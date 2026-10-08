@@ -65,3 +65,14 @@ Publication contains implementation, authored public fixtures and hash-only resu
 summaries. Raw archives, database captures, VM credentials and recorder private
 keys are excluded. CI repeats the offline public-fixture suite on Linux and Windows;
 it does not launch native database qualification or call a model.
+
+
+## PR273 review completion increment — October 8 UTC
+
+The revised executor adds conservative EXEC/dynamic-result refusal, per-result ordering and tied-row comparison, source/twin policy obligations, broader exact table-value contracts, expanded native error mappings, all-module dependency captures, Tower-bound float tolerance, generated typed inputs and bounded failure-preserving shrinking. All 43 public procedures now have unique names and typed arguments in a prospective corpus; historical assets remain intact. PostgreSQL locale/timezone and SQL Server compatibility levels are explicit.
+
+The fresh nine-control coverage-v2 check passed independent replay. A separate full native seed run completed 108 pairs (57 observable matches, 51 divergences) and cleaned up, but its original finalization failed on case labels. That report remains failed. A corrected versioned offline finalizer binds signed assets and actual argument hashes; ten procedure/variant outcomes remain unresolved. Therefore full requalification and mLogica readiness are not claimed. See [native review results](../data-modernization/tsql-procedures/native-review-r2.md) and the hash-only audits for every preserved attempt.
+
+Finalization tests reject changed record bindings, missing cases and duplicates. The latest T-SQL suite has 111 passing tests. The earlier combined run covered 486 tests, 15 skipped and no failures; the extra finalization test was then added and included in the 111-test rerun. No model calls or local Docker execution occurred. Real database execution used only the approved dedicated Linux VM.
+
+A separate generated-input/shrinking integration completed 92 native pairs (54 observable matches, 38 divergences), with independent replay and verified cleanup. Full results and costs are recorded in the linked native review report. No synthetic trace is presented as native evidence.

@@ -32,9 +32,9 @@ The default statement/branch thresholds remain 90%/80%, with all error paths
 required. Missing paths stay in the denominator; none is deleted because a
 reference produced the expected result.
 
-Seven separately declared native controls test a straight path, both branch edges,
+Nine separately declared native controls test a straight path, both branch edges,
 a missing branch, a taken handler, a missing handler, an uninitialized scalar
-declaration and a table-variable declaration on both engines. These
+declaration, a table-variable declaration, a non-dbo schema and view exclusion on both engines. These
 controls test the collectors, not twin effectiveness. The handler-hit control's
 implicit return-code difference is retained and is not counted as an equivalence
 success. Full runs bind the collector file, ScriptDom bridge and image identities
@@ -57,13 +57,12 @@ closure binds all profiler inputs and outputs.
 ## Explicit mapping contract
 
 Each procedure receives a `tsql-public-mapping/1` record bound to all six SQL/setup
-asset hashes and its calling convention. The register covers all 42 procedures
-and all 25 trap families. These are public-fixture rules, not customer approvals.
+asset hashes and its calling convention. The current register is generated from the corpus manifest, including the added ordering trap. Historical 42-procedure / 25-family results remain separate. These are public-fixture rules, not customer approvals.
 
 | Observable | Declared rule |
 |---|---|
-| Result sets | Preserve set order and exact column names; map only enumerated character type codes. Preserve values, whitespace, nulls and duplicate rows. Public fixture result rows are multisets. |
-| Table schema | Infer only exact schema/table/column names and flag the inference. Map `int` to `integer`, and `varchar(n)` to `character varying(n)`; compare nullability and primary keys. Unknown types remain unsupported. |
+| Result sets | Preserve set order and exact column names; use the closed type map in representation v3. Bind ordering per result to ScriptDom; tied rows form duplicate-preserving multisets. EXEC, dynamic or conditional result origins without a complete contract remain unresolved. |
+| Table schema | Infer only exact schema/table/column names and flag the inference. Map the explicit integer, decimal, date/time, float, text, UUID and binary types in `value_contract.py`; compare nullability and primary keys. SQL datetime uses 1/300-second ticks and smalldatetime minute ticks. Floats remain exact; no tolerance decision has been admitted. Unknown types remain unsupported. |
 | Table effects | Compare complete before/after captures, keyed by primary key where present, otherwise as duplicate-preserving multisets; include trigger tables. |
 | Identity/sequence | Use native sequence ownership, not a guessed sequence name. Compare owner, seed, increment and last consumed value. An uncalled sequence maps to an unconsumed identity, not to a consumed seed. |
 | OUTPUT / return | Exact values under each declared calling convention. The three corrected twins return status from their actual exception handlers. |
@@ -108,3 +107,16 @@ equivalence remain not assessed.
 
 Collector references: [Microsoft Extended Events](https://learn.microsoft.com/en-us/sql/relational-databases/extended-events/quick-start-extended-events-in-sql-server?view=sql-server-ver16)
 and [plpgsql_check profiler](https://github.com/okbob/plpgsql_check).
+
+## Current review-head control check (2026-10-08 UTC)
+
+Nine fresh coverage-v2 native controls passed independent offline qualification on the dedicated Linux VM. Native duration: 37.211384 seconds; independent replay: 0.155024 seconds. Read-only checks found no owned containers, networks or volumes for either the failed provisioning attempt or the successful run. No local Docker commands or model calls were made for this check.
+
+- Signed native report content hash: `4955af4748481925956012a236a198783d0290369f44ce6b19ee6c204bc70e20`.
+- Evidence public-key hash: `b679e45f060488079a0e25d21bff530ce72a15d00af649822be752acfad49df1`.
+- ScriptDom bridge hash: `ec974a7e4917c97462065e07e46c71dffe9357c9ab0741e80c34bd959630eaf0`.
+- Local audit content hash: `ebaa97fafddc0a7479a97c7ebcf4b7fc152ab1544b9b827136e40ce8e3db9a05`; see [hash-only audit](coverage-head-r3-audit.json). This audit is a replay summary, not an independently signed attestation; its source report and all nine pair manifests are signed and verified.
+
+The first preparation collision and the subsequent provisioning failure are preserved. The latter exposed ownership registration after PostgreSQL profile application; registration now occurs immediately after CREATE DATABASE so subsequent failures retain cleanup ownership. Neither failed attempt was replaced or counted as a passing control.
+
+The handler-hit control retains its observed return-code divergence. Acceptance here means the coverage collector correctly distinguishes covered and missing paths; it is not twin equivalence. This is a native control check of the revised code, not a full-corpus requalification. The later completion increment implements native module catalogues with conservative unresolved-dependency refusal, Tower-policy consumption, explicitly admitted float tolerance, and 43 named typed procedures. See native-review-r2.md for the separate full run and its unresolved qualification outcomes. The runner now generates typed boundary cases and records bounded shrinking results, but this nine-control run explicitly used declared seeds with shrinking disabled.

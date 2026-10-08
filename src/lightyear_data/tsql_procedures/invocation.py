@@ -31,8 +31,15 @@ def parameter_value(value, sql_type):
             digits=result.as_tuple();fraction=max(0,-digits.exponent)
             if fraction>scale or result.adjusted()+1>precision-scale:raise ValueError('argument-decimal-range-or-scale')
         return result
+    if kind in ('float','real') or re.fullmatch(r'float\([0-9]+\)',kind):
+        import math
+        if type(value) not in (int,float) or not math.isfinite(value):raise ValueError('argument-float')
+        return float(value)
+    if kind in ('text','ntext'):
+        if not isinstance(value,str):raise ValueError('argument-text-type')
+        return value
     if kind=='date':return date.fromisoformat(value)
-    if kind.startswith('datetime'):return datetime.fromisoformat(value)
+    if kind.startswith('datetime') or kind=='smalldatetime':return datetime.fromisoformat(value)
     if kind.startswith('time'):return time.fromisoformat(value)
     if kind=='uniqueidentifier':return UUID(value)
     if re.fullmatch(r'(?:varbinary|binary)\((?:max|[1-9][0-9]*)\)',kind):
@@ -58,3 +65,20 @@ def bind(item):
             bound.append(dict(name=name,type=p['type'],output=p['output'],value=parameter_value(args.get(name),p['type'])))
     qualified='.'.join(identifier(inv[k],'sqlserver') for k in ('schema','name'))
     return qualified,bound
+
+
+def driver_type(sql_type):
+    """ScriptDom pretty-print spacing is not part of a TDS type identifier."""
+    value=re.sub(r'\s+','',sql_type).lower()
+    if not re.fullmatch(r'[a-z][a-z0-9]*(?:\((?:max|[0-9]+(?:,[0-9]+)?)\))?',value):raise ValueError('driver-type-declaration')
+    return value
+
+
+def validate_target_arguments(convention,arguments):
+    bindings=convention.get('target_parameters',[])
+    outputs=set(convention.get('output_mapping',{}))
+    extra=set(arguments)-set(bindings)
+    if (len(bindings)!=len(set(bindings)) or set(bindings)-set(arguments) or extra-outputs
+        or any(arguments[k] is not None for k in extra)):
+        raise ValueError('target-argument-contract-required')
+    return bindings

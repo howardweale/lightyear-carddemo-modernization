@@ -72,7 +72,7 @@ report = {
     "elapsed_seconds": round(time.monotonic() - clock, 3),
     "corpus_file_sha256": sha(manifest_raw), "bridge_sha256": sha(dll.read_bytes()),
     "package_lock_sha256": sha((root / "tools/tsql_scriptdom/packages.lock.json").read_bytes()),
-    "parser_checks": results, "passed": len(results) == 42 and all(r["passed"] for r in results),
+    "parser_checks": results, "passed": len(results) == len(manifest["procedures"]) and bool(results) and all(r["passed"] for r in results),
     "native_pairs": 0, "model_calls": 0,
     "claim": "Parser build and syntax only; no semantic qualification",
 }

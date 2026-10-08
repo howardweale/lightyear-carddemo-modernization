@@ -53,6 +53,9 @@ def main():
     p.add_argument('--root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--ids',nargs='*')
+    p.add_argument('--corpus',default='data-modernization/tsql-procedures/corpus.json')
+    p.add_argument('--seed-cases-only',action='store_true',help='Explicitly omit proposed boundary cases; recorded in plan')
+    p.add_argument('--shrink-limit',type=int,default=10,help='Maximum extra fresh pairs per divergent case')
     p.add_argument('--variants',nargs='+',choices=['correct','wrong'],default=['correct','wrong'])
     p.add_argument('--expected-host',default='ly-tsql-m0')
     p.add_argument('--coverage-bridge',type=Path)
@@ -63,7 +66,13 @@ def main():
     p.add_argument('--coverage-controls-evidence',type=Path)
     p.add_argument('--coverage-controls-report-sha256')
     p.add_argument('--coverage-controls-key-sha256')
+    p.add_argument('--policy-decisions',type=Path)
+    p.add_argument('--policy-authority',type=Path)
+    p.add_argument('--policy-authority-sha256')
+    p.add_argument('--policy-scope')
+    p.add_argument('--policy-journal-head')
     args=p.parse_args()
+    if not 0<=args.shrink_limit<=100:raise ValueError('shrink-call-limit')
     if args.coverage_revision==1 and args.coverage_schemas not in (None,['dbo']):
         raise ValueError('coverage-v1-schema-fixed')
     if platform.system()!='Linux' or platform.machine()!='x86_64' or platform.node()!=args.expected_host:
@@ -71,14 +80,15 @@ def main():
     if importlib.metadata.version('python-tds')!='1.16.1': raise SystemExit('TDS driver not pinned')
     args.output.mkdir(parents=True,exist_ok=False)
     root=args.root.resolve(); out=args.output.resolve()
-    manifest_path=root/'data-modernization/tsql-procedures/corpus.json'
+    manifest_path=(root/args.corpus).resolve()
+    if not manifest_path.is_relative_to(root):raise ValueError('corpus-path-escape')
     corpus=json.loads(manifest_path.read_bytes())
     items=[v for v in corpus['procedures'] if not args.ids or v['id'] in args.ids]
     if args.ids and {v['id'] for v in items}!=set(args.ids): raise ValueError('unknown-id')
     items=expand(items)
     from lightyear_data.tsql_procedures.inventory import parse
     from lightyear_data.tsql_procedures.semantics import contract
-    from lightyear_data.tsql_procedures.comparison_v5 import compare as compare_v5
+    from lightyear_data.tsql_procedures.comparison_v7 import compare as compare_v7
     from copy import deepcopy
     cases=[]
     for item in items:
@@ -86,15 +96,44 @@ def main():
         if syntax['status']!='parsed':raise ValueError('native-source-syntax-required')
         semantic=contract(syntax)
         if len(semantic['procedures'])!=1:raise ValueError('native-single-procedure-contract')
-        for case in item['cases']:
-            one=deepcopy(item);one['cases']=[case];one['source_syntax']=syntax['ast']
-            one['procedure_contract']=semantic['procedures'][0]
-            if len(item['cases'])>1:one['scenario']+=':'+case['id']
-            cases.append(one)
+        from lightyear_data.tsql_procedures.casegen import generate
+        parameters=[v for v in semantic['procedures'][0]['parameters'] if not v['output']]
+        for seed in item['cases']:
+            proposals=([dict(id=seed['id'],parameters=seed['parameters'],source='declared-seed')]
+                       if args.seed_cases_only else generate(parameters,seed['parameters']))
+            if len(proposals)>1000:raise ValueError('case-generation-bound')
+            for proposal in proposals:
+                case={**seed,'id':proposal['id'],'parameters':proposal['parameters']}
+                one=deepcopy(item);one['cases']=[case];one['source_syntax']=syntax['ast']
+                one['procedure_contract']=semantic['procedures'][0]
+                one['case_origin']=proposal['source']
+                if len(item['cases'])>1:one['scenario']+=':'+seed['id']
+                if not args.seed_cases_only and len(proposals)>1:one['scenario']+=':'+proposal['id']
+                cases.append(one)
     items=cases
     # Verify EVERY selected byte before any container or SQL action.
     for item in items:
         for a in item['assets'].values(): asset(root,a)
+    policy_records={}
+    if args.policy_decisions:
+        from datetime import datetime,timezone
+        from lightyear_data.tsql_procedures.comparison_policy import prepare,context
+        if not all((args.policy_authority,args.policy_authority_sha256,args.policy_scope,args.policy_journal_head)):
+            raise ValueError('complete-policy-trust-required')
+        entries=json.loads(args.policy_decisions.read_bytes())
+        known={(item['id'],v) for item in items for v in args.variants}
+        seen=set()
+        for entry in entries:
+            selector=(entry['procedure_id'],entry['variant'])
+            if selector not in known or selector in seen:raise ValueError('policy-selector-unknown-or-duplicate')
+            seen.add(selector)
+            for item in items:
+                if item['id']==selector[0]:
+                    ctx=context(corpus,item,selector[1]);record=prepare(entry,args.policy_authority.read_bytes(),args.policy_authority_sha256,
+                        scope=args.policy_scope,head=args.policy_journal_head,now=datetime.now(timezone.utc),bound_context=ctx)
+                    policy_records[sha(__import__('lightyear_data.tsql_procedures.native_evidence',fromlist=['canonical']).canonical(ctx))]=record
+    elif any((args.policy_authority,args.policy_authority_sha256,args.policy_scope,args.policy_journal_head)):
+        raise ValueError('policy-decisions-required')
     qualification=None
     if args.coverage_controls_evidence:
         from lightyear_data.tsql_procedures.coverage_qualification import qualify
@@ -123,21 +162,25 @@ def main():
           'images':{'sqlserver':SQL_IMAGE,'postgresql':args.pg_image},
           'coverage_bridge_sha256':sha(args.coverage_bridge.read_bytes()) if args.coverage_bridge else None,
           'coverage_revision':args.coverage_revision,'coverage_schemas':args.coverage_schemas or ['dbo'],
-          'semantic_bridge_sha256':sha(args.semantic_bridge.read_bytes()),'comparison_revision':5,
+          'semantic_bridge_sha256':sha(args.semantic_bridge.read_bytes()),'comparison_revision':7,
           'sqlserver_profile':{'collation':'Latin1_General_100_CI_AS','compatibility_level':160},
           'ids':[v['id'] for v in items],'variants':args.variants,
+          'case_generation':'declared-seeds-only' if args.seed_cases_only else 'typed-boundaries-v2',
+          'maximum_shrink_calls_per_case':args.shrink_limit,
           'pairs':sum(v['cases'][0]['repeated_runs']*len(args.variants) for v in items),
           'code_sha256':{f.relative_to(root).as_posix():sha(f.read_bytes()) for f in sorted((root/'src/lightyear_data').rglob('*.py'))},
           'runner_sha256':sha(Path(__file__).read_bytes()),
+          'policy_authority_sha256':args.policy_authority_sha256,'policy_admissions':policy_records,
           'evidence_key_sha256':sha(public),'signer_role':'run-local experimental recorder; operator review, not independent attestation',
           'model_calls':0,'coverage_required':True,'coverage_collector_qualified':False,
           'no_equivalence_certificate':True}
     plan['coverage_collector_qualified']=qualification is not None
     plan['coverage_qualification_sha256']=sha((out/'coverage-qualification.json').read_bytes()) if qualification else None
+    plan['maximum_pairs_including_shrink']=plan['pairs']*(1+args.shrink_limit)
     write(out/'plan.json',sign(plan,key))
     (out/'corpus.json').write_bytes(manifest_path.read_bytes())
     write(out/'policy-register.json',policy_register(corpus))
-    resources=[]; records=[]; started=utc(); tick=time.monotonic(); fatal=None; cleanup=[]
+    resources=[]; records=[]; reductions=[]; started=utc(); tick=time.monotonic(); fatal=None; cleanup=[]
     password='Ly!'+secrets.token_urlsafe(28)+'9a'
     sql_env=secret_dir/'sql.env'; pg_env=secret_dir/'pg.env'
     sql_env.write_text('ACCEPT_EULA=Y\nMSSQL_PID=Developer\nMSSQL_SA_PASSWORD='+password+'\nMSSQL_MEMORY_LIMIT_MB=4096\n')
@@ -187,51 +230,80 @@ def main():
         write(out/'ready.json',sign({'schema':'tsql-native-ready/1','at_utc':utc(),'images':images,
               'ports_bind':'unpublished; host access to dedicated internal bridge only','versions':{n:importlib.metadata.version(n) for n in ('python-tds','psycopg','cryptography')},'model_calls':0},key))
         print(json.dumps({'event':'ready','owner':owner,'planned_pairs':plan['pairs'],'at_utc':utc()}),flush=True)
+        from lightyear_data.tsql_procedures.native_evidence import canonical
+        from lightyear_data.tsql_procedures.casegen import shrink
+        from lightyear_data.tsql_procedures.invocation import bind
         index=0
+        reductions=[]
+        def execute_case(item,variant,repeat):
+            nonlocal index
+            index+=1
+            pair=out/f'pair-{index:03d}-{item["id"]}-{variant}-{repeat+1}'
+            pair.mkdir()
+            record={'index':index,'id':item['id'],'variant':variant,'repeat':repeat+1,
+                    'scenario':item.get('scenario','primary'),'case_origin':item.get('case_origin','declared-seed'),'case_sha256':sha(canonical(item['cases'][0]['parameters'])),'trap_family':item['trap_family'],'started_utc':utc()}
+            from lightyear_data.tsql_procedures.comparison_policy import context
+            policy_record=policy_records.get(sha(canonical(context(corpus,item,variant))))
+            baselines={}; resets={}; lanes={}; phase='provision'
+            try:
+                for lane,engine in engines.items():
+                    setup='source-setup' if lane=='source' else ('target-setup' if variant=='correct' else 'wrong-setup')
+                    procedure='source' if lane=='source' else variant
+                    baselines[lane]=engine.provision(f'b{index:03d}',asset(root,item['assets'][setup]),asset(root,item['assets'][procedure]))
+                    phase='reset-'+lane
+                    resets[lane]=engine.reset(baselines[lane],f'r{index:03d}')
+                    phase='call-'+lane
+                    execution_item=deepcopy(item)
+                    if policy_record:execution_item['policy_admission']=policy_record
+                    if lane=='target':execution_item['target_source']=asset(root,item['assets'][procedure])
+                    execution_item['case_binding']={'parameters':item['cases'][0]['parameters'],'case_sha256':sha(canonical(item['cases'][0]['parameters']))}
+                    lanes[lane]=engine.call(resets[lane],execution_item,
+                        lambda kind,value,lane=lane:write(out/f'capture-{index:03d}-{lane}-{kind}.json',value))
+                    lanes[lane]['baseline']=baselines[lane]
+                    write(pair/(lane+'.json'),lanes[lane])
+                    phase='provision'
+                phase='compare'
+                comparison=compare_v7(lanes['source'],lanes['target'],profile(item),qualification)
+                write(pair/'comparison.json',comparison)
+                envelope=seal_pair(pair,dict(record,assets=item['assets'],images=plan['images'],policy_authority_sha256=args.policy_authority_sha256,plan_sha256=sha((out/'plan.json').read_bytes())),key)
+                replay=replay_pair(pair,public,envelope['content_sha256'])
+                write(out/f'replay-{index:03d}.json',sign(replay,key))
+                record.update(status=comparison['observed_status'],verdict=comparison['verdict'],
+                              manifest_sha256=envelope['content_sha256'],replay_verified=True,
+                              differences=[d['observable'] for d in comparison['differences']])
+            except Exception as ex:
+                record.update(status='failed',phase=phase,error_type=type(ex).__name__,error=str(ex))
+                write(pair/'failure.json',sign(dict(record,traceback=traceback.format_exc()),key))
+            finally:
+                dropped=[]
+                for engine in engines.values():
+                    for db in sorted(engine.owned): dropped.append(engine.drop(db))
+                record['database_cleanup']=dropped
+            record['ended_utc']=utc(); records.append(record)
+            write(out/f'progress-{index:03d}.json',sign(record,key))
+            print(json.dumps(record),flush=True)
+            if record['status']=='failed':
+                raise RuntimeError('native-pair-failed-preserved:'+str(index))
+            return comparison,record
+        def fingerprint(comparison):
+            if comparison['verdict']!='divergent':return None
+            return sha(canonical([(d['observable'],d.get('attribution'),d['classification']) for d in comparison['differences']]))
         for item in items:
             for variant in args.variants:
                 for repeat in range(item['cases'][0]['repeated_runs']):
-                    index+=1
-                    pair=out/f'pair-{index:03d}-{item["id"]}-{variant}-{repeat+1}'
-                    pair.mkdir()
-                    record={'index':index,'id':item['id'],'variant':variant,'repeat':repeat+1,
-                            'scenario':item.get('scenario','primary'),'trap_family':item['trap_family'],'started_utc':utc()}
-                    baselines={}; resets={}; lanes={}; phase='provision'
-                    try:
-                        for lane,engine in engines.items():
-                            setup='source-setup' if lane=='source' else ('target-setup' if variant=='correct' else 'wrong-setup')
-                            procedure='source' if lane=='source' else variant
-                            baselines[lane]=engine.provision(f'b{index:03d}',asset(root,item['assets'][setup]),asset(root,item['assets'][procedure]))
-                            phase='reset-'+lane
-                            resets[lane]=engine.reset(baselines[lane],f'r{index:03d}')
-                            phase='call-'+lane
-                            lanes[lane]=engine.call(resets[lane],item,
-                                lambda kind,value,lane=lane:write(out/f'capture-{index:03d}-{lane}-{kind}.json',value))
-                            lanes[lane]['baseline']=baselines[lane]
-                            write(pair/(lane+'.json'),lanes[lane])
-                            phase='provision'
-                        phase='compare'
-                        comparison=compare_v5(lanes['source'],lanes['target'],profile(item),qualification)
-                        write(pair/'comparison.json',comparison)
-                        envelope=seal_pair(pair,dict(record,assets=item['assets'],images=plan['images'],plan_sha256=sha((out/'plan.json').read_bytes())),key)
-                        replay=replay_pair(pair,public,envelope['content_sha256'])
-                        write(out/f'replay-{index:03d}.json',sign(replay,key))
-                        record.update(status=comparison['observed_status'],verdict=comparison['verdict'],
-                                      manifest_sha256=envelope['content_sha256'],replay_verified=True,
-                                      differences=[d['observable'] for d in comparison['differences']])
-                    except Exception as ex:
-                        record.update(status='failed',phase=phase,error_type=type(ex).__name__,error=str(ex))
-                        write(pair/'failure.json',sign(dict(record,traceback=traceback.format_exc()),key))
-                    finally:
-                        dropped=[]
-                        for engine in engines.values():
-                            for db in sorted(engine.owned): dropped.append(engine.drop(db))
-                        record['database_cleanup']=dropped
-                    record['ended_utc']=utc(); records.append(record)
-                    write(out/f'progress-{index:03d}.json',sign(record,key))
-                    print(json.dumps(record),flush=True)
-                    if record['status']=='failed':
-                        raise RuntimeError('native-pair-failed-preserved:'+str(index))
+                    comparison,record=execute_case(item,variant,repeat)
+                    original=fingerprint(comparison)
+                    if original and item['cases'][0]['parameters'] and args.shrink_limit:
+                        def oracle(parameters):
+                            trial=deepcopy(item);trial['cases'][0]['parameters']=parameters;trial['case_origin']='shrink-probe'
+                            try:bind(trial)
+                            except ValueError:return None
+                            measured,_=execute_case(trial,variant,repeat)
+                            return fingerprint(measured)
+                        reduction=shrink(item['cases'][0]['parameters'],original,oracle,maximum_calls=args.shrink_limit)
+                        reduction.update(source_pair=record['manifest_sha256'],failure_fingerprint=original)
+                        reductions.append(reduction)
+                        write(out/('reduction-'+str(record['index'])+'.json'),sign(reduction,key))
     except Exception as ex:
         fatal={'type':type(ex).__name__,'message':str(ex),'traceback':traceback.format_exc()}
     finally:
@@ -256,14 +328,15 @@ def main():
                 'elapsed_seconds':time.monotonic()-tick,'planned_pairs':plan['pairs'],'records':records,
                 'counts':dict(Counter(r['status'] for r in records)),'fatal':fatal,'cleanup':cleanup,
                 'cleanup_passed':len(cleanup)==len(resources) and all(r['status']=='absent' for r in cleanup),
-                'model_calls':0,'qualification_passed':False,
+                'model_calls':0,'qualification_passed':False,'cases_run':len(records),
+                'minimal_cases':reductions,
                 'claim':('Native public-fixture comparison; seven-control coverage qualification bound; '
                          if qualification and len(qualification.get('controls',[]))==7 else
                          'Native public-fixture comparison; see plan for coverage qualification; ')
                         +'operator review, not independent attestation'}
-        if not fatal and report['cleanup_passed'] and qualification and not args.ids and args.variants==['correct','wrong']:
+        if not fatal and report['cleanup_passed'] and qualification and not args.ids and args.variants==['correct','wrong'] and args.seed_cases_only and not reductions:
             try:
-                from lightyear_data.tsql_procedures.m0_v2 import accept as accept_v2
+                from lightyear_data.tsql_procedures.m0_v3 import accept as accept_v2
                 acceptance=accept_v2(out,corpus,plan,records,public)
                 acceptance['native_elapsed_seconds']=report['elapsed_seconds']
                 acceptance['pairs_per_minute']=len(records)/(report['elapsed_seconds']/60)

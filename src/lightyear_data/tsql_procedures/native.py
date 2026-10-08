@@ -130,10 +130,13 @@ class NativeEngine:
         self.coverage_revision=coverage_revision
         self.coverage_schemas=tuple(coverage_schemas)
         self.engine_profile=engine_profile
-        if engine_profile and (set(engine_profile)!={'collation','compatibility_level'}
+        if engine=='sqlserver' and engine_profile and (set(engine_profile)!={'collation','compatibility_level'}
                 or not re.fullmatch('[A-Za-z0-9_]+',engine_profile['collation'])
-                or engine_profile['compatibility_level'] not in (150,160)):
+                or engine_profile['compatibility_level'] not in (110,120,130,140,150,160)):
             raise ValueError('engine-profile')
+        if engine=='postgresql':
+            self.engine_profile=engine_profile or {'locale':'C','timezone':'UTC'}
+            if self.engine_profile!={'locale':'C','timezone':'UTC'}:raise ValueError('postgresql-profile')
 
     def name(self, suffix):
         if not re.fullmatch(r'[a-z0-9_]{1,45}', suffix): raise ValueError('database-suffix')
@@ -148,8 +151,9 @@ class NativeEngine:
         with self.connector(None) as c:
             # CREATE, never CREATE IF NOT EXISTS: an old slot cannot be reused.
             execute(c, 'CREATE DATABASE ' + identifier(db, self.engine)+
-                    (' COLLATE '+self.engine_profile['collation'] if self.engine=='sqlserver' and self.engine_profile else ''))
-        self.owned.add(db)
+                    (' COLLATE '+self.engine_profile['collation'] if self.engine=='sqlserver' and self.engine_profile else " TEMPLATE template0 LC_COLLATE 'C' LC_CTYPE 'C'" if self.engine=='postgresql' else ''))
+            self.owned.add(db) # CREATE succeeded; retain ownership even if profile/setup fails.
+            if self.engine=='postgresql':execute(c, 'ALTER DATABASE '+self._q(db)+" SET timezone TO 'UTC'")
         with self.connector(db) as c:
             if self.engine == 'sqlserver':
                 if self.engine_profile:
@@ -158,6 +162,8 @@ class NativeEngine:
                     if actual!=[self.engine_profile['collation'],self.engine_profile['compatibility_level']]:raise ValueError('database-profile-differs')
                 for sql in go_batches(setup) + go_batches(procedure): execute(c, sql)
             else:
+                actual=query(c,"SELECT datcollate,datctype,current_setting('TimeZone') FROM pg_database WHERE datname=current_database()")[0]
+                if actual!=['C','C','UTC']:raise ValueError('postgresql-profile-differs')
                 if self.coverage_bridge: execute(c, 'CREATE EXTENSION plpgsql_check')
                 execute(c, setup)
                 execute(c, procedure)
@@ -222,6 +228,8 @@ class NativeEngine:
                 version = query(c, 'SELECT version()')[0][0]
                 settings = query(c, 'SELECT current_setting(\'TimeZone\'),current_setting(\'standard_conforming_strings\')')
                 clock = str(query(c, 'SELECT clock_timestamp()')[0][0])
+            from .dependencies import capture as capture_dependencies
+            dependency_catalogue=capture_dependencies(c,self.engine)
             before = self.capture_state(c)
             if on_capture: on_capture('before',before)
             collector=None
@@ -236,7 +244,12 @@ class NativeEngine:
             obs = self._sql_call(c,item) if self.engine == 'sqlserver' else self._pg_call(c,item)
             obs.update(started_utc=started, ended_utc=utc(), elapsed_seconds=time.monotonic()-tick,
                        engine_version=version, session_settings=settings, database_clock_before=clock)
+            if 'policy_admission' in item:obs['policy_admission']=item['policy_admission']
+            obs['dependency_catalogue']=dependency_catalogue
+            obs['dependency_catalogue_after']=capture_dependencies(c,self.engine)
             if self.engine=='sqlserver' and 'source_syntax' in item:obs['source_syntax']=item['source_syntax']
+            if self.engine=='postgresql' and 'target_source' in item:obs['target_source']=item['target_source']
+            if 'case_binding' in item:obs['case_binding']=item['case_binding']
             if on_capture: on_capture('protocol',obs)
             if self.engine == 'sqlserver':
                 obs['transaction_after'] = query(c, 'SELECT @@TRANCOUNT,XACT_STATE()')[0]
@@ -263,8 +276,9 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
         sets, outputs, err, status = [], {}, None, None
         with connection.cursor() as cur:
             from .invocation import bind
+            from .invocation import driver_type
             procedure,bound=bind(item)
-            parameters={p['name']:Param(name=p['name'],type=sql_type_by_declaration(p['type']),
+            parameters={p['name']:Param(name=p['name'],type=sql_type_by_declaration(driver_type(p['type'])),
                 value=p['value'],flags=fByRefValue if p['output'] else 0) for p in bound}
             with tds_tokens(cur._session) as tokens:
                 try:
@@ -293,9 +307,8 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
         supported=any(k in convention for k in ('result_return_mapping','return_mapping')) or convention.get('target_return_code')=='mapped-default-zero'
         if convention.get('target_return_code')=='mapped-default-zero':status=0
         arguments=item.get('cases',[{'parameters':{}}])[0]['parameters']
-        bindings=convention.get('target_parameters',[])
-        if set(bindings)!=set(arguments) and arguments and set(arguments)!=set(convention.get('output_mapping',{})):
-            raise ValueError('target-argument-contract-required')
+        from .invocation import validate_target_arguments
+        bindings=validate_target_arguments(convention,arguments)
         if bindings:
             from .invocation import bind
             _,typed=bind(item)

@@ -1,0 +1,131 @@
+{
+  "actual_cleanup": [
+    {
+      "absent": true,
+      "kind": "containers",
+      "owner": "lytsql_4d697b5cf706"
+    },
+    {
+      "absent": true,
+      "kind": "networks",
+      "owner": "lytsql_4d697b5cf706"
+    },
+    {
+      "absent": true,
+      "kind": "volumes",
+      "owner": "lytsql_4d697b5cf706"
+    },
+    {
+      "absent": true,
+      "kind": "containers",
+      "owner": "lytsql_bd3e0bc8df40"
+    },
+    {
+      "absent": true,
+      "kind": "networks",
+      "owner": "lytsql_bd3e0bc8df40"
+    },
+    {
+      "absent": true,
+      "kind": "volumes",
+      "owner": "lytsql_bd3e0bc8df40"
+    }
+  ],
+  "audit_sha256": "ebaa97fafddc0a7479a97c7ebcf4b7fc152ab1544b9b827136e40ce8e3db9a05",
+  "bridge_sha256": "ec974a7e4917c97462065e07e46c71dffe9357c9ab0741e80c34bd959630eaf0",
+  "claim": "Operator review; not independent attestation",
+  "collector_sha256": "12f72289492b875afde7d7e46410b2950a58bb395a2328927e76035d845ab8d7",
+  "controls": [
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-straight",
+      "manifest_sha256": "299e8c7df084c65e64be6793688656c22d13a06963b66572b084cc12e1e5ddbf",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-both-edges",
+      "manifest_sha256": "ca47b3c81a8522eb1b0c8ab7f5e7a8685ba1eef77aa4a0f2dde308b1b540b451",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-missing-edge",
+      "manifest_sha256": "a8a4c0b1f329f9db34d42c79ba081c237af4e06ef40c464c0f9676b93a98fb1c",
+      "passed": true
+    },
+    {
+      "business_status": "divergent",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-handler-hit",
+      "manifest_sha256": "5164bd673bfd88625129b62db079dc1f747aacab75ac8daa4b50285cef748f0d",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-handler-missing",
+      "manifest_sha256": "900e8c4a645dce56fb9b896db66b6dc13a511cdac3017ecbf400ab62c15e278c",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-scalar-declaration",
+      "manifest_sha256": "df146cd6932809fa2d1fa172791ebf4555ddd4906a8a84f32f1d7342665bef8b",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-table-declaration",
+      "manifest_sha256": "19f9864f114d6b8ec8cc743cc15372c765746f81c8b7ff2c8fda397ede4db3d4",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-non-dbo-schema",
+      "manifest_sha256": "b0a60a7c8dc2da54cc95d0722fdaca2043160384aec469f07bb394dcabc0aec6",
+      "passed": true
+    },
+    {
+      "business_status": "match-on-compared-observables",
+      "business_verdict_not_control_acceptance": true,
+      "id": "coverage-view-excluded",
+      "manifest_sha256": "c89263c39ad29c80d53677e4446998f2a67c2774611cb8024384f1bcf4dca118",
+      "passed": true
+    }
+  ],
+  "coverage_schemas": [
+    "dbo",
+    "business"
+  ],
+  "images": {
+    "postgresql": "sha256:b03ef125d79567173ab5622d9c5b05c9baf353a4eb78f8c13a938de4141de30d",
+    "sqlserver": "mcr.microsoft.com/mssql/server@sha256:4402d880dd4c34bfa7d8705e56a86cd6c88da80a1f6bbbe741f999e76264a090"
+  },
+  "independent_replay_seconds": 0.15502404699873296,
+  "limitations": [
+    "procedural coverage only; SQL expression and dynamic-body branch coverage excluded",
+    "PostgreSQL native branch fraction retained; per-handler proof conservative at 100%",
+    "nine public controls including custom schema and view exclusion; not universal proof"
+  ],
+  "model_calls": 0,
+  "native_report_fields": {
+    "cases_run": 9,
+    "cleanup_passed": true,
+    "elapsed_seconds": 37.211383542002295,
+    "fatal": null,
+    "planned_pairs": 9
+  },
+  "native_seconds": 37.211383542002295,
+  "passed": true,
+  "public_key_sha256": "b679e45f060488079a0e25d21bff530ce72a15d00af649822be752acfad49df1",
+  "report_file_sha256": "bf15e28ad65e9d1982c96c4b252f120b8e658a84ed8803b26812da32be6f9baf",
+  "report_sha256": "4955af4748481925956012a236a198783d0290369f44ce6b19ee6c204bc70e20",
+  "schema": "tsql-coverage-qualification/2"
+}

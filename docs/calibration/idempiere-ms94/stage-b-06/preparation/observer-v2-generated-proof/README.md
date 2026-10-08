@@ -92,8 +92,13 @@ observation file and the test log. Raw captures and compiled class files remain
 local.
 
 Reverification found all **2,117 r10** and **2,125 r11** frozen input hashes
-unchanged. r10 remains failed. No production collector, replay predicate, J1
-predicate, expected outcome, frozen plan or Tower decision was changed.
+unchanged. r10 remains failed. The preparation increment did change production
+`PostingObserver.java`, `posting_replay.py` and `posting_broker.py` behind the
+`forwarding_stub` gate. Those changes fail closed and were not native
+qualification. J1 business predicates, expected outcomes, frozen plans and
+Tower decisions were not changed. The [review follow-up](../review-pr269-271/README.md)
+adds stricter defining-host/factory checks; complete native provenance remains
+a prerequisite.
 
 ## Remaining before five-path publication and Tower review
 

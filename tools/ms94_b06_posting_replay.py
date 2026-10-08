@@ -30,7 +30,9 @@ def catalog(root, bindings):
     """Recompute identities from bound compiled bytes; ignore asserted identities."""
     result = {}
     for name, expected in bindings.items():
-        item = inspect_class(bound_file(root, name, expected).read_bytes())
+        raw=bound_file(root, name, expected).read_bytes()
+        item = inspect_class(raw)
+        item['class_bytes_hex']=raw.hex()
         check(item['class'] not in result, 'observer-duplicate-class-identity')
         result[item['class']] = item
     check({SUPPORT, CANDIDATE, *FRAMEWORK} <= set(result), 'observer-class-catalog-incomplete')

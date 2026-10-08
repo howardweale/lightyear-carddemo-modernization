@@ -1,5 +1,11 @@
 # Observer v2: exact image-artifact extraction proposal
 
+**Historical proposal; superseded by the [inventory-first review
+follow-up](../review-pr269-271/README.md). Do not execute the old commands below.**
+Its extraction attempt and later larger-bound proposal remain preserved. The
+new controller refuses a broad-extraction core; a new inventory snapshot,
+public commit and Tower window are required.
+
 Prepared for Howard's separate Control Tower decision. **Not launched.**
 Operator review; not independent attestation. This is an artifact extraction,
 not a smoke group, qualification, five-path census or measurement.

@@ -1,5 +1,9 @@
 # J1 smoke r10 executable freeze
 
+**Historical failed run.** See the [preserved r10 outcome and offline frame
+diagnosis](../r10-offline-diagnosis/README.md). This publication is not permission
+to rerun, resume or replace its slots.
+
 Operator review; not independent attestation. Zero model calls. This is a new
 three-slot qualification group, not a measurement, restart or replacement of
 the failed r9 group. The r9 outcome and frozen files remain unchanged.

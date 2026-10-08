@@ -102,7 +102,7 @@ def definition(raw):
     return pool(cp, raw['constant_pool_count']), code
 
 
-def validate_stub(raw, frame, target_frame, classes, host_entries):
+def validate_stub_body(raw, frame, target_frame, classes, host_entries):
     """Only loads/captured getfield, exactly one invoke, and a typed return.
 
     No casts, boxing, allocation, arithmetic, branches, stores, field writes,
@@ -112,7 +112,8 @@ def validate_stub(raw, frame, target_frame, classes, host_entries):
     for name in ('class', 'method', 'signature', 'loader', 'constant_pool_sha256', 'method_sha256'):
         check(raw[name] == frame[name], 'stub-definition-frame-binding')
     check(not raw['native_or_abstract'] and raw['method_modifiers'] & (8 | 0x20) == 0, 'stub-instance-method')
-    # VM metadata identifies a synthetic runtime definition; spelling never binds its host.
+    # Shape constraint only. This does NOT prove factory provenance; validate_stub
+    # below separately replays the external-JDI generation record.
     check(raw['class_modifiers'] & 0x1000 and '/' in raw['class'], 'stub-not-vm-hidden-synthetic')
     check(isinstance(target_frame, dict), 'stub-missing-adjacent-target')
     args, result = descriptor(raw['signature'])
@@ -179,13 +180,49 @@ def validate_stub(raw, frame, target_frame, classes, host_entries):
     check(target_frame['constant_pool_sha256'] == host['constant_pool_sha256'] and
           target_frame['method_sha256'] == host['methods'].get(method+sig), 'stub-host-bytecode')
     public_hosts = ('org.idempiere.test.LightyearOperationsTest', 'org.idempiere.test.JourneySupport')
-    if not (any(owner == n or owner.startswith(n + '$') for n in public_hosts)
-            or owner.startswith(('org.compiere.', 'org.adempiere.'))):
+    if not any(owner == n or owner.startswith(n + '$') for n in public_hosts):
         entry = host_entries.get(owner)
         check(entry is not None and entry['entry_sha256'] == host['class_sha256'], 'stub-framework-jar-entry')
     return {'stub_method_sha256': raw['method_sha256'], 'stub_constant_pool_sha256': raw['constant_pool_sha256'],
             'host_class': owner, 'host_class_sha256': host['class_sha256'], 'host_method': method,
             'host_signature': sig, 'loader': frame['loader'], 'definition_id': raw['definition_id']}
+
+
+def validate_stub(raw, frame, target_frame, classes, host_entries):
+    """Require actual factory entry/return, defining host/site, body and loader.
+
+    Current native records without external-JDI generation evidence fail closed.
+    Neither a hidden name nor a receipt signature is a substitute for linkage.
+    """
+    from tools.b06_host_probe.generation_replay import lambda_linkage, lambda_body
+    body=validate_stub_body(raw,frame,target_frame,classes,host_entries)
+    generation=raw.get('generation')
+    check(isinstance(generation,dict) and set(generation)=={'record','definitions'},'stub-generation-provenance-missing')
+    record,definitions=generation['record'],generation['definitions']
+    check(record.get('entry_method')=='java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;',
+          'stub-not-lambda-factory')
+    defining=record['lambda_factory']['targetClass']['class']
+    check(defining in classes,'stub-defining-host-unbound')
+    host=classes[defining]
+    check('class_bytes_hex' in host,'stub-defining-host-bytes-required')
+    original=bytes.fromhex(host['class_bytes_hex'])
+    check(hashlib.sha256(original).hexdigest()==host['class_sha256'],'stub-defining-host-hash')
+    public=('org.idempiere.test.LightyearOperationsTest','org.idempiere.test.JourneySupport')
+    if not any(defining==n or defining.startswith(n+'$') for n in public):
+        check(host_entries.get(defining,{}).get('entry_sha256')==host['class_sha256'],'stub-defining-host-jar-entry')
+    linkage=lambda_linkage(record,definitions,original)
+    lambda_body(record,definitions,linkage)
+    generated=definitions[str(record['returned_class']['class_object_id'])]
+    check(generated['class']==raw['class'] and generated['loader']==raw['loader']==linkage['loader'],'stub-returned-class-binding')
+    methods=[m for m in generated['methods'] if m['name']==raw['method'] and m['signature']==raw['signature']]
+    check(len(methods)==1 and methods[0]['sha256']==raw['method_sha256'] and
+          generated['constant_pool_sha256']==raw['constant_pool_sha256'],'stub-generation-byte-binding')
+    check(tuple(linkage['implementation'])==(body['host_class'],body['host_method'],body['host_signature']),
+          'stub-bootstrap-target-differs')
+    body.update(host_class=defining,host_class_sha256=host['class_sha256'],
+        invoked_target_class=linkage['implementation'][0],bootstrap_site=linkage,
+        generation_sha256=hashlib.sha256(__import__('json').dumps(generation,sort_keys=True,separators=(',',':')).encode()).hexdigest())
+    return body
 
 
 def receipt_records(events):

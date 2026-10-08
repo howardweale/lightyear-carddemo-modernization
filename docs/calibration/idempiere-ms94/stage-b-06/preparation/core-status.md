@@ -1,5 +1,13 @@
 # B06 preparation status
 
+| Current state (October 7 review follow-up) | Status |
+| --- | --- |
+| Native readiness | r10 failed; r11 rejected by Howard (operator-reported); no replacement authorized. Inventory-only and scoped runtime extraction prepared offline; generated-class/native runtime proof remains incomplete. See [review follow-up](review-pr269-271/README.md). |
+
+The dated entries below are historical. Core items 1–2 remain natively
+unqualified; item 3 needs the artifact/provenance prerequisites and a fresh
+five-path executable/Tower decision; items 4–5 are not measurement-ready.
+
 ## October 7 r9 native failure and offline correction r10
 
 The r9 retained-reference slot ran on both engines but failed as

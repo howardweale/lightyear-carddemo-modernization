@@ -1,0 +1,36 @@
+name: B06 portable provenance regressions
+on:
+  pull_request:
+    paths:
+      - 'tools/b06_host_probe/**'
+      - 'tools/b06_image_artifacts/**'
+      - 'tools/ms94_b06_forwarding_stub.py'
+      - 'tests/b06_synthetic_classfiles.py'
+      - 'tests/test_b06_review_improvements.py'
+      - '.github/workflows/b06-provenance-offline.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/b06_host_probe/**'
+      - 'tools/b06_image_artifacts/**'
+      - 'tools/ms94_b06_forwarding_stub.py'
+      - 'tests/b06_synthetic_classfiles.py'
+      - 'tests/test_b06_review_improvements.py'
+      - '.github/workflows/b06-provenance-offline.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[control-tower]'
+      - name: Authored fixtures; no local JDI evidence, Docker or models
+        run: python -B -m unittest discover -s tests -p 'test_b06_review_improvements.py' -v

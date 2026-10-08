@@ -18,7 +18,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 from lightyear_workflow.campaign_engine import Signer
 from tools.b06_image_artifacts import controller as c
-from tools.b06_image_artifacts.extract import collect
+from tools.b06_image_artifacts.extract import collect, verify_catalogue, LIMITS
 from tools.b06_image_artifacts.prepare import prepare
 
 
@@ -74,11 +74,20 @@ class ExtractionTests(unittest.TestCase):
                 with zipfile.ZipFile(app/'a.jar','w') as z:
                     z.writestr('same/Name.class',b'FIRST');z.writestr('same/Name.class',b'SECOND')
             with zipfile.ZipFile(app/'b.jar','w') as z:z.writestr('same/Name.class',b'THIRD')
+            (app/'copied.jar').write_bytes((app/'a.jar').read_bytes())
             with patch('subprocess.run',side_effect=AssertionError('no subprocess')):
                 r=collect([app],jdk,p/'out')
             copies=[x for x in r['classes'] if x['entry']=='same/Name.class']
             self.assertEqual(len(copies),3);self.assertEqual(len({x['sha256'] for x in copies}),3)
             self.assertEqual([x['ordinal'] for x in copies],[0,1,0])
+            self.assertEqual(len(copies[0]['artifact_paths']),2)
+            self.assertFalse((p/'out/blobs'/copies[0]['sha256']).exists())
+            self.assertTrue(verify_catalogue(p/'out',r)['full_class_bytes_replayed'])
+            for field,value in [('sha256','f'*64),('ordinal',99),('artifact_paths',[])]:
+                changed=json.loads(json.dumps(r));changed['classes'][0][field]=value
+                with self.subTest(field=field),self.assertRaises(ValueError):verify_catalogue(p/'out',changed)
+            missing=json.loads(json.dumps(r));missing['classes'].pop()
+            with self.assertRaisesRegex(ValueError,'closure'):verify_catalogue(p/'out',missing)
             self.assertFalse(r['resolved_runtime_claim']);self.assertFalse(r['native_admission'])
             with self.assertRaises(FileExistsError):collect([app],jdk,p/'out')
 
@@ -88,6 +97,7 @@ class ControllerTests(unittest.TestCase):
         p=Path(tmp);root=p/'snapshot';root.mkdir();out=p/'output'
         f=root/c.EXTRACTOR;f.parent.mkdir(parents=True);f.write_bytes(b'# test fixture only\n')
         core=seal({'image':c.IMAGE,'native_pairs':0,'model_calls':0,'target_jvm_executions':0,
+                   'catalogue_schema':'b06-image-inventory/1','operation':'inventory-only','class_bytes_copied':0,'entrypoint':c.ENTRYPOINT,
                    'maximum_extraction_seconds':900,'cleanup_reserve_seconds':600,'container_count':1,'retries':0})
         (root/'core.json').write_bytes(canonical(core))
         manifest=seal({'schema':'b06-image-extraction-snapshot/1','model_calls':0,
@@ -135,6 +145,7 @@ class ControllerTests(unittest.TestCase):
                 root,out,plan,now,tower,signer,reader=self.fixture(tmp)
                 value={k:v for k,v in plan.items() if k!='content_sha256'}
                 value.update({'public_plan_path':'public/plan.json',
+                    'public_ref':'refs/heads/codex/b06-observer-v2-preparation',
                     'public_files':{n:'public/'+n for n in (c.EXTRACTOR,'core.json','snapshot.json')}})
                 if fault=='closure':del value['public_files']['core.json']
                 plan=seal(value);ref='refs/heads/codex/b06-observer-v2-preparation'
@@ -173,12 +184,12 @@ class ControllerTests(unittest.TestCase):
                     elif args[0]=='start':
                         if mode in ('timeout','foreign'):
                             raise subprocess.TimeoutExpired('docker start',900,output=b'partial output',stderr=b'partial error')
-                        catalogue=out/'catalogue';(catalogue/'blobs').mkdir(parents=True)
-                        blob=b'public synthetic artifact';h=hashlib.sha256(blob).hexdigest()
-                        (catalogue/'blobs'/h).write_bytes(blob if mode!='tamper' else b'changed')
-                        (catalogue/'catalogue.json').write_bytes(canonical({'schema':'b06-image-artifact-catalogue/1',
-                            'model_calls':0,'native_pairs':0,'target_jvm_executions':0,'artifacts':[{'sha256':h}],
-                            'classes':[],'runtime_files':[]}))
+                        folder=out/'inventory';folder.mkdir()
+                        row={'path':'/application/Test.class','bytes':5,'sha256':'a'*64}
+                        roots={'/application':{'files':1}}
+                        (folder/'inventory.json').write_bytes(canonical(dict(schema='b06-image-inventory/1',
+                            artifacts=[row],roots=roots,failure=None,model_calls=0,native_pairs=0,class_bytes_copied=0)))
+                        (folder/'progress.jsonl').write_bytes(canonical(dict(artifact={} if mode=='tamper' else row,root_counts=roots))+b'\n')
                     elif args[0]=='ps' and created and not removed:raw=identity.encode()
                     elif args[0]=='rm':self.assertEqual(args,('rm','--force',identity));removed=True
                     return subprocess.CompletedProcess(args,0,raw,b'')

@@ -34,6 +34,11 @@ def expand(items):
 
 def coverage_union(records):
     if not records:raise ValueError('coverage-cases-missing')
+    versions={v['raw']['schema'].rsplit('/',1)[-1] for v in records}
+    if len(versions)!=1:raise ValueError('coverage-mixed-revisions')
+    from .coverage import replay_coverage, summarize
+    if versions=={'2'}:
+        from .coverage_v2 import replay_coverage, summarize
     groups=defaultdict(list);source_hashes={}
     collectors=set()
     for record in records:

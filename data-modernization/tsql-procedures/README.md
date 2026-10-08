@@ -22,7 +22,7 @@ and failed attempts remain preserved. No B06 or Windows containers were used.
 | Profile | SQL Server collation and compatibility pinned and read back | Tested: Latin1_General_100_CI_AS / 160 |
 | Capture | All user-table effects, raw metadata, OUT/RETURN, errors/messages, transaction exit, identity and SQL SEQUENCE metadata | Standalone sequence mapping, nested PG counts and complete transaction-event streams remain gated |
 | Inventory | Missing twin refused per pair; unpaired-file hashes retained; parser-derived cross-database references | Partial dependency catalogue; full native transitive closure remains incomplete |
-| Coverage | Qualified revision 1 unchanged; revision 2 adds configurable PG schemas and excludes views from procedural parsing | Revision 2 selectable but unqualified; cannot reuse revision 1 controls |
+| Coverage | Qualified revision 1 unchanged; revision 2 passed nine native controls and six consuming pairs, including PG schemas and view exclusion | [Exact v2 scope and hashes](coverage-v2-results.md); cannot reuse revision 1 controls or infer universal coverage |
 | Cases | Boundary/branch-value/trace proposals and bounded same-failure shrinking | Proposals need fresh execution; no global minimum or automatic path-solving claim |
 | Tower | Registered procedure-equivalence-policy kind and signature verification bound to inventory/procedure/policy/evidence | No decision issued; comparator does not clear obligations from unverified proposals |
 
@@ -60,10 +60,11 @@ PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -B tools/run_tsql_native.py \
   --coverage-controls-key-sha256 EXPECTED_CONTROL_PUBLIC_KEY
 ```
 
-For prospective collector-v2 checks, add `--coverage-revision 2` and repeat
-`--coverage-schema` for target schemas; omit old control arguments. These runs
-cannot establish equivalence until new controls qualify revision 2. All schemas
-are plan-bound. This runner is not a confidential customer deployment or
+For qualified collector-v2 comparisons, add `--coverage-revision 2`, repeat
+`--coverage-schema dbo --coverage-schema business`, and supply the exact v2
+control evidence/report/key from [the qualification](coverage-v2-results.json).
+Revision 1 evidence is rejected. New schema scopes require fresh qualification.
+All schemas are plan-bound. This runner is not a confidential customer deployment or
 permission to transfer customer code.
 
 ## Independent replay

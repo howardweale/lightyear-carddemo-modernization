@@ -129,6 +129,9 @@ class SqlCoverage:
         if not name.replace('_','').isalnum():raise ValueError('coverage-session-name')
         self.c,self.name=connection,name
         self.modules=[]
+        self.excluded_views=[{'name':schema+'.'+name_,'definition_sha256':sha(definition.encode())}
+            for schema,name_,definition in query(connection,"""SELECT SCHEMA_NAME(o.schema_id),o.name,m.definition
+FROM sys.sql_modules m JOIN sys.objects o ON o.object_id=m.object_id WHERE o.is_ms_shipped=0 AND o.type='V' ORDER BY o.object_id""")]
         for oid,schema,name_,definition in query(connection,"""SELECT o.object_id,SCHEMA_NAME(o.schema_id),o.name,m.definition
 FROM sys.sql_modules m JOIN sys.objects o ON o.object_id=m.object_id WHERE o.is_ms_shipped=0 AND o.type IN ('P','FN','TF','TR') ORDER BY o.object_id"""):
             p=subprocess.run(['dotnet',str(bridge)],input=definition.encode(),capture_output=True,timeout=30)
@@ -151,6 +154,7 @@ FROM sys.dm_xe_sessions s JOIN sys.dm_xe_session_targets t ON t.event_session_ad
 WHERE s.name=%s AND t.target_name='ring_buffer'""",(self.name,))
             if len(rows)!=1:raise ValueError('coverage-target-missing')
             raw={'schema':'tsql-sqlserver-coverage-input/2','modules':self.modules,
+                 'excluded_views':self.excluded_views,
                  'bridge_sha256':self.bridge_sha256,'ring_xml':rows[0][0],'dropped_events':rows[0][1]}
             if preserve: preserve(raw)
             return {'raw':raw,'summary':sql_summary(raw)}
@@ -175,7 +179,8 @@ WHERE n.nspname = ANY(%s) AND l.lanname='plpgsql' ORDER BY p.oid""",(list(self.s
         for m in self.modules:
             m['after']=self.statements(m['oid'])
             m['branch_fraction']=float(query(self.c,'SELECT plpgsql_coverage_branches(%s::oid)',(m['oid'],))[0][0])
-        raw={'schema':'tsql-postgresql-coverage-input/2','extension_version':self.version,'modules':self.modules}
+        raw={'schema':'tsql-postgresql-coverage-input/2','extension_version':self.version,'modules':self.modules,
+             'schemas':list(self.schemas)}
         if preserve: preserve(raw)
         return {'raw':raw,'summary':pg_summary(raw)}
 

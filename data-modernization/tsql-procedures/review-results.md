@@ -66,8 +66,9 @@ equivalence. Missing twins refuse per pair; AST references replace lexical
 three-part-name assumptions.
 
 Coverage revision 1 is unchanged and retains seven native controls. Revision 2
-is separately selectable, adds PG schemas and excludes views, and is **not
-natively qualified**. It cannot reuse revision 1 control evidence. Case
+is separately selectable, adds PG schemas and excludes views. Its subsequent
+[nine-control native qualification](coverage-v2-results.md) passed; this does
+not retroactively change run 015. It cannot reuse revision 1 control evidence. Case
 generation, bounded same-failure shrinking and Tower policy verification are
 offline-tested APIs, not completed customer workflow qualification.
 

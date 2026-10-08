@@ -168,7 +168,7 @@ def compare_v2(source,target,mapping,qualification=None,revision=2,coverage_modu
         if record is None:pending(lane+'-coverage-missing','unsupported')
         else:coverage[lane]=replay_coverage(record)
     eligible=len(coverage)==2 and all(c['eligible'] for c in coverage.values())
-    qualified=qualification is not None and qualification.get('schema')=='tsql-coverage-qualification/1' and qualification.get('passed') is True
+    qualified=qualification is not None and qualification.get('schema') in ('tsql-coverage-qualification/1','tsql-coverage-qualification/2') and qualification.get('passed') is True
     if qualification is not None and not qualified:raise ValueError('coverage-qualification-contract')
     if qualified:
         if (sha(Path(coverage_module.__file__).read_bytes())!=qualification['collector_sha256']
@@ -179,7 +179,7 @@ def compare_v2(source,target,mapping,qualification=None,revision=2,coverage_modu
     result={'schema':'tsql-native-comparison/'+str(revision),'mapping':mapping,
         'differences':differences,'unresolved':unresolved,'coverage':coverage,
         'coverage_thresholds_met':eligible,'coverage_qualification':qualification,
-        'collector_qualification':(('five' if len(qualification['controls'])==5 else 'seven')+'-native-controls-passed') if qualified else 'pending-native-controls',
+        'collector_qualification':({5:'five',7:'seven',9:'nine'}[len(qualification['controls'])]+'-native-controls-passed') if qualified else 'pending-native-controls',
         'observed_status':'divergent' if differences else 'match-on-compared-observables',
         'verdict':verdict,
         'normalized_fields':normalized,'inferred_mappings_flagged':True,

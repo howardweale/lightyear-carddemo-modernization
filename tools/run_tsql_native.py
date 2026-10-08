@@ -97,10 +97,13 @@ def main():
         for a in item['assets'].values(): asset(root,a)
     qualification=None
     if args.coverage_controls_evidence:
-        if args.coverage_revision!=1:raise ValueError('coverage-v2-needs-new-native-control-qualification')
         from lightyear_data.tsql_procedures.coverage_qualification import qualify
         from lightyear_data.tsql_procedures import coverage as coverage_module
+        if args.coverage_revision==2:
+            from lightyear_data.tsql_procedures import coverage_v2 as coverage_module
         qualification=qualify(args.coverage_controls_evidence,args.coverage_controls_report_sha256,args.coverage_controls_key_sha256)
+        if qualification['schema']!='tsql-coverage-qualification/'+str(args.coverage_revision):raise ValueError('coverage-qualification-revision')
+        if args.coverage_revision==2 and qualification['coverage_schemas']!=(args.coverage_schemas or ['dbo']):raise ValueError('coverage-qualification-schemas')
         if (not args.coverage_bridge or qualification['bridge_sha256']!=sha(args.coverage_bridge.read_bytes())
                 or qualification['collector_sha256']!=sha(Path(coverage_module.__file__).read_bytes())
                 or qualification['images']!={'sqlserver':SQL_IMAGE,'postgresql':args.pg_image}):

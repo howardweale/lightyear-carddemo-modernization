@@ -14,8 +14,13 @@ fresh per-case reset, pinned/read-back collation/compatibility, error/type contr
 SEQUENCE capture and per-pair intake refusal are implemented. 89 T-SQL offline
 tests and 18 Tower registry tests pass. Zero model calls.
 
-Collector revision 2, case proposal/shrink APIs and Tower policy verification are
-offline-tested; they do not claim new native collector or customer qualification.
+Collector revision 2 is now [natively qualified on nine controls](../data-modernization/tsql-procedures/coverage-v2-results.md),
+including non-dbo schema capture and view exclusion. All nine controls and six
+fresh consuming comparison pairs replayed on Linux and Windows; actual owned
+cleanup passed. The consumption check produced three equivalent correct cases
+and three divergent wrong cases. The current offline suite passes 93 tests.
+Earlier failed attempts remain preserved. Case proposal/shrink APIs and Tower
+policy verification remain offline-tested, without customer qualification.
 Full customer dependency closure and release remain gated. The following is the
 preserved earlier milestone, not the current run's results.
 

@@ -28,6 +28,7 @@ def validate(root,plan):
         p=root/name;check(not p.is_symlink() and p.resolve().is_relative_to(root),'runtime-snapshot-path')
         check(hashlib.sha256(p.read_bytes()).hexdigest()==expected,'runtime-snapshot-changed')
     check(digest(files)==plan['snapshot_sha256'],'runtime-snapshot-binding')
+    check({p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}==set(files),'runtime-snapshot-extra-files')
     check(hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==files['runtime_launch.py'],'runtime-host-launcher-changed')
     from . import runtime_producer
     check(hashlib.sha256(Path(runtime_producer.__file__).read_bytes()).hexdigest()==files['runtime_producer.py'],'runtime-host-producer-changed')
@@ -36,10 +37,38 @@ def validate(root,plan):
     check(hashlib.sha256(Path(__file__).parents[1].joinpath('ms94_b06_observed_worker.py').read_bytes()).hexdigest()==files['ms94_b06_observed_worker.py'],'runtime-measured-worker-binding')
     return root
 
-def bound(plan,commit):
-    return {k:digest(v) for k,v in dict(campaign=plan['id'],plan=plan,declaration=dict(runtime_only=True,models=0,native_pairs=0),
+def request(plan,commit):
+    verify(plan);check(re.fullmatch('[a-f0-9]{40}',commit),'full-public-commit')
+    artifacts=dict(campaign=plan['id'],plan=plan,declaration=dict(runtime_only=True,models=0,native_pairs=0),
         limits=dict(seconds=plan['maximum_runtime_seconds'],cleanup=600,retries=0),snapshot=plan['snapshot_sha256'],
-        window=plan['window'],public_commit=commit).items()}
+        window=plan['window'],public_commit=commit)
+    bindings={k:digest(v) for k,v in artifacts.items()}
+    value=dict(schema='tower-request/1',scope='ms94-b06',kind='campaign-authorization',bound=bindings,
+        evidence={k:'evidence/b06/runtime-closure/'+v+'.json' for k,v in bindings.items()},
+        proposed_by='b06-runtime-closure-preparation',workload=plan['id'],
+        summary='One network-free runtime-closure container; offline probe compilation, no-database Tycho/Equinox test JVM and jimage extraction. '
+          'No native pairs, models or databases; no retry. 2700 seconds runtime plus 600 seconds cleanup reserve. '
+          'Window '+plan['window']['not_before_utc']+' to '+plan['window']['deadline_utc']+'. '
+          'Latest start '+plan['window']['latest_start_utc']+'. Five-path census is not authorized. Operator review; not independent attestation.')
+    value['id']='b06-runtime-'+digest(value)
+    return value,{**bindings,'request':digest(value)},artifacts
+
+
+def bound(plan,commit):
+    return request(plan,commit)[1]
+
+
+def write_request(repository,plan,commit):
+    value,bindings,artifacts=request(plan,commit)
+    for name,artifact in artifacts.items():
+        p=Path(repository)/value['evidence'][name]
+        if p.exists():check(p.read_bytes()==canonical(artifact),'runtime-review-evidence-changed')
+        else:atomic_new(p,artifact)
+    p=Path(repository)/'work/control-tower/requests/ms94-b06'/(value['id']+'.json')
+    if p.exists():check(p.read_bytes()==canonical(value),'runtime-request-changed')
+    else:atomic_new(p,value)
+    return value['id'],bindings
+
 
 def publication(repository,root,plan,commit):
     def git(*args):return subprocess.check_output(['git','-C',str(repository),*args],timeout=60)
@@ -117,3 +146,25 @@ def execute(repository,root,plan,output,commit,reader,signer):
            resolution_sha256=digest(resolution) if resolution else None,model_calls=0,native_pairs=0))
         atomic_new(output/'report.json',report)
     return report
+
+
+def main():
+    import argparse
+    p=argparse.ArgumentParser()
+    for name in ('root','plan','repository','output','public-commit','authority','tower-key','credential'):
+        p.add_argument('--'+name,required=True)
+    p.add_argument('--tower-url',default='http://127.0.0.1:8766')
+    a=p.parse_args();root=Path(a.root).resolve()
+    check(Path.cwd().resolve()==root and Path(__file__).resolve().is_relative_to(root),'frozen-cwd-imports-required')
+    plan=json.loads(Path(a.plan).read_bytes());validate(root,plan)
+    # Verify public bytes before opening the existing signer or operator session.
+    publication(a.repository,root,plan,a.public_commit)
+    from tools.ms94_b06_qualification_worker import existing_signer
+    from lightyear_control_tower.b06 import DecisionReader
+    from lightyear_control_tower.client import ConsoleClient
+    signer=existing_signer(a.authority)
+    reader=DecisionReader(ConsoleClient(a.tower_url),Path(a.credential).read_text(encoding='utf-8-sig').strip(),Path(a.tower_key).read_bytes())
+    result=execute(a.repository,root,plan,a.output,a.public_commit,reader,signer)
+    if not result['passed']:raise SystemExit(1)
+
+if __name__=='__main__':main()

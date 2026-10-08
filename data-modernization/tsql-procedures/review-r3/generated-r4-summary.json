@@ -1,0 +1,287 @@
+{
+  "audit": {
+    "actual_docker_check": "not performed by offline replay",
+    "claim": "Operator review; not independent attestation",
+    "cleanup_receipt_passed": true,
+    "database_calls": 0,
+    "elapsed_seconds": 0.466704904999915,
+    "file_count": 450,
+    "model_calls": 0,
+    "pairs_replayed": 18,
+    "public_key_sha256": "b58ff73b8e1c5d524db02c71fa2df0a0cf1ee656b2c974a006b4830998fdf0db",
+    "qualification_passed": false,
+    "replays": [
+      {
+        "index": 1,
+        "manifest_sha256": "fafa16788588faf572d9ec766a9a6d7090fa2fdb2a8c6ec7e177d3b895de9ef2",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 2,
+        "manifest_sha256": "209f2e633523cfbe179a6d579d258b07a7fad745a8e36aae0532d7895d38e141",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 3,
+        "manifest_sha256": "8f70e26909cab00601f15c3406c2aaa49afe1fe5da6a05585123d5751f86f503",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 4,
+        "manifest_sha256": "bffd5d3a9ad729eae1ec2853da2fdd7ba7a1ae23953bbe5a5f3ce66c6a7bc15e",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 5,
+        "manifest_sha256": "e38e96fdb5096f38a6f71e440a9433bc88d6f8868b914519e0ad8e29a4494ed7",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 6,
+        "manifest_sha256": "eb5760cee3d3c8e14437aa3a6af4cd5d57c3e48733f3512719ca70bd84f5bb55",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 7,
+        "manifest_sha256": "d54a8fce7745a6a334aae4dd369f060ccdd4b568c001db4f79457df4c56d9335",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 8,
+        "manifest_sha256": "26ca67542773aed8c5e75b8d1b71286830508a8ffe50740b214c61e358caadab",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 9,
+        "manifest_sha256": "2a1d19ba49d6f05324839d81de37fedd6f09398ec0495f485fe7a8ec61d84f6c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 10,
+        "manifest_sha256": "d6844fddbf069d9dc5decb397c50ae197fab3b50d3ed17c466c6dddf8085373a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 11,
+        "manifest_sha256": "b7a2f8e7a4260a179f466e5f36357df720a46132ff1d6ad56b20ffc1a308b29f",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 12,
+        "manifest_sha256": "14920248c65ccec95b23bdf0ebcd7f2023df160a966d46ca3a6839853f8bafb6",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 13,
+        "manifest_sha256": "3197f460af8e60bf3c5420a7380fd374297f25e5cd0ba40625b2687e7ee4a747",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 14,
+        "manifest_sha256": "fe58503f7fa9563b704ec7d5e5545dc4e63ba0fc4347dae80d95938680f4a23d",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 15,
+        "manifest_sha256": "d9995eb58d60f50e818f7d8bdb3d20238982359d9906f7c3474ae26dadb51c65",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 16,
+        "manifest_sha256": "fa488aee994cc33a23758c5c70a75a5468b926de77f0bcb73a4fc3ffca2316ad",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 17,
+        "manifest_sha256": "3a8e0d38a39c08a50f30e519270fea9e6a13bc196db7475e7c9370493e7b1b8a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 18,
+        "manifest_sha256": "394c3070fba9e5bee06a9156a5528ba205d1e3ead9849c71e282db957d207e7c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      }
+    ],
+    "report_sha256": "fcb12e2197ec0efd26f4a29b4be35d3b2e325429b5ae09eab9b1f20392b629a2",
+    "schema": "tsql-independent-offline-audit/1"
+  },
+  "cleanup": {
+    "containers": true,
+    "networks": true,
+    "volumes": true
+  },
+  "elapsed_seconds": 100.40852330100006,
+  "model_calls": 0,
+  "public_key_sha256": "b58ff73b8e1c5d524db02c71fa2df0a0cf1ee656b2c974a006b4830998fdf0db",
+  "records": [
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 1,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [
+        "result_sets",
+        "result_sets"
+      ],
+      "id": "len",
+      "index": 2,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "case_origin": "shrink-probe",
+      "differences": [],
+      "id": "len",
+      "index": 3,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "shrink-probe",
+      "differences": [],
+      "id": "len",
+      "index": 4,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 5,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [
+        "result_sets",
+        "result_sets"
+      ],
+      "id": "len",
+      "index": 6,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "case_origin": "shrink-probe",
+      "differences": [],
+      "id": "len",
+      "index": 7,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "shrink-probe",
+      "differences": [],
+      "id": "len",
+      "index": 8,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 9,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 10,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 11,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 12,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 13,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 14,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 15,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 16,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 17,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "proposed-not-executed",
+      "differences": [],
+      "id": "len",
+      "index": 18,
+      "variant": "wrong",
+      "verdict": "equivalent"
+    }
+  ],
+  "report_sha256": "fcb12e2197ec0efd26f4a29b4be35d3b2e325429b5ae09eab9b1f20392b629a2"
+}

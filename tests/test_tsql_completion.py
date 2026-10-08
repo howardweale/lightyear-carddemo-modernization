@@ -21,9 +21,9 @@ class CompletionTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'binding'):assess(altered)
  def test_all_module_queries_are_observed(self):
   with patch('lightyear_data.tsql_procedures.dependencies.query',return_value=[]) as q:
-   capture(None,'sqlserver');self.assertEqual(q.call_count,3)
+   capture(None,'sqlserver');self.assertEqual(q.call_count,4)
   with patch('lightyear_data.tsql_procedures.dependencies.query',return_value=[]) as q:
-   capture(None,'postgresql');self.assertEqual(q.call_count,3)
+   capture(None,'postgresql');self.assertEqual(q.call_count,4)
  def test_tower_policy_is_bound_and_replayed_not_self_approved(self):
   policy=dict(schema='tsql-float-tolerance/1',absolute_tolerance=0.001,relative_tolerance=0)
   args=dict(scope='test',head='a'*64,now=datetime.now(timezone.utc),bound_context=dict(inventory={},procedure={},evidence={}))

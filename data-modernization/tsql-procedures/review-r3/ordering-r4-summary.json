@@ -1,0 +1,147 @@
+{
+  "audit": {
+    "actual_docker_check": "not performed by offline replay",
+    "claim": "Operator review; not independent attestation",
+    "cleanup_receipt_passed": true,
+    "database_calls": 0,
+    "elapsed_seconds": 0.49567892300001404,
+    "file_count": 288,
+    "model_calls": 0,
+    "pairs_replayed": 8,
+    "public_key_sha256": "00db335f6aeaa4b58903c043d8ea345b2697d69e6879a8efd48a2da8c236ccee",
+    "qualification_passed": false,
+    "replays": [
+      {
+        "index": 1,
+        "manifest_sha256": "faff333e19bec8e151123ce07720c00dc765072d686f5b052a89558073d47d5a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 2,
+        "manifest_sha256": "007a9aacec1daf60472f183448310f891d2be42584e1abe0759669446ede6e5a",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 3,
+        "manifest_sha256": "43030e379ce0f646cde8a294b0d1d760a3c61c5feffafb169923fff5c192f7f1",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 4,
+        "manifest_sha256": "efb66290b6b9e8cbb666e8bd52a76ec8faafa150aa30e8dfc836dc585d4b1fe2",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 5,
+        "manifest_sha256": "18877ea54398751257b219ed9331fd83995fc1745ba718522cd37dfa492318e0",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 6,
+        "manifest_sha256": "4384d9e959cf1cf047bc6e1d59349285e0c2404c54bdac9ed724e30238932cbe",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 7,
+        "manifest_sha256": "2cce94349bc8374f7e6c404556743d50d754b522ebc25d78ff510a02425c6479",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 8,
+        "manifest_sha256": "d31a197030b60c9a43fc585c5de9ef8599ed14eaa2f265cc7fba40a8d3113dea",
+        "status": "divergent",
+        "verified": true
+      }
+    ],
+    "report_sha256": "f747fe48bf06d309633e2aae41c1b851fd54d48f4eced19e0bacb1673695050c",
+    "schema": "tsql-independent-offline-audit/1"
+  },
+  "cleanup": {
+    "containers": true,
+    "networks": true,
+    "volumes": true
+  },
+  "elapsed_seconds": 53.67897244899996,
+  "model_calls": 0,
+  "public_key_sha256": "00db335f6aeaa4b58903c043d8ea345b2697d69e6879a8efd48a2da8c236ccee",
+  "records": [
+    {
+      "case_origin": "declared-seed",
+      "differences": [],
+      "id": "orderless-twin",
+      "index": 1,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [
+        "target-order-contract-missing"
+      ],
+      "id": "orderless-twin",
+      "index": 2,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [],
+      "id": "ordered-union",
+      "index": 3,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [
+        "ordered-result-sets"
+      ],
+      "id": "ordered-union",
+      "index": 4,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [],
+      "id": "qualified-sort",
+      "index": 5,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [],
+      "id": "qualified-sort",
+      "index": 6,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [],
+      "id": "nonreturning-select",
+      "index": 7,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "case_origin": "declared-seed",
+      "differences": [
+        "ordered-result-sets"
+      ],
+      "id": "nonreturning-select",
+      "index": 8,
+      "variant": "wrong",
+      "verdict": "divergent"
+    }
+  ],
+  "report_sha256": "f747fe48bf06d309633e2aae41c1b851fd54d48f4eced19e0bacb1673695050c"
+}

@@ -123,7 +123,7 @@ class SecondReviewTests(unittest.TestCase):
     def test_datetime_ticks_and_exact_decimal_table_values(self):
         from lightyear_data.tsql_procedures.value_contract import datetime_value
         def dt(text):return dict(type='datetime',value='2026-10-01T00:00:00.'+text)
-        self.assertEqual(datetime_value(dt('003000'),'datetime'),datetime_value(dt('003333'),'datetime'))
+        self.assertNotEqual(datetime_value(dt('003000'),'datetime'),datetime_value(dt('003333'),'datetime'))
         self.assertNotEqual(datetime_value(dt('003000'),'datetime'),datetime_value(dt('007000'),'datetime'))
         with self.assertRaisesRegex(ValueError,'naive'):
             datetime_value(dict(type='datetime',value='2026-10-01T00:00:00+02:00'),'datetime')
@@ -178,7 +178,7 @@ class SecondReviewTests(unittest.TestCase):
         from lightyear_data.tsql_procedures.value_contract import normalized_tables
         a=dict(tables={'t':dict(columns=[['at','datetime']],primary_key=[],rows=[{'at':dict(type='datetime',value='2026-10-01T00:00:00.003')}])})
         b=dict(tables={'t':dict(columns=[['at','timestamp without time zone']],primary_key=[],rows=[{'at':dict(type='datetime',value='2026-10-01T00:00:00.003333')}])})
-        self.assertEqual(*normalized_tables(a,b))
+        self.assertNotEqual(*normalized_tables(a,b))
 
     def test_profile_failure_preserves_ownership_of_created_database(self):
         from unittest.mock import patch

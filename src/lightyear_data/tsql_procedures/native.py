@@ -229,7 +229,7 @@ class NativeEngine:
                 settings = query(c, 'SELECT current_setting(\'TimeZone\'),current_setting(\'standard_conforming_strings\')')
                 clock = str(query(c, 'SELECT clock_timestamp()')[0][0])
             from .dependencies import capture as capture_dependencies
-            dependency_catalogue=capture_dependencies(c,self.engine)
+            dependency_catalogue=capture_dependencies(c,self.engine,self.coverage_bridge)
             before = self.capture_state(c)
             if on_capture: on_capture('before',before)
             collector=None
@@ -246,7 +246,7 @@ class NativeEngine:
                        engine_version=version, session_settings=settings, database_clock_before=clock)
             if 'policy_admission' in item:obs['policy_admission']=item['policy_admission']
             obs['dependency_catalogue']=dependency_catalogue
-            obs['dependency_catalogue_after']=capture_dependencies(c,self.engine)
+            obs['dependency_catalogue_after']=capture_dependencies(c,self.engine,self.coverage_bridge)
             if self.engine=='sqlserver' and 'source_syntax' in item:obs['source_syntax']=item['source_syntax']
             if self.engine=='postgresql' and 'target_source' in item:obs['target_source']=item['target_source']
             if 'case_binding' in item:obs['case_binding']=item['case_binding']

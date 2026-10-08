@@ -1,0 +1,21 @@
+{
+  "schema": "tsql-validation-session/1",
+  "claim": "Operator review; not independent attestation",
+  "model_calls": 0,
+  "local_docker_commands": 0,
+  "lastStartTimestamp": "2026-10-08T06:37:27.627-07:00",
+  "lastStopTimestamp": "2026-10-08T07:40:15.486-07:00",
+  "scheduling": {
+    "automaticRestart": false,
+    "instanceTerminationAction": "STOP",
+    "maxRunDuration": {
+      "nanos": 0,
+      "seconds": "14400"
+    },
+    "onHostMaintenance": "MIGRATE",
+    "preemptible": false,
+    "provisioningModel": "STANDARD"
+  },
+  "status": "TERMINATED",
+  "elapsed_seconds": 3767.859
+}

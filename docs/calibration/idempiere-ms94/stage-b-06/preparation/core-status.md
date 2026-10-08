@@ -1,5 +1,26 @@
 # B06 preparation status
 
+## October 8 archive copy and offline five-path inputs complete; observer v2 integration incomplete
+
+The [exact archive copy](built-catalog-r1/terminal/README.md) passed: 204 archives,
+132,922,294 bytes, signed report and independent replay verified, 291 frozen files
+unchanged and actual owned resources absent. Zero native pairs or models.
+
+The [offline census assembly](built-census-offline-r1/README.md) indexes 122,650
+class entries from 204 archives, 44 application bundles and 27,834 JDK classes.
+Fresh host extraction of the bound module image matched all saved JDK classes.
+Five fresh private input assemblies contain 82 hash-verified input references.
+Fourteen offline integrity tests pass. No Docker/model call occurred in assembly.
+
+This does not complete the approved observer-v2 boundary: external defining
+origins, native use of the approved pool rule, LambdaForm per-use target proof,
+JDK provider/loader bindings and full native replay integration remain. The new
+five-path preparation is explicitly non-executable; no new Tower request, window
+or snapshot is claimed. The Oct 9 generated-proof deadline remains. The archive
+prerequisite is complete, but earlier wording must not imply it was the only
+remaining executable-census gate.
+
+
 ## October 8 direct built-runtime launch implemented; census not launched
 
 The [native integration](built-native-r1/README.md) now provides direct Java launch,

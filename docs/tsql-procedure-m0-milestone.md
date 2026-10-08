@@ -81,3 +81,5 @@ A separate generated-input/shrinking integration completed 92 native pairs (54 o
 ## PR277 review completion - October 8 UTC
 
 Fresh revision 9 qualification passed 86/86 expected procedure/variant outcomes across 108 native pairs. All archives independently replayed; nine coverage controls, eight ordering controls and an 18-pair generated/shrink integration were also verified. Prior failed revision 8 remains preserved. The dedicated VM was stopped after 3767.859 seconds (about 63 minutes), within the approved four-hour limit. Zero model calls and zero local Docker commands. [Results, exact hashes and limitations](../data-modernization/tsql-procedures/review-r3/README.md).
+
+Publication CI: the dedicated T-SQL Linux and Windows jobs passed. The first full Linux suite ran 2,731 tests and found one missing optional parser dependency; its workflow now installs the same tsql extra before the full suite. No qualified implementation, source bundle or native evidence was changed.

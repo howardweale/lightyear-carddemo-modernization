@@ -37,3 +37,12 @@ The new manifest reader successfully read preserved r10 output without changing 
 Offline tests cover strict non-candidate entries (including nested JARs, manifest qualifiers and generated resources), exact per-run class allowance, immutable dependency/configuration checks, wrong origin/hash/loader, duplicate actual JVM definitions, frozen input mutation, insufficient windows, container ownership, serial read-only consumers, no retry and failure preservation. Docker lifecycle tests mock the subprocess boundary. A host-JDK test compiles only tiny public fixtures and the practice recorder. Native direct Equinox launch remains unverified until practice.
 
 Validation: 82 focused offline tests passed on the development checkout, including the real host-JVM byte-recorder test and mocked Docker lifecycle tests. Frozen-import results are recorded with the assembled plan.
+
+## Frozen preparation
+
+- Source commit: `11d6ff4c91e76949f171a3a5385b7b59bee5597c`.
+- Snapshot (777 files): `c2694d9b28d4af4226f0ce9693c87411768cc63ed52756a7805955b1da6743af`.
+- Plan content: `3301aee1764e388b1f451163be3273d7ea1592db3e9b73f0bb8f1f93056512b3` ([plan](plan.json)).
+- [Offline check](offline-check.json): 82 tests, zero errors/failures, 3.047 seconds with frozen imports. All 777 hashes checked before and after.
+- Runtime files remain local under `work/b06-runtime-snapshots/build-once-r1`; the public plan contains hashes and original committed paths. No private archives are included.
+- Docker window: not approved or scheduled. Derived image: not created. Tower request: not issued. B06 measurement: not launched.

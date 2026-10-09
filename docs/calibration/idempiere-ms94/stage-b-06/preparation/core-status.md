@@ -1,5 +1,17 @@
 # B06 preparation status
 
+## October 9 morning census r2 prepared; Tower decision pending
+
+The [r2 executable preparation](census-v2-r2/README.md) passed all five offline
+assemblies, 113,610 frozen hashes, 766 public source comparisons and 20 focused
+tests. Window: October 9 07:00-18:00 PDT; latest full-budget launch 07:50:50 PDT.
+Snapshot `b1bd1b72ea82486c10ab306f054581f4c6351dc0d6e8261d04bd4e7779516f0d`;
+plan `17c4aac5fc98bbef39ed1de9af940592420328bf5d0cac20583977ee3f1a1bf7`.
+R1 expired unlaunched and remains preserved. No Docker, model calls or native
+pairs during preparation. A fresh exact Tower decision is required; nothing is
+armed. No journey qualification or measurement credit. Operator review, not
+independent attestation.
+
 ## October 8 five-path observer-v2 census executable prepared
 
 The [census preparation](census-v2-r1/README.md) seals five fresh zero-model pairs

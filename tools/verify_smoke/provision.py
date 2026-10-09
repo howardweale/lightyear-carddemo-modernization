@@ -19,7 +19,8 @@ DEV = Path("/srv/dev")
 TOWER = Path("/srv/verify-tower")
 FIXTURE = "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05"
 PREFIXES = ("src/", "spec/mainframe/", "tests/", "candidate-java/", "extensions/runtime/")
-SINGLE = {"pyproject.toml", "README.md", "tools/run_verify_acceptance.py"}
+SINGLE = {"pyproject.toml", "README.md", "tools/run_verify_acceptance.py",
+          "tools/verify_graph_activation_check.py"}
 
 UNIT = """[Unit]
 Description=Lightyear Verify public-fixture smoke judge

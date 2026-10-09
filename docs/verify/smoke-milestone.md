@@ -113,3 +113,17 @@ and this milestone entry. Validation confirmed attachment byte equality and
 preservation of every original smoke-results byte; Git whitespace checks passed.
 This documentation update made zero model calls and ran no live client or Docker
 workload. Repository CI is separate from the reported Kiro evidence.
+
+## Graph activation checker installation — October 8, 2026
+
+The VM smoke installer now includes the tracked
+`tools/verify_graph_activation_check.py` in its hash-bound installation set.
+Previously a successfully installed VM could lack that checker, causing the
+operator command to fail with file-not-found. The added regression checks both
+tracked inclusion and omission when the file is untracked; untracked code is not
+silently installed. Existing installation/hash verification remains in force.
+
+Validation: smoke-kit unit tests; no VM provisioning, Docker or model calls in
+this publication. This closes the packaging defect, not a new live-client,
+isolation or graph-activation attestation. Existing operator-run results and
+Claude Code, Kiro and Codex result sections remain unchanged.

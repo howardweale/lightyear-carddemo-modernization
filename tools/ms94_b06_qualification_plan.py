@@ -21,11 +21,28 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
           'qualification-only-no-builder')
     check(len(draft['schedule']) == draft['slot_count'] and
           len({s['id'] for s in draft['schedule']}) == draft['slot_count'], 'qualification-slot-inventory')
+    census = draft.get('purpose') == 'five-path-provenance-census'
+    if census:
+        check(draft['journey'] == 'multi' and draft.get('qualification_credit') is False and
+              [(s['journey'], s['control']) for s in draft['schedule']] == [
+                  ('J1', 'retained-reference'), ('J1', 'duplicate-invoice-line'),
+                  ('J1', 'invoice-null-dereference'), ('J2', 'retained-reference'),
+                  ('J3', 'retained-reference')], 'census-five-path-schedule')
+    else:
+        check(draft['journey'] in ('J1', 'J2', 'J3'), 'qualification-single-journey')
+    scheduled = {s['id']: s for s in draft['schedule']}
     by_id = {}
     for name, sha in manifest['slot_plans_sha256'].items():
         p = root / name; plan = read_json(p); verify(plan)
         validate_native_owner(p.parent)
-        check(plan['content_sha256'] == sha and plan['journey'] == draft['journey'], 'qualification-slot-binding')
+        expected_journey = scheduled.get(plan['slot_id'], {}).get('journey') if census else draft['journey']
+        check(plan['content_sha256'] == sha and plan['journey'] == expected_journey, 'qualification-slot-binding')
+        if census:
+            check(plan['posting_observer'].get('observer_binding_v2', {}).get('policy') ==
+                  'observer-binding-v2' and 'built_runtime' in plan, 'census-observer-built-runtime-required')
+            check(plan['declaration']['policy']['max_elapsed_seconds'] == 7190 and
+                  plan['declaration']['policy']['max_model_calls'] == 0 and
+                  plan['candidate_timeout_seconds'] == 1800, 'census-slot-budget')
         check(plan['slot_id'] not in by_id, 'qualification-duplicate-slot')
         verify_inputs(p.parent, plan)
         check(plan.get('execution_admission_version') == 3, 'qualification-old-plan-version')
@@ -48,7 +65,9 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
         check(calendar == plan['calendar'], 'qualification-calendar-differs')
         slots.append({'id': slot['id'], 'plan_path': name, 'plan_sha256': plan['content_sha256'],
                       'plan_file_sha256': file_hash(root / name), 'expected': slot['expected']})
-    return seal({'artifact_type': 'ms94-b06-qualification-executable-plan/1',
+    extra = {'purpose': 'five-path-provenance-census', 'qualification_credit': False,
+             'journeys': ['J1', 'J2', 'J3']} if census else {}
+    return seal({**extra, 'artifact_type': 'ms94-b06-qualification-executable-plan/1',
                  'review_plan_sha256': draft['content_sha256'], 'snapshot_sha256': snapshot_sha256,
                  'tower_public_key_sha256': tower_public_key_sha256,
                  'authorization_kind': 'b06-qualification-group',

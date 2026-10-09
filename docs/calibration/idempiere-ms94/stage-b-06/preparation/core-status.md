@@ -1,5 +1,17 @@
 # B06 preparation status
 
+## October 9 census r2 failed; r3 correction preparing
+
+R2 stopped on Oracle J1 with `java.lang.IllegalStateException: ambiguous generation catch`.
+Finalization then lacked `b06-clock-evidence.json`; it did not complete. All four
+remaining slots stayed unstarted. Signed terminal report
+`417ff6e3ce43fc3c656a2ccde4d3911709a218756c487807ca0eacdb2fcb0388`
+is preserved. [R3](census-v2-r3/README.md) replaces method-based catch guessing
+with observed handler activation and adds an explicitly incomplete failure audit.
+Host JDI regressions and the 205-test suite (10 skips) passed. The proposed
+08:30-19:30 PDT replacement window still requires a fresh frozen plan and exact
+Tower authorization. No Docker or model calls; no qualification credit.
+
 ## October 9 morning census r2 prepared; Tower decision pending
 
 The [r2 executable preparation](census-v2-r2/README.md) passed all five offline

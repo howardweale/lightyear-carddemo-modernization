@@ -99,6 +99,20 @@ class KitTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "differs from"):
                 provision.source_files(ROOT)
 
+    def test_install_includes_bound_graph_protocol_checker_only_when_tracked(self):
+        fixture = provision.FIXTURE + "/run.json"
+        checker = "tools/verify_graph_activation_check.py"
+        for tracked in (True, False):
+            with self.subTest(tracked=tracked):
+                paths = (fixture + "\0" + (checker + "\0" if tracked else "")) .encode()
+                with patch.object(provision, "git_output", side_effect=lambda _, *args:
+                                  paths if args[0] == "ls-files" else (ROOT / fixture).read_bytes()):
+                    files = provision.source_files(ROOT)
+                if tracked:
+                    self.assertEqual(provision.sha((ROOT / checker).read_bytes()), files[checker])
+                else:
+                    self.assertNotIn(checker, files)
+
     def test_existing_different_config_never_replaced(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "config.json"

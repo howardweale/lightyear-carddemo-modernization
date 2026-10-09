@@ -18,6 +18,9 @@ from urllib.request import urlopen
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
+# Docker Official Image, mirrored by Docker on ECR Public; see docs/ci-postgres-mirror.md.
+POSTGRES_IMAGE = ('public.ecr.aws/docker/library/postgres:16-alpine@sha256:'
+                  '721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea')
 sys.path.insert(0, str(ROOT / 'src'))
 from lightyear_data.cloudbank_ms67_drills import CUSTOMER_MIGRATIONS_SQL, detailed_snapshot, snapshot_difference
 from lightyear_data.cloudbank_sql_recovery import SNAPSHOT_SQL
@@ -36,7 +39,7 @@ def main():
     name = 'ms67-customer-startup-' + uuid.uuid4().hex[:12]
     try:
         command(['docker', 'run', '-d', '--name', name, '-p', '127.0.0.1::5432',
-                 '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', 'postgres:16-alpine'])
+                 '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', POSTGRES_IMAGE])
         port = json.loads(command(['docker', 'inspect', name]))[0]['NetworkSettings']['Ports']['5432/tcp'][0]['HostPort']
         deadline = time.monotonic() + 60
         while subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'postgres'], capture_output=True).returncode:

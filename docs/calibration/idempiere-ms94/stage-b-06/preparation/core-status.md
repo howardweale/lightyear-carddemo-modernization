@@ -1,5 +1,18 @@
 # B06 preparation status
 
+## October 9 observer practice r2 frozen; fresh Tower decision required
+
+[Practice r2](observer-practice-r2/README.md) binds the corrected startup observer
+to one fresh J1 pair for 2:30–5:30 PM PDT; latest start 3:20:10 PM PDT.
+All 113,579 frozen hashes, 767 public source
+comparisons and 41 focused frozen tests passed. Snapshot `a9358f8e39334890d82e0339276afb524e35ed4f39d191ebf99c5708e4ceb741`;
+plan `9209b1eb66d511429efbe71811ae60e897fd22861300bf0885f472d50534330f`. No Docker, native execution or model calls occurred during
+preparation. Publication is isolated from the preparation checkout. The exact new
+Tower decision remains required; no qualification or measurement credit is claimed.
+See the [integration milestone](../../../../b06-oct09-integration-milestone.md).
+
+
+
 ## October 9 observer practice failed; startup suspension repair verified offline
 
 Practice r1 stopped on Oracle with `java.lang.IllegalStateException: duplicate return arm`

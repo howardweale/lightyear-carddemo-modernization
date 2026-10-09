@@ -1,0 +1,14 @@
+{
+  "claim": "Offline preparation only; not native qualification",
+  "docker_commands": 0,
+  "elapsed_seconds": 3.0469999999913853,
+  "errors": 0,
+  "failures": 0,
+  "model_calls": 0,
+  "native_pairs": 0,
+  "passed": true,
+  "plan_sha256": "3301aee1764e388b1f451163be3273d7ea1592db3e9b73f0bb8f1f93056512b3",
+  "schema": "b06-build-once-offline-check/1",
+  "snapshot_sha256": "c2694d9b28d4af4226f0ce9693c87411768cc63ed52756a7805955b1da6743af",
+  "tests": 82
+}

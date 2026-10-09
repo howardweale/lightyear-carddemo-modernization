@@ -1,0 +1,2287 @@
+{
+  "bundles": [
+    {
+      "bundle": "org.adempiere.base.callout.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 63
+    },
+    {
+      "bundle": "org.adempiere.base.process.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 213
+    },
+    {
+      "bundle": "org.adempiere.base.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 3018
+    },
+    {
+      "bundle": "org.adempiere.install.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 71
+    },
+    {
+      "bundle": "org.adempiere.payment.processor.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 14
+    },
+    {
+      "bundle": "org.adempiere.pipo.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 39
+    },
+    {
+      "bundle": "org.adempiere.plugin.utils.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 15
+    },
+    {
+      "bundle": "org.adempiere.replication.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 24
+    },
+    {
+      "bundle": "org.adempiere.report.jasper.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 26
+    },
+    {
+      "bundle": "org.adempiere.server.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 76
+    },
+    {
+      "bundle": "org.adempiere.ui.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 114
+    },
+    {
+      "bundle": "org.adempiere.ui.zk.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 1253
+    },
+    {
+      "bundle": "org.apache.ecs.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 143
+    },
+    {
+      "bundle": "org.compiere.db.oracle.provider.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 19
+    },
+    {
+      "bundle": "org.compiere.db.postgresql.provider.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 20
+    },
+    {
+      "bundle": "org.idempiere.hazelcast.service.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 16
+    },
+    {
+      "bundle": "org.idempiere.tablepartition.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 16
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "class_entries": 324,
+      "counts": {
+        "a": 0,
+        "b": 2,
+        "c": 3,
+        "d": 2
+      },
+      "total_entries": 531
+    },
+    {
+      "bundle": "org.idempiere.webservices.resources.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 21
+    },
+    {
+      "bundle": "org.idempiere.webservices.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 86
+    },
+    {
+      "bundle": "org.idempiere.zk.billboard.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 38
+    },
+    {
+      "bundle": "org.idempiere.zk.extra.source",
+      "class_entries": 0,
+      "counts": {
+        "a": 0,
+        "b": 1,
+        "c": 1,
+        "d": 0
+      },
+      "total_entries": 10
+    }
+  ],
+  "comparison": "r9 to r10 saved current captures; not a historical admission requirement",
+  "docker_commands": 0,
+  "entries": [
+    {
+      "bundle": "org.adempiere.base.callout.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 82001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 81942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.callout.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.callout.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "41a726775b9ca91ff6a6d22ed8378dc91af4cb45aaba4ff88df3a6f79f080c2d",
+      "r9_sha256": "b3409a56d5736ea0c554f7a150a4cebed365e13ad79fb6e200e301fafaecb26a"
+    },
+    {
+      "bundle": "org.adempiere.base.callout.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:50 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:06 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.callout.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.callout.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "b813a7dfd98cddf15208d5ccc73639945049918602f21202ed8d9358c5016238",
+      "r9_sha256": "0263837ef10e7ea3da88fd87fc1dce6ca0ebde6d7618f2ee9d40c422943acee9"
+    },
+    {
+      "bundle": "org.adempiere.base.process.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 82001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 81942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.process.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.process.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "9ec91ac1b584cd470730160d8228e5a5419f71ad7f74f2f495457b300df6195c",
+      "r9_sha256": "71eb03479f385d636df7b9367787aa022a34eb95ef40f84afc94a8cd9a59eab5"
+    },
+    {
+      "bundle": "org.adempiere.base.process.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:51 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:07 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.process.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.process.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "06bef9c0c6a90fff83293ad16230188a3f836261e6b6117a7e7dd65d086a147d",
+      "r9_sha256": "a86013e858d26e69e0f5487b9ed85ec752dcb836a21d6c5b453dc2f31680f2b1"
+    },
+    {
+      "bundle": "org.adempiere.base.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.base;version=\"13.0.0.202610082001\";r"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.base;version=\"13.0.0.202610081942\";r"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "f59fe811d1978c55912b32e6a15a61401ed09310869095fe10b039f6e8e7e84f",
+      "r9_sha256": "49db4d2f74062c453240175a95b2d0152dab9d8e2b6390b4e5e75d8ea94fd922"
+    },
+    {
+      "bundle": "org.adempiere.base.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:48 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:04 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.base.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.base.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "3e4c2b4e5e64ddf7ce649e1b1f34aa0f8e9d96aaabeadd62ff1563213def694f",
+      "r9_sha256": "fecb3b9410351b6fa0a4dc7e3823395195a8a0bcdbb5a9038872b1fd973f6aa4"
+    },
+    {
+      "bundle": "org.adempiere.install.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.install;version=\"13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.install;version=\"13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.install.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.install.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "c9e61141633eabb4f8d5168b4b9ec4f3ad81013e092f1fc13b104874cfad77b6",
+      "r9_sha256": "b62c004da3ba70ba8ade8482477bede89477e1d17740b2820f5e0703b7bcb949"
+    },
+    {
+      "bundle": "org.adempiere.install.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:52 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:09 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.install.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.install.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "66f0cdd447dae62e16ac00b34c93f3856cefb89a782cbdb194ca616c469f8085",
+      "r9_sha256": "ab27c4bd14ace889858d321aa746fcc2efe6b0994859f9ff8c5a920337d3481c"
+    },
+    {
+      "bundle": "org.adempiere.payment.processor.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 2610082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 2610081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.payment.processor.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.payment.processor.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "6ba813687ad3cf3e07ee23793ffb8716324ae60be2f3736eb32988d162c81f50",
+      "r9_sha256": "6164fff86b2e1d06914bf4c440328f18366b7a85681579cff56d97b0b3b82e97"
+    },
+    {
+      "bundle": "org.adempiere.payment.processor.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:52 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:08 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.payment.processor.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.payment.processor.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "05f7cc95b77808b064da196ed2b3f4bcb804841912fd63eb8433836d101e37a1",
+      "r9_sha256": "c68d8adc3b401eed1cf9219b91f011e0caa40a95d65262d6578dbea0a407e598"
+    },
+    {
+      "bundle": "org.adempiere.pipo.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.pipo;version=\"13.0.0.202610082001\";r"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.pipo;version=\"13.0.0.202610081942\";r"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.pipo.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.pipo.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "d8b3300d455f52681a9fed045cce688904aee188b921b9254ca2b72197e94929",
+      "r9_sha256": "6e6c8034d3401e0e643bb401e200f9f004591aedb103c2d4680c5caa3dd39781"
+    },
+    {
+      "bundle": "org.adempiere.pipo.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:53 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:09 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.pipo.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.pipo.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "03360aee48f812015ee54fe7c80fe2cf7d4c1f5be134d479f13d75c9ca56626e",
+      "r9_sha256": "0fc6529ac90ec953c137c5873f53173d45c6daaaa3670fa4b38873909fdf36d3"
+    },
+    {
+      "bundle": "org.adempiere.plugin.utils.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 82001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 81942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.plugin.utils.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.plugin.utils.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "edb6d5779f591d7dffdd145c8496448dd311d77f3665625d09db27550f7922ed",
+      "r9_sha256": "bd7379563fd11fd06b49e07bd53bf90d5f399761189464073684b17db5670e5e"
+    },
+    {
+      "bundle": "org.adempiere.plugin.utils.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:53 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:09 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.plugin.utils.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.plugin.utils.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "93624b4786be26550f42243cd147e36d305e10deb948ce7670e5ab3b8889df29",
+      "r9_sha256": "977882c89fbdb8d0a40187e9cba451498074ec58c5b9ded52078fdd6f3b654ec"
+    },
+    {
+      "bundle": "org.adempiere.replication.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 2001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 1942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.replication.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.replication.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "28aca20291ed9471d65562cc71c08cf37a8b585b9d8366a26516bd2cba193fa8",
+      "r9_sha256": "402f21ae7f2f82f75253e145cd48491dfac81d0263ce4ce9a05e531265b8433f"
+    },
+    {
+      "bundle": "org.adempiere.replication.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:54 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:10 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.replication.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.replication.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "b7c03378c7180cf188902ee3dffd79df9d3256a9de95e14af4d73a2d67f96825",
+      "r9_sha256": "2c8ed2ca700665e9d6366ead8374e32a3500c61f43e9c2a18b1ead78f7b0c9f4"
+    },
+    {
+      "bundle": "org.adempiere.report.jasper.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.report.jasper.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.report.jasper.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "41bfe1cd33e0f46ff696edc4f98d48ac7a68017b036fa5c5c3b0f12203e3400b",
+      "r9_sha256": "a76722dd6ba4db1b4464107d3c55ff6dc0594a42e5004b21e9900860509d4c3b"
+    },
+    {
+      "bundle": "org.adempiere.report.jasper.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:56 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:12 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.report.jasper.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.report.jasper.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "f305dbfd65b1632e5ddbdd7220a544a890b79023abf10433eaae40f299073bdf",
+      "r9_sha256": "aaa5501042108db844f51de326ca08af3b00fe6500e90b29c162c0497bbd7641"
+    },
+    {
+      "bundle": "org.adempiere.server.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.server;version=\"13.0.0.202610082001\""
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.server;version=\"13.0.0.202610081942\""
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.server.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.server.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "8fec0e8ebc714ace6d5a3a40094119f1caaee769b29c19f5a8eb22e4f92b73dc",
+      "r9_sha256": "64fffad360eccb8c0a2196a736716764c73e6419fbe60f9c09ac6c91a5179c71"
+    },
+    {
+      "bundle": "org.adempiere.server.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:55 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:11 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.server.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.server.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "124ac234dc8fd12a54b66c06072cf0626fe25c1dfc5c9e7eead540a738409efc",
+      "r9_sha256": "f5c7f1628a4df97ebac2171a8ac6f3ad3fe9138d37bf2d25c2e247cff12bd2d4"
+    },
+    {
+      "bundle": "org.adempiere.ui.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.ui;version=\"13.0.0.202610082001\";roo"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.ui;version=\"13.0.0.202610081942\";roo"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.ui.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.ui.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "89b8555524b53c1f1d705895f9f185d87a4d417309ded201642ce83632b263ba",
+      "r9_sha256": "30636eb338c246d39f45d2d42dabaa9c6319defa0874d92886a4d98c3f5d0b86"
+    },
+    {
+      "bundle": "org.adempiere.ui.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:56 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:12 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.ui.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.ui.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "855a8fcf588c307e89e13a10269698c3b13c080a245affe43504d874cad6e3a8",
+      "r9_sha256": "0999c992ee0e3e81558c741887b15be4a7201a223b68fcc2599b7c61946609ef"
+    },
+    {
+      "bundle": "org.adempiere.ui.zk.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.adempiere.ui.zk;version=\"13.0.0.202610082001\";"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.adempiere.ui.zk;version=\"13.0.0.202610081942\";"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.ui.zk.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.adempiere.ui.zk.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "f5bec7a9a9c2f99c16254af4e59d89f4ead63b6d412cdf166ab6501340b914c6",
+      "r9_sha256": "3e5a024ca4c6b31b03290ada8ff883be7910b19a4108b43a4abb2fa1527fa058"
+    },
+    {
+      "bundle": "org.adempiere.ui.zk.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:00 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:16 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.adempiere.ui.zk.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.adempiere.ui.zk.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "1ce1deb477bcd6fe1fce76960d423ed0e53cf9f63188adc827257f2e9377e526",
+      "r9_sha256": "af58c37ce82eb12aadb3ffab99138f4bdbe2202bf35a343eac87361a0df62f13"
+    },
+    {
+      "bundle": "org.apache.ecs.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.apache.ecs;version=\"13.0.0.202610082001\";roots"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.apache.ecs;version=\"13.0.0.202610081942\";roots"
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.apache.ecs.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.apache.ecs.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "d3fafcd82d7fe91e174c39bcd02e1fcecd4d09a99596371aeaf2cfb79a490ab9",
+      "r9_sha256": "ca048fca96272688e9d1f5b642b6b0bb8314709ce8a4f427095e4715bb728ff0"
+    },
+    {
+      "bundle": "org.apache.ecs.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:38 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:42:56 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.apache.ecs.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.apache.ecs.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "edb73f3acb8a5b8276ddd46c7c08ab8b801f9bc8308f530ad1bc60b1dbe4bba5",
+      "r9_sha256": "b5d5e07657fab2ad9bdff77e359495c6a9390f4b97b4594bb32f0138431a4b33"
+    },
+    {
+      "bundle": "org.compiere.db.oracle.provider.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 2610082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 2610081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.compiere.db.oracle.provider.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.compiere.db.oracle.provider.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "8e9724ee14da09c3faf131b9108098d4dd6e37e6463aea31a3d91466dccdb9b3",
+      "r9_sha256": "ffb0af870b9aaa584136083a65281bebf6baf0f1fb201ed0ce6f000d63b35373"
+    },
+    {
+      "bundle": "org.compiere.db.oracle.provider.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:01 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:17 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.compiere.db.oracle.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.compiere.db.oracle.provider.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "24b27c241fe659d85e400996b35520f40ce95c269822aeb2c0794d5bc0149938",
+      "r9_sha256": "1893dca9658bef730fd7ea91d647b0b1d7e2677b4de19403b7a874aaec7fb472"
+    },
+    {
+      "bundle": "org.compiere.db.postgresql.provider.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 0.202610082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 0.202610081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.compiere.db.postgresql.provider.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.compiere.db.postgresql.provider.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "782c1f765a9aed6b9131c0e2fe400e161ea6f91c196eefbca3679dd92939287b",
+      "r9_sha256": "02fd1eb2dfe78789c2a9ac5d99be12d30d1dcfe74e6696a9ebad51dcbaffb64e"
+    },
+    {
+      "bundle": "org.compiere.db.postgresql.provider.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:02 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:17 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.compiere.db.postgresql.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.compiere.db.postgresql.provider.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "899ecc6319127b5df7a48fe184c7ceb44d3008d566a6e18cdea7bdea96f0327b",
+      "r9_sha256": "f4c2da310aa60bcca05d72aa0a6dc780364a174f1feb1d03d9257e925d8624b9"
+    },
+    {
+      "bundle": "org.idempiere.hazelcast.service.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 2610082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 2610081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.hazelcast.service.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.hazelcast.service.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "d9280d6417d4bf3a40f1eb1774d78151eb2487f4c2d29150ec07429af4990244",
+      "r9_sha256": "858e643d58c104ddee01111496cd192eb8a601e835f22b1908f5c3f301b93691"
+    },
+    {
+      "bundle": "org.idempiere.hazelcast.service.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:02 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:18 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.hazelcast.service.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.hazelcast.service.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "857b20495835112d532c3af663390e7490f9257879a8ced34a9fd1a1b6c2bdd2",
+      "r9_sha256": "0b038a10a195ff7c95778f7f7fc079c452e3c916bfffc9f3789e5ccba53b7c92"
+    },
+    {
+      "bundle": "org.idempiere.tablepartition.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 0082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 0081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.tablepartition.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.tablepartition.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "6af47df31923a6ed7bfa34ce83228d6986bbfb779d077a7997dbed13cceb7035",
+      "r9_sha256": "87606fd4510fc5f7676569593a66d81586382765f2ea5269f37c94e6fa8831a9"
+    },
+    {
+      "bundle": "org.idempiere.tablepartition.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:07 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:22 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.tablepartition.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.tablepartition.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "2cd52411865243a8ba84c6aa72a669295d2ef715465a9742b91e2e7277bdc700",
+      "r9_sha256": "3d835f5740b44401322757b40d24cabcf587195b63b261133feab43af6b13421"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 5,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 5
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\MANIFEST.MF"
+      },
+      "r10_sha256": "b231a98108861061d31b0c5ca952bc73b0ff96e026fefa675f9eb469d218e7a8",
+      "r9_sha256": "85071daa6c00b750cc685889facc5913ab6424cb237b53bc7686840ccb2d8397"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:19 UTC 2026"
+          ],
+          "r10_line": 1,
+          "r9": [
+            "#Thu Oct 08 19:43:34 UTC 2026"
+          ],
+          "r9_line": 1
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/local-artifacts.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\local-artifacts.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\local-artifacts.properties"
+      },
+      "r10_sha256": "82c7d22cb47c02a9b5d1c67a4e6de16e7cec22c3b3341bc7124600b0132248f8",
+      "r9_sha256": "6d9f4a56cc7985dc8418d9e0c8746964444ca3f0506cfa97985b89cb2834d26f"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "d",
+      "differences": [
+        {
+          "offset": 10,
+          "r10": "49a0485d00000000",
+          "r9": "709d485d00000000"
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT-sources.jar"
+      },
+      "r10_sha256": "0380a6d6301ae2aee2f0a441111f20056ef756da1faa902e48751ccf7bd01556",
+      "r9_sha256": "d0eb1abb390cb63b5da5e99f586763aca59035f1cebd5e504b876d7d48dca66d"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "d",
+      "differences": [
+        {
+          "offset": 10,
+          "r10": "49a0485d00000000",
+          "r9": "719d485d00000000"
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/org.idempiere.test-13.0.0-SNAPSHOT.jar",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT.jar",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT.jar"
+      },
+      "r10_sha256": "9dde942b893e69361c64c300e4c1aef6bee883feadd2e69c291cb781efe793a7",
+      "r9_sha256": "9933f3aa7ef457416160d2a5e04287691ec764da63379db322e2a59445d933a2"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "  <artifact classifier='osgi.bundle' id='org.idempiere.test' version='13.0.0.202610082001'>"
+          ],
+          "r10_line": 4,
+          "r9": [
+            "  <artifact classifier='osgi.bundle' id='org.idempiere.test' version='13.0.0.202610081942'>"
+          ],
+          "r9_line": 4
+        },
+        {
+          "r10": [
+            "      <property name='download.checksum.sha-512' value='9b69a1db1dc716a859a1a1b18fb043ed248dd08551b1220f6fa60f5bb79408ef9adc438f630ccbf780ec636d176e49c3cb5836e239fc34c2ff5925fe8e3220d9'/>",
+            "      <property name='download.checksum.sha-1' value='acd229348424d488386b13f8506a7dedb3d4205f'/>",
+            "      <property name='download.checksum.sha-256' value='9dde942b893e69361c64c300e4c1aef6bee883feadd2e69c291cb781efe793a7'/>"
+          ],
+          "r10_line": 8,
+          "r9": [
+            "      <property name='download.checksum.sha-512' value='e952718b8546b18a271388429b58725de8f0b1615a5275ef9a5b5f271e6cdb970c8b6e1d7a8d263d97603ca053af136318e364cc3d396783930e4ba60930e752'/>",
+            "      <property name='download.checksum.sha-1' value='a1ecd53cd536ad99e1d9a5e8cddf9787a2c452f9'/>",
+            "      <property name='download.checksum.sha-256' value='9933f3aa7ef457416160d2a5e04287691ec764da63379db322e2a59445d933a2'/>"
+          ],
+          "r9_line": 8
+        },
+        {
+          "r10": [
+            "  <artifact classifier='osgi.bundle' id='org.idempiere.test.source' version='13.0.0.202610082001'>"
+          ],
+          "r10_line": 17,
+          "r9": [
+            "  <artifact classifier='osgi.bundle' id='org.idempiere.test.source' version='13.0.0.202610081942'>"
+          ],
+          "r9_line": 17
+        },
+        {
+          "r10": [
+            "      <property name='artifact.size' value='633032'/>",
+            "      <property name='download.size' value='633032'/>",
+            "      <property name='download.checksum.sha-512' value='d2c7a100d643e98c96ddb34ed6eae1a43d5c5103c7abee875eece12e8d124326fe855cfbc793b8bf94d096f99de1523523b1827531b2210f2d1e8c4f8ad51c29'/>",
+            "      <property name='download.checksum.sha-1' value='7a4238bcf894b6f77cf7864e629402fdeaf2a1ca'/>",
+            "      <property name='download.checksum.sha-256' value='0380a6d6301ae2aee2f0a441111f20056ef756da1faa902e48751ccf7bd01556'/>"
+          ],
+          "r10_line": 19,
+          "r9": [
+            "      <property name='artifact.size' value='633034'/>",
+            "      <property name='download.size' value='633034'/>",
+            "      <property name='download.checksum.sha-512' value='ca1838cdb72fa5dd172075074e34c098105981db9b21b0556b606fc503263b04c5652cada372edc820dca597b63cd0e4ac35180ea10b291488397c1d6f956a5f'/>",
+            "      <property name='download.checksum.sha-1' value='435ae1b4905e993794358d0c4b70bbc5cafe0611'/>",
+            "      <property name='download.checksum.sha-256' value='d0eb1abb390cb63b5da5e99f586763aca59035f1cebd5e504b876d7d48dca66d'/>"
+          ],
+          "r9_line": 19
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/p2artifacts.xml",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\p2artifacts.xml",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\p2artifacts.xml"
+      },
+      "r10_sha256": "df495710b6524584bbb458969fab42181cac0a59330276f3e964c0dd7a0bbde9",
+      "r9_sha256": "73d2ee72c83b8c966ac17d30d8cccba6ea1087b0e9f5d973ea4d6c2db9fd09cd"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "  <unit id='org.idempiere.test' version='13.0.0.202610082001' singleton='false' generation='2'>",
+            "    <update id='org.idempiere.test' range='[0.0.0,13.0.0.202610082001)' severity='0'/>"
+          ],
+          "r10_line": 3,
+          "r9": [
+            "  <unit id='org.idempiere.test' version='13.0.0.202610081942' singleton='false' generation='2'>",
+            "    <update id='org.idempiere.test' range='[0.0.0,13.0.0.202610081942)' severity='0'/>"
+          ],
+          "r9_line": 3
+        },
+        {
+          "r10": [
+            "      <provided namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test' version='13.0.0.202610082001'/>",
+            "      <provided namespace='osgi.bundle' name='org.idempiere.test' version='13.0.0.202610082001'/>"
+          ],
+          "r10_line": 14,
+          "r9": [
+            "      <provided namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test' version='13.0.0.202610081942'/>",
+            "      <provided namespace='osgi.bundle' name='org.idempiere.test' version='13.0.0.202610081942'/>"
+          ],
+          "r9_line": 14
+        },
+        {
+          "r10": [
+            "      <provided namespace='osgi.identity' name='org.idempiere.test' version='13.0.0.202610082001'>"
+          ],
+          "r10_line": 134,
+          "r9": [
+            "      <provided namespace='osgi.identity' name='org.idempiere.test' version='13.0.0.202610081942'>"
+          ],
+          "r9_line": 134
+        },
+        {
+          "r10": [
+            "      <required namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test.source' range='[13.0.0.202610082001,13.0.0.202610082001]' optional='true'>"
+          ],
+          "r10_line": 201,
+          "r9": [
+            "      <required namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test.source' range='[13.0.0.202610081942,13.0.0.202610081942]' optional='true'>"
+          ],
+          "r9_line": 201
+        },
+        {
+          "r10": [
+            "      <artifact classifier='osgi.bundle' id='org.idempiere.test' version='13.0.0.202610082001'/>"
+          ],
+          "r10_line": 208,
+          "r9": [
+            "      <artifact classifier='osgi.bundle' id='org.idempiere.test' version='13.0.0.202610081942'/>"
+          ],
+          "r9_line": 208
+        },
+        {
+          "r10": [
+            "          Bundle-SymbolicName: org.idempiere.test&#xA;Bundle-Version: 13.0.0.202610082001&#xA;"
+          ],
+          "r10_line": 214,
+          "r9": [
+            "          Bundle-SymbolicName: org.idempiere.test&#xA;Bundle-Version: 13.0.0.202610081942&#xA;"
+          ],
+          "r9_line": 214
+        },
+        {
+          "r10": [
+            "  <unit id='org.idempiere.test.source' version='13.0.0.202610082001' singleton='false'>",
+            "    <update id='org.idempiere.test.source' range='[0.0.0,13.0.0.202610082001)' severity='0'/>"
+          ],
+          "r10_line": 219,
+          "r9": [
+            "  <unit id='org.idempiere.test.source' version='13.0.0.202610081942' singleton='false'>",
+            "    <update id='org.idempiere.test.source' range='[0.0.0,13.0.0.202610081942)' severity='0'/>"
+          ],
+          "r9_line": 219
+        },
+        {
+          "r10": [
+            "      <provided namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test.source' version='13.0.0.202610082001'/>",
+            "      <provided namespace='osgi.bundle' name='org.idempiere.test.source' version='13.0.0.202610082001'/>",
+            "      <provided namespace='osgi.identity' name='org.idempiere.test.source' version='13.0.0.202610082001'>"
+          ],
+          "r10_line": 234,
+          "r9": [
+            "      <provided namespace='org.eclipse.equinox.p2.iu' name='org.idempiere.test.source' version='13.0.0.202610081942'/>",
+            "      <provided namespace='osgi.bundle' name='org.idempiere.test.source' version='13.0.0.202610081942'/>",
+            "      <provided namespace='osgi.identity' name='org.idempiere.test.source' version='13.0.0.202610081942'>"
+          ],
+          "r9_line": 234
+        },
+        {
+          "r10": [
+            "      <artifact classifier='osgi.bundle' id='org.idempiere.test.source' version='13.0.0.202610082001'/>"
+          ],
+          "r10_line": 245,
+          "r9": [
+            "      <artifact classifier='osgi.bundle' id='org.idempiere.test.source' version='13.0.0.202610081942'/>"
+          ],
+          "r9_line": 245
+        },
+        {
+          "r10": [
+            "          Bundle-SymbolicName: org.idempiere.test.source&#xA;Bundle-Version: 13.0.0.202610082001&#xA;"
+          ],
+          "r10_line": 251,
+          "r9": [
+            "          Bundle-SymbolicName: org.idempiere.test.source&#xA;Bundle-Version: 13.0.0.202610081942&#xA;"
+          ],
+          "r9_line": 251
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/p2content.xml",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\p2content.xml",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\p2content.xml"
+      },
+      "r10_sha256": "dc9673740e80e70251eee9d20e6c1059f55099a71221fff950da1816fca53a5c",
+      "r9_sha256": "5e45f89d9384f3ff4ec684543f67b28a9ae42db91c9bab25a01e41c2ea5f65a0"
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:18 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:33 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": null,
+      "entry": "target/sourcebundle-l10n-gen/OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.test\\target\\sourcebundle-l10n-gen\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.test\\target\\sourcebundle-l10n-gen\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "866973c351b099dc2ac69737c43f6751662b977ff2aafd411dea1ccc28dd3ad0",
+      "r9_sha256": "e1985de946089341006c7e3462f6a63b320528c827d3baef0749d99b65870cd6"
+    },
+    {
+      "bundle": "org.idempiere.webservices.resources.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 0.202610082001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 0.202610081942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.webservices.resources.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.webservices.resources.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "6736abfb1a16290ec2ca54571a2f905ca9463ea86c5a984162cfc83f9992875a",
+      "r9_sha256": "3e85fb4860937a68c65f7c48b805c4b6b723dcc95bc2104b0b54c971c8c14c01"
+    },
+    {
+      "bundle": "org.idempiere.webservices.resources.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:03 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:18 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.webservices.resources.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.webservices.resources.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "5f85dcfd0176bbf3601bb0289a6b16c7acd82baa9c8c1bba6ee305b46ac74997",
+      "r9_sha256": "69a5c917e58db8dbf70387ef0e8cc18ae8774320a01921a9b12cf5f723a78016"
+    },
+    {
+      "bundle": "org.idempiere.webservices.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 2001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 1942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.webservices.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.webservices.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "940b1ba12b07df101a0bbbbea6cbaa27b8b4164c4840fb61b701bc964e9f2b5b",
+      "r9_sha256": "e35c3d7866d83069c6ff9b95643fc6bb1578bf102b44bf98b4c323748d09f80b"
+    },
+    {
+      "bundle": "org.idempiere.webservices.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:02:04 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:19 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.webservices.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.webservices.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "c9dc1989eabd79d0c938c9ec941f6f1d80e0fa11efb1c27f6e13416d2cff82c3",
+      "r9_sha256": "b9d4684a4a109f8be28284943f0fba482995c473dfd0a4475499a6ccad645ec0"
+    },
+    {
+      "bundle": "org.idempiere.zk.billboard.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001"
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942"
+          ],
+          "r9_line": 6
+        },
+        {
+          "r10": [
+            " 82001\";roots:=\".\""
+          ],
+          "r10_line": 8,
+          "r9": [
+            " 81942\";roots:=\".\""
+          ],
+          "r9_line": 8
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.zk.billboard.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.zk.billboard.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "7b796c964464c569a9fc9065f72b7189b3b5f8e7f5637808ad08a4be1d6f1e4b",
+      "r9_sha256": "a1b50e003ba428e5c2c0edd3d720ed3c2f625503816a97f3c9e8cf803f7cf5ea"
+    },
+    {
+      "bundle": "org.idempiere.zk.billboard.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:57 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:13 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.zk.billboard.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.zk.billboard.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "51b729ea2c960241f97e91bb69d1104a1531a270f67fe5ecbf0357943b202b88",
+      "r9_sha256": "c8e8912d462093c6cd4e1b396e446e543c64b265a0827b9c52c6c4dc9f2e4941"
+    },
+    {
+      "bundle": "org.idempiere.zk.extra.source",
+      "category": "c",
+      "differences": [
+        {
+          "r10": [
+            "Bundle-Version: 13.0.0.202610082001",
+            "Eclipse-SourceBundle: org.idempiere.zk.extra;version=\"13.0.0.20261008200",
+            " 1\";roots:=\".\""
+          ],
+          "r10_line": 6,
+          "r9": [
+            "Bundle-Version: 13.0.0.202610081942",
+            "Eclipse-SourceBundle: org.idempiere.zk.extra;version=\"13.0.0.20261008194",
+            " 2\";roots:=\".\""
+          ],
+          "r9_line": 6
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "META-INF/MANIFEST.MF",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.zk.extra.source\\META-INF\\MANIFEST.MF",
+        "r9": "differing-bytes\\r9\\org.idempiere.zk.extra.source\\META-INF\\MANIFEST.MF"
+      },
+      "r10_sha256": "ea1c4f9030364fe4bc0f8f92f8897474c796e4f00e777faf78ef9662b7a0e484",
+      "r9_sha256": "f8ae45893917761854e539b4ab131dbf50ed4a645b59344fbf134359a2a45bb1"
+    },
+    {
+      "bundle": "org.idempiere.zk.extra.source",
+      "category": "b",
+      "differences": [
+        {
+          "r10": [
+            "#Thu Oct 08 20:01:57 UTC 2026"
+          ],
+          "r10_line": 2,
+          "r9": [
+            "#Thu Oct 08 19:43:13 UTC 2026"
+          ],
+          "r9_line": 2
+        }
+      ],
+      "draft_normalization_matches": true,
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "preserved": {
+        "r10": "differing-bytes\\r10\\org.idempiere.zk.extra.source\\OSGI-INF\\l10n\\bundle-src.properties",
+        "r9": "differing-bytes\\r9\\org.idempiere.zk.extra.source\\OSGI-INF\\l10n\\bundle-src.properties"
+      },
+      "r10_sha256": "e8a73e062ddfa6691bec08911d1b38b98349ef17ff0bf46171d2edf00a402a69",
+      "r9_sha256": "af1f688d25d924e122915787f63770d2bb0ed30b08c787b9387eb5f0ef24729c"
+    }
+  ],
+  "input_archive_hashes": {
+    "r10": {
+      "org.adempiere.base.callout.source": "a7455c8c7d392a253e726b8392c08e7d9455a07d9425b7401e7bf525201ffa83",
+      "org.adempiere.base.process.source": "9b042eb7ff3434c67c4ce323203abbf6215a61630851552e4d46f0165dd16177",
+      "org.adempiere.base.source": "6240900a9511f7b687dae1c10def5786c261b5ee66df307d96869a576d750175",
+      "org.adempiere.install.source": "1f0efac68137f22090625e3ea690d4e6c82ae0d77686407431d608c396e65a44",
+      "org.adempiere.payment.processor.source": "618bad2fce6688870cad72f782ebdb583636b3eb7935b563009648e8dd783efb",
+      "org.adempiere.pipo.source": "4d8d047f45c0434dbcdf18e7c23db5f77bb48b677a5a7cf7d1b6eb5b343320eb",
+      "org.adempiere.plugin.utils.source": "fa0b7d9ca49deacce2b19706c0701169812d5a0a5175c0368bb31b18bf422999",
+      "org.adempiere.replication.source": "7ee1503b1bcaaff9ce5b83d3c35fb217642d021d70c82949b666adee30439b63",
+      "org.adempiere.report.jasper.source": "e8b069e85161595f95d5000362a3ce534318b015e7c1c0000c16a68149e5ada0",
+      "org.adempiere.server.source": "fe35686e33d1bc1c98a8f62ee43b42f86ff507d31478528892c1e88a2eb8bcb3",
+      "org.adempiere.ui.source": "07317753a2bbd1870c29fd8757cc12e9b995bc14bb897a910f799b6ff8895610",
+      "org.adempiere.ui.zk.source": "824406c7fcfc3329344a59ae2fc4d56099c9d3a9af2959cb5cfb9c391c2db975",
+      "org.apache.ecs.source": "ce52cc2723142985f8d27c6dab49b7f8708f5ece9afdb2d92c230663526f4d9c",
+      "org.compiere.db.oracle.provider.source": "81ff8fa9f1bcafed1c2937e82155e1f6430f3e6205b697eb0ae17c95b5031924",
+      "org.compiere.db.postgresql.provider.source": "9bae54b6146a564bed78a7d63574e1a380a527bc2d83107d3518ba335f60b598",
+      "org.idempiere.hazelcast.service.source": "caf021fe09ff130321622642063217221e47f20ce77c138aa5601b70ebbe3c62",
+      "org.idempiere.tablepartition.source": "a61a01e75b566ab6cc5c732776b3749d64bc8c79ea5c0b59fa6bb73b74b931e7",
+      "org.idempiere.test": "ff278c62140d642468e6e90cb345a5c9baa862c8affbbe1b5f4730dcb4864916",
+      "org.idempiere.webservices.resources.source": "1eb566fac1788c7e1ec0d79784b8561f2288822c886070f64e20b52e64dfa7df",
+      "org.idempiere.webservices.source": "2a63cc3dc12537042b4d24ac6e3069d74984df2297558b119f28c7ae51b1d6a3",
+      "org.idempiere.zk.billboard.source": "08fb91a15b57868a8743c5b34923e835b210a5dcb4e117e33c26f68e03055a5e",
+      "org.idempiere.zk.extra.source": "6493c013bdf7a63666518572a428ce3e9bc9f21f8c1ae45d05a4cf745de493fc"
+    },
+    "r9": {
+      "org.adempiere.base.callout.source": "890936260101d86123904168d7eebd8aeb7aaa8266248cb0be2ade739cf391f8",
+      "org.adempiere.base.process.source": "25894f90012204456b4e319b90a4a5490f87a37953fa7a6ccef2a20719c58b77",
+      "org.adempiere.base.source": "86bc05b5798aab100267aaab1d70b6fa115a78b940ab9011904b13b9619e5473",
+      "org.adempiere.install.source": "c47494877e10f17104f33124e396c3665f164a3a19f6b689e13c8828cbf05b06",
+      "org.adempiere.payment.processor.source": "adb0f576d3cb8c6c8872ab9e9bf65a15cd51ccbdab5b2980c361157d91adb4e7",
+      "org.adempiere.pipo.source": "7e41b073a6f33f55de9a7a90f4e5a95bb5a613629f59dcbe7b403fb497140acb",
+      "org.adempiere.plugin.utils.source": "cc99fd6dfc90b3f6011afd9e7da6bc13698628ac496302df84695587d40e184d",
+      "org.adempiere.replication.source": "6e511f7d8e519a8e6fde652f9689d8744afac6b1dba0a0dd628c11d1827150d1",
+      "org.adempiere.report.jasper.source": "7ef1c4b050404ba74c5cf05c1b84ea2e56b0498a465aa6761caa5c0a18456e23",
+      "org.adempiere.server.source": "db128cbc3cbc61aaa90e579b844320781b50029f4807359f27323ebe373f5755",
+      "org.adempiere.ui.source": "57afa3539443260a215d6a062cdf12bc5f31e6dde0d9af024ec75e8b66ba358a",
+      "org.adempiere.ui.zk.source": "3ba3c4ae4a475d284df8eb5e176e03e9afca04b0f475243f112938571af2ef51",
+      "org.apache.ecs.source": "3d73aa4b5c17b42f9664fc114ccfd9fda0c20fb2ce0a75901df022728ae1bb37",
+      "org.compiere.db.oracle.provider.source": "07f4758c97c98045765776e250921f1d9066d7f4cbaf6cdc73ca45bd9977c862",
+      "org.compiere.db.postgresql.provider.source": "40bc4b69f9064e4b6c9f2a30d5cc95106071e1ff6c4c775a9a906cf51b6a1b60",
+      "org.idempiere.hazelcast.service.source": "7a875d53c7a53c16399276ad212836197bd4728de5ba576b7c71b8d68083a14c",
+      "org.idempiere.tablepartition.source": "dd6c55a5c140c0effdb68a91a2a4a03dd992b2d1d32a3ddba928cd3123c1f577",
+      "org.idempiere.test": "4b68c3f984c62ac08f265bb0a26a785f5be6b5bc57136a77001e2a88fbdf3855",
+      "org.idempiere.webservices.resources.source": "1b43882e43e73c28cf992cf464c4bb8c552deded7fa976d4655dca47d54c2aad",
+      "org.idempiere.webservices.source": "bf02416d5e1b53fdbec1e7e7ce5fe8164260e9c2f5c8c4a9bbdfc23d31a454ca",
+      "org.idempiere.zk.billboard.source": "6a230b47ccb937b8ba2e405cc7f860e7f08a8e9eb54cb360c91c9cfe93667ad1",
+      "org.idempiere.zk.extra.source": "7192679913d3870e990891525273e52a261661c2abfed33f1402cde3ab2e1796"
+    }
+  },
+  "javap": {
+    "invocations": 0,
+    "reason": "No differing .class entries in the 21 source bundles or the test bundle; nested test jars also checked separately."
+  },
+  "model_calls": 0,
+  "nested_test_archives": [
+    {
+      "bundle": "org.idempiere.test",
+      "changed_classes": [],
+      "changed_entries": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "class_entries_compared": 0,
+      "entries": 200,
+      "entry": "target/org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+      "entry_sets_equal": true
+    },
+    {
+      "bundle": "org.idempiere.test",
+      "changed_classes": [],
+      "changed_entries": [
+        "META-INF/MANIFEST.MF"
+      ],
+      "class_entries_compared": 324,
+      "entries": 365,
+      "entry": "target/org.idempiere.test-13.0.0-SNAPSHOT.jar",
+      "entry_sets_equal": true
+    }
+  ],
+  "normalization_activated": false,
+  "preserved_files": [
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r9\\org.adempiere.base.callout.source\\META-INF\\MANIFEST.MF",
+      "sha256": "b3409a56d5736ea0c554f7a150a4cebed365e13ad79fb6e200e301fafaecb26a"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r10\\org.adempiere.base.callout.source\\META-INF\\MANIFEST.MF",
+      "sha256": "41a726775b9ca91ff6a6d22ed8378dc91af4cb45aaba4ff88df3a6f79f080c2d"
+    },
+    {
+      "bytes": 127,
+      "path": "differing-bytes\\r9\\org.adempiere.base.callout.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "0263837ef10e7ea3da88fd87fc1dce6ca0ebde6d7618f2ee9d40c422943acee9"
+    },
+    {
+      "bytes": 127,
+      "path": "differing-bytes\\r10\\org.adempiere.base.callout.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "b813a7dfd98cddf15208d5ccc73639945049918602f21202ed8d9358c5016238"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r9\\org.adempiere.base.process.source\\META-INF\\MANIFEST.MF",
+      "sha256": "71eb03479f385d636df7b9367787aa022a34eb95ef40f84afc94a8cd9a59eab5"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r10\\org.adempiere.base.process.source\\META-INF\\MANIFEST.MF",
+      "sha256": "9ec91ac1b584cd470730160d8228e5a5419f71ad7f74f2f495457b300df6195c"
+    },
+    {
+      "bytes": 129,
+      "path": "differing-bytes\\r9\\org.adempiere.base.process.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "a86013e858d26e69e0f5487b9ed85ec752dcb836a21d6c5b453dc2f31680f2b1"
+    },
+    {
+      "bytes": 129,
+      "path": "differing-bytes\\r10\\org.adempiere.base.process.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "06bef9c0c6a90fff83293ad16230188a3f836261e6b6117a7e7dd65d086a147d"
+    },
+    {
+      "bytes": 380,
+      "path": "differing-bytes\\r9\\org.adempiere.base.source\\META-INF\\MANIFEST.MF",
+      "sha256": "49db4d2f74062c453240175a95b2d0152dab9d8e2b6390b4e5e75d8ea94fd922"
+    },
+    {
+      "bytes": 380,
+      "path": "differing-bytes\\r10\\org.adempiere.base.source\\META-INF\\MANIFEST.MF",
+      "sha256": "f59fe811d1978c55912b32e6a15a61401ed09310869095fe10b039f6e8e7e84f"
+    },
+    {
+      "bytes": 124,
+      "path": "differing-bytes\\r9\\org.adempiere.base.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "fecb3b9410351b6fa0a4dc7e3823395195a8a0bcdbb5a9038872b1fd973f6aa4"
+    },
+    {
+      "bytes": 124,
+      "path": "differing-bytes\\r10\\org.adempiere.base.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "3e4c2b4e5e64ddf7ce649e1b1f34aa0f8e9d96aaabeadd62ff1563213def694f"
+    },
+    {
+      "bytes": 386,
+      "path": "differing-bytes\\r9\\org.adempiere.install.source\\META-INF\\MANIFEST.MF",
+      "sha256": "b62c004da3ba70ba8ade8482477bede89477e1d17740b2820f5e0703b7bcb949"
+    },
+    {
+      "bytes": 386,
+      "path": "differing-bytes\\r10\\org.adempiere.install.source\\META-INF\\MANIFEST.MF",
+      "sha256": "c9e61141633eabb4f8d5168b4b9ec4f3ad81013e092f1fc13b104874cfad77b6"
+    },
+    {
+      "bytes": 125,
+      "path": "differing-bytes\\r9\\org.adempiere.install.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "ab27c4bd14ace889858d321aa746fcc2efe6b0994859f9ff8c5a920337d3481c"
+    },
+    {
+      "bytes": 125,
+      "path": "differing-bytes\\r10\\org.adempiere.install.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "66f0cdd447dae62e16ac00b34c93f3856cefb89a782cbdb194ca616c469f8085"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r9\\org.adempiere.payment.processor.source\\META-INF\\MANIFEST.MF",
+      "sha256": "6164fff86b2e1d06914bf4c440328f18366b7a85681579cff56d97b0b3b82e97"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r10\\org.adempiere.payment.processor.source\\META-INF\\MANIFEST.MF",
+      "sha256": "6ba813687ad3cf3e07ee23793ffb8716324ae60be2f3736eb32988d162c81f50"
+    },
+    {
+      "bytes": 137,
+      "path": "differing-bytes\\r9\\org.adempiere.payment.processor.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "c68d8adc3b401eed1cf9219b91f011e0caa40a95d65262d6578dbea0a407e598"
+    },
+    {
+      "bytes": 137,
+      "path": "differing-bytes\\r10\\org.adempiere.payment.processor.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "05f7cc95b77808b064da196ed2b3f4bcb804841912fd63eb8433836d101e37a1"
+    },
+    {
+      "bytes": 380,
+      "path": "differing-bytes\\r9\\org.adempiere.pipo.source\\META-INF\\MANIFEST.MF",
+      "sha256": "6e6c8034d3401e0e643bb401e200f9f004591aedb103c2d4680c5caa3dd39781"
+    },
+    {
+      "bytes": 380,
+      "path": "differing-bytes\\r10\\org.adempiere.pipo.source\\META-INF\\MANIFEST.MF",
+      "sha256": "d8b3300d455f52681a9fed045cce688904aee188b921b9254ca2b72197e94929"
+    },
+    {
+      "bytes": 130,
+      "path": "differing-bytes\\r9\\org.adempiere.pipo.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "0fc6529ac90ec953c137c5873f53173d45c6daaaa3670fa4b38873909fdf36d3"
+    },
+    {
+      "bytes": 130,
+      "path": "differing-bytes\\r10\\org.adempiere.pipo.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "03360aee48f812015ee54fe7c80fe2cf7d4c1f5be134d479f13d75c9ca56626e"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r9\\org.adempiere.plugin.utils.source\\META-INF\\MANIFEST.MF",
+      "sha256": "bd7379563fd11fd06b49e07bd53bf90d5f399761189464073684b17db5670e5e"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r10\\org.adempiere.plugin.utils.source\\META-INF\\MANIFEST.MF",
+      "sha256": "edb6d5779f591d7dffdd145c8496448dd311d77f3665625d09db27550f7922ed"
+    },
+    {
+      "bytes": 132,
+      "path": "differing-bytes\\r9\\org.adempiere.plugin.utils.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "977882c89fbdb8d0a40187e9cba451498074ec58c5b9ded52078fdd6f3b654ec"
+    },
+    {
+      "bytes": 132,
+      "path": "differing-bytes\\r10\\org.adempiere.plugin.utils.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "93624b4786be26550f42243cd147e36d305e10deb948ce7670e5ab3b8889df29"
+    },
+    {
+      "bytes": 394,
+      "path": "differing-bytes\\r9\\org.adempiere.replication.source\\META-INF\\MANIFEST.MF",
+      "sha256": "402f21ae7f2f82f75253e145cd48491dfac81d0263ce4ce9a05e531265b8433f"
+    },
+    {
+      "bytes": 394,
+      "path": "differing-bytes\\r10\\org.adempiere.replication.source\\META-INF\\MANIFEST.MF",
+      "sha256": "28aca20291ed9471d65562cc71c08cf37a8b585b9d8366a26516bd2cba193fa8"
+    },
+    {
+      "bytes": 131,
+      "path": "differing-bytes\\r9\\org.adempiere.replication.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "2c8ed2ca700665e9d6366ead8374e32a3500c61f43e9c2a18b1ead78f7b0c9f4"
+    },
+    {
+      "bytes": 131,
+      "path": "differing-bytes\\r10\\org.adempiere.replication.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "b7c03378c7180cf188902ee3dffd79df9d3256a9de95e14af4d73a2d67f96825"
+    },
+    {
+      "bytes": 398,
+      "path": "differing-bytes\\r9\\org.adempiere.report.jasper.source\\META-INF\\MANIFEST.MF",
+      "sha256": "a76722dd6ba4db1b4464107d3c55ff6dc0594a42e5004b21e9900860509d4c3b"
+    },
+    {
+      "bytes": 398,
+      "path": "differing-bytes\\r10\\org.adempiere.report.jasper.source\\META-INF\\MANIFEST.MF",
+      "sha256": "41bfe1cd33e0f46ff696edc4f98d48ac7a68017b036fa5c5c3b0f12203e3400b"
+    },
+    {
+      "bytes": 144,
+      "path": "differing-bytes\\r9\\org.adempiere.report.jasper.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "aaa5501042108db844f51de326ca08af3b00fe6500e90b29c162c0497bbd7641"
+    },
+    {
+      "bytes": 144,
+      "path": "differing-bytes\\r10\\org.adempiere.report.jasper.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "f305dbfd65b1632e5ddbdd7220a544a890b79023abf10433eaae40f299073bdf"
+    },
+    {
+      "bytes": 384,
+      "path": "differing-bytes\\r9\\org.adempiere.server.source\\META-INF\\MANIFEST.MF",
+      "sha256": "64fffad360eccb8c0a2196a736716764c73e6419fbe60f9c09ac6c91a5179c71"
+    },
+    {
+      "bytes": 384,
+      "path": "differing-bytes\\r10\\org.adempiere.server.source\\META-INF\\MANIFEST.MF",
+      "sha256": "8fec0e8ebc714ace6d5a3a40094119f1caaee769b29c19f5a8eb22e4f92b73dc"
+    },
+    {
+      "bytes": 126,
+      "path": "differing-bytes\\r9\\org.adempiere.server.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "f5c7f1628a4df97ebac2171a8ac6f3ad3fe9138d37bf2d25c2e247cff12bd2d4"
+    },
+    {
+      "bytes": 126,
+      "path": "differing-bytes\\r10\\org.adempiere.server.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "124ac234dc8fd12a54b66c06072cf0626fe25c1dfc5c9e7eead540a738409efc"
+    },
+    {
+      "bytes": 376,
+      "path": "differing-bytes\\r9\\org.adempiere.ui.source\\META-INF\\MANIFEST.MF",
+      "sha256": "30636eb338c246d39f45d2d42dabaa9c6319defa0874d92886a4d98c3f5d0b86"
+    },
+    {
+      "bytes": 376,
+      "path": "differing-bytes\\r10\\org.adempiere.ui.source\\META-INF\\MANIFEST.MF",
+      "sha256": "89b8555524b53c1f1d705895f9f185d87a4d417309ded201642ce83632b263ba"
+    },
+    {
+      "bytes": 127,
+      "path": "differing-bytes\\r9\\org.adempiere.ui.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "0999c992ee0e3e81558c741887b15be4a7201a223b68fcc2599b7c61946609ef"
+    },
+    {
+      "bytes": 127,
+      "path": "differing-bytes\\r10\\org.adempiere.ui.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "855a8fcf588c307e89e13a10269698c3b13c080a245affe43504d874cad6e3a8"
+    },
+    {
+      "bytes": 382,
+      "path": "differing-bytes\\r9\\org.adempiere.ui.zk.source\\META-INF\\MANIFEST.MF",
+      "sha256": "3e5a024ca4c6b31b03290ada8ff883be7910b19a4108b43a4abb2fa1527fa058"
+    },
+    {
+      "bytes": 382,
+      "path": "differing-bytes\\r10\\org.adempiere.ui.zk.source\\META-INF\\MANIFEST.MF",
+      "sha256": "f5bec7a9a9c2f99c16254af4e59d89f4ead63b6d412cdf166ab6501340b914c6"
+    },
+    {
+      "bytes": 130,
+      "path": "differing-bytes\\r9\\org.adempiere.ui.zk.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "af58c37ce82eb12aadb3ffab99138f4bdbe2202bf35a343eac87361a0df62f13"
+    },
+    {
+      "bytes": 130,
+      "path": "differing-bytes\\r10\\org.adempiere.ui.zk.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "1ce1deb477bcd6fe1fce76960d423ed0e53cf9f63188adc827257f2e9377e526"
+    },
+    {
+      "bytes": 372,
+      "path": "differing-bytes\\r9\\org.apache.ecs.source\\META-INF\\MANIFEST.MF",
+      "sha256": "ca048fca96272688e9d1f5b642b6b0bb8314709ce8a4f427095e4715bb728ff0"
+    },
+    {
+      "bytes": 372,
+      "path": "differing-bytes\\r10\\org.apache.ecs.source\\META-INF\\MANIFEST.MF",
+      "sha256": "d3fafcd82d7fe91e174c39bcd02e1fcecd4d09a99596371aeaf2cfb79a490ab9"
+    },
+    {
+      "bytes": 128,
+      "path": "differing-bytes\\r9\\org.apache.ecs.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "b5d5e07657fab2ad9bdff77e359495c6a9390f4b97b4594bb32f0138431a4b33"
+    },
+    {
+      "bytes": 128,
+      "path": "differing-bytes\\r10\\org.apache.ecs.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "edb73f3acb8a5b8276ddd46c7c08ab8b801f9bc8308f530ad1bc60b1dbe4bba5"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r9\\org.compiere.db.oracle.provider.source\\META-INF\\MANIFEST.MF",
+      "sha256": "ffb0af870b9aaa584136083a65281bebf6baf0f1fb201ed0ce6f000d63b35373"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r10\\org.compiere.db.oracle.provider.source\\META-INF\\MANIFEST.MF",
+      "sha256": "8e9724ee14da09c3faf131b9108098d4dd6e37e6463aea31a3d91466dccdb9b3"
+    },
+    {
+      "bytes": 135,
+      "path": "differing-bytes\\r9\\org.compiere.db.oracle.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "1893dca9658bef730fd7ea91d647b0b1d7e2677b4de19403b7a874aaec7fb472"
+    },
+    {
+      "bytes": 135,
+      "path": "differing-bytes\\r10\\org.compiere.db.oracle.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "24b27c241fe659d85e400996b35520f40ce95c269822aeb2c0794d5bc0149938"
+    },
+    {
+      "bytes": 414,
+      "path": "differing-bytes\\r9\\org.compiere.db.postgresql.provider.source\\META-INF\\MANIFEST.MF",
+      "sha256": "02fd1eb2dfe78789c2a9ac5d99be12d30d1dcfe74e6696a9ebad51dcbaffb64e"
+    },
+    {
+      "bytes": 414,
+      "path": "differing-bytes\\r10\\org.compiere.db.postgresql.provider.source\\META-INF\\MANIFEST.MF",
+      "sha256": "782c1f765a9aed6b9131c0e2fe400e161ea6f91c196eefbca3679dd92939287b"
+    },
+    {
+      "bytes": 139,
+      "path": "differing-bytes\\r9\\org.compiere.db.postgresql.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "f4c2da310aa60bcca05d72aa0a6dc780364a174f1feb1d03d9257e925d8624b9"
+    },
+    {
+      "bytes": 139,
+      "path": "differing-bytes\\r10\\org.compiere.db.postgresql.provider.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "899ecc6319127b5df7a48fe184c7ceb44d3008d566a6e18cdea7bdea96f0327b"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r9\\org.idempiere.hazelcast.service.source\\META-INF\\MANIFEST.MF",
+      "sha256": "858e643d58c104ddee01111496cd192eb8a601e835f22b1908f5c3f301b93691"
+    },
+    {
+      "bytes": 406,
+      "path": "differing-bytes\\r10\\org.idempiere.hazelcast.service.source\\META-INF\\MANIFEST.MF",
+      "sha256": "d9280d6417d4bf3a40f1eb1774d78151eb2487f4c2d29150ec07429af4990244"
+    },
+    {
+      "bytes": 137,
+      "path": "differing-bytes\\r9\\org.idempiere.hazelcast.service.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "0b038a10a195ff7c95778f7f7fc079c452e3c916bfffc9f3789e5ccba53b7c92"
+    },
+    {
+      "bytes": 137,
+      "path": "differing-bytes\\r10\\org.idempiere.hazelcast.service.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "857b20495835112d532c3af663390e7490f9257879a8ced34a9fd1a1b6c2bdd2"
+    },
+    {
+      "bytes": 400,
+      "path": "differing-bytes\\r9\\org.idempiere.tablepartition.source\\META-INF\\MANIFEST.MF",
+      "sha256": "87606fd4510fc5f7676569593a66d81586382765f2ea5269f37c94e6fa8831a9"
+    },
+    {
+      "bytes": 400,
+      "path": "differing-bytes\\r10\\org.idempiere.tablepartition.source\\META-INF\\MANIFEST.MF",
+      "sha256": "6af47df31923a6ed7bfa34ce83228d6986bbfb779d077a7997dbed13cceb7035"
+    },
+    {
+      "bytes": 125,
+      "path": "differing-bytes\\r9\\org.idempiere.tablepartition.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "3d835f5740b44401322757b40d24cabcf587195b63b261133feab43af6b13421"
+    },
+    {
+      "bytes": 125,
+      "path": "differing-bytes\\r10\\org.idempiere.tablepartition.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "2cd52411865243a8ba84c6aa72a669295d2ef715465a9742b91e2e7277bdc700"
+    },
+    {
+      "bytes": 7115,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\MANIFEST.MF",
+      "sha256": "85071daa6c00b750cc685889facc5913ab6424cb237b53bc7686840ccb2d8397"
+    },
+    {
+      "bytes": 7115,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\MANIFEST.MF",
+      "sha256": "b231a98108861061d31b0c5ca952bc73b0ff96e026fefa675f9eb469d218e7a8"
+    },
+    {
+      "bytes": 401,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\local-artifacts.properties",
+      "sha256": "6d9f4a56cc7985dc8418d9e0c8746964444ca3f0506cfa97985b89cb2834d26f"
+    },
+    {
+      "bytes": 401,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\local-artifacts.properties",
+      "sha256": "82c7d22cb47c02a9b5d1c67a4e6de16e7cec22c3b3341bc7124600b0132248f8"
+    },
+    {
+      "bytes": 633034,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+      "sha256": "d0eb1abb390cb63b5da5e99f586763aca59035f1cebd5e504b876d7d48dca66d"
+    },
+    {
+      "bytes": 633032,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+      "sha256": "0380a6d6301ae2aee2f0a441111f20056ef756da1faa902e48751ccf7bd01556"
+    },
+    {
+      "bytes": 10025306,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT.jar",
+      "sha256": "9933f3aa7ef457416160d2a5e04287691ec764da63379db322e2a59445d933a2"
+    },
+    {
+      "bytes": 10025306,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\org.idempiere.test-13.0.0-SNAPSHOT.jar",
+      "sha256": "9dde942b893e69361c64c300e4c1aef6bee883feadd2e69c291cb781efe793a7"
+    },
+    {
+      "bytes": 2024,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\p2artifacts.xml",
+      "sha256": "73d2ee72c83b8c966ac17d30d8cccba6ea1087b0e9f5d973ea4d6c2db9fd09cd"
+    },
+    {
+      "bytes": 2024,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\p2artifacts.xml",
+      "sha256": "df495710b6524584bbb458969fab42181cac0a59330276f3e964c0dd7a0bbde9"
+    },
+    {
+      "bytes": 20882,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\p2content.xml",
+      "sha256": "5e45f89d9384f3ff4ec684543f67b28a9ae42db91c9bab25a01e41c2ea5f65a0"
+    },
+    {
+      "bytes": 20882,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\p2content.xml",
+      "sha256": "dc9673740e80e70251eee9d20e6c1059f55099a71221fff950da1816fca53a5c"
+    },
+    {
+      "bytes": 122,
+      "path": "differing-bytes\\r9\\org.idempiere.test\\target\\sourcebundle-l10n-gen\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "e1985de946089341006c7e3462f6a63b320528c827d3baef0749d99b65870cd6"
+    },
+    {
+      "bytes": 122,
+      "path": "differing-bytes\\r10\\org.idempiere.test\\target\\sourcebundle-l10n-gen\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "866973c351b099dc2ac69737c43f6751662b977ff2aafd411dea1ccc28dd3ad0"
+    },
+    {
+      "bytes": 414,
+      "path": "differing-bytes\\r9\\org.idempiere.webservices.resources.source\\META-INF\\MANIFEST.MF",
+      "sha256": "3e85fb4860937a68c65f7c48b805c4b6b723dcc95bc2104b0b54c971c8c14c01"
+    },
+    {
+      "bytes": 414,
+      "path": "differing-bytes\\r10\\org.idempiere.webservices.resources.source\\META-INF\\MANIFEST.MF",
+      "sha256": "6736abfb1a16290ec2ca54571a2f905ca9463ea86c5a984162cfc83f9992875a"
+    },
+    {
+      "bytes": 135,
+      "path": "differing-bytes\\r9\\org.idempiere.webservices.resources.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "69a5c917e58db8dbf70387ef0e8cc18ae8774320a01921a9b12cf5f723a78016"
+    },
+    {
+      "bytes": 135,
+      "path": "differing-bytes\\r10\\org.idempiere.webservices.resources.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "5f85dcfd0176bbf3601bb0289a6b16c7acd82baa9c8c1bba6ee305b46ac74997"
+    },
+    {
+      "bytes": 394,
+      "path": "differing-bytes\\r9\\org.idempiere.webservices.source\\META-INF\\MANIFEST.MF",
+      "sha256": "e35c3d7866d83069c6ff9b95643fc6bb1578bf102b44bf98b4c323748d09f80b"
+    },
+    {
+      "bytes": 394,
+      "path": "differing-bytes\\r10\\org.idempiere.webservices.source\\META-INF\\MANIFEST.MF",
+      "sha256": "940b1ba12b07df101a0bbbbea6cbaa27b8b4164c4840fb61b701bc964e9f2b5b"
+    },
+    {
+      "bytes": 131,
+      "path": "differing-bytes\\r9\\org.idempiere.webservices.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "b9d4684a4a109f8be28284943f0fba482995c473dfd0a4475499a6ccad645ec0"
+    },
+    {
+      "bytes": 131,
+      "path": "differing-bytes\\r10\\org.idempiere.webservices.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "c9dc1989eabd79d0c938c9ec941f6f1d80e0fa11efb1c27f6e13416d2cff82c3"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r9\\org.idempiere.zk.billboard.source\\META-INF\\MANIFEST.MF",
+      "sha256": "a1b50e003ba428e5c2c0edd3d720ed3c2f625503816a97f3c9e8cf803f7cf5ea"
+    },
+    {
+      "bytes": 396,
+      "path": "differing-bytes\\r10\\org.idempiere.zk.billboard.source\\META-INF\\MANIFEST.MF",
+      "sha256": "7b796c964464c569a9fc9065f72b7189b3b5f8e7f5637808ad08a4be1d6f1e4b"
+    },
+    {
+      "bytes": 109,
+      "path": "differing-bytes\\r9\\org.idempiere.zk.billboard.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "c8e8912d462093c6cd4e1b396e446e543c64b265a0827b9c52c6c4dc9f2e4941"
+    },
+    {
+      "bytes": 109,
+      "path": "differing-bytes\\r10\\org.idempiere.zk.billboard.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "51b729ea2c960241f97e91bb69d1104a1531a270f67fe5ecbf0357943b202b88"
+    },
+    {
+      "bytes": 388,
+      "path": "differing-bytes\\r9\\org.idempiere.zk.extra.source\\META-INF\\MANIFEST.MF",
+      "sha256": "f8ae45893917761854e539b4ab131dbf50ed4a645b59344fbf134359a2a45bb1"
+    },
+    {
+      "bytes": 388,
+      "path": "differing-bytes\\r10\\org.idempiere.zk.extra.source\\META-INF\\MANIFEST.MF",
+      "sha256": "ea1c4f9030364fe4bc0f8f92f8897474c796e4f00e777faf78ef9662b7a0e484"
+    },
+    {
+      "bytes": 126,
+      "path": "differing-bytes\\r9\\org.idempiere.zk.extra.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "af1f688d25d924e122915787f63770d2bb0ed30b08c787b9387eb5f0ef24729c"
+    },
+    {
+      "bytes": 126,
+      "path": "differing-bytes\\r10\\org.idempiere.zk.extra.source\\OSGI-INF\\l10n\\bundle-src.properties",
+      "sha256": "e8a73e062ddfa6691bec08911d1b38b98349ef17ff0bf46171d2edf00a402a69"
+    }
+  ],
+  "review": "operator review; not independent attestation",
+  "schema": "b06-application-entry-triage/1",
+  "source_counts": {
+    "a": 0,
+    "b": 21,
+    "c": 21,
+    "d": 0
+  }
+}

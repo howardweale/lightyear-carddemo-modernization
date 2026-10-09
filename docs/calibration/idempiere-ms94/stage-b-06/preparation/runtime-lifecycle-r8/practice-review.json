@@ -1,0 +1,23 @@
+{
+  "schema": "b06-practice-review/1",
+  "claim": "Operator review; not independent attestation; non-evidence practice only",
+  "passed": false,
+  "elapsed_seconds": 127.532,
+  "cleanup_passed": true,
+  "model_calls": 0,
+  "native_pairs": 0,
+  "replay_completed": false,
+  "observed_bundles": 350,
+  "transient_copies": 102,
+  "stage": "application-capture",
+  "error": "ValueError: runtime-folder-root-missing",
+  "failed_bundle_inferred": "org.idempiere.test (52)",
+  "exact_missing_root": "not recorded; cannot establish from preserved output",
+  "hashes": {
+    "practice-plan.json": "65c596c2514a03d57ab17f88a5d20929126fe9f5a7df7bb5577951535be7d6e8",
+    "practice-report.json": "83ca2716ec5a6a1e6a4003d0384ac611228c59915fe9839cccc6efc9c86c21f7",
+    "results/closure-observation.json": "6a4f411e1a9c66570c0e7da11f3eedc9127439bca81351bfd8c7b1c3c01d64b7",
+    "results/closure-complete.json": "9ee9bc4bc7750d33cae28de2ca96337c117c21bcfbbdc72bcaa69efbc26cbea8",
+    "results/worker-error.json": "bdcbab758dc06435cdbb296a59239b04b167481220dbbcf3050f0db3479cb100"
+  }
+}

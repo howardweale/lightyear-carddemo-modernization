@@ -1,0 +1,870 @@
+{
+  "census": {
+    "system": 1,
+    "/tmp": 102,
+    "/root/.m2": 203,
+    "/application": 44
+  },
+  "transient_seen": 102,
+  "transient_qualified": 102,
+  "comparisons": {
+    "r4-window2": [
+      {
+        "symbolic_name": "org.adempiere.base",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.callout",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.callout.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.process",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.process.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.install",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.install.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.payment.processor",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.payment.processor.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.pipo",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.pipo.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.plugin.utils",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.plugin.utils.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.replication",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.replication.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.report.jasper",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.report.jasper.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.server",
+        "status": "different",
+        "entries_old": 141,
+        "entries_practice": 140,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.adempiere.server/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.adempiere.server.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.zk",
+        "status": "different",
+        "entries_old": 1577,
+        "entries_practice": 1576,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.adempiere.ui.zk/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.zk.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.apache.ant",
+        "status": "different",
+        "entries_old": 65,
+        "entries_practice": 29,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.eclipse.orbit.bundles/org.apache.ant/pom.xml",
+          "OSGI-INF/l10n/bundle.properties",
+          "about.html",
+          "about_files/DOM-LICENSE.html",
+          "about_files/LICENSE",
+          "about_files/NOTICE",
+          "about_files/SAX-LICENSE.html",
+          "about_files/THE_APACHE_SOFTWARE_LICENSE__VERSION_2.0.txt",
+          "bin/ant",
+          "bin/ant.bat",
+          "bin/ant.cmd",
+          "bin/antRun",
+          "bin/antRun.bat",
+          "bin/antRun.pl",
+          "bin/antenv.cmd",
+          "bin/complete-ant-cmd.pl",
+          "bin/envset.cmd",
+          "bin/lcp.bat",
+          "bin/runant.pl",
+          "bin/runant.py",
+          "bin/runrc.cmd",
+          "etc/changelog.xsl",
+          "etc/checkstyle/checkstyle-frames-sortby-check.xsl",
+          "etc/checkstyle/checkstyle-frames.xsl",
+          "etc/checkstyle/checkstyle-text.xsl",
+          "etc/checkstyle/checkstyle-xdoc.xsl",
+          "etc/coverage-frames.xsl",
+          "etc/jdepend-frames.xsl",
+          "etc/jdepend.xsl",
+          "etc/junit-frames-xalan1.xsl",
+          "etc/junit-frames.xsl",
+          "etc/junit-noframes.xsl",
+          "etc/log.xsl",
+          "etc/maudit-frames.xsl",
+          "etc/mmetrics-frames.xsl",
+          "etc/tagdiff.xsl"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.apache.ecs",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.apache.ecs.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.oracle.provider",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.oracle.provider.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.postgresql.provider",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.postgresql.provider.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.hazelcast.service",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.hazelcast.service.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.tablepartition",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.tablepartition.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.test",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices",
+        "status": "different",
+        "entries_old": 62,
+        "entries_practice": 61,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.idempiere.webservices/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.resources",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.resources.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.billboard",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.billboard.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.extra",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.extra.source",
+        "status": "historical-content-not-preserved"
+      }
+    ],
+    "r5b": [
+      {
+        "symbolic_name": "org.adempiere.base",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.callout",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.callout.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.process",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.process.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.base.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.install",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.install.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.payment.processor",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.payment.processor.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.pipo",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.pipo.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.plugin.utils",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.plugin.utils.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.replication",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.replication.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.report.jasper",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.report.jasper.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.server",
+        "status": "different",
+        "entries_old": 141,
+        "entries_practice": 140,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.adempiere.server/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.adempiere.server.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.zk",
+        "status": "different",
+        "entries_old": 1577,
+        "entries_practice": 1576,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.adempiere.ui.zk/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.adempiere.ui.zk.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.apache.ant",
+        "status": "different",
+        "entries_old": 65,
+        "entries_practice": 29,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.eclipse.orbit.bundles/org.apache.ant/pom.xml",
+          "OSGI-INF/l10n/bundle.properties",
+          "about.html",
+          "about_files/DOM-LICENSE.html",
+          "about_files/LICENSE",
+          "about_files/NOTICE",
+          "about_files/SAX-LICENSE.html",
+          "about_files/THE_APACHE_SOFTWARE_LICENSE__VERSION_2.0.txt",
+          "bin/ant",
+          "bin/ant.bat",
+          "bin/ant.cmd",
+          "bin/antRun",
+          "bin/antRun.bat",
+          "bin/antRun.pl",
+          "bin/antenv.cmd",
+          "bin/complete-ant-cmd.pl",
+          "bin/envset.cmd",
+          "bin/lcp.bat",
+          "bin/runant.pl",
+          "bin/runant.py",
+          "bin/runrc.cmd",
+          "etc/changelog.xsl",
+          "etc/checkstyle/checkstyle-frames-sortby-check.xsl",
+          "etc/checkstyle/checkstyle-frames.xsl",
+          "etc/checkstyle/checkstyle-text.xsl",
+          "etc/checkstyle/checkstyle-xdoc.xsl",
+          "etc/coverage-frames.xsl",
+          "etc/jdepend-frames.xsl",
+          "etc/jdepend.xsl",
+          "etc/junit-frames-xalan1.xsl",
+          "etc/junit-frames.xsl",
+          "etc/junit-noframes.xsl",
+          "etc/log.xsl",
+          "etc/maudit-frames.xsl",
+          "etc/mmetrics-frames.xsl",
+          "etc/tagdiff.xsl"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.apache.ecs",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.apache.ecs.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.oracle.provider",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.oracle.provider.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.postgresql.provider",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.compiere.db.postgresql.provider.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.hazelcast.service",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.hazelcast.service.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.tablepartition",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.tablepartition.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.test",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices",
+        "status": "different",
+        "entries_old": 62,
+        "entries_practice": 61,
+        "added": [],
+        "removed": [
+          "META-INF/maven/org.idempiere/org.idempiere.webservices/pom.xml"
+        ],
+        "changed": []
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.resources",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.resources.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.webservices.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.billboard",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.billboard.source",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.extra",
+        "status": "historical-content-not-preserved"
+      },
+      {
+        "symbolic_name": "org.idempiere.zk.extra.source",
+        "status": "historical-content-not-preserved"
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "line": 174,
+      "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+    },
+    {
+      "line": 535,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 586,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 894,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1049,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1100,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1218,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1456,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1557,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1608,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1659,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1715,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1819,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 1883,
+      "text": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10"
+    },
+    {
+      "line": 1887,
+      "text": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10"
+    },
+    {
+      "line": 3047,
+      "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+    },
+    {
+      "line": 3318,
+      "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+    },
+    {
+      "line": 3578,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0."
+    },
+    {
+      "line": 3579,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0."
+    },
+    {
+      "line": 3580,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1."
+    },
+    {
+      "line": 3581,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0."
+    },
+    {
+      "line": 3582,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1."
+    },
+    {
+      "line": 3583,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0."
+    },
+    {
+      "line": 3584,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0."
+    },
+    {
+      "line": 3585,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0."
+    },
+    {
+      "line": 3586,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0."
+    },
+    {
+      "line": 3587,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0."
+    },
+    {
+      "line": 3588,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1."
+    },
+    {
+      "line": 3589,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2."
+    },
+    {
+      "line": 3590,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0."
+    },
+    {
+      "line": 3591,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0."
+    },
+    {
+      "line": 3592,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1."
+    },
+    {
+      "line": 3593,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7."
+    },
+    {
+      "line": 3594,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7."
+    },
+    {
+      "line": 3595,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7."
+    },
+    {
+      "line": 3596,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7."
+    },
+    {
+      "line": 3597,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0."
+    },
+    {
+      "line": 3598,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5."
+    },
+    {
+      "line": 3599,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1."
+    },
+    {
+      "line": 3600,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1."
+    },
+    {
+      "line": 3601,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2."
+    },
+    {
+      "line": 3602,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2."
+    },
+    {
+      "line": 3603,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2."
+    },
+    {
+      "line": 3604,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3."
+    },
+    {
+      "line": 3605,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0."
+    },
+    {
+      "line": 3606,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3."
+    },
+    {
+      "line": 3607,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5."
+    },
+    {
+      "line": 3608,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final."
+    },
+    {
+      "line": 3609,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24."
+    },
+    {
+      "line": 3610,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19."
+    },
+    {
+      "line": 3611,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4."
+    },
+    {
+      "line": 3612,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27."
+    },
+    {
+      "line": 3613,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27."
+    },
+    {
+      "line": 3614,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27."
+    },
+    {
+      "line": 3615,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27."
+    },
+    {
+      "line": 3616,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27."
+    },
+    {
+      "line": 3617,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27."
+    },
+    {
+      "line": 3618,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27."
+    },
+    {
+      "line": 3619,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3."
+    },
+    {
+      "line": 3620,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3."
+    },
+    {
+      "line": 3621,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0."
+    },
+    {
+      "line": 3622,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3623,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3624,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3625,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3626,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3627,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3628,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3629,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3630,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    },
+    {
+      "line": 3631,
+      "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+    }
+  ],
+  "error_log_lines": [
+    {
+      "line": 1884,
+      "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10"
+    },
+    {
+      "line": 1888,
+      "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ "
+    },
+    {
+      "line": 3061,
+      "text": "2026-10-08T19:10:51.020499471Z Start Level: Equinox Container: 67ed1275-8f2d-4085-b805-224fba3d915f ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console..."
+    }
+  ],
+  "error_files": [],
+  "boot_classpath": [
+    "/root/.m2/repository/p2/osgi/bundle/org.eclipse.equinox.launcher/1.6.500.v20230717-2134/org.eclipse.equinox.launcher-1.6.500.v20230717-2134.jar"
+  ],
+  "fork_command": [
+    "/opt/java/openjdk/bin/java",
+    "-Dosgi.noShutdown=false",
+    "-Dosgi.os=linux",
+    "-Dosgi.ws=gtk",
+    "-Dosgi.arch=x86_64",
+    "-DIDEMPIERE_HOME=..",
+    "-Duser.timezone=UTC",
+    "-Djunit.jupiter.execution.parallel.enabled=false",
+    "-javaagent:/results/agent.jar=/results/loaded",
+    "-javaagent:/results/closure-agent.jar=/results/closure-observation.json",
+    "-Djunit.jupiter.execution.parallel.mode.default=concurrent",
+    "-Djunit.jupiter.execution.parallel.config.strategy=fixed",
+    "-Djunit.jupiter.execution.parallel.config.fixed.parallelism=4",
+    "-Djunit.jupiter.execution.parallel.mode.classes.default=same_thread",
+    "-Dosgi.clean=true",
+    "-jar",
+    "/root/.m2/repository/p2/osgi/bundle/org.eclipse.equinox.launcher/1.6.500.v20230717-2134/org.eclipse.equinox.launcher-1.6.500.v20230717-2134.jar",
+    "-data",
+    "/application/org.idempiere.test/target/work/data",
+    "-install",
+    "/application/org.idempiere.test/target/work",
+    "-configuration",
+    "/application/org.idempiere.test/target/work/configuration",
+    "-application",
+    "org.eclipse.tycho.surefire.osgibooter.headlesstest",
+    "-testproperties",
+    "/application/org.idempiere.test/target/surefire.properties"
+  ],
+  "surefire_sha256": "9e4d240f327ad166ddcce88d3250407ce6e1561e25871f85d334b776c2d46b6e",
+  "launcher_sha256": "28aaab5d9779244be3f4f2bbf65126db56f8c90eabeea00ee16736012fdad888",
+  "captured_surefire_files": [
+    "runtime\\surefire.properties"
+  ],
+  "surefire_copy_byte_identical": true,
+  "fork_jar_matches": true,
+  "fork_testproperties": "/application/org.idempiere.test/target/surefire.properties",
+  "observed_java_class_path": "/root/.m2/repository/p2/osgi/bundle/org.eclipse.equinox.launcher/1.6.500.v20230717-2134/org.eclipse.equinox.launcher-1.6.500.v20230717-2134.jar",
+  "practice_source_hashes_match": true,
+  "practice_host_hashes_match": true,
+  "head_commit": "1e900aa42ac212f424cedccb51eaedde051d5129",
+  "practice_plan_binds_commit": false,
+  "practice_plan_binds_tower_snapshot": false,
+  "warning_categories": {
+    "default package import": 2,
+    "wildcard Service-Component": 13,
+    "invalid POM": 2,
+    "missing digest": 44,
+    "weak digest": 10
+  },
+  "assessment": {
+    "1": "pass",
+    "2": "pass",
+    "3": "not satisfied: 40 historical bundles unavailable and 4 differ in entry set",
+    "4": "pass",
+    "5": "fail: no error files, but 71 warnings and 3 error-level messages",
+    "6": "not satisfied: no exact commit/snapshot/Tower binding for uncommitted practice implementation"
+  },
+  "evidence_window_ready": false,
+  "model_calls": 0,
+  "docker_commands_this_audit": 0,
+  "review": "operator review; not independent attestation",
+  "practice_report_sha256": "49f654a1e0f8b3df00cb560c69ad271b734c2751a14c4c6473bb46d49d58ba90",
+  "source_sha256": {
+    "maven.log": "18a45eea29da55c5c3904bbb90aeb9ae67b3c083b9ff2cf3ae4f89c99b62ace5",
+    "worker-observation.json": "521847d19a43c917b597ee216460437f7da7f3d6d6eb8c5f27bc0dffb4c18c1b",
+    "closure-observation.json": "9209022a3ded291e6278154d531bc881d97b13cacd3be5eeec0f146a26f28d53",
+    "measured-inventory.json": "37107d2f9253c18ceef2110ed06cb12d4c9f8dabfc28bb4f62fdaef3317b7f46",
+    "effective-surefire.properties": "9e4d240f327ad166ddcce88d3250407ce6e1561e25871f85d334b776c2d46b6e",
+    "fork-command.json": "7e6ba6e5fa23eb36f377e4edac646b76a5955772c4afc76283a8c64d3abfd1d6",
+    "runtime-catalogue.tsv": "d8fac3d06f43d35089bd33b4920493ae1b7edc9ae3ac80200064ba989d8c9703"
+  }
+}

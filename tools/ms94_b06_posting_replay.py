@@ -227,6 +227,14 @@ def replay(root, run, lane, public_key):
           receipt['execution_sha256'] == execution['content_sha256'] and receipt['complete'] is True,
           'observer-receipt-invalid')
     validate_jvm(receipt['target']['jvm'], spec)
+    if 'built_runtime' in plan:
+        from tools.ms94_b06_built_runtime import contract, mount_contract
+        manifest,launch,_=contract(root,plan)
+        check(receipt['target'].get('readonly_rootfs') is True and
+              receipt['target'].get('built_launch_sha256')==launch['content_sha256'] and
+              receipt['target'].get('application_mounts')==[list(m) for m in mount_contract(manifest,launch['overlays'])],
+              'observer-built-runtime-binding')
+
     if spec.get('forwarding_stub') is not None:
         from tools.ms94_b06_forwarding_stub import validate_spec
         validate_spec(spec, catalog(root, spec['target_class_files_sha256']))
@@ -244,7 +252,7 @@ def replay(root, run, lane, public_key):
               census['last_event_sha256'] == receipt['last_event_sha256'] and
               census['event_file_sha256'] == receipt['event_file_sha256'], 'observer-census-receipt-binding')
     check(receipt['observer_class_files_sha256'] == spec['class_files_sha256'] and
-          receipt['target']['image'] == plan['local']['runner_image'] and
+          receipt['target']['image'] == plan.get('built_runtime', {}).get('image', plan['local']['runner_image']) and
           receipt['target']['ports_published'] is False and
           receipt['target']['observer_private_mount_absent'] is True and
           receipt['target']['jvm']['java_binary_sha256'] == spec['java_binary_sha256'] and

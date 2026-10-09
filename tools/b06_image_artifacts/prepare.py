@@ -13,7 +13,7 @@ from .extract import LIMITS
 
 
 def prepare(repository, commit, snapshot, public, start, tower_key,
-            public_ref='refs/heads/codex/b06-image-inventory-r1'):
+            public_ref='refs/heads/codex/b06-image-inventory-r1', *, selection_path=None):
     repository, snapshot, public = map(Path, (repository, snapshot, public))
     check(not snapshot.exists() and not public.exists(), 'freeze-output-already-exists')
     def git(*args):
@@ -69,6 +69,24 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
         'artifact_roots':['/application','/root/.m2'],'jdk':'resolved image java executable parent',
         'purpose':'Inventory paths, sizes, entry counts and hashes; no class copies or runtime admission.',
         'raw_artifacts_public':False,'five_path_census_authorized':False})
+    selected_record=None
+    if selection_path is not None:
+        import json
+        from .selected_archives import validate
+        from .controller import profile
+        check(selection_path in files, 'selection-must-be-committed')
+        selected_bytes=git('cat-file','blob',commit+':'+selection_path)
+        selected_record=json.loads(selected_bytes);validate(selected_record)
+        target='tools/b06_image_artifacts/selected.json'
+        (snapshot/target).write_bytes(selected_bytes)
+        hashes[target]=hashlib.sha256(selected_bytes).hexdigest();mapping[target]=selection_path
+        body={k:v for k,v in core.items() if k!='content_sha256'}
+        body.update(image=selected_record['image'],operation='selected-runtime-archives',
+                    catalogue_schema='b06-selected-runtime-archive-copy/1',selection_sha256=selected_record['content_sha256'],
+                    entrypoint=profile(dict(operation='selected-runtime-archives',image=selected_record['image']))[2],
+                    purpose='Copy exact selected runtime archives from retained image. No build or JVM.',
+                    artifact_roots=['/root/.m2'],jdk='no JDK process or copy',class_bytes_copied='inside selected archives, local only')
+        core=seal(body)
     raw=canonical(core); (snapshot/'core.json').write_bytes(raw); (public/'core.json').write_bytes(raw)
     hashes['core.json']=hashlib.sha256(raw).hexdigest()
     manifest=seal({'schema':'b06-image-extraction-snapshot/1','model_calls':0,'files_sha256':hashes})
@@ -85,6 +103,10 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
                   'deadline_utc':(at+timedelta(minutes=30)).isoformat()},
         'review':'operator review; not independent attestation',
         'run_authorized':False,'requires_exact_tower_decision':True})
+    if selected_record is not None:
+        plan=seal({**{k:v for k,v in plan.items() if k!='content_sha256'},
+            'id':'b06-image-built-catalog-r1','operation':'selected-runtime-archives',
+            'image':selected_record['image'],'selection_sha256':selected_record['content_sha256']})
     (public/'plan.json').write_bytes(canonical(plan)); verify_snapshot(snapshot, plan)
     return plan
 

@@ -1,0 +1,38 @@
+{
+  "schema": "b06-practice-review/1",
+  "claim": "NON-EVIDENCE; operator review, not independent attestation",
+  "passed": true,
+  "elapsed_seconds": 387.0,
+  "cleanup_passed": true,
+  "independent_owned_label_inventory_absent": true,
+  "model_calls": 0,
+  "native_pairs": 0,
+  "native_admission": false,
+  "replay": {
+    "claim": "In-memory test-signature check only; no production or Tower signing authority used",
+    "maximum_classes": 115590,
+    "native_admission": false,
+    "replayed": true
+  },
+  "offline_tests": 98,
+  "offline_test_seconds": 16.174,
+  "bundles": 350,
+  "application_copies": 44,
+  "transient_copies": 102,
+  "absent_dev_roots": [
+    {
+      "bundle": "org.idempiere.test",
+      "roots": [
+        "target/test-classes"
+      ]
+    }
+  ],
+  "host_and_worker_hashes_unchanged": true,
+  "hashes": {
+    "practice-plan.json": "b65272f5de7b054a6cfe0fb9894421c51d445f004d8a3bbece3ed74cd82196ef",
+    "practice-report.json": "49f654a1e0f8b3df00cb560c69ad271b734c2751a14c4c6473bb46d49d58ba90",
+    "results/closure-observation.json": "9209022a3ded291e6278154d531bc881d97b13cacd3be5eeec0f146a26f28d53",
+    "results/worker-observation.json": "521847d19a43c917b597ee216460437f7da7f3d6d6eb8c5f27bc0dffb4c18c1b",
+    "results/measured-inventory.json": "37107d2f9253c18ceef2110ed06cb12d4c9f8dabfc28bb4f62fdaef3317b7f46"
+  }
+}

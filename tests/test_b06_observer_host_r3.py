@@ -68,11 +68,11 @@ class MissingBase {}
   java=Path(os.environ['B06_HOST_JDK'])/'bin'/('java.exe' if os.name=='nt' else 'java');javac=java.with_name('javac.exe' if os.name=='nt' else 'javac')
   root=Path(__file__).resolve().parents[1]
   sources={
-   'org/osgi/framework/Bundle.java':'package org.osgi.framework; public interface Bundle {long getBundleId(); int getState(); String getLocation(); BundleContext getBundleContext();}',
+   'org/osgi/framework/Bundle.java':'package org.osgi.framework; public interface Bundle {long getBundleId(); int getState(); String getLocation(); String getSymbolicName(); String getVersion(); java.util.Dictionary<String,String> getHeaders(String locale); BundleContext getBundleContext();}',
    'org/osgi/framework/BundleContext.java':'package org.osgi.framework; public interface BundleContext {Bundle[] getBundles();}',
    'org/osgi/framework/FrameworkUtil.java':"""package org.osgi.framework;
 public class FrameworkUtil {
- public static class B implements Bundle {int id;B(int n){id=n;}public long getBundleId(){return id;}public int getState(){return id==0?32:2;}public String getLocation(){return id==0?"System Bundle":"initial@reference:file:/application/bundle/";}public BundleContext getBundleContext(){return new C();}}
+ public static class B implements Bundle {int id;B(int n){id=n;}public long getBundleId(){return id;}public int getState(){return id==0?32:2;}public String getLocation(){return id==0?"System Bundle":"initial@reference:file:public-fixture-bundle/";}public String getSymbolicName(){return "fixture.bundle"+id;}public String getVersion(){return "1.0.0";}public java.util.Dictionary<String,String> getHeaders(String locale){return new java.util.Hashtable<>();}public BundleContext getBundleContext(){return new C();}}
  public static class C implements BundleContext {public Bundle[] getBundles(){return new Bundle[]{new B(0),new B(1)};}}
  public static Bundle getBundle(Class<?> c){return new B(0);}
 }""",
@@ -81,7 +81,8 @@ public class FrameworkUtil {
    'ProbeAgent.java':"""import java.lang.instrument.*;import java.lang.reflect.*;import java.nio.file.*;
 public class ProbeAgent {public static void main(String[] args)throws Exception {
  Class<?>[] loaded={org.osgi.framework.FrameworkUtil.class,org.junit.platform.engine.support.hierarchical.NodeTestTask.class,org.junit.platform.launcher.core.ExecutionListenerAdapter.class};
- Instrumentation i=(Instrumentation)Proxy.newProxyInstance(ProbeAgent.class.getClassLoader(),new Class<?>[]{Instrumentation.class},(p,m,a)->{if(m.getName().equals("getAllLoadedClasses"))return loaded;throw new UnsupportedOperationException();});
+ Instrumentation i=(Instrumentation)Proxy.newProxyInstance(ProbeAgent.class.getClassLoader(),new Class<?>[]{Instrumentation.class},(p,m,a)->{if(m.getName().equals("getAllLoadedClasses"))return loaded;if(m.getName().equals("addTransformer") && a.length==1 && a[0] instanceof ClassFileTransformer)return null;throw new UnsupportedOperationException();});
+ System.setProperty("osgi.install.area",Path.of(".").toAbsolutePath().toUri().toString());
  RuntimeClosureAgent.premain(args[0],i);long end=System.nanoTime()+5_000_000_000L;while(!Files.exists(Path.of(args[0]))&&System.nanoTime()<end)Thread.sleep(10);
  if(!Files.exists(Path.of(args[0])))throw new AssertionError("agent did not capture INSTALLED bundle");
  }}"""}
@@ -90,6 +91,12 @@ public class ProbeAgent {public static void main(String[] args)throws Exception 
    for name,code in sources.items():
     f=p/name;f.parent.mkdir(parents=True,exist_ok=True);f.write_text(code);files.append(str(f))
    subprocess.run([str(javac),'-d',str(p),str(root/'tools/b06_image_artifacts/RuntimeClosureAgent.java'),*files],check=True,capture_output=True,timeout=45)
-   subprocess.run([str(java),'-cp',str(p),'ProbeAgent',str(p/'observation.json')],check=True,capture_output=True,timeout=15)
+   observed=subprocess.run([str(java),'-cp',str(p),'ProbeAgent',str(p/'observation.json')],capture_output=True,timeout=15)
+   error_path=p/'closure-error.json'
+   if os.name=='nt' and observed.returncode and error_path.exists():
+    failure=json.loads(error_path.read_text())
+    if failure['stage']=='process-metadata' and failure['exception_class']=='java.util.NoSuchElementException':
+     self.skipTest('Host JDK omits ProcessHandle.Info command/arguments; Linux closure metadata not verified')
+   self.assertEqual(observed.returncode,0,observed.stderr.decode(errors='replace'))
    row=json.loads((p/'observation.json').read_bytes());self.assertEqual([b['state'] for b in row['bundles']],[32,2])
-   self.assertEqual(row['bundles'][1]['location'],'initial@reference:file:/application/bundle/')
+   self.assertEqual(row['bundles'][1]['location'],'initial@reference:file:public-fixture-bundle/')

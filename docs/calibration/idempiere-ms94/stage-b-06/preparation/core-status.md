@@ -1,5 +1,216 @@
 # B06 preparation status
 
+## October 8 archive copy and offline five-path inputs complete; observer v2 integration incomplete
+
+The [exact archive copy](built-catalog-r1/terminal/README.md) passed: 204 archives,
+132,922,294 bytes, signed report and independent replay verified, 291 frozen files
+unchanged and actual owned resources absent. Zero native pairs or models.
+
+The [offline census assembly](built-census-offline-r1/README.md) indexes 122,650
+class entries from 204 archives, 44 application bundles and 27,834 JDK classes.
+Fresh host extraction of the bound module image matched all saved JDK classes.
+Five fresh private input assemblies contain 82 hash-verified input references.
+Fourteen offline integrity tests pass. No Docker/model call occurred in assembly.
+
+This does not complete the approved observer-v2 boundary: external defining
+origins, native use of the approved pool rule, LambdaForm per-use target proof,
+JDK provider/loader bindings and full native replay integration remain. The new
+five-path preparation is explicitly non-executable; no new Tower request, window
+or snapshot is claimed. The Oct 9 generated-proof deadline remains. The archive
+prerequisite is complete, but earlier wording must not imply it was the only
+remaining executable-census gate.
+
+
+## October 8 direct built-runtime launch implemented; census not launched
+
+The [native integration](built-native-r1/README.md) now provides direct Java launch,
+separately bound compiled classes, read-only application mounts, exact external
+JDI command admission and offline replay. All 61 source inputs (218 class
+references), including five census paths, are prepared from authenticated prior
+compilations. Focused offline tests pass; there is no native qualification claim.
+
+The full runtime catalogue still needs the 204 measured Maven/runtime archives
+(132,922,294 bytes; 62,978 expanded class entries). Their exact hash-only selection
+is prepared for a distinct Tower-gated copy, with no JVM/build/database/model
+execution. The requested 15:30 PDT census reservation does not waive this gate.
+No census Tower request or native launch has been created. Existing failures,
+B04 void status, B05, work/ms94, template-r1 and J1 predicates remain unchanged.
+
+
+## October 8 build-once practice passed; native integration remains blocked
+
+The [terminal result and handoff](build-once-r1/terminal/README.md) records one
+build and two direct consumers, 1,031.157 seconds, all captures/replays passed,
+44 application bundles exact except the bound probe class, 102/102 source-only
+temporaries, unchanged 777-file freeze and actual owned cleanup. The image is
+retained locally. Zero models/native pairs; practice is not qualification.
+
+The offline hash-bound handoff is prepared and 17 related tests pass. No new
+Tower request, Docker window, evidence driver execution or measurement launch.
+The native worker still uses Maven: direct built-image launch with external JDI,
+per-slot class/parameter binding, the five-path provenance census, journey
+qualification and final preflight remain. The handoff is non-executable until
+its separately bound host adapter and exact authorization are ready.
+
+
+
+## October 8 application-identity triage completed offline
+
+The [22-bundle triage](application-identity-triage-r1/README.md) classifies every
+changed entry: the 21 source bundles have 21 properties timestamp comments (b)
+and 21 generated manifests (c), zero changed classes (a) or other resources (d).
+A draft two-rule normalization is enumerated per file and bundle; five tests
+and all 42 observed entry pairs pass. No normalization is active.
+
+The test bundle's probe class is identical, but seven non-candidate entries differ
+(two properties, three descriptors, two nested JAR resources). Its 324 nested
+class entries are identical. A class-only exemption cannot fix those resource
+differences. Exact exclusion inventory and a build-once amendment/practice draft
+are prepared for review. All 98 differing byte files (21,399,748 bytes) are
+preserved locally with hashes. No Docker, models, Tower request or publication.
+There is no historical-content admission requirement. Earlier failures unchanged.
+
+
+## October 8 operator amendment: no historical content requirement
+
+Howard removed the historical-content requirement. The [prospective amendment](runtime-history-amendment/README.md)
+and plan schema /3 omit prior-run comparisons and validate current captures.
+Missing old content and supplemental r9/r10 differences are no longer historical
+admission gates. Current capture, source-only, Tycho, warning, cleanup, snapshot
+and later closure-to-measured identity checks remain. Legacy r9/r10 records are
+unchanged. 32 offline tests passed; all 44 saved r10 current captures validate
+under the new check, while the legacy report reproduces exactly. No Docker,
+new freeze, Tower request or launch.
+
+
+## October 8 frozen practice r10: pipeline/replay complete; acceptance blocked
+
+The [terminal review](runtime-fidelity-r10/terminal/README.md) records the single
+authorized run: 387.672 seconds, zero models/native pairs, owned cleanup confirmed,
+776 frozen hashes unchanged. The corrected census audit completes. Census,
+source-only transients, Tycho, warning baseline and frozen-byte checks pass;
+application-content acceptance remains false for 40 unavailable historical copies.
+Exact outcome: `frozen-practice-six-checks-not-satisfied`.
+
+Supplemental r9/r10 comparison covers all 44 application bundles: every entry set
+matches, but only 22 bundles match allowed normalized bytes. Twenty-one source
+bundles retain host-qualifier/timestamp changes, and the test folder retains seven
+changed build-artifact entries. No policy was widened. No Tower request or retry.
+A future baseline/identity or build-once decision is needed; repeated runs alone
+do not resolve these blockers. Operator review, not independent attestation.
+
+
+## October 8 frozen practice r9: failed final audit; captures and replay completed
+
+The [terminal review](runtime-fidelity-r9/terminal/README.md) preserves the exact
+failure `; finalization: tycho-file-url-required` at the six-check census. Bundle
+ID 0's `System Bundle` location was parsed as a file URL before the ID branch.
+Practice duration 388.922 seconds; producer/offline replay completed and actual
+owned cleanup verified. All 776 frozen files are unchanged. Zero models/native
+pairs. No retry or Tower request.
+
+Separate offline diagnosis confirms 350 bundles, 102/102 source-only transients,
+correct Tycho binding and no new baseline warnings or structured error files.
+The four retained historical application copies now match exactly (1,577/141/
+62/65 entries), restoring all 39 omissions. Forty historical full copies remain
+unavailable; 44/44 comparison is not claimed. This diagnosis does not turn the
+failed frozen acceptance into a pass.
+
+
+The census correction is implemented only in the unfrozen development checkout.
+Nine focused tests passed; the corrected checker was exercised offline against
+the saved output and still refuses overall acceptance because historical
+application content is missing. No frozen bytes or result were changed.
+
+
+## October 8 closure fidelity r9: prepared offline, practice approval pending
+
+The [r9 preparation](runtime-fidelity-r9/README.md) replaces broad filename/path
+filtering with a single bundle-content view used by capture, producer, replay
+and comparison. JAR bytes stay exact; folder exclusions name six run-written
+paths and their reasons. The 61-message warning baseline is the intersection
+of r4, r5b and practice logs (74 severity lines each). New messages refuse.
+Frozen practice now binds a committed executable and common plan; all six checks
+are recomputed before a Tower request or evidence launch. No Docker/model calls
+or Tower request in this preparation. Forty historical application captures
+remain unavailable, so 44/44 historical equivalence is still blocked. Earlier
+failures and the passed-pipeline/failed-six-check practice remain unchanged.
+
+
+## October 8 practice r8b pre-window audit: blocked
+
+The [six-check audit](runtime-lifecycle-r8/six-check-audit.md) confirms the exact
+350-bundle census, 102/102 source-only temporary bundles and correct Tycho fork
+binding. It does **not** confirm evidence readiness: the four historically
+comparable application bundles lose 39 entries in practice captures; 40 other
+historical bundle contents were not retained. The log contains 71 warnings and
+three error-level messages despite Maven success and no structured error file.
+The practice binds file hashes but no exact committed executable/snapshot/Tower
+plan. Therefore no evidence window/request proceeds. The prior passed practice
+report describes pipeline completion only; all earlier results remain preserved.
+This audit ran offline, zero Docker/model calls. Operator review, not independent
+attestation.
+
+
+## October 8 corrected practice r8b passed
+
+The user-authorized fresh non-evidence practice passed in **387.000 seconds**
+(6 minutes 27 seconds), including worker finalization, producer, offline replay
+with an ephemeral in-memory test key, and owned cleanup. Independent read-only
+owned-label container/network/volume checks were empty afterward. No production
+signer or Tower authority was used. Zero model calls, databases and native pairs;
+network disabled. This is not a qualification result or measurement admission.
+
+All 350 observed bundles were processed, including 44 application copies and
+102 preserved source-only transient copies. The worker recorded the absent
+`org.idempiere.test/target/test-classes` dev output; classes loaded from
+`target/classes`. Folder-selection policy `/2` records this absence explicitly,
+keeps manifest roots mandatory and rejects loaded classes from absent roots.
+98 offline tests passed before the rerun, including complete pipeline replay
+and negative cases. Host/worker hashes remained unchanged during the run.
+
+Practice report SHA-256:
+`49f654a1e0f8b3df00cb560c69ad271b734c2751a14c4c6473bb46d49d58ba90`.
+Measured inventory SHA-256:
+`37107d2f9253c18ceef2110ed06cb12d4c9f8dabfc28bb4f62fdaef3317b7f46`.
+See [r8b review](runtime-lifecycle-r8/practice-r8b-review.json) and the
+[explicit capture rule](runtime-lifecycle-r8/optional-dev-output-fix.md).
+
+r7 and the failed r8 practice remain preserved. A future evidence run still
+requires a fresh exact snapshot, publication and Tower decision; none was
+created or launched here. Operator review, not independent attestation.
+
+
+## October 8 r8 non-evidence practice result
+
+Howard approved one bounded practice container. It failed after **127.532 seconds**;
+owned-container/network/volume absence was independently checked after cleanup.
+Zero models, native pairs and databases; no network. No retry or Tower request.
+
+The agent completed its observation and matching completion marker: 350 bundles
+and 102 preserved transient source copies. Maven succeeded. The worker then
+failed at `application-capture` with exact error
+`ValueError: runtime-folder-root-missing`. Producer/replay was not reached.
+Practice report SHA-256:
+`83ca2716ec5a6a1e6a4003d0384ac611228c59915fe9839cccc6efc9c86c21f7`.
+Observation SHA-256:
+`6a4f411e1a9c66570c0e7da11f3eedc9127439bca81351bfd8c7b1c3c01d64b7`.
+
+Partial application copies 9, 10, 22 and 48 precede bundle 52,
+`org.idempiere.test`, in the recorded capture order. Its dev.properties declares
+`target/classes` and `target/test-classes`. The compilation log and loaded-class
+catalogue confirm use of `target/classes`; `target/test-classes` is a suspected
+missing root, not an established fact. The old error omitted the path, and the
+full test-bundle root was not retained. The prospective error now includes the
+bundle, declared root and path; missing roots still refuse. A unit test checks
+that exact diagnostic. No capture/admission policy has been widened.
+
+The one-shot practice source, plan, results and failed r7 snapshot remain
+unchanged. See [practice review](runtime-lifecycle-r8/practice-review.json).
+Native admission remains blocked. A fresh practice requires separate approval;
+no qualification success or independent attestation is claimed.
+
+
 ## October 8 PR275 follow-up
 
 Host observer, replay and runtime-closure repairs are tested; native readiness is still blocked. See [review r3](review-r3/README.md). Core items 1-2 need native provenance/qualification; item 3 needs the runtime closure, scoped artifacts, pinned-image overhead, corrected pool approval and a fresh five-path plan/Tower decision. Items 4-5 remain not measurement-ready. No new Docker window or model launch is authorized by this code publication.
@@ -300,3 +511,136 @@ possible launch as October 27 at 23:59:59 UTC (16:59:59 PDT). This is a calculat
 boundary, not approval to launch. The actual plan must bind its freeze date,
 scenario dates and launch guard after qualification; J1's B05 work order remains
 unchanged. No measurement snapshot or model launch is admitted by this document.
+
+## Runtime closure r4 window2 failure — October 8, 2026
+
+The 09:30 PDT authorized runtime-closure attempt failed after 137 seconds;
+Maven completed successfully. The exact worker error was
+`ValueError: unambiguous-surefire-configuration-required` at frozen
+`runtime_worker.py:100`, in `main()` during effective Surefire configuration
+discovery, after Maven/test/class capture and before runtime inventory and
+signed resolution. The controller recorded `ValueError: runtime-worker-failed`.
+Signed terminal report:
+`ddef351691fe724f7bbbb7c55d9cbf40f27d871a8ac8805dc3f55562c3ef3235`.
+All 275 frozen files were unchanged; signed cleanup and a separate read-only
+owned-container absence check passed. Zero native pairs and model calls.
+The failure is preserved and has not been rerun or reclassified.
+
+The worker assumed Maven-Surefire `classPathUrl.N` properties. Tycho 4.0.8 uses
+its test-provider properties and an Equinox `-jar` / `-testproperties` launch;
+the old worker also omitted `target/surefire.properties` from capture. The saved
+attempt has no copy of that file. No replacement properties or successful
+receipt may be fabricated to complete replay.
+
+[The r5 offline correction](tycho-runtime-r5/README.md) adds a separate closed
+Tycho reader, exact file capture, observed fork argv/test bundle identity,
+`b06-resolved-runtime/3` production and replay, and preserves `/2` history.
+The new parser checks the preserved command/configuration layout successfully;
+complete producer replay remains blocked by missing properties, new observation
+fields, measured inventory and a successful signed launch receipt. This is
+preparation only; remaining items 2–5 above are not admitted by it.
+Operator review; not independent attestation.
+
+
+## Runtime closure r5b failure and r6 offline census — October 8, 2026
+
+r5b failed after 391.297 seconds at `runtime_inventory.measure`, `p.stat()`,
+with exact worker error `FileNotFoundError: [Errno 2] No such file or directory:
+'/tmp/tycho_wrapped_source10021272085316246407.jar'`. Controller:
+`ValueError: runtime-worker-failed`. The Tycho properties/command checks had
+passed; completed inventory/resolution had not. Signed terminal report:
+`f182d02a75c63c0c628e861014c3a41dbe59f46ad5c3db46426bfd2408c45fd9`.
+All 281 frozen files unchanged; signed cleanup and read-only owned-label
+container/network/volume absence verified. Zero model calls/native pairs.
+
+[The r6 correction and full saved-location census](transient-source-r6/README.md)
+cover **203 `/root/.m2`, 44 `/application`, 102 `/tmp`, 0 other** non-system
+bundles (349 total, plus one system bundle). All temporary paths match the
+Tycho wrapper shape, but the old evidence cannot prove source-only eligibility.
+New in-process copy/header/identity and loaded-class evidence is required;
+the producer and replay re-inspect preserved bytes. `/2` and `/3` history and
+the Tycho properties fix remain intact. 67 focused offline tests passed.
+
+**Another blocker was found offline:** `org.adempiere.ui.zk`,
+`org.adempiere.server` and `org.idempiere.webservices` changed both path and
+manifest bytes/version between the two saved attempts (build qualifiers
+`202610081632` versus `202610081715`). These non-source bundles stay exact.
+Other Maven-generated application artifacts have no demonstrated byte stability.
+Do not consume a new Tower window until an explicit deterministic runtime/build
+strategy resolves this. No new snapshot, request, Docker run or model call in r6.
+Operator review, not independent attestation.
+
+
+## Prospective application content identity r7 — October 8, 2026
+
+The required saved-catalogue comparison found **4 application classes compared,
+4 identical, 0 different**, all in `org.adempiere.base`; no loaded-class records
+exist for the three timestamped bundles. Every saved class blob was verified.
+Supplemental retained-folder inspection found **2,891 identical class entries**
+across UI ZK (1,301), server (59), webservices (145) and Ant (1,386), with zero
+changed/added/missing entries. Artifact contents are not a loaded-class census.
+All 44 application bundles and their coverage gaps are in
+[the r7 report](application-content-r7/README.md).
+
+Howard explicitly approved prospective content-identity implementation while
+**keeping native admission blocked pending complete evidence**. The implementation
+normalizes only the Bundle-Version qualifier, Built-By, Bnd-LastModified and
+Build-Timestamp main-header values; all class/resource entry bytes, entry names
+and other manifest differences stay exact. Source-only transient identities and
+exact Maven-cache/JDK/framework/launcher hashes retain their separate rules.
+Per-run application copies, paths, qualifiers, archive hashes, byte-replayed
+production and the measured posting-class consumer are implemented. The rule
+passed against all four complete saved folder bundles (1,845 file entries total).
+80 focused offline tests passed. No Docker/model/Tower run or native admission.
+This supersedes the proposed deterministic-build remedy in r6, not its evidence.
+
+
+## 2026-10-08 r7 diagnosis, recorded before lifecycle code changes
+
+Literal search of saved maven.log for `B06 runtime closure probe failed:`: zero matches.
+Maven exit 0 / BUILD SUCCESS; the JUnit test returned after 0.097 seconds.
+Exact worker exception at runtime_worker.py:89:
+`FileNotFoundError: [Errno 2] No such file or directory: '/results/closure-observation.json'`.
+No observation or error file exists. Partial bundle copies show capture began.
+JVM exit interrupting asynchronous capture is the leading explanation, not a
+recorded exception or proven exit mechanism: the test did not wait and a
+non-daemon thread cannot prevent System.exit. The evidence cannot establish
+a more exact cause. Writes before the final readiness check and recursive
+in-memory application-folder capture are additional confirmed code defects;
+there is no evidence of an r7 exception from either.
+
+Preserved copies (not a complete runtime catalogue):
+
+| Path | Bytes | SHA-256 |
+|---|---:|---|
+| runtime-transient/1.jar | 67213 | `4a22db763a964b1333e968a36d93363fbaa0f3a2543c6d58773d4c9fca041ed6` |
+| runtime-transient/2.jar | 525528 | `acf1661b9987f5aa8c1da3a69eafa76a6c8c1dbd7b6b14ecd18ff0b564e47e3c` |
+| runtime-transient/3.jar | 581 | `601a60288a1ab720b0eb105b20a69478ce13c002fe6a1d7e33c00e4286fabe26` |
+| runtime-transient/4.jar | 83609 | `f6dfb5e4bc733570c8e649f3cf7f1f275a2ade6d2217d1e8c1be84d74ef91a92` |
+| runtime-transient/6.jar | 34718 | `7a6db56c61d467f42d24355ed1b880f189d046e03291238067978021923db2d7` |
+| runtime-transient/7.jar | 158683 | `aaf8d17c90a8bcecd66dbe12c1d5416efb6b1efdfd3b47f5ca671057692c119e` |
+| runtime-application/9.jar | 40573 | `fc3b7114464c315f288711973741ce0ba131b6225cfd00e0fb2f74081320bfaf` |
+
+Terminal ae86ac24880c3dd5baa89a5d58d6a59ea400229ca380f3917862d8fb0e4370de:
+failed, 123.969 seconds, cleanup passed. Signature and 285 frozen hashes
+verified; actual owned-label container/network/volume inventory was empty.
+Zero model calls/native pairs. r7 remains failed; evidence is unchanged.
+Operator review, not independent attestation.
+
+
+## 2026-10-08 r8 offline lifecycle correction
+
+See [r8 review](runtime-lifecycle-r8/README.md). 92 focused tests passed; final
+10 targeted checks passed after the last mutation guard. Real host Equinox
+rehearsals preserve specific errors, including unavailable Windows process argv;
+350-bundle synthetic worker/producer/replay passed. No Linux practice result or
+new qualification claimed. Practice plan `65c596c2514a03d57ab17f88a5d20929126fe9f5a7df7bb5577951535be7d6e8` is prepared, not authorized
+or run. Zero Docker/model calls; no Tower request. r7 and every prior failure
+remain preserved. Native admission stays blocked.
+
+
+## October 8: build-once preparation r1
+
+Howard approved implementing build-once preparation. [Design and bounded practice](build-once-r1/README.md) now define one pinned-image build and two direct Equinox consumers on its read-only derived image. Non-candidate application content remains byte-exact; only the enumerated probe class differs under separate compiled/observed/capture binding. No draft source normalization is enabled. Historical content is not an admission requirement; all earlier failures remain preserved.
+
+Preparation adds offline capture/replay, host-JVM byte-recorder and mocked lifecycle tests. The preserved r10 data is readable as 44 application bundles, 207 runtime artifacts and 102 source-only JARs. This does not pass a new native run. No Docker commands, models or Tower request were executed in this increment. The proposed practice needs an approved one-hour window, with 45 minutes work plus 10 minutes cleanup reserve. The derived image digest can only be reported after that build. Native admission remains false; generated-class proof, five-path census, J1/J2/J3 qualification and final preflight are still outstanding.

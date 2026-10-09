@@ -10,7 +10,7 @@ def runtime_contract(plan, run_id):
     expected['capture'] = {'container': run_id + '-operations-1-runner', 'image': plan['local']['runner_image']}
     for lane in LANES:
         expected['application-' + lane] = {'container': run_id + '-application-' + lane,
-                                          'image': plan['local']['runner_image']}
+                                          'image': plan.get('built_runtime', {}).get('image', plan['local']['runner_image'])}
         if 'posting_observer' in plan:
             expected['observer-' + lane] = {'container': run_id + '-posting-observer-' + lane,
                                            'image': plan['local']['runner_image']}

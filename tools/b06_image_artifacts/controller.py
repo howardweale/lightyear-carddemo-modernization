@@ -40,6 +40,16 @@ def utc(value):
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+
+def profile(plan):
+    operation=plan.get('operation','inventory-only')
+    check(operation in ('inventory-only','selected-runtime-archives'),'unknown-extraction-operation')
+    if operation=='inventory-only':return IMAGE,EXTRACTOR,ENTRYPOINT
+    check(re.fullmatch('sha256:[a-f0-9]{64}',plan.get('image','')) is not None,'selected-image-required')
+    return plan['image'],'tools/b06_image_artifacts/selected_archives.py',[
+        'python3','-B','/extract/selected_archives.py','--spec','/extract/selected.json','--output','/evidence/catalogue']
+
+
 def verify_snapshot(root, plan):
     root = Path(root).resolve(); verify(plan)
     m = read_json(root/'snapshot.json'); verify(m)
@@ -53,20 +63,30 @@ def verify_snapshot(root, plan):
     actual = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
     check(actual == set(m['files_sha256']) | {'snapshot.json'}, 'snapshot-extra-files')
     core = read_json(root/'core.json'); verify(core)
-    check(core['content_sha256'] == plan['core_sha256'] and core['image'] == IMAGE and
+    image,extractor,entrypoint=profile(plan)
+    check(core['content_sha256'] == plan['core_sha256'] and core['image'] == image and
           core['native_pairs'] == core['model_calls'] == core['target_jvm_executions'] == 0,
           'extraction-only-plan')
     check(core['maximum_extraction_seconds'] == 900 and core['cleanup_reserve_seconds'] == 600 and
           core['container_count'] == 1 and core['retries'] == 0, 'extraction-limits')
-    check(core.get('operation')=='inventory-only' and core.get('catalogue_schema')=='b06-image-inventory/1'
-          and core.get('class_bytes_copied')==0, 'inventory-only-plan-required')
-    check(core.get('entrypoint') == ENTRYPOINT, 'inventory-entrypoint-binding')
-    check(EXTRACTOR in m['files_sha256'], 'extractor-missing')
+    check(core.get('operation')==plan.get('operation','inventory-only'),'extraction-operation-binding')
+    if core['operation']=='inventory-only':
+        check(core.get('catalogue_schema')=='b06-image-inventory/1' and core.get('class_bytes_copied')==0,
+              'inventory-only-plan-required')
+    else:
+        from .selected_archives import validate
+        selected=read_json(root/'tools/b06_image_artifacts/selected.json');validate(selected)
+        check(selected['content_sha256']==core['selection_sha256']==plan['selection_sha256'] and
+              selected['image']==image and core['catalogue_schema']=='b06-selected-runtime-archive-copy/1',
+              'selected-runtime-binding')
+    check(core.get('entrypoint') == entrypoint, 'inventory-entrypoint-binding')
+    check(extractor in m['files_sha256'], 'extractor-missing')
     return m, core
 
 
 def request(plan, commit):
     verify(plan); check(re.fullmatch('[a-f0-9]{40}', commit), 'public-commit')
+    if plan.get('operation')=='selected-runtime-archives':return selected_request(plan,commit)
     artifacts = {
         'campaign': {'id': plan['id'], 'purpose': 'inventory-only-no-class-copies'},
         'plan': plan, 'declaration': {'native_pairs': 0, 'model_calls': 0,
@@ -90,6 +110,27 @@ def request(plan, commit):
     value['id'] = 'b06-image-'+digest(value)
     return value, {**bound, 'request': digest(value)}, artifacts
 
+
+
+def selected_request(plan,commit):
+    profile(plan)
+    artifacts=dict(campaign={'id':plan['id'],'purpose':'copy-exact-runtime-archives'},plan=plan,
+        declaration=dict(model_calls=0,native_pairs=0,target_jvm_executions=0,database_containers=0,
+                         network='none',rebuild=False,five_path_census_authorized=False),
+        limits=dict(containers=1,extraction_seconds=900,cleanup_reserve_seconds=600,retries=0),
+        public_commit={'commit':commit},snapshot={'sha256':plan['snapshot_sha256']},window=plan['window'])
+    bound={k:digest(v) for k,v in artifacts.items()}
+    value=dict(schema='tower-request/1',scope=SCOPE,kind=KIND,bound=bound,
+        evidence={k:'evidence/b06/image-artifacts/'+v+'.json' for k,v in bound.items()},
+        proposed_by='b06-selected-runtime-archives',workload=plan['id'],
+        summary='Prerequisite only: copy the exact hash-bound Maven/runtime JARs from the retained build-once image. '
+                'One read-only, network-free container; no Maven, Java, databases, native pairs or models. '
+                '15 minutes copying plus 10 minutes owned cleanup; no retry. Archives stay local. '
+                'This does not authorize the five-path census, qualification or measurement. '
+                'Window '+plan['window']['not_before_utc']+' to '+plan['window']['deadline_utc']+'. '
+                'Operator review; not independent attestation.')
+    value['id']='b06-selected-'+digest(value)
+    return value,{**bound,'request':digest(value)},artifacts
 
 def write_request(repository, plan, commit):
     value, bound, artifacts = request(plan, commit)
@@ -136,6 +177,7 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
     """Dependency injection supports offline guard tests; CLI supplies real checks."""
     root, output = Path(root).resolve(), Path(output).resolve()
     manifest, core = verify_snapshot(root, plan)
+    runtime_image,extractor,entrypoint=profile(plan)
     check(public_verified, 'verified-publication-required')
     now = clock or (lambda: datetime.now(timezone.utc))
     w = plan['window']; a,b,latest = map(utc,(w['not_before_utc'],w['deadline_utc'],w['latest_start_utc']))
@@ -166,11 +208,11 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
     try:
         check(not command('ps','-q').stdout.strip(), 'active-container-overlap')
         check(not command('ps','-a','-q','--filter','name=^/'+name+'$').stdout.strip(), 'owned-name-already-exists')
-        image = json.loads(command('image','inspect',IMAGE).stdout)[0]
-        check(image['Id'] == IMAGE, 'image-identity')
+        image = json.loads(command('image','inspect',runtime_image).stdout)[0]
+        check(image['Id'] == runtime_image, 'image-identity')
         check(not image.get('Config', {}).get('Volumes'), 'image-anonymous-volumes-forbidden')
-        source = root/EXTRACTOR
-        check(sha(source) == manifest['files_sha256'][EXTRACTOR], 'extractor-changed')
+        source = root/extractor
+        check(sha(source) == manifest['files_sha256'][extractor], 'extractor-changed')
         # Set before create: preserve and clean a partially successful Docker create.
         created = True
         command('create','--name',name,'--label',label,'--network','none','--read-only',
@@ -178,9 +220,9 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
                 '--memory','2g','--cpus','1','--env','PYTHONDONTWRITEBYTECODE=1',
                 '--mount','type=bind,src='+str(root/EXTRACTOR_DIRECTORY)+',dst=/extract,readonly',
                 '--mount','type=bind,src='+str(output)+',dst=/evidence',
-                '--entrypoint',ENTRYPOINT[0],IMAGE,*ENTRYPOINT[1:])
+                '--entrypoint',entrypoint[0],runtime_image,*entrypoint[1:])
         inspect = json.loads(command('container','inspect',name).stdout)[0]
-        check(inspect['Image'] == IMAGE and inspect['Config']['Labels'].get('lightyear.b06.artifacts') == name,
+        check(inspect['Image'] == runtime_image and inspect['Config']['Labels'].get('lightyear.b06.artifacts') == name,
               'created-container-ownership')
         check(inspect['HostConfig']['NetworkMode'] == 'none' and inspect['HostConfig']['ReadonlyRootfs'] is True and
               len(inspect['Mounts']) == 2 and not inspect['HostConfig'].get('PortBindings'), 'container-isolation')
@@ -191,14 +233,21 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
         (output/'extract.stdout').write_bytes(result.stdout); (output/'extract.stderr').write_bytes(result.stderr)
         state = json.loads(command('container','inspect',name).stdout)[0]['State']
         check(result.returncode == 0 and not state['Running'] and state['ExitCode'] == 0, 'extractor-failed')
-        path = output/'inventory/inventory.json'; catalogue = read_json(path)
-        check(catalogue['schema']=='b06-image-inventory/1' and catalogue['failure'] is None and
-              catalogue['model_calls']==catalogue['native_pairs']==catalogue['class_bytes_copied']==0,'inventory-kind')
-        records=[json.loads(line) for line in (output/'inventory/progress.jsonl').read_text().splitlines()]
-        check([r['artifact'] for r in records]==catalogue['artifacts'],'inventory-progress-closure')
-        check(records and records[-1]['root_counts']==catalogue['roots'],'inventory-root-counts')
-        atomic_new(output/'inventory-replay.json',dict(progress_verified=True,artifact_count=len(records),
-            class_bytes_replayed=False,native_admission=False))
+        if core['operation']=='selected-runtime-archives':
+            from .selected_archives import replay
+            selected=read_json(root/'tools/b06_image_artifacts/selected.json')
+            result=replay(selected,output/'catalogue')
+            atomic_new(output/'selected-replay.json',result)
+            path=output/'catalogue/catalogue.json'
+        else:
+            path = output/'inventory/inventory.json'; catalogue = read_json(path)
+            check(catalogue['schema']=='b06-image-inventory/1' and catalogue['failure'] is None and
+                  catalogue['model_calls']==catalogue['native_pairs']==catalogue['class_bytes_copied']==0,'inventory-kind')
+            records=[json.loads(line) for line in (output/'inventory/progress.jsonl').read_text().splitlines()]
+            check([r['artifact'] for r in records]==catalogue['artifacts'],'inventory-progress-closure')
+            check(records and records[-1]['root_counts']==catalogue['roots'],'inventory-root-counts')
+            atomic_new(output/'inventory-replay.json',dict(progress_verified=True,artifact_count=len(records),
+                class_bytes_replayed=False,native_admission=False))
         catalogue_hash = sha(path)
     except BaseException as exc:
         if isinstance(exc, subprocess.TimeoutExpired):
@@ -213,11 +262,14 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
                 check(len(ids) <= 1, 'ambiguous-owned-resource')
                 for identity in ids:
                     info = json.loads(command('container','inspect',identity).stdout)[0]
-                    check(info['Name'] == '/'+name and info['Image'] == IMAGE and
+                    check(info['Name'] == '/'+name and info['Image'] == runtime_image and
                           info['Config']['Labels'].get('lightyear.b06.artifacts') == name, 'cleanup-ownership')
                     command('rm','--force',info['Id'],timeout=90)
                 check(not command('ps','-a','-q','--filter','label='+label).stdout.strip() and
                       not command('ps','-a','-q','--filter','name=^/'+name+'$').stdout.strip(), 'cleanup-not-absent')
+                if core['operation']=='selected-runtime-archives':
+                    for kind in ('network','volume'):
+                        check(not command(kind,'ls','-q','--filter','label='+label).stdout.strip(),'owned-'+kind+'-remains')
                 cleaned = True
             except BaseException as exc:
                 failure = (failure or '')+'; cleanup: '+type(exc).__name__+': '+str(exc)
@@ -231,7 +283,7 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
         atomic_new(output/'docker-commands.json',commands)
         signed('report.json', {'schema':'b06-image-extraction-report/1','passed':failure is None and cleaned,
                'failure':failure,'plan_sha256':plan['content_sha256'],'snapshot_sha256':plan['snapshot_sha256'],
-               'catalogue_sha256':catalogue_hash,'image':IMAGE,'owned_cleanup_verified':cleaned,
+               'catalogue_sha256':catalogue_hash,'image':runtime_image,'owned_cleanup_verified':cleaned,
                'frozen_hashes_unchanged':unchanged,
                'elapsed_seconds':round(time.monotonic()-started,3),'finished_real_utc':now().isoformat(),
                'model_calls':0,'native_pairs':0,'target_jvm_executions':0,'five_path_census_authorized':False,

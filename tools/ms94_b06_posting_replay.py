@@ -86,7 +86,7 @@ def origin(frames):
     return 'outside'
 
 
-def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries=None):
+def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries=None, binding_v2=None):
     """Pure content verification; caller must authenticate receipt and full entry."""
     data = (folder / 'events.jsonl').read_bytes()
     check(hashlib.sha256(data).hexdigest() == receipt['event_file_sha256'], 'observer-event-file-changed')
@@ -96,6 +96,9 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
     if stub_policy is not None:
         from tools.ms94_b06_forwarding_stub import receipt_records
         check(receipt.get('frame_records') == receipt_records(all_records), 'observer-signed-frame-records-differ')
+    if binding_v2 is not None:
+        from tools.ms94_b06_observer_v2 import commitments
+        check(receipt.get('v2_records') == commitments(all_records), 'observer-v2-receipt-commitments')
     previous, ready, death = None, False, False
     definitions = {}
     generation_pending = {}
@@ -111,7 +114,12 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         kind = event['kind']
         if kind == 'ready':
             check(sequence == 1 and not ready and event['checkpoint'] is False, 'observer-ready-order')
+            if binding_v2 is not None:
+                check(event.get('binding_version') == 2, 'observer-v2-collector-version')
             ready = True
+        elif binding_v2 is not None and kind in ('class-definition-v2','generation-entry','generation-return','generation-unwind'):
+            check(ready and event['checkpoint'] is False, 'observer-v2-record-order')
+            binding_v2.event(event)
         elif kind in ('generation-entry','generation-return','generation-unwind'):
             check(ready and event['checkpoint'] is False,'observer-generation-order')
             record=event['record'];thread=record['thread_id']
@@ -128,9 +136,9 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
                 if 'lambda_factory' in record:generation_complete[generated]=record
         elif kind == 'frame-definition':
             from tools.ms94_b06_forwarding_stub import definition
-            check(stub_policy is not None and ready and event['checkpoint'] is False, 'observer-definition-order')
+            check((stub_policy is not None or binding_v2 is not None) and ready and event['checkpoint'] is False, 'observer-definition-order')
             raw = event['definition']
-            if 'generation' in raw:
+            if binding_v2 is None and 'generation' in raw:
                 record=raw['generation']['record']
                 check(generation_complete.get(record['returned_class']['class_object_id'])==record,'observer-generation-not-recorded')
             definition(raw)
@@ -143,8 +151,11 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             death = True
         else:
             check(ready and event['checkpoint'] is True, 'observer-checkpoint-not-suspended')
-            frames = checked_frames(event, classes, loaders, definitions, stub_policy, host_entries)
+            frames = (binding_v2.frames(event['frames']) if binding_v2 is not None else
+                      checked_frames(event, classes, loaders, definitions, stub_policy, host_entries))
             event = {**event, 'frames':frames}
+            if binding_v2 is not None and event.get('catch_location'):
+                binding_v2.frames([event['catch_location']])
             if stub_policy is not None and event.get('catch_location'):
                 checked_frames({'frames':[event['catch_location']]}, classes, loaders, definitions, stub_policy, host_entries)
             stack = stacks.setdefault(event['thread'], [])
@@ -157,7 +168,7 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
                       'observer-candidate-invoked-terminal')
                 check(any(f['class'] == 'org.junit.platform.engine.support.hierarchical.NodeTestTask' for f in frames[1:]),
                       'observer-terminal-engine-stack')
-                check(all(f['class'] in classes or f.get('_verified_forwarding_host') in classes
+                check(binding_v2 is not None or all(f['class'] in classes or f.get('_verified_forwarding_host') in classes
                           for f in frames if f['class'].startswith('org.junit.')),
                       'observer-terminal-unbound-framework')
                 check(not any(t['descriptor_id'] == event['descriptor_id'] for t in terminals),
@@ -202,7 +213,8 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             check(item['readback_sha256'] is None, 'observer-unexpected-readback')
     check(ready and death and previous == receipt['last_event_sha256'], 'observer-incomplete-stream')
     return {'entries': entries, 'readbacks': readbacks, 'observations': observations, 'exceptions': exceptions, 'terminals': terminals, 'verified_capture_hashes': captures,
-            'event_count': len(lines), 'collection_complete': True}
+            'event_count': len(lines), 'collection_complete': True,
+            **({'observer_v2': binding_v2.finish()} if binding_v2 is not None else {})}
 
 
 def replay(root, run, lane, public_key):
@@ -258,8 +270,21 @@ def replay(root, run, lane, public_key):
           receipt['target']['jvm']['java_binary_sha256'] == spec['java_binary_sha256'] and
           '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005' in
           receipt['target']['jvm']['arguments'], 'observer-target-binding')
+    binding_v2 = None
+    if spec.get('observer_binding_v2') is not None:
+        from tools.ms94_b06_observer_v2 import Replay, load_manifest
+        manifest, entries = load_manifest(root, spec, receipt['target']['image'])
+        check(receipt.get('runtime_files') == manifest['runtime_files'] and
+              receipt['target']['jvm']['executable'] == manifest['jdk']['java'], 'observer-v2-runtime-files-differ')
+        census = read_json(folder / 'frame-census.json')
+        check(verify_envelope(census, public_key) and census['complete'] is True and
+              census['plan_sha256'] == plan['content_sha256'] and census['lane'] == lane and
+              census['event_file_sha256'] == receipt['event_file_sha256'] and
+              census.get('v2_records') == receipt.get('v2_records') and
+              census.get('runtime_files') == receipt.get('runtime_files'), 'observer-v2-census-binding')
+        binding_v2 = Replay(entries)
     result = replay_stream(folder, receipt, catalog(root, spec['target_class_files_sha256']), lane,
-                           spec.get('forwarding_stub'), receipt.get('host_jar_entries', {}))
+                           spec.get('forwarding_stub'), receipt.get('host_jar_entries', {}), binding_v2)
     return {**result, 'full_entry_replayed': True, 'entry_sha256': entry['content_sha256'],
             'clock': clocks, 'authorization_sha256': authorization['content_sha256'],
             'observer_replayed': True, 'receipt_sha256': receipt['content_sha256'],

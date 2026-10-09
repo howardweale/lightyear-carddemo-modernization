@@ -1,5 +1,22 @@
 # B06 preparation status
 
+## October 8 observer-v2 native integration and host target proof implemented
+
+The [integration report](observer-v2-integration-r1/README.md) records the new
+explicit v2 collector, plan/freeze/broker wiring and independent replay. External
+JDI origins, the approved narrow pool comparison, JDK module/provider checks and
+per-use generated targets are implemented. The production collector's public
+host fixture replay passed all 10 checkpoints / 62 frame observations, with six
+lambda and six LambdaForm proof occurrences. All 201 offline B06 tests passed.
+Zero Docker, models or native pairs; this is not Oracle/PostgreSQL qualification.
+
+Generated storage fields receive data-layout proof only, never executable-frame
+trust. Unsupported generated executable recipes remain fail-closed. The five-path
+census still needs complete per-slot v2 manifests, its new frozen executable and
+an exact public-bound Tower decision/window. No run or new authorization was
+created. Earlier statuses below are historical; failures remain preserved.
+
+
 ## October 8 archive copy and offline five-path inputs complete; observer v2 integration incomplete
 
 The [exact archive copy](built-catalog-r1/terminal/README.md) passed: 204 archives,

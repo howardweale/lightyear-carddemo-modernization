@@ -70,13 +70,17 @@ def emission_definition_binding(emission, definition, runtime):
             'runtime_pool_sha256':runtime['constant_pool_sha256'],'native_admission':False}
 
 
-def observed_dynamic_target(handle_graph, frames, definitions, ordinary_bindings, jdk_class_ids):
+def observed_dynamic_target(handle_graph, frames, definitions, ordinary_bindings, jdk_class_ids, *,
+                            generated_dispatch_ids=(), captured_fields=()):
     """Conservative actual-use check, never infer a target from a generated name.
 
     Only one non-JDK member may occur in the reachable handle graph. Multiple
     targets are unresolved, not an invitation to select the one matching a
     deeper candidate frame. The caller supplies independently admitted JDK IDs
     and byte-bound ordinary definitions; package spelling is not authority.
+    Optional generated dispatch IDs require separate emission/body proof.
+    Captured-field tuples permit only independently verified read-only data
+    access, never an invocation or frame admission for that holder.
     """
     g=Graph(handle_graph);found={}
     # Require closure of the graph rooted at the observed argument, rather than
@@ -91,8 +95,9 @@ def observed_dynamic_target(handle_graph, frames, definitions, ordinary_bindings
         if node['class']!='java.lang.invoke.MemberName':continue
         value=node['fields']['java.lang.invoke.MemberName.clazz']
         klass=g.value(value);identity=str(klass['class_object_id'])
-        if identity in jdk_class_ids:continue
+        if identity in jdk_class_ids or identity in generated_dispatch_ids:continue
         kind,owner,name,desc=g.member(ref)
+        if kind == 1 and (identity,owner,name,desc) in captured_fields:continue
         need(kind in (5,6,7,8,9),'unsupported-dynamic-member-kind')
         need(identity in ordinary_bindings and identity in definitions,'dynamic-target-not-byte-bound')
         bound=ordinary_bindings[identity]

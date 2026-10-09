@@ -21,10 +21,17 @@ public final class PostingObserver {
     private final Set<String> definitions = new HashSet<>();
     private final Set<String> configured = new HashSet<>();
     private VirtualMachine vm;
+    private boolean bindingV2;
+    private final Map<String,String> emittedV2Definitions=new HashMap<>();
     private long sequence = 0;
     /** Generation evidence only: factory names select VM breakpoints, never grant trust. */
     private static final class Generation {
         static final String FACTORY="java.lang.invoke.InnerClassLambdaMetafactory";
+        static final String INVOKER="java.lang.invoke.InvokerBytecodeGenerator";
+        static final String LOADER="java.lang.ClassLoader";
+        static final String DEFINE="(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;";
+        static final Set<String> EMITTERS=Set.of("generateCustomizedCodeBytes","generateLambdaFormInterpreterEntryPointBytes","generateNamedFunctionInvokerImpl");
+        boolean v2;
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
         static final Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
@@ -34,12 +41,58 @@ public final class PostingObserver {
     static Map<String,Object> readDefinition(ReferenceType type) throws Exception {
         Map<String,Object> r=new LinkedHashMap<>();byte[] cp=type.constantPool();
         r.put("class",type.name());r.put("signature",type.signature());r.put("loader",type.classLoader()==null?"bootstrap":Long.toString(type.classLoader().uniqueID()));
-        r.put("module",type.module().name());r.put("class_object_id",type.classObject().uniqueID());r.put("modifiers",type.modifiers());
+        r.put("module",type.module().name());r.put("module_id",type.module().uniqueID());
+        r.put("module_loader",type.module().classLoader()==null?"bootstrap":Long.toString(type.module().classLoader().uniqueID()));
+        r.put("loader_class",type.classLoader()==null?null:type.classLoader().referenceType().name());
+        r.put("loader_class_object_id",type.classLoader()==null?null:type.classLoader().referenceType().classObject().uniqueID());r.put("class_object_id",type.classObject().uniqueID());r.put("modifiers",type.modifiers());
         r.put("constant_pool_count",type.constantPoolCount());r.put("constant_pool_hex",HexFormat.of().formatHex(cp));r.put("constant_pool_sha256",hash(cp));
         List<Object> methods=new ArrayList<>();
         for(Method m:type.methods()) { Map<String,Object> x=new LinkedHashMap<>();x.put("name",m.name());x.put("signature",m.signature());x.put("modifiers",m.modifiers());
             if(!m.isNative()&&!m.isAbstract()){byte[] b=m.bytecodes();x.put("bytecode_hex",HexFormat.of().formatHex(b));x.put("sha256",hash(b));}methods.add(x); }
         r.put("methods",methods);return r;
+    }
+    static Object graph(Value seed) throws Exception {
+        Map<String,Object> nodes=new LinkedHashMap<>();Deque<ObjectReference> queue=new ArrayDeque<>();
+        if(!(seed instanceof ObjectReference initial))return value(seed,0);
+        queue.add(initial);
+        while(!queue.isEmpty()){
+            ObjectReference o=queue.remove();String id=Long.toString(o.uniqueID());if(nodes.containsKey(id))continue;
+            if(nodes.size()>=4096)throw new IllegalStateException("method-handle graph bound exceeded");
+            Map<String,Object> node=new LinkedHashMap<>();node.put("class",o.referenceType().name());nodes.put(id,node);
+            if(o instanceof ClassObjectReference || o instanceof StringReference){node.put("value",value(o,0));continue;}
+            Map<String,Value> selected=new LinkedHashMap<>();
+            if(o instanceof ArrayReference array){
+                if(array.length()>4096)throw new IllegalStateException("method-handle array bound exceeded");
+                for(int i=0;i<array.length();i++)selected.put(Integer.toString(i),array.getValue(i));
+            }else{
+                boolean handle=false;
+                if(o.referenceType() instanceof ClassType ct)for(ClassType t=ct;t!=null;t=t.superclass())if(t.name().equals("java.lang.invoke.MethodHandle"))handle=true;
+                Set<String> wanted=switch(o.referenceType().name()){
+                    case "java.lang.invoke.LambdaForm" -> Set.of("arity","result","names","customized","vmentry","kind");
+                    case "java.lang.invoke.LambdaForm$Name" -> Set.of("type","index","function","constraint","arguments");
+                    case "java.lang.invoke.LambdaForm$NamedFunction" -> Set.of("member","resolvedHandle","type");
+                    case "java.lang.invoke.MemberName" -> Set.of("clazz","name","type","flags","method","resolution");
+                    case "java.lang.invoke.MethodType" -> Set.of("rtype","ptypes");
+                    case "java.lang.invoke.ResolvedMethodName" -> Set.of("vmtarget","vmholder");
+                    case "java.lang.Integer","java.lang.Long","java.lang.Short","java.lang.Byte","java.lang.Character","java.lang.Boolean","java.lang.Float","java.lang.Double" -> Set.of("value");
+                    case "java.lang.invoke.LambdaForm$BasicType","java.lang.invoke.LambdaForm$Kind" -> Set.of("name","ordinal");
+                    default -> Set.of();
+                };
+                for(Field f:o.referenceType().allFields()) {
+                    boolean handleField=handle && (Set.of("type","form","member","initMethod","instanceClass").contains(f.name()) || f.name().startsWith("arg"));
+                    if(!f.isStatic() && (wanted.contains(f.name()) || handleField))
+                        selected.put(f.declaringType().name()+"."+f.name(),o.getValue(f));
+                }
+                if(selected.isEmpty())node.put("opaque",true);
+            }
+            Map<String,Object> fields=new LinkedHashMap<>();
+            for(var entry:selected.entrySet()){
+                Value v=entry.getValue();
+                if(v instanceof ObjectReference ref){queue.add(ref);fields.put(entry.getKey(),Map.of("ref",Long.toString(ref.uniqueID())));}
+                else fields.put(entry.getKey(),value(v,0));
+            }node.put("fields",fields);
+        }
+        return Map.of("root",Long.toString(initial.uniqueID()),"nodes",nodes);
     }
     static Object value(Value v, int depth) throws Exception {
         if(v==null)return null;
@@ -66,6 +119,7 @@ public final class PostingObserver {
             definitions.put(id,Map.of("class",t.name(),"class_object_id",t.classObject().uniqueID(),"prepared",t.isPrepared(),"signature",t.signature(),"loader",loader(t)));
             if(!t.isPrepared() || t instanceof ArrayType)return;
             Map<String,Object> d=readDefinition(t);
+            if(t.classLoader()!=null)remember(t.classLoader().referenceType());
             List<Object> fields=new ArrayList<>();for(Field f:t.fields())fields.add(Map.of("name",f.name(),"signature",f.signature(),"modifiers",f.modifiers()));d.put("fields",fields);
             definitions.put(id,d);
         }
@@ -82,11 +136,13 @@ public final class PostingObserver {
     }
 
         boolean selected(Method m) {
-            return (m.declaringType().name().equals(FACTORY) && m.name().equals("spinInnerClass") && m.signature().equals("()Ljava/lang/Class;"))
+            return (v2 && m.declaringType().name().equals(LOADER) && m.name().equals("defineClass") && m.signature().equals(DEFINE))
+                || (v2 && m.declaringType().name().equals(INVOKER) && EMITTERS.contains(m.name()) && m.signature().endsWith(")[B"))
+                || (m.declaringType().name().equals(FACTORY) && m.name().equals("spinInnerClass") && m.signature().equals("()Ljava/lang/Class;"))
                 || (m.declaringType().name().equals(DEFINER) && m.name().equals("defineClass") && m.signature().equals("(ZLjava/lang/Object;)Ljava/lang/Class;"));
         }
         void configure(VirtualMachine vm,ReferenceType t) {
-            if(!Set.of(FACTORY,DEFINER).contains(t.name()) || !installed.add(t.name()+":"+loader(t)))return;
+            if(!(v2?Set.of(FACTORY,DEFINER,INVOKER,LOADER):Set.of(FACTORY,DEFINER)).contains(t.name()) || !installed.add(t.name()+":"+loader(t)))return;
             for(Method m:t.methods())if(selected(m)){
                 BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(m.location());
                 q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
@@ -130,6 +186,41 @@ public final class PostingObserver {
             Map<String,Object> r=new LinkedHashMap<>();r.put("kind","generation");r.put("thread_id",t.uniqueID());
             r.put("entry_depth",t.frameCount());r.put("entry_method",e.location().declaringType().name()+"."+e.location().method().name()+e.location().method().signature());
             r.put("stack",stack(t));
+            StackFrame top=t.frame(0);
+            if(v2){
+                        if(e.location().declaringType().name().equals(LOADER)){
+                            r.put("kind","ordinary-definition");
+                            List<Value> argv=top.getArgumentValues();ArrayReference bytes=(ArrayReference)argv.get(1);
+                            int offset=((IntegerValue)argv.get(2)).value(),length=((IntegerValue)argv.get(3)).value();
+                            if(length<0 || length>1024*1024 || offset<0 || offset+length>bytes.length())throw new IllegalStateException("class definition size");
+                            byte[] raw=new byte[length];for(int i=0;i<length;i++)raw[i]=((ByteValue)bytes.getValue(offset+i)).value();
+                            r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));
+                            r.put("requested_name",value(argv.get(0),0));r.put("defining_loader",Long.toString(top.thisObject().uniqueID()));
+                            if(argv.get(4) instanceof ObjectReference pd){
+                                Field cs=pd.referenceType().fieldByName("codesource");ObjectReference source=cs==null?null:(ObjectReference)pd.getValue(cs);
+                                if(source!=null){ObjectReference url=(ObjectReference)source.getValue(source.referenceType().fieldByName("location"));
+                                    if(url!=null)r.put("code_source",selected(url,List.of("protocol","host","port","file"),0));
+                                }
+                            }
+                        }
+                        if(e.location().declaringType().name().equals(INVOKER)){
+                            r.put("kind","generator-bytecode");r.put("generator_object_id",top.thisObject().uniqueID());
+                            r.put("lambda_form_graph",graph(top.thisObject().getValue(top.thisObject().referenceType().fieldByName("lambdaForm"))));
+                        }
+                        if(e.location().declaringType().name().equals(DEFINER)){
+                        r.put("definer",selected(top.thisObject(),List.of("lookup","name","classFlags"),1));
+                        // A byte array read is corroboration only. Runtime CP/method reads below remain the executable evidence.
+                        ArrayReference bytes=(ArrayReference)top.thisObject().getValue(top.thisObject().referenceType().fieldByName("bytes"));
+                        if(bytes.length()>1024*1024)throw new IllegalStateException("definition size bound");
+                        byte[] raw=new byte[bytes.length()];for(int i=0;i<raw.length;i++)raw[i]=((ByteValue)bytes.getValue(i)).value();
+                        r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));r.put("definition_input_object_id",bytes.uniqueID());
+                        r.put("class_data_graph",graph(top.getArgumentValues().get(1)));
+                        for(StackFrame f:t.frames())if(f.location().declaringType().name().equals("java.lang.invoke.InvokerBytecodeGenerator")&&f.thisObject()!=null){
+                            Field field=f.thisObject().referenceType().fieldByName("lambdaForm");
+                            r.put("lambda_form_graph",graph(f.thisObject().getValue(field)));break;
+                        }
+                        }
+            }
             if(e.location().declaringType().name().equals(FACTORY)){
                 r.put("lambda_factory",selected(t.frame(0).thisObject(),List.of("targetClass","factoryType","interfaceClass","interfaceMethodName","interfaceMethodType","implementation","implMethodType","implInfo","implKind","implIsInstanceMethod","implClass","dynamicMethodType","isSerializable","altInterfaces","altMethods","implMethodClassName","implMethodName","implMethodDesc","argNames","argDescs","useImplMethodHandle"),2));
             }
@@ -142,9 +233,14 @@ public final class PostingObserver {
             Map<String,Object> r=q.pop();
             String name=e.method().declaringType().name()+"."+e.method().name()+e.method().signature();
             if(!r.get("entry_method").equals(name) || !r.get("entry_depth").equals(e.thread().frameCount()))throw new IllegalStateException("generation return mismatch");
-            if(!(e.returnValue() instanceof ClassObjectReference c))throw new IllegalStateException("generation return not Class");
-            remember(c.reflectedType());r.put("returned_class",value(c,0));
-            if(name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
+            if(e.returnValue() instanceof ClassObjectReference c){
+                remember(c.reflectedType());r.put("returned_class",value(c,0));
+                if(name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
+            }else if(v2 && e.returnValue() instanceof ArrayReference a && a.referenceType().signature().equals("[B")){
+                if(a.length()>1024*1024)throw new IllegalStateException("generated byte array bound exceeded");
+                byte[] bytes=new byte[a.length()];for(int i=0;i<bytes.length;i++)bytes[i]=((ByteValue)a.getValue(i)).value();
+                r.put("returned_bytes_object_id",a.uniqueID());r.put("returned_bytes_hex",HexFormat.of().formatHex(bytes));r.put("returned_bytes_sha256",hash(bytes));
+            }else throw new IllegalStateException("generation return unsupported");
             MethodExitRequest armed=exits.remove(e.thread().uniqueID());
             if(armed==null || !armed.equals(e.request()))throw new IllegalStateException("unarmed generation exit");
             vm.eventRequestManager().deleteEventRequest(armed);
@@ -251,14 +347,42 @@ public final class PostingObserver {
             if(provenance!=null)definition.put("generation",provenance);
             emit(new LinkedHashMap<>(Map.of("kind", "frame-definition", "definition", definition)), false);
         }
-        return Map.of("class", type.name(), "method", method.name(), "signature", method.signature(), "line", location.lineNumber(),
+        Map<String,Object> result=new LinkedHashMap<>(Map.of("class", type.name(), "method", method.name(), "signature", method.signature(), "line", location.lineNumber(),
                       "code_index", location.codeIndex(), "method_sha256", methodHash,
-                      "constant_pool_sha256", poolHash, "loader", loader, "definition_id", id);
+                      "constant_pool_sha256", poolHash, "loader", loader, "definition_id", id));
+        if(bindingV2){Generation.definitions.remove(Long.toString(type.classObject().uniqueID()));Generation.remember(type);result.put("class_object_id",type.classObject().uniqueID());result.put("module",type.module().name());}
+        return result;
     }
     private List<Map<String,Object>> frames(ThreadReference thread) throws Exception {
         List<Map<String,Object>> result = new ArrayList<>();
-        for (StackFrame frame : thread.frames()) result.add(location(frame.location()));
+        for (StackFrame frame : thread.frames()) {
+            Map<String,Object> item=location(frame.location());
+            if(bindingV2 && !frame.location().method().isNative()) {
+                List<Object> handles=new ArrayList<>();List<Value> values=new ArrayList<>(frame.getArgumentValues());
+                if(frame.thisObject()!=null)values.add(frame.thisObject());
+                for(int i=0;i<values.size();i++)if(values.get(i) instanceof ObjectReference o && o.referenceType() instanceof ClassType ct){
+                    boolean handle=false;for(ClassType t=ct;t!=null;t=t.superclass())if(t.name().equals("java.lang.invoke.MethodHandle"))handle=true;
+                    if(handle)handles.add(Map.of("value_index",i,"handle_graph",Generation.graph(o)));
+                }
+                item.put("handle_uses",handles);
+            }
+            result.add(item);
+        }
+        if(bindingV2)flushDefinitions();
         return result;
+    }
+    private void flushDefinitions() throws Exception {
+        for(var entry:Generation.definitions.entrySet()) {
+            String sha=hash(json(entry.getValue()).getBytes(StandardCharsets.UTF_8));
+            if(!sha.equals(emittedV2Definitions.get(entry.getKey()))) {
+                emit(new LinkedHashMap<>(Map.of("kind","class-definition-v2","definition",entry.getValue())),false);
+                emittedV2Definitions.put(entry.getKey(),sha);
+            }
+        }
+    }
+    private boolean relevant(ThreadReference thread) throws Exception {
+        for(StackFrame f:thread.frames()) {String n=f.location().declaringType().name();if(n.equals(SUPPORT)||n.equals(CANDIDATE)||n.startsWith(CANDIDATE+"$"))return true;}
+        return false;
     }
     private boolean selected(Method method) {
         String type = method.declaringType().name(), name = method.name(), signature = method.signature();
@@ -286,6 +410,7 @@ public final class PostingObserver {
             emit(new LinkedHashMap<>(Map.of("kind","generation-entry","record",generation.enter(vm,event))),false);return;
         }
         ThreadReference thread = event.thread(); Method method = event.location().method();
+        if(!method.declaringType().name().equals(TERMINAL) && !relevant(thread))return;
         List<Map<String,Object>> stack = frames(thread);
         if (method.declaringType().name().equals(TERMINAL)) {
             terminal(thread, stack); return;
@@ -378,6 +503,7 @@ public final class PostingObserver {
             MethodExitRequest armed=generation.exits.remove(event.thread().uniqueID());
             if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed);
         }
+        if(!relevant(event.thread()))return;
         List<Map<String,Object>> stack = frames(event.thread());
         if (stack.stream().noneMatch(f -> f.get("class").equals(SUPPORT) || f.get("class").toString().startsWith(CANDIDATE))) return;
         Map<String,Object> record = new LinkedHashMap<>();
@@ -410,6 +536,7 @@ public final class PostingObserver {
             vm.eventRequestManager().deleteEventRequest(call.exit());
         }
         record.put("unwound_calls", unwound);
+        if(bindingV2)flushDefinitions();
         emit(record, true);
     }
     private void run(String host, String port) throws Exception {
@@ -420,6 +547,7 @@ public final class PostingObserver {
         if (!vm.canGetBytecodes() || !vm.canGetConstantPool() || !vm.canGetMethodReturnValues())
             throw new IllegalStateException("Required VM inspection unavailable");
         Set<String> observedTypes=new HashSet<>(TYPES);observedTypes.add(Generation.FACTORY);observedTypes.add(Generation.DEFINER);
+        if(bindingV2){observedTypes.add(Generation.INVOKER);observedTypes.add(Generation.LOADER);}
         for (String type : observedTypes) {
             ClassPrepareRequest request = vm.eventRequestManager().createClassPrepareRequest();
             request.addClassFilter(type); request.setSuspendPolicy(EventRequest.SUSPEND_ALL); request.enable();
@@ -427,7 +555,7 @@ public final class PostingObserver {
         for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
-        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version())), false);
+        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1)), false);
         vm.resume();
         boolean running = true;
         while (running) {
@@ -446,7 +574,8 @@ public final class PostingObserver {
         }
     }
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) throw new IllegalArgumentException("host and port required");
-        new PostingObserver().run(args[0], args[1]);
+        if (args.length != 2 && !(args.length==3 && args[2].equals("observer-binding-v2"))) throw new IllegalArgumentException("host, port and optional observer-binding-v2 required");
+        PostingObserver observer=new PostingObserver();observer.bindingV2=args.length==3;
+        observer.generation.v2=observer.bindingV2;observer.run(args[0],args[1]);
     }
 }

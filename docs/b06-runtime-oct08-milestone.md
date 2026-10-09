@@ -46,3 +46,9 @@ exact executable snapshot, public commit, window and signed Tower decision.
 Journey qualification and zero-model preflight remain before any measurement.
 B04 stays void; B05, template-r1, work/ms94, J1 predicates and frozen evidence are
 unchanged. Historical expired plans in this PR grant no new run authority.
+
+Publication CI found one Windows-only test-fixture mismatch: the temporary
+folder used an 8.3 short path while the runner correctly resolved its long path.
+The fixture now resolves its root before comparing the exact read-only mount;
+production mount checks and frozen code are unchanged. Both mocked runner tests
+pass; Windows/Linux CI is rerun on the correction.

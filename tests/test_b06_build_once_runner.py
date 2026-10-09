@@ -6,7 +6,7 @@ from tools.b06_image_artifacts import build_once_practice as p
 class BuildOnceRunnerTests(unittest.TestCase):
  def exercise(self,fail=False):
   with tempfile.TemporaryDirectory() as d:
-   root=Path(d);plan=root/'plan.json';plan.write_text(json.dumps(dict(source_commit='a'*40,snapshot_sha256='b'*64,content_sha256='c'*64)))
+   root=Path(d).resolve();plan=root/'plan.json';plan.write_text(json.dumps(dict(source_commit='a'*40,snapshot_sha256='b'*64,content_sha256='c'*64)))
    states={};calls=[];active=None;derived='sha256:built';owner=None
    manifest=p.seal(dict(config_path=p.TEST_ROOT+'/target/work/configuration',data_path=p.TEST_ROOT+'/target/work/data'))
    def command(argv,**kw):

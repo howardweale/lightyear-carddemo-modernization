@@ -1,4 +1,4 @@
-# Lightyear Verify: manual Multipass smoke test
+# Lightyear Verify: Multipass smoke test
 
 This is a **public-fixture rehearsal**, not Maintec acceptance. Setup, Maven/JAR
 builds, Inspector and the optional acceptance suite make **zero model calls** and
@@ -150,7 +150,53 @@ Stop only after pending attempts finish unless deliberately testing interruption
 Stopping while pending can consume an attempt and require operator review.
 Receipts, keys and cumulative budgets survive stop/start. No reset command exists.
 
-## (a) MCP Inspector: manual, no model
+## (a) Scripted walkthrough: default, no model
+
+Use **only a fresh VM/task with five unused cumulative attempts**. This check
+consumes all five. Never reset a ledger or rename a task to evade its limit.
+The graph-off VM recorded on October 9 is spent and must be preserved. Use a
+separate fresh walkthrough VM, for example `lyverify-walkthrough-r1`; reserve
+`lyverify-graph-on-r1` for the separately reviewed graph activation task.
+
+After the reviewed walkthrough revision is published, use that exact commit in
+the provisioning commands above, then start the judge. Do not replace code or
+configuration in an already sealed installation. From the Mac:
+
+```sh
+VM=lyverify-walkthrough-r1
+multipass exec "$VM" -- sudo bash /opt/lightyear-verify/tools/verify_smoke/start.sh
+multipass exec "$VM" -- sudo python3 -I /opt/lightyear-verify/tools/verify_smoke/agent.py /opt/lightyear-verify-venv/bin/python /opt/lightyear-verify/tools/verify_smoke/walkthrough.py
+multipass exec "$VM" -- sudo -u lyagent cat /srv/dev/walkthrough-report.json
+```
+
+The client uses the same stdio server and token environment as Inspector, runs
+as lyagent, and never calls a model. It generates UUIDv4 IDs, deliberately reuses
+the first ID once, polls at intervals of at least two seconds, and stops at the
+first mismatch or the 360-second attempt deadline. A timeout never causes a
+resubmission. Do not run the manual fallback afterward on that consumed task.
+
+`walkthrough-report.json` is exclusively created before connection: an existing
+file refuses without submitting. It preserves completed steps and attempted
+submission IDs on failure; investigate and retain it. Each public receipt is
+retained as exact base64 bytes with its byte SHA-256, distinct from the signed
+body's `content_sha256`. No parse/re-serialization supplies that byte hash.
+No token, private key or raw evaluation data belongs in the report.
+
+The fixture-only judge response now advertises `smoke_evidence` in `get_task`
+and includes exact public receipt bytes, the repeated-diagnostic alert and the
+observed journal head with `get_receipt`. Old judges refuse the walkthrough at
+step 1 before consuming attempts. Non-fixture receipt responses are unchanged.
+The existing ten MCP tools and input schemas are unchanged.
+
+The report's final head is the head observed after step 15, not a claim that
+shutdown or subsequent ingress cannot append events. An administrator must stop
+the judge and pin the actual sealed head for the independent offline replay
+below. A successful client check is not signature replay or native isolation
+acceptance. Host fake-judge tests are not a Linux walkthrough result.
+
+<a id="a-mcp-inspector-manual-no-model"></a>
+
+### MCP Inspector: manual fallback, no model
 
 Install Node 24 inside the lyagent shell from the
 [official Linux binary distribution](https://nodejs.org/en/download).

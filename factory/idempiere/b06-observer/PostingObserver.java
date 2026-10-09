@@ -49,7 +49,9 @@ public final class PostingObserver {
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
         static final Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
-        final Map<Long,MethodExitRequest> exits=new HashMap<>();
+        private record ReturnArm(MethodExitRequest request, Method method, int depth,
+                                 Map<String,Object> entry) {}
+        final Map<Long,ReturnArm> exits=new HashMap<>();
         final Map<Long,Map<String,Object>> completed=new HashMap<>();
         final Set<String> installed=new HashSet<>();
     static Map<String,Object> readDefinition(ReferenceType type) throws Exception {
@@ -188,13 +190,27 @@ public final class PostingObserver {
             }
             return result;
         }
-        void atReturn(VirtualMachine vm,BreakpointEvent e) {
+        static String methodName(Method m) {
+            return m.declaringType().name()+"."+m.name()+m.signature();
+        }
+        void atReturn(VirtualMachine vm,BreakpointEvent e) throws Exception {
             // JDI has no operand-stack read. Arm an exact class/thread exit only
             // at ARETURN; no intervening Java invocation can occur.
-            if(exits.containsKey(e.thread().uniqueID()))throw new IllegalStateException("duplicate return arm");
+            long thread=e.thread().uniqueID();Method method=e.location().method();
+            ReturnArm prior=exits.get(thread);
+            if(prior!=null)throw new IllegalStateException("duplicate return arm: thread="+thread+
+                " armed="+methodName(prior.method())+" current="+methodName(method));
+            Deque<Map<String,Object>> calls=pending.get(thread);
+            int depth=e.thread().frameCount();
+            if(calls==null || calls.isEmpty() || !selected(method) ||
+               !calls.peek().get("entry_method").equals(methodName(method)) ||
+               !calls.peek().get("entry_depth").equals(depth) ||
+               !e.thread().frame(0).location().equals(e.location()))
+                throw new IllegalStateException("generation return arm without matching activation");
             MethodExitRequest q=vm.eventRequestManager().createMethodExitRequest();
             q.addThreadFilter(e.thread());q.addClassFilter(e.location().declaringType());
-            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();exits.put(e.thread().uniqueID(),q);
+            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
+            exits.put(thread,new ReturnArm(q,method,depth,calls.peek()));
         }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
@@ -244,8 +260,12 @@ public final class PostingObserver {
         }
         Map<String,Object> returned(VirtualMachine vm,MethodExitEvent e) throws Exception {
             Deque<Map<String,Object>> q=pending.get(e.thread().uniqueID());
-            if(q==null || q.isEmpty() || !selected(e.method()))return null;
-            Map<String,Object> r=q.pop();
+            ReturnArm armed=exits.get(e.thread().uniqueID());
+            if(armed==null || !armed.request().equals(e.request()) || !armed.method().equals(e.method()) ||
+               q==null || q.isEmpty() || q.peek()!=armed.entry() ||
+               armed.depth()!=e.thread().frameCount() || !selected(e.method()))
+                throw new IllegalStateException("generation exit does not match armed activation");
+            Map<String,Object> r=q.peek();
             String name=e.method().declaringType().name()+"."+e.method().name()+e.method().signature();
             if(!r.get("entry_method").equals(name) || !r.get("entry_depth").equals(e.thread().frameCount()))throw new IllegalStateException("generation return mismatch");
             if(e.returnValue() instanceof ClassObjectReference c){
@@ -256,9 +276,8 @@ public final class PostingObserver {
                 byte[] bytes=readBytes(a,0,a.length());
                 r.put("returned_bytes_object_id",a.uniqueID());r.put("returned_bytes_hex",HexFormat.of().formatHex(bytes));r.put("returned_bytes_sha256",hash(bytes));
             }else throw new IllegalStateException("generation return unsupported");
-            MethodExitRequest armed=exits.remove(e.thread().uniqueID());
-            if(armed==null || !armed.equals(e.request()))throw new IllegalStateException("unarmed generation exit");
-            vm.eventRequestManager().deleteEventRequest(armed);
+            exits.remove(e.thread().uniqueID());q.pop();
+            vm.eventRequestManager().deleteEventRequest(armed.request());
             if(q.isEmpty())pending.remove(e.thread().uniqueID());
             return r;
         }
@@ -481,7 +500,8 @@ public final class PostingObserver {
         emit(record, true);
     }
     private void exit(MethodExitEvent event) throws Exception {
-        if(event.request().equals(generation.exits.get(event.thread().uniqueID()))) {
+        Generation.ReturnArm arm=generation.exits.get(event.thread().uniqueID());
+        if(arm!=null && event.request().equals(arm.request())) {
             Map<String,Object> record=generation.returned(vm,event);
             if(record!=null)emit(new LinkedHashMap<>(Map.of("kind","generation-return","record",record)),false);
             return;
@@ -543,8 +563,8 @@ public final class PostingObserver {
                 q.setSuspendPolicy(EventRequest.SUSPEND_ALL);
                 generationCatches.put(threadId,new GenerationCatch(q,event.exception().referenceType().name()));q.enable();
             }
-            MethodExitRequest armed=generation.exits.remove(threadId);
-            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed);
+            Generation.ReturnArm armed=generation.exits.remove(threadId);
+            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed.request());
         }
         if(!relevant(event.thread()))return;
         List<Map<String,Object>> stack = frames(event.thread());
@@ -599,7 +619,9 @@ public final class PostingObserver {
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
         emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1")), false);
-        vm.resume();
+        // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
+        // below. Resuming here too can release a later breakpoint suspension
+        // before its handler runs, causing a missed exit and a stale return arm.
         boolean running = true;
         while (running) {
             EventSet set = vm.eventQueue().remove(1000);
@@ -610,6 +632,8 @@ public final class PostingObserver {
                 else if (event instanceof MethodExitEvent methodExit) exit(methodExit);
                 else if (event instanceof ExceptionEvent exception) failure(exception);
                 else if (event instanceof VMDeathEvent) {
+                    if(!generation.pending.isEmpty() || !generation.exits.isEmpty() || !generationCatches.isEmpty())
+                        throw new IllegalStateException("VM died with incomplete generation activation");
                     emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false); running = false;
                 } else if (event instanceof VMDisconnectEvent) running = false;
             }

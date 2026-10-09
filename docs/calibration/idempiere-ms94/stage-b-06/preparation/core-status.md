@@ -1,5 +1,22 @@
 # B06 preparation status
 
+## October 9 observer practice failed; startup suspension repair verified offline
+
+Practice r1 stopped on Oracle with `java.lang.IllegalStateException: duplicate return arm`
+at `PostingObserver$Generation.atReturn(PostingObserver.java:194)`. Signed terminal
+report `5ead361bc340074209dbcdecfc0779c0abd15e662f59d9e5d16de2aa87547ed1`
+remains failed: 1,439.859 seconds, 24,827 preserved partial Oracle events, no PostgreSQL
+execution or native qualification credit. All 113,572 frozen hashes and 13 signatures
+verified; owned resource inventory is empty. The monitor is paused.
+
+The [startup repair milestone](../../../../b06-observer-startup-repair-milestone.md)
+records a controlled host reproduction of the exact error using the preserved old
+collector. Removing its extra VM resume fixes that regression; return requests now
+require the exact observed activation. Duplicate and mismatched returns still refuse.
+Six host tests and 43 proof/driver tests passed; one optional historical pool test was
+skipped. Fresh host replay verified 10 checkpoints, 62 frames and 22 class identities.
+No Docker/model calls or new Tower request; changed bytes require new native approval.
+
 ## October 9 observer practice r1 frozen; exact Tower approval pending
 
 [Observer practice r1](observer-practice-r1/README.md) prepares one fresh retained J1

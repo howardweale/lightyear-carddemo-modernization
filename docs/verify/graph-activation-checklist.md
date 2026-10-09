@@ -24,7 +24,7 @@ python /opt/lightyear-verify/tools/verify_graph_activation_check.py \
 ```
 
 Require passed platform acceptance with no skips, ten tools and unchanged budget.
-Complete the runbook's 15-step Inspector walkthrough and retain its four receipts.
+Complete the runbook's 15-step walkthrough and retain its five receipts.
 Do not launch Claude/Codex or the A/B. Record architecture, install hash, actual
 time and report/receipt hashes. Host Windows tests do not satisfy this gate.
 An unrun x86_64 platform remains untested.
@@ -88,6 +88,13 @@ hash. An offline old proof cannot discover a later decision automatically.
 A baseline-only tool count alone does not establish the reason for refusal.
 
 ## Completion record
+
+[October 9 graph-off acceptance](graph-off-acceptance-2026-10-09.md) records
+Howard's arm64 operator review at revision `25735d06`: platform acceptance and
+the ten-tool baseline passed; the manual 15-step walkthrough and five-attempt
+offline replay were reported complete. The supplied record is preserved unchanged.
+It does not establish graph-on activation or x86_64 acceptance. The old task's
+five attempts are spent; preserve its VM and journal.
 
 Record the reviewed revision; CPU/OS/setup hash; graph-off acceptance and Inspector;
 projection/manifest/policy/inventory/certificate; Tower scope/key/decision/head;

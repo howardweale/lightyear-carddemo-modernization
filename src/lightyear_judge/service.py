@@ -488,6 +488,28 @@ class Judge:
             )
         )
 
+    def receipt_evidence(self, attempt_id):
+        """Public bytes and observed journal position; never private receipt data.
+
+        Called under invoke's lock. The head is a point-in-time observation,
+        not a promise that subsequent ingress or shutdown cannot append events.
+        """
+        receipt = self.public_receipt(attempt_id)
+        raw = (self.root / "public-receipts" / (attempt_id + ".json")).read_bytes()
+        if json.loads(raw) != receipt:
+            raise ValueError("public-receipt-bytes-changed")
+        seen, repeated = set(), False
+        for event in self.accepted():
+            path = self.root / "public-receipts" / (event["attempt_id"] + ".json")
+            if path.exists():
+                diagnostics = self.public_receipt(event["attempt_id"])["diagnostics"]
+                fingerprint = digest(diagnostics)
+                repeated |= bool(diagnostics and fingerprint in seen)
+                seen.add(fingerprint)
+        return {"receipt": receipt, "receipt_bytes_base64": base64.b64encode(raw).decode("ascii"),
+                "journal_head_sha256": self.events[-1]["content_sha256"],
+                "alerts": ["repeated-identical-diagnostics"] if repeated else []}
+
     def invoke(self, method, args):
         with self.lock:
             try:
@@ -508,10 +530,13 @@ class Judge:
                         "budget": self.budget(),
                         "rules": "Exact existing INTCALC comparator; normalization only by verified human Tower decisions.",
                     }
+                    if self.config.get("fixture"):
+                        result["smoke_evidence"] = "public-receipt-bytes-v1"
                 elif method == "get_budget":
                     result = self.budget()
                 elif method == "get_receipt":
-                    result = {"receipt": self.public_receipt(args["attempt_id"])}
+                    result = (self.receipt_evidence(args["attempt_id"]) if self.config.get("fixture")
+                              else {"receipt": self.public_receipt(args["attempt_id"])})
                 elif method == "get_verdict":
                     if args["attempt_id"] == self.active:
                         return {

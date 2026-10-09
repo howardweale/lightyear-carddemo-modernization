@@ -1,5 +1,32 @@
 # B06 preparation status
 
+## October 9 morning census r2 prepared; Tower decision pending
+
+The [r2 executable preparation](census-v2-r2/README.md) passed all five offline
+assemblies, 113,610 frozen hashes, 766 public source comparisons and 20 focused
+tests. Window: October 9 07:00-18:00 PDT; latest full-budget launch 07:50:50 PDT.
+Snapshot `b1bd1b72ea82486c10ab306f054581f4c6351dc0d6e8261d04bd4e7779516f0d`;
+plan `17c4aac5fc98bbef39ed1de9af940592420328bf5d0cac20583977ee3f1a1bf7`.
+R1 expired unlaunched and remains preserved. No Docker, model calls or native
+pairs during preparation. A fresh exact Tower decision is required; nothing is
+armed. No journey qualification or measurement credit. Operator review, not
+independent attestation.
+
+## October 8 five-path observer-v2 census executable prepared
+
+The [census preparation](census-v2-r1/README.md) seals five fresh zero-model pairs
+into a new 113,610-file snapshot. All five native plan assemblies and the final
+frozen offline verification passed. The window is October 8 20:00 to October 9
+07:00 PDT; latest full-group start is 20:50:50 PDT. Exact publication and a new
+Tower decision remain required before Docker. No census pair has run.
+
+This advances per-slot assembly and executable preparation, not native
+qualification. Observer-v2/generated provenance on both engines, J1/J2/J3
+qualification, measurement admission and its preflight remain. No model calls,
+no B05/work/ms94/template-r1/J1 predicate changes. Prior failures remain failed.
+Operator review, not independent attestation.
+
+
 ## October 8 observer-v2 native integration and host target proof implemented
 
 The [integration report](observer-v2-integration-r1/README.md) records the new

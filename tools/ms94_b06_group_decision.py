@@ -22,6 +22,11 @@ def request(group, commit):
     value = {'schema': 'tower-request/1', 'scope': SCOPE, 'kind': KIND,
              'bound': bound, 'evidence': evidence, 'proposed_by': 'b06-qualification-controller',
              'summary': 'Authorize one zero-model qualification group in its exact Docker window. Operator review; not independent attestation.'}
+    if group.get('purpose') == 'five-path-provenance-census':
+        check(group.get('qualification_credit') is False, 'census-not-qualification-credit')
+        value['summary'] = ('Authorize five serial zero-model provenance-census pairs: three J1 paths, '
+                            'J2 reference and J3 reference. No qualification or measurement credit. '
+                            'Exact Docker window; operator review, not independent attestation.')
     value['id'] = 'b06-q-'+digest(value)
     return value, {**bound, 'request': digest(value)}, artifacts
 

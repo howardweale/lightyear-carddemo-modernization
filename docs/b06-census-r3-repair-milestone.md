@@ -13,3 +13,9 @@ See the [repair, preserved failure, exact compilation hashes and proposed r3 win
 A new immutable snapshot, public-bound Tower decision and native census remain
 pending. The authorized requested window is 08:30-19:30 PDT; latest start is
 09:20:50 PDT. No deadline extension or automatic slot replacement.
+
+The [replacement window](calibration/idempiere-ms94/stage-b-06/preparation/census-v2-r3-window2/README.md)
+completed offline preparation: 113,634 frozen files, 767 public source files and
+23 frozen tests verified. Window October 9 10:00-21:00 PDT, latest launch
+10:50:50 PDT. All 28 implementation CI checks passed. The exact new Tower
+decision is pending; no native run or model call has started.

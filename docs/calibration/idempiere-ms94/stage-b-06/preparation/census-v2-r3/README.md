@@ -1,3 +1,5 @@
+> Superseded before launch by [the 10:00 AM-9:00 PM PDT window](../census-v2-r3-window2/README.md). Original frozen plans remain preserved; all five slots were unstarted.
+
 # Census r3: observed catch activation and failed-run audit
 
 Prospective replacement group for October 9, 2026 **08:30-19:30 PDT**

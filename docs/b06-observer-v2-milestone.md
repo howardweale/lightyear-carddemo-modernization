@@ -28,3 +28,8 @@ The next gate is the five-path census on the pinned native runtime with complete
 per-slot manifests, a fresh snapshot/public commit, window and Tower decision.
 No measurement readiness is claimed. B04 stays void; r10 stays failed; B05,
 work/ms94, template-r1, J1 predicates and historical frozen evidence are preserved.
+
+The earlier [runtime-closure r4 window2 failure review](calibration/idempiere-ms94/stage-b-06/preparation/runtime-closure-r4-window2/terminal/README.md)
+is published byte-for-byte with this increment. Its "local only" wording records
+its original publication state and is preserved rather than editing a hashed
+historical record. It remains failed: `unambiguous-surefire-configuration-required`.

@@ -84,3 +84,32 @@ The setup kit and initial milestone were merged in PR #249; the sudo privilege
 check and executable shell modes were corrected in PR #250. Repository CI is
 distinct from the operator-reported live results and outstanding checks above.
 Approval to publish and merge documentation does not authorize new model calls.
+
+## Kiro CLI results recorded — October 8, 2026
+
+The [Kiro CLI results](smoke-results.md#kiro-cli) record Howard's operator-run
+public-fixture test on `lyverify-kiro`, an Apple Silicon Mac running Multipass
+Ubuntu 24.04. Kiro CLI 2.28.0 used explicitly selected `claude-sonnet-4.5` as
+lyagent. All four prebuilt artifacts produced the expected verdicts: the good
+JAR was equivalent; rounding, skipped-record and date mutants were divergent.
+The client reported 18 Verify tool calls, four attempts consumed and one left.
+
+Howard reported successful offline replay after stopping the judge: four
+attempts and four native verdicts, zero model calls, exit code 0. Receipt
+identities, hashes and the terminal journal head are recorded in the supplied
+section. They were not separately inspected for this documentation update;
+the journal head was obtained immediately before replay, not pinned by an
+independent observer. Operator review; not independent attestation.
+
+Reported usage was 6.73 Kiro credits, approximately six minutes wall time and a
+calculated $0.13 at the Pro plan rate (not an invoice). Follow-up observations
+cover model-composed idempotency UUIDs, public-read order and receipt identities
+reported without agent-written receipt files. This demonstrates the prebuilt
+public-fixture workflow, not autonomous implementation effectiveness or Maintec
+equivalence. Codex's existing planned status is unchanged.
+
+PR #281 adds the supplied Kiro section verbatim between Claude Code and Codex
+and this milestone entry. Validation confirmed attachment byte equality and
+preservation of every original smoke-results byte; Git whitespace checks passed.
+This documentation update made zero model calls and ran no live client or Docker
+workload. Repository CI is separate from the reported Kiro evidence.

@@ -152,30 +152,84 @@ class BuiltHostTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'source-binding'):host.contract(root,wrong)
 class ObservedCarrierTests(unittest.TestCase):
     def test_actual_runner_overrides_inherited_builder_entrypoint(self):
+        self.run_observed()
+
+    def test_slow_observer_preparation_does_not_consume_candidate_watchdog(self):
+        self.run_observed('slow-preparation')
+
+    def test_candidate_watchdog_still_expires_and_cleans_up(self):
+        self.run_observed('timeout')
+
+    def test_observer_failure_remains_equipment_failure(self):
+        self.run_observed('observer-failure')
+
+    def test_window_cancel_after_preparation_prevents_worker_launch(self):
+        self.run_observed('cancel')
+
+    def test_failed_stop_diagnostic_cannot_prevent_cleanup(self):
+        self.run_observed('stop-record-failure')
+
+    def run_observed(self, mode='normal'):
         from unittest.mock import Mock
         from tools.ms94_b06_observed_runner import ObservedRunner
+        from tools.ms94_b06_candidate_result import CandidateTimeout
+        from lightyear_calibration.contracts import CalibrationError
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);run=root/'run';(run/'inputs').mkdir(parents=True)
             source=run/'inputs/operations.java';source.write_bytes(b'public candidate fixture')
             runner=object.__new__(ObservedRunner);runner.root=root;runner.run=run;runner.owner='owned';runner.label='owned=1';runner.network='internal';runner.password='fixture';runner.signer=Mock()
             runner.plan=dict(built_runtime={},local={'runner_image':'base'},calendar={'scenario_date':'2026-10-01'})
-            for name in ('remember','record_guard','assert_real_runtime','before_candidate'):setattr(runner,name,Mock())
+            for name in ('remember','record_guard','assert_real_runtime','before_candidate','emit','check_cancel'):setattr(runner,name,Mock())
             runner.trusted_identity=Mock(return_value={'name':'db','clock':{'value':'real clock fixture'}})
             image='sha256:'+'d'*64;launch={'image':image,'content_sha256':'a'*64}
             expected=[dict(destination='/runtime/worker.py',writable=False),dict(destination='/results',writable=True)]
             info=dict(Image=image,HostConfig={'ReadonlyRootfs':True},Mounts=[dict(Destination=m['destination'],RW=m['writable'],Type='bind') for m in expected])
             broker=Mock(failure=None);broker.done.wait.return_value=True
+            clock=[0.0]
+            broker.start.side_effect=lambda: clock.__setitem__(0,1200.0)
+            if mode=='cancel':runner.check_cancel.side_effect=RuntimeError('window closed')
+            if mode=='stop-record-failure':
+                def emit(kind,payload):
+                    if kind=='application-stop-requested':raise RuntimeError('diagnostic disk failure')
+                runner.emit.side_effect=emit
+            child=Mock(returncode=None)
+            child.poll.side_effect=lambda:child.returncode
+            child.kill.side_effect=lambda:setattr(child,'returncode',-9)
+            calls=[0]
+            def communicate(**kwargs):
+                calls[0]+=1
+                if calls[0]==1 and mode in ('slow-preparation','timeout','observer-failure'):
+                    clock[0]+=1831 if mode=='timeout' else 800
+                    if mode=='observer-failure':broker.failure='fixture observer failure'
+                    raise subprocess.TimeoutExpired('fixture',1)
+                child.returncode=0
+                return (json.dumps(dict(exit_code=0,launch_sha256='a'*64,offline_maven=False)).encode(),b'')
+            child.communicate.side_effect=communicate
             def process(*args,**kwargs):
                 for n in ('built-before.json','built-after.json'):(run/'application-output/oracle'/n).write_bytes(b'{}')
-                return Mock(returncode=0,communicate=Mock(return_value=(json.dumps(dict(exit_code=0,launch_sha256='a'*64,offline_maven=False)).encode(),b'')),poll=Mock(return_value=0))
+                return child
             with patch('tools.ms94_b06_built_runtime.prepare',return_value=(['--read-only'],expected,launch)), \
                  patch('tools.ms94_b06_built_runtime.replay') as replay, \
                  patch('tools.ms94_b06_observed_runner.docker') as docker, \
                  patch('tools.ms94_b06_observed_runner.inspect',return_value=info), \
                  patch('tools.ms94_b06_observed_runner.PostingBroker',return_value=broker), \
-                 patch('tools.ms94_b06_observed_runner.subprocess.Popen',side_effect=process):
-                value=runner.worker('execute',dict(lane='oracle',test='LightyearOperationsTest',output='/output/execution/oracle',
-                    harness_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),timeout_seconds=1800,source_commit='c'*40),1830)
+                 patch('tools.ms94_b06_observed_runner.time.monotonic',side_effect=lambda:clock[0]), \
+                 patch('tools.ms94_b06_observed_runner.subprocess.Popen',side_effect=process) as popen:
+                payload=dict(lane='oracle',test='LightyearOperationsTest',output='/output/execution/oracle',
+                    harness_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),timeout_seconds=1800,source_commit='c'*40)
+                if mode in ('timeout','observer-failure','cancel','stop-record-failure'):
+                    expected_error={'timeout':CandidateTimeout,'observer-failure':CalibrationError,'cancel':RuntimeError,'stop-record-failure':RuntimeError}[mode]
+                    with self.assertRaises(expected_error):runner.worker('execute',payload,1830)
+                    if mode=='cancel':popen.assert_not_called()
+                    replay.assert_not_called()
+                else:value=runner.worker('execute',payload,1830)
             create=docker.call_args_list[0].args
             self.assertEqual(create[-5:],('--entrypoint','/bin/sh',image,'-c','exec sleep infinity'))
+            broker.cancel.assert_called_once()
+            self.assertTrue(any(c.args[:1]==('stop',) for c in docker.call_args_list))
+            events=[c.args[0] for c in runner.emit.call_args_list]
+            self.assertEqual('application-watchdog-expired' in events,mode=='timeout')
+            if mode in ('timeout','observer-failure'):child.kill.assert_called_once()
+            else:child.kill.assert_not_called()
+            if mode in ('timeout','observer-failure','cancel','stop-record-failure'):return
             self.assertFalse(value['offline_maven']);self.assertTrue(value['application_readonly']);replay.assert_called_once()

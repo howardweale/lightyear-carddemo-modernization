@@ -1,5 +1,30 @@
 # B06 preparation status
 
+## October 9 census r3 window2 failed; offline performance correction tested
+
+R3 window2 stopped on Oracle in the first J1 retained-reference slot. Exact
+collector error: `com.sun.jdi.VMDisconnectedException`, while reading a class
+array in `PostingObserver$Generation.enter(PostingObserver.java:196)`.
+Signed report `eb19052ae94619234c8308ee1421c2a903a39ec0c066382fc157168bc4c57c58`
+remains failed: 2,212.687 seconds, four slots unstarted, zero passes/models or
+qualification credit. The partial audit authenticated 7,485 Oracle events;
+there were no posting checkpoints. All owned resources were absent after cleanup.
+
+The [offline repair report](../../../../b06-census-r3-performance-repair-milestone.md)
+documents two reproduced defects: per-byte JDI reads while the JVM is suspended,
+and charging observer preparation against the execution watchdog. The corrected
+collector uses exact bounded batch reads; execution timing begins at worker
+launch, with the outer slot/window limits unchanged. Host lifecycle diagnostics
+now record preparation, worker launch/return, watchdog expiry and stop requests.
+
+The identical large-class host fixture improved from 10.594 to 0.625 seconds
+with the same 34 events and five byte-exact definitions. Fresh production-collector
+host replay passed 10 checkpoints / 62 frame observations. This is an offline
+correction, not a successful native census. The old disconnect's initiating stop
+reason was not recorded; watchdog expiry is a strong timing/code inference,
+not an independently observed kill reason. No Docker, Tower request, replacement
+snapshot or native run was made for this repair. Monitor remains paused.
+
 ## October 9 census r3 replacement window ready for exact Tower decision
 
 [Window2](census-v2-r3-window2/README.md) binds 10:00-21:00 PDT; latest launch

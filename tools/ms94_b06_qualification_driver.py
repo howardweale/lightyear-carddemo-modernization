@@ -294,8 +294,8 @@ def execute_group(root, group, directory, signer, *, authority_root, tower_reade
                         'artifact_type':'ms94-b06-qualification-recovery-failure/1',
                         'exception_type':type(cleanup_error).__name__, 'model_calls':0}, signer)
             break
-    purpose = ({'purpose': 'five-path-provenance-census', 'qualification_credit': False}
-               if group.get('purpose') == 'five-path-provenance-census' else {})
+    purpose = ({'purpose': group['purpose'], 'qualification_credit': False}
+               if group.get('purpose') in ('five-path-provenance-census', 'observer-native-practice') else {})
     return sign_once(directory/'report.json',{**purpose, 'artifact_type':'ms94-b06-qualification-terminal/1',
         'plan_sha256':group['content_sha256'],'snapshot_sha256':group['snapshot_sha256'],
         'passed':failure is None and len(rows)==len(group['slots']), 'failure':failure,'completed':rows,

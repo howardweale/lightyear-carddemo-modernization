@@ -100,6 +100,9 @@ def assemble_slot(root, run, base, slot, input_files):
     if 'built_runtime' in plan:
         from tools.ms94_b06_built_runtime import contract
         contract(root, plan)
+    if spec.get('observer_binding_v2') is not None:
+        from tools.ms94_b06_observer_v2 import load_manifest
+        load_manifest(root, spec, plan.get('built_runtime', {}).get('image', plan['local']['runner_image']))
     if spec.get('forwarding_stub') is not None:
         from tools.ms94_b06_forwarding_stub import validate_spec
         validate_spec(spec, classes)
@@ -152,6 +155,15 @@ def freeze(source, destination, bindings, slot_plans):
         if 'built_runtime' in plan:
             from tools.ms94_b06_built_runtime import required_inputs
             required.update(required_inputs(plan['built_runtime']))
+        if plan['posting_observer'].get('observer_binding_v2') is not None:
+            from tools.ms94_b06_observer_v2 import load_manifest
+            spec = plan['posting_observer']; ref = spec['observer_binding_v2']
+            manifest, _ = load_manifest(source, spec, plan.get('built_runtime', {}).get('image', plan['local']['runner_image']))
+            required[ref['path']] = ref['sha256']
+            for row in manifest['classes']:
+                required[row['path']] = row['sha256']
+                if row.get('archive_path'):
+                    required[row['archive_path']] = manifest['runtime_files'][row['origin']]
         check(all(bindings.get(n) == h for n, h in required.items()), 'freeze-input-closure')
     destination.mkdir(parents=True, exist_ok=False)
     for name, sha in bindings.items():

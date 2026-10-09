@@ -28,6 +28,7 @@ class PostingBroker:
         self.process, self.thread, self.failure = None, None, None
         self.done, self.ready, self.stop_requested = threading.Event(), threading.Event(), threading.Event()
         self.records, self.previous = [], None
+        self.runtime_files, self.v2_records = {}, []
 
     def start(self):
         runner = self.runner
@@ -42,6 +43,24 @@ class PostingBroker:
         check(not info['HostConfig'].get('PortBindings'), 'observer-debug-port-published')
         check(all(not Path(m['Source']).resolve().is_relative_to(self.private.resolve())
                   for m in info['Mounts'] if m['Type'] == 'bind'), 'observer-output-visible-to-candidate')
+        self.runtime_files = {}
+        if self.spec.get('observer_binding_v2') is not None:
+            from tools.ms94_b06_observer_v2 import load_manifest
+            manifest, _ = load_manifest(runner.root, self.spec, info['Image'])
+            check(info['HostConfig'].get('ReadonlyRootfs') is True, 'observer-v2-writable-root')
+            for target in manifest['runtime_files']:
+                from pathlib import PurePosixPath
+                for mount in info['Mounts']:
+                    path=PurePosixPath(mount['Destination'])
+                    if PurePosixPath(target)==path or PurePosixPath(target).is_relative_to(path):
+                        check(mount.get('RW') is False, 'observer-v2-writable-runtime-overlay')
+            source = bound_file(runner.root, 'tools/ms94_b06_runtime_files_probe.py',
+                runner.plan['implementation_sha256']['tools/ms94_b06_runtime_files_probe.py'])
+            probe = docker('exec', '-i', self.app, 'python', '-c', source.read_text(encoding='utf-8'),
+                           input=canonical(manifest['runtime_files']), timeout=120)
+            self.v2_java_path = manifest['jdk']['java']
+            self.runtime_files = json.loads(probe.stdout)
+            check(self.runtime_files == manifest['runtime_files'], 'observer-v2-runtime-measurement')
         self.host_jar_entries = {}
         if self.spec.get('forwarding_stub') is not None:
             host_spec = self.spec['host_jar_entries']
@@ -90,13 +109,16 @@ class PostingBroker:
                     check(len(owners) == 1, 'observer-ambiguous-listener')
                     owner = owners[0]
                     validate_jvm(owner, self.spec)
+                    if self.spec.get('observer_binding_v2') is not None:
+                        check(owner['executable'] == self.v2_java_path, 'observer-v2-java-path-differs')
                     self.target['jvm'] = owner
                     break
                 check(time.monotonic() < deadline, 'observer-target-listener-timeout')
                 self.stop_requested.wait(.1)
             stderr_stream = (self.private / 'collector.stderr').open('xb')
             self.process = subprocess.Popen(['docker', 'exec', '-i', self.name, 'java', '--add-modules', 'jdk.jdi',
-                '-cp', '/observer-classes', 'lightyear.observer.PostingObserver', self.app, '5005'],
+                '-cp', '/observer-classes', 'lightyear.observer.PostingObserver', self.app, '5005',
+                *(['observer-binding-v2'] if self.spec.get('observer_binding_v2') is not None else [])],
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_stream)
             stderr_stream.close()
             events = queue.Queue(maxsize=16)
@@ -170,12 +192,15 @@ class PostingBroker:
             try:
                 from tools.ms94_b06_forwarding_stub import receipt_records
                 self.frame_census = receipt_records(self.records)
+                from tools.ms94_b06_observer_v2 import commitments
+                self.v2_records = commitments(self.records) if self.spec.get('observer_binding_v2') is not None else []
                 sign_once(self.private / 'frame-census.json', {
                     'artifact_type':'ms94-b06-generated-frame-census/1',
                     'plan_sha256':self.runner.plan['content_sha256'], 'lane':self.lane,
                     'complete':self.failure is None, 'event_count':len(self.records),
                     'last_event_sha256':self.previous, 'frame_records':self.frame_census,
                     'host_jar_entries':self.host_jar_entries,
+                    'v2_records':self.v2_records, 'runtime_files':self.runtime_files,
                     'event_file_sha256':hashlib.sha256((self.private/'events.jsonl').read_bytes()).hexdigest(),
                     'native_qualification':False, 'model_calls':0,
                 }, self.signer)
@@ -197,6 +222,7 @@ class PostingBroker:
             'event_file_sha256': hashlib.sha256((self.private / 'events.jsonl').read_bytes()).hexdigest(),
             'frame_records': self.frame_census,
             'host_jar_entries': self.host_jar_entries,
+            'v2_records': self.v2_records, 'runtime_files': self.runtime_files,
             'complete': True, 'native_qualification': False,
         }, self.signer)
 

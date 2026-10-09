@@ -25,6 +25,12 @@ def validate_jvm(owner, spec):
     check(agents == [JDWP], 'observer-unapproved-bytecode-agent')
     check(not any(a.startswith('@') for a in args), 'observer-unexpanded-jvm-arguments')
     check(owner.get('jvm_option_environment_present') == [], 'observer-jvm-option-environment')
+    if spec.get('observer_binding_v2') is not None:
+        check('expected_jvm_arguments' in spec, 'observer-v2-exact-launch-required')
+        forbidden = ('--patch-module', '--upgrade-module-path', '-Xbootclasspath',
+                     '-Djava.system.class.loader', '-Djava.library.path', '-Dsun.boot.library.path',
+                     '-XX:SharedArchiveFile', '-XX:ArchiveClassesAtExit')
+        check(not any(a.startswith(forbidden) for a in args), 'observer-v2-runtime-injection')
     if 'expected_jvm_arguments' in spec:
         check(args == spec['expected_jvm_arguments'], 'observer-built-command-differs')
     return True

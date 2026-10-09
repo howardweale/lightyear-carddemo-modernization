@@ -22,6 +22,13 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
     check(len(draft['schedule']) == draft['slot_count'] and
           len({s['id'] for s in draft['schedule']}) == draft['slot_count'], 'qualification-slot-inventory')
     census = draft.get('purpose') == 'five-path-provenance-census'
+    practice = draft.get('purpose') == 'observer-native-practice'
+    if practice:
+        check(draft['journey'] == 'J1' and draft.get('qualification_credit') is False and
+              draft['slot_count'] == 1 and len(draft['schedule']) == 1 and
+              draft['schedule'][0]['control'] == 'retained-reference' and
+              draft['schedule'][0]['expected'] == {'status': 'passed', 'equipment_suspect': False, 'diagnostics': []},
+              'practice-one-retained-reference-only')
     if census:
         check(draft['journey'] == 'multi' and draft.get('qualification_credit') is False and
               [(s['journey'], s['control']) for s in draft['schedule']] == [
@@ -37,7 +44,7 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
         validate_native_owner(p.parent)
         expected_journey = scheduled.get(plan['slot_id'], {}).get('journey') if census else draft['journey']
         check(plan['content_sha256'] == sha and plan['journey'] == expected_journey, 'qualification-slot-binding')
-        if census:
+        if census or practice:
             check(plan['posting_observer'].get('observer_binding_v2', {}).get('policy') ==
                   'observer-binding-v2' and 'built_runtime' in plan, 'census-observer-built-runtime-required')
             check(plan['declaration']['policy']['max_elapsed_seconds'] == 7190 and
@@ -67,6 +74,9 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
                       'plan_file_sha256': file_hash(root / name), 'expected': slot['expected']})
     extra = {'purpose': 'five-path-provenance-census', 'qualification_credit': False,
              'journeys': ['J1', 'J2', 'J3']} if census else {}
+    if practice:
+        extra = {'purpose': 'observer-native-practice', 'qualification_credit': False,
+                 'journeys': ['J1']}
     return seal({**extra, 'artifact_type': 'ms94-b06-qualification-executable-plan/1',
                  'review_plan_sha256': draft['content_sha256'], 'snapshot_sha256': snapshot_sha256,
                  'tower_public_key_sha256': tower_public_key_sha256,

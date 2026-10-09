@@ -1,5 +1,59 @@
 # B06 preparation status
 
+## October 9 observer practice failed; startup suspension repair verified offline
+
+Practice r1 stopped on Oracle with `java.lang.IllegalStateException: duplicate return arm`
+at `PostingObserver$Generation.atReturn(PostingObserver.java:194)`. Signed terminal
+report `5ead361bc340074209dbcdecfc0779c0abd15e662f59d9e5d16de2aa87547ed1`
+remains failed: 1,439.859 seconds, 24,827 preserved partial Oracle events, no PostgreSQL
+execution or native qualification credit. All 113,572 frozen hashes and 13 signatures
+verified; owned resource inventory is empty. The monitor is paused.
+
+The [startup repair milestone](../../../../b06-observer-startup-repair-milestone.md)
+records a controlled host reproduction of the exact error using the preserved old
+collector. Removing its extra VM resume fixes that regression; return requests now
+require the exact observed activation. Duplicate and mismatched returns still refuse.
+Six host tests and 43 proof/driver tests passed; one optional historical pool test was
+skipped. Fresh host replay verified 10 checkpoints, 62 frames and 22 class identities.
+No Docker/model calls or new Tower request; changed bytes require new native approval.
+
+## October 9 observer practice r1 frozen; exact Tower approval pending
+
+[Observer practice r1](observer-practice-r1/README.md) prepares one fresh retained J1
+Oracle/PostgreSQL pair for 12:30–15:30 PDT; latest start 13:20:10 PDT.
+Full validation passed: 113,572 frozen files, 767 public source files, 39 frozen tests.
+Snapshot `cb142c2805b7d7d8947afbeae1026b6353cfbbac4f979890d8be3a71ee9ade13`;
+plan `fec26f2cba5a6a4a497a590087a3cf51e202a8eb36407e38724550b471943ed1`.
+No native execution, Docker or model calls during preparation. The one-pair practice
+has no qualification or measurement credit. Earlier failed runs remain preserved.
+Fresh exact public-bound Tower authorization is required before arming the launcher.
+
+
+## October 9 census r3 window2 failed; offline performance correction tested
+
+R3 window2 stopped on Oracle in the first J1 retained-reference slot. Exact
+collector error: `com.sun.jdi.VMDisconnectedException`, while reading a class
+array in `PostingObserver$Generation.enter(PostingObserver.java:196)`.
+Signed report `eb19052ae94619234c8308ee1421c2a903a39ec0c066382fc157168bc4c57c58`
+remains failed: 2,212.687 seconds, four slots unstarted, zero passes/models or
+qualification credit. The partial audit authenticated 7,485 Oracle events;
+there were no posting checkpoints. All owned resources were absent after cleanup.
+
+The [offline repair report](../../../../b06-census-r3-performance-repair-milestone.md)
+documents two reproduced defects: per-byte JDI reads while the JVM is suspended,
+and charging observer preparation against the execution watchdog. The corrected
+collector uses exact bounded batch reads; execution timing begins at worker
+launch, with the outer slot/window limits unchanged. Host lifecycle diagnostics
+now record preparation, worker launch/return, watchdog expiry and stop requests.
+
+The identical large-class host fixture improved from 10.594 to 0.625 seconds
+with the same 34 events and five byte-exact definitions. Fresh production-collector
+host replay passed 10 checkpoints / 62 frame observations. This is an offline
+correction, not a successful native census. The old disconnect's initiating stop
+reason was not recorded; watchdog expiry is a strong timing/code inference,
+not an independently observed kill reason. No Docker, Tower request, replacement
+snapshot or native run was made for this repair. Monitor remains paused.
+
 ## October 9 census r3 replacement window ready for exact Tower decision
 
 [Window2](census-v2-r3-window2/README.md) binds 10:00-21:00 PDT; latest launch

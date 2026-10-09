@@ -24,6 +24,20 @@ public final class PostingObserver {
     private boolean bindingV2;
     private final Map<String,String> emittedV2Definitions=new HashMap<>();
     private long sequence = 0;
+    /** Read the exact suspended-VM slice in bounded packets, never one JDWP request per byte. */
+    static byte[] readBytes(ArrayReference array, int offset, int length) {
+        int available=array.length();
+        if(offset<0 || length<0 || length>1024*1024 || offset>available || length>available-offset)
+            throw new IllegalStateException("byte array slice bound exceeded");
+        byte[] result=new byte[length];
+        for(int start=0;start<length;start+=16384) {
+            int count=Math.min(16384,length-start);
+            List<Value> values=array.getValues(offset+start,count);
+            if(values.size()!=count)throw new IllegalStateException("short JDI byte array read");
+            for(int i=0;i<count;i++)result[start+i]=((ByteValue)values.get(i)).value();
+        }
+        return result;
+    }
     /** Generation evidence only: factory names select VM breakpoints, never grant trust. */
     private static final class Generation {
         static final String FACTORY="java.lang.invoke.InnerClassLambdaMetafactory";
@@ -35,7 +49,9 @@ public final class PostingObserver {
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
         static final Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
-        final Map<Long,MethodExitRequest> exits=new HashMap<>();
+        private record ReturnArm(MethodExitRequest request, Method method, int depth,
+                                 Map<String,Object> entry) {}
+        final Map<Long,ReturnArm> exits=new HashMap<>();
         final Map<Long,Map<String,Object>> completed=new HashMap<>();
         final Set<String> installed=new HashSet<>();
     static Map<String,Object> readDefinition(ReferenceType type) throws Exception {
@@ -63,7 +79,8 @@ public final class PostingObserver {
             Map<String,Value> selected=new LinkedHashMap<>();
             if(o instanceof ArrayReference array){
                 if(array.length()>4096)throw new IllegalStateException("method-handle array bound exceeded");
-                for(int i=0;i<array.length();i++)selected.put(Integer.toString(i),array.getValue(i));
+                List<Value> values=array.getValues();
+                for(int i=0;i<values.size();i++)selected.put(Integer.toString(i),values.get(i));
             }else{
                 boolean handle=false;
                 if(o.referenceType() instanceof ClassType ct)for(ClassType t=ct;t!=null;t=t.superclass())if(t.name().equals("java.lang.invoke.MethodHandle"))handle=true;
@@ -173,13 +190,27 @@ public final class PostingObserver {
             }
             return result;
         }
-        void atReturn(VirtualMachine vm,BreakpointEvent e) {
+        static String methodName(Method m) {
+            return m.declaringType().name()+"."+m.name()+m.signature();
+        }
+        void atReturn(VirtualMachine vm,BreakpointEvent e) throws Exception {
             // JDI has no operand-stack read. Arm an exact class/thread exit only
             // at ARETURN; no intervening Java invocation can occur.
-            if(exits.containsKey(e.thread().uniqueID()))throw new IllegalStateException("duplicate return arm");
+            long thread=e.thread().uniqueID();Method method=e.location().method();
+            ReturnArm prior=exits.get(thread);
+            if(prior!=null)throw new IllegalStateException("duplicate return arm: thread="+thread+
+                " armed="+methodName(prior.method())+" current="+methodName(method));
+            Deque<Map<String,Object>> calls=pending.get(thread);
+            int depth=e.thread().frameCount();
+            if(calls==null || calls.isEmpty() || !selected(method) ||
+               !calls.peek().get("entry_method").equals(methodName(method)) ||
+               !calls.peek().get("entry_depth").equals(depth) ||
+               !e.thread().frame(0).location().equals(e.location()))
+                throw new IllegalStateException("generation return arm without matching activation");
             MethodExitRequest q=vm.eventRequestManager().createMethodExitRequest();
             q.addThreadFilter(e.thread());q.addClassFilter(e.location().declaringType());
-            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();exits.put(e.thread().uniqueID(),q);
+            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
+            exits.put(thread,new ReturnArm(q,method,depth,calls.peek()));
         }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
@@ -193,7 +224,7 @@ public final class PostingObserver {
                             List<Value> argv=top.getArgumentValues();ArrayReference bytes=(ArrayReference)argv.get(1);
                             int offset=((IntegerValue)argv.get(2)).value(),length=((IntegerValue)argv.get(3)).value();
                             if(length<0 || length>1024*1024 || offset<0 || offset+length>bytes.length())throw new IllegalStateException("class definition size");
-                            byte[] raw=new byte[length];for(int i=0;i<length;i++)raw[i]=((ByteValue)bytes.getValue(offset+i)).value();
+                            byte[] raw=readBytes(bytes,offset,length);
                             r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));
                             r.put("requested_name",value(argv.get(0),0));r.put("defining_loader",Long.toString(top.thisObject().uniqueID()));
                             if(argv.get(4) instanceof ObjectReference pd){
@@ -212,7 +243,7 @@ public final class PostingObserver {
                         // A byte array read is corroboration only. Runtime CP/method reads below remain the executable evidence.
                         ArrayReference bytes=(ArrayReference)top.thisObject().getValue(top.thisObject().referenceType().fieldByName("bytes"));
                         if(bytes.length()>1024*1024)throw new IllegalStateException("definition size bound");
-                        byte[] raw=new byte[bytes.length()];for(int i=0;i<raw.length;i++)raw[i]=((ByteValue)bytes.getValue(i)).value();
+                        byte[] raw=readBytes(bytes,0,bytes.length());
                         r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));r.put("definition_input_object_id",bytes.uniqueID());
                         r.put("class_data_graph",graph(top.getArgumentValues().get(1)));
                         for(StackFrame f:t.frames())if(f.location().declaringType().name().equals("java.lang.invoke.InvokerBytecodeGenerator")&&f.thisObject()!=null){
@@ -229,8 +260,12 @@ public final class PostingObserver {
         }
         Map<String,Object> returned(VirtualMachine vm,MethodExitEvent e) throws Exception {
             Deque<Map<String,Object>> q=pending.get(e.thread().uniqueID());
-            if(q==null || q.isEmpty() || !selected(e.method()))return null;
-            Map<String,Object> r=q.pop();
+            ReturnArm armed=exits.get(e.thread().uniqueID());
+            if(armed==null || !armed.request().equals(e.request()) || !armed.method().equals(e.method()) ||
+               q==null || q.isEmpty() || q.peek()!=armed.entry() ||
+               armed.depth()!=e.thread().frameCount() || !selected(e.method()))
+                throw new IllegalStateException("generation exit does not match armed activation");
+            Map<String,Object> r=q.peek();
             String name=e.method().declaringType().name()+"."+e.method().name()+e.method().signature();
             if(!r.get("entry_method").equals(name) || !r.get("entry_depth").equals(e.thread().frameCount()))throw new IllegalStateException("generation return mismatch");
             if(e.returnValue() instanceof ClassObjectReference c){
@@ -238,12 +273,11 @@ public final class PostingObserver {
                 if(name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
             }else if(v2 && e.returnValue() instanceof ArrayReference a && a.referenceType().signature().equals("[B")){
                 if(a.length()>1024*1024)throw new IllegalStateException("generated byte array bound exceeded");
-                byte[] bytes=new byte[a.length()];for(int i=0;i<bytes.length;i++)bytes[i]=((ByteValue)a.getValue(i)).value();
+                byte[] bytes=readBytes(a,0,a.length());
                 r.put("returned_bytes_object_id",a.uniqueID());r.put("returned_bytes_hex",HexFormat.of().formatHex(bytes));r.put("returned_bytes_sha256",hash(bytes));
             }else throw new IllegalStateException("generation return unsupported");
-            MethodExitRequest armed=exits.remove(e.thread().uniqueID());
-            if(armed==null || !armed.equals(e.request()))throw new IllegalStateException("unarmed generation exit");
-            vm.eventRequestManager().deleteEventRequest(armed);
+            exits.remove(e.thread().uniqueID());q.pop();
+            vm.eventRequestManager().deleteEventRequest(armed.request());
             if(q.isEmpty())pending.remove(e.thread().uniqueID());
             return r;
         }
@@ -466,7 +500,8 @@ public final class PostingObserver {
         emit(record, true);
     }
     private void exit(MethodExitEvent event) throws Exception {
-        if(event.request().equals(generation.exits.get(event.thread().uniqueID()))) {
+        Generation.ReturnArm arm=generation.exits.get(event.thread().uniqueID());
+        if(arm!=null && event.request().equals(arm.request())) {
             Map<String,Object> record=generation.returned(vm,event);
             if(record!=null)emit(new LinkedHashMap<>(Map.of("kind","generation-return","record",record)),false);
             return;
@@ -528,8 +563,8 @@ public final class PostingObserver {
                 q.setSuspendPolicy(EventRequest.SUSPEND_ALL);
                 generationCatches.put(threadId,new GenerationCatch(q,event.exception().referenceType().name()));q.enable();
             }
-            MethodExitRequest armed=generation.exits.remove(threadId);
-            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed);
+            Generation.ReturnArm armed=generation.exits.remove(threadId);
+            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed.request());
         }
         if(!relevant(event.thread()))return;
         List<Map<String,Object>> stack = frames(event.thread());
@@ -584,7 +619,9 @@ public final class PostingObserver {
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
         emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1")), false);
-        vm.resume();
+        // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
+        // below. Resuming here too can release a later breakpoint suspension
+        // before its handler runs, causing a missed exit and a stale return arm.
         boolean running = true;
         while (running) {
             EventSet set = vm.eventQueue().remove(1000);
@@ -595,6 +632,8 @@ public final class PostingObserver {
                 else if (event instanceof MethodExitEvent methodExit) exit(methodExit);
                 else if (event instanceof ExceptionEvent exception) failure(exception);
                 else if (event instanceof VMDeathEvent) {
+                    if(!generation.pending.isEmpty() || !generation.exits.isEmpty() || !generationCatches.isEmpty())
+                        throw new IllegalStateException("VM died with incomplete generation activation");
                     emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false); running = false;
                 } else if (event instanceof VMDisconnectEvent) running = false;
             }

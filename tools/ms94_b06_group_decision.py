@@ -27,6 +27,13 @@ def request(group, commit):
         value['summary'] = ('Authorize five serial zero-model provenance-census pairs: three J1 paths, '
                             'J2 reference and J3 reference. No qualification or measurement credit. '
                             'Exact Docker window; operator review, not independent attestation.')
+    if group.get('purpose') == 'observer-native-practice':
+        check(group.get('qualification_credit') is False and group.get('slot_count') == 1 and
+              group.get('journey') == 'J1', 'practice-scope')
+        value['summary'] = ('Authorize one fresh zero-model J1 retained-reference practice pair '
+                            '(Oracle and PostgreSQL), using the corrected external observer. '
+                            'No retries, qualification or measurement credit. Exact Docker window; '
+                            'operator review, not independent attestation.')
     value['id'] = 'b06-q-'+digest(value)
     return value, {**bound, 'request': digest(value)}, artifacts
 

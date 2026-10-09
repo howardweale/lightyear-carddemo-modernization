@@ -57,10 +57,21 @@ class ObservedRunner(NativeRunner):
         before = self.trusted_identity(lane); started = time.monotonic()
         broker = PostingBroker(self, lane, app, self.signer)
         process = None
+        execution_started = None
         try:
+            self.emit('observer-preparation-started', {'lane': lane})
             broker.start()
+            self.emit('observer-preparation-completed', {'lane': lane,
+                'elapsed_seconds': round(time.monotonic() - started, 3)})
+            # Observer manifest validation is equipment preparation. The outer
+            # slot/window supervisor still bounds it; it must not consume the
+            # candidate worker's 1800-second execution budget.
+            self.check_cancel()
+            execution_started = time.monotonic()
             process = subprocess.Popen(['docker', 'exec', '-i', app, 'python', '/runtime/worker.py'],
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.emit('application-worker-started', {'lane': lane, 'watchdog_seconds': timeout,
+                'candidate_timeout_seconds': payload['timeout_seconds']})
             data = canonical({'lane': lane, 'password': self.password, 'timeout_seconds': payload['timeout_seconds'],
                               'scenario_date': self.plan['calendar']['scenario_date']})
             while True:
@@ -70,20 +81,39 @@ class ObservedRunner(NativeRunner):
                 except subprocess.TimeoutExpired:
                     data = None; self.check_cancel()
                     require(broker.failure is None, 'Trusted posting observer failed')
-                    if time.monotonic() - started > timeout:
+                    if time.monotonic() - execution_started > timeout:
+                        self.emit('application-watchdog-expired', {'lane': lane,
+                            'elapsed_seconds': round(time.monotonic() - execution_started, 3),
+                            'watchdog_seconds': timeout})
                         raise CandidateTimeout()
             require(process.returncode == 0, 'Separate application worker failed')
             response = json.loads(stdout); code = response['exit_code']
+            self.emit('application-worker-returned', {'lane': lane, 'exit_code': code,
+                'elapsed_seconds': round(time.monotonic() - execution_started, 3)})
             if built:
                 require(response.get('launch_sha256')==launch['content_sha256'] and response.get('offline_maven') is False,
                         'Built worker response binding')
             if code != 124:
                 require(broker.done.wait(15) and broker.failure is None, 'Trusted posting observer incomplete')
+        except Exception as exc:
+            self.emit('observed-execution-failed', {'lane': lane,
+                'exception_type': type(exc).__name__, 'observer_failed': broker.failure is not None,
+                'worker_started': execution_started is not None})
+            raise
         finally:
-            if process is not None and process.poll() is None:
-                process.kill(); process.communicate()
-            docker('stop', '--time', '2', app, check_code=False)
-            broker.cancel()
+            try:
+                self.emit('application-stop-requested', {'lane': lane,
+                    'worker_running': process is not None and process.poll() is None})
+            finally:
+                # Diagnostic I/O must never prevent resource cleanup.
+                try:
+                    if process is not None and process.poll() is None:
+                        process.kill(); process.communicate()
+                finally:
+                    try:
+                        docker('stop', '--time', '2', app, check_code=False)
+                    finally:
+                        broker.cancel()
         after = self.trusted_identity(lane)
         out.mkdir(parents=True, exist_ok=False)
         for name in (('journey.xml','runtime.log','built-before.json','built-after.json') if built else ('journey.xml','maven.log')):

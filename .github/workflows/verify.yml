@@ -130,9 +130,11 @@ jobs:
         env:
           PYTHONPATH: src
           LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER: lightyear-sql-recovery-test
+          # Docker Official Image, byte-identical to Docker Hub's postgres:16-alpine.
+          POSTGRES_IMAGE: public.ecr.aws/docker/library/postgres:16-alpine@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
         run: |
           docker run --detach --name "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" \
-            -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16-alpine
+            -e POSTGRES_HOST_AUTH_METHOD=trust "$POSTGRES_IMAGE"
           trap 'docker rm --force "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" >/dev/null' EXIT
           ready=false
           for attempt in {1..60}; do

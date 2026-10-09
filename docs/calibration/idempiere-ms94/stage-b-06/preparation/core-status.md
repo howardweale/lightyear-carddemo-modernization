@@ -1,5 +1,17 @@
 # B06 preparation status
 
+## October 9 observer practice r1 frozen; exact Tower approval pending
+
+[Observer practice r1](observer-practice-r1/README.md) prepares one fresh retained J1
+Oracle/PostgreSQL pair for 12:30–15:30 PDT; latest start 13:20:10 PDT.
+Full validation passed: 113,572 frozen files, 767 public source files, 39 frozen tests.
+Snapshot `cb142c2805b7d7d8947afbeae1026b6353cfbbac4f979890d8be3a71ee9ade13`;
+plan `fec26f2cba5a6a4a497a590087a3cf51e202a8eb36407e38724550b471943ed1`.
+No native execution, Docker or model calls during preparation. The one-pair practice
+has no qualification or measurement credit. Earlier failed runs remain preserved.
+Fresh exact public-bound Tower authorization is required before arming the launcher.
+
+
 ## October 9 census r3 window2 failed; offline performance correction tested
 
 R3 window2 stopped on Oracle in the first J1 retained-reference slot. Exact

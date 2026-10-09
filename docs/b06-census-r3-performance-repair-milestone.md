@@ -109,3 +109,13 @@ The correction is ready for review and a separately authorized bounded native
 practice on newly frozen bytes. That practice must show startup and target
 proof completing within budget before another five-path evidence run. This
 document neither authorizes that practice nor changes an existing Tower decision.
+
+## Follow-up: frozen single-pair practice prepared
+
+The corrected source was published as `f18cb1e06ca5e6bb1e71ef241402a0fea9ee4dd8`
+on draft PR 287. [Practice r1](calibration/idempiere-ms94/stage-b-06/preparation/observer-practice-r1/README.md)
+completed full offline preparation at 19:07:13 UTC: 113,572 frozen files, 767
+public source comparisons and 39 frozen tests passed. Its October 9 12:30–15:30 PDT
+window has a latest full-budget start of 13:20:10 PDT. Publication and an exact Tower
+request precede any launcher arming. No Docker/native/model calls have occurred in
+this preparation, and no qualification or measurement credit is claimed.

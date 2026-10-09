@@ -237,7 +237,8 @@ def execute_group(root, group, directory, signer, *, authority_root, tower_reade
     spec = group['docker_run_window']; rows = []; attempted = []; failure = None
     def stopping(slot, exc):
         nonlocal failure
-        failure = {'slot_id':slot['id'], 'exception_type':type(exc).__name__}
+        if failure is None:
+            failure = {'slot_id':slot['id'], 'exception_type':type(exc).__name__}
         if not (directory/'stopping.json').exists():
             sign_once(directory/'stopping.json', {'artifact_type':'ms94-b06-qualification-stop/1',
                 'plan_sha256':group['content_sha256'], 'failure':failure,
@@ -278,9 +279,9 @@ def execute_group(root, group, directory, signer, *, authority_root, tower_reade
                          'audit_sha256':audit['content_sha256'],'status':receipt['status']})
             check(time.monotonic()-trial_started < plan['declaration']['policy']['max_elapsed_seconds'] and
                   now() < utc(spec['deadline_utc']), 'qualification-finalization-deadline')
-            intended(plan,audit)
             verify_snapshot(root,group['snapshot_sha256'])
             if failure is not None: break
+            intended(plan,audit)
             sign_once(directory/(slot['id']+'-progress.json'),{'artifact_type':'ms94-b06-qualification-progress/1',
                 'plan_sha256':group['content_sha256'],'completed':list(rows),'model_calls':0},signer)
         except Exception as exc:

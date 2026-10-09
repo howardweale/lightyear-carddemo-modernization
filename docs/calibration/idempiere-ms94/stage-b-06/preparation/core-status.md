@@ -1,5 +1,26 @@
 # B06 preparation status
 
+## October 9 census r3 replacement window ready for exact Tower decision
+
+[Window2](census-v2-r3-window2/README.md) binds 10:00-21:00 PDT; latest launch
+10:50:50 PDT. Full freeze and verification passed: 113,634 files, 767 public
+code files, 23 frozen tests. Only five prospective slot windows changed; all
+other bytes and outcomes remain exact. Zero Docker/native/model calls. Fresh
+public-bound Tower authorization remains required. R2 stays failed and the
+original r3 window stays unlaunched. No qualification or measurement credit.
+
+## October 9 census r2 failed; r3 correction preparing
+
+R2 stopped on Oracle J1 with `java.lang.IllegalStateException: ambiguous generation catch`.
+Finalization then lacked `b06-clock-evidence.json`; it did not complete. All four
+remaining slots stayed unstarted. Signed terminal report
+`417ff6e3ce43fc3c656a2ccde4d3911709a218756c487807ca0eacdb2fcb0388`
+is preserved. [R3](census-v2-r3/README.md) replaces method-based catch guessing
+with observed handler activation and adds an explicitly incomplete failure audit.
+Host JDI regressions and the 205-test suite (10 skips) passed. The proposed
+08:30-19:30 PDT replacement window still requires a fresh frozen plan and exact
+Tower authorization. No Docker or model calls; no qualification credit.
+
 ## October 9 morning census r2 prepared; Tower decision pending
 
 The [r2 executable preparation](census-v2-r2/README.md) passed all five offline

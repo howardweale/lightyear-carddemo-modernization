@@ -54,7 +54,7 @@ class DriverTests(unittest.TestCase):
         return root, output, authority, group, signer
 
     def test_failures_stop_before_next_slot_and_replay_after_early_notification(self):
-        for failure in ('none','native','unexpected','replay','cleanup','missing-plan'):
+        for failure in ('none','native','unexpected','equipment','replay','cleanup','missing-plan'):
             with self.subTest(failure=failure), tempfile.TemporaryDirectory() as tmp:
                 root,out,authority,group,signer = self.fixture(tmp)
                 calls=[]
@@ -63,11 +63,13 @@ class DriverTests(unittest.TestCase):
                     if kind=='native':
                         if failure=='native': raise RuntimeError('unit native failure')
                         (run/'cleanup.json').write_bytes(canonical({'complete':failure!='cleanup'}))
-                        return signer.sign({'status':'passed' if failure!='unexpected' else 'business-failure',
-                                            'equipment_suspect':False})
-                    if failure in ('unexpected','cleanup'):
+                        return signer.sign({'status':('equipment-failure' if failure=='equipment' else 'passed' if failure!='unexpected' else 'business-failure'),
+                                            'equipment_suspect':failure=='equipment'})
+                    if failure in ('unexpected','equipment','cleanup'):
                         self.assertTrue((out/'stopping.json').exists())
                     if failure=='replay': raise ValueError('unit replay failure')
+                    if failure=='equipment':
+                        return signer.sign({'replay':{'full_entry_replayed':True,'clock_replayed':False,'equipment_failure_audited':True}})
                     return signer.sign({'replay':{'full_entry_replayed':True,'clock_replayed':True,
                         'status':'passed','equipment_suspect':False,'complete_gate_replayed':True,
                         'diagnostic_replayed':True,'observer_replayed':True}})
@@ -81,6 +83,8 @@ class DriverTests(unittest.TestCase):
                     if failure!='none':
                         self.assertIn('j1-002',report['unstarted'])
                         self.assertFalse(any(slot=='j1-002' for _,slot in calls))
+                    if failure=='equipment':
+                        self.assertEqual(1,len(report['completed']));self.assertEqual('EvidenceFailure',report['failure']['exception_type'])
                     if failure in ('native','replay'): self.assertEqual(['j1-001'],report['unfinalized'])
                     with self.assertRaisesRegex(ValueError,'already-attempted'):
                         execute_group(root,group,out,signer,authority_root=authority,tower_reader=self.reader)

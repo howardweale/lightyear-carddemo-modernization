@@ -110,6 +110,7 @@ def code_source(record):
 class Replay:
     def __init__(self, entries):
         self.entries = entries
+        self.catch_resolution_required = False
         self.definitions = {}
         self.pending = {}
         self.ordinary = {}
@@ -145,8 +146,8 @@ class Replay:
         entry = stack.pop()
         check(all(r.get(k) == v for k, v in entry.items()), 'observer-v2-return-binding')
         if kind == 'generation-unwind':
-            check(event['catch_depth'] < r['entry_depth'] and event['exception_class'],
-                  'observer-v2-unwind-depth')
+            from tools.ms94_b06_generation_catch import validate_unwind
+            validate_unwind(event, self.catch_resolution_required)
             return True
         if r['entry_method'].startswith(INVOKER + '.'):
             key = (r['thread_id'], r['returned_bytes_object_id'])

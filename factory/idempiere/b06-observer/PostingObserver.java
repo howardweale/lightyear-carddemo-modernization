@@ -258,6 +258,8 @@ public final class PostingObserver {
         }
     }
     private final Generation generation=new Generation();
+    private record GenerationCatch(BreakpointRequest request, String exceptionClass) {}
+    private final Map<Long,GenerationCatch> generationCatches=new HashMap<>();
 
     private record Call(long sequence, Method method, List<Integer> document, MethodExitRequest exit, int depth) {}
 
@@ -405,6 +407,7 @@ public final class PostingObserver {
         }
     }
     private void entry(BreakpointEvent event) throws Exception {
+        if(Boolean.TRUE.equals(event.request().getProperty("generation-catch"))) {generationCatch(event);return;}
         if(Boolean.TRUE.equals(event.request().getProperty("generation-return"))) {generation.atReturn(vm,event);return;}
         if(generation.selected(event.location().method())) {
             emit(new LinkedHashMap<>(Map.of("kind","generation-entry","record",generation.enter(vm,event))),false);return;
@@ -483,24 +486,49 @@ public final class PostingObserver {
         record.put("return_value", value); record.put("frames", frames(event.thread()));
         emit(record, true);
     }
+    private void unwindGeneration(ThreadReference thread, int depth, String exceptionClass,
+                                  Map<String,Object> resolution) throws Exception {
+        Deque<Map<String,Object>> generated=generation.pending.get(thread.uniqueID());
+        if(generated==null)return;
+        while(!generated.isEmpty() && ((Number)generated.peek().get("entry_depth")).intValue()>depth) {
+            Map<String,Object> unwound=generated.pop();
+            emit(new LinkedHashMap<>(Map.of("kind","generation-unwind","record",unwound,
+                "exception_class",exceptionClass,"catch_depth",depth,"catch_resolution",resolution)),false);
+        }
+        if(generated.isEmpty())generation.pending.remove(thread.uniqueID());
+    }
+    private void generationCatch(BreakpointEvent event) throws Exception {
+        GenerationCatch pending=generationCatches.remove(event.thread().uniqueID());
+        if(pending==null || !pending.request().equals(event.request()) ||
+           !pending.request().location().equals(event.location()))throw new IllegalStateException("unarmed generation catch");
+        vm.eventRequestManager().deleteEventRequest(pending.request());
+        // JDI gives a catch Location, not an activation identity. Observe the
+        // handler itself: its top frame is now the actual selected activation,
+        // even if recursive invocations of the same Method were on the stack.
+        if(!event.thread().frame(0).location().equals(event.location()))throw new IllegalStateException("generation catch not top frame");
+        int depth=event.thread().frameCount();
+        unwindGeneration(event.thread(),depth,pending.exceptionClass(),Map.of(
+            "kind","handler-breakpoint","thread_id",event.thread().uniqueID(),
+            "frame_count",depth,"location",location(event.location())));
+    }
     private void failure(ExceptionEvent event) throws Exception {
-        Deque<Map<String,Object>> generated=generation.pending.get(event.thread().uniqueID());
+        long threadId=event.thread().uniqueID();
+        GenerationCatch prior=generationCatches.remove(threadId);
+        if(prior!=null)vm.eventRequestManager().deleteEventRequest(prior.request());
+        Deque<Map<String,Object>> generated=generation.pending.get(threadId);
         if(generated!=null) {
-            int catchDepth=-1;
-            if(event.catchLocation()!=null) {
-                List<StackFrame> fs=event.thread().frames();
-                for(int i=0;i<fs.size();i++)if(fs.get(i).location().method().equals(event.catchLocation().method())) {
-                    if(catchDepth!=-1)throw new IllegalStateException("ambiguous generation catch");catchDepth=fs.size()-i;
-                }
-                if(catchDepth<0)throw new IllegalStateException("generation catch absent");
+            // A superseding exception (for example in a finally block) selects
+            // its own handler. Never guess an activation from repeated methods.
+            if(event.catchLocation()==null) {
+                unwindGeneration(event.thread(),-1,event.exception().referenceType().name(),
+                    Map.of("kind","uncaught","thread_id",threadId,"frame_count",0));
+            } else {
+                BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(event.catchLocation());
+                q.addThreadFilter(event.thread());q.putProperty("generation-catch",true);
+                q.setSuspendPolicy(EventRequest.SUSPEND_ALL);
+                generationCatches.put(threadId,new GenerationCatch(q,event.exception().referenceType().name()));q.enable();
             }
-            while(!generated.isEmpty() && ((Number)generated.peek().get("entry_depth")).intValue()>catchDepth) {
-                Map<String,Object> unwound=generated.pop();
-                emit(new LinkedHashMap<>(Map.of("kind","generation-unwind","record",unwound,
-                    "exception_class",event.exception().referenceType().name(),"catch_depth",catchDepth)),false);
-            }
-            if(generated.isEmpty())generation.pending.remove(event.thread().uniqueID());
-            MethodExitRequest armed=generation.exits.remove(event.thread().uniqueID());
+            MethodExitRequest armed=generation.exits.remove(threadId);
             if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed);
         }
         if(!relevant(event.thread()))return;
@@ -555,7 +583,7 @@ public final class PostingObserver {
         for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
-        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1)), false);
+        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1")), false);
         vm.resume();
         boolean running = true;
         while (running) {

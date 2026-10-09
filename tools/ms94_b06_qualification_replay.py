@@ -15,6 +15,65 @@ def signed(path, key):
     return record
 
 
+def incomplete_equipment(run, plan, receipt, public_key):
+    """Authenticate preserved prefixes, never invent absent execution stages.
+
+    This is a failed-run audit, not observer, clock, diagnostic or gate replay.
+    Complete-run admission still requires every original replay predicate.
+    """
+    import hashlib, json
+    from tools.ms94_b06_forwarding_stub import receipt_records
+    from tools.ms94_b06_observer_v2 import commitments
+    check(receipt['status'] == 'equipment-failure' and receipt['equipment_suspect'] is True and
+          receipt.get('error', {}).get('kind') == 'equipment-failure', 'partial-audit-not-equipment')
+    check(receipt.get('runtime_delivery_sha256') is None and receipt.get('gate_sha256') is None and
+          not any((run/n).exists() for n in ('zero-model-builder-inbox.json','runtime-diagnostic.json','gate.json')),
+          'partial-equipment-unexpected-verdict-or-feedback')
+    records = []
+    for lane in LANES:
+        folder = run/'posting-observer'/lane
+        failure_path, census_path = folder/'failure.json', folder/'frame-census.json'
+        if not failure_path.exists() and not census_path.exists():
+            check(not folder.exists() or not any(folder.iterdir()), 'partial-collector-unsealed')
+            continue
+        census = signed(census_path, public_key)
+        check(census['plan_sha256'] == plan['content_sha256'] and census['lane'] == lane and
+              census['model_calls'] == 0 and census['native_qualification'] is False,
+              'partial-census-binding')
+        raw = (folder/'events.jsonl').read_bytes()
+        check(hashlib.sha256(raw).hexdigest() == census['event_file_sha256'], 'partial-event-bytes')
+        events = [json.loads(line) for line in raw.splitlines()]
+        check(len(events) == census['event_count'], 'partial-event-count')
+        previous = None
+        for index, item in enumerate(events, 1):
+            verify(item)
+            check(item['previous_sha256'] == previous and item['event']['sequence'] == index,
+                  'partial-event-chain')
+            previous = item['content_sha256']
+        check(previous == census['last_event_sha256'] and census['frame_records'] == receipt_records(events),
+              'partial-frame-commitments')
+        if plan.get('posting_observer', {}).get('observer_binding_v2') is not None:
+            check(census['v2_records'] == commitments(events), 'partial-v2-commitments')
+        failure = None
+        if failure_path.exists():
+            failure = signed(failure_path, public_key)
+            check(failure['plan_sha256'] == plan['content_sha256'] and failure['lane'] == lane and
+                  failure['complete'] is False and census['complete'] is False and
+                  failure['event_count'] == len(events) and failure['last_event_sha256'] == previous,
+                  'partial-failure-binding')
+        else:
+            check(census['complete'] is True, 'partial-missing-failure-record')
+        records.append({'lane':lane,'census_sha256':census['content_sha256'],
+                        'failure_sha256':failure['content_sha256'] if failure else None,
+                        'event_count':len(events),'prefix_authenticated':True})
+    return {'partial_evidence':True, 'equipment_failure_audited':True,
+            'collector_prefixes':records, 'missing_artifacts':[
+                name for name in ('b06-clock-evidence.json', 'gate.json',
+                    *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
+                if not (run/name).exists()],
+            'audit_scope':'authenticated preserved evidence only; no completed-stage or provenance claim'}
+
+
 def replay_pair(root, run, public_key):
     root, run = Path(root), Path(run)
     plan = read_json(run / 'plan.json'); verify(plan)
@@ -43,6 +102,9 @@ def replay_pair(root, run, public_key):
         check(receipt['equipment_suspect'] is True and receipt['runtime_delivery_sha256'] is None,
               'database-fault-delivered-feedback')
         check(not (run / 'zero-model-builder-inbox.json').exists(), 'database-fault-unexpected-inbox')
+        return result
+    if receipt['status'] == 'equipment-failure':
+        result.update(incomplete_equipment(run, plan, receipt, public_key))
         return result
     result.update(replay_clocks(run, public_key))
     native_pair_tables(run)  # every captured table, including early failures

@@ -1,9 +1,14 @@
 """Host-only JDI event tests. No Docker, application image or native pair."""
 import json,os,subprocess,tempfile,time,unittest
+from unittest.mock import patch
 from pathlib import Path
 
 @unittest.skipUnless(os.environ.get('B06_HOST_JDK'),'host JDK probe explicitly enabled')
 class HostObserverTests(unittest.TestCase):
+ def test_v2_recursive_catch_real_jdi(self):
+  with patch.dict(os.environ, {'B06_HOST_OBSERVER_V2':'1'}):
+   self.test_real_generation_events_direct_hidden_and_failed_definition_unwind()
+
  def test_real_generation_events_direct_hidden_and_failed_definition_unwind(self):
   java=Path(os.environ['B06_HOST_JDK'])/'bin'/('java.exe' if os.name=='nt' else 'java')
   javac=java.with_name('javac.exe' if os.name=='nt' else 'javac')
@@ -14,6 +19,12 @@ class HostObserverTests(unittest.TestCase):
 import java.lang.invoke.*;import java.nio.file.*;
 public class Probe {
  public static void run() {}
+ static void recurse(int depth, byte[] bad) throws Throwable {
+  if(depth==3) {try {recurse(depth-1,bad);} catch(NoClassDefFoundError expected) {return;}}
+  else if(depth>0) recurse(depth-1,bad);
+  else MethodHandles.lookup().defineHiddenClass(bad,false);
+ }
+
  public static void main(String[] args)throws Throwable {
   long start=System.nanoTime();var lookup=MethodHandles.lookup();
   for(int i=0;i<300;i++) {
@@ -21,6 +32,7 @@ public class Probe {
    ((Runnable)site.getTarget().invokeExact()).run();
   }
   try {lookup.defineHiddenClass(Files.readAllBytes(Path.of(args[1])),false);}catch(NoClassDefFoundError expected){}
+  recurse(3,Files.readAllBytes(Path.of(args[1])));
   lookup.defineHiddenClass(Files.readAllBytes(Path.of(args[0])),false);
   System.out.println("elapsed_ns="+(System.nanoTime()-start));
  }
@@ -35,12 +47,13 @@ class MissingBase {}
    target=subprocess.Popen([str(java),'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=127.0.0.1:0','-cp',str(p),'fixture.Probe',str(p/'fixture/Hidden.class'),str(p/'fixture/MissingHidden.class')],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
    try:
     line=target.stdout.readline();port=line.strip().rsplit(':',1)[-1].strip();self.assertTrue(port.isdigit(),line)
-    observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(p),'lightyear.observer.PostingObserver','127.0.0.1',port],input='',capture_output=True,text=True,timeout=90)
+    observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(p),'lightyear.observer.PostingObserver','127.0.0.1',port,*(['observer-binding-v2'] if os.environ.get('B06_HOST_OBSERVER_V2') else [])],input='',capture_output=True,text=True,timeout=90)
     self.assertEqual(observed.returncode,0,observed.stderr)
     output,error=target.communicate(timeout=15);self.assertEqual(target.returncode,0,error)
     events=[json.loads(line) for line in observed.stdout.splitlines()]
     entries=[e for e in events if e['kind']=='generation-entry'];returns=[e for e in events if e['kind']=='generation-return'];unwinds=[e for e in events if e['kind']=='generation-unwind']
     self.assertEqual(len(entries),len(returns)+len(unwinds));self.assertTrue(unwinds)
+    self.assertTrue(any(e.get('catch_resolution',{}).get('location',{}).get('method')=='recurse' for e in unwinds))
     self.assertGreaterEqual(sum('lambda_factory' in e['record'] for e in returns),300)
     self.assertTrue(any('lambda_factory' not in e['record'] for e in returns))
     self.assertEqual(events[-1]['kind'],'vm-death');self.assertEqual(events[-1]['generation_pending'],0)
@@ -55,8 +68,13 @@ class MissingBase {}
      record=seal(dict(previous_sha256=previous,event=event,readback_sha256=None));records.append(record);previous=record['content_sha256']
     raw=b''.join(canonical(row)+b'\n' for row in records);(p/'events.jsonl').write_bytes(raw)
     receipt=dict(event_file_sha256=hashlib.sha256(raw).hexdigest(),event_count=len(records),last_event_sha256=previous,frame_records=receipt_records(records))
-    replayed=replay_stream(p,receipt,{},'postgresql',dict(policy=POLICY,adjacent_target='younger'),{})
-    self.assertTrue(replayed['collection_complete']);self.assertEqual(replayed['event_count'],len(events))
+    if not os.environ.get('B06_HOST_OBSERVER_V2'):
+     replayed=replay_stream(p,receipt,{},'postgresql',dict(policy=POLICY,adjacent_target='younger'),{})
+     self.assertTrue(replayed['collection_complete']);self.assertEqual(replayed['event_count'],len(events))
+    else:
+     from tools.ms94_b06_generation_catch import validate_unwind
+     self.assertEqual(events[0]['generation_catch_policy'],'handler-activation-v1')
+     for event in unwinds:validate_unwind(event,True)
     result=dict(schema='b06-host-observer-performance/1',host_only=True,native_admission=False,
         baseline_stdout=plain.stdout,observed_stdout=output,event_count=len(events),event_bytes=len(observed.stdout.encode()),
         generation_entries=len(entries),generation_returns=len(returns),generation_unwinds=len(unwinds),model_calls=0)

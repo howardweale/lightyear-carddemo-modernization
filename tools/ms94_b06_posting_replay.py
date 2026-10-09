@@ -100,6 +100,7 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         from tools.ms94_b06_observer_v2 import commitments
         check(receipt.get('v2_records') == commitments(all_records), 'observer-v2-receipt-commitments')
     previous, ready, death = None, False, False
+    catch_resolution_required = False
     definitions = {}
     generation_pending = {}
     generation_complete = {}
@@ -116,6 +117,12 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             check(sequence == 1 and not ready and event['checkpoint'] is False, 'observer-ready-order')
             if binding_v2 is not None:
                 check(event.get('binding_version') == 2, 'observer-v2-collector-version')
+            from tools.ms94_b06_generation_catch import POLICY
+            catch_policy = event.get('generation_catch_policy')
+            check(catch_policy in (None, POLICY), 'observer-generation-catch-policy')
+            catch_resolution_required = catch_policy == POLICY
+            if binding_v2 is not None:
+                binding_v2.catch_resolution_required = catch_resolution_required
             ready = True
         elif binding_v2 is not None and kind in ('class-definition-v2','generation-entry','generation-return','generation-unwind'):
             check(ready and event['checkpoint'] is False, 'observer-v2-record-order')
@@ -130,7 +137,8 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
                 entry=stack.pop()
                 check(all(record.get(k)==v for k,v in entry.items()),'observer-generation-entry-return-differs')
                 if kind=='generation-unwind':
-                    check(event['catch_depth']<record['entry_depth'] and bool(event['exception_class']),'observer-generation-unwind-depth')
+                    from tools.ms94_b06_generation_catch import validate_unwind
+                    validate_unwind(event, catch_resolution_required)
                     continue
                 generated=record['returned_class']['class_object_id']
                 if 'lambda_factory' in record:generation_complete[generated]=record

@@ -59,42 +59,31 @@ def load_manifest(root, spec, image):
               for p, h in files.items()), 'observer-v2-runtime-files')
     entries = []
     identities = set()
-    archive_bytes = {}
-    zip_cache = {}
-    for row in manifest['classes']:
-        data = bound_file(root, row['path'], row['sha256']).read_bytes()
-        info = inspect_class(data)
-        check(info['class'] == row['class'] and row['kind'] in ('jdk', 'ordinary'),
-              'observer-v2-class-input')
-        identity = (row['class'], row['origin'], tuple(row['members']))
-        check(identity not in identities, 'observer-v2-duplicate-origin')
-        identities.add(identity)
-        check(row['origin'] in files, 'observer-v2-unmeasured-origin')
-        if row['kind'] == 'jdk':
-            check(row['origin'] == jdk['modules'] and row['module'] and
-                  row['members'] == [row['module'] + '/' + row['class'].replace('.', '/') + '.class'],
-                  'observer-v2-module-entry')
-        elif row['members']:
-            import io, zipfile
-            archive_key = (row['archive_path'], files[row['origin']])
-            if archive_key not in archive_bytes:
-                archive_bytes[archive_key] = bound_file(root, *archive_key).read_bytes()
-            body = archive_bytes[archive_key]; chain = archive_key
-            for member in row['members']:
-                if chain not in zip_cache:
-                    jar = zipfile.ZipFile(io.BytesIO(body))
-                    from collections import Counter
-                    zip_cache[chain] = (jar, Counter(jar.namelist()))
-                jar, counts = zip_cache[chain]
-                check(counts[member] == 1, 'observer-v2-jar-member-ambiguous')
-                body = jar.read(member); chain = (*chain, member)
-            check(body == data, 'observer-v2-jar-entry-differs')
-        else:
-            check(files[row['origin']] == row['sha256'], 'observer-v2-loose-class-differs')
-        if row.get('native_provider') is not None:
-            check(row['native_provider'] in jdk['native_providers'], 'observer-v2-native-provider-not-approved')
-        entries.append({**row, 'bytes': data, 'methods': info['methods']})
-    for jar, _ in zip_cache.values(): jar.close()
+    from lightyear_evidence.read_cache import VerificationReadCache
+    with VerificationReadCache() as cache:
+        for row in manifest['classes']:
+            data = bound_file(root, row['path'], row['sha256']).read_bytes()
+            info = inspect_class(data)
+            check(info['class'] == row['class'] and row['kind'] in ('jdk', 'ordinary'),
+                  'observer-v2-class-input')
+            identity = (row['class'], row['origin'], tuple(row['members']))
+            check(identity not in identities, 'observer-v2-duplicate-origin')
+            identities.add(identity)
+            check(row['origin'] in files, 'observer-v2-unmeasured-origin')
+            if row['kind'] == 'jdk':
+                check(row['origin'] == jdk['modules'] and row['module'] and
+                      row['members'] == [row['module'] + '/' + row['class'].replace('.', '/') + '.class'],
+                      'observer-v2-module-entry')
+            elif row['members']:
+                archive_key = (row['archive_path'], files[row['origin']])
+                body = cache.member(archive_key, lambda: bound_file(root, *archive_key).read_bytes(),
+                                    row['members'], ambiguity_error='observer-v2-jar-member-ambiguous')
+                check(body == data, 'observer-v2-jar-entry-differs')
+            else:
+                check(files[row['origin']] == row['sha256'], 'observer-v2-loose-class-differs')
+            if row.get('native_provider') is not None:
+                check(row['native_provider'] in jdk['native_providers'], 'observer-v2-native-provider-not-approved')
+            entries.append({**row, 'bytes': data, 'methods': info['methods']})
     check(entries, 'observer-v2-empty-manifest')
     return manifest, entries
 

@@ -94,10 +94,10 @@ def probes(output):
     output.mkdir()
     src = ROOT/'tools/legacy_twin/platform-probe.cob'
     execute(['cobc','-x','-free',*FLAGS,src,'-o',output/'probe'], output, output/'compile')
-    result = execute([output/'probe'], output, output/'run', extra_env={'COB_CURRENT_DATE':'2022/07/18 00:00:00'})
+    result = execute([output/'probe'], output, output/'run', extra_env={'COB_CURRENT_DATE':'2022/07/18 00:00:00.000000000'})
     observed = dict(line.split('=',1) for line in result.stdout.decode().splitlines())
-    expected = {'SIGNED':'001234N','ROUNDED':'-001.24','TRUNCATED':'-001.23','SIZE-TRUNCATION':'23',
-                'COLLATION':'A-before-a','LEAP-DATE':'20240229','CLOCK':'20220718000000',
+    expected = {'SIGNED-DISPLAY':'0012345-', 'SIGNED-STORAGE':'001234N','ROUNDED':'-001.24','TRUNCATED':'-001.23','SIZE-TRUNCATION':'23',
+                'COLLATION':'A-before-a','LEAP-DATE':'20240229','CLOCK':'2022071800000000',
                 'MISSING-FILE':'35','DUPLICATE-KEY':'22','MISSING-KEY':'23','EOF':'10'}
     packed = (output/'packed.bin').read_bytes().hex()
     summary = receipt(output/'probes.json', phase='platform-probes', source_sha256=sha(src.read_bytes()),

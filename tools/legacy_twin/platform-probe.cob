@@ -23,6 +23,7 @@ working-storage section.
 01 edited-number pic +999.99.
 01 narrow-number pic 99.
 01 signed-display pic s9(5)v99.
+01 signed-bytes redefines signed-display pic x(7).
 01 current-stamp pic x(21).
 01 calendar-date pic 9(8).
 procedure division.
@@ -32,7 +33,8 @@ procedure division.
  write packed-record
  close packed-file
  move -123.45 to signed-display
- display 'SIGNED=' signed-display
+ display 'SIGNED-DISPLAY=' signed-display
+ display 'SIGNED-STORAGE=' signed-bytes
  compute rounded-number rounded = -1.235
  move rounded-number to edited-number
  display 'ROUNDED=' edited-number
@@ -47,7 +49,7 @@ procedure division.
  to calendar-date
  display 'LEAP-DATE=' calendar-date
  move function current-date to current-stamp
- display 'CLOCK=' current-stamp(1:14)
+ display 'CLOCK=' current-stamp(1:16)
  open input indexed-file
  display 'MISSING-FILE=' fs
  open output indexed-file

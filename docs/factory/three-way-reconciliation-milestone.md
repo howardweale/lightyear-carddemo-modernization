@@ -57,3 +57,21 @@ Do not reuse an output directory. Hosted execution/table and classification of
 all actual disagreements are required before calling 2.2 complete. The exact
 commit needs Howard's merge approval; no default oracle or existing evidence gate
 is modified by this PR.
+
+## First hosted findings (preserved, not a green acceptance)
+
+Run 38088862638 compiled and executed all five public scenarios before its probe
+assertion failed. Its account outputs matched byte-for-byte in all three INTCALC
+success cases. Transaction differences affected only original/processing timestamps:
+50 records in each original rehearsal and 13 in the discriminating case.
+Classification: **twin clock-adapter defect**, not interest-calculation divergence.
+The injected clock omitted fractional seconds; observed `.550000` versus requested
+`.000000` is bound in the retained output. PR 2.1 now pins the full fractional clock.
+No data or comparator ignore rule was changed.
+
+The failing probe confused numeric DISPLAY rendering (`0012345-`) with raw
+zoned storage (`001234N`). It now observes and asserts both separately using an
+alphanumeric REDEFINES view. Packed signed bytes, rounding/truncation, dates,
+collation and all four file-status probes matched the declared GnuCOBOL expectation.
+The clock assertion now includes hundredths. These are test/adapter corrections;
+no result establishes z/OS equivalence.

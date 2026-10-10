@@ -1,5 +1,24 @@
 # B06 preparation status
 
+## October 9 amended gate: one diagnostic capture prepared, not armed
+
+[Full diagnostic plan](observer-diagnostic-r1/README.md) proposes October 10,
+9 AM–noon PDT, latest start 9:50:10 AM. The complete packet requires at least four
+hours of review before latest start, fresh exact Tower and explicit Docker
+approval. No native launch is authorized by preparation. All 113,595 frozen
+hashes, 771 source comparisons and 60 focused frozen tests passed.
+Snapshot `ba570784e544a252682737ff0396df59dd7b3fc5d5be63e94c0afc075a1ce555`;
+plan `90e8bee67bb84af31bafeb5d78b3cfd107a8715a8c594c3be8c80b33dfdb3c1a`.
+
+Four deep concurrent host workers completed 1,024 iterations without either
+historical refusal. The extended allowance hit the unchanged audit-byte bound;
+it is incomplete, not a pass. No native cause or tracker fix is proven. Strict
+first-anomaly stop, no degradation, zero qualification/measurement credit remain.
+Captured failure must be reproduced and fixed offline before qualification.
+PR #292 was merged after all 24 checks; #293 is ready but not merged. Earlier
+practice failures remain failed, including r2 window2 report
+`34a27503e9b82e0c775d6b3d10ec8e004ab00a7dc26bcd0dd8ca8ad204b8d598`.
+The dated entries below are historical, not current runnable windows.
 ## October 9 replacement practice window prepared
 
 [Practice r2 window2](observer-practice-r2-window2/README.md) targets 4:15–7:15 PM PDT;

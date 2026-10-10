@@ -137,6 +137,10 @@ class PostingBroker:
                 finally: enqueue(None)
             threading.Thread(target=consume, daemon=True).start()
             sequence, death = 0, False
+            from tools.ms94_b06_observer_audit import Audit
+            audit = Audit()
+            evidence_count = 0
+            audit_required = False
             with (self.private / 'events.jsonl').open('xb') as log:
                 while True:
                     self.runner.check_cancel()
@@ -147,7 +151,13 @@ class PostingBroker:
                     check(len(line) <= 4 * 1024 * 1024, 'observer-event-too-large')
                     event = json.loads(line)
                     sequence += 1
-                    check(event['sequence'] == sequence and sequence <= 50000, 'observer-sequence-invalid')
+                    check(event['sequence'] == sequence, 'observer-sequence-invalid')
+                    if event['kind'] == 'observer-audit':
+                        check(audit_required, 'observer-audit-unannounced')
+                        audit.event(event)
+                    else:
+                        evidence_count += 1
+                        check(evidence_count <= 50000, 'observer-sequence-invalid')
                     readback = None
                     if event.get('document'):
                         check(event['checkpoint'] is True, 'observer-readback-without-suspension')
@@ -165,8 +175,14 @@ class PostingBroker:
                     self.previous = item['content_sha256']; self.records.append(item)
                     from tools.ms94_b06_fault_hook import inject
                     inject(self.runner, self.lane, item, self.signer)
-                    if event['kind'] == 'ready': self.ready.set()
-                    if event['kind'] == 'vm-death': death = True
+                    if event['kind'] == 'ready':
+                        from tools.ms94_b06_observer_audit import POLICY
+                        check(event.get('audit_policy') in (None, POLICY), 'observer-audit-policy')
+                        audit_required = event.get('audit_policy') == POLICY
+                        self.ready.set()
+                    if event['kind'] == 'vm-death':
+                        if audit_required: audit.complete()
+                        death = True
                     if event['checkpoint']:
                         self.process.stdin.write((str(sequence) + '\n').encode()); self.process.stdin.flush()
             code = self.process.wait(timeout=10)

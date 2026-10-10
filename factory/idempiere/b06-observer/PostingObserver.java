@@ -24,6 +24,76 @@ public final class PostingObserver {
     private boolean bindingV2;
     private final Map<String,String> emittedV2Definitions=new HashMap<>();
     private long sequence = 0;
+    private long auditSet = 0, auditIndex = 0, auditBytes = 0, requestSequence = 0;
+    private int auditPosition = -1;
+    private static final long AUDIT_BYTES = 128L * 1024 * 1024;
+    private static final long AUDIT_EVENTS = 500000;
+    private static Map<String,Object> auditLocation(Location l) {
+        Method m=l.method();
+        return Map.of("class",l.declaringType().name(),"method",m.name(),
+            "signature",m.signature(),"code_index",l.codeIndex());
+    }
+    private long requestId(EventRequest request) {
+        if(request==null)return 0;
+        Object id=request.getProperty("b06-audit-id");
+        if(id==null){id=++requestSequence;request.putProperty("b06-audit-id",id);}
+        return ((Number)id).longValue();
+    }
+    private void audit(String action, Map<String,Object> detail) throws Exception {
+        Map<String,Object> record=new LinkedHashMap<>();
+        record.put("kind","observer-audit");record.put("policy","structural-jdi-v1");
+        record.put("audit_index",++auditIndex);record.put("event_set_id",auditSet);
+        record.put("event_position",auditPosition);record.put("action",action);record.put("detail",detail);
+        auditBytes+=json(record).getBytes(StandardCharsets.UTF_8).length;
+        if(auditIndex>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)
+            throw new IllegalStateException("observer structural audit bound exceeded");
+        emit(record,false);
+    }
+    private void auditEvent(Event event) throws Exception {
+        Map<String,Object> d=new LinkedHashMap<>();
+        String type=event instanceof BreakpointEvent?"breakpoint":event instanceof MethodExitEvent?"method-exit":
+            event instanceof ExceptionEvent?"exception":event instanceof VMStartEvent?"vm-start":
+            event instanceof VMDeathEvent?"vm-death":event instanceof VMDisconnectEvent?"vm-disconnect":
+            event instanceof ClassPrepareEvent?"class-prepare":"other";
+        d.put("event_type",type);d.put("request_id",requestId(event.request()));
+        if(event instanceof LocatableEvent e) {
+            ThreadReference t=e.thread();d.put("thread_id",t.uniqueID());
+            // Thread names are target-controlled and may contain business values.
+            // Preserve equality/identity without copying names into the diagnostic.
+            d.put("thread_name_sha256",hash(t.name().getBytes(StandardCharsets.UTF_8)));
+            d.put("location",auditLocation(e.location()));d.put("depth",t.frameCount());
+            if(t.frameCount()>0)d.put("top_location",auditLocation(t.frame(0).location()));
+            d.put("selected_generation",generation.selected(e.location().method()));
+            d.put("return_breakpoint",Boolean.TRUE.equals(e.request().getProperty("generation-return")));
+            d.put("catch_breakpoint",Boolean.TRUE.equals(e.request().getProperty("generation-catch")));
+            Generation.ReturnArm arm=generation.exits.get(t.uniqueID());
+            if(arm!=null)d.put("arm",Map.of("request_id",requestId(arm.request()),
+                "method",Generation.methodName(arm.method()),"depth",arm.depth(),
+                "generation_id",arm.entry().get("generation_id")));
+            List<Object> pending=new ArrayList<>();
+            for(Map<String,Object> p:generation.pending.getOrDefault(t.uniqueID(),new ArrayDeque<>()))
+                pending.add(Map.of("generation_id",p.get("generation_id"),"method",p.get("entry_method"),"depth",p.get("entry_depth")));
+            if(pending.size()>256)throw new IllegalStateException("generation audit pending bound exceeded");
+            d.put("pending",pending);
+            if(event instanceof ExceptionEvent x) {
+                d.put("exception_class",x.exception().referenceType().name());
+                d.put("catch_location",x.catchLocation()==null?null:auditLocation(x.catchLocation()));
+                d.put("exceptional_exit","unknown-until-handler");
+            } else if(event instanceof MethodExitEvent) d.put("exceptional_exit",false);
+        }
+        audit("jdi-event",d);
+    }
+    private void auditState(Event event) throws Exception {
+        if(!(event instanceof LocatableEvent e))return;
+        long thread=e.thread().uniqueID();
+        Generation.ReturnArm arm=generation.exits.get(thread);
+        Map<String,Object> d=new LinkedHashMap<>();d.put("thread_id",thread);
+        d.put("arm_request_id",arm==null?null:requestId(arm.request()));
+        d.put("arm_generation_id",arm==null?null:arm.entry().get("generation_id"));
+        d.put("pending_generation_ids",generation.pending.getOrDefault(thread,new ArrayDeque<>()).stream()
+            .map(p->p.get("generation_id")).toList());
+        audit("dispatch-completed",d);
+    }
     /** Read the exact suspended-VM slice in bounded packets, never one JDWP request per byte. */
     static byte[] readBytes(ArrayReference array, int offset, int length) {
         int available=array.length();
@@ -46,6 +116,7 @@ public final class PostingObserver {
         static final String DEFINE="(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;";
         static final Set<String> EMITTERS=Set.of("generateCustomizedCodeBytes","generateLambdaFormInterpreterEntryPointBytes","generateNamedFunctionInvokerImpl");
         boolean v2;
+        long generationSequence;
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
         static final Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
@@ -215,6 +286,7 @@ public final class PostingObserver {
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
             Map<String,Object> r=new LinkedHashMap<>();r.put("kind","generation");r.put("thread_id",t.uniqueID());
+            r.put("generation_id",++generationSequence);
             r.put("entry_depth",t.frameCount());r.put("entry_method",e.location().declaringType().name()+"."+e.location().method().name()+e.location().method().signature());
             r.put("stack",stack(t));
             StackFrame top=t.frame(0);
@@ -618,7 +690,7 @@ public final class PostingObserver {
         for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
-        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1")), false);
+        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1")), false);
         // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
         // below. Resuming here too can release a later breakpoint suspension
         // before its handler runs, causing a missed exit and a stale return arm.
@@ -626,7 +698,15 @@ public final class PostingObserver {
         while (running) {
             EventSet set = vm.eventQueue().remove(1000);
             if (set == null) continue;
+            auditSet++;auditPosition=-1;
+            audit("event-set-open",Map.of("size",set.size(),"suspend_policy",set.suspendPolicy()));
+            boolean deathObserved=false;
             for (Event event : set) {
+                auditPosition++;
+                // Emit before dispatch: a guard failure must retain the actual
+                // failing event, live operands and arm, not just its predecessor.
+                auditEvent(event);
+                try {
                 if (event instanceof ClassPrepareEvent prepared) configure(prepared.referenceType());
                 else if (event instanceof BreakpointEvent breakpoint) entry(breakpoint);
                 else if (event instanceof MethodExitEvent methodExit) exit(methodExit);
@@ -634,10 +714,20 @@ public final class PostingObserver {
                 else if (event instanceof VMDeathEvent) {
                     if(!generation.pending.isEmpty() || !generation.exits.isEmpty() || !generationCatches.isEmpty())
                         throw new IllegalStateException("VM died with incomplete generation activation");
-                    emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false); running = false;
+                    deathObserved=true; running = false;
                 } else if (event instanceof VMDisconnectEvent) running = false;
+                auditState(event);
+                } catch(Exception failure) {
+                    audit("dispatch-refused",Map.of("exception_class",failure.getClass().getName()));
+                    throw failure;
+                }
             }
-            if (running) set.resume();
+            if(deathObserved)emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false);
+            if (running) {
+                audit("resume-requested",Map.of("scope","event-set"));
+                set.resume();
+                audit("resume-completed",Map.of("scope","event-set"));
+            }
         }
     }
     public static void main(String[] args) throws Exception {

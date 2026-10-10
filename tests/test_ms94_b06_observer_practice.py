@@ -12,6 +12,22 @@ from tools.ms94_b06_group_decision import request
 
 
 class PracticeTests(unittest.TestCase):
+    def test_diagnostic_request_preserves_strict_scope(self):
+        scope=dict(purpose='capture-refusal-context-only',qualification_credit=False,measurement_credit=False,
+                   stop_at_first_anomaly=True,degradation_mode=False,automatic_retry=False,
+                   minimum_full_plan_review_lead_seconds=14400)
+        body=dict(purpose='observer-native-practice',journey='J1',slot_count=1,qualification_credit=False,
+                  model_calls=0,measurement_authorized=False,snapshot_sha256='a'*64,docker_run_window={},diagnostic_scope=scope)
+        good,_,_=request(seal(body),'b'*40)
+        self.assertIn('solely to capture',good['summary'])
+        self.assertNotIn('corrected external observer',good['summary'])
+        for field,value in [('qualification_credit',True),('measurement_credit',True),('stop_at_first_anomaly',False),
+                            ('degradation_mode',True),('automatic_retry',True),('minimum_full_plan_review_lead_seconds',0),
+                            ('purpose','qualification')]:
+            changed={**body,'diagnostic_scope':{**scope,field:value}}
+            with self.subTest(field=field),self.assertRaisesRegex(ValueError,'diagnostic-capture-only'):
+                request(seal(changed),'b'*40)
+
     def test_exact_one_pair_conversion_and_tower_summary(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); start,end='2026-10-09T20:00:00Z','2026-10-09T23:00:00Z'

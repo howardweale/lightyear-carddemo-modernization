@@ -1,0 +1,420 @@
+{
+  "schema": "b06-host-stress-review/1",
+  "diagnostic_observer_initial_commit": "427f8c4f0548765725153f6c6ad4d46e01ef054b",
+  "published_harness_commit": "b0d5749c0a876b7977d8c64bdeca65706b6c129f",
+  "host_only": true,
+  "native_credit": false,
+  "tracker_fix_proven": false,
+  "either_historical_refusal_reproduced": false,
+  "model_calls": 0,
+  "docker_commands": 0,
+  "attempts": [
+    {
+      "observer_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+      "fixture_sha256": "0d5e20c33c011981bca153608b83f74a627913c48994c4354dee5aa5ce1ceb72",
+      "java_version": "openjdk version \"21.0.10\" 2026-01-20 LTS\nOpenJDK Runtime Environment Corretto-21.0.10.7.1 (build 21.0.10+7-LTS)\nOpenJDK 64-Bit Server VM Corretto-21.0.10.7.1 (build 21.0.10+7-LTS, mixed mode, sharing)\n",
+      "threads": 4,
+      "requested_iterations_per_thread": 800,
+      "requested_recursive_depth": 128,
+      "method_handle_customize_threshold": 0,
+      "elapsed_seconds": 1.609,
+      "timeout_seconds": 600,
+      "timed_out": false,
+      "observer_returncode": 0,
+      "target_returncode": 1,
+      "counts": {
+        "ready": 1,
+        "observer-audit": 958,
+        "generation-entry": 61,
+        "generation-return": 61,
+        "vm-death": 1
+      },
+      "audit_complete": true,
+      "audit_error": null,
+      "generation_methods_by_thread": {
+        "1": {
+          "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": 1,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 12,
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 13,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 1
+        },
+        "1350": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 5,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 4
+        },
+        "1382": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 5,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 4
+        },
+        "1345": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 5,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 4
+        },
+        "1341": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 4,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 3
+        }
+      },
+      "depth_ranges": {
+        "1": [
+          8,
+          27
+        ],
+        "1350": [
+          136,
+          149
+        ],
+        "1382": [
+          136,
+          149
+        ],
+        "1345": [
+          136,
+          149
+        ],
+        "1341": [
+          136,
+          149
+        ]
+      },
+      "duplicate_return_arm": false,
+      "unmatched_activation": false,
+      "output_hashes": {
+        "observer.stdout": "b9386cba4bab107db31d1812959c68072c3c88661a6294e69d207ddf4799fb64",
+        "observer.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "target.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "target.stderr": "d4bc0b38093f65ae9b9e70ce1311ffc11b1d0e91d0b40329ad9bd6d3ae185b4d"
+      },
+      "attempt": "stress-4x800-depth128",
+      "status": "fixture-error",
+      "result_file_sha256": "fc1f9b385fb8fafaa33594990ddbc75943899d31e304a63f8b655c4645f79e03",
+      "stress_completed": false,
+      "raw_captures_published": false,
+      "fixture_error": "WrongMethodTypeException: (Object)Object handle invoked with (Object)Integer signature; fixed only in public fixture."
+    },
+    {
+      "observer_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+      "fixture_sha256": "2ab58e10c27f2fc6334515912a72c874c3bb3e79a771d85bd84d920be446f666",
+      "java_version": "openjdk version \"21.0.10\" 2026-01-20 LTS\nOpenJDK Runtime Environment Corretto-21.0.10.7.1 (build 21.0.10+7-LTS)\nOpenJDK 64-Bit Server VM Corretto-21.0.10.7.1 (build 21.0.10+7-LTS, mixed mode, sharing)\n",
+      "threads": 4,
+      "requested_iterations_per_thread": 800,
+      "requested_recursive_depth": 128,
+      "method_handle_customize_threshold": 0,
+      "elapsed_seconds": 600.158,
+      "timeout_seconds": 600,
+      "timed_out": true,
+      "observer_returncode": 1,
+      "target_returncode": 1,
+      "counts": {
+        "ready": 1,
+        "observer-audit": 300331,
+        "generation-entry": 20023,
+        "generation-return": 20020
+      },
+      "audit_complete": false,
+      "audit_error": "observer-audit-incomplete",
+      "generation_methods_by_thread": {
+        "1": {
+          "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": 1,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 12,
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 13,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 1
+        },
+        "1350": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 2744,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 1648,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 548
+        },
+        "1345": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 2645,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 1589,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 528
+        },
+        "1341": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 2829,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 1699,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 565
+        },
+        "1390": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 2889,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 1735,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 577
+        }
+      },
+      "depth_ranges": {
+        "1": [
+          8,
+          27
+        ],
+        "1350": [
+          136,
+          151
+        ],
+        "1345": [
+          136,
+          151
+        ],
+        "1341": [
+          136,
+          151
+        ],
+        "1390": [
+          136,
+          151
+        ]
+      },
+      "duplicate_return_arm": false,
+      "unmatched_activation": false,
+      "output_hashes": {
+        "observer.stdout": "1b10b240441a09c9087a12b8848e094fb6d624f39d13446f3edc4cae428b4a68",
+        "observer.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "target.stdout": "ff92b9feaa83a40deb3171e96aa22394d136018f24d4d45485db5f21fe655626",
+        "target.stderr": "d732d3150657004de1bdc3cbbb8e90cbdefefe39a4e8e5184a896658a698c65f"
+      },
+      "attempt": "stress-4x800-depth128-v2",
+      "status": "host-timeout",
+      "result_file_sha256": "b924d87af5a446852818d6c9651e2ab253ae2bfe66b97d2a15dc2adf751a5fb9",
+      "stress_completed": false,
+      "raw_captures_published": false
+    },
+    {
+      "observer_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+      "fixture_sha256": "2ab58e10c27f2fc6334515912a72c874c3bb3e79a771d85bd84d920be446f666",
+      "java_version": "openjdk version \"21.0.10\" 2026-01-20 LTS\nOpenJDK Runtime Environment Corretto-21.0.10.7.1 (build 21.0.10+7-LTS)\nOpenJDK 64-Bit Server VM Corretto-21.0.10.7.1 (build 21.0.10+7-LTS, mixed mode, sharing)\n",
+      "threads": 4,
+      "requested_iterations_per_thread": 256,
+      "requested_recursive_depth": 128,
+      "method_handle_customize_threshold": 0,
+      "elapsed_seconds": 200.593,
+      "timeout_seconds": 600,
+      "timed_out": false,
+      "observer_returncode": 0,
+      "target_returncode": 0,
+      "counts": {
+        "ready": 1,
+        "observer-audit": 139263,
+        "generation-entry": 9283,
+        "generation-return": 9283,
+        "vm-death": 1
+      },
+      "audit_complete": true,
+      "audit_error": null,
+      "generation_methods_by_thread": {
+        "1": {
+          "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": 1,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 12,
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 13,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 1
+        },
+        "1352": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 1285,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 773,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 256
+        },
+        "1367": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 1285,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 773,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 256
+        },
+        "1341": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 1285,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 773,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 256
+        },
+        "1378": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 1285,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 773,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 256
+        }
+      },
+      "depth_ranges": {
+        "1": [
+          8,
+          27
+        ],
+        "1352": [
+          136,
+          151
+        ],
+        "1367": [
+          136,
+          151
+        ],
+        "1341": [
+          136,
+          151
+        ],
+        "1378": [
+          136,
+          151
+        ]
+      },
+      "entry_sequence_intervals": {
+        "1": [
+          8,
+          462
+        ],
+        "1352": [
+          479,
+          153121
+        ],
+        "1367": [
+          496,
+          156511
+        ],
+        "1341": [
+          502,
+          154850
+        ],
+        "1378": [
+          508,
+          157814
+        ]
+      },
+      "generation_thread_switches": 8834,
+      "compiled_observer_classes_sha256": {
+        "lightyear/observer/PostingObserver$Call.class": "27f9c795a5165f3bf4efdb0fe06a512088e3b71035a921a4d981848ec3cae528",
+        "lightyear/observer/PostingObserver$Generation$ReturnArm.class": "d8be2539441d3c66b87ae269cfe2ffa7b8eeb5ad0c50d0a94a0088b3f47064fc",
+        "lightyear/observer/PostingObserver$Generation.class": "4d03532eba65f309e50feb83f55f43fb19f8ea04d9cc5ec98e9ac15ff0676882",
+        "lightyear/observer/PostingObserver$GenerationCatch.class": "528ab0c61259a22c6ef4b0018a7dc3ea102454fe635b5075a91532f1384e3f5d",
+        "lightyear/observer/PostingObserver.class": "6fb6cafb9264e7c9dbfed4afa3483529a016c034fa630fc72233b19824256d39"
+      },
+      "duplicate_return_arm": false,
+      "unmatched_activation": false,
+      "output_hashes": {
+        "observer.stdout": "f2157a6d0edaeadfbd3dd0a3d9e9d9a5b5b9683b54809daed5eeef5189942517",
+        "observer.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "target.stdout": "df43384459e004030af0424388a257f4d1aff797349ed26769611e27292c8bd9",
+        "target.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "started_at_utc": "2026-10-10T00:31:44.768685+00:00",
+      "finished_at_utc": "2026-10-10T00:35:09.888766+00:00",
+      "attempt": "stress-4x256-depth128",
+      "status": "completed",
+      "result_file_sha256": "3e750d826f27d5eb3014d6c1b345cd76a38a4d3e9726bd2429611baba9541968",
+      "stress_completed": true,
+      "raw_captures_published": false,
+      "audit_body_bytes": 45935657
+    },
+    {
+      "observer_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+      "fixture_sha256": "2ab58e10c27f2fc6334515912a72c874c3bb3e79a771d85bd84d920be446f666",
+      "java_version": "openjdk version \"21.0.10\" 2026-01-20 LTS\nOpenJDK Runtime Environment Corretto-21.0.10.7.1 (build 21.0.10+7-LTS)\nOpenJDK 64-Bit Server VM Corretto-21.0.10.7.1 (build 21.0.10+7-LTS, mixed mode, sharing)\n",
+      "threads": 4,
+      "requested_iterations_per_thread": 800,
+      "requested_recursive_depth": 128,
+      "method_handle_customize_threshold": 0,
+      "elapsed_seconds": 995.295,
+      "timeout_seconds": 1800,
+      "timed_out": false,
+      "observer_returncode": 1,
+      "target_returncode": 1,
+      "counts": {
+        "ready": 1,
+        "observer-audit": 405342,
+        "generation-entry": 27023,
+        "generation-return": 27020
+      },
+      "audit_complete": false,
+      "audit_error": "observer-audit-incomplete",
+      "generation_methods_by_thread": {
+        "1": {
+          "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": 1,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 12,
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 13,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 1
+        },
+        "1353": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 3890,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 2336,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 777
+        },
+        "1367": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 3802,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 2283,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 759
+        },
+        "1341": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 3587,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 2154,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 717
+        },
+        "1343": {
+          "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": 3717,
+          "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": 2232,
+          "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": 742
+        }
+      },
+      "depth_ranges": {
+        "1": [
+          8,
+          27
+        ],
+        "1353": [
+          136,
+          151
+        ],
+        "1367": [
+          136,
+          151
+        ],
+        "1341": [
+          136,
+          149
+        ],
+        "1343": [
+          136,
+          151
+        ]
+      },
+      "entry_sequence_intervals": {
+        "1": [
+          8,
+          462
+        ],
+        "1353": [
+          479,
+          459343
+        ],
+        "1367": [
+          490,
+          459326
+        ],
+        "1341": [
+          502,
+          459366
+        ],
+        "1343": [
+          508,
+          459349
+        ]
+      },
+      "generation_thread_switches": 25936,
+      "compiled_observer_classes_sha256": {
+        "lightyear/observer/PostingObserver$Call.class": "27f9c795a5165f3bf4efdb0fe06a512088e3b71035a921a4d981848ec3cae528",
+        "lightyear/observer/PostingObserver$Generation$ReturnArm.class": "d8be2539441d3c66b87ae269cfe2ffa7b8eeb5ad0c50d0a94a0088b3f47064fc",
+        "lightyear/observer/PostingObserver$Generation.class": "4d03532eba65f309e50feb83f55f43fb19f8ea04d9cc5ec98e9ac15ff0676882",
+        "lightyear/observer/PostingObserver$GenerationCatch.class": "528ab0c61259a22c6ef4b0018a7dc3ea102454fe635b5075a91532f1384e3f5d",
+        "lightyear/observer/PostingObserver.class": "6fb6cafb9264e7c9dbfed4afa3483529a016c034fa630fc72233b19824256d39"
+      },
+      "duplicate_return_arm": false,
+      "unmatched_activation": false,
+      "output_hashes": {
+        "observer.stdout": "b25926cf74e0489b955512ccd992cefe7a7305b7a771636e5edbd040b7902ff8",
+        "observer.stderr": "f3a27d6b488dbf1dcc49c3c7611e888caabb47c79ba54a7de58bddf837aa3a58",
+        "target.stdout": "5bc7e707517201a4facd5b15c16b7008698f603917b1381a28b23839fbb94a85",
+        "target.stderr": "d732d3150657004de1bdc3cbbb8e90cbdefefe39a4e8e5184a896658a698c65f"
+      },
+      "started_at_utc": "2026-10-10T00:35:12.361216+00:00",
+      "finished_at_utc": "2026-10-10T00:52:00.514417+00:00",
+      "attempt": "stress-4x800-depth128-30m",
+      "status": "audit-byte-limit",
+      "result_file_sha256": "c08f041631d2ed029be50ac4d94542425b107b3ee6ebefb3c485588dd55afa7e",
+      "stress_completed": false,
+      "raw_captures_published": false,
+      "observer_error": "observer structural audit bound exceeded",
+      "limiting_bound_bytes": 134217728,
+      "target_completion_after_observer_disconnect_is_not_capture_completion": true
+    }
+  ]
+}

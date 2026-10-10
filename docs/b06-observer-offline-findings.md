@@ -5,6 +5,11 @@ credit. Operator review, not independent attestation. No new Docker, native run,
 Tower request or model call was used for this investigation. The frozen-file check
 finished successfully before this work began. Preserved evidence was read only.
 
+Subsequent authorization: Howard's [diagnostic gate amendment](b06-diagnostic-gate-amendment.md)
+replaces the impossible historical exact-event reproduction prerequisite. The
+findings below remain historical facts, not a veto on that explicitly authorized
+diagnostic preparation. Qualification still requires a supported fix and proof.
+
 ## The 4:15 PM window, recorded as it happened
 
 The window opened at 16:15 PDT; the group actually started at 16:24:53.175659 PDT

@@ -70,6 +70,7 @@
   "run_class": "engineering",
   "schema": "factory-b07-search-amendment/1",
   "sealing_allowed": false,
-  "selected_option": null,
+  "selected_option": "graph-and-search",
+  "selection_scope": "Draft design only; no model-call, native-run or spending authorization",
   "status": "draft-unsealed"
 }

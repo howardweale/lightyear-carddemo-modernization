@@ -10,9 +10,10 @@ Parts 1, 1.5 and 2 retain all their original coverage, audit and approval gates.
 ## Part 3 replacement: context arms
 
 The historical B06 curated arm remains the baseline. New arms are graph (G) and
-plain search (S, the requested Arm C). An optional fresh curated drift-control
-arm (D) is a separate decision. Prepare both budget options; arm count remains
-Howard's decision. No inference that historical B06 is complete or nonvoid is made.
+plain search (S, the requested Arm C). Howard selected these two new arms.
+A fresh curated drift-control arm (D) is not selected; its alternative estimate
+is retained below for transparency only. This selects the draft design, not runs
+or spending. No inference that historical B06 is complete or nonvoid is made.
 
 Both G and S remove the curated `api_reference` block. G gets its mechanically
 assembled graph block; S gets only the public contract, pinned source identity,
@@ -110,7 +111,6 @@ responses before requesting a specific model budget. No model call is authorized
 Delivered: a reviewable search-arm design, pairwise analysis/negative-claim
 template and calculated options. No model, Docker or native run occurred.
 B06 is not yet a complete nonvoid baseline, and B07 static/runtime coverage and
-audit are not complete. Therefore no B07 sealing date is available. Howard must
-choose arm count; later gates require the actual coverage proof, audit, merged
+audit are not complete. Therefore no B07 sealing date is available. Howard selected G + S with no fresh curated drift arm. Later gates require the actual coverage proof, audit, merged
 implementations, frozen client/model/images/context, zero-model preflight,
 approved budget/window and full-plan review lead. None is bypassed here.

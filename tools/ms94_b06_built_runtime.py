@@ -72,8 +72,10 @@ def prepare(root, run, plan, staging):
     for name in ('data','reports'):(mutable/name).mkdir()
     (inputs/'launch.json').write_bytes(worker.canonical(launch))
     (inputs/'surefire.properties').write_bytes(properties)
+    from tools.b06_image_artifacts.standalone_content import reader_bytes
+    (inputs/'bundle_content.py').write_bytes(reader_bytes())
     mounts=[(root/'tools/ms94_b06_built_worker.py','/runtime/worker.py',False),
-            (root/'tools/b06_image_artifacts/bundle_content.py','/runtime/bundle_content.py',False),
+            (inputs/'bundle_content.py','/runtime/bundle_content.py',False),
             (inputs/'launch.json','/runtime/launch.json',False),
             (inputs/'surefire.properties',manifest['testproperties_path'],False),
             (config,manifest['config_path'],True),(mutable/'data',manifest['data_path'],True),

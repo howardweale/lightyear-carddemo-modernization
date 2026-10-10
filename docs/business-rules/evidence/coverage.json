@@ -1,0 +1,327 @@
+{
+  "schema": "lightyear-rule-coverage/1",
+  "programs": {
+    "CBACT04C": {
+      "decision_count": 47,
+      "explained_count": 16,
+      "explained_percentage": 34.04,
+      "unexplained": [
+        {
+          "id": "legacy:cobol-decision:CBACT04C:237:777",
+          "program": "CBACT04C",
+          "paragraph": "0000-TCATBALF-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 237,
+          "line_end": 237,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:242:789",
+          "program": "CBACT04C",
+          "paragraph": "0000-TCATBALF-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 242,
+          "line_end": 242,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:255:815",
+          "program": "CBACT04C",
+          "paragraph": "0100-XREFFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 255,
+          "line_end": 255,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:260:827",
+          "program": "CBACT04C",
+          "paragraph": "0100-XREFFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 260,
+          "line_end": 260,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:273:854",
+          "program": "CBACT04C",
+          "paragraph": "0200-DISCGRP-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 273,
+          "line_end": 273,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:278:866",
+          "program": "CBACT04C",
+          "paragraph": "0200-DISCGRP-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 278,
+          "line_end": 278,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:292:892",
+          "program": "CBACT04C",
+          "paragraph": "0300-ACCTFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 292,
+          "line_end": 292,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:297:904",
+          "program": "CBACT04C",
+          "paragraph": "0300-ACCTFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 297,
+          "line_end": 297,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:310:930",
+          "program": "CBACT04C",
+          "paragraph": "0400-TRANFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 310,
+          "line_end": 310,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:315:942",
+          "program": "CBACT04C",
+          "paragraph": "0400-TRANFILE-OPEN",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 315,
+          "line_end": 315,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:357:1026",
+          "program": "CBACT04C",
+          "paragraph": "1050-UPDATE-ACCOUNT",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 357,
+          "line_end": 357,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:362:1038",
+          "program": "CBACT04C",
+          "paragraph": "1050-UPDATE-ACCOUNT",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 362,
+          "line_end": 362,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:374:1060",
+          "program": "CBACT04C",
+          "paragraph": "1100-GET-ACCT-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 374,
+          "line_end": 374,
+          "construct": "INVALID KEY",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:378:1065",
+          "program": "CBACT04C",
+          "paragraph": "1100-GET-ACCT-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 378,
+          "line_end": 378,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:383:1077",
+          "program": "CBACT04C",
+          "paragraph": "1100-GET-ACCT-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 383,
+          "line_end": 383,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:396:1102",
+          "program": "CBACT04C",
+          "paragraph": "1110-GET-XREF-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 396,
+          "line_end": 396,
+          "construct": "INVALID KEY",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:400:1107",
+          "program": "CBACT04C",
+          "paragraph": "1110-GET-XREF-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 400,
+          "line_end": 400,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:405:1119",
+          "program": "CBACT04C",
+          "paragraph": "1110-GET-XREF-DATA",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 405,
+          "line_end": 405,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:501:1305",
+          "program": "CBACT04C",
+          "paragraph": "END-STRING",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 501,
+          "line_end": 501,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:507:1317",
+          "program": "CBACT04C",
+          "paragraph": "END-STRING",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 507,
+          "line_end": 507,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:525:1346",
+          "program": "CBACT04C",
+          "paragraph": "9000-TCATBALF-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 525,
+          "line_end": 525,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:530:1358",
+          "program": "CBACT04C",
+          "paragraph": "9000-TCATBALF-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 530,
+          "line_end": 530,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:544:1383",
+          "program": "CBACT04C",
+          "paragraph": "9100-XREFFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 544,
+          "line_end": 544,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:549:1395",
+          "program": "CBACT04C",
+          "paragraph": "9100-XREFFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 549,
+          "line_end": 549,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:562:1420",
+          "program": "CBACT04C",
+          "paragraph": "9200-DISCGRP-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 562,
+          "line_end": 562,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:567:1432",
+          "program": "CBACT04C",
+          "paragraph": "9200-DISCGRP-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 567,
+          "line_end": 567,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:580:1457",
+          "program": "CBACT04C",
+          "paragraph": "9300-ACCTFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 580,
+          "line_end": 580,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:585:1469",
+          "program": "CBACT04C",
+          "paragraph": "9300-ACCTFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 585,
+          "line_end": 585,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:598:1494",
+          "program": "CBACT04C",
+          "paragraph": "9400-TRANFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 598,
+          "line_end": 598,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:603:1506",
+          "program": "CBACT04C",
+          "paragraph": "9400-TRANFILE-CLOSE",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 603,
+          "line_end": 603,
+          "construct": "IF",
+          "explained_by": []
+        },
+        {
+          "id": "legacy:cobol-decision:CBACT04C:636:1590",
+          "program": "CBACT04C",
+          "paragraph": "9910-DISPLAY-IO-STATUS",
+          "path": "app/cbl/CBACT04C.cbl",
+          "line_start": 636,
+          "line_end": 636,
+          "construct": "IF",
+          "explained_by": []
+        }
+      ]
+    }
+  },
+  "dead_rules": [
+    "rule:intcalc:disclosure-rate",
+    "rule:intcalc:zero-rate"
+  ],
+  "limitation": "Lexical decision inventory and source-anchor overlap, not executed branch coverage."
+}

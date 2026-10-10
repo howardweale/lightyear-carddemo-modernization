@@ -50,6 +50,11 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
             check(plan['declaration']['policy']['max_elapsed_seconds'] == 7190 and
                   plan['declaration']['policy']['max_model_calls'] == 0 and
                   plan['candidate_timeout_seconds'] == 1800, 'census-slot-budget')
+        from tools.ms94_b06_unmatched_return import enabled, validate_scope
+        if enabled(plan.get('posting_observer', {})):
+            validate_scope({**draft, 'docker_run_window': plan['docker_run_window']})
+        elif draft.get('diagnostic_scope', {}).get('purpose') == 'capture-with-unmatched-return-exception':
+            check(False, 'diagnostic-policy-not-bound-in-native-plan')
         check(plan['slot_id'] not in by_id, 'qualification-duplicate-slot')
         verify_inputs(p.parent, plan)
         check(plan.get('execution_admission_version') == 3, 'qualification-old-plan-version')
@@ -77,6 +82,7 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
     if practice:
         extra = {'purpose': 'observer-native-practice', 'qualification_credit': False,
                  'journeys': ['J1']}
+    if 'diagnostic_scope' in draft: extra['diagnostic_scope'] = draft['diagnostic_scope']
     return seal({**extra, 'artifact_type': 'ms94-b06-qualification-executable-plan/1',
                  'review_plan_sha256': draft['content_sha256'], 'snapshot_sha256': snapshot_sha256,
                  'tower_public_key_sha256': tower_public_key_sha256,

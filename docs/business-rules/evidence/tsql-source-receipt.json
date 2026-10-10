@@ -1,0 +1,72 @@
+{
+  "schema": "lightyear-rule-verdict/1",
+  "evaluator_version": "lightyear-rule-evaluator/1",
+  "rule_set_sha256": "f1004b03ed94eef713446e91eb2d0d02eb846e7b5964fc7bdbc152a76d118df8",
+  "records_sha256": "fc4677d429dd343203e415f86ac26f027d3afb82dffbf3516aea1bde2b561108",
+  "visibility": "public-development",
+  "record_count": 10,
+  "rules": [
+    {
+      "id": "rule:tsql:datediff-day",
+      "status": "verified",
+      "applicable_count": 2,
+      "agree_count": 2,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:isnull-length",
+      "status": "verified",
+      "applicable_count": 2,
+      "agree_count": 2,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:len",
+      "status": "verified",
+      "applicable_count": 2,
+      "agree_count": 2,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:money-scale",
+      "status": "verified",
+      "applicable_count": 2,
+      "agree_count": 2,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:round-negative",
+      "status": "verified",
+      "applicable_count": 2,
+      "agree_count": 2,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    }
+  ],
+  "status_counts": {
+    "verified": 5
+  },
+  "model_calls": 0,
+  "limitation": "Statuses describe only these captured records; no mainframe equivalence claim.",
+  "evaluator_sha256": "eabd0343505d3a150d3ebe8de729084e2b1f787799816c0f5df44f44e84b00fb",
+  "content_sha256": "64779039a4f16ce22ef1020b5c2587d120073917361b5d4f40fda22f923caa17",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "80d1c6f7ba7b78c2a26cc2d4c5a2157d9db6f30ef60e43fade5f34fe1884dfc1",
+    "value": "LODMNCYywSJk2rz1xiu6w6zSP9jV7MDc3qe726YQnr9FWPvV9BenJTCwERTPcQKKKJOUfXzw+Z4utf5GVvbkAQ=="
+  }
+}

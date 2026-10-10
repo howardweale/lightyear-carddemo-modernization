@@ -1,5 +1,50 @@
 # B06 preparation status
 
+## October 10: Afternoon unmatched-return r3 prepared, not armed
+
+[Full frozen plan](observer-unmatched-r3/README.md): one fresh J1 pair,
+12:30 PM–3:30 PM PDT, latest start 1:20:10 PM PDT. Howard shortened review lead
+for this window only; fresh exact Tower and separate Docker approval remain.
+All 113,616 frozen hashes, 783 public source comparisons and 70 focused tests passed.
+Plan `83a92cdc0ea79d3c7408999684c68f9380400afbb2417a56dc8d2d3fa659d7fb`; snapshot `510b33966417dc247de3a97170d06e64dfd009ea66f6807e91ad12a212ef9377`.
+
+Only empty-pending unmatched returns may continue as explicit unobserved records.
+Other anomalies stop. Any unmatched return makes observation indeterminate;
+diagnostic-only collection cannot issue a business gate or qualification credit.
+The original failure was reproduced offline, but missing-entry delivery cause
+remains unproven. Old failures and consumed approvals remain preserved.
+Earlier dated plans below are historical and cannot authorize this new run.
+
+## October 10: Unicode-corrected unmatched-return r2 prepared, not armed
+
+[Full frozen plan](observer-unmatched-r2/README.md): one fresh J1 pair,
+10:30 AM–1:30 PM PDT, latest start 11:20:10 AM PDT. Howard shortened review lead
+for this window only; fresh exact Tower and separate Docker approval remain.
+All 113,611 frozen hashes, 783 public source comparisons and 70 focused tests passed.
+Plan `6ad761916d4e2b2dcfae86b38f3f368292b18f9ff5c94c49c3a9fbaafe038048`; snapshot `61c6749befdfed62796db3752db611c1836b9e8db7d6359b0e876224abed5ebe`.
+
+Only empty-pending unmatched returns may continue as explicit unobserved records.
+Other anomalies stop. Any unmatched return makes observation indeterminate;
+diagnostic-only collection cannot issue a business gate or qualification credit.
+The original failure was reproduced offline, but missing-entry delivery cause
+remains unproven. Old failures and consumed approvals remain preserved.
+Earlier dated plans below are historical and cannot authorize this new run.
+
+## October 10: accepted unmatched-return diagnostic prepared, not armed
+
+[Full frozen plan](observer-unmatched-r1/README.md): one fresh J1 pair,
+10:30 AM–1:30 PM PDT, latest start 11:20:10 AM PDT. Howard shortened review lead
+for this window only; fresh exact Tower and separate Docker approval remain.
+All 113,606 frozen hashes, 783 public source comparisons and 69 focused tests passed.
+Plan `2d81a2505cf9993f8311a154662354141d7388d5cd275013faab586e8f3f8004`; snapshot `ffdf878cdb6e11ddeaefd86701bb162dea931e4616f9d37cf5d552cfef23d780`.
+
+Only empty-pending unmatched returns may continue as explicit unobserved records.
+Other anomalies stop. Any unmatched return makes observation indeterminate;
+diagnostic-only collection cannot issue a business gate or qualification credit.
+The original failure was reproduced offline, but missing-entry delivery cause
+remains unproven. Old failures and consumed approvals remain preserved.
+Earlier dated plans below are historical and cannot authorize this new run.
+
 ## October 9 amended gate: one diagnostic capture prepared, not armed
 
 [Full diagnostic plan](observer-diagnostic-r1/README.md) proposes October 10,
@@ -19,6 +64,19 @@ PR #292 was merged after all 24 checks; #293 is ready but not merged. Earlier
 practice failures remain failed, including r2 window2 report
 `34a27503e9b82e0c775d6b3d10ec8e004ab00a7dc26bcd0dd8ca8ad204b8d598`.
 The dated entries below are historical, not current runnable windows.
+## October 9 replacement practice window prepared
+
+[Practice r2 window2](observer-practice-r2-window2/README.md) targets 4:15–7:15 PM PDT;
+latest start 5:05:10 PM PDT. The earlier 2:30–5:30 PM plan expired unarmed and
+unstarted. Its records remain preserved. Only the never-started native plan's window
+changes; 113,578 bound files remain identical.
+
+All 113,579 frozen hashes, 767 public source comparisons
+and 41 focused frozen tests passed. Snapshot `e58ea4f5ed0cf1b5347fb256a0d9a425e244530d6af2b24f598682ecd3c77076`;
+plan `32d2345c386c350c40bd5ca637bcb60690c78a78f018a30dbf010d2ba047327d`. Fresh exact Tower approval remains required.
+No Docker, model calls or native pairs occurred during preparation; no native
+qualification or measurement credit is claimed. See the
+[window milestone](../../../../b06-observer-practice-window2-milestone.md).
 
 ## October 9 observer practice r2 frozen; fresh Tower decision required
 

@@ -22,6 +22,8 @@ public final class PostingObserver {
     private final Set<String> configured = new HashSet<>();
     private VirtualMachine vm;
     private boolean bindingV2;
+    private boolean diagnosticUnmatchedReturn;
+    private static final String UNMATCHED_POLICY="diagnostic-unmatched-return-v1";
     private final Map<String,String> emittedV2Definitions=new HashMap<>();
     private long sequence = 0;
     private long auditSet = 0, auditIndex = 0, auditBytes = 0, requestSequence = 0;
@@ -263,6 +265,15 @@ public final class PostingObserver {
         }
         static String methodName(Method m) {
             return m.declaringType().name()+"."+m.name()+m.signature();
+        }
+        Map<String,Object> unmatchedReturnContext(BreakpointEvent e) throws Exception {
+            // Only an absent activation can be accepted diagnostically. Never
+            // pop an existing call, replace an arm, or invent a generated class.
+            long thread=e.thread().uniqueID();Deque<Map<String,Object>> calls=pending.get(thread);
+            if(exits.containsKey(thread) || (calls!=null && !calls.isEmpty()))return null;
+            Method method=e.location().method();int depth=e.thread().frameCount();
+            if(!selected(method) || depth<1 || !e.thread().frame(0).location().equals(e.location()))return null;
+            return Map.of("thread_id",thread,"method",methodName(method),"depth",depth,"code_index",e.location().codeIndex());
         }
         void atReturn(VirtualMachine vm,BreakpointEvent e) throws Exception {
             // JDI has no operand-stack read. Arm an exact class/thread exit only
@@ -514,7 +525,15 @@ public final class PostingObserver {
     }
     private void entry(BreakpointEvent event) throws Exception {
         if(Boolean.TRUE.equals(event.request().getProperty("generation-catch"))) {generationCatch(event);return;}
-        if(Boolean.TRUE.equals(event.request().getProperty("generation-return"))) {generation.atReturn(vm,event);return;}
+        if(Boolean.TRUE.equals(event.request().getProperty("generation-return"))) {
+            Map<String,Object> missing=diagnosticUnmatchedReturn?generation.unmatchedReturnContext(event):null;
+            if(missing!=null) {
+                emit(new LinkedHashMap<>(Map.of("kind","diagnostic-unmatched-return","policy",UNMATCHED_POLICY,
+                    "context",missing,"observation_complete",false,"provenance_created",false)),false);
+                return;
+            }
+            generation.atReturn(vm,event);return;
+        }
         if(generation.selected(event.location().method())) {
             emit(new LinkedHashMap<>(Map.of("kind","generation-entry","record",generation.enter(vm,event))),false);return;
         }
@@ -690,7 +709,9 @@ public final class PostingObserver {
         for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
-        emit(new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1")), false);
+        Map<String,Object> ready=new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1"));
+        if(diagnosticUnmatchedReturn)ready.put("unmatched_return_policy",UNMATCHED_POLICY);
+        emit(ready,false);
         // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
         // below. Resuming here too can release a later breakpoint suspension
         // before its handler runs, causing a missed exit and a stale return arm.
@@ -731,8 +752,11 @@ public final class PostingObserver {
         }
     }
     public static void main(String[] args) throws Exception {
-        if (args.length != 2 && !(args.length==3 && args[2].equals("observer-binding-v2"))) throw new IllegalArgumentException("host, port and optional observer-binding-v2 required");
-        PostingObserver observer=new PostingObserver();observer.bindingV2=args.length==3;
+        if (!(args.length==2 || (args.length==3 && args[2].equals("observer-binding-v2")) ||
+              (args.length==4 && args[2].equals("observer-binding-v2") && args[3].equals(UNMATCHED_POLICY))))
+            throw new IllegalArgumentException("host, port, optional observer-binding-v2 and exact diagnostic policy required");
+        PostingObserver observer=new PostingObserver();observer.bindingV2=args.length>=3;
+        observer.diagnosticUnmatchedReturn=args.length==4;
         observer.generation.v2=observer.bindingV2;observer.run(args[0],args[1]);
     }
 }

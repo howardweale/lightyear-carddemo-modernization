@@ -1,0 +1,330 @@
+{
+  "ci_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38089428759",
+  "focused_tests_passed": 8,
+  "java": {
+    "adapters": {
+      "Service.java": "abeec20759a4f7d704803af0cda12b4fa04514f3c94f6ac3b2a2375cd91aadf4",
+      "TwinCandidate.java": "66faf91d6eca23d36bf35b19205a3305e4395416320a7a8da5144b92dc0c3843"
+    },
+    "compiler": "javac 21.0.12.1",
+    "sources": {
+      "candidate-java/src/main/java/ai/lightyear/carddemo/codec/CardDemoRecordCodec.java": "13addf5b3e8f997ede62531a6d59905da2ada6f2625236ebbe0644447536a66d",
+      "candidate-java/src/main/java/ai/lightyear/carddemo/codec/ZonedDecimal.java": "806f5c33f5303315f149cac7a2a871d29a64d73f9f72c7d589bf8c69863eb018",
+      "candidate-java/src/main/java/ai/lightyear/carddemo/domain/Records.java": "4f0fd7e6297e4a7514400737bbd7b21fe6b4d820adb0a370120f1a67a6a722cd",
+      "candidate-java/src/main/java/ai/lightyear/carddemo/service/InterestCalculationService.java": "975dc89e9f57c1b93aa3eeca6fab860be18e972877b34b10efda6bbffde01486"
+    }
+  },
+  "measurement_credit": false,
+  "oracle_class": "executable-twin",
+  "platform_probes": {
+    "content_sha256": "000d81395163e9c20db93c98d8dbe5a73c8a393b3e5b992215c31b36bb95b989",
+    "expected_gnucobol": {
+      "CLOCK": "2022071800000000",
+      "COLLATION": "A-before-a",
+      "DUPLICATE-KEY": "22",
+      "EOF": "10",
+      "LEAP-DATE": "20240229",
+      "MISSING-FILE": "35",
+      "MISSING-KEY": "23",
+      "ROUNDED": "-001.24",
+      "SIGNED-DISPLAY": "0012345-",
+      "SIGNED-STORAGE": "001234N",
+      "SIZE-TRUNCATION": "23",
+      "TRUNCATED": "-001.23"
+    },
+    "limitation": "No authorised Enterprise COBOL runtime baseline supplied; no z/OS confirmation inferred",
+    "measurement_credit": false,
+    "observed": {
+      "CLOCK": "2022071800000000",
+      "COLLATION": "A-before-a",
+      "DUPLICATE-KEY": "22",
+      "EOF": "10",
+      "LEAP-DATE": "20240229",
+      "MISSING-FILE": "35",
+      "MISSING-KEY": "23",
+      "ROUNDED": "-001.24",
+      "SIGNED-DISPLAY": "0012345-",
+      "SIGNED-STORAGE": "001234N",
+      "SIZE-TRUNCATION": "23",
+      "TRUNCATED": "-001.23"
+    },
+    "oracle_class": "executable-twin",
+    "packed_hex": "0012345c0012345d",
+    "phase": "platform-probes",
+    "qualification_credit": false,
+    "run_class": "engineering",
+    "schema": "factory-legacy-twin/1",
+    "source_sha256": "f25c19db6d14b3603305c90cdf075220340836e2ecd5a9ca09e506c56c0379d6",
+    "zos_confirmation": false,
+    "zos_match": "unknown-for-all-probes"
+  },
+  "qualification_credit": false,
+  "reference_sources": {
+    "oracle.py": "da9718cb9a8ae84194ac73a7b6de004e0fce033ee43ca9f4e7adeeb14ca376b2",
+    "records.py": "36cadb354b8345456da751619fa63827151e403b800831375a81aa0dc1473d61"
+  },
+  "remaining_scope": [
+    "Independent POSTTRAN reference and Java implementations",
+    "Multipass reproduction",
+    "Future workstream 1 scenario registration",
+    "Authorised z/OS confirmation"
+  ],
+  "report_content_sha256": "64da40dfba1d61c358f64b152644058c75cf6845435804e31872491712d18592",
+  "run_class": "engineering",
+  "scenarios": [
+    {
+      "classification": "none",
+      "comparisons": {
+        "python-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        },
+        "twin-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        },
+        "twin-vs-python": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        }
+      },
+      "scenario": "intcalc-public-1",
+      "states": {
+        "java": "completed",
+        "python": "completed",
+        "twin": "completed"
+      },
+      "status": "byte-agreement"
+    },
+    {
+      "classification": "none",
+      "comparisons": {
+        "python-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        },
+        "twin-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        },
+        "twin-vs-python": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+            "order_or_framing_only": false,
+            "right_sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd",
+            "order_or_framing_only": false,
+            "right_sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+          }
+        }
+      },
+      "scenario": "intcalc-public-2",
+      "states": {
+        "java": "completed",
+        "python": "completed",
+        "twin": "completed"
+      },
+      "status": "byte-agreement"
+    },
+    {
+      "classification": "none",
+      "comparisons": {
+        "python-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5",
+            "order_or_framing_only": false,
+            "right_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4",
+            "order_or_framing_only": false,
+            "right_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4"
+          }
+        },
+        "twin-vs-java": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5",
+            "order_or_framing_only": false,
+            "right_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4",
+            "order_or_framing_only": false,
+            "right_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4"
+          }
+        },
+        "twin-vs-python": {
+          "ACCTFILE": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5",
+            "order_or_framing_only": false,
+            "right_sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5"
+          },
+          "TRANSACT": {
+            "added": 0,
+            "byte_identical": true,
+            "deleted": 0,
+            "fields": {},
+            "keyed_identical": true,
+            "left_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4",
+            "order_or_framing_only": false,
+            "right_sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4"
+          }
+        }
+      },
+      "scenario": "intcalc-discriminating",
+      "states": {
+        "java": "completed",
+        "python": "completed",
+        "twin": "completed"
+      },
+      "status": "byte-agreement"
+    },
+    {
+      "classification": "missing-disclosure-source-path",
+      "comparisons": {},
+      "scenario": "intcalc-missing-disclosure",
+      "states": {
+        "java": "execution-failure",
+        "python": "execution-failure",
+        "twin": "execution-failure"
+      },
+      "status": "expected-failure-agreement"
+    },
+    {
+      "classification": "missing-reference-and-candidate",
+      "reason": "Existing Python and Java implement INTCALC only; do not invent POSTTRAN oracle results",
+      "scenario": "posttran-public",
+      "status": "not-three-way-supported",
+      "twin_returncode": 4
+    }
+  ],
+  "schema": "factory-three-way-hosted-result/1",
+  "tested_commit": "413014469a75bc927d89f105ae72a0f3fb06b4da"
+}

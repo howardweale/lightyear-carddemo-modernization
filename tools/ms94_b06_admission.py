@@ -41,6 +41,8 @@ def bound_file(root, name, expected):
 
 
 def verify_inputs(run, plan):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(plan, run)
     verify(plan)
     check(plan["artifact_type"] == "ms94-b06-native-pair-plan/1", "wrong-native-plan")
     if plan['journey'] == 'J1':

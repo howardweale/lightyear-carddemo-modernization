@@ -13,6 +13,8 @@ KIND = 'b06-qualification-group'
 
 def request(group, commit):
     """Deterministic review request; hashes cover exact reviewed JSON bytes."""
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(group)
     verify(group)
     check(re.fullmatch('[a-f0-9]{40}', commit) is not None, 'qualification-public-commit')
     artifacts = {'plan': group, 'snapshot': {'sha256': group['snapshot_sha256']},

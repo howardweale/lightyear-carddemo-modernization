@@ -9,6 +9,9 @@ from tools.ms94_b06_os_probe import admit
 
 
 def builder_gate(plan, context):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(plan)
+    refuse_engineering(context)
     check(isinstance(context, dict) and isinstance(plan.get('builder_boundary'), dict),
           'measurement-builder-probe-required')
     spec = plan['builder_boundary']

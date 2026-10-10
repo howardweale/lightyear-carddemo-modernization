@@ -50,6 +50,8 @@ def assemble_slot(root, run, base, slot, input_files):
     check(run.parent == (root / RUNS).resolve(), 'slot-run-path')
     check(not run.exists() and re.fullmatch(r'[a-z0-9-]+', run.name), 'slot-already-exists')
     validate_native_owner(run)
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(base, run)
     check(base['journey'] in ('J1', 'J2', 'J3') and base['model_calls'] == 0 and
           base['qualification_only'] is True, 'slot-not-qualification')
     check(base['declaration']['policy']['max_model_calls'] == 0, 'declaration-model-budget')

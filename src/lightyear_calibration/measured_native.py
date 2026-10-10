@@ -27,6 +27,9 @@ HARNESS='LightyearOperationsTest.java'
 def native_plan(root,campaign,build,builder):
     from .measured_campaign import frozen
     cp=frozen(root,campaign)
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(cp, campaign)
+    refuse_engineering(builder, build)
     require(verify_envelope(builder,JourneySigner(root).public),'Builder signature differs')
     require(file_hash(build/'workspace'/HARNESS)==builder['harness_sha256'],'Candidate changed')
     for name,field in [('prompt.json','prompt_sha256'),('proposal.json','proposal_sha256'),('events.jsonl','events_sha256')]:

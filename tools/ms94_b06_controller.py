@@ -20,6 +20,8 @@ ADMISSIONS = frozenset(('interpreter', 'packages', 'codex_binary', 'tool_runtime
 
 class Controller:
     def __init__(self, directory, tower, plan, sign, *, monotonic):
+        from tools.ms94_b06_engineering_boundary import refuse_engineering
+        refuse_engineering(plan, directory)
         verify(plan)
         require(plan['schedule'] == schedule(plan['schedule']['seed']), 'B06 schedule differs')
         require(plan['limits'] == LIMITS and plan['trial_limits'] == TRIAL_LIMITS,
@@ -158,6 +160,8 @@ class Controller:
         return deepcopy(self.active)
 
     def finish(self, row, now, *, review_root, artifacts):
+        from tools.ms94_b06_engineering_boundary import refuse_engineering
+        refuse_engineering(row, review_root)
         self.guard(now)
         require(self.active and self.monotonic() < self.active['deadline'],
                 'Trial deadline includes cleanup, signatures, archive and replay')

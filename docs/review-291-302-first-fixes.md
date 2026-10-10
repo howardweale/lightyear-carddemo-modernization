@@ -1,8 +1,8 @@
-# PRs 291â€“302 review: first corrective batch
+# PRs 291Ã¢â‚¬â€œ302 review: first corrective batch
 
 This batch implements the urgent execution hold and focused admission, cache and
 host-test fixes from Howard's October 10 review. It is not completion of the
-whole review list. Historical evidence, signed catalogues, fixture v2, B04â€“B06,
+whole review list. Historical evidence, signed catalogues, fixture v2, B04Ã¢â‚¬â€œB06,
 work/ms94, template-r1 and J1 are unchanged. No private intake, native/container
 run, model call, private-key read or machine configuration change is involved.
 
@@ -60,7 +60,7 @@ No CI or host result establishes native memory stability or qualification.
 
 ## Merge gate
 
-No merge is authorized by this build request. Howard's commit-specific approval
-and all required checks completed green on the final head are necessary. Queued,
+Howard subsequently requested publication, merging and a delivery milestone for
+this batch. All required checks completed green on the final head remain necessary. Queued,
 running, cancelled or failed required checks do not satisfy the gate. The prior
 merges are historical facts, not precedent for bypassing this rule.

@@ -183,9 +183,11 @@ def reconcile(output):
         rows.append(row)
     platform_results = probes(output/'platform')
     collation_results = collation_experiment(output/'collation')
+    from tools.legacy_twin.posting_io import probe as posting_io_probe
+    posting_io = posting_io_probe(output/'posting-io')
     from carddemo_oracle import oracle, records
     report = receipt(output/'reconciliation.json', phase='three-way-reconciliation', scenarios=rows,
-                     java=java, collation_experiment=collation_results, reference_sources={Path(m.__file__).name: sha(Path(m.__file__).read_bytes()) for m in (oracle,records)},
+                     java=java, collation_experiment=collation_results, posting_io_sha256=posting_io['content_sha256'], reference_sources={Path(m.__file__).name: sha(Path(m.__file__).read_bytes()) for m in (oracle,records)},
                      platform_probes_sha256=platform_results['content_sha256'],
                      status='engineering-report-not-release-gate', default_oracle_changed=False)
     lines = ['# Public three-way reconciliation', '', '| Scenario | Observation | Classification |', '|---|---|---|']

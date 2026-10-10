@@ -66,12 +66,11 @@ def incomplete_equipment(run, plan, receipt, public_key):
         records.append({'lane':lane,'census_sha256':census['content_sha256'],
                         'failure_sha256':failure['content_sha256'] if failure else None,
                         'event_count':len(events),'prefix_authenticated':True})
-    return {'partial_evidence':True, 'equipment_failure_audited':True,
-            'collector_prefixes':records, 'missing_artifacts':[
-                name for name in ('b06-clock-evidence.json', 'gate.json',
-                    *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
-                if not (run/name).exists()],
-            'audit_scope':'authenticated preserved evidence only; no completed-stage or provenance claim'}
+    from lightyear_evidence.completeness import partial_equipment_summary
+    required = ('b06-clock-evidence.json', 'gate.json',
+                *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
+    return partial_equipment_summary(records, required, (name for name in required if (run/name).exists()))
+
 
 
 def replay_pair(root, run, public_key):

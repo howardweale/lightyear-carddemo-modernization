@@ -169,8 +169,8 @@ def execute_pair(root, run, signer):
             except Exception as exc:
                 emit('J1-observer-publication-failure', {'lane': observer.lane, 'exception_type': type(exc).__name__})
                 error = error or failure_record(exc)
-    if not cleaned['complete']:
-        error = {'kind': 'equipment-failure', 'exception_type': 'CleanupIncomplete'}
+    from lightyear_evidence.completeness import cleanup_error
+    error = cleanup_error(error, cleaned['complete'])
     if error is None:
         if any(x['exit_code'] == 124 for x in executions.values()):
             error = {'kind': 'candidate-timeout', 'exception_type': 'CandidateTimeout', 'closed_reason': 'candidate-timeout'}

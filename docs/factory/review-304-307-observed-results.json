@@ -1,0 +1,263 @@
+{
+  "artifact_hashes": {
+    "acceptance": "a28664ab3c24755e0bfaa804448d3abe0200cc88f42aa7ecb222ad3d9eb9774c",
+    "collation": "46c40080de8a6fe9e4a5b347b1946e989923362c66f813315ad6e948b220a57b",
+    "posting_io": "ec6ecfc1cd973e8be12d0179013fd10dff4881332f26a3b6d273af04cfd60377"
+  },
+  "binary_count": 10,
+  "binary_hashes": {
+    "INTCALC/bin/ACCTFILE": "b45d5f302a3f08e84f36302161888c82b3349dd8b4652a297a4c763770712615",
+    "INTCALC/bin/DISCGRP": "3088e48aadfe05ce00c53e576dbf35529a32b4066e41f7f720f7d2ddc7713a38",
+    "INTCALC/bin/TCATBALF": "61aa5b76ede9d05bd20516ea42b16762b5c14dee7d2ec2e8d5b6c10df651eba0",
+    "INTCALC/bin/XREFFILE": "a9685da989973e4c70f2319750a7cf6e163e37fd185e1772a6d1ca498a77321e",
+    "INTCALC/bin/twin": "43db5ae6385793886d853be06cbdb01b887175aa9beebf3f420a2d5e5111d7d9",
+    "POSTTRAN/bin/ACCTFILE": "b45d5f302a3f08e84f36302161888c82b3349dd8b4652a297a4c763770712615",
+    "POSTTRAN/bin/TCATBALF": "61aa5b76ede9d05bd20516ea42b16762b5c14dee7d2ec2e8d5b6c10df651eba0",
+    "POSTTRAN/bin/TRANFILE": "00cbbfc30a15f8056561fba873797e9d05b9028e429f99c52df31cd8e29db355",
+    "POSTTRAN/bin/XREFFILE": "e3421e7da49a6fcdde7157e0a93ff51346fe50821a18dce42bf4ba1900d8d448",
+    "POSTTRAN/bin/twin": "aadd79d6a7bf241c5976dda38663b27ceea04d2d5195dd4b319138a2c9563e7e"
+  },
+  "collation": {
+    "native-ascii": {
+      "merge": "Aa",
+      "sort": "0Aa",
+      "source_sha256": "611860d6802cad45ab88a35235536f70c4b5efa92eca403f03f6612570aa7fba",
+      "stdout": "LITERAL=A-before-a\nDATA=A-before-a\nINDEX=0\nINDEX=A\nINDEX=a\n"
+    },
+    "program-ebcdic": {
+      "merge": "aA",
+      "sort": "aA0",
+      "source_sha256": "7c14d5157969e5fd97603329b757cb7f2290e5f61fe9794a1451a819bdb9d1f1",
+      "stdout": "LITERAL=A-before-a\nDATA=a-before-A\nINDEX=0\nINDEX=A\nINDEX=a\n"
+    }
+  },
+  "measurement_credit": false,
+  "posting_io": {
+    "ACCTFILE": {
+      "key_length": 11,
+      "observed": {
+        "DUPLICATE": "22",
+        "NOT-FOUND": "23",
+        "READ": "00",
+        "REWRITE": "00",
+        "WRITE": "00",
+        "WRITE-NEW": "00"
+      },
+      "record_length": 300,
+      "source_sha256": "96d034981b86afbfd6c3f2d29247447746dafd0ae024b4179fca64f6617df3bd",
+      "zos_confirmation": false
+    },
+    "TCATBALF": {
+      "key_length": 17,
+      "observed": {
+        "DUPLICATE": "22",
+        "NOT-FOUND": "23",
+        "READ": "00",
+        "REWRITE": "00",
+        "WRITE": "00",
+        "WRITE-NEW": "00"
+      },
+      "record_length": 50,
+      "source_sha256": "82883f56c35c8b83a2306b3207173de2cbced376749925d6e4721b28047052f6",
+      "zos_confirmation": false
+    },
+    "TRANFILE": {
+      "key_length": 16,
+      "observed": {
+        "DUPLICATE": "22",
+        "NOT-FOUND": "23",
+        "READ": "00",
+        "REWRITE": "00",
+        "WRITE": "00",
+        "WRITE-NEW": "00"
+      },
+      "record_length": 350,
+      "source_sha256": "b706cf01ef802bad71f4b4d05c4322e01a3c5e9f4fe108d2867af855e702eb73",
+      "zos_confirmation": false
+    }
+  },
+  "posttran": {
+    "posttran-expired-account": {
+      "invariants": {
+        "failures": [],
+        "human_review": "pending",
+        "inputs": 1,
+        "java_second_opinion": "unavailable",
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "passed": true,
+        "posted": 0,
+        "rejected": 1,
+        "releasable": false,
+        "repeatability": "requires-separate-second-run",
+        "schema": "posttran-independent-invariants/1",
+        "zos_confirmation": false
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "f8c7028069f142bb47393f2d70c44950fb91d0ac10450fe0416d3c7078441492"
+        },
+        "DALYREJS": {
+          "records": 1,
+          "sha256": "163b68e6cdeb9536bcd05f6a28567f7c4962eec51eb0d50262a7dc1a6ced8d1c"
+        },
+        "DALYTRAN": {
+          "records": 1,
+          "sha256": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df"
+        },
+        "TCATBALF": {
+          "records": 50,
+          "sha256": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71"
+        },
+        "TRANFILE": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "repeatability": "byte-identical"
+    },
+    "posttran-missing-account": {
+      "invariants": {
+        "failures": [],
+        "human_review": "pending",
+        "inputs": 1,
+        "java_second_opinion": "unavailable",
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "passed": true,
+        "posted": 0,
+        "rejected": 1,
+        "releasable": false,
+        "repeatability": "requires-separate-second-run",
+        "schema": "posttran-independent-invariants/1",
+        "zos_confirmation": false
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+        },
+        "DALYREJS": {
+          "records": 1,
+          "sha256": "951cdccf76a3ebfc29a62af4c1330d70c46e2cab4d06136a249787671d0d968a"
+        },
+        "DALYTRAN": {
+          "records": 1,
+          "sha256": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df"
+        },
+        "TCATBALF": {
+          "records": 50,
+          "sha256": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71"
+        },
+        "TRANFILE": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "942e2a172840e615a0d4351df94322c3953e54b7fab51caf1fb38723b8f96be0"
+        }
+      },
+      "repeatability": "byte-identical"
+    },
+    "posttran-missing-card": {
+      "invariants": {
+        "failures": [],
+        "human_review": "pending",
+        "inputs": 1,
+        "java_second_opinion": "unavailable",
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "passed": true,
+        "posted": 0,
+        "rejected": 1,
+        "releasable": false,
+        "repeatability": "requires-separate-second-run",
+        "schema": "posttran-independent-invariants/1",
+        "zos_confirmation": false
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+        },
+        "DALYREJS": {
+          "records": 1,
+          "sha256": "a93865911716340183f371c1f8d3d4dbd2bcf6052cc17c63c58ea0793fe4b558"
+        },
+        "DALYTRAN": {
+          "records": 1,
+          "sha256": "466093ef4c07a443de460bf03a641c051fd671f3770e5d2a78966de1f8fa7b9e"
+        },
+        "TCATBALF": {
+          "records": 50,
+          "sha256": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71"
+        },
+        "TRANFILE": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "repeatability": "byte-identical"
+    },
+    "posttran-public": {
+      "invariants": {
+        "failures": [],
+        "human_review": "pending",
+        "inputs": 300,
+        "java_second_opinion": "unavailable",
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "passed": true,
+        "posted": 262,
+        "rejected": 38,
+        "releasable": false,
+        "repeatability": "requires-separate-second-run",
+        "schema": "posttran-independent-invariants/1",
+        "zos_confirmation": false
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "173a21a83b4550cf24863c4b1dc1667cf827510caea403b6934b306c39154734"
+        },
+        "DALYREJS": {
+          "records": 38,
+          "sha256": "730af35c0e8d4cc28e6c205c562a32e623dfc858ef6843ec8530cec6933ac68e"
+        },
+        "DALYTRAN": {
+          "records": 300,
+          "sha256": "1605206de7009cba771a921bf13f4dfcd1673fc13f1b844150355e9a95fa8da3"
+        },
+        "TCATBALF": {
+          "records": 100,
+          "sha256": "b2a8654114a60e095b8c0a5fc4276a9def34494e240d9c7a973096227730df5f"
+        },
+        "TRANFILE": {
+          "records": 262,
+          "sha256": "3b676ae400a11cbd3572a327c5116ab2cf43e25e311687cd8d35ea803f284e3a"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "repeatability": "byte-identical"
+    }
+  },
+  "public_twin_ci": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372569",
+  "qualification_credit": false,
+  "reconciliation_ci": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372644",
+  "releasable": false,
+  "source_head": "6c0f2a817d94f0df306cc33556f82bf0070597e4",
+  "zos_confirmation": false
+}

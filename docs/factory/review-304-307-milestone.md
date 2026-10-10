@@ -83,3 +83,7 @@ through the real twin, with repeated byte comparisons and invariant checks.
 Their CI review sheets supplement the original public sample; no agent signs
 the pending human review. Reason109 is a runtime REWRITE anomaly, not an input
 validation outcome that can honestly be manufactured as a successful run.
+
+## Observed hosted validation
+
+[Real twin](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372569) and [reconciliation](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372644) completed green on6c0f2a8. Ten binaries matched across clean builds. All four POSTTRAN scenarios had passing invariants and byte-identical repeat outputs. The completed real Spring-context test and forced snapshot fallback passed. [Result record](review-304-307-observed-results.json) preserves hashes and observations; these are focused results, not a declaration that the eventual PR final head is wholly green. The ten-record unsigned public sample now covers100/101/102/103 and posted amount extremes. General collation equivalence remains disproven by indexed order and literal comparison.

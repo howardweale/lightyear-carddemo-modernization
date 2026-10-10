@@ -77,3 +77,7 @@ installer and `python -B -m tools.check_legacy_twin <fresh-output>`. Compare eve
 receipts. Matching compiler packages alone do not pin linker, libc, architecture
 or all transitive build inputs, so a mismatch needs investigation rather than an
 assumption of compiler nondeterminism.
+
+## Observed pinned 3.1.2 collation result
+
+[Hosted experiment](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372644): native runtime-data and literal comparisons both A-before-a; explicit EBCDIC runtime-data comparison a-before-A, but literal comparison still A-before-a. SORT changed from0Aa to aA0; MERGE of two valid one-record inputs changed fromAa to aA. Indexed READ NEXT remained0Aa in both. Thus program collation alone is insufficient for general z/OS equivalence. [Observed results](review-304-307-observed-results.json) retain the source and artifact hashes. Original source remains unchanged.

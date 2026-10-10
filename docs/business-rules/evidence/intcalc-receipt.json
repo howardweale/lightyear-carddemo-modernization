@@ -1,0 +1,123 @@
+{
+  "schema": "lightyear-rule-verdict/1",
+  "evaluator_version": "lightyear-rule-evaluator/1",
+  "rule_set_sha256": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019",
+  "records_sha256": "83af070853671fbd1455168dca306e1de055b93c1bc6adeffd883c62eb80ed05",
+  "visibility": "public-development",
+  "record_count": 50,
+  "rules": [
+    {
+      "id": "rule:intcalc:account-boundary",
+      "status": "verified",
+      "applicable_count": 49,
+      "agree_count": 49,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:account-update",
+      "status": "verified",
+      "applicable_count": 49,
+      "agree_count": 49,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:default-rate",
+      "status": "verified",
+      "applicable_count": 50,
+      "agree_count": 50,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:disclosure-rate",
+      "status": "untested",
+      "applicable_count": 0,
+      "agree_count": 0,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:fixed-width-contract",
+      "status": "verified",
+      "applicable_count": 50,
+      "agree_count": 50,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:interest-transaction",
+      "status": "verified",
+      "applicable_count": 50,
+      "agree_count": 50,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:monthly-interest",
+      "status": "verified",
+      "applicable_count": 50,
+      "agree_count": 50,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:nonzero-rate-emission",
+      "status": "verified",
+      "applicable_count": 50,
+      "agree_count": 50,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:source-final-account",
+      "status": "verified",
+      "applicable_count": 1,
+      "agree_count": 1,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    },
+    {
+      "id": "rule:intcalc:zero-rate",
+      "status": "untested",
+      "applicable_count": 0,
+      "agree_count": 0,
+      "disagree_count": 0,
+      "indeterminate_count": 0,
+      "first_disagreement": null,
+      "reasons": []
+    }
+  ],
+  "status_counts": {
+    "untested": 2,
+    "verified": 8
+  },
+  "model_calls": 0,
+  "limitation": "Statuses describe only these captured records; no mainframe equivalence claim.",
+  "evaluator_sha256": "eabd0343505d3a150d3ebe8de729084e2b1f787799816c0f5df44f44e84b00fb",
+  "content_sha256": "e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "80d1c6f7ba7b78c2a26cc2d4c5a2157d9db6f30ef60e43fade5f34fe1884dfc1",
+    "value": "T9/NzxwnIoeb+1na14GzIwXv1/3O3NAsSQKTmFjCC4l3P1kC2EIx80+v2Xoy/7jnNYisvqBPOpcqPB7nWudEDA=="
+  }
+}

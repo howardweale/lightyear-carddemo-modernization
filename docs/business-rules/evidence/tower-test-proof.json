@@ -1,0 +1,174 @@
+{
+  "schema": "tower-decision-proof/1",
+  "decision_sha256": "278775d8deece0c9f6f980df34a03465a07c808fe9b4a78f40d8d1dbc36d3e26",
+  "journal": {
+    "record_type": "tower-journal-export/1",
+    "scope": "business-rules-demo",
+    "events": [
+      {
+        "actor": {
+          "id": "local-authority-administrator",
+          "kind": "service",
+          "name": "Local authority administration"
+        },
+        "content_sha256": "4ee405cc1bde056894fd2cba443114cb95c3bc6441fd5714aa7dcde2f1b7c9a1",
+        "kind": "roles_assigned",
+        "occurred_at": "2026-10-10T13:50:08.540973+00:00",
+        "payload": {
+          "actor_id": "demo-customer",
+          "reason": "Temporary acceptance fixture only",
+          "roles": [
+            "business-owner",
+            "operator"
+          ],
+          "scope": "business-rules-demo",
+          "workloads": [
+            "workload:carddemo-intcalc"
+          ]
+        },
+        "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "record_type": "control-tower-decision-event",
+        "schema_version": "1.0",
+        "sequence": 1,
+        "session_id": null,
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+          "value": "D3PPUZYXmjXzxjHoHeOeoTuYVGphoCDKadMEjn8JSkBz4/drLE+AKmXQaENVNlfWaol2mYsTocWns7V9dsNvCA=="
+        }
+      },
+      {
+        "actor": {
+          "id": "demo-customer",
+          "kind": "customer",
+          "name": "DEMO customer approver"
+        },
+        "content_sha256": "d1bfdf7fbf6822164506ccea3eda8aab8a91067bd953464336da7b936dea95cd",
+        "kind": "session_started",
+        "occurred_at": "2026-10-10T13:50:08.546488+00:00",
+        "payload": {
+          "authentication": "individual-local-credential",
+          "expires_at": "2026-10-10T14:50:08.546488+00:00",
+          "scope": "business-rules-demo"
+        },
+        "previous_sha256": "4ee405cc1bde056894fd2cba443114cb95c3bc6441fd5714aa7dcde2f1b7c9a1",
+        "record_type": "control-tower-decision-event",
+        "schema_version": "1.0",
+        "sequence": 2,
+        "session_id": "c8a6b825-331b-47c0-b2fa-9fa419a75584",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+          "value": "jwAMKi6xjQtURBxAXW0m7a50l/n7+DVsxjuwJ5m0IeoX28vb784esBuO9k5KyrX8yhLaxN0ZOc5crlgKX/SRBg=="
+        }
+      },
+      {
+        "actor": {
+          "id": "demo-customer",
+          "kind": "customer",
+          "name": "DEMO customer approver"
+        },
+        "content_sha256": "7e3269945bf7c7c89e1c360641b3635ff0999a15f5a7375641b5fc0abe2027bb",
+        "kind": "tower_item_viewed",
+        "occurred_at": "2026-10-10T13:50:08.561500+00:00",
+        "payload": {
+          "bound": {
+            "receipt": "9529d441645e5c5e6966e23c175fc0af492e19f309e688132c8a5795c9740e21",
+            "request": "56d834eca031bd6942be34520e16c26628080a261a4c0855ce485596c05b716f",
+            "rule": "310bbe0008a9ccf5896763864ff8a2a55065edf103b022b0eb532242d047adb4",
+            "rule_set": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019"
+          },
+          "item_id": "business-rule-5f4ca0e6794b4f908728fd4a2b2c1204",
+          "previous_decision_sha256": null,
+          "previous_decisions_by_role": {
+            "business-owner": null
+          },
+          "scope": "business-rules-demo"
+        },
+        "previous_sha256": "d1bfdf7fbf6822164506ccea3eda8aab8a91067bd953464336da7b936dea95cd",
+        "record_type": "control-tower-decision-event",
+        "schema_version": "1.0",
+        "sequence": 3,
+        "session_id": "c8a6b825-331b-47c0-b2fa-9fa419a75584",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+          "value": "BqHUtOhWOToCeDOg9a+z5ObkZ2E5/m4cbxUmKBiv61C/vBLxzKU1UXtMo6KlLNy5WdayRxQtbVAlDZV2vtpBAg=="
+        }
+      },
+      {
+        "actor": {
+          "id": "demo-customer",
+          "kind": "customer",
+          "name": "DEMO customer approver"
+        },
+        "content_sha256": "278775d8deece0c9f6f980df34a03465a07c808fe9b4a78f40d8d1dbc36d3e26",
+        "kind": "tower_decision",
+        "occurred_at": "2026-10-10T13:50:08.595282+00:00",
+        "payload": {
+          "actor": {
+            "id": "demo-customer",
+            "kind": "customer",
+            "name": "DEMO customer approver"
+          },
+          "authentication": "individual-local-credential",
+          "bound": {
+            "receipt": "9529d441645e5c5e6966e23c175fc0af492e19f309e688132c8a5795c9740e21",
+            "request": "56d834eca031bd6942be34520e16c26628080a261a4c0855ce485596c05b716f",
+            "rule": "310bbe0008a9ccf5896763864ff8a2a55065edf103b022b0eb532242d047adb4",
+            "rule_set": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019"
+          },
+          "channel": "control-tower",
+          "decider_is_proposer": true,
+          "decision_slot": null,
+          "independence": "operator-review",
+          "item_id": "business-rule-5f4ca0e6794b4f908728fd4a2b2c1204",
+          "kind": "business-rule-disposition",
+          "kind_version": 1,
+          "named_owner": "DEMO customer approver",
+          "outcome": "preserve",
+          "previous_decision_sha256": null,
+          "proposed_by": "demo-customer",
+          "reason": "TEST FIXTURE: proves gate only; does not authorize customer or production behaviour",
+          "request_id": "eed9ae8d-279c-4391-b413-e57f62d4db2b",
+          "request_sha256": "8191224ef3562b3db08cc2a25d9e8b0a7ec5e5cf295bbbb5775ba1e4268169a6",
+          "review_after": "2026-10-15",
+          "roles_held": [
+            "business-owner",
+            "operator"
+          ],
+          "schema": "tower-decision/1",
+          "scope": "business-rules-demo",
+          "session_id": "c8a6b825-331b-47c0-b2fa-9fa419a75584",
+          "signature_type": "Service countersignature of authenticated operator intent",
+          "validation": {
+            "operator_review": true,
+            "passed": true,
+            "receipt_sha256": "e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075",
+            "rule_id": "rule:intcalc:source-final-account"
+          },
+          "verdict_changed": false
+        },
+        "previous_sha256": "7e3269945bf7c7c89e1c360641b3635ff0999a15f5a7375641b5fc0abe2027bb",
+        "record_type": "control-tower-decision-event",
+        "schema_version": "1.0",
+        "sequence": 4,
+        "session_id": "c8a6b825-331b-47c0-b2fa-9fa419a75584",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+          "value": "ODELX24XXSLUvZyBfR6iJmsf6Sx4a9TCv7MPE90nneErte7+ubC74EJ8kPPCufjpwls4iWUoA8kYtF3VBdbVCA=="
+        }
+      }
+    ],
+    "exported_at": "2026-10-10T13:50:08.600563+00:00",
+    "journal_head_sha256": "278775d8deece0c9f6f980df34a03465a07c808fe9b4a78f40d8d1dbc36d3e26",
+    "signature_type": "Service countersignature of authenticated operator intent",
+    "content_sha256": "d0137187344ba4e2c17964b594307fa22f58b77298b1ae2347985f2596708e17",
+    "signature": {
+      "algorithm": "Ed25519",
+      "key_id": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+      "value": "U36agM1hK2Vpteebs7zs8N7/g0HUb6TA5PIPFYgopkcWnhMENjeLo/VbueliLPzleepB5487bAPs82Y0wKzwDg=="
+    }
+  }
+}

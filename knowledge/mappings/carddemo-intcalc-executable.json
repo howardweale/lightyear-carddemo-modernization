@@ -1,0 +1,1131 @@
+{
+  "schema_version": "1.0",
+  "workloads": [
+    {
+      "id": "workload:carddemo-intcalc",
+      "name": "CardDemo interest calculation",
+      "status": "verified-candidate",
+      "visibility": "shared",
+      "legacy_entrypoints": [
+        "legacy:cobol-program:CBACT04C"
+      ],
+      "modern_entrypoints": [
+        "modern:java-type:ai.lightyear.carddemo.service.InterestCalculationService",
+        "modern:java-type:ai.lightyear.carddemo.batch.InterestCalculationTasklet"
+      ],
+      "scheduled_by": [
+        "legacy:jcl-job:INTCALC"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:intcalc:synthetic-differential",
+          "name": "Synthetic source-faithful differential run",
+          "kind": "differential",
+          "status": "passing",
+          "visibility": "shared"
+        },
+        {
+          "id": "scenario:intcalc:upstream-ascii-differential",
+          "name": "Pinned upstream ASCII differential run",
+          "kind": "differential",
+          "status": "passing",
+          "visibility": "shared"
+        },
+        {
+          "id": "scenario:intcalc:private-holdout-boundary",
+          "name": "Private legacy execution holdouts",
+          "kind": "differential-holdout",
+          "status": "planned",
+          "visibility": "inspector_private"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule:intcalc:account-boundary",
+          "name": "Group category balances by account",
+          "statement": "When the account identifier changes, persist the previous account total, reset accumulated interest, and load the new account and card cross-reference.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 194,
+              "line_end": 205
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVTRA01Y"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+            "legacy:copybook:CVACT01Y"
+          ],
+          "bindings": {
+            "input.before_balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "input.boundary": {
+              "node": "legacy:copybook:CVTRA01Y"
+            },
+            "input.total": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "output.account_present": {
+              "node": "legacy:copybook:CVACT01Y"
+            },
+            "output.balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.credit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.debit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            }
+          },
+          "executable": {
+            "form": "sequence_predicate",
+            "when": {
+              "field": "input.boundary"
+            },
+            "condition": {
+              "op": "and",
+              "args": [
+                {
+                  "field": "output.account_present"
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.balance"
+                    },
+                    {
+                      "assign": {
+                        "op": "add",
+                        "args": [
+                          {
+                            "field": "input.before_balance"
+                          },
+                          {
+                            "field": "input.total"
+                          }
+                        ]
+                      },
+                      "type": {
+                        "pic": "S9(10)V99"
+                      },
+                      "rounding": "truncate"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.credit"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.debit"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:disclosure-rate",
+          "name": "Resolve account-group disclosure rate",
+          "statement": "Use the account group, transaction type, and category to obtain the applicable annual disclosure rate.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 210,
+              "line_end": 213
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:upstream-ascii-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+            "legacy:copybook:CVTRA02Y"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10"
+          ],
+          "bindings": {
+            "input.balance": {
+              "node": "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "input.fallback": {
+              "node": "legacy:copybook:CVTRA02Y"
+            },
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.amount": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            }
+          },
+          "executable": {
+            "form": "expression",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "ne",
+                  "args": [
+                    {
+                      "field": "input.rate"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                },
+                {
+                  "op": "not",
+                  "args": [
+                    {
+                      "field": "input.fallback"
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "op": "div",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "field": "input.balance"
+                    },
+                    {
+                      "field": "input.rate"
+                    }
+                  ]
+                },
+                {
+                  "number": "1200"
+                }
+              ]
+            },
+            "output": "output.amount",
+            "target_type": {
+              "pic": "S9(09)V99"
+            },
+            "rounding": "truncate"
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:default-rate",
+          "name": "Fallback to the default disclosure group",
+          "statement": "If the account-group disclosure is missing, retry the lookup using the DEFAULT group and fail if that record is also missing.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1200-GET-INTEREST-RATE",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 415,
+              "line_end": 459
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+            "legacy:copybook:CVTRA02Y"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10"
+          ],
+          "bindings": {
+            "input.balance": {
+              "node": "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "input.fallback": {
+              "node": "legacy:copybook:CVTRA02Y"
+            },
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.amount": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            }
+          },
+          "executable": {
+            "form": "expression",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "ne",
+                  "args": [
+                    {
+                      "field": "input.rate"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                },
+                {
+                  "field": "input.fallback"
+                }
+              ]
+            },
+            "value": {
+              "op": "div",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "field": "input.balance"
+                    },
+                    {
+                      "field": "input.rate"
+                    }
+                  ]
+                },
+                {
+                  "number": "1200"
+                }
+              ]
+            },
+            "output": "output.amount",
+            "target_type": {
+              "pic": "S9(09)V99"
+            },
+            "rounding": "truncate"
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:zero-rate",
+          "name": "Skip zero-rate categories",
+          "statement": "A zero disclosure rate creates no interest transaction and contributes no interest to the account.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 214,
+              "line_end": 217
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#zeroRateEmitsNoTransaction"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "bindings": {
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.amount": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "output.present": {
+              "node": "legacy:copybook:CVTRA05Y"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.rate"
+                },
+                {
+                  "number": "0"
+                }
+              ]
+            },
+            "condition": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "not",
+                  "args": [
+                    {
+                      "field": "output.present"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.amount"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:monthly-interest",
+          "name": "Calculate monthly interest",
+          "statement": "Monthly interest is category balance multiplied by annual percentage rate, divided by 1200, and represented with COBOL-compatible two-decimal truncation.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 462,
+              "line_end": 468
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:upstream-ascii-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10"
+          ],
+          "bindings": {
+            "input.balance": {
+              "node": "legacy:cobol-field:CVTRA01Y:TRAN-CAT-BAL:9",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.amount": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            }
+          },
+          "executable": {
+            "form": "expression",
+            "when": {
+              "op": "ne",
+              "args": [
+                {
+                  "field": "input.rate"
+                },
+                {
+                  "number": "0"
+                }
+              ]
+            },
+            "value": {
+              "op": "div",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "field": "input.balance"
+                    },
+                    {
+                      "field": "input.rate"
+                    }
+                  ]
+                },
+                {
+                  "number": "1200"
+                }
+              ]
+            },
+            "output": "output.amount",
+            "target_type": {
+              "pic": "S9(09)V99"
+            },
+            "rounding": "truncate"
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:interest-transaction",
+          "name": "Emit an interest transaction",
+          "statement": "For every non-zero monthly interest amount, write a system transaction with a deterministic processing-date identifier and the account card number.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1300-B-WRITE-TX",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 473,
+              "line_end": 500
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVACT03Y"
+          ],
+          "outputs": [
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "bindings": {
+            "input.account": {
+              "node": "legacy:copybook:CVACT01Y"
+            },
+            "input.card": {
+              "node": "legacy:copybook:CVACT03Y"
+            },
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.card": {
+              "node": "legacy:copybook:CVTRA05Y"
+            },
+            "output.category": {
+              "node": "legacy:copybook:CVTRA05Y"
+            },
+            "output.description": {
+              "node": "legacy:copybook:CVTRA05Y"
+            },
+            "output.present": {
+              "node": "legacy:copybook:CVTRA05Y"
+            },
+            "output.source": {
+              "node": "legacy:copybook:CVTRA05Y"
+            },
+            "output.type": {
+              "node": "legacy:copybook:CVTRA05Y"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "ne",
+              "args": [
+                {
+                  "field": "input.rate"
+                },
+                {
+                  "number": "0"
+                }
+              ]
+            },
+            "condition": {
+              "op": "and",
+              "args": [
+                {
+                  "field": "output.present"
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.card"
+                    },
+                    {
+                      "field": "input.card"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.type"
+                    },
+                    {
+                      "literal": "01"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.category"
+                    },
+                    {
+                      "literal": "0005"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.source"
+                    },
+                    {
+                      "literal": "System"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.description"
+                    },
+                    {
+                      "op": "concat",
+                      "args": [
+                        {
+                          "literal": "Int. for a/c "
+                        },
+                        {
+                          "field": "input.account"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:account-update",
+          "name": "Apply accumulated interest and reset cycle totals",
+          "statement": "Add accumulated interest to the current balance, reset current-cycle credit and debit to zero, and rewrite the account record.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1050-UPDATE-ACCOUNT",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 350,
+              "line_end": 356
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVTRA01Y"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+            "legacy:copybook:CVACT01Y"
+          ],
+          "bindings": {
+            "input.before_balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "input.boundary": {
+              "node": "legacy:copybook:CVTRA01Y"
+            },
+            "input.total": {
+              "node": "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+              "type": {
+                "pic": "S9(09)V99"
+              }
+            },
+            "output.account_present": {
+              "node": "legacy:copybook:CVACT01Y"
+            },
+            "output.balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.credit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.debit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "field": "input.boundary"
+            },
+            "condition": {
+              "op": "and",
+              "args": [
+                {
+                  "field": "output.account_present"
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.balance"
+                    },
+                    {
+                      "assign": {
+                        "op": "add",
+                        "args": [
+                          {
+                            "field": "input.before_balance"
+                          },
+                          {
+                            "field": "input.total"
+                          }
+                        ]
+                      },
+                      "type": {
+                        "pic": "S9(10)V99"
+                      },
+                      "rounding": "truncate"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.credit"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.debit"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:source-final-account",
+          "name": "Preserve source final-account EOF behavior",
+          "statement": "In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 188,
+              "line_end": 221
+            },
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 325,
+              "line_end": 340
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#intendedPolicyUpdatesFinalAccount",
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+            "legacy:cobol-program:CBACT04C"
+          ],
+          "outputs": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+            "legacy:copybook:CVACT01Y"
+          ],
+          "bindings": {
+            "input.before_balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "input.before_credit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "input.before_debit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.account_present": {
+              "node": "legacy:copybook:CVACT01Y"
+            },
+            "output.balance": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.credit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-CREDIT:13",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "output.debit": {
+              "node": "legacy:cobol-field:CVACT01Y:ACCT-CURR-CYC-DEBIT:14",
+              "type": {
+                "pic": "S9(10)V99"
+              }
+            },
+            "position.last": {
+              "node": "legacy:cobol-program:CBACT04C"
+            }
+          },
+          "executable": {
+            "form": "sequence_predicate",
+            "when": {
+              "field": "position.last"
+            },
+            "condition": {
+              "op": "and",
+              "args": [
+                {
+                  "field": "output.account_present"
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.balance"
+                    },
+                    {
+                      "field": "input.before_balance"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.credit"
+                    },
+                    {
+                      "field": "input.before_credit"
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "output.debit"
+                    },
+                    {
+                      "field": "input.before_debit"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "defect-candidate",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:fixed-width-contract",
+          "name": "Preserve fixed-width record contracts",
+          "statement": "Read and write the account, disclosure, cross-reference, category-balance, and transaction layouts with their pinned field positions and COBOL signed-zoned decimal representation.",
+          "confidence": "asserted",
+          "derived_from": [
+            {
+              "node": "legacy:copybook:CVACT01Y",
+              "path": "app/cpy/CVACT01Y.cpy",
+              "line_start": 1,
+              "line_end": 80
+            },
+            {
+              "node": "legacy:copybook:CVTRA05Y",
+              "path": "app/cpy/CVTRA05Y.cpy",
+              "line_start": 1,
+              "line_end": 80
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#parseAccount",
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#renderAccount",
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#renderTransaction",
+            "modern:java-method:ai.lightyear.carddemo.codec.ZonedDecimal#decode",
+            "modern:java-method:ai.lightyear.carddemo.codec.ZonedDecimal#encode"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.codec.ZonedDecimalTest#positiveRoundTrip",
+            "modern:test:ai.lightyear.carddemo.codec.ZonedDecimalTest#negativeRoundTrip",
+            "scenario:intcalc:upstream-ascii-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [],
+          "outputs": [
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "bindings": {
+            "output.contract": {
+              "node": "legacy:copybook:CVTRA05Y"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "literal": true
+            },
+            "condition": {
+              "field": "output.contract"
+            }
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        },
+        {
+          "id": "rule:intcalc:nonzero-rate-emission",
+          "name": "Emit for every nonzero rate",
+          "statement": "A nonzero disclosure rate emits an interest transaction even when truncation makes its amount zero.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 214,
+              "line_end": 217
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "scenario:intcalc:synthetic-differential"
+          ],
+          "schema": "lightyear-business-rule/1",
+          "workload": "workload:carddemo-intcalc",
+          "kind": "decision",
+          "inputs": [
+            "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9"
+          ],
+          "outputs": [
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "bindings": {
+            "input.rate": {
+              "node": "legacy:cobol-field:CVTRA02Y:DIS-INT-RATE:9",
+              "type": {
+                "pic": "S9(04)V99"
+              }
+            },
+            "output.present": {
+              "node": "legacy:copybook:CVTRA05Y"
+            }
+          },
+          "executable": {
+            "form": "decision_table",
+            "when": {
+              "literal": true
+            },
+            "output": "output.present",
+            "rows": [
+              {
+                "when": {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "field": "input.rate"
+                    },
+                    {
+                      "number": "0"
+                    }
+                  ]
+                },
+                "then": {
+                  "literal": false
+                }
+              },
+              {
+                "else": {
+                  "literal": true
+                }
+              }
+            ]
+          },
+          "provenance": "source-observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null
+        }
+      ]
+    }
+  ]
+}

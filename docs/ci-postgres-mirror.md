@@ -49,3 +49,11 @@ No image digest, runtime configuration or test assertion changes.
 Validation: 12 focused mocked image-acquisition and existing Customer startup tests
 passed in 2.235 seconds. Actual Docker startup remains a hosted CI check; no local
 Docker command was used. The prior exit-125 failure remains recorded.
+
+The repaired source-build/customer-startup job and SQL-recovery job both passed
+in hosted run [38084084989](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38084084989)
+on October 10. All 25 checks passed on implementation head
+`522e23ed4ad1104ed1e9ca53443c0318e3078ebf`. PR #300 merged after the fixture-attribute
+integration described in [the delivery milestone](oct10-rules-evidence-delivery-milestone.md).
+This verifies the new startup path; it does not establish the lost stderr from the
+historical exit-125 failure.

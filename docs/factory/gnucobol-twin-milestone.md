@@ -94,3 +94,17 @@ do not inherit the preload. No binary bytes or checks are edited after compilati
 Both clean builds must still match exactly. The first failed artifact is preserved.
 See [GnuCOBOL release notes](https://sourceforge.net/projects/gnucobol/files/gnucobol/)
 and [libfaketime scope documentation](https://github.com/wolfcw/libfaketime).
+
+The compiler-clock run 38089237223 removed all timestamp differences; the only
+remaining differing bytes were the linker's 20-byte GNU build ID (offsets 888–907
+in each ELF binary). Linking now explicitly uses `--build-id=none`, recorded in
+flags. Binary comparison still covers every byte, with no post-build stripping
+or normalization by this driver.
+
+The first real scenario executions also exposed a clock-adapter defect:
+`COB_CURRENT_DATE` without a fractional part leaves live nanoseconds in 3.1.2.
+Both INTCALC transaction timestamps consequently differed from Python/Java;
+all other compared output fields matched. The adapter now supplies an explicit
+nine-digit zero fraction. Outputs/fixtures are not rewritten and the exact
+transaction-timestamp assertion remains required. Original mismatch artifacts
+are retained under hosted run 38088862638.

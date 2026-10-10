@@ -16,7 +16,7 @@ from .zos_bindings import ROOT, load_bindings, dataset_binding
 SOURCE_COMMIT = "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
 SOURCE_TREE = "a1253e31c839f78d1f185b01771ba956da63b005"
 PACKAGE_VERSION = "3.1.2-5.1ubuntu1"
-FLAGS = ["-std=ibm", "-fsign=EBCDIC", "-O2"]
+FLAGS = ["-std=ibm", "-fsign=EBCDIC", "-O2", "-Q", "-Wl,--build-id=none"]
 PROGRAMS = {"INTCALC": "CBACT04C", "POSTTRAN": "CBTRN02C"}
 # Fixed layouts and physical keys copied from the pinned SELECT/FD declarations.
 FILES = {
@@ -361,7 +361,7 @@ def run(target, scenario, output):
     timestamp = meta["candidate_timestamp"]
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}\.[0-9]{2}\.[0-9]{2}\.000000", timestamp):
         raise ValueError("unsupported deterministic timestamp")
-    env["COB_CURRENT_DATE"] = timestamp[:10].replace("-", "/") + " " + timestamp[11:19].replace(".", ":")
+    env["COB_CURRENT_DATE"] = timestamp[:10].replace("-", "/") + " " + timestamp[11:19].replace(".", ":") + ".000000000"
     env["TWIN_PROCESSING_DATE"] = meta.get("processing_date") or "0000000000"
     result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12))
     outputs = {}

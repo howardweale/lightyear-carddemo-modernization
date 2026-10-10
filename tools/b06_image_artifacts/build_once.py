@@ -5,6 +5,7 @@ Only the enumerated probe .class differs, and its bytes require separate evidenc
 """
 import copy,hashlib,json,re
 from pathlib import Path
+from lightyear_evidence.build_once import descriptor, compare_package, verify_consumer_states
 from .bundle_content import bundle_content_view
 from .tycho_runtime import path,option,properties
 from .application_identity import records as application_records,copies_at as application_copies
@@ -26,7 +27,6 @@ def digest(value):return hashlib.sha256(canonical(value)).hexdigest()
 def seal(value):return dict(value,content_sha256=digest(value))
 def verify(value):require(value.get('content_sha256')==digest({k:v for k,v in value.items() if k!='content_sha256'}),'build-once-manifest-hash')
 
-def descriptor(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 
 def application_maps(out):
  out=Path(out);obs=json.loads((out/'worker-observation.json').read_bytes())
@@ -47,13 +47,11 @@ def application_maps(out):
 def compare_applications(base,current,expected_class):
  require(set(base)==set(current),'layer-bundle-set')
  for name,left in base.items():
-  right=current[name];a=copy.deepcopy(left);b=copy.deepcopy(right)
+  right=current[name];replacements={}
   if name=='org.idempiere.test':
-   require(a['path']==b['path']==TEST_ROOT and a['kind']==b['kind']=='folder-archive','layer-test-origin')
-   require(TEST_ENTRY in a['entries'] and TEST_ENTRY in b['entries'],'per-run-class-missing')
-   actual=b['entries'].pop(TEST_ENTRY);a['entries'].pop(TEST_ENTRY)
-   require(actual==dict(kind='file',**expected_class),'per-run-captured-class-bytes')
-  require(a==b,'non-candidate-layer-content-differs:'+name)
+   require(left['path']==right['path']==TEST_ROOT and left['kind']==right['kind']=='folder-archive','layer-test-origin')
+   replacements={TEST_ENTRY:dict(kind='file',**expected_class)}
+  compare_package(left,right,replacements,missing='per-run-class-missing',changed='per-run-captured-class-bytes',different='non-candidate-layer-content-differs:'+name)
  return True
 
 def direct_command(fork):
@@ -115,7 +113,6 @@ def verify_consumer(manifest,out,variant):
  require({k:record.get(k) for k in ('bytes','sha256')}==expected,'practice-observed-class-bytes')
  require(not (out/'per-run-class-error.json').exists(),'practice-class-observer-error')
  require(any(r['name']==TEST_CLASS and r['origin']==record['origin'] for r in catalogue((out/'runtime-catalogue.tsv').read_bytes())),'practice-class-catalogue-binding')
- for filename in ('before.json','after.json'):
-  state=json.loads((out/filename).read_bytes());require(state==dict(manifest_sha256=manifest['content_sha256'],variant=variant,verified=True),'consumer-pre-post-binding')
+ verify_consumer_states([json.loads((out/filename).read_bytes()) for filename in ('before.json','after.json')],manifest['content_sha256'],variant)
  return dict(passed=True,variant=variant,manifest_sha256=manifest['content_sha256'],non_candidate_bundles=44,per_run_class=expected,
              native_admission=False,claim='Zero-candidate practice observation; production JDI admission remains separate')

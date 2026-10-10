@@ -18,16 +18,19 @@ from urllib.request import urlopen
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
-# Docker Official Image, mirrored by Docker on ECR Public; see docs/ci-postgres-mirror.md.
-POSTGRES_IMAGE = ('public.ecr.aws/docker/library/postgres:16-alpine@sha256:'
-                  '721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea')
+sys.path.insert(0, str(ROOT))
+from tools.ci_postgres_image import POSTGRES_IMAGE, ensure_image
 sys.path.insert(0, str(ROOT / 'src'))
 from lightyear_data.cloudbank_ms67_drills import CUSTOMER_MIGRATIONS_SQL, detailed_snapshot, snapshot_difference
 from lightyear_data.cloudbank_sql_recovery import SNAPSHOT_SQL
 
 
 def command(args, **kw):
-    return subprocess.run(args, capture_output=True, text=True, check=True, timeout=180, **kw).stdout
+    try:
+        return subprocess.run(args, capture_output=True, text=True, check=True, timeout=180, **kw).stdout
+    except subprocess.CalledProcessError as exc:
+        print(exc.stderr or 'Command failed without stderr', file=sys.stderr)
+        raise
 
 
 def main():
@@ -38,7 +41,8 @@ def main():
     assert jar.is_file()
     name = 'ms67-customer-startup-' + uuid.uuid4().hex[:12]
     try:
-        command(['docker', 'run', '-d', '--name', name, '-p', '127.0.0.1::5432',
+        ensure_image()
+        command(['docker', 'run', '--pull=never', '-d', '--name', name, '-p', '127.0.0.1::5432',
                  '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', POSTGRES_IMAGE])
         port = json.loads(command(['docker', 'inspect', name]))[0]['NetworkSettings']['Ports']['5432/tcp'][0]['HostPort']
         deadline = time.monotonic() + 60

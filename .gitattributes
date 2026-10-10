@@ -213,6 +213,9 @@ tools/tsql_scriptdom/** -text whitespace=blank-at-eol,blank-at-eof,space-before-
 tools/run_tsql_native.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/replay_tsql_native.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 
+tests/fixtures/build-once-public-v1/** -text
+tools/build_public_consumer_fixture.py -text
+
 # Preserve exact bytes of new signed rule evidence and public fixture inventories.
 docs/business-rules/evidence-strength-v1/** -text
 tests/mainframe/fixtures/intcalc-discriminating-v1/** -text

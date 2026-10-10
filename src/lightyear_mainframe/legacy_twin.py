@@ -52,6 +52,14 @@ def receipt(path, **data):
     return data
 
 
+def new_output(path):
+    path = Path(path).resolve()
+    path.mkdir(parents=True, exist_ok=False)
+    write_json(path / "engineering.json", {"run_class": "engineering",
+               "qualification_credit": False, "measurement_credit": False})
+    return path
+
+
 def clean_env():
     # No inherited COB_* / DD_* / compiler flags may change this run.
     return {"PATH": os.defpath, "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8",
@@ -220,8 +228,7 @@ def build(target):
     bindings = load_bindings()
     if bindings["source_commit"] != SOURCE_COMMIT:
         raise ValueError("unexpected upstream source")
-    target = Path(target).resolve()
-    target.mkdir(parents=True, exist_ok=False)
+    target = new_output(target)
     sources = {}
     for job, program in PROGRAMS.items():
         folder = target / job
@@ -318,8 +325,7 @@ def run(target, scenario, output):
     target = Path(target).resolve()
     verify_build(target)
     job, meta, images, hashes = public_inputs(scenario)
-    output = Path(output).resolve()
-    output.mkdir(parents=True, exist_ok=False)
+    output = new_output(output)
     for name in ("files", "before", "after", "logs"):
         (output / name).mkdir()
     env = {}

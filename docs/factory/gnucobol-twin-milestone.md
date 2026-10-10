@@ -39,7 +39,9 @@ fixes the fixture clock; acceptance checks the generated timestamp.
 Build receipts bind compiler/runtime identification, package version, flags,
 original source hashes, generated adapter hashes and executable hashes. Run
 receipts bind the build receipt, all input/output hashes, return code and clock.
-Logs and partial outputs survive failures. Receipts are digest sealed, **unsigned**,
+Logs and partial outputs survive failures. An `engineering.json` marker is written
+before compilation/execution, so the existing evidence boundary also refuses raw
+child artifacts even if their receipt is omitted. Receipts are digest sealed, **unsigned**,
 and tagged `engineering` / `executable-twin`; they do not authenticate a z/OS
 observation or grant qualification/measurement credit. Record comparison and
 three-way adjudication are separate workstream 2.2; running is not equivalence.

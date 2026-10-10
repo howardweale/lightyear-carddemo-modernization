@@ -88,6 +88,8 @@ def origin(frames):
 
 def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries=None, binding_v2=None):
     """Pure content verification; caller must authenticate receipt and full entry."""
+    check(not receipt.get('diagnostic_only') and not receipt.get('unmatched_return_policy'),
+          'observer-diagnostic-not-admissible')
     data = (folder / 'events.jsonl').read_bytes()
     check(hashlib.sha256(data).hexdigest() == receipt['event_file_sha256'], 'observer-event-file-changed')
     lines = data.splitlines()
@@ -129,12 +131,15 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             catch_resolution_required = catch_policy == POLICY
             if binding_v2 is not None:
                 binding_v2.catch_resolution_required = catch_resolution_required
+            check('unmatched_return_policy' not in event, 'observer-diagnostic-not-admissible')
             ready = True
             check(event.get('audit_policy') in (None, AUDIT_POLICY), 'observer-audit-policy')
             audit_required = event.get('audit_policy') == AUDIT_POLICY
         elif kind == 'observer-audit':
             check(ready and audit_required, 'observer-audit-unannounced')
             structural_audit.event(event)
+        elif kind == 'diagnostic-unmatched-return':
+            check(False, 'observer-unobserved-generation')
         elif binding_v2 is not None and kind in ('class-definition-v2','generation-entry','generation-return','generation-unwind'):
             check(ready and event['checkpoint'] is False, 'observer-v2-record-order')
             binding_v2.event(event)

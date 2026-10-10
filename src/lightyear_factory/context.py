@@ -88,6 +88,13 @@ class GraphContextAssembler:
 
         for node_id in sorted(selected_nodes):
             node = selected_nodes[node_id]
+            if node["kind"] == "business_rule" and node.get("properties", {}).get("schema") == "lightyear-business-rule/1":
+                # Raw graph statuses/expressions are not approved runtime evidence.
+                # Enriched rule data is delivered only via the approved projection.
+                if node["properties"].get("provenance") not in {"source-observed", "asserted"}:
+                    continue
+                node = {**node, "properties": {k:v for k,v in node["properties"].items()
+                    if k in {"statement", "visibility", "confidence", "provenance"}}}
             item = {
                 "id": node["id"],
                 "kind": node["kind"],

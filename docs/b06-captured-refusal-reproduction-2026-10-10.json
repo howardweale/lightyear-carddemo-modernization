@@ -1,0 +1,34 @@
+{
+  "docker_commands": 0,
+  "event_sequence": 231089,
+  "exact_guard_exception_reproduced": true,
+  "exception": "java.lang.IllegalStateException: generation return arm without matching activation",
+  "fixture_sha256": "9c310442cd9f25dca92a37b25f7d79bbe6038306a91c71c97d622f6dc2add447",
+  "focused_tests_passed": 8,
+  "frozen_integrity": {
+    "elapsed_seconds": 71.125,
+    "files_verified": 113595,
+    "passed": true,
+    "snapshot_sha256": "ba570784e544a252682737ff0396df59dd7b3fc5d5be63e94c0afc075a1ce555"
+  },
+  "host_experiment": {
+    "docker_commands": 0,
+    "duplicate_arm": false,
+    "elapsed_seconds": 17.172,
+    "host_only": true,
+    "native_credit": false,
+    "observer_returncode": 0,
+    "simultaneous_threads": 3,
+    "target_output": "completed_threads=300",
+    "threads": 300,
+    "timed_out": false,
+    "unmatched_activation": false
+  },
+  "model_calls": 0,
+  "native_credit": false,
+  "refusal_sequence": 231090,
+  "scheduling_cause_proven": false,
+  "source_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+  "target_jvm_executed": false,
+  "tracker_fix_proven": false
+}

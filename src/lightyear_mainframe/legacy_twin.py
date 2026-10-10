@@ -66,8 +66,22 @@ def clean_env():
             "TZ": "UTC", "SOURCE_DATE_EPOCH": "1658102400"}
 
 
+def compiler_clock():
+    version = subprocess.check_output(["dpkg-query", "-W", "-f=${Version}", "libfaketime"], env=clean_env()).decode()
+    if version != "0.9.10-2.1":
+        raise ValueError("unpinned compiler clock adapter")
+    paths = subprocess.check_output(["dpkg-query", "-L", "libfaketime"], env=clean_env()).decode().splitlines()
+    libraries = [Path(p) for p in paths if p.endswith("/libfaketime.so.1")]
+    if len(libraries) != 1:
+        raise ValueError("missing or ambiguous compiler clock adapter")
+    return {"LD_PRELOAD": str(libraries[0]), "FAKETIME": "2022-07-18 00:00:00",
+            "FAKETIME_DONT_FAKE_MONOTONIC": "1", "NO_FAKE_STAT": "1"}
+
+
 def execute(command, cwd, log, *, extra_env=None, allowed=(0,), timeout=120):
     env = clean_env()
+    if str(command[0]) == "cobc":
+        env.update(compiler_clock())
     env.update(extra_env or {})
     try:
         result = subprocess.run(list(map(str, command)), cwd=cwd, env=env,
@@ -225,6 +239,11 @@ procedure division.
 
 def build(target):
     host = linux_platform()
+    clock = compiler_clock()
+    host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
+                              "fixed_utc": clock["FAKETIME"],
+                              "library_sha256": sha(Path(clock["LD_PRELOAD"]).read_bytes()),
+                              "scope": "compiler subprocesses only, never application runtime"}
     bindings = load_bindings()
     if bindings["source_commit"] != SOURCE_COMMIT:
         raise ValueError("unexpected upstream source")

@@ -25,7 +25,7 @@ jobs:
       - name: Install pinned compiler (no containers)
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1
+          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1 libfaketime=0.9.10-2.1
       - name: Focused refusal and adapter tests
         run: python -B -m unittest discover -s tests -p test_legacy_twin.py -v
       - name: Two clean builds and five public executions

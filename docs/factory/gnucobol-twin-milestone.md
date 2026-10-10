@@ -10,7 +10,7 @@ services remain outside this twin. No historical B06 evidence is changed.
 ## Reproduction
 
 Use Ubuntu 24.04 (GitHub Actions or an Ubuntu Multipass VM), not Windows Docker.
-Install `gnucobol3=3.1.2-5.1ubuntu1`; Python 3.11 or later requires no extra packages.
+Install `gnucobol3=3.1.2-5.1ubuntu1` and `libfaketime=0.9.10-2.1`; Python 3.11 or later requires no extra packages.
 Run with `PYTHONPATH=src:.`:
 
 ```sh
@@ -81,3 +81,16 @@ would be a reference model, not a confirmed executable twin.
 Multipass is not installed at the checked local paths. No VM run is claimed and
 no machine software was installed. The same Ubuntu command is supplied above;
 VM execution remains outstanding alongside hosted CI acceptance.
+
+## Reproducibility finding
+
+The first hosted build (run 38088492240) compiled both unchanged programs, then
+correctly failed exact binary comparison. Preserved binaries differ in embedded
+compilation timestamps. GnuCOBOL 3.1.2 does not honor `SOURCE_DATE_EPOCH` for those
+timestamps (support was added in 3.2). The pinned compiler is now invoked with a
+pinned, hash-recorded libfaketime adapter for **compiler subprocesses only**,
+fixing metadata time at 2022-07-18 UTC. Application execution and timeout clocks
+do not inherit the preload. No binary bytes or checks are edited after compilation.
+Both clean builds must still match exactly. The first failed artifact is preserved.
+See [GnuCOBOL release notes](https://sourceforge.net/projects/gnucobol/files/gnucobol/)
+and [libfaketime scope documentation](https://github.com/wolfcw/libfaketime).

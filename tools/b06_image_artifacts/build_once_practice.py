@@ -20,6 +20,7 @@ def prepare(repo,commit,snapshot,plan_path):
  require(git('rev-parse',commit).decode().strip()==commit,'full-commit-required')
  names=git('ls-tree','-r','--name-only',commit).decode().splitlines()
  selected={n:n for n in names if n.startswith(('tools/','src/')) and n.endswith(('.py','.java'))}
+ selected.update({n.removeprefix('src/'):n for n in names if n.startswith('src/lightyear_evidence/') and n.endswith('.py')})
  for n in WORKER|EXTRA:selected[n]='tools/'+n if n in EXTRA else 'tools/b06_image_artifacts/'+n
  selected['warning-baseline.json']=BASELINE
  require(all(n in names for n in selected.values()),'committed-freeze-input-required')

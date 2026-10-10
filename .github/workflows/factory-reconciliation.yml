@@ -31,7 +31,7 @@ jobs:
       - name: Install pinned GnuCOBOL (no containers)
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1
+          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1 libfaketime=0.9.10-2.1
       - name: Focused no-suppression tests
         run: python -B -m unittest discover -s tests -p test_twin_reconciliation.py -v
       - name: Run real twin, Python, Java and platform probes

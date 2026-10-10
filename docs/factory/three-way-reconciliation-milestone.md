@@ -75,3 +75,34 @@ alphanumeric REDEFINES view. Packed signed bytes, rounding/truncation, dates,
 collation and all four file-status probes matched the declared GnuCOBOL expectation.
 The clock assertion now includes hundredths. These are test/adapter corrections;
 no result establishes z/OS equivalence.
+
+## Verified INTCALC milestone — October 10, 2026
+
+[Hosted run 38089428759](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38089428759)
+passed on implementation commit `413014469a75bc927d89f105ae72a0f3fb06b4da`:
+eight focused no-suppression tests, actual COBOL/Python/Java runs, twelve scalar
+platform assertions and exact signed packed-decimal bytes. Report seal:
+`64da40dfba1d61c358f64b152644058c75cf6845435804e31872491712d18592`.
+The companion result JSON retains source/output hashes and all pairwise comparisons.
+
+| Public scenario | Twin / Python / Java result | Classification |
+|---|---|---|
+| Original rehearsal 1 | Exact byte agreement for accounts and transactions | No remaining discrepancy |
+| Original rehearsal 2 | Exact byte agreement for accounts and transactions | No remaining discrepancy |
+| Discriminating | Exact byte agreement for accounts and transactions | No remaining discrepancy |
+| Missing default disclosure | All refuse with the matching source-specific diagnostic | Expected execution failure |
+| POSTTRAN | Twin only: 262 posted, 38 rejected; RC4 | Missing independent Python/Java implementations |
+
+The first three rows contain **18 exact pair/dataset comparisons**, with zero
+remaining discrepancies. They are three fixture runs, not independent production
+samples. The initial clock-adapter defect is classified and corrected with its
+original mismatch artifact retained. No business-model defect was observed in
+these INTCALC scenarios; that is not proof beyond the exercised paths.
+
+Workstream 2.2 is complete for the existing INTCALC implementations and remains
+partial for POSTTRAN/future generated scenarios. No new coverage or legacy-mutant
+kill-rate result was measured in this milestone. The next behavioral milestone
+is twin decision instrumentation and deterministic scenario generation, followed
+by registering every new scenario in this same comparison matrix.
+All z/OS platform confirmations remain unknown. No default oracle was changed.
+Publication changes after the tested commit contain only milestone/result documents.

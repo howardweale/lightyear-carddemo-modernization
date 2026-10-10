@@ -37,3 +37,45 @@ was waived or weakened. The live PR status is authoritative for later merges.
 B07 remains preparation-only. Its pinned upstream commit was checked against the
 current B06 declaration. Graph coverage proof, runtime coverage, audit and sealing
 are not complete; no B07 model or native run is authorized by this milestone.
+
+## Integration completed October 10
+
+All five implementation PRs are merged into main. This closes the pending status
+above; the dated publication record and original evidence remain preserved.
+
+| PR | Verified implementation head | Hosted checks passed | Main merge commit |
+|---|---|---:|---|
+| #297 | `30270812cdf771b53f82c3c842539891745dd5e4` | 23 | `6ad6ef93bd55032ba1db04823038e142dea96742` |
+| #298 | `e0d409e539292628fdd4e6c1a0c88e927053bb36` | 26 | `0512c05440e81367a44af8f1cffdcdcd89926b4d` |
+| #299 | `45d4b55d2189ee59617fb60c28d351efc387c780` | 26 | `429bc8d0b46e9a45863368aba63d40ceec74d0a0` |
+| #300 | `522e23ed4ad1104ed1e9ca53443c0318e3078ebf` | 25 | `6c45c790ce13c2cff767c99dc7bc98627b9c6cb1` |
+| #301 | `f2235be508f250d8f2dbc33cc17cf4ea3f6a173f` | 29 | `85e355f863fe2cd3497e4ad4c1c2d4214e3b4037` |
+
+The 129 checks include Linux and Windows differential verification. After #297
+and #299 merged, #300 required a `.gitattributes` conflict resolution. Commit
+`07d62103e9849bb7640930bcea06cd8db2794d97` retains both sets of exact-byte fixture
+rules. Every incoming file was checked against the already verified main Git blob;
+no implementation code was manually changed. Fifty focused rules, saved-evidence,
+build-once and CI-wrapper tests passed in 5.515 seconds on the resolved tree.
+The table's 25 hosted checks describe the pre-resolution #300 implementation head,
+not the newly queued run on that integration commit. #301's clean integration was
+likewise checked against exact main blobs and its fully green head.
+
+The browser failure came from corrupted UTF-8 punctuation in the decision-console
+JavaScript. Correcting those characters made the unchanged repeated-cause assertion
+pass locally and in [hosted browser inspection](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38083945949).
+The public fixture and evidence-strength classification were not weakened.
+
+The earlier Docker exit 125 did not retain daemon stderr, so its initiating cause
+remains unproven. Both PostgreSQL CI paths now explicitly acquire the same official
+ECR digest, retry only recognized transient acquisition failures, and run with
+`--pull=never`. Permanent failures, container startup and workload assertions are
+not retried. The repaired [source-build and SQL-recovery jobs](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38084084989)
+passed. No image pin or runtime/test semantics changed.
+
+The completeness, diagnostic-only archive and engineering-boundary integrations
+retain zero-credit behavior. All work used isolated integration checkouts. No
+sealed B06 checkout, native capture, Tower decision or approval was changed, and
+no Docker/native workload was launched locally. The native engineering adapter
+remains unproven; merging it does not execute the separately approved October 11
+engineering window. B07's prior preparation-only status is unchanged.

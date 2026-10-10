@@ -43,7 +43,7 @@ explains why a skipped workflow cannot serve as the sole required check.
 - A real Spring Boot context test exercises the injected INTCALC service and
   batch-job wiring. The lightweight three-way harness remains explicitly labelled.
 
-Focused local validation: 29 tests passed. This includes refusal before output,
+Focused local validation: 31 tests passed. This includes refusal before output,
 exact-head CI gating, input selection, tampered/missing/duplicated posting outputs,
 reason codes, collation-sensitive input refusal and sample coverage. An actual
 prior public twin artifact was checked against its already-published hashes:

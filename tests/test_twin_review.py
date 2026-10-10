@@ -62,6 +62,17 @@ class PostingInvariantTests(unittest.TestCase):
         raw=bytearray(self.before['XREFFILE']);raw[0]=ord('A')
         with self.assertRaisesRegex(ValueError,'collation-sensitive'):
             inv.require_collation_independent(dict(self.before,XREFFILE=bytes(raw)))
+    def test_new_alphanumeric_transaction_key_refused(self):
+        raw=bytearray(self.before['DALYTRAN']);raw[0]=ord('A')
+        with self.assertRaisesRegex(ValueError,'collation-sensitive'):
+            inv.require_collation_independent(dict(self.before,DALYTRAN=bytes(raw)))
+    def test_balance_amount_and_clock_mutations_refused(self):
+        for dd,field in [('ACCTFILE','ACCT-CURR-BAL'),('TCATBALF','TRAN-CAT-BAL'),('TRANFILE','TRAN-AMT'),('TRANFILE','TRAN-PROC-TS')]:
+            binding=dataset_binding(load_bindings(),'POSTTRAN','STEP15',dd)
+            layout=load_copybook(twin.ROOT/binding['copybook'])
+            offset=next(f.offset for f in layout.fields if f.path.endswith('.'+field))
+            raw=bytearray(self.after[dd]);raw[offset]=ord('1') if raw[offset]!=ord('1') else ord('2')
+            self.assertFalse(self.check(dict(self.after,**{dd:bytes(raw)}))['passed'],field)
     def test_review_sheet_deterministic_unsigned_and_covers_reasons(self):
         a=inv.review_sheet(self.before,self.after)
         self.assertEqual(a,inv.review_sheet(self.before,self.after))

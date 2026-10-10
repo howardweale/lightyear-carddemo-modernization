@@ -25,6 +25,8 @@ def require_collation_independent(images):
             raise ValueError('POSTTRAN collation-sensitive expiry: stop')
         date.fromisoformat(value)
     for r in records(images,'DALYTRAN'):
+        if any(not r[k].isdigit() for k in ('DALYTRAN-ID','DALYTRAN-CARD-NUM','DALYTRAN-TYPE-CD')):
+            raise ValueError('POSTTRAN collation-sensitive new transaction/category key: stop')
         value=r['DALYTRAN-ORIG-TS'][:10]
         if not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}',value):
             raise ValueError('POSTTRAN collation-sensitive origin date: stop')

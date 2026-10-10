@@ -3,7 +3,9 @@ import hashlib
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from lightyear_calibration.contracts import canonical, digest, verify
+from lightyear_calibration.contracts import verify
+# Tower hashes, writes and verifies its envelopes with the same UTF-8 encoding.
+from lightyear_control_tower.decisions import canonical, digest
 from lightyear_control_tower.b06 import SCOPE, atomic_new
 from lightyear_control_tower.verification import verify_decision
 from tools.ms94_b06_admission import check, utc

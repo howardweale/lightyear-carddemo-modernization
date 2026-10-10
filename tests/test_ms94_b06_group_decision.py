@@ -64,3 +64,33 @@ class GroupDecisionTests(unittest.TestCase):
                     return p
                 self.reader.get.side_effect=get
                 with self.assertRaises(ValueError):authorize(self.group,self.commit,self.reader,self.campaign.public,self.now)
+
+    def test_unicode_evidence_and_summary_match_real_inbox_and_consumer(self):
+        from tools.ms94_b06_unmatched_return import SCOPE as diagnostic_scope
+        from lightyear_control_tower.decisions import canonical as tower_bytes
+        from lightyear_calibration.contracts import verify
+        from pathlib import Path
+        group=seal({**{k:v for k,v in self.group.items() if k!='content_sha256'},
+            'purpose':'observer-native-practice', 'journey':'J1', 'slot_count':1,
+            'qualification_credit':False, 'measurement_authorized':False, 'model_calls':0,
+            'diagnostic_scope':diagnostic_scope,
+            'docker_run_window':{'not_before_utc':'2026-10-10T17:30:00+00:00',
+                                 'deadline_utc':'2026-10-10T20:30:00+00:00'},
+            'unicode_fixture':'caf\u00e9 \u2013 \u6771\u4eac'})
+        verify(group)
+        with tempfile.TemporaryDirectory() as folder:
+            name,bound=write_request(folder,group,self.commit)
+            item=RequestInbox(folder,SCOPE,default_registry()).item(name)
+            self.assertEqual(bound,item['bound'])
+            self.assertEqual((name,bound),write_request(folder,group,self.commit))
+            value,_,artifacts=request(group,self.commit)
+            for field,artifact in artifacts.items():
+                raw=(Path(folder)/value['evidence'][field]).read_bytes()
+                self.assertEqual(raw,tower_bytes(artifact))
+                self.assertEqual(hashlib.sha256(raw).hexdigest(),bound[field])
+            self.reader.get.side_effect=lambda k,b,n:proof_for(self.tower,item['bound'],n)
+            authorize(group,self.commit,self.reader,self.campaign.public,self.now)
+            evidence=Path(folder)/value['evidence']['plan']
+            evidence.write_bytes(evidence.read_bytes()+b' ')
+            with self.assertRaisesRegex(ValueError,'Evidence hash mismatch'):
+                RequestInbox(folder,SCOPE,default_registry()).item(name)

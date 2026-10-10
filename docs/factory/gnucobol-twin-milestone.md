@@ -1,0 +1,63 @@
+# Factory 2.1: executable public CardDemo twin
+
+This PR adds an engineering-only GnuCOBOL build and run path for the pinned
+Apache-2.0 CBACT04C (INTCALC) and CBTRN02C (POSTTRAN) programs. Original COBOL
+and copybook bytes are verified against the existing CardDemo bindings at commit
+`59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e`, then compiled without business edits.
+CICS programs, JES/JCL orchestration, native VSAM semantics, Db2 and z/OS runtime
+services remain outside this twin. No historical B06 evidence is changed.
+
+## Reproduction
+
+Use Ubuntu 24.04 (GitHub Actions or an Ubuntu Multipass VM), not Windows Docker.
+Install `gnucobol3=3.1.2-5.1ubuntu1`; Python 3.11 or later requires no extra packages.
+Run with `PYTHONPATH=src:.`:
+
+```sh
+python -B -m unittest discover -s tests -p test_legacy_twin.py -v
+python -B -m tools.check_legacy_twin work/factory-twin-new
+```
+
+Output directories must not exist. The command builds both programs twice in
+separate clean directories and requires identical executable hashes, then runs
+both public INTCALC rehearsals, the discriminating and missing-disclosure cases,
+and the public POSTTRAN rehearsal. GitHub workflow `Factory legacy twin` runs
+these checks without containers, models, customer data or a native B06 window.
+
+## Adaptation boundary
+
+Compilation uses fixed-format originals, IBM dialect, EBCDIC zoned-display signs
+and optimization `-O2`. Generated free-format adapters load/dump actual GnuCOBOL
+indexed files with each original program's primary and alternate keys. Strict
+existing copybook decoding converts pinned public cp037 fixtures to ASCII display
+records; sequential files retain fixed record widths without line delimiters.
+No Python business logic executes inside the twin. INTCALC receives its original
+length-prefixed linkage parameter through a wrapper. `CEE3ABD` is an explicit
+RC12 stop shim, not an emulation of Language Environment abends. `COB_CURRENT_DATE`
+fixes the fixture clock; acceptance checks the generated timestamp.
+
+Build receipts bind compiler/runtime identification, package version, flags,
+original source hashes, generated adapter hashes and executable hashes. Run
+receipts bind the build receipt, all input/output hashes, return code and clock.
+Logs and partial outputs survive failures. Receipts are digest sealed, **unsigned**,
+and tagged `engineering` / `executable-twin`; they do not authenticate a z/OS
+observation or grant qualification/measurement credit. Record comparison and
+three-way adjudication are separate workstream 2.2; running is not equivalence.
+
+## Validation and remaining limits
+
+Hosted acceptance is required before this milestone is considered executed.
+The CI artifact retains both builds and each run, including negative-case logs.
+POSTTRAN permits source return code 4 for rejected input; this is not a failed
+compiler or a silently accepted equivalence result. Synthetic POSTTRAN after-images
+contain a deliberately planted decoding-rehearsal reject, not a native expected
+answer, and are never asserted as twin truth. GnuCOBOL/compiler platform differences
+remain unresolved until separately probed. No default oracle is changed.
+
+The next milestone compares twin, Python and Java field by field and records every
+disagreement. Coverage instrumentation and thresholds follow that reconciliation.
+Merge requires Howard's approval of the exact commit.
+
+Sources: [Ubuntu noble package](https://packages.ubuntu.com/noble/gnucobol3),
+[GnuCOBOL manual](https://gnucobol.sourceforge.io/doc/gnucobol.html), and existing
+`spec/mainframe/public-source/README.md` / copybook LICENSE and NOTICE.

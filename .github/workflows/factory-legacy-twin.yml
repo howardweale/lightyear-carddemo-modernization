@@ -1,0 +1,39 @@
+name: Factory legacy twin
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_mainframe/legacy_twin.py'
+      - 'tools/check_legacy_twin.py'
+      - 'tests/test_legacy_twin.py'
+      - '.github/workflows/factory-legacy-twin.yml'
+      - 'spec/mainframe/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-twin:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src:.
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned compiler (no containers)
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1
+      - name: Focused refusal and adapter tests
+        run: python -B -m unittest discover -s tests -p test_legacy_twin.py -v
+      - name: Two clean builds and five public executions
+        run: python -B -m tools.check_legacy_twin work/factory-twin-ci
+      - name: Preserve engineering receipts and failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-gnucobol-engineering
+          path: work/factory-twin-ci
+          if-no-files-found: warn

@@ -55,6 +55,15 @@ class TwinTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'digest'):
                 twin.verify_build(root)
 
+    def test_uncredited_directory_is_refused_by_evidence_boundary(self):
+        from tools.ms94_b06_engineering_boundary import refuse_engineering
+        with tempfile.TemporaryDirectory() as tmp:
+            output = twin.new_output(Path(tmp)/'new-run')
+            with self.assertRaisesRegex(ValueError, 'engineering-evidence'):
+                refuse_engineering({}, output/'raw-output')
+            with self.assertRaises(FileExistsError):
+                twin.new_output(output)
+
     def test_runtime_environment_does_not_inherit_overrides(self):
         with patch.dict(twin.os.environ, {'COB_CURRENT_DATE':'1999', 'DD_ACCTFILE':'secret'}):
             self.assertNotIn('COB_CURRENT_DATE', twin.clean_env())

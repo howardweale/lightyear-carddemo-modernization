@@ -51,7 +51,9 @@ No extraction, subprocess, archive rewriting or recursive nested-JAR filtering.
   with zipfile.ZipFile(io.BytesIO(raw)) as z:
    names=set()
    for e in z.infolist():
-    if validate_original_names:safe(e.orig_filename)  # Windows ZipInfo normalizes backslashes.
+    if validate_original_names:
+     safe(e.orig_filename)  # Windows ZipInfo normalizes backslashes.
+     require(':' not in e.orig_filename,'bundle-view-path')  # Portable drive/stream refusal.
     n=e.filename;safe(n);require(n not in names and not e.flag_bits&1 and (e.external_attr>>16)&0o170000!=0o120000,'bundle-view-entry');names.add(n)
     if kind=='folder-archive':
      reason=excluded(n.rstrip('/'), exclusions)

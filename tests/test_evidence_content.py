@@ -32,7 +32,7 @@ class ContentTests(unittest.TestCase):
         # JAR entries may not be filtered by folder exclusions.
         self.assertIn("logs/run.txt",self.view(raw,exclusions={"logs":"runtime log"})["entries"])
     def test_duplicates_and_traversal_refused(self):
-        for rows in ([('a',b'1'),('a',b'2')],[('../escape',b'x')],[('/absolute',b'x')]):
+        for rows in ([('a',b'1'),('a',b'2')],[('../escape',b'x')],[('/absolute',b'x')],[('C:/escape',b'x')],[('entry:stream',b'x')]):
             with self.assertRaises(ValueError):self.view(archive(rows))
         raw=archive([("a/escape",b"x")]).replace(b"a/escape",b"a\\escape")
         with self.assertRaises(ValueError):self.view(raw)

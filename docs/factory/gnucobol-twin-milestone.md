@@ -96,7 +96,7 @@ See [GnuCOBOL release notes](https://sourceforge.net/projects/gnucobol/files/gnu
 and [libfaketime scope documentation](https://github.com/wolfcw/libfaketime).
 
 The compiler-clock run 38089237223 removed all timestamp differences; the only
-remaining differing bytes were the linker's 20-byte GNU build ID (offsets 888–907
+remaining differing bytes were the linker's 20-byte GNU build ID (offsets 888â€“907
 in each ELF binary). Linking now explicitly uses `--build-id=none`, recorded in
 flags. Binary comparison still covers every byte, with no post-build stripping
 or normalization by this driver.
@@ -108,3 +108,26 @@ all other compared output fields matched. The adapter now supplies an explicit
 nine-digit zero fraction. Outputs/fixtures are not rewritten and the exact
 transaction-timestamp assertion remains required. Original mismatch artifacts
 are retained under hosted run 38088862638.
+
+## Verified hosted milestone — October 10, 2026
+
+[Hosted run 38089424966](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38089424966)
+passed on implementation commit `cfe6df2266e1da2c64e6b9332f5ec89f24106828`:
+eight focused tests; two independent clean builds with **all ten executable hashes
+identical**; five actual public scenario executions. Acceptance seal:
+`69bb7ed864d478cb4adb21b4968d60b7405e591c9abe45a63ede482f54806ca5`.
+The companion `gnucobol-twin-result.json` publishes counts and hashes only.
+
+| Scenario | Return code | Observed output |
+|---|---:|---|
+| INTCALC public rehearsal 1 | 0 | 50 accounts, 50 transactions |
+| INTCALC public rehearsal 2 | 0 | 50 accounts, 50 transactions |
+| INTCALC discriminating | 0 | 4 accounts, 13 transactions; exact declared timestamps |
+| INTCALC missing disclosure | 12 | Explicit CEE3ABD shim; zero transactions |
+| POSTTRAN public | 4 | 300 inputs, 262 posted, 38 rejects |
+
+This establishes executable engineering behavior and reproducibility on the
+recorded Ubuntu toolchain. It does not establish universal cross-toolchain binary
+identity, z/OS equivalence or adequate scenario coverage. VM execution remains
+outstanding because Multipass is unavailable here. Subsequent changes in this
+commit are publication of these results only; the tested implementation is unchanged.

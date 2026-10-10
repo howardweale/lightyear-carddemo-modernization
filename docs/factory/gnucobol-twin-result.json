@@ -1,0 +1,197 @@
+{
+  "acceptance_content_sha256": "69bb7ed864d478cb4adb21b4968d60b7405e591c9abe45a63ede482f54806ca5",
+  "ci_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38089424966",
+  "focused_tests_passed": 8,
+  "measurement_credit": false,
+  "multipass_execution": "not-performed-runtime-unavailable",
+  "oracle_class": "executable-twin",
+  "qualification_credit": false,
+  "reproducible_binaries": {
+    "INTCALC/bin/ACCTFILE": "b45d5f302a3f08e84f36302161888c82b3349dd8b4652a297a4c763770712615",
+    "INTCALC/bin/DISCGRP": "3088e48aadfe05ce00c53e576dbf35529a32b4066e41f7f720f7d2ddc7713a38",
+    "INTCALC/bin/TCATBALF": "61aa5b76ede9d05bd20516ea42b16762b5c14dee7d2ec2e8d5b6c10df651eba0",
+    "INTCALC/bin/XREFFILE": "a9685da989973e4c70f2319750a7cf6e163e37fd185e1772a6d1ca498a77321e",
+    "INTCALC/bin/twin": "43db5ae6385793886d853be06cbdb01b887175aa9beebf3f420a2d5e5111d7d9",
+    "POSTTRAN/bin/ACCTFILE": "b45d5f302a3f08e84f36302161888c82b3349dd8b4652a297a4c763770712615",
+    "POSTTRAN/bin/TCATBALF": "61aa5b76ede9d05bd20516ea42b16762b5c14dee7d2ec2e8d5b6c10df651eba0",
+    "POSTTRAN/bin/TRANFILE": "00cbbfc30a15f8056561fba873797e9d05b9028e429f99c52df31cd8e29db355",
+    "POSTTRAN/bin/XREFFILE": "e3421e7da49a6fcdde7157e0a93ff51346fe50821a18dce42bf4ba1900d8d448",
+    "POSTTRAN/bin/twin": "aadd79d6a7bf241c5976dda38663b27ceea04d2d5195dd4b319138a2c9563e7e"
+  },
+  "run_class": "engineering",
+  "scenarios": {
+    "intcalc-discriminating": {
+      "inputs": {
+        "ACCTFILE": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab",
+        "DISCGRP": "13311e203d96913555569dedf45c026d809a0d363e0122803759a9d9c9533965",
+        "TCATBALF": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+        "TRANSACT": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e"
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 4,
+          "sha256": "22c9bfc86e84c54158a4026504db5e1339bd85f48ca54628975c6cbc604b92f5"
+        },
+        "DISCGRP": {
+          "records": 28,
+          "sha256": "9af0f5fe82b705e717505107479440b90d38ddc5abe9c77dbd1b2906e558cd73"
+        },
+        "TCATBALF": {
+          "records": 17,
+          "sha256": "5dc40b7f2d759cd9c66157f3a82305e7f4dbd0b05fd313e0e0bd0248ad467a78"
+        },
+        "TRANSACT": {
+          "records": 13,
+          "sha256": "3a952cb215c4473ca94002c0e56f8d123b001cd41cfdcd870473332eb46327f4"
+        },
+        "XREFFILE": {
+          "records": 4,
+          "sha256": "0e62759276a62ddfbe0ae5fe92b8318c0b91b13328f83d26b0e708e16bcd19b4"
+        }
+      },
+      "receipt_content_sha256": "c25278df2ba851fcfcb58df3fd875459f8baf39c255f490865f41dba76018f31",
+      "returncode": 0
+    },
+    "intcalc-missing-disclosure": {
+      "inputs": {
+        "ACCTFILE": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab",
+        "DISCGRP": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "TCATBALF": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+        "TRANSACT": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e"
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 4,
+          "sha256": "fa770e535407fa9ffe965a997fd4eb2fe46d9daa46c8f808fb9e278ecc9ff2fe"
+        },
+        "DISCGRP": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "TCATBALF": {
+          "records": 17,
+          "sha256": "5dc40b7f2d759cd9c66157f3a82305e7f4dbd0b05fd313e0e0bd0248ad467a78"
+        },
+        "TRANSACT": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "XREFFILE": {
+          "records": 4,
+          "sha256": "0e62759276a62ddfbe0ae5fe92b8318c0b91b13328f83d26b0e708e16bcd19b4"
+        }
+      },
+      "receipt_content_sha256": "8e56cabbd8ac24ae00612ab203aad436b224d36b4d007507986d9a8417f0e2f8",
+      "returncode": 12
+    },
+    "intcalc-public-1": {
+      "inputs": {
+        "ACCTFILE": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+        "DISCGRP": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+        "TCATBALF": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+        "TRANSACT": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+        },
+        "DISCGRP": {
+          "records": 51,
+          "sha256": "95f83a6bdf9d0590ec59e30b137a95685f7bd6dbfd39786576bb15ba11a18241"
+        },
+        "TCATBALF": {
+          "records": 50,
+          "sha256": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71"
+        },
+        "TRANSACT": {
+          "records": 50,
+          "sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "receipt_content_sha256": "d160bc1e47f6215a9d848e10be358b77b93ee555f6b81e5c48fe9e4879f01e01",
+      "returncode": 0
+    },
+    "intcalc-public-2": {
+      "inputs": {
+        "ACCTFILE": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+        "DISCGRP": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+        "TCATBALF": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+        "TRANSACT": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2"
+        },
+        "DISCGRP": {
+          "records": 51,
+          "sha256": "95f83a6bdf9d0590ec59e30b137a95685f7bd6dbfd39786576bb15ba11a18241"
+        },
+        "TCATBALF": {
+          "records": 50,
+          "sha256": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71"
+        },
+        "TRANSACT": {
+          "records": 50,
+          "sha256": "99cc67d495974da0ecd631861b139c0ce9b993d3a1a4330b5dfdad822fb59ebd"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "receipt_content_sha256": "b1d880ad29e08a921e39aeca797e351c6eeb5f3a4f5230f9a298ee441bde7646",
+      "returncode": 0
+    },
+    "posttran-public": {
+      "inputs": {
+        "ACCTFILE": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+        "TCATBALF": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+      },
+      "outputs": {
+        "ACCTFILE": {
+          "records": 50,
+          "sha256": "173a21a83b4550cf24863c4b1dc1667cf827510caea403b6934b306c39154734"
+        },
+        "DALYREJS": {
+          "records": 38,
+          "sha256": "730af35c0e8d4cc28e6c205c562a32e623dfc858ef6843ec8530cec6933ac68e"
+        },
+        "DALYTRAN": {
+          "records": 300,
+          "sha256": "1605206de7009cba771a921bf13f4dfcd1673fc13f1b844150355e9a95fa8da3"
+        },
+        "TCATBALF": {
+          "records": 100,
+          "sha256": "b2a8654114a60e095b8c0a5fc4276a9def34494e240d9c7a973096227730df5f"
+        },
+        "TRANFILE": {
+          "records": 262,
+          "sha256": "3b676ae400a11cbd3572a327c5116ab2cf43e25e311687cd8d35ea803f284e3a"
+        },
+        "XREFFILE": {
+          "records": 50,
+          "sha256": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+        }
+      },
+      "receipt_content_sha256": "0df796503bf2e7dba608b13e03d633b9e69071d4210ff1a9c230431b7c8984e7",
+      "returncode": 4
+    }
+  },
+  "schema": "factory-twin-hosted-result/1",
+  "tested_commit": "cfe6df2266e1da2c64e6b9332f5ec89f24106828",
+  "zos_confirmation": false
+}

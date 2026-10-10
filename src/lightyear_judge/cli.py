@@ -12,6 +12,8 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     from .graph_cli import parsers
     parsers(commands)
+    from lightyear_business_rules.cli import parsers as rule_parsers
+    rule_parsers(commands)
     init = commands.add_parser("init")
     init.add_argument("--data-root", type=Path, required=True)
     init.add_argument("--config", type=Path, required=True)
@@ -34,7 +36,10 @@ def main(argv=None):
     budget.add_argument("--proof", type=Path)
     budget.add_argument("--trusted-head")
     args = parser.parse_args(argv)
-    if args.command in {"graph-project", "graph-leak-check"}:
+    if args.command in {"rule-check", "rule-replay", "rule-export", "rule-mode"}:
+        from lightyear_business_rules.cli import execute
+        print(json.dumps(execute(args)))
+    elif args.command in {"graph-project", "graph-leak-check"}:
         from .graph_cli import execute
         result = execute(args)
         print(json.dumps({"status": "written", "sha256": result["content_sha256"], "model_calls": 0}))

@@ -50,6 +50,10 @@ def default_registry():
     K = DecisionKind
     return KindRegistry(
         [
+            K("business-rule-disposition", ("preserve", "fix", "investigate"),
+              ("business-owner",), ("rule_set", "rule", "receipt"),
+              required_fields=("reason", "named_owner", "review_after"),
+              consumer="business-rule-candidate-mode"),
             K("procedure-equivalence-policy", ("approved", "rejected", "retired"),
               ("normalization-approver",), ("inventory", "procedure", "policy", "evidence"),
               required_fields=("reason", "named_owner", "review_after"),

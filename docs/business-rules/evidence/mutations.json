@@ -1,0 +1,530 @@
+{
+  "schema": "lightyear-rule-mutations/1",
+  "rule_set_sha256": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019",
+  "receipt_sha256": "e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075",
+  "rules": [
+    {
+      "id": "rule:intcalc:account-boundary",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:account-update",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:default-rate",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:fixed-width-contract",
+      "generated": 1,
+      "killed": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "codec-scale-minus-one",
+          "target": "codec",
+          "source_sha256": "657ae505cbd69a3f256e1cd113228876b14ee9e4e90fabd7c54a46d3cf50ec49",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:interest-transaction",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:monthly-interest",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:nonzero-rate-emission",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:source-final-account",
+      "generated": 7,
+      "killed": 1,
+      "kill_rate": 0.14285714285714285,
+      "mutants": [
+        {
+          "name": "boundary-shift",
+          "target": "service",
+          "source_sha256": "e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "rounding-mode",
+          "target": "service",
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "operand-swap",
+          "target": "service",
+          "source_sha256": "a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707",
+          "status": "execution-failure",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "dropped-branch",
+          "target": "service",
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-plus-one",
+          "target": "service",
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "scale-minus-one",
+          "target": "service",
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "killed": false
+        },
+        {
+          "name": "one-cent-smoke",
+          "target": "service",
+          "source_sha256": "5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7",
+            "legacy:cobol-field:CVTRA05Y:TRAN-AMT:10",
+            "legacy:copybook:CVACT01Y",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "killed": true
+        }
+      ],
+      "limitation": null
+    }
+  ],
+  "model_calls": 0,
+  "docker_calls": 0,
+  "baseline": {
+    "name": "baseline",
+    "target": "service",
+    "source_sha256": "975dc89e9f57c1b93aa3eeca6fab860be18e972877b34b10efda6bbffde01486",
+    "status": "equivalent",
+    "fields": []
+  },
+  "limitation": "Modern service mutations against public synthetic captured records; surviving and inapplicable operators are retained.",
+  "content_sha256": "04109c2db61338e5655dd0ea1b696ab361e99f6dd629c61010062e7ba5a0d16f",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "80d1c6f7ba7b78c2a26cc2d4c5a2157d9db6f30ef60e43fade5f34fe1884dfc1",
+    "value": "jOkTWfcfmVZG3eprxNQfRRL96Vk3RVnEiMbos7XTD7Q7CeW0eGpSeYUO1hAlNJgG84KmUlmCV3zuF7Yu1eitBQ=="
+  }
+}

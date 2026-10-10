@@ -55,7 +55,7 @@ async function load() {
   clearTimeout(timer);
   $("message").textContent = "";
   try {
-    await { campaigns, queue, catalogue, workspace, history, knowledge }[current]();
+    await { campaigns, queue, catalogue, workspace, history, knowledge, businessRules }[current]();
   } catch (e) {
     showError(e);
   }
@@ -493,6 +493,23 @@ async function catalogue() {
     table.append(tr);
   }
   content.append(table);
+}
+
+async function businessRules() {
+  const v = await api("business-rules");
+  content.replaceChildren(el("h2", "Lightyear business rules"));
+  if (!v.available) content.append(el("p", "No authenticated rule requests in this scope."));
+  for (const item of v.catalogues || []) {
+    content.append(el("h3", item.request_id));
+    for (const rule of item.catalogue.entries) {
+      content.append(el("p", `${rule.id}: ${rule.statement} — ${rule.status}; ${rule.applicable_count} applicable`));
+      content.append(el("p", `${rule.agree_count} agree; ${rule.disagree_count} disagree; ${rule.indeterminate_count} indeterminate`));
+      content.append(el("pre", JSON.stringify(rule.source, null, 2)));
+      if (rule.first_disagreement) content.append(el("pre", JSON.stringify(rule.first_disagreement, null, 2)));
+      content.append(el("small", `Receipt: ${rule.receipt_sha256}`, "hash"));
+    }
+    content.append(el("p", "Keep-or-fix decisions are reviewed and signed in the decision queue."));
+  }
 }
 async function workspace() {
   const v = await api("workspace");

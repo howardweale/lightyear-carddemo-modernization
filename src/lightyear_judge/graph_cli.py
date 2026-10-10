@@ -20,6 +20,9 @@ def parsers(commands):
     p.add_argument("--annotation-ledger",type=Path)
     p.add_argument("--annotation-trust",type=Path)
     p.add_argument("--include-inferred",action="store_true")
+    p.add_argument("--rule-mapping", type=Path, action="append")
+    for name in ("rule-records", "rule-receipt", "rule-public-key"):
+        p.add_argument("--" + name, type=Path)
     p = commands.add_parser("graph-leak-check")
     for name in ("projection","policy","source-root","evaluation","signing-key","operator-public-key"):
         p.add_argument("--"+name,type=Path,required=True)
@@ -33,6 +36,16 @@ def execute(args):
     if args.command == "graph-project":
         ledger=None
         provider=None
+        rule_evidence = None
+        rule_args = [getattr(args, k, None) for k in
+                     ("rule_mapping", "rule_records", "rule_receipt", "rule_public_key")]
+        if any(rule_args):
+            if not all(rule_args) or args.mode != "field":
+                raise ValueError("rule evidence requires all four inputs and public field mode")
+            from lightyear_business_rules.engine import rules_from_mappings
+            rule_evidence = dict(rules=rules_from_mappings([read(p) for p in args.rule_mapping]),
+                                 records=read(args.rule_records), receipt=read(args.rule_receipt),
+                                 judge_key=args.rule_public_key.read_bytes())
         if args.embedding_assets or args.embedding_manifest:
             if not args.embedding_assets or not args.embedding_manifest or not args.hybrid:
                 raise ValueError('local embeddings need assets, manifest and explicit hybrid option')
@@ -45,7 +58,7 @@ def execute(args):
             ledger=AnnotationLedger(args.annotation_ledger,**keys,scope=c["scope"],inventory_sha256=c["inventory_sha256"])
         return build(args.graph,args.evidence,args.policy,args.lane,args.mode,args.customer_id,
             args.out,signer,source_root=args.source_root,hybrid=args.hybrid,annotation_ledger=ledger,
-            include_inferred=args.include_inferred,embedding_provider=provider)
+            include_inferred=args.include_inferred,embedding_provider=provider,rule_evidence=rule_evidence)
     root=args.projection
     manifest=read(root/"projection-manifest.json")
     lane=read(args.policy)["lanes"][args.lane]

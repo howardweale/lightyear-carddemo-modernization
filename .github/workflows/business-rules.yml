@@ -1,0 +1,27 @@
+name: Business rules offline
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  offline-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install 'cryptography>=46,<47' 'mcp==2.2.0'
+      - name: Focused evaluator, graph and Tower tests
+        env:
+          PYTHONPATH: src:.:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B -m unittest test_business_rules test_knowledge_graph test_verify_graph_projection test_decision_console test_decision_console_http test_verify_graph
+      - name: Replay public acceptance receipts
+        env:
+          PYTHONPATH: src:.
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B tools/replay_business_rules_demo.py

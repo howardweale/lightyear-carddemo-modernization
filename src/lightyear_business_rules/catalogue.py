@@ -27,12 +27,13 @@ def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None
 
 def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, tower_key=None, tower_head=None, tower_scope=None):
     require(verify_envelope(receipt, judge_key) and receipt["rule_set_sha256"] == digest(rules), "catalogue-receipt-binding")
-    require(receipt.get("schema") == "lightyear-rule-verdict/1", "catalogue-receipt-schema")
+    require(receipt.get("schema") in {"lightyear-rule-verdict/1", "lightyear-rule-verdict/2"}, "catalogue-receipt-schema")
     status = {r["id"]: r for r in receipt["rules"]}
     require(set(status) == {r["id"] for r in rules}, "catalogue-rule-set")
+    kill_report = kill_report or receipt.get("mutation_assessment")
     if kill_report:
         require(verify_envelope(kill_report, judge_key), "mutation-signature")
-        require(kill_report["rule_set_sha256"] == digest(rules) and kill_report["receipt_sha256"] == receipt["content_sha256"], "mutation-binding")
+        require(kill_report["rule_set_sha256"] == digest(rules) and kill_report["receipt_sha256"] == receipt.get("original_receipt", receipt)["content_sha256"], "mutation-binding")
     kills = {r["id"]: r for r in (kill_report or {}).get("rules", [])}
     entries = []
     for rule in rules:
@@ -40,7 +41,12 @@ def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, to
         # reviewed mapping. A status alone never approves their source provenance.
         if rule["provenance"] == "model-proposed":
             continue
-        s = status[rule["id"]]
+        s = dict(status[rule["id"]])
+        from .strength import assess, display
+        mutation = kills.get(rule["id"]) if (kill_report or {}).get("schema") == "lightyear-rule-mutations/2" else None
+        strength, reason = assess(s["status"], s.get("output_diversity", {}), mutation)
+        s.update(evidence_strength=strength, evidence_strength_reason=reason,
+                 display_status=display(s["status"], strength))
         decision = None
         if (decisions or {}).get(rule["id"]):
             decision = disposition(rules, rule, receipt, decisions[rule["id"]], tower_key, tower_head, tower_scope)
@@ -51,7 +57,9 @@ def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, to
     return dict(schema="lightyear-rule-catalogue/1", brand="Lightyear", rule_set_sha256=digest(rules),
                 receipt_sha256=receipt["content_sha256"], entries=entries,
                 register=[e for e in entries if e["status"] == "contradicted" or e["legacy_behaviour"] == "defect-candidate"],
-                verified_total=sum(e["status"] == "verified" for e in entries),
+                verified_total=sum(e["status"] == "verified" and e["evidence_strength"] == "discriminating" for e in entries),
+                verified_weak_total=sum(e["status"] == "verified" and e["evidence_strength"] == "weak" for e in entries),
+                verified_not_assessed_total=sum(e["status"] == "verified" and e["evidence_strength"] == "not-assessed" for e in entries),
                 limitation=receipt["limitation"])
 
 
@@ -60,7 +68,7 @@ def html(payload):
     if payload.get("test_authority_only"):
         payload = {**payload, "limitation": "TEST AUTHORITY ONLY: no production/customer decision. " + payload["limitation"]}
     for e in payload["entries"]:
-        rows.append("<tr>" + "".join("<td>"+escape(str(e[k]))+"</td>" for k in ("id", "statement", "status", "applicable_count", "disagree_count", "receipt_sha256")) + "</tr>")
+        rows.append("<tr>" + "".join("<td>"+escape(str(e[k]))+"</td>" for k in ("id", "statement", "display_status", "applicable_count", "disagree_count", "receipt_sha256")) + "</tr>")
     return '<!doctype html><html lang="en"><meta charset="utf-8"><title>Lightyear | Verified business rules</title><style>body{font:16px system-ui;margin:2em;color:#17334c}table{border-collapse:collapse}td,th{padding:.5em;border:1px solid #ccd;overflow-wrap:anywhere}th{text-align:left}</style><h1>Lightyear | Business rules</h1><p>'+escape(payload["limitation"])+"</p><table><thead><tr><th>Rule</th><th>Statement</th><th>Status</th><th>Applicable</th><th>Disagree</th><th>Receipt SHA-256</th></tr></thead><tbody>"+"".join(rows)+"</tbody></table><h2>Keep or fix</h2><pre>"+escape(json.dumps(payload["register"], indent=2))+"</pre></html>"
 
 

@@ -85,12 +85,8 @@ def check(rules, records, *, visibility="private"):
             row["status"] = ("contradicted" if row["disagree_count"] else "indeterminate" if row["indeterminate_count"]
                              else "verified" if row["applicable_count"] else "untested")
         row["reasons"] = sorted(set(row["reasons"]))
-        from .strength import diversity, assess
-        counts, error = diversity(rule, records)
-        strength, reason = assess(row["status"], counts, error=error)
-        row.update(output_diversity=counts, evidence_strength=strength, evidence_strength_reason=reason)
         results.append(row)
-    return dict(schema="lightyear-rule-verdict/2", evaluator_version=EVALUATOR_VERSION, rule_set_sha256=digest(rules), records_sha256=digest(records),
+    return dict(schema="lightyear-rule-verdict/1", evaluator_version=EVALUATOR_VERSION, rule_set_sha256=digest(rules), records_sha256=digest(records),
                 visibility=visibility, record_count=len(records), rules=results, status_counts=dict(sorted(Counter(r["status"] for r in results).items())),
                 model_calls=0, limitation="Statuses describe only these captured records; no mainframe equivalence claim.")
 
@@ -98,61 +94,15 @@ def check(rules, records, *, visibility="private"):
 def implementation_hash():
     # Git may materialize CRLF on Windows; line endings do not alter Python semantics.
     return digest({name: sha256((Path(__file__).parent/name).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-                   for name in ("__init__.py", "engine.py", "language.py", "strength.py")})
+                   for name in ("__init__.py", "engine.py", "language.py")})
 
 
 def issue(rules, records, signer, *, visibility="private"):
     return signer.sign({**check(rules, records, visibility=visibility), "evaluator_sha256": implementation_hash()})
 
 
-def prior_v2_hash():
-    return digest({name: sha256((Path(__file__).parent/(name.replace(".py", "_v2.py") if name in {"engine.py", "strength.py"} else name)).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-                   for name in ("__init__.py", "engine.py", "language.py", "strength.py")})
-
-
 def replay(receipt, rules, records, public_key):
-    if "original_receipt" in receipt:
-        original = receipt["original_receipt"]
-        require("original_receipt" not in original, "nested-assessment")
-        replay(original, rules, records, public_key)
-        expected = assessment_body(original, receipt["mutation_assessment"], public_key)
-        require(verify_envelope(receipt, public_key), "invalid-rule-signature")
-        require({k:v for k,v in receipt.items() if k not in {"signature", "content_sha256"}} == expected, "assessment-replay-mismatch")
-        return dict(status="passed", receipt_sha256=receipt["content_sha256"], rules=len(rules), model_calls=0)
-    if receipt.get("schema") == "lightyear-rule-verdict/1":
-        from .engine_v1 import check as check_v1
-        require(verify_envelope(receipt, public_key), "invalid-rule-signature")
-        legacy_hash = digest({name: sha256((Path(__file__).parent/("engine_v1.py" if name == "engine.py" else name)).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-                              for name in ("__init__.py", "engine.py", "language.py")})
-        expected = {**check_v1(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": legacy_hash}
-        require({k:v for k,v in receipt.items() if k not in {"signature", "content_sha256"}} == expected, "rule-replay-mismatch")
-        return dict(status="passed", receipt_sha256=receipt["content_sha256"], rules=len(rules), model_calls=0)
     require(verify_envelope(receipt, public_key), "invalid-rule-signature")
-    if receipt.get("evaluator_sha256") == prior_v2_hash():
-        from .engine_v2 import check as prior_check
-        expected = {**prior_check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": prior_v2_hash()}
-    else:
-        expected = {**check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": implementation_hash()}
+    expected = {**check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": implementation_hash()}
     require({k:v for k,v in receipt.items() if k not in {"signature", "content_sha256"}} == expected, "rule-replay-mismatch")
     return dict(status="passed", receipt_sha256=receipt["content_sha256"], rules=len(rules), model_calls=0)
-
-
-def assessment_body(original, report, public_key):
-    from .strength import assess
-    if original.get("evaluator_sha256") == prior_v2_hash():
-        from .strength_v2 import assess
-    require(verify_envelope(original, public_key) and verify_envelope(report, public_key), "assessment-signature")
-    require(report.get("schema") == "lightyear-rule-mutations/2" and report["receipt_sha256"] == original["content_sha256"]
-            and report["rule_set_sha256"] == original["rule_set_sha256"], "assessment-binding")
-    by_id = {r["id"]: r for r in report["rules"]}
-    require(len(by_id) == len(report["rules"]) and set(by_id) == {r["id"] for r in original["rules"]}, "assessment-rule-set")
-    rows = []
-    for row in original["rules"]:
-        strength, reason = assess(row["status"], row.get("output_diversity", {}), by_id[row["id"]])
-        rows.append({**row, "evidence_strength": strength, "evidence_strength_reason": reason})
-    return {**{k:v for k,v in original.items() if k not in {"signature", "content_sha256"}},
-            "rules": rows, "original_receipt": original, "mutation_assessment": report}
-
-
-def issue_assessment(original, report, signer):
-    return signer.sign(assessment_body(original, report, signer.public))

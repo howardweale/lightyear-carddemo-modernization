@@ -210,7 +210,7 @@ class RulesTests(unittest.TestCase):
         receipt=issue(self.rules,self.records,self.signer,visibility="public-development")
         node={"id":"rule:intcalc:monthly-interest","properties":{"statement":"Monthly interest"}}
         result=enrich(node,self.rules,receipt,self.records,self.signer.public,public_lane=True,approved_source="1200")
-        self.assertEqual("verified",result["properties"]["rule_status"])
+        self.assertEqual("verified (weak evidence)",result["properties"]["rule_status"])
         self.assertNotIn("rule_executable_json",result["properties"]) # zero literal also needs approved source
         with self.assertRaises(RuleError): enrich(node,self.rules,receipt,self.records,self.signer.public,public_lane=False,approved_source="1200 0")
         rules=copy.deepcopy(self.rules);rules[0]["provenance"]="model-proposed"

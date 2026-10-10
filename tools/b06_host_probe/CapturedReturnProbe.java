@@ -27,6 +27,17 @@ public class CapturedReturnProbe {
   var v=c.getDeclaredField("v2");v.setAccessible(true);v.set(generation,true);
   var pending=c.getDeclaredField("pending");pending.setAccessible(true);
   if(!((Map<?,?>)pending.get(generation)).isEmpty())throw new AssertionError("fixture requires empty pending");
+  if(a.length==7 && a[6].equals("diagnostic")) {
+   Class<?> outer=Class.forName("lightyear.observer.PostingObserver");var oc=outer.getDeclaredConstructor();oc.setAccessible(true);Object observer=oc.newInstance();
+   var gf=outer.getDeclaredField("generation");gf.setAccessible(true);generation=gf.get(observer);v.set(generation,true);
+   var opt=outer.getDeclaredField("diagnosticUnmatchedReturn");opt.setAccessible(true);opt.set(observer,true);
+   var request=(com.sun.jdi.request.BreakpointRequest)proxy(com.sun.jdi.request.BreakpointRequest.class,(n,x)->n.equals("getProperty")?Boolean.valueOf("generation-return".equals(x[0])):null);
+   BreakpointEvent diagnostic=(BreakpointEvent)proxy(BreakpointEvent.class,(n,x)->switch(n){case "thread"->thread;case "location"->loc;case "request"->request;default->null;});
+   var entry=outer.getDeclaredMethod("entry",BreakpointEvent.class);entry.setAccessible(true);entry.invoke(observer,diagnostic);
+   var exits=c.getDeclaredField("exits");exits.setAccessible(true);
+   if(!((Map<?,?>)pending.get(generation)).isEmpty() || !((Map<?,?>)exits.get(generation)).isEmpty())throw new AssertionError("diagnostic fabricated activation");
+   return;
+  }
   var call=c.getDeclaredMethod("atReturn",VirtualMachine.class,BreakpointEvent.class);call.setAccessible(true);
   try {call.invoke(generation,vm,event);throw new AssertionError("missing entry was accepted");}
   catch(InvocationTargetException failure) {

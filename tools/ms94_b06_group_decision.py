@@ -34,7 +34,15 @@ def request(group, commit):
                             '(Oracle and PostgreSQL), using the corrected external observer. '
                             'No retries, qualification or measurement credit. Exact Docker window; '
                             'operator review, not independent attestation.')
-        if 'diagnostic_scope' in group:
+        if group.get('diagnostic_scope', {}).get('purpose') == 'capture-with-unmatched-return-exception':
+            from tools.ms94_b06_unmatched_return import validate_scope
+            validate_scope(group)
+            value['summary'] = ('Authorize ONE diagnostic J1 pair with the explicitly accepted empty-pending unmatched-return exception. '
+                'Record missing provenance as unobserved and continue collection; every other anomaly stops. '
+                'Any unmatched return makes observation indeterminate. Zero qualification/measurement credit, models or retries. '
+                'Howard shortened the four-hour review lead for October 10, 10:30 AM–1:30 PM PDT only. '
+                'Fresh Tower and separate Docker approval remain required. Operator review, not independent attestation.')
+        elif 'diagnostic_scope' in group:
             scope = group['diagnostic_scope']
             check(scope.get('purpose') == 'capture-refusal-context-only' and
                   scope.get('qualification_credit') is False and scope.get('measurement_credit') is False and

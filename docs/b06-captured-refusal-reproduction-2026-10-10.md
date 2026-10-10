@@ -93,9 +93,12 @@ paused. No original record was modified or re-signed.
 
 ## Rerun gate
 
-Blocked on a proven observation repair. After that: fresh preparation and freeze,
-a complete plan delivered at least four hours before latest start, and Howard's
-exact Tower and separate Docker approvals. The prior approval and owner are
-consumed; they cannot authorize another run. No new window has been selected.
+At the time of reproduction, rerun was blocked on a proven observation repair.
+Howard subsequently accepted an unmatched-return diagnostic exception and
+shortened the four-hour review lead for October 10, 10:30 AM–1:30 PM PDT.
+This is a prospective policy amendment, not proof that missing entry delivery
+was repaired. Fresh preparation, freeze, exact Tower and separate Docker
+approvals remain required. The prior owner and approval remain consumed.
+See `b06-unmatched-return-diagnostic-milestone.md` for the bounded exception.
 
 Operator review only; not independent attestation.

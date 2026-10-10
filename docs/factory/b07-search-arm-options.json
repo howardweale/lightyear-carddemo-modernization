@@ -1,0 +1,75 @@
+{
+  "additional_uncached_tokens_per_call_assumption": 4000,
+  "basis_path": "docs/calibration/idempiere-ms94/stage-b-05/cost-estimate.json",
+  "basis_sha256": "636694fccc891c6fd58c64418c861759fbfec576f64361317a61d85281cfba58",
+  "campaign_budget_reconciliation_required": true,
+  "historical_pricing_checked_utc": "2026-10-02T15:20:27.547260+00:00",
+  "measurement_credit": false,
+  "model_calls_executed": 0,
+  "options": [
+    {
+      "compilations": 234,
+      "historical_api_equivalent_usd": {
+        "long": 731.98,
+        "long_no_cache": 2230.42,
+        "short": 409.5
+      },
+      "model_calls": 390,
+      "option": "graph-only",
+      "serial_trial_hours": 155.7833,
+      "serial_trial_seconds": 560820,
+      "trials": 78
+    },
+    {
+      "compilations": 468,
+      "historical_api_equivalent_usd": {
+        "long": 1463.96,
+        "long_no_cache": 4460.83,
+        "short": 818.99
+      },
+      "model_calls": 780,
+      "option": "graph-and-search",
+      "serial_trial_hours": 311.5667,
+      "serial_trial_seconds": 1121640,
+      "trials": 156
+    },
+    {
+      "compilations": 54,
+      "historical_api_equivalent_usd": {
+        "long": 168.92,
+        "long_no_cache": 514.71,
+        "short": 94.5
+      },
+      "model_calls": 90,
+      "option": "drift-addition",
+      "serial_trial_hours": 35.95,
+      "serial_trial_seconds": 129420,
+      "trials": 18
+    },
+    {
+      "compilations": 522,
+      "historical_api_equivalent_usd": {
+        "long": 1632.87,
+        "long_no_cache": 4975.54,
+        "short": 913.49
+      },
+      "model_calls": 870,
+      "option": "graph-search-drift",
+      "serial_trial_hours": 347.5167,
+      "serial_trial_seconds": 1251060,
+      "trials": 174
+    }
+  ],
+  "original_campaign_cap_hours": 96,
+  "qualification_credit": false,
+  "required_comparisons": [
+    "graph-vs-b06",
+    "search-vs-b06",
+    "graph-vs-search"
+  ],
+  "run_class": "engineering",
+  "schema": "factory-b07-search-amendment/1",
+  "sealing_allowed": false,
+  "selected_option": null,
+  "status": "draft-unsealed"
+}

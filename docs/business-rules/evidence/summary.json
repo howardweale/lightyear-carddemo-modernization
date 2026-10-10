@@ -1,0 +1,29 @@
+{
+  "schema": "lightyear-business-rules-demo/1",
+  "intcalc": {
+    "untested": 2,
+    "verified": 8
+  },
+  "tsql": {
+    "source": {
+      "verified": 5
+    },
+    "correct": {
+      "verified": 5
+    },
+    "wrong": {
+      "contradicted": 5
+    }
+  },
+  "receipt_sha256": "e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075",
+  "ruleset_sha256": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019",
+  "model_calls": 0,
+  "docker_calls": 0,
+  "qualification_credit": false,
+  "test_authority_only": true,
+  "limitations": [
+    "INTCALC inputs/outputs are public synthetic rehearsal records.",
+    "Tower decision uses a temporary demo customer and is not Howard's production decision.",
+    "SQL results authenticate historical public native captures; no new native run."
+  ]
+}

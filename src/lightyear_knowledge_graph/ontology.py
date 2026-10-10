@@ -15,6 +15,21 @@ def load_ontology(path: Path = DEFAULT_ONTOLOGY_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def business_rules_ontology():
+    """Explicit additive ontology; historical graph identities remain unchanged."""
+    ontology = load_ontology()
+    ontology["ontology_id"] = "lightyear:business-rule-relationships"
+    for relation, pairs in {
+        "CONTAINS": [("cobol_program", "cobol_decision")],
+        "DERIVED_FROM": [("business_rule", "sql_procedure")],
+        "IMPLEMENTED_BY": [("business_rule", "sql_procedure")],
+        "LEGACY_ENTRYPOINT": [("modernization_workload", "sql_procedure")],
+        "MODERN_ENTRYPOINT": [("modernization_workload", "sql_procedure")],
+    }.items():
+        ontology["relations"][relation]["allowed_pairs"].extend(map(list, pairs))
+    return ontology
+
+
 def ontology_hash(ontology: dict[str, Any]) -> str:
     canonical = json.dumps(ontology, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()

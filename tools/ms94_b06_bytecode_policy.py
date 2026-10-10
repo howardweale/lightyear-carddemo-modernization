@@ -7,6 +7,8 @@ JDWP = '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005'
 
 def validate_policy(spec):
     check(spec.get('bytecode_policy') == POLICY, 'observer-bytecode-policy-missing')
+    from tools.ms94_b06_unmatched_return import enabled
+    enabled(spec)
 
 
 def validate_jvm(owner, spec):

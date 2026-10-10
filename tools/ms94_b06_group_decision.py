@@ -34,6 +34,19 @@ def request(group, commit):
                             '(Oracle and PostgreSQL), using the corrected external observer. '
                             'No retries, qualification or measurement credit. Exact Docker window; '
                             'operator review, not independent attestation.')
+        if 'diagnostic_scope' in group:
+            scope = group['diagnostic_scope']
+            check(scope.get('purpose') == 'capture-refusal-context-only' and
+                  scope.get('qualification_credit') is False and scope.get('measurement_credit') is False and
+                  scope.get('stop_at_first_anomaly') is True and scope.get('degradation_mode') is False and
+                  scope.get('automatic_retry') is False and scope.get('minimum_full_plan_review_lead_seconds') == 14400 and
+                  group.get('model_calls') == 0 and group.get('measurement_authorized') is False,
+                  'diagnostic-capture-only-scope')
+            value['summary'] = ('Authorize ONE diagnostic J1 retained-reference pair solely to capture observer refusal context. '
+                                'Strict stop at first anomaly; no degradation or retries. Zero models, qualification or measurement credit. '
+                                'Full frozen plan requires four hours of review lead before latest start and explicit Docker approval. '
+                                'Captured failure requires offline reproduction and a proven fix before qualification. '
+                                'Operator review; not independent attestation.')
     value['id'] = 'b06-q-'+digest(value)
     return value, {**bound, 'request': digest(value)}, artifacts
 

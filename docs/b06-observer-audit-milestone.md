@@ -1,8 +1,9 @@
 # B06 structural audit extension — October 9, 2026
 
 Status: prospective diagnostics implemented and host-tested; **native cause and
-tracker correction remain unproven**. This does not satisfy Step 2 or authorize a
-new window. See [the preserved-stream findings](b06-observer-offline-findings.md)
+tracker correction remain unproven**. This does not authorize a native launch.
+Howard has [amended the diagnostic gate](b06-diagnostic-gate-amendment.md), replacing
+the impossible historical exact-event reproduction prerequisite. See [the preserved-stream findings](b06-observer-offline-findings.md)
 and the [design-only degradation proposal](b06-observer-degradation-proposal.md).
 No Docker, native pairs, Tower requests, model calls, machine configuration
 changes, private-key reads or historical-evidence edits occurred in this work.
@@ -84,11 +85,14 @@ overhead bound. The earlier intermediate instrumentation measurement is not used
 ## Remaining work and next-window gate
 
 The evidence does not identify the failed raw event in either historical run.
-The current tracker was not changed speculatively. Exact native failure reproduction
-and a supported lifecycle correction are still required, followed by fresh full
-preparation/freeze and delivery of the full plan to Howard at least four hours
-before the latest start. No replacement window is proposed. The richer audit is
-in a prospective source change, **not in an authorized frozen build**.
+The current tracker was not changed speculatively. Under Howard's amended gate,
+a completed host stress experiment that does not reproduce either refusal permits
+preparation of one diagnostic native window. It requires a fresh freeze, delivery
+of the full plan at least four hours before latest start, and fresh Tower and
+Docker approval. Strict stop at first anomaly stays in force; no degradation or
+qualification credit is allowed. A failure captured by that run must be reproduced,
+fixed and proven offline before any qualification window. The richer audit is
+currently **not in an authorized frozen build**.
 
 This diagnostic draft and the findings PR can be reviewed now. Merge requires
 Howard's approval for the specific commits. It must not be described as completing

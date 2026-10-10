@@ -1,4 +1,5 @@
 """One bounded, real-JDI host experiment. Saves local raw output; publishes metadata only."""
+from tools.b06_host_probe.jdk import executable
 import argparse
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -18,13 +19,15 @@ def sha(path):
     return digest.hexdigest()
 
 
-def run(jdk, out, threads=4, iterations=800, depth=128, timeout=600):
+def run(jdk, out, threads=4, iterations=800, depth=128, timeout=600, observer_heap_mib=192):
+    if type(observer_heap_mib) is not int or not 32 <= observer_heap_mib <= 4096:
+        raise ValueError('stress observer heap out of range')
     if threads < 3 or iterations < 100 or depth <= 100: raise ValueError('stress scope too small')
     out.mkdir(parents=True, exist_ok=False)
     root = Path(__file__).resolve().parents[2]
     source = root/'factory/idempiere/b06-observer/PostingObserver.java'
     fixture = root/'tests/fixtures/B06GenerationStress.java'
-    java = jdk/'bin/java.exe'; javac = jdk/'bin/javac.exe'
+    java = executable(jdk,'java'); javac = executable(jdk,'javac')
     subprocess.run([str(javac), '--add-modules', 'jdk.jdi', '-d', str(out), str(source), str(fixture)],
                    check=True, capture_output=True, timeout=60)
     version = subprocess.run([str(java), '-version'], capture_output=True, text=True, check=True).stderr
@@ -37,7 +40,7 @@ def run(jdk, out, threads=4, iterations=800, depth=128, timeout=600):
         try:
             banner = target.stdout.readline(); port = banner.strip().rsplit(':', 1)[-1].strip()
             if not port.isdigit(): raise ValueError('host listener unavailable')
-            observer = subprocess.Popen([str(java), '--add-modules', 'jdk.jdi', '-cp', str(out),
+            observer = subprocess.Popen([str(java), '-Xmx%dm' % observer_heap_mib, '--add-modules', 'jdk.jdi', '-cp', str(out),
                 'lightyear.observer.PostingObserver', '127.0.0.1', port, 'observer-binding-v2'],
                 stdin=subprocess.DEVNULL, stdout=output, stderr=error)
             try: observer.wait(timeout=timeout)
@@ -88,7 +91,7 @@ def run(jdk, out, threads=4, iterations=800, depth=128, timeout=600):
         native_admission=False, observer_sha256=sha(source), fixture_sha256=sha(fixture),
         java_version=version, threads=threads, requested_iterations_per_thread=iterations,
         requested_recursive_depth=depth, method_handle_customize_threshold=0,
-        elapsed_seconds=round(elapsed, 3), timeout_seconds=timeout, timed_out=timed_out,
+        observer_heap_mib=observer_heap_mib, elapsed_seconds=round(elapsed, 3), timeout_seconds=timeout, timed_out=timed_out,
         observer_returncode=observer.returncode, target_returncode=target.returncode,
         target_completion=target_output.strip(), counts=dict(counts), audit_complete=complete,
         audit_error=audit_error, generation_methods_by_thread=dict(entries), depth_ranges=dict(depths),
@@ -108,5 +111,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--jdk', type=Path, required=True); parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--iterations', type=int, default=800)
+    parser.add_argument('--observer-heap-mib', type=int, default=192)
+    parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
-    run(args.jdk, args.out, iterations=args.iterations)
+    run(args.jdk, args.out, iterations=args.iterations, timeout=args.timeout, observer_heap_mib=args.observer_heap_mib)

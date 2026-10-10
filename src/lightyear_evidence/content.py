@@ -22,7 +22,7 @@ def stream_hash(f, limit=1024*1024*1024):
   size+=len(block);require(size<=limit,'bundle-view-file-bound');h.update(block)
  return dict(kind='file',bytes=size,sha256=h.hexdigest())
 
-def content_view(source,*,kind,policy,exclusions=None,required_entries=(),limit=1024*1024*1024,validate_original_names=True):
+def content_view(source,*,kind,policy,exclusions=None,required_entries=(),limit=1024*1024*1024,validate_original_names=True,max_entries=100000):
  """Directory, JAR bytes or captured-folder ZIP -> identical named byte maps.
 
 No extraction, subprocess, archive rewriting or recursive nested-JAR filtering.
@@ -46,11 +46,16 @@ No extraction, subprocess, archive rewriting or recursive nested-JAR filtering.
     with p.open('rb') as f:row=stream_hash(f, limit)
     entries[n]=row;paths[n]=p;total+=row['bytes'];require(total<=limit,'bundle-view-total-bound')
  elif kind in ('jar','folder-archive'):
+  if not isinstance(source,bytes):
+   require(Path(source).stat().st_size<=limit,'bundle-view-archive-bound')
   raw=source if isinstance(source,bytes) else Path(source).read_bytes()
   require(len(raw)<=limit,'bundle-view-archive-bound')
   with zipfile.ZipFile(io.BytesIO(raw)) as z:
+   infos=z.infolist()
+   require(len(infos)<=max_entries,'bundle-view-entry-bound')
+   require(sum(e.file_size for e in infos)<=limit,'bundle-view-total-bound')
    names=set()
-   for e in z.infolist():
+   for e in infos:
     if validate_original_names:
      safe(e.orig_filename)  # Windows ZipInfo normalizes backslashes.
      require(':' not in e.orig_filename,'bundle-view-path')  # Portable drive/stream refusal.
@@ -62,5 +67,5 @@ No extraction, subprocess, archive rewriting or recursive nested-JAR filtering.
     with z.open(e) as f:row=stream_hash(f, limit)
     if e.is_dir():row['kind']='directory'
     entries[n]=row;total+=row['bytes'];require(total<=limit,'bundle-view-total-bound')
- require(len(entries)<=100000 and set(required_entries) <= set(entries),'bundle-view-entry-bound')
+ require(len(entries)<=max_entries and set(required_entries) <= set(entries),'bundle-view-entry-bound')
  return dict(policy=policy,kind=kind,entries=entries,omitted=omitted,exclusions=dict(exclusions) if kind!='jar' else {},paths=paths)

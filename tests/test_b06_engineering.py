@@ -23,6 +23,27 @@ class EngineeringTests(unittest.TestCase):
             [dict(start='2026-10-10T19:30:00Z',end='2026-10-10T22:30:00Z')], [str(self.evidence)], self.root/'b06-engineering')
         self.clock=patch.object(e,'now',return_value=datetime(2026,10,11,1,tzinfo=timezone.utc)); self.clock.start(); self.addCleanup(self.clock.stop)
 
+    def test_review_hold_precedes_cli_parsing_signing_and_docker(self):
+        from tools.ms94_b06_engineering_run import main as supervisor
+        from tools.ms94_b06_engineering_worker import main as worker
+        from tools.ms94_b06_engineering_native import execute
+        for call in (supervisor, worker, lambda: execute(None,None,None,None)):
+            with self.subTest(call=call), patch('argparse.ArgumentParser.parse_args') as parse, \
+                    patch('tools.ms94_b06_engineering_native.docker') as docker:
+                with self.assertRaisesRegex(ValueError,'engineering-on-hold-review-291-302'):
+                    call()
+                parse.assert_not_called(); docker.assert_not_called()
+
+    def test_direct_census_and_replay_reject_relocated_engineering_paths(self):
+        from tools.ms94_b06_frame_census import census_lane
+        from tools.ms94_b06_posting_replay import replay_stream
+        renamed=self.root/'renamed'; renamed.mkdir()
+        e.write_new(renamed/'engineering.json',{})
+        for call in (lambda:census_lane(self.root,renamed,'oracle',{},None,{}),
+                     lambda:replay_stream(renamed/'posting-observer/oracle',{}, {},'oracle')):
+            with self.assertRaisesRegex(ValueError,'engineering-evidence-not-admissible'):
+                call()
+
     def test_proposal_cannot_authorize(self):
         path=self.root/'approval.json'; e.write_new(path,self.a)
         with self.assertRaisesRegex(ValueError,'approval-required'): e.approve_check(self.a,e.sha(path),path)
@@ -101,10 +122,14 @@ class EngineeringTests(unittest.TestCase):
         from tools.ms94_b06_measurement_admission import builder_gate
         from tools.ms94_b06_group_decision import request
         from tools.ms94_b06_controller import Controller
+        from tools.ms94_b06_frame_census import census_lane
+        from tools.ms94_b06_posting_replay import replay_stream
         value=seal(dict(**e.LABEL))
         calls=(lambda:verify_inputs(self.root,value),lambda:execute_group(self.root,value,self.root,None,authority_root=self.root),
                lambda:builder_gate(value,None),lambda:request(value,'a'*40),
-               lambda:Controller(self.root,None,value,None,monotonic=lambda:0))
+               lambda:Controller(self.root,None,value,None,monotonic=lambda:0),
+               lambda:census_lane(self.root,self.root,'oracle',value,b'fixture',{}),
+               lambda:replay_stream(self.root,value,{},'oracle'))
         for call in calls:
             with self.assertRaisesRegex(ValueError,'not-admissible'):call()
 
@@ -135,7 +160,8 @@ class EngineeringTests(unittest.TestCase):
         run=self.root/'run';run.mkdir();e.write_new(run/'plan.json',dict(declaration=dict(policy=dict(max_elapsed_seconds=3600))))
         signer=Mock(sign=lambda value:seal(value))
         with patch.object(n.OracleEngineeringRunner,'prepare',side_effect=ValueError('failure')),             patch.object(n,'cleanup_owned',return_value=dict(complete=True)) as clean,patch.object(n,'absence',return_value=True):
-            result=n.execute(self.root,run,self.a,signer)
+            with patch.object(e,'require_execution_ready'):
+                result=n.execute(self.root,run,self.a,signer)
         clean.assert_called_once();self.assertEqual(result['outcome'],'refused');self.assertTrue(result['cleanup_verified'])
 
     def test_output_root_cannot_reset_approved_run_cap(self):

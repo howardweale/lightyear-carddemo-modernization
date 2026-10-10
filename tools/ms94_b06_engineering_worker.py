@@ -6,6 +6,8 @@ from tools.ms94_b06_engineering import approve_check, guard, EngineeringSigner, 
 
 
 def main():
+    from tools.ms94_b06_engineering import require_execution_ready
+    require_execution_ready()
     p=argparse.ArgumentParser()
     for name in ('assets','run','authority','approval','approved-sha256'): p.add_argument('--'+name,required=True)
     a=p.parse_args(); run=Path(a.run).resolve()

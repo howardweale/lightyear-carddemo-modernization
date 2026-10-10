@@ -60,6 +60,8 @@ def prepare_run(assets, source, run, approval):
 
 
 def main():
+    from tools.ms94_b06_engineering import require_execution_ready
+    require_execution_ready()
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('approval','approved-sha256','assets','template','output','authority'):
         p.add_argument('--'+name,required=True)

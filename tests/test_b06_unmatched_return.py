@@ -1,3 +1,4 @@
+from tools.b06_host_probe.jdk import executable
 import copy
 import hashlib
 import json
@@ -62,9 +63,9 @@ class DiagnosticHostTests(unittest.TestCase):
     def test_captured_operands_continue_without_creating_activation(self):
         f=json.loads(FIXTURE.read_bytes());d=f['thread_events'][-1]['detail'];loc=d['location'];jdk=Path(os.environ['B06_HOST_JDK'])
         with tempfile.TemporaryDirectory() as tmp:
-            subprocess.run([str(jdk/'bin/javac.exe'),'--add-modules','jdk.jdi','-d',tmp,
+            subprocess.run([str(executable(jdk,'javac')),'--add-modules','jdk.jdi','-d',tmp,
                 str(ROOT/'factory/idempiere/b06-observer/PostingObserver.java'),str(ROOT/'tools/b06_host_probe/CapturedReturnProbe.java')],check=True,capture_output=True,timeout=60)
-            result=subprocess.run([str(jdk/'bin/java.exe'),'--add-modules','jdk.jdi','-cp',tmp,'CapturedReturnProbe',loc['class'],loc['method'],loc['signature'],str(f['thread']),str(d['depth']),str(loc['code_index']),'diagnostic'],check=True,capture_output=True,text=True,timeout=30)
+            result=subprocess.run([str(executable(jdk,'java')),'--add-modules','jdk.jdi','-cp',tmp,'CapturedReturnProbe',loc['class'],loc['method'],loc['signature'],str(f['thread']),str(d['depth']),str(loc['code_index']),'diagnostic'],check=True,capture_output=True,text=True,timeout=30)
         event=json.loads(result.stdout);self.assertEqual(event['kind'],'diagnostic-unmatched-return')
         self.assertFalse(event['provenance_created']);self.assertFalse(event['observation_complete'])
 
@@ -73,7 +74,7 @@ class DiagnosticHostTests(unittest.TestCase):
         from tools.ms94_b06_observer_audit import Audit
         jdk=Path(os.environ['B06_HOST_JDK']);source=(ROOT/'factory/idempiere/b06-observer/PostingObserver.java').read_text()
         with tempfile.TemporaryDirectory() as tmp:
-            observed,events,_=host_capture(jdk/'bin/java.exe',jdk/'bin/javac.exe',source,Path(tmp)/'probe',diagnostic=True)
+            observed,events,_=host_capture(executable(jdk,'java'),executable(jdk,'javac'),source,Path(tmp)/'probe',diagnostic=True)
         self.assertEqual(observed.returncode,0,observed.stderr)
         self.assertEqual(events[-1]['kind'],'vm-death')
         anomalies=[(i,e) for i,e in enumerate(events) if e['kind']=='diagnostic-unmatched-return']

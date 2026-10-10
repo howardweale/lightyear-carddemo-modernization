@@ -66,9 +66,13 @@ def checked(record, key):
 
 
 def census_lane(root, run, lane, plan, key, classes):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(plan, run)
     folder = run / 'posting-observer' / lane
     receipt = checked(read_json(folder / 'receipt.json'), key)
+    refuse_engineering(receipt, folder)
     execution = read_json(run / 'cases/operations/1/execution' / lane / 'execution.json')
+    refuse_engineering(execution, run)
     verify(execution)
     assert receipt['plan_sha256'] == plan['content_sha256']
     assert receipt['execution_sha256'] == execution['content_sha256']

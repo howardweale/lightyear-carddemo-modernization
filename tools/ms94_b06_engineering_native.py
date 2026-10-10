@@ -114,6 +114,8 @@ def no_overlap():
 
 
 def execute(assets, run, approval, signer):
+    from tools.ms94_b06_engineering import require_execution_ready
+    require_execution_ready()
     run=Path(run); plan=read_json(run/'plan.json')
     def emit(kind, body):
         with (run/'progress.jsonl').open('ab') as stream:

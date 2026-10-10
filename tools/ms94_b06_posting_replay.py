@@ -88,6 +88,8 @@ def origin(frames):
 
 def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries=None, binding_v2=None):
     """Pure content verification; caller must authenticate receipt and full entry."""
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(receipt, folder)
     check(not receipt.get('diagnostic_only') and not receipt.get('unmatched_return_policy'),
           'observer-diagnostic-not-admissible')
     data = (folder / 'events.jsonl').read_bytes()

@@ -1,4 +1,5 @@
 """Authenticate and minimize the diagnostic refusal; never invent a missing entry."""
+from tools.b06_host_probe.jdk import executable
 import argparse
 from collections import Counter
 import hashlib
@@ -82,10 +83,10 @@ def reproduce(fixture, source, jdk):
     loc=d['location']; source=Path(source); jdk=Path(jdk)
     probe=Path(__file__).with_name('CapturedReturnProbe.java')
     with tempfile.TemporaryDirectory(prefix='b06-captured-guard-') as tmp:
-        compiled=subprocess.run([str(jdk/'bin/javac.exe'),'--add-modules','jdk.jdi','-d',tmp,
+        compiled=subprocess.run([str(executable(jdk,'javac')),'--add-modules','jdk.jdi','-d',tmp,
             str(source),str(probe)],capture_output=True,text=True,timeout=60)
         if compiled.returncode: raise ValueError(compiled.stderr)
-        result=subprocess.run([str(jdk/'bin/java.exe'),'--add-modules','jdk.jdi','-cp',tmp,
+        result=subprocess.run([str(executable(jdk,'java')),'--add-modules','jdk.jdi','-cp',tmp,
             'CapturedReturnProbe',loc['class'],loc['method'],loc['signature'],str(fixture['thread']),
             str(d['depth']),str(loc['code_index'])],capture_output=True,text=True,timeout=30)
         expected='java.lang.IllegalStateException: generation return arm without matching activation'

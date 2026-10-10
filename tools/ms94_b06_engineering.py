@@ -24,6 +24,13 @@ LIMITS = dict(run_seconds=3600, cleanup_seconds=600, candidate_seconds=1800,
               audit_records=500000, audit_bytes=128*1024**2, evidence_records=50000)
 
 
+# October 10 review suspends the old October 11 approval. Removing this hold
+# requires a reviewed memory-bounded implementation and renewed exact approval.
+# A caller-supplied JSON flag or an old approval digest cannot override it.
+def require_execution_ready():
+    raise ValueError('engineering-on-hold-review-291-302-renewed-approval-required')
+
+
 def require(ok, reason):
     if not ok: raise ValueError('engineering-' + reason)
 

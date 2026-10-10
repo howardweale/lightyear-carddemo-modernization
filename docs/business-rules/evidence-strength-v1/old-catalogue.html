@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Lightyear | Verified business rules</title><style>body{font:16px system-ui;margin:2em;color:#17334c}table{border-collapse:collapse}td,th{padding:.5em;border:1px solid #ccd;overflow-wrap:anywhere}th{text-align:left}</style><h1>Lightyear | Business rules</h1><p>Statuses describe only these captured records; no mainframe equivalence claim.</p><table><thead><tr><th>Rule</th><th>Statement</th><th>Status</th><th>Applicable</th><th>Disagree</th><th>Receipt SHA-256</th></tr></thead><tbody><tr><td>rule:intcalc:account-boundary</td><td>When the account identifier changes, persist the previous account total, reset accumulated interest, and load the new account and card cross-reference.</td><td>verified (weak evidence)</td><td>49</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:account-update</td><td>Add accumulated interest to the current balance, reset current-cycle credit and debit to zero, and rewrite the account record.</td><td>verified (weak evidence)</td><td>49</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:default-rate</td><td>If the account-group disclosure is missing, retry the lookup using the DEFAULT group and fail if that record is also missing.</td><td>verified (weak evidence)</td><td>50</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:disclosure-rate</td><td>Use the account group, transaction type, and category to obtain the applicable annual disclosure rate.</td><td>untested</td><td>0</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:fixed-width-contract</td><td>Read and write the account, disclosure, cross-reference, category-balance, and transaction layouts with their pinned field positions and COBOL signed-zoned decimal representation.</td><td>verified (weak evidence)</td><td>50</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:interest-transaction</td><td>For every non-zero monthly interest amount, write a system transaction with a deterministic processing-date identifier and the account card number.</td><td>verified (weak evidence)</td><td>50</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:monthly-interest</td><td>Monthly interest is category balance multiplied by annual percentage rate, divided by 1200, and represented with COBOL-compatible two-decimal truncation.</td><td>verified (weak evidence)</td><td>50</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:nonzero-rate-emission</td><td>A nonzero disclosure rate emits an interest transaction even when truncation makes its amount zero.</td><td>verified (weak evidence)</td><td>50</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:source-final-account</td><td>In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.</td><td>verified (weak evidence)</td><td>1</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr><tr><td>rule:intcalc:zero-rate</td><td>A zero disclosure rate creates no interest transaction and contributes no interest to the account.</td><td>untested</td><td>0</td><td>0</td><td>395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786</td></tr></tbody></table><h2>Keep or fix</h2><pre>[
+  {
+    &quot;id&quot;: &quot;rule:intcalc:source-final-account&quot;,
+    &quot;statement&quot;: &quot;In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.&quot;,
+    &quot;source&quot;: [
+      {
+        &quot;node&quot;: &quot;legacy:cobol-program:CBACT04C&quot;,
+        &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+        &quot;line_start&quot;: 188,
+        &quot;line_end&quot;: 221
+      },
+      {
+        &quot;node&quot;: &quot;legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT&quot;,
+        &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+        &quot;line_start&quot;: 325,
+        &quot;line_end&quot;: 340
+      }
+    ],
+    &quot;status&quot;: &quot;verified&quot;,
+    &quot;applicable_count&quot;: 1,
+    &quot;agree_count&quot;: 1,
+    &quot;disagree_count&quot;: 0,
+    &quot;indeterminate_count&quot;: 0,
+    &quot;first_disagreement&quot;: null,
+    &quot;reasons&quot;: [],
+    &quot;output_diversity&quot;: {
+      &quot;output.account_present&quot;: 1,
+      &quot;output.balance&quot;: 1,
+      &quot;output.credit&quot;: 1,
+      &quot;output.debit&quot;: 1
+    },
+    &quot;evidence_strength&quot;: &quot;weak&quot;,
+    &quot;evidence_strength_reason&quot;: &quot;At least one applicable output is constant.&quot;,
+    &quot;display_status&quot;: &quot;verified (weak evidence)&quot;,
+    &quot;legacy_behaviour&quot;: &quot;defect-candidate&quot;,
+    &quot;receipt_sha256&quot;: &quot;395891a1cea14dbe0cbf782f86cedeb25534d758e0f4573c4b46c279db318786&quot;,
+    &quot;mutation&quot;: {
+      &quot;id&quot;: &quot;rule:intcalc:source-final-account&quot;,
+      &quot;generated&quot;: 1,
+      &quot;killed&quot;: 0,
+      &quot;killed_divergent&quot;: 0,
+      &quot;killed_failure&quot;: 0,
+      &quot;kill_rate&quot;: 0.0,
+      &quot;mutants&quot;: [
+        {
+          &quot;name&quot;: &quot;source-final-account--drop-final-branch&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;rule_id&quot;: &quot;rule:intcalc:source-final-account&quot;,
+          &quot;anchor&quot;: {
+            &quot;legacy&quot;: [
+              {
+                &quot;node&quot;: &quot;legacy:cobol-program:CBACT04C&quot;,
+                &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+                &quot;line_start&quot;: 188,
+                &quot;line_end&quot;: 221
+              },
+              {
+                &quot;node&quot;: &quot;legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT&quot;,
+                &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+                &quot;line_start&quot;: 325,
+                &quot;line_end&quot;: 340
+              }
+            ],
+            &quot;start_line&quot;: 112,
+            &quot;end_line&quot;: 112,
+            &quot;original_sha256&quot;: &quot;ec73c2026c4fb500f5da503a3aa5e7e82e6e769ec752d2a28fa4f1de4bfe7841&quot;
+          },
+          &quot;source_sha256&quot;: &quot;8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;outcome&quot;: &quot;survived&quot;,
+          &quot;killed&quot;: false
+        }
+      ],
+      &quot;outcome&quot;: null,
+      &quot;limitation&quot;: null
+    },
+    &quot;decision&quot;: null
+  }
+]</pre></html>

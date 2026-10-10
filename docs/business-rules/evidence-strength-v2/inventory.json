@@ -1,0 +1,18 @@
+{
+  "judge-test.public.pem": "0f3a23e4ee44c6490d0afef4fc7b56d310eb9c4ea7e84b33b742b4da77c050b1",
+  "new-binding.json": "0bcdfb741716450ecf55042ff4022e7fadf6d2069ab6255c5cd9603a0646a829",
+  "new-catalogue.html": "cd8ba73f054f2ed7454bee3e47663e8870958b4a1046b78a39487c00721f1279",
+  "new-catalogue.json": "cd53e88b2def5cb73d60c35fa4230042471b660c01af11d3438f99337b7ebdbb",
+  "new-mutations.json": "0962b42052cb144cd90983cf7332a296367806d6bf966a36dfd0091235d8dfb5",
+  "new-receipt.json": "2ae3eb39180780f183525a656db62923d15c90cc8a793ee8a1aaec08b4bf290c",
+  "new-records.json": "2f002609e59440e131b0723d5228d2eb490ff730863fb525ebe4f3fe2eab3d3b",
+  "new-replay.json": "28f7fd220949919e27b53703ca6d314e9b1456c7569bb2985e7c4fdbb95a632b",
+  "old-binding.json": "8b6089265e085272a32aa04f083bd151bafef3c274c4c8d62314710f1f3d7e82",
+  "old-catalogue.html": "1d006200053ea33273f8d70c9ead24fc2de6f58c42a4b016d22207a99aa05543",
+  "old-catalogue.json": "fe893965c6f0ac2af55cbb4da322a4aeeb8656c1c18d67f37a2f764d036cbe9d",
+  "old-mutations.json": "78368a75d9aedeb3d34180ddf591f22e93719cbb01ca5da4cb51f16e7b799223",
+  "old-receipt.json": "7331a94b92c17ff968699cce594c292e077b2ebed8acf87c254ae3bdc431c0af",
+  "old-records.json": "94294f53447ebc868707437a4a58cdc37bae780152b3f5ff66a0c6dd63cd1b47",
+  "old-replay.json": "70588afbc5ffcf6de48ef8bc297bf74154e3611fd7bcdd4c2e763e87111913eb",
+  "summary.json": "4312a3f9ab3f63257f36d1d8c72482ad10b06bf4c44fe777268e509607408e3c"
+}

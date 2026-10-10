@@ -1,0 +1,479 @@
+{
+  "schema": "lightyear-rule-mutations/2",
+  "rule_set_sha256": "00f6de34b1213e9a520ccc026e5bd8d4ea88fe010b786f413c4a4aacdd2f4019",
+  "receipt_sha256": "3669cd823aed8b8bc5a5fa5f48cfd42a43a03c6d228711eb6a347d5cdbc22b19",
+  "rules": [
+    {
+      "id": "rule:intcalc:account-boundary",
+      "generated": 1,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "account-boundary--drop-account-boundary",
+          "target": "service",
+          "rule_id": "rule:intcalc:account-boundary",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 194,
+                "line_end": 205
+              }
+            ],
+            "start_line": 61,
+            "end_line": 61,
+            "original_sha256": "f6cbba95f45132cdd7f6e147617c4a1ea3c5b9c568b27c30747263f84a777aa5"
+          },
+          "source_sha256": "69922e7b2786d27f311f2c304998c8b436a6b1ab7a18246ac0fe7bd6a845e8a3",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-CARD-NUM:15",
+            "legacy:cobol-field:CVTRA05Y:TRAN-DESC:9",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:account-update",
+      "generated": 0,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": null,
+      "mutants": [],
+      "outcome": "not-applicable",
+      "limitation": "No reviewed modern edit anchor for this rule; no service-wide mutants borrowed."
+    },
+    {
+      "id": "rule:intcalc:default-rate",
+      "generated": 1,
+      "killed": 1,
+      "killed_divergent": 0,
+      "killed_failure": 1,
+      "kill_rate": 1.0,
+      "mutants": [
+        {
+          "name": "default-rate--drop-default-branch",
+          "target": "service",
+          "rule_id": "rule:intcalc:default-rate",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1200-GET-INTEREST-RATE",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 415,
+                "line_end": 459
+              }
+            ],
+            "start_line": 75,
+            "end_line": 75,
+            "original_sha256": "aff3dcb01e6132221958b36037a3d208f93e7956dd7b175e3a78793f6369ca54"
+          },
+          "source_sha256": "49cd30b94b79b0b286e66b2c799fe67681fedbe9ed97f88a3f53eaee47317b59",
+          "status": "execution-failure",
+          "fields": [],
+          "outcome": "killed-failure",
+          "killed": true
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:disclosure-rate",
+      "generated": 1,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "disclosure-rate--drop-direct-rate",
+          "target": "service",
+          "rule_id": "rule:intcalc:disclosure-rate",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 210,
+                "line_end": 213
+              }
+            ],
+            "start_line": 74,
+            "end_line": 74,
+            "original_sha256": "4fe16fd5238b98419bc60b7706b5f15232d9b6777b52b603d8e3b4bc381ad9df"
+          },
+          "source_sha256": "994494965432f36c73904f2c808187dc14cdf202be27e20bb3e3aaee13e90534",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:fixed-width-contract",
+      "generated": 0,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": null,
+      "mutants": [],
+      "outcome": "not-applicable",
+      "limitation": "No reviewed modern edit anchor for this rule; no service-wide mutants borrowed."
+    },
+    {
+      "id": "rule:intcalc:interest-transaction",
+      "generated": 1,
+      "killed": 1,
+      "killed_divergent": 1,
+      "killed_failure": 0,
+      "kill_rate": 1.0,
+      "mutants": [
+        {
+          "name": "interest-transaction--record-offset",
+          "target": "service",
+          "rule_id": "rule:intcalc:interest-transaction",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-B-WRITE-TX",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 473,
+                "line_end": 500
+              }
+            ],
+            "start_line": 92,
+            "end_line": 92,
+            "original_sha256": "d8ae204aa128cf26ad15944362ea1f0f12a64f0b7f516cecf1530ddddb5fd165"
+          },
+          "source_sha256": "f9fdddca9364c4f685fce6fda65b4cb0f55d5859516827bfb65ecd7550a54b4c",
+          "status": "divergent",
+          "fields": [
+            "legacy:cobol-field:CVTRA05Y:TRAN-ID:5",
+            "legacy:copybook:CVTRA05Y"
+          ],
+          "outcome": "killed-divergent",
+          "killed": true
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:monthly-interest",
+      "generated": 5,
+      "killed": 1,
+      "killed_divergent": 0,
+      "killed_failure": 1,
+      "kill_rate": 0.2,
+      "mutants": [
+        {
+          "name": "monthly-interest--rounding-mode",
+          "target": "service",
+          "rule_id": "rule:intcalc:monthly-interest",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 462,
+                "line_end": 468
+              }
+            ],
+            "start_line": 90,
+            "end_line": 90,
+            "original_sha256": "1914af2f56fcaa1d095885f55bdb8069a37e111714da1ca43205c992b768a1ae"
+          },
+          "source_sha256": "16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        },
+        {
+          "name": "monthly-interest--scale-minus-one",
+          "target": "service",
+          "rule_id": "rule:intcalc:monthly-interest",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 462,
+                "line_end": 468
+              }
+            ],
+            "start_line": 90,
+            "end_line": 90,
+            "original_sha256": "1914af2f56fcaa1d095885f55bdb8069a37e111714da1ca43205c992b768a1ae"
+          },
+          "source_sha256": "e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        },
+        {
+          "name": "monthly-interest--scale-plus-one",
+          "target": "service",
+          "rule_id": "rule:intcalc:monthly-interest",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 462,
+                "line_end": 468
+              }
+            ],
+            "start_line": 90,
+            "end_line": 90,
+            "original_sha256": "1914af2f56fcaa1d095885f55bdb8069a37e111714da1ca43205c992b768a1ae"
+          },
+          "source_sha256": "17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        },
+        {
+          "name": "monthly-interest--operand-swap",
+          "target": "service",
+          "rule_id": "rule:intcalc:monthly-interest",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 462,
+                "line_end": 468
+              }
+            ],
+            "start_line": 90,
+            "end_line": 90,
+            "original_sha256": "1914af2f56fcaa1d095885f55bdb8069a37e111714da1ca43205c992b768a1ae"
+          },
+          "source_sha256": "fb1827c2e61e9793107f91427fbaaa2495210c3ca6cfbc09ef42ce5edd6e8408",
+          "status": "execution-failure",
+          "fields": [],
+          "outcome": "killed-failure",
+          "killed": true
+        },
+        {
+          "name": "monthly-interest--constant-zero",
+          "target": "service",
+          "rule_id": "rule:intcalc:monthly-interest",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 462,
+                "line_end": 468
+              }
+            ],
+            "start_line": 90,
+            "end_line": 90,
+            "original_sha256": "1914af2f56fcaa1d095885f55bdb8069a37e111714da1ca43205c992b768a1ae"
+          },
+          "source_sha256": "76ff26d6b33a86fbf01b4be42b3e25c9e8158b9bf192cec8107fb992e5b9f9e8",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:nonzero-rate-emission",
+      "generated": 2,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "nonzero-rate-emission--comparison-boundary",
+          "target": "service",
+          "rule_id": "rule:intcalc:nonzero-rate-emission",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 214,
+                "line_end": 217
+              }
+            ],
+            "start_line": 83,
+            "end_line": 83,
+            "original_sha256": "4bc2a2e8936edf68d147778d73054005e6c90eedaf74e72d51834edb2d86fdaf"
+          },
+          "source_sha256": "103efa8138ec0b0e02621ce8cbb21adcc67a7e6d9d0fca561b997885c9f496de",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        },
+        {
+          "name": "nonzero-rate-emission--drop-zero-branch",
+          "target": "service",
+          "rule_id": "rule:intcalc:nonzero-rate-emission",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 214,
+                "line_end": 217
+              }
+            ],
+            "start_line": 83,
+            "end_line": 83,
+            "original_sha256": "4bc2a2e8936edf68d147778d73054005e6c90eedaf74e72d51834edb2d86fdaf"
+          },
+          "source_sha256": "4006b4ba4191e18981b77747081e81c9a87939d3d9ab922738a0d93521926a7e",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:source-final-account",
+      "generated": 1,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "source-final-account--drop-final-branch",
+          "target": "service",
+          "rule_id": "rule:intcalc:source-final-account",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 188,
+                "line_end": 221
+              },
+              {
+                "node": "legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 325,
+                "line_end": 340
+              }
+            ],
+            "start_line": 112,
+            "end_line": 112,
+            "original_sha256": "ec73c2026c4fb500f5da503a3aa5e7e82e6e769ec752d2a28fa4f1de4bfe7841"
+          },
+          "source_sha256": "8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    },
+    {
+      "id": "rule:intcalc:zero-rate",
+      "generated": 2,
+      "killed": 0,
+      "killed_divergent": 0,
+      "killed_failure": 0,
+      "kill_rate": 0.0,
+      "mutants": [
+        {
+          "name": "zero-rate--comparison-boundary",
+          "target": "service",
+          "rule_id": "rule:intcalc:zero-rate",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 214,
+                "line_end": 217
+              }
+            ],
+            "start_line": 83,
+            "end_line": 83,
+            "original_sha256": "4bc2a2e8936edf68d147778d73054005e6c90eedaf74e72d51834edb2d86fdaf"
+          },
+          "source_sha256": "103efa8138ec0b0e02621ce8cbb21adcc67a7e6d9d0fca561b997885c9f496de",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        },
+        {
+          "name": "zero-rate--drop-zero-branch",
+          "target": "service",
+          "rule_id": "rule:intcalc:zero-rate",
+          "anchor": {
+            "legacy": [
+              {
+                "node": "legacy:cobol-program:CBACT04C",
+                "path": "app/cbl/CBACT04C.cbl",
+                "line_start": 214,
+                "line_end": 217
+              }
+            ],
+            "start_line": 83,
+            "end_line": 83,
+            "original_sha256": "4bc2a2e8936edf68d147778d73054005e6c90eedaf74e72d51834edb2d86fdaf"
+          },
+          "source_sha256": "4006b4ba4191e18981b77747081e81c9a87939d3d9ab922738a0d93521926a7e",
+          "status": "equivalent",
+          "fields": [],
+          "outcome": "survived",
+          "killed": false
+        }
+      ],
+      "outcome": null,
+      "limitation": null
+    }
+  ],
+  "model_calls": 0,
+  "docker_calls": 0,
+  "baseline": {
+    "name": "baseline",
+    "target": "service",
+    "rule_id": null,
+    "anchor": null,
+    "source_sha256": "975dc89e9f57c1b93aa3eeca6fab860be18e972877b34b10efda6bbffde01486",
+    "status": "equivalent",
+    "fields": []
+  },
+  "missing_disclosure": null,
+  "limitation": "Rule-scoped modern Java mutations versus public reference-model outputs, not legacy execution.",
+  "content_sha256": "5572cdc88a0c42df75a86a46126977e5f4f536516dbfecee7c752e1371810164",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "3498b9a1172b41ab31d899719df65c4520a58e63242f0b3b03ef941c2cfaec89",
+    "value": "z2MJdjrsJeOJtCUyEtHfOQT1aRDFMZlFpX5+1T1aKfNlVJ7+k5eo73YWlPxVBvYw3g9fnDKgERpAC2ag/qJeDA=="
+  }
+}

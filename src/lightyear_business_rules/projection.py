@@ -13,7 +13,10 @@ def enrich(node, rules, receipt, records, judge_key, *, public_lane, approved_so
         return node
     result = {**node, "properties": dict(node["properties"])}
     status = next(r for r in receipt["rules"] if r["id"] == rule["id"])
-    result["properties"].update(rule_status=status["status"], rule_receipt_sha256=receipt["content_sha256"])
+    from .strength import display
+    strength = status.get("evidence_strength", "not-assessed")
+    result["properties"].update(rule_status=display(status["status"], strength),
+        rule_evidence_strength=strength, rule_receipt_sha256=receipt["content_sha256"])
     def constants(value):
         if isinstance(value, dict):
             for k,v in value.items():

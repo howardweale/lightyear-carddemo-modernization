@@ -19,7 +19,7 @@ def captured_records(directory):
     directory = Path(directory).resolve()
     require("arrivals" not in directory.parts, "private-arrivals-adapter-refused")
     manifest = json.loads((directory / "run.json").read_text(encoding="utf-8"))
-    require(manifest.get("evidence_class") == "synthetic-public-rehearsal", "public-fixture-required")
+    require(manifest.get("evidence_class") in {"synthetic-public-rehearsal", "synthetic-public-reference-model"}, "public-fixture-required")
     streams, hashes = {}, {}
     for item in manifest["datasets"]:
         path = (directory / item["file"]).resolve()
@@ -32,6 +32,8 @@ def captured_records(directory):
         streams[key] = [cls.parse(raw[i:i+cls.LENGTH].decode("cp037")) for i in range(0, len(raw), cls.LENGTH)]
         hashes[item["file"]] = sha256(raw).hexdigest()
     rows = adapt(streams)
+    for row in rows:
+        row["meta"]["evidence_class"] = manifest["evidence_class"]
     return rows, dict(evidence_class=manifest["evidence_class"], dataset_hashes=hashes,
                       run_sha256=sha256((directory / "run.json").read_bytes()).hexdigest(),
                       limitation="Stored synthetic public rehearsal outputs; not a native mainframe observation.")

@@ -98,3 +98,20 @@ a temporary test-only Tower authority and destroys its private keys. Respect
 any active B06 load restriction before running it. Do not substitute private
 customer/partner archives. The lightweight replay above needs neither a JDK
 nor capture archives.
+
+## Evidence strength
+
+See the [evidence-strength milestone](evidence-strength-milestone.md) for per-rule old/new results. Agreement and evidence strength are distinct: exports and the Tower/graph catalogues mark weak verified rules explicitly. Plain verified totals count only discriminating rules; weak and not-assessed totals are separate. New signed assessments bind their original receipt and rule-scoped mutation report. Legacy receipts remain replayable using the byte-preserved v1 evaluator.
+
+[New fixture catalogue](evidence-strength-v2/new-catalogue.html) · [old fixture reassessment](evidence-strength-v2/old-catalogue.html). Reference-model outputs are not legacy observations. Verification against Maintec mainframe outputs under separate authorization remains the ground truth; this work does not do it. The milestone's “What can be said publicly” section limits INTCALC claims to discriminating rules and preserves existing T-SQL claims.
+
+Rebuild only outside a competing B06 native window, into NEW directories:
+
+```text
+python -B tools/build_discriminating_intcalc.py --output NEW_FIXTURE
+python -B tools/rules_evidence_v2.py --output NEW_EVIDENCE --jdk JDK_ROOT
+```
+
+The evidence runner uses the checked-in fixture, compiles only small host Java variants and creates a disposable TEST authority. It never reads production signing authority or runs Docker. Do not replace historical evidence with regenerated outputs.
+
+The corrected v2 assessment supersedes the preserved v1 extraction run. See the milestone for every rule’s old/new status and divergent/failure counts; four agreeing rules remain not-assessed because their mutation anchor or named output-field binding is unavailable.

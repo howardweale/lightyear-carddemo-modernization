@@ -48,3 +48,11 @@ The new run requires a fresh owner, full validation, immutable snapshot, public
 source and plan byte verification. Pair budget remains 7,190 seconds plus 600
 seconds cleanup reserve; candidate timeout remains 1,800 seconds. Existing audit
 and evidence caps are unchanged. No retries, slot replacement or window extension.
+
+## Frozen preparation completed
+
+Completed 2026-10-10T17:22:27.688800+00:00 in 1754.297 seconds, with zero Docker/model calls.
+All 113,606 frozen files, 783 public source comparisons and 69 focused frozen tests passed.
+Plan `2d81a2505cf9993f8311a154662354141d7388d5cd275013faab586e8f3f8004`; snapshot `ffdf878cdb6e11ddeaefd86701bb162dea931e4616f9d37cf5d552cfef23d780`.
+[Full plan](calibration/idempiere-ms94/stage-b-06/preparation/observer-unmatched-r1/README.md).
+Publication and preparation do not authorize native execution.

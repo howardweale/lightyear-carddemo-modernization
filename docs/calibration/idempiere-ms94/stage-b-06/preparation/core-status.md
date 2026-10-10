@@ -1,5 +1,20 @@
 # B06 preparation status
 
+## October 10: accepted unmatched-return diagnostic prepared, not armed
+
+[Full frozen plan](observer-unmatched-r1/README.md): one fresh J1 pair,
+10:30 AM–1:30 PM PDT, latest start 11:20:10 AM PDT. Howard shortened review lead
+for this window only; fresh exact Tower and separate Docker approval remain.
+All 113,606 frozen hashes, 783 public source comparisons and 69 focused tests passed.
+Plan `2d81a2505cf9993f8311a154662354141d7388d5cd275013faab586e8f3f8004`; snapshot `ffdf878cdb6e11ddeaefd86701bb162dea931e4616f9d37cf5d552cfef23d780`.
+
+Only empty-pending unmatched returns may continue as explicit unobserved records.
+Other anomalies stop. Any unmatched return makes observation indeterminate;
+diagnostic-only collection cannot issue a business gate or qualification credit.
+The original failure was reproduced offline, but missing-entry delivery cause
+remains unproven. Old failures and consumed approvals remain preserved.
+Earlier dated plans below are historical and cannot authorize this new run.
+
 ## October 9 amended gate: one diagnostic capture prepared, not armed
 
 [Full diagnostic plan](observer-diagnostic-r1/README.md) proposes October 10,

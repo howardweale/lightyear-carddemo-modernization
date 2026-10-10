@@ -17,10 +17,12 @@ def prepare(repository,output):
  for name in sorted(WORKER|EXTRA):
   original=repository/'tools'/(name if name in EXTRA else 'b06_image_artifacts/'+name)
   (source/name).write_bytes(original.read_bytes())
+ for original in (repository/'src/lightyear_evidence').rglob('*.py'):
+  target=source/original.relative_to(repository/'src');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(original.read_bytes())
  # Bind all prospective host Python inputs, not private work files or archives.
  files={p.relative_to(repository).as_posix():digest_file(p) for folder in ('src','tools') for p in (repository/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.java')}
  plan=dict(schema='b06-runtime-practice/1',claim='NON-EVIDENCE PRACTICE; not qualification or Tower authority',repository=str(repository),output=str(output),image=IMAGE,
-  source_sha256={p.name:digest_file(p) for p in source.iterdir()},host_files_sha256=files,model_calls=0,native_pairs=0,database_containers=0,network='none',maximum_runtime_seconds=2700,cleanup_reserve_seconds=600,run_authorized=False)
+  source_sha256={p.relative_to(source).as_posix():digest_file(p) for p in source.rglob('*') if p.is_file()},host_files_sha256=files,model_calls=0,native_pairs=0,database_containers=0,network='none',maximum_runtime_seconds=2700,cleanup_reserve_seconds=600,run_authorized=False)
  atomic_json(output/'practice-plan.json',plan)
  return plan
 
@@ -63,7 +65,7 @@ def run(plan_path,*,snapshot=None,output=None):
    if digest_file(repo/name)!=sha:raise ValueError('practice-host-changed:'+name)
   if frozen:
    validate(repo,original_plan)
-  elif {p.name:digest_file(p) for p in source.iterdir()}!=plan['source_sha256']:raise ValueError('practice-source-changed')
+  elif {p.relative_to(source).as_posix():digest_file(p) for p in source.rglob('*') if p.is_file()}!=plan['source_sha256']:raise ValueError('practice-source-changed')
  verify()
  claim=root/'once.claim'
  with claim.open('x') as f:f.write('practice only; no automatic retry')

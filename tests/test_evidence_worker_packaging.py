@@ -1,0 +1,19 @@
+"""Standalone source directory can import the shared content module without src/."""
+import os, subprocess, sys, tempfile, unittest
+from pathlib import Path
+from tools.b06_image_artifacts.runtime_practice import prepare, WORKER, EXTRA
+
+class WorkerPackagingTests(unittest.TestCase):
+ def test_preparation_binds_and_packages_importable_shared_module(self):
+  repo=Path(__file__).resolve().parents[1]
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d)
+   for name in WORKER|EXTRA:
+    rel=Path('tools')/(name if name in EXTRA else 'b06_image_artifacts/'+name)
+    p=root/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((repo/rel).read_bytes())
+   for original in (repo/'src/lightyear_evidence').rglob('*.py'):
+    p=root/original.relative_to(repo);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(original.read_bytes())
+   out=root/'work/practice';plan=prepare(root,out)
+   self.assertIn('lightyear_evidence/content.py',plan['source_sha256'])
+   env=dict(os.environ,PYTHONPATH=str(out/'source'),PYTHONDONTWRITEBYTECODE='1')
+   subprocess.run([sys.executable,'-B','-S','-c','import bundle_content; assert callable(bundle_content.bundle_content_view)'],cwd=out,env=env,check=True,capture_output=True)

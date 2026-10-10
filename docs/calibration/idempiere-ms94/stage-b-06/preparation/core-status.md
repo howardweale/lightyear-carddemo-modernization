@@ -1,5 +1,20 @@
 # B06 preparation status
 
+## October 10: Unicode-corrected unmatched-return r2 prepared, not armed
+
+[Full frozen plan](observer-unmatched-r2/README.md): one fresh J1 pair,
+10:30 AM–1:30 PM PDT, latest start 11:20:10 AM PDT. Howard shortened review lead
+for this window only; fresh exact Tower and separate Docker approval remain.
+All 113,611 frozen hashes, 783 public source comparisons and 70 focused tests passed.
+Plan `6ad761916d4e2b2dcfae86b38f3f368292b18f9ff5c94c49c3a9fbaafe038048`; snapshot `61c6749befdfed62796db3752db611c1836b9e8db7d6359b0e876224abed5ebe`.
+
+Only empty-pending unmatched returns may continue as explicit unobserved records.
+Other anomalies stop. Any unmatched return makes observation indeterminate;
+diagnostic-only collection cannot issue a business gate or qualification credit.
+The original failure was reproduced offline, but missing-entry delivery cause
+remains unproven. Old failures and consumed approvals remain preserved.
+Earlier dated plans below are historical and cannot authorize this new run.
+
 ## October 10: accepted unmatched-return diagnostic prepared, not armed
 
 [Full frozen plan](observer-unmatched-r1/README.md): one fresh J1 pair,

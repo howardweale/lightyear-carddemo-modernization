@@ -217,3 +217,5 @@ tools/replay_tsql_native.py -text whitespace=blank-at-eol,blank-at-eof,space-bef
 docs/business-rules/evidence-strength-v1/** -text
 tests/mainframe/fixtures/intcalc-discriminating-v1/** -text
 tools/build_discriminating_intcalc.py -text
+
+docs/business-rules/evidence-strength-v2/** -text

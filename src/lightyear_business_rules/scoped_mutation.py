@@ -114,18 +114,16 @@ def run(root, fixture, work, jdk, rules, receipt):
         outcomes = []
         for result in applicable:
             output_nodes = {v["node"] for k,v in rule.get("bindings", {}).items() if k.startswith("output.") and v["node"].startswith("legacy:cobol-field:")}
-            # Record-presence predicates have copybook-level output bindings.
-            if not output_nodes:
-                output_nodes = set(rule["outputs"])
-            outcome = "killed-failure" if result["status"] == "execution-failure" else "killed-divergent" if killed(result, output_nodes) else "survived"
+            outcome = "not-applicable" if not output_nodes else "killed-failure" if result["status"] == "execution-failure" else "killed-divergent" if killed(result, output_nodes) else "survived"
             outcomes.append({**result, "outcome": outcome, "killed": outcome.startswith("killed-")})
         divergent = sum(m["outcome"] == "killed-divergent" for m in outcomes)
         failure = sum(m["outcome"] == "killed-failure" for m in outcomes)
-        rows.append(dict(id=rule["id"], generated=len(outcomes), killed=divergent+failure,
+        evaluated=sum(m["outcome"] != "not-applicable" for m in outcomes)
+        rows.append(dict(id=rule["id"], generated=len(outcomes), evaluated=evaluated, killed=divergent+failure,
             killed_divergent=divergent, killed_failure=failure,
-            kill_rate=(divergent+failure)/len(outcomes) if outcomes else None, mutants=outcomes,
-            outcome=None if outcomes else "not-applicable",
-            limitation=None if outcomes else "No reviewed modern edit anchor for this rule; no service-wide mutants borrowed."))
+            kill_rate=(divergent+failure)/evaluated if evaluated else None, mutants=outcomes,
+            outcome=None if evaluated else "not-applicable",
+            limitation=None if evaluated else "No reviewed modern edit anchor or named output field for this rule; no sibling mutants or copybook-wide differences borrowed."))
     return dict(schema="lightyear-rule-mutations/2", rule_set_sha256=digest(rules), receipt_sha256=receipt["content_sha256"],
                 rules=rows, model_calls=0, docker_calls=0, baseline=results[0], missing_disclosure=failure_case,
                 limitation="Rule-scoped modern Java mutations versus public reference-model outputs, not legacy execution.")

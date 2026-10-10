@@ -25,8 +25,6 @@ def assess(status, counts, mutation=None, error=None):
         return "not-assessed", error or "No applicable output observations."
     if status != "verified":
         return "not-assessed", "Agreement was not established."
-    if mutation is not None and mutation.get("outcome") == "not-applicable":
-        return "not-assessed", mutation.get("limitation") or "No applicable rule-scoped mutation check."
     if any(n < 2 for n in counts.values()):
         return "weak", "At least one applicable output is constant."
     if mutation is None:

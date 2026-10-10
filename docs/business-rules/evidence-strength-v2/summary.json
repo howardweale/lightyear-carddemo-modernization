@@ -1,0 +1,161 @@
+{
+  "old": {
+    "verified_total": 0,
+    "verified_weak_total": 4,
+    "verified_not_assessed_total": 4,
+    "rules": [
+      {
+        "id": "rule:intcalc:account-boundary",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:account-update",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:default-rate",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 0,
+        "killed_failure": 1
+      },
+      {
+        "id": "rule:intcalc:disclosure-rate",
+        "status": "untested",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:fixed-width-contract",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:interest-transaction",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:monthly-interest",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 0,
+        "killed_failure": 1
+      },
+      {
+        "id": "rule:intcalc:nonzero-rate-emission",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:source-final-account",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:zero-rate",
+        "status": "untested",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      }
+    ]
+  },
+  "new": {
+    "verified_total": 2,
+    "verified_weak_total": 4,
+    "verified_not_assessed_total": 4,
+    "rules": [
+      {
+        "id": "rule:intcalc:account-boundary",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 1,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:account-update",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:default-rate",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 0,
+        "killed_failure": 1
+      },
+      {
+        "id": "rule:intcalc:disclosure-rate",
+        "status": "verified",
+        "evidence_strength": "discriminating",
+        "killed_divergent": 1,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:fixed-width-contract",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:interest-transaction",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:monthly-interest",
+        "status": "verified",
+        "evidence_strength": "discriminating",
+        "killed_divergent": 4,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:nonzero-rate-emission",
+        "status": "verified",
+        "evidence_strength": "not-assessed",
+        "killed_divergent": 0,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:source-final-account",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 1,
+        "killed_failure": 0
+      },
+      {
+        "id": "rule:intcalc:zero-rate",
+        "status": "verified",
+        "evidence_strength": "weak",
+        "killed_divergent": 2,
+        "killed_failure": 0
+      }
+    ]
+  },
+  "schema": "public-rule-evidence-v2/1",
+  "test_authority_only": true,
+  "legacy_execution": false,
+  "docker_calls": 0,
+  "model_calls": 0
+}

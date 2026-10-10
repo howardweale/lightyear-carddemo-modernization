@@ -105,11 +105,6 @@ def issue(rules, records, signer, *, visibility="private"):
     return signer.sign({**check(rules, records, visibility=visibility), "evaluator_sha256": implementation_hash()})
 
 
-def prior_v2_hash():
-    return digest({name: sha256((Path(__file__).parent/(name.replace(".py", "_v2.py") if name in {"engine.py", "strength.py"} else name)).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-                   for name in ("__init__.py", "engine.py", "language.py", "strength.py")})
-
-
 def replay(receipt, rules, records, public_key):
     if "original_receipt" in receipt:
         original = receipt["original_receipt"]
@@ -128,19 +123,13 @@ def replay(receipt, rules, records, public_key):
         require({k:v for k,v in receipt.items() if k not in {"signature", "content_sha256"}} == expected, "rule-replay-mismatch")
         return dict(status="passed", receipt_sha256=receipt["content_sha256"], rules=len(rules), model_calls=0)
     require(verify_envelope(receipt, public_key), "invalid-rule-signature")
-    if receipt.get("evaluator_sha256") == prior_v2_hash():
-        from .engine_v2 import check as prior_check
-        expected = {**prior_check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": prior_v2_hash()}
-    else:
-        expected = {**check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": implementation_hash()}
+    expected = {**check(rules, records, visibility=receipt["visibility"]), "evaluator_sha256": implementation_hash()}
     require({k:v for k,v in receipt.items() if k not in {"signature", "content_sha256"}} == expected, "rule-replay-mismatch")
     return dict(status="passed", receipt_sha256=receipt["content_sha256"], rules=len(rules), model_calls=0)
 
 
 def assessment_body(original, report, public_key):
     from .strength import assess
-    if original.get("evaluator_sha256") == prior_v2_hash():
-        from .strength_v2 import assess
     require(verify_envelope(original, public_key) and verify_envelope(report, public_key), "assessment-signature")
     require(report.get("schema") == "lightyear-rule-mutations/2" and report["receipt_sha256"] == original["content_sha256"]
             and report["rule_set_sha256"] == original["rule_set_sha256"], "assessment-binding")

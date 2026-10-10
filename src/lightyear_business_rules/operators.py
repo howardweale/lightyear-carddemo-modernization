@@ -24,7 +24,7 @@ class CardDemoAdapter:
             return [Edit("rounding-mode", monthly, monthly.replace("DOWN", "HALF_UP")),
                 Edit("scale-minus-one", monthly, monthly.replace(", 2,", ", 1,")),
                 Edit("scale-plus-one", monthly, monthly.replace(", 2,", ", 3,")),
-                Edit("operand-swap", monthly, ".divide(balance.balance().multiply(disclosure.annualRate()), 2, RoundingMode.DOWN)"),
+                Edit("operand-swap", "balance.balance()\n                    .multiply(disclosure.annualRate())\n                    "+monthly, "BigDecimal.valueOf(1200).divide(balance.balance().multiply(disclosure.annualRate()), 2, RoundingMode.DOWN)"),
                 Edit("constant-zero", monthly, monthly+".multiply(BigDecimal.ZERO)")]
         if suffix == "disclosure-rate":
             return [Edit("drop-direct-rate", "Disclosure disclosure = disclosureByKey.get(key);", "Disclosure disclosure = null;")]

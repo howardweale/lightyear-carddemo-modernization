@@ -27,6 +27,13 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual("discriminating",assess("verified",{"output.x":2},{"killed_divergent":1})[0])
         self.assertEqual("not-assessed",assess("verified",{})[0])
         self.assertEqual("weak",assess("verified",{"output.x":1},{"killed_divergent":1})[0])
+    def test_unavailable_mutation_is_not_assessed_even_when_output_is_constant(self):
+        self.assertEqual("not-assessed",assess("verified",{"output.x":1},{"outcome":"not-applicable","limitation":"no anchor"})[0])
+    def test_operand_reversal_replaces_entire_expression(self):
+        source=(ROOT/"candidate-java/src/main/java/ai/lightyear/carddemo/service/InterestCalculationService.java").read_text()
+        rule=next(r for r in self.rules if r["id"].endswith("monthly-interest"))
+        variant=next(v for v in anchored_variants(source,rule,CardDemoAdapter()) if v["name"]=="operand-swap")
+        self.assertIn("BigDecimal monthly = BigDecimal.valueOf(1200).divide(balance.balance().multiply(disclosure.annualRate())",variant["text"])
     def test_rule_anchors_never_borrow_monthly_mutants(self):
         source=(ROOT/"candidate-java/src/main/java/ai/lightyear/carddemo/service/InterestCalculationService.java").read_text()
         for rule in self.rules:
@@ -50,6 +57,13 @@ class EvidenceTests(unittest.TestCase):
             self.assertIn("verified (weak evidence)",html(catalogue(self.rules,assessed,signer.public)))
             bad=copy.deepcopy(assessed);bad["rules"][0]["evidence_strength"]="discriminating"
             with self.assertRaises(RuleError):replay(bad,self.rules,self.records,signer.public)
+    def test_superseded_and_current_strength_receipts_replay(self):
+        for revision in ("evidence-strength-v1", "evidence-strength-v2"):
+            folder=ROOT/"docs/business-rules"/revision
+            for label in ("old", "new"):
+                receipt=json.loads((folder/f"{label}-receipt.json").read_bytes())
+                records=json.loads((folder/f"{label}-records.json").read_bytes())
+                self.assertEqual("passed",replay(receipt,self.rules,records,(folder/"judge-test.public.pem").read_bytes())["status"])
     def test_historical_public_evidence_still_replays(self):
         from tools.replay_business_rules_demo import verify
         self.assertEqual("passed",verify()["status"])

@@ -14,6 +14,7 @@ from .records import load_copybook, to_ascii_fixed
 from .zos_bindings import ROOT, load_bindings, dataset_binding
 
 SOURCE_COMMIT = "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
+SOURCE_TREE = "a1253e31c839f78d1f185b01771ba956da63b005"
 PACKAGE_VERSION = "3.1.2-5.1ubuntu1"
 FLAGS = ["-std=ibm", "-fsign=EBCDIC", "-O2"]
 PROGRAMS = {"INTCALC": "CBACT04C", "POSTTRAN": "CBTRN02C"}
@@ -245,6 +246,9 @@ def build(target):
                 execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy"))}
     return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
+                   source_tree=SOURCE_TREE, license="Apache-2.0",
+                   license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
+                   driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,
                    adapters="Generated indexed file bridge, parameter wrapper and explicit RC12 CEE3ABD shim",
                    limits="No CICS, JES/JCL execution, VSAM implementation or z/OS equivalence claim")

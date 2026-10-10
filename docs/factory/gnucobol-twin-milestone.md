@@ -61,3 +61,21 @@ Merge requires Howard's approval of the exact commit.
 Sources: [Ubuntu noble package](https://packages.ubuntu.com/noble/gnucobol3),
 [GnuCOBOL manual](https://gnucobol.sourceforge.io/doc/gnucobol.html), and existing
 `spec/mainframe/public-source/README.md` / copybook LICENSE and NOTICE.
+
+## Source boundary and VM status
+
+The pinned upstream Git tree is `a1253e31c839f78d1f185b01771ba956da63b005`.
+Original source provenance and Apache-2.0 license hashes appear in build receipts.
+The primary `app/cbl` online program inventory is excluded: COACTUPC, COACTVWC,
+COADM01C, COBIL00C, COBSWAIT, COCRDLIC, COCRDSLC, COCRDUPC, COMEN01C, CORPT00C,
+COSGN00C, COTRN00C, COTRN01C, COTRN02C, COUSR00C, COUSR01C, COUSR02C and COUSR03C.
+The optional IMS/Db2/MQ and transaction-type extensions are excluded too.
+Proposed later record harness: extract a reviewed business paragraph behind a
+COMMAREA-shaped fixed-record input/output adapter, with explicit CICS READ/WRITE
+and response-code stubs; assert map/screen/terminal statements are unreachable.
+Until independently reviewed against original execution, that extracted harness
+would be a reference model, not a confirmed executable twin.
+
+Multipass is not installed at the checked local paths. No VM run is claimed and
+no machine software was installed. The same Ubuntu command is supplied above;
+VM execution remains outstanding alongside hosted CI acceptance.

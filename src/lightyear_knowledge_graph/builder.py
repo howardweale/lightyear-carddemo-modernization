@@ -20,6 +20,7 @@ def build_graph(
     modern_commit: str = "working-tree",
     ontology_path: Path = DEFAULT_ONTOLOGY_PATH,
     semantic_input_path: Path | None = None,
+    business_rules: bool = False,
 ) -> KnowledgeGraph:
     legacy_root = legacy_root.resolve()
     modern_root = modern_root.resolve()
@@ -27,6 +28,9 @@ def build_graph(
     if semantic_input_path is not None:
         semantic_input_path = semantic_input_path.resolve()
     ontology = load_ontology(ontology_path)
+    if business_rules:
+        from .ontology import business_rules_ontology
+        ontology = business_rules_ontology()
     semantic_inputs = (
         load_semantic_inputs(semantic_input_path, modern_root)
         if semantic_input_path is not None
@@ -55,7 +59,7 @@ def build_graph(
         ],
         ontology_identity(ontology),
     )
-    extract_legacy(graph, legacy_root)
+    extract_legacy(graph, legacy_root, include_decisions=business_rules)
     declared_modern = (
         resolve_declared_paths(semantic_inputs, modern_root, "modern_files")
         if semantic_inputs is not None
@@ -88,6 +92,9 @@ def _apply_manifest(graph: KnowledgeGraph, manifest_path: Path) -> None:
         )
     ]
     for workload in manifest["workloads"]:
+        if workload.get("source_language") == "T-SQL":
+            from lightyear_business_rules.tsql import add_graph_nodes
+            add_graph_nodes(graph, workload, manifest_path.resolve().parents[2])
         workload_id = workload["id"]
         graph.add_node(
             workload_id,
@@ -124,17 +131,24 @@ def _apply_manifest(graph: KnowledgeGraph, manifest_path: Path) -> None:
 
         for rule in workload["rules"]:
             rule_id = rule["id"]
+            extended = rule.get("schema") == "lightyear-business-rule/1"
+            if extended:
+                from lightyear_business_rules.engine import validate_rules
+                validate_rules([rule], graph.nodes)
             graph.add_node(
                 rule_id,
                 "business_rule",
                 rule["name"],
                 properties={
                     "statement": rule["statement"],
-                    "status": rule.get("status", "mapped"),
+                    "status": "untested" if extended else rule.get("status", "mapped"),
                     "visibility": rule.get("visibility", "shared"),
                     "confidence": rule.get("confidence", "asserted"),
                 },
             )
+            if extended:
+                graph.nodes[rule_id]["properties"].update({k: rule[k] for k in (
+                    "schema", "workload", "kind", "inputs", "outputs", "executable", "provenance", "legacy_behaviour", "decision_ref")})
             graph.add_edge(workload_id, "HAS_RULE", rule_id, evidence_items=mapping_evidence)
             for source in rule.get("derived_from", []):
                 node_id = source["node"]
@@ -145,7 +159,7 @@ def _apply_manifest(graph: KnowledgeGraph, manifest_path: Path) -> None:
                     node_id,
                     evidence_items=[
                         evidence(
-                            LEGACY_SOURCE_ID,
+                            MODERN_SOURCE_ID if workload.get("source_language") == "T-SQL" else LEGACY_SOURCE_ID,
                             source["path"],
                             source["line_start"],
                             source.get("line_end"),

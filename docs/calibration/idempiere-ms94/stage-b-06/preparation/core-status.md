@@ -19,6 +19,19 @@ PR #292 was merged after all 24 checks; #293 is ready but not merged. Earlier
 practice failures remain failed, including r2 window2 report
 `34a27503e9b82e0c775d6b3d10ec8e004ab00a7dc26bcd0dd8ca8ad204b8d598`.
 The dated entries below are historical, not current runnable windows.
+## October 9 replacement practice window prepared
+
+[Practice r2 window2](observer-practice-r2-window2/README.md) targets 4:15–7:15 PM PDT;
+latest start 5:05:10 PM PDT. The earlier 2:30–5:30 PM plan expired unarmed and
+unstarted. Its records remain preserved. Only the never-started native plan's window
+changes; 113,578 bound files remain identical.
+
+All 113,579 frozen hashes, 767 public source comparisons
+and 41 focused frozen tests passed. Snapshot `e58ea4f5ed0cf1b5347fb256a0d9a425e244530d6af2b24f598682ecd3c77076`;
+plan `32d2345c386c350c40bd5ca637bcb60690c78a78f018a30dbf010d2ba047327d`. Fresh exact Tower approval remains required.
+No Docker, model calls or native pairs occurred during preparation; no native
+qualification or measurement credit is claimed. See the
+[window milestone](../../../../b06-observer-practice-window2-milestone.md).
 
 ## October 9 observer practice r2 frozen; fresh Tower decision required
 

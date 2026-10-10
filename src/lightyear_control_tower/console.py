@@ -105,6 +105,8 @@ class ConsoleService(DecisionService):
             {}
         )  # Kind validators are installed by trusted application code.
         self.finalizers = {}
+        from lightyear_business_rules.tower import inspect as inspect_business_rule
+        self.validators["business-rule-disposition"] = lambda item, payload, events, session: inspect_business_rule(self, item)
 
     def qualification_key(self):
         return qualification_key(

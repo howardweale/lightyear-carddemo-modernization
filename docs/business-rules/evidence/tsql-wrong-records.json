@@ -1,0 +1,67 @@
+[
+  {
+    "key": "pair-016-len-wrong-1-target",
+    "input": {
+      "procedure": "len"
+    },
+    "output": {
+      "value": "4"
+    },
+    "meta": {
+      "pair_manifest_sha256": "11546b358938f8f931819a54ec765a88b7ff6c9950c49ae11ef13f60694a5c3e",
+      "evidence_class": "signed-public-native-capture"
+    }
+  },
+  {
+    "key": "pair-022-isnull-length-wrong-1-target",
+    "input": {
+      "procedure": "isnull-length"
+    },
+    "output": {
+      "value": "abcdef"
+    },
+    "meta": {
+      "pair_manifest_sha256": "9c32e49c5ec2916810aa1d15dbeee15dce5a8d3ecc985b75282f91d53d02b4e4",
+      "evidence_class": "signed-public-native-capture"
+    }
+  },
+  {
+    "key": "pair-032-datediff-day-wrong-1-target",
+    "input": {
+      "procedure": "datediff-day"
+    },
+    "output": {
+      "value": "0"
+    },
+    "meta": {
+      "pair_manifest_sha256": "0cdc1344556503673957ff2a2b99ca7d9b43b4c5cf339d7be31d1b4a902d22e9",
+      "evidence_class": "signed-public-native-capture"
+    }
+  },
+  {
+    "key": "pair-042-round-negative-wrong-1-target",
+    "input": {
+      "procedure": "round-negative"
+    },
+    "output": {
+      "value": "-100"
+    },
+    "meta": {
+      "pair_manifest_sha256": "39570df201e722979af890af3ba25ac7890ddef8de654fc182fe81ed6298b7f7",
+      "evidence_class": "signed-public-native-capture"
+    }
+  },
+  {
+    "key": "pair-044-money-scale-wrong-1-target",
+    "input": {
+      "procedure": "money-scale"
+    },
+    "output": {
+      "value": "1.23456"
+    },
+    "meta": {
+      "pair_manifest_sha256": "5c8a18535759376030ca8485199a2a25745213cc1d5e0a79201ae3e765193bad",
+      "evidence_class": "signed-public-native-capture"
+    }
+  }
+]

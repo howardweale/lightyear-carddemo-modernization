@@ -1,0 +1,97 @@
+{
+  "schema": "lightyear-rule-verdict/1",
+  "evaluator_version": "lightyear-rule-evaluator/1",
+  "rule_set_sha256": "f1004b03ed94eef713446e91eb2d0d02eb846e7b5964fc7bdbc152a76d118df8",
+  "records_sha256": "70a1f9760baa390f6e4b1d88493a1d3e29a1cfc21ef32ce28e9861721edd64ef",
+  "visibility": "public-development",
+  "record_count": 5,
+  "rules": [
+    {
+      "id": "rule:tsql:datediff-day",
+      "status": "contradicted",
+      "applicable_count": 1,
+      "agree_count": 0,
+      "disagree_count": 1,
+      "indeterminate_count": 0,
+      "first_disagreement": {
+        "record_key": "pair-032-datediff-day-wrong-1-target",
+        "fields": [
+          "legacy:tsql-procedure:datediff-day:result:value"
+        ]
+      },
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:isnull-length",
+      "status": "contradicted",
+      "applicable_count": 1,
+      "agree_count": 0,
+      "disagree_count": 1,
+      "indeterminate_count": 0,
+      "first_disagreement": {
+        "record_key": "pair-022-isnull-length-wrong-1-target",
+        "fields": [
+          "legacy:tsql-procedure:isnull-length:result:value"
+        ]
+      },
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:len",
+      "status": "contradicted",
+      "applicable_count": 1,
+      "agree_count": 0,
+      "disagree_count": 1,
+      "indeterminate_count": 0,
+      "first_disagreement": {
+        "record_key": "pair-016-len-wrong-1-target",
+        "fields": [
+          "legacy:tsql-procedure:len:result:value"
+        ]
+      },
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:money-scale",
+      "status": "contradicted",
+      "applicable_count": 1,
+      "agree_count": 0,
+      "disagree_count": 1,
+      "indeterminate_count": 0,
+      "first_disagreement": {
+        "record_key": "pair-044-money-scale-wrong-1-target",
+        "fields": [
+          "legacy:tsql-procedure:money-scale:result:value"
+        ]
+      },
+      "reasons": []
+    },
+    {
+      "id": "rule:tsql:round-negative",
+      "status": "contradicted",
+      "applicable_count": 1,
+      "agree_count": 0,
+      "disagree_count": 1,
+      "indeterminate_count": 0,
+      "first_disagreement": {
+        "record_key": "pair-042-round-negative-wrong-1-target",
+        "fields": [
+          "legacy:tsql-procedure:round-negative:result:value"
+        ]
+      },
+      "reasons": []
+    }
+  ],
+  "status_counts": {
+    "contradicted": 5
+  },
+  "model_calls": 0,
+  "limitation": "Statuses describe only these captured records; no mainframe equivalence claim.",
+  "evaluator_sha256": "eabd0343505d3a150d3ebe8de729084e2b1f787799816c0f5df44f44e84b00fb",
+  "content_sha256": "29575077abb7c8f53a2ff1dc35bf8eb964ac1712e905ce3b7a6d4288023bf593",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "80d1c6f7ba7b78c2a26cc2d4c5a2157d9db6f30ef60e43fade5f34fe1884dfc1",
+    "value": "PTgoWRdXHLrRDX2h9KnUcaiQCn0Ng0d9r5RLTZKbD2yVQEL1+2u6HrsG/B5danEDMNB69gfD8Yizz1WusySeBQ=="
+  }
+}

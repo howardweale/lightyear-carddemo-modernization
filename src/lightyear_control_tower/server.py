@@ -28,6 +28,7 @@ READ_ROUTES = frozenset(
         "events",
         "arrivals",
         "knowledge",
+        "business-rules",
     }
 )
 WRITE_ROUTES = frozenset({"review", "decide", "propose", "logout"})
@@ -53,6 +54,9 @@ class ConsoleAPI:
             if route == "knowledge":
                 self.service._read_access(token)
                 return {"available": False}
+            if route == "business-rules":
+                self.service._read_access(token)
+                return {"available": False, "catalogues": []}
             return self.carddemo.read(route, token, args)
         s = self.service
         if route == "workspace":
@@ -61,6 +65,9 @@ class ConsoleAPI:
             s._read_access(token)
             return {"scope": s.scope, "configured": False}
         s._read_access(token)
+        if route == "business-rules":
+            from lightyear_business_rules.tower import read_catalogue
+            return read_catalogue(s)
         if route == "knowledge":
             from .knowledge_status import read_status
             return read_status(s.root,s.scope)

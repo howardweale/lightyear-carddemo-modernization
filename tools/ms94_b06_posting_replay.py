@@ -91,8 +91,11 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
     data = (folder / 'events.jsonl').read_bytes()
     check(hashlib.sha256(data).hexdigest() == receipt['event_file_sha256'], 'observer-event-file-changed')
     lines = data.splitlines()
-    check(len(lines) == receipt['event_count'] and 2 <= len(lines) <= 50000, 'observer-event-count')
+    from tools.ms94_b06_observer_audit import MAX_EVENTS
+    check(len(lines) == receipt['event_count'] and 2 <= len(lines) <= 50000 + MAX_EVENTS, 'observer-event-count')
     all_records = [json.loads(line) for line in lines]
+    check(sum(r['event']['kind'] != 'observer-audit' for r in all_records) <= 50000,
+          'observer-evidence-event-count')
     if stub_policy is not None:
         from tools.ms94_b06_forwarding_stub import receipt_records
         check(receipt.get('frame_records') == receipt_records(all_records), 'observer-signed-frame-records-differ')
@@ -101,6 +104,9 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         check(receipt.get('v2_records') == commitments(all_records), 'observer-v2-receipt-commitments')
     previous, ready, death = None, False, False
     catch_resolution_required = False
+    from tools.ms94_b06_observer_audit import Audit, POLICY as AUDIT_POLICY
+    structural_audit = Audit()
+    audit_required = False
     definitions = {}
     generation_pending = {}
     generation_complete = {}
@@ -124,6 +130,11 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             if binding_v2 is not None:
                 binding_v2.catch_resolution_required = catch_resolution_required
             ready = True
+            check(event.get('audit_policy') in (None, AUDIT_POLICY), 'observer-audit-policy')
+            audit_required = event.get('audit_policy') == AUDIT_POLICY
+        elif kind == 'observer-audit':
+            check(ready and audit_required, 'observer-audit-unannounced')
+            structural_audit.event(event)
         elif binding_v2 is not None and kind in ('class-definition-v2','generation-entry','generation-return','generation-unwind'):
             check(ready and event['checkpoint'] is False, 'observer-v2-record-order')
             binding_v2.event(event)
@@ -153,6 +164,7 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
             check(raw['definition_id'] not in definitions, 'observer-duplicate-definition')
             definitions[raw['definition_id']] = raw
         elif kind == 'vm-death':
+            if audit_required: structural_audit.complete()
             check(not any(generation_pending.values()),'observer-generation-incomplete')
             check(ready and sequence == len(lines) and event['checkpoint'] is False and
                   not any(stacks.values()), 'observer-death-with-open-calls')

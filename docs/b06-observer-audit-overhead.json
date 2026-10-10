@@ -1,0 +1,53 @@
+{
+  "audited_source_text_sha256": "b4b8e34a858464f1b507ba0fe33e1ba92feb7d6afe7d9b637fd30f05c88dc065",
+  "baseline_source_sha256": "b5a7430383478985c8ad35185e312f4aeeaaf2d25b3c729f679247701292e99d",
+  "claim": "Two samples per variant, one public Windows Corretto21 fixture; not a native performance bound. Compilation excluded; target and observer startup included.",
+  "docker_commands": 0,
+  "host_only": true,
+  "median_seconds": {
+    "audit": 0.9797335,
+    "baseline": 0.9342685
+  },
+  "model_calls": 0,
+  "native_credit": false,
+  "overhead_ratio": 1.0486637406698396,
+  "samples": [
+    {
+      "audit_body_bytes": 0,
+      "audit_events": 0,
+      "elapsed_seconds": 0.957706,
+      "stdout_bytes": 1064382,
+      "stdout_sha256": "59911c5e52fef36fd7e7b718f1abe594ad4ae540899b4f2adffac9b489a4613d",
+      "total_events": 168,
+      "variant": "baseline"
+    },
+    {
+      "audit_body_bytes": 416559,
+      "audit_events": 1263,
+      "elapsed_seconds": 0.998557,
+      "stdout_bytes": 1528749,
+      "stdout_sha256": "90330e1fcc5170f05c852c8fcaec2d881edb18e37b360cc6686e81fa319e1d1a",
+      "total_events": 1431,
+      "variant": "audit"
+    },
+    {
+      "audit_body_bytes": 416559,
+      "audit_events": 1263,
+      "elapsed_seconds": 0.96091,
+      "stdout_bytes": 1528749,
+      "stdout_sha256": "402137273c8d8fac37227db028ed751929132ee433fd4ebbc0316fc06fa40195",
+      "total_events": 1431,
+      "variant": "audit"
+    },
+    {
+      "audit_body_bytes": 0,
+      "audit_events": 0,
+      "elapsed_seconds": 0.910831,
+      "stdout_bytes": 1064382,
+      "stdout_sha256": "3f2881dd5f2797178bd2968ff9919d68f7d72743772033ecab4a506eb2fdbb87",
+      "total_events": 168,
+      "variant": "baseline"
+    }
+  ],
+  "schema": "b06-offline-audit-overhead/1"
+}

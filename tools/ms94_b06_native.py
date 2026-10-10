@@ -169,8 +169,8 @@ def execute_pair(root, run, signer):
             except Exception as exc:
                 emit('J1-observer-publication-failure', {'lane': observer.lane, 'exception_type': type(exc).__name__})
                 error = error or failure_record(exc)
-    if not cleaned['complete']:
-        error = {'kind': 'equipment-failure', 'exception_type': 'CleanupIncomplete'}
+    from lightyear_evidence.completeness import cleanup_error
+    error = cleanup_error(error, cleaned['complete'])
     from tools.ms94_b06_unmatched_return import enabled
     diagnostic_only = enabled(plan.get('posting_observer', {}))
     if error is None and diagnostic_only:

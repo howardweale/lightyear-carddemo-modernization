@@ -105,15 +105,16 @@ def incomplete_equipment(run, plan, receipt, public_key):
     if diagnostic:
         check(len(records)==2 and not any(r['failure_sha256'] for r in records), 'diagnostic-pair-incomplete')
         replay_clocks(run, public_key)
-    return {'partial_evidence':True, 'equipment_failure_audited':not diagnostic,
-            **({'diagnostic_capture_audited': True, 'qualification_credit': False, 'measurement_credit': False,
-                'diagnostic_outcome': 'indeterminate' if any(r['unmatched_return_sequences'] for r in records)
-                                      else 'no-unmatched-return-observed'} if diagnostic else {}),
-            'collector_prefixes':records, 'missing_artifacts':[
-                name for name in ('b06-clock-evidence.json', 'gate.json',
-                    *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
-                if not (run/name).exists()],
-            'audit_scope':'authenticated preserved evidence only; no completed-stage or provenance claim'}
+    from lightyear_evidence.completeness import partial_equipment_summary
+    required = ('b06-clock-evidence.json', 'gate.json',
+                *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
+    summary = partial_equipment_summary(records, required, (name for name in required if (run/name).exists()))
+    if diagnostic:
+        summary.update(equipment_failure_audited=False, diagnostic_capture_audited=True,
+                       qualification_credit=False, measurement_credit=False,
+                       diagnostic_outcome='indeterminate' if any(r['unmatched_return_sequences'] for r in records)
+                                          else 'no-unmatched-return-observed')
+    return summary
 
 
 def replay_pair(root, run, public_key):

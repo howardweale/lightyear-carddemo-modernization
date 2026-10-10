@@ -1,0 +1,12 @@
+{
+  "evidence_class": "public-executable-twin-regression-not-zos",
+  "files": {
+    "ACCTFILE": "173a21a83b4550cf24863c4b1dc1667cf827510caea403b6934b306c39154734",
+    "DALYREJS": "730af35c0e8d4cc28e6c205c562a32e623dfc858ef6843ec8530cec6933ac68e",
+    "TCATBALF": "b2a8654114a60e095b8c0a5fc4276a9def34494e240d9c7a973096227730df5f",
+    "TRANFILE": "3b676ae400a11cbd3572a327c5116ab2cf43e25e311687cd8d35ea803f284e3a"
+  },
+  "inputs": "arrival-rehearsal/POSTTRAN-run1-2026-10-05",
+  "source_artifact": 11683936483,
+  "source_run": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38089424966"
+}

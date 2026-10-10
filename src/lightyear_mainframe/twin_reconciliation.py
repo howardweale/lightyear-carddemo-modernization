@@ -98,15 +98,37 @@ def probes(output):
     observed = dict(line.split('=',1) for line in result.stdout.decode().splitlines())
     expected = {'SIGNED-DISPLAY':'0012345-', 'SIGNED-STORAGE':'001234N','ROUNDED':'-001.24','TRUNCATED':'-001.23','SIZE-TRUNCATION':'23',
                 'COLLATION':'A-before-a','LEAP-DATE':'20240229','CLOCK':'2022071800000000',
-                'MISSING-FILE':'35','DUPLICATE-KEY':'22','MISSING-KEY':'23','EOF':'10'}
+                'PACKED-OVERFLOW':'detected', 'READ-EXISTING':'00', 'REWRITE-EXISTING':'00', 'MISSING-FILE':'35','DUPLICATE-KEY':'22','MISSING-KEY':'23','EOF':'10'}
     packed = (output/'packed.bin').read_bytes().hex()
     summary = receipt(output/'probes.json', phase='platform-probes', source_sha256=sha(src.read_bytes()),
                       observed=observed, expected_gnucobol=expected, packed_hex=packed,
-                      zos_match='unknown-for-all-probes',
+                      zos_match={k: ('known-different-from-zos' if k == 'COLLATION' else 'unknown') for k in expected},
                       limitation='No authorised Enterprise COBOL runtime baseline supplied; no z/OS confirmation inferred')
     if observed != expected or packed != '0012345c0012345d':
         raise AssertionError('platform probe changed; preserved actual observations')
     return summary
+
+
+def collation_experiment(output):
+    output.mkdir()
+    template=(ROOT/'tools/legacy_twin/collation-probe.cob').read_text()
+    results={}
+    for mode in ('native-ascii','program-ebcdic'):
+        folder=output/mode;folder.mkdir()
+        text=template if mode=='native-ascii' else template.replace('object-computer. x86.',
+            'object-computer. x86 program collating sequence is ebcdic-order.\nspecial-names. alphabet ebcdic-order is ebcdic.')
+        source=folder/'probe.cob';source.write_text(text)
+        execute(['cobc','-x','-free',*FLAGS,source,'-o',folder/'probe'],folder,folder/'compile')
+        result=execute([folder/'probe'],folder,folder/'run')
+        results[mode]={'stdout':result.stdout.decode(),'sort':(folder/'sorted.bin').read_text(),
+                       'merge':(folder/'merged.bin').read_text(),'source_sha256':sha(source.read_bytes())}
+    receipt(output/'collation.json',phase='collation-experiment',results=results,
+            limitation='Program collating sequence does not establish EBCDIC indexed-file key order or z/OS equivalence.')
+    if results['native-ascii']['sort']!='0Aa' or results['program-ebcdic']['sort']!='aA0':
+        raise AssertionError('Unexpected SORT collation; inspect preserved experiment')
+    if any(v['merge']!=v['sort'] for v in results.values()):
+        raise AssertionError('MERGE collation differs from SORT')
+    return results
 
 
 def reconcile(output):
@@ -123,8 +145,10 @@ def reconcile(output):
         twin = run(output/'twin', scenario, folder/'twin')
         if job != 'INTCALC':
             rows.append(dict(scenario=scenario, twin_returncode=twin['returncode'], status='not-three-way-supported',
-                classification='missing-reference-and-candidate',
-                reason='Existing Python and Java implement INTCALC only; do not invent POSTTRAN oracle results'))
+                classification='provisional-twin-missing-java-second-opinion',
+                oracle_class='executable-twin', zos_confirmation=False, releasable=False,
+                invariant_checks=twin['invariants'],
+                reason='POSTTRAN uses the provisional twin answer key; Java second opinion and signed human review remain required. No Python POSTTRAN oracle is created'))
             continue
         (folder/'inputs').mkdir()
         for dd, raw in images.items():
@@ -158,9 +182,10 @@ def reconcile(output):
             row.update(status='byte-agreement' if equal else 'disagreement', classification='none' if equal else 'unresolved')
         rows.append(row)
     platform_results = probes(output/'platform')
+    collation_results = collation_experiment(output/'collation')
     from carddemo_oracle import oracle, records
     report = receipt(output/'reconciliation.json', phase='three-way-reconciliation', scenarios=rows,
-                     java=java, reference_sources={Path(m.__file__).name: sha(Path(m.__file__).read_bytes()) for m in (oracle,records)},
+                     java=java, collation_experiment=collation_results, reference_sources={Path(m.__file__).name: sha(Path(m.__file__).read_bytes()) for m in (oracle,records)},
                      platform_probes_sha256=platform_results['content_sha256'],
                      status='engineering-report-not-release-gate', default_oracle_changed=False)
     lines = ['# Public three-way reconciliation', '', '| Scenario | Observation | Classification |', '|---|---|---|']

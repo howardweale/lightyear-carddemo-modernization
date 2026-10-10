@@ -2,11 +2,16 @@ name: Verify oracle and Spring Batch candidate
 
 on:
   pull_request:
+    paths-ignore: ['**/*.md']
   push:
     branches: [main]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   cloudbank-sustained-load:

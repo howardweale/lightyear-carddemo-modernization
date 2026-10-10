@@ -25,6 +25,13 @@ def check(output):
             lines = (output/'runs'/scenario/'after/TRANSACT').read_text().splitlines()
             if not all('2022-07-18-00.00.00.000000' in line for line in lines):
                 raise AssertionError('GnuCOBOL deterministic clock did not take effect')
+        if scenario == 'posttran-public':
+            if not result['invariants']['passed']:
+                raise AssertionError('POSTTRAN invariant failure: preserve unresolved observations')
+            repeat = run(output/'build-a', scenario, output/'runs'/'posttran-repeat')
+            if result['outputs'] != repeat['outputs']:
+                raise AssertionError('POSTTRAN repeat output bytes differ')
+            result = dict(result, repeatability='byte-identical', repeat_receipt=repeat['content_sha256'])
         results[scenario] = result
     receipt(output/'acceptance.json', phase='acceptance', reproducible_binaries=binaries,
             scenarios=results, status='engineering-executed', equivalence='not-yet-adjudicated')

@@ -24,7 +24,8 @@ def verify(root=ROOT):
     mutations = read(evidence/"mutations.json")
     assert verify_envelope(mutations, key)
     cat = catalogue(rules, receipt, key, kill_report=mutations)
-    assert cat["verified_total"] == 8
+    assert cat["verified_total"] == 0
+    assert cat["verified_not_assessed_total"] == 8
     assert all(r["generated"] > 0 for r in mutations["rules"])
     monthly = next(r for r in mutations["rules"] if r["id"].endswith("monthly-interest"))
     assert next(m for m in monthly["mutants"] if m["name"] == "one-cent-smoke")["killed"]

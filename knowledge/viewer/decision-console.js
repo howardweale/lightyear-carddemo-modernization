@@ -127,14 +127,14 @@ async function campaign(id) {
   if (v.totals) content.append(
     el(
       "p",
-      `${totals.cohort_passed ?? 0} passes · ${totals.cohort_completed ?? 0} completed cohort trials · pilots excluded`,
+      `${totals.cohort_passed ?? 0} passes Â· ${totals.cohort_completed ?? 0} completed cohort trials Â· pilots excluded`,
     ),
   );
   if (totals.wilson_95)
     content.append(
       el(
         "p",
-        `Wilson 95% interval: ${(100 * totals.wilson_95.lower).toFixed(1)}–${(100 * totals.wilson_95.upper).toFixed(1)}%`,
+        `Wilson 95% interval: ${(100 * totals.wilson_95.lower).toFixed(1)}â€“${(100 * totals.wilson_95.upper).toFixed(1)}%`,
       ),
     );
   for (const [k, limit] of Object.entries(v.limits || {})) {
@@ -147,13 +147,13 @@ async function campaign(id) {
     p.value = v.used?.[k] || 0;
     content.append(el("small", `${k}: ${p.value} / ${limit}`), p);
   }
-  if (v.fixture) content.append(el("p", "FIXTURE — zero-model integration rehearsal; not a measured result.", "boundary"));
+  if (v.fixture) content.append(el("p", "FIXTURE â€” zero-model integration rehearsal; not a measured result.", "boundary"));
   for (const j of v.journeys || []) {
-    content.append(el("h3", `${j.id}: ${j.cohort_passed}/${j.cohort_completed} completed · ${j.planned} planned`));
+    content.append(el("h3", `${j.id}: ${j.cohort_passed}/${j.cohort_completed} completed Â· ${j.planned} planned`));
     content.append(el("p", j.void ? "Journey VOID; no rate." :
-      `${j.interim ? "Interim · " : ""}pilots excluded` + (j.wilson_95 ? ` · Wilson 95%: ${(100*j.wilson_95.lower).toFixed(1)}–${(100*j.wilson_95.upper).toFixed(1)}%` : "")));
+      `${j.interim ? "Interim Â· " : ""}pilots excluded` + (j.wilson_95 ? ` Â· Wilson 95%: ${(100*j.wilson_95.lower).toFixed(1)}â€“${(100*j.wilson_95.upper).toFixed(1)}%` : "")));
   }
-  if (v.calendar?.latest_launch_utc) content.append(el("p", `Latest launch (UTC): ${v.calendar.latest_launch_utc} · period closes ${v.calendar.period_end_exclusive_utc}`));
+  if (v.calendar?.latest_launch_utc) content.append(el("p", `Latest launch (UTC): ${v.calendar.latest_launch_utc} Â· period closes ${v.calendar.period_end_exclusive_utc}`));
   if (v.pause) content.append(el("p", `Paused: ${v.pause.reasons.join(", ")}. Review ${v.pause.request_id} in the Work queue. The controller consumes the signed decision; the Tower does not control processes.`, "boundary"));
   const grid = el("div", undefined, "trial-grid");
   for (const t of v.trials) {
@@ -167,10 +167,10 @@ async function campaign(id) {
     const g = v.graph_projection;
     if (g) {
       content.append(el("h3", "Verify graph context"),
-        el("p", `Projection: ${g.state} · ${g.mode || "off"} · ${g.projection_sha256 || "none"}`),
+        el("p", `Projection: ${g.state} Â· ${g.mode || "off"} Â· ${g.projection_sha256 || "none"}`),
         el("p", "Public CardDemo reference only. Customer and Maintec source are not enabled. Approval expiry stops judge submissions and removes graph tools.", "boundary"));
       if (g.node_count !== undefined) content.append(el("p",
-        `${g.node_count} nodes · ${g.edge_count} edges · ${g.excluded_count} exclusions · leak check ${g.leak_check}`));
+        `${g.node_count} nodes Â· ${g.edge_count} edges Â· ${g.excluded_count} exclusions Â· leak check ${g.leak_check}`));
       if (g.decision_sha256) {
         const link = el("a", `Tower decision ${g.decision_sha256}`);
         link.href = "#drawer";
@@ -191,14 +191,14 @@ async function campaign(id) {
       el("p", `Submissions: ${v.submissions}; refused requests: ${v.refusals}`),
     );
     for (const r of v.verdicts)
-      content.append(el("p", `${r.id}: ${r.verdict} · receipt ${r.receipt_sha256} · context ${r.context_projection_sha256 || "none"}`));
+      content.append(el("p", `${r.id}: ${r.verdict} Â· receipt ${r.receipt_sha256} Â· context ${r.context_projection_sha256 || "none"}`));
   }
   for (const a of v.alerts || [])
     content.append(
       el(
         "div",
         a.code +
-          " · " +
+          " Â· " +
           [
             a.journey,
             a.budget ? `${a.budget} ${100*a.threshold}%` : "",
@@ -228,7 +228,7 @@ async function queue() {
       c.append(
         el("h3", i.kind || i.id),
         badge(i.age?.overdue ? "Review overdue" : i.status),
-        el("p", i.summary || "Invalid evidence — decision disabled."),
+        el("p", i.summary || "Invalid evidence â€” decision disabled."),
         el("small", (i.required_roles || []).join(", ")),
       );
       if (i.status === "review due") c.append(el("p", i.next_action));
@@ -454,7 +454,7 @@ async function catalogue() {
     content.append(
       el(
         "p",
-        "Fixture records — not production qualification evidence.",
+        "Fixture records â€” not production qualification evidence.",
         "alert",
       ),
     );
@@ -502,7 +502,7 @@ async function businessRules() {
   for (const item of v.catalogues || []) {
     content.append(el("h3", item.request_id));
     for (const rule of item.catalogue.entries) {
-      content.append(el("p", `${rule.id}: ${rule.statement} — ${rule.status}; ${rule.applicable_count} applicable`));
+      content.append(el("p", `${rule.id}: ${rule.statement} â€” ${rule.display_status || rule.status}; ${rule.applicable_count} applicable`));
       content.append(el("p", `${rule.agree_count} agree; ${rule.disagree_count} disagree; ${rule.indeterminate_count} indeterminate`));
       content.append(el("pre", JSON.stringify(rule.source, null, 2)));
       if (rule.first_disagreement) content.append(el("pre", JSON.stringify(rule.first_disagreement, null, 2)));
@@ -529,7 +529,7 @@ async function workspace() {
     if (!v.arrivals.length) content.append(el("p", "No verified arrival requests yet."));
     for (const arrival of v.arrivals) {
       const card = el("article", undefined, "card");
-      card.append(badge(arrival.status), el("p", `${arrival.runs} runs · ${arrival.files} files · ${arrival.findings} findings`),
+      card.append(badge(arrival.status), el("p", `${arrival.runs} runs Â· ${arrival.files} files Â· ${arrival.findings} findings`),
         el("p", arrival.intake_sha256, "hash"));
       content.append(card);
     }
@@ -538,7 +538,7 @@ async function workspace() {
   const labels = {
     equivalent: "verified equivalent",
     divergent: "differs: needs your decision",
-    indeterminate: "couldn’t decide: more evidence needed",
+    indeterminate: "couldnâ€™t decide: more evidence needed",
   };
   for (const [k, n] of Object.entries(v.counts || {}))
     content.append(el("p", `${n} ${labels[k]}`));
@@ -555,7 +555,7 @@ async function history() {
       el("h3", e.payload.kind || e.payload.proposal_type),
       badge(e.payload.independence || e.payload.label),
       el("p", e.payload.reason || e.payload.text),
-      el("small", e.actor.name + " · " + e.occurred_at),
+      el("small", e.actor.name + " Â· " + e.occurred_at),
       el("p", e.content_sha256, "hash"),
     );
     content.append(c);
@@ -568,7 +568,7 @@ $("login").addEventListener("submit", async (e) => {
     const s = await api("session", { credential: input.value });
     input.value = "";
     token = s.token;
-    $("identity").textContent = s.actor.name + " · " + s.scope;
+    $("identity").textContent = s.actor.name + " Â· " + s.scope;
     $("login").hidden = true;
     load();
   } catch (err) {

@@ -1,0 +1,1602 @@
+[
+  {
+    "key": "category-1",
+    "input": {
+      "account": "00000000001",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "194.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "9680294154603697",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "194.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "9680294154603697",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000001",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-2",
+    "input": {
+      "account": "00000000002",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "158.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "0923877193247330",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "158.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "0923877193247330",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000002",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-3",
+    "input": {
+      "account": "00000000003",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "147.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "3999169246375885",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "147.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "3999169246375885",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000003",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-4",
+    "input": {
+      "account": "00000000004",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "40.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "2988091353094312",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "40.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "2988091353094312",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000004",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-5",
+    "input": {
+      "account": "00000000005",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "345.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6009619150674526",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "345.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6009619150674526",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000005",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-6",
+    "input": {
+      "account": "00000000006",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "218.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "2871968252812490",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "218.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "2871968252812490",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000006",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-7",
+    "input": {
+      "account": "00000000007",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "193.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "4859452612877065",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "193.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "4859452612877065",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000007",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-8",
+    "input": {
+      "account": "00000000008",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "605.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "8931369351894783",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "605.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "8931369351894783",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000008",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-9",
+    "input": {
+      "account": "00000000009",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "560.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "9501733721429893",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "560.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "9501733721429893",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000009",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-10",
+    "input": {
+      "account": "00000000010",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "159.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "3260763612337560",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "159.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "3260763612337560",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000010",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-11",
+    "input": {
+      "account": "00000000011",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "212.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7427684863423209",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "212.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7427684863423209",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000011",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-12",
+    "input": {
+      "account": "00000000012",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "176.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "0982496213629795",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "176.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "0982496213629795",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000012",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-13",
+    "input": {
+      "account": "00000000013",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "41.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "4011500891777367",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "41.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "4011500891777367",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000013",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-14",
+    "input": {
+      "account": "00000000014",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "15.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "8517866958206008",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "15.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "8517866958206008",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000014",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-15",
+    "input": {
+      "account": "00000000015",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "489.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6349250331648509",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "489.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6349250331648509",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000015",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-16",
+    "input": {
+      "account": "00000000016",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "733.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6727055190616014",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "733.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6727055190616014",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000016",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-17",
+    "input": {
+      "account": "00000000017",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "33.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "9349107475869214",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "33.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "9349107475869214",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000017",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-18",
+    "input": {
+      "account": "00000000018",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "144.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "5671184478505844",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "144.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "5671184478505844",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000018",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-19",
+    "input": {
+      "account": "00000000019",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "480.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "3940246016141489",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "480.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "3940246016141489",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000019",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-20",
+    "input": {
+      "account": "00000000020",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "369.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "0927987108636232",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "369.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "0927987108636232",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000020",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-21",
+    "input": {
+      "account": "00000000021",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "112.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "5407099850479866",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "112.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "5407099850479866",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000021",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-22",
+    "input": {
+      "account": "00000000022",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "55.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "2940139362300449",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "55.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "2940139362300449",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000022",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-23",
+    "input": {
+      "account": "00000000023",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "104.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "8112545834239735",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "104.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "8112545834239735",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000023",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-24",
+    "input": {
+      "account": "00000000024",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "400.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "2760836797107565",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "400.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "2760836797107565",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000024",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-25",
+    "input": {
+      "account": "00000000025",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "61.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "9056297931664011",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "61.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "9056297931664011",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000025",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-26",
+    "input": {
+      "account": "00000000026",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "46.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "8040580410348680",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "46.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "8040580410348680",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000026",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-27",
+    "input": {
+      "account": "00000000027",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "284.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "0683586198171516",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "284.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "0683586198171516",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000027",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-28",
+    "input": {
+      "account": "00000000028",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "68.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6723000463207764",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "68.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6723000463207764",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000028",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-29",
+    "input": {
+      "account": "00000000029",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "339.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7251508149188883",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "339.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7251508149188883",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000029",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-30",
+    "input": {
+      "account": "00000000030",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "2.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6509230362553816",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "2.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6509230362553816",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000030",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-31",
+    "input": {
+      "account": "00000000031",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "31.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7026637615032277",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "31.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7026637615032277",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000031",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-32",
+    "input": {
+      "account": "00000000032",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "30.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7094142751055551",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "30.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7094142751055551",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000032",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-33",
+    "input": {
+      "account": "00000000033",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "410.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6832676047698087",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "410.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6832676047698087",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000033",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-34",
+    "input": {
+      "account": "00000000034",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "253.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "4385271476627819",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "253.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "4385271476627819",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000034",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-35",
+    "input": {
+      "account": "00000000035",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "166.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "1561409106491600",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "166.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "1561409106491600",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000035",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-36",
+    "input": {
+      "account": "00000000036",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "110.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "4534784102713951",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "110.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "4534784102713951",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000036",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-37",
+    "input": {
+      "account": "00000000037",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "7.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "1142167692878931",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "7.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "1142167692878931",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000037",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-38",
+    "input": {
+      "account": "00000000038",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "612.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7443870988897530",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "612.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7443870988897530",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000038",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-39",
+    "input": {
+      "account": "00000000039",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "843.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "2745303720002090",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "843.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "2745303720002090",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000039",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-40",
+    "input": {
+      "account": "00000000040",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "43.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "9805583408996588",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "43.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "9805583408996588",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000040",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-41",
+    "input": {
+      "account": "00000000041",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "375.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "3766281984155154",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "375.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "3766281984155154",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000041",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-42",
+    "input": {
+      "account": "00000000042",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "302.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "5975117516616077",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "302.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "5975117516616077",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000042",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-43",
+    "input": {
+      "account": "00000000043",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "610.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7058267261837752",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "610.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7058267261837752",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000043",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-44",
+    "input": {
+      "account": "00000000044",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "263.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "1014086565224350",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "263.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "1014086565224350",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000044",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-45",
+    "input": {
+      "account": "00000000045",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "186.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "7379335634661142",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "186.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "7379335634661142",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000045",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-46",
+    "input": {
+      "account": "00000000046",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "396.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "5656830544981216",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "396.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "5656830544981216",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000046",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-47",
+    "input": {
+      "account": "00000000047",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "32.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "5787351228879339",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "32.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "5787351228879339",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000047",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-48",
+    "input": {
+      "account": "00000000048",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "226.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "6503535181795992",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "226.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "6503535181795992",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000048",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-49",
+    "input": {
+      "account": "00000000049",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "100.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "8262593602473076",
+      "boundary": true,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "100.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "8262593602473076",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000049",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  },
+  {
+    "key": "category-50",
+    "input": {
+      "account": "00000000050",
+      "balance": "0.00",
+      "rate": "15.00",
+      "fallback": true,
+      "before_balance": "492.00",
+      "before_credit": "0.00",
+      "before_debit": "0.00",
+      "card": "0500024453765740",
+      "boundary": false,
+      "total": "0.00"
+    },
+    "output": {
+      "present": true,
+      "amount": "0.00",
+      "account_present": true,
+      "balance": "492.00",
+      "credit": "0.00",
+      "debit": "0.00",
+      "card": "0500024453765740",
+      "type": "01",
+      "category": "0005",
+      "source": "System",
+      "description": "Int. for a/c 00000000050",
+      "contract": true
+    },
+    "meta": {
+      "evidence_class": "synthetic-public-rehearsal"
+    }
+  }
+]

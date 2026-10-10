@@ -1,0 +1,17 @@
+{
+  "evidence_class": "synthetic-public-rehearsal",
+  "dataset_hashes": {
+    "before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "before/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "before/TRANSACT.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "after/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "after/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "after/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "after/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "after/TRANSACT.bin": "b1f32d8f67b8922cbf029aaab6991437e7cbef3ee28b276dac9cbbf9636dc690"
+  },
+  "run_sha256": "8f66f1ed58d04a35d3d95aa588ca97ef32cb39ec9b10507455ef9c31ec7e3fa2",
+  "limitation": "Stored synthetic public rehearsal outputs; not a native mainframe observation."
+}

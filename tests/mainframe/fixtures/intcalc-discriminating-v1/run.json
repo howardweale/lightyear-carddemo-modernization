@@ -1,0 +1,143 @@
+{
+  "schema": "public-intcalc-reference/1",
+  "evidence_class": "synthetic-public-reference-model",
+  "seed": "intcalc-discriminating-public-v1",
+  "generator": "tools/build_discriminating_intcalc.py",
+  "generator_sha256": "431240d4be43b5212635e7dfb25700bbc1c9528a73ade63c20ecfd602dc35d4b",
+  "reference_sha256": "da9718cb9a8ae84194ac73a7b6de004e0fce033ee43ca9f4e7adeeb14ca376b2",
+  "processing_date": "2022071800",
+  "candidate_timestamp": "2022-07-18-00.00.00.000000",
+  "datasets": [
+    {
+      "file": "before/ACCTFILE.bin",
+      "phase": "before",
+      "dd": "ACCTFILE",
+      "recfm": "F",
+      "lrecl": 300,
+      "codec": "cp037",
+      "sha256": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab"
+    },
+    {
+      "file": "before/TCATBALF.bin",
+      "phase": "before",
+      "dd": "TCATBALF",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147"
+    },
+    {
+      "file": "before/DISCGRP.bin",
+      "phase": "before",
+      "dd": "DISCGRP",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "13311e203d96913555569dedf45c026d809a0d363e0122803759a9d9c9533965"
+    },
+    {
+      "file": "before/XREFFILE.bin",
+      "phase": "before",
+      "dd": "XREFFILE",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e"
+    },
+    {
+      "file": "before/TRANSACT.bin",
+      "phase": "before",
+      "dd": "TRANSACT",
+      "recfm": "F",
+      "lrecl": 350,
+      "codec": "cp037",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "after/ACCTFILE.bin",
+      "phase": "after",
+      "dd": "ACCTFILE",
+      "recfm": "F",
+      "lrecl": 300,
+      "codec": "cp037",
+      "sha256": "922a49e00624754455d5f6fb8afad87b05d0e89fafa16ed49d14ad5fafd3fc82"
+    },
+    {
+      "file": "after/TCATBALF.bin",
+      "phase": "after",
+      "dd": "TCATBALF",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147"
+    },
+    {
+      "file": "after/DISCGRP.bin",
+      "phase": "after",
+      "dd": "DISCGRP",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "13311e203d96913555569dedf45c026d809a0d363e0122803759a9d9c9533965"
+    },
+    {
+      "file": "after/XREFFILE.bin",
+      "phase": "after",
+      "dd": "XREFFILE",
+      "recfm": "F",
+      "lrecl": 50,
+      "codec": "cp037",
+      "sha256": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e"
+    },
+    {
+      "file": "after/TRANSACT.bin",
+      "phase": "after",
+      "dd": "TRANSACT",
+      "recfm": "F",
+      "lrecl": 350,
+      "codec": "cp037",
+      "sha256": "38733c46a8d1ba3e418ab08a63f5970671c39e566291b4aecf569f5d457f97e7"
+    }
+  ],
+  "expected_failure": {
+    "status": "execution-failure",
+    "message": "DEFAULT DISCLOSURE MISSING: type=01 category=0001",
+    "datasets": [
+      {
+        "file": "missing-disclosure/ACCTFILE.bin",
+        "sha256": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab",
+        "lrecl": 300
+      },
+      {
+        "file": "missing-disclosure/TCATBALF.bin",
+        "sha256": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+        "lrecl": 50
+      },
+      {
+        "file": "missing-disclosure/DISCGRP.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "lrecl": 50
+      },
+      {
+        "file": "missing-disclosure/XREFFILE.bin",
+        "sha256": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e",
+        "lrecl": 50
+      },
+      {
+        "file": "missing-disclosure/TRANSACT.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "lrecl": 350
+      }
+    ]
+  },
+  "observations": {
+    "balance_rows": 17,
+    "account_updates": 3,
+    "transactions_created": 13,
+    "default_rates_used": 4,
+    "zero_rate_rows": 4,
+    "final_account_policy": "source-faithful",
+    "known_behavior": "final account is not rewritten"
+  },
+  "limitation": "Python source-faithful reference model, not legacy execution."
+}

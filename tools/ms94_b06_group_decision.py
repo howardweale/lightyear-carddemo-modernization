@@ -42,7 +42,7 @@ def request(group, commit):
             value['summary'] = ('Authorize ONE diagnostic J1 pair with the explicitly accepted empty-pending unmatched-return exception. '
                 'Record missing provenance as unobserved and continue collection; every other anomaly stops. '
                 'Any unmatched return makes observation indeterminate. Zero qualification/measurement credit, models or retries. '
-                'Howard shortened the four-hour review lead for October 10, 10:30 AM–1:30 PM PDT only. '
+                'Howard shortened the four-hour review lead for October 10, 12:30 PM–3:30 PM PDT only. '
                 'Fresh Tower and separate Docker approval remain required. Operator review, not independent attestation.')
         elif 'diagnostic_scope' in group:
             scope = group['diagnostic_scope']

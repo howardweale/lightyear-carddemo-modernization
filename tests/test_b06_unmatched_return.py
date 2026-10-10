@@ -28,11 +28,13 @@ class DiagnosticTests(unittest.TestCase):
     def test_scope_and_one_window_review_exception_are_bound(self):
         body=dict(purpose='observer-native-practice',journey='J1',slot_count=1,qualification_credit=False,
             measurement_authorized=False,model_calls=0,snapshot_sha256='a'*64,diagnostic_scope=copy.deepcopy(SCOPE),
-            docker_run_window=dict(not_before_utc='2026-10-10T17:30:00Z',deadline_utc='2026-10-10T20:30:00Z'))
+            docker_run_window=dict(not_before_utc='2026-10-10T19:30:00Z',deadline_utc='2026-10-10T22:30:00Z'))
         r,_,_=request(seal(body),'b'*40);self.assertIn('every other anomaly stops',r['summary'])
         for key,value in [('qualification_credit',True),('stop_at_first_other_anomaly',False),('automatic_retry',True)]:
             bad=copy.deepcopy(body);bad['diagnostic_scope'][key]=value
             with self.assertRaises(ValueError):request(seal(bad),'b'*40)
+        old=copy.deepcopy(body);old['docker_run_window']=dict(not_before_utc='2026-10-10T17:30:00Z',deadline_utc='2026-10-10T20:30:00Z')
+        with self.assertRaises(ValueError):request(seal(old),'b'*40)
         body['docker_run_window']['deadline_utc']='2026-10-10T21:30:00Z'
         with self.assertRaises(ValueError):request(seal(body),'b'*40)
 

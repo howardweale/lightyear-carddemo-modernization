@@ -8,7 +8,7 @@ SCOPE = dict(purpose='capture-with-unmatched-return-exception', qualification_cr
              measurement_credit=False, stop_at_first_anomaly=False, stop_at_first_other_anomaly=True,
              degradation_mode='unmatched-return-only', automatic_retry=False,
              minimum_full_plan_review_lead_seconds=0,
-             review_lead_exception='Howard explicitly shortened review lead on 2026-10-10 for 10:30 AM–1:30 PM PDT.',
+             review_lead_exception='Howard explicitly shortened review lead on 2026-10-10 for 12:30 PM–3:30 PM PDT.',
              unmatched_return=SPEC)
 
 def enabled(spec):
@@ -24,8 +24,8 @@ def validate_scope(group):
           'diagnostic-unmatched-return-scope')
     from tools.ms94_b06_admission import utc
     w=group['docker_run_window']
-    check(utc(w['not_before_utc']).isoformat() == '2026-10-10T17:30:00+00:00' and
-          utc(w['deadline_utc']).isoformat() == '2026-10-10T20:30:00+00:00',
+    check(utc(w['not_before_utc']).isoformat() == '2026-10-10T19:30:00+00:00' and
+          utc(w['deadline_utc']).isoformat() == '2026-10-10T22:30:00+00:00',
           'diagnostic-review-exception-window')
 
 def validate_event(event, prior):

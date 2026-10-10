@@ -74,8 +74,8 @@ class GroupDecisionTests(unittest.TestCase):
             'purpose':'observer-native-practice', 'journey':'J1', 'slot_count':1,
             'qualification_credit':False, 'measurement_authorized':False, 'model_calls':0,
             'diagnostic_scope':diagnostic_scope,
-            'docker_run_window':{'not_before_utc':'2026-10-10T17:30:00+00:00',
-                                 'deadline_utc':'2026-10-10T20:30:00+00:00'},
+            'docker_run_window':{'not_before_utc':'2026-10-10T19:30:00+00:00',
+                                 'deadline_utc':'2026-10-10T22:30:00+00:00'},
             'unicode_fixture':'caf\u00e9 \u2013 \u6771\u4eac'})
         verify(group)
         with tempfile.TemporaryDirectory() as folder:

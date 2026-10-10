@@ -1,0 +1,44 @@
+name: B06 host review regressions
+on:
+  pull_request:
+    paths:
+      - 'factory/idempiere/b06-observer/**'
+      - 'tools/b06_host_probe/**'
+      - 'tools/check_source_lf.py'
+      - 'tools/ms94_b06*.py'
+      - 'src/lightyear_evidence/**'
+      - 'tests/test_b06*.py'
+      - 'tests/test_evidence_content.py'
+      - '.github/workflows/b06-host-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  host-jdi:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src:.:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '21'
+      - run: python -m pip install 'cryptography>=46,<47'
+      - name: Exercise real host JDI and refusal boundaries (no containers)
+        shell: bash
+        run: |
+          export B06_HOST_JDK="$JAVA_HOME"
+          python -B -m unittest -v test_b06_captured_refusal test_b06_unmatched_return test_b06_observer_startup test_b06_observer_bulk_reads test_b06_observer_host_r3 test_b06_observer_audit test_b06_engineering test_evidence_content test_b06_host_tools test_ms94_b06_observer_v2 test_ms94_b06_frame_census test_ms94_b06_posting_replay test_evidence_worker_packaging test_evidence_completeness
+      - name: Changed source uses LF
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python -B -m tools.check_source_lf --base "$BASE_SHA"

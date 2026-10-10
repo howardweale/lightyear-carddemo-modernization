@@ -39,6 +39,18 @@ class ReconciliationTests(unittest.TestCase):
         self.assertEqual(d['value_records'],0)
         self.assertEqual(d['raw_records'],1)
 
+    def test_timestamp_difference_is_never_hidden(self):
+        _,meta,images,_=public_inputs('intcalc-discriminating')
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp)/'reference'
+            reference(meta,images,folder)
+            raw=(folder/'TRANSACT').read_bytes()
+        layout=load_copybook(ROOT/'spec/mainframe/copybooks/CVTRA05Y.cpy')
+        field=next(f for f in layout.fields if f.path.endswith('.TRAN-PROC-TS'))
+        changed=bytearray(raw); changed[field.offset+3]=ord('3')
+        result=compare_images(raw,bytes(changed),layout,['TRAN-RECORD.TRAN-ID'])
+        self.assertIn(field.path,result['fields'])
+
     def test_record_order_is_reported(self):
         lines=self.raw.splitlines(keepends=True)
         result=self.compare(b''.join(reversed(lines)))

@@ -5,7 +5,7 @@ import json
 import os
 import shutil
 from .legacy_twin import (ROOT, PUBLIC_SCENARIOS, FILES, FLAGS, build, run, sha,
-                          public_inputs, receipt, execute, linux_platform)
+                          public_inputs, receipt, execute, linux_platform, new_output)
 from .records import load_copybook, from_ascii_fixed
 from .zos_bindings import load_bindings, dataset_binding
 from carddemo_oracle.oracle import run_intcalc, OracleExecutionError
@@ -111,8 +111,7 @@ def probes(output):
 
 def reconcile(output):
     linux_platform()
-    output = Path(output).resolve()
-    output.mkdir(parents=True, exist_ok=False)
+    output = new_output(output)
     build(output/'twin')
     java = compile_java(output/'java')
     bindings = load_bindings()

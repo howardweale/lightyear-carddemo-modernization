@@ -46,13 +46,19 @@ class AuditTests(unittest.TestCase):
         with self.assertRaises(ValueError): audit.event(record(4,'resume-requested',0,{}))
 
 
-def host_capture(java, javac, source, out, *, fault=False):
+def host_capture(java, javac, source, out, *, fault=False, diagnostic=False):
     """Public diagnostic fixture only. Fault is injected in a temporary source copy."""
     out.mkdir()
     if fault:
         needle = 'generation.atReturn(vm,event);return;'
         if source.count(needle) != 1: raise ValueError('fault hook missing')
         source = source.replace(needle, 'generation.pending.clear();generation.atReturn(vm,event);return;')
+    if diagnostic:
+        # Suppress ONLY selected outer entry delivery in the disposable host fixture.
+        import re
+        source,n=re.subn(r'if\(generation.selected\(event.location\(\).method\(\)\)\)',
+            'if(generation.selected(event.location().method()) && !event.location().method().name().equals("spinInnerClass"))',source)
+        if n!=1: raise ValueError('diagnostic entry-delivery fixture hook missing')
     (out/'PostingObserver.java').write_text(source)
     (out/'Probe.java').write_text('''package fixture;
 import java.lang.invoke.*;
@@ -74,7 +80,7 @@ public class Probe {
     try:
         port=target.stdout.readline().strip().rsplit(':',1)[-1].strip()
         if not port.isdigit(): raise ValueError('no host listener')
-        observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2'],input='',capture_output=True,text=True,timeout=60)
+        observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2',*(['diagnostic-unmatched-return-v1'] if diagnostic else [])],input='',capture_output=True,text=True,timeout=60)
         elapsed=time.perf_counter()-started
         events=[json.loads(line) for line in observed.stdout.splitlines()]
         return observed, events, elapsed

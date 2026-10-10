@@ -2,8 +2,10 @@
 
 Implementation and offline acceptance are complete in the isolated
 `codex/verified-business-rules` worktree, based on
-`c4103b3e4a09c13deb580b233e2305f259729ecd`. Publication and merge require approval
-of the final commit. B06 checkouts, frozen evidence, machine configuration,
+`c4103b3e4a09c13deb580b233e2305f259729ecd`. Implementation commit
+`46b94ba15c3e9e4cea7186e63b69aa924f4528aa` contains the completed work.
+Howard authorized publication, PR creation and merge on October 10, with this
+milestone update. B06 checkouts, frozen evidence, machine configuration,
 Docker, and model endpoints were not changed or invoked.
 
 ## Results
@@ -44,7 +46,8 @@ signed checking/replay, COBOL decision coverage, modern Java mutation reports,
 Tower catalogue/register and named-customer authorization, verified candidate
 mode output, opt-in public graph enrichment, HTML/JSON/DMN/scenario exports, and
 five public T-SQL rules are implemented. A dedicated lightweight offline CI job
-replays the acceptance evidence. Remote CI has not run for this local commit.
+replays the acceptance evidence. The PR's checks and merge record provide the
+publication result; the local acceptance results above are not claims about CI.
 
 The historical default graph/ontology and default-off Verify tool interfaces
 remain unchanged. The integration does not arm, run, or authorize any B06
@@ -55,7 +58,7 @@ public synthetic/historical evidence, not independent attestation.
 
 The test-authority Tower proof satisfies the integration demonstration only.
 Any production keep/fix decision must be made by an authorized human against
-the exact production rule set and receipt. Publication and merge are separately
-commit-specific. No private mLogica/customer batch is processed without explicit
+the exact production rule set and receipt. The publication approval does not
+authorize a production business decision. No private mLogica/customer batch is processed without explicit
 data authorization. DMN XML is structurally checked; import into a particular
 business-rules engine remains unclaimed.

@@ -24,3 +24,16 @@ call reductions, coverage and classification counts as pending. Those experiment
 must wait for an evidence-free gap and the relevant approval. Changing the retained
 image or native JVM options would need an explicit amendment; the baseline approval
 does not authorize an unreviewed alternative runtime. No merge is authorized.
+
+## October 10 integration and approval update
+
+Howard approved the stated October 11 engineering window; the original pending
+status above is superseded by `b06-engineering-approval-milestone.md`. No native
+engineering attempt has run. Howard also authorized merging the implementation.
+
+Integration with the current evidence libraries and unmatched-return diagnostic
+source retains the engineering rejection guard and both diagnostic and failed
+prefix-audit behavior. Forty-three focused engineering, alternative-accounting,
+real host unmatched-return, completeness and driver tests passed in 5.614 seconds.
+The strict retained observer/runtime source remains unchanged. No Docker or model
+workload ran. The host fixtures are not a native adapter validation.

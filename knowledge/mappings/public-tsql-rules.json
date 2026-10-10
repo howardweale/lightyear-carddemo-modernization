@@ -1,0 +1,485 @@
+{
+  "schema_version": "1.0",
+  "workloads": [
+    {
+      "id": "workload:tsql:len",
+      "name": "len",
+      "status": "public-rule-fixture",
+      "source_language": "T-SQL",
+      "source_assets": {
+        "source": {
+          "path": "data-modernization/tsql-procedures/corpus/len/source.sql",
+          "sha256": "49e2fbc6c7d2bc8e8aa4befbda06b2d73784d00e8531514a7402d69c86972f90"
+        },
+        "correct": {
+          "path": "data-modernization/tsql-procedures/corpus/len/correct.sql",
+          "sha256": "b09d4569bcc560c87af888dcb7bb84a68af4bf73dcbce0f4217d3e37b43bf88a"
+        }
+      },
+      "legacy_entrypoints": [
+        "legacy:tsql-procedure:len"
+      ],
+      "modern_entrypoints": [
+        "modern:tsql-procedure:len"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:tsql-rule:len",
+          "name": "Historical public scalar capture",
+          "kind": "captured-record-rule-check"
+        }
+      ],
+      "rules": [
+        {
+          "schema": "lightyear-business-rule/1",
+          "id": "rule:tsql:len",
+          "name": "len",
+          "workload": "workload:tsql:len",
+          "statement": "LEN excludes trailing spaces: LEN(' A  ') returns 2.",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:tsql-procedure:len"
+          ],
+          "outputs": [
+            "legacy:tsql-procedure:len:result:value"
+          ],
+          "bindings": {
+            "input.procedure": {
+              "node": "legacy:tsql-procedure:len"
+            },
+            "output.value": {
+              "node": "legacy:tsql-procedure:len:result:value"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.procedure"
+                },
+                {
+                  "literal": "len"
+                }
+              ]
+            },
+            "condition": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "output.value"
+                },
+                {
+                  "literal": "2"
+                }
+              ]
+            }
+          },
+          "derived_from": [
+            {
+              "node": "legacy:tsql-procedure:len",
+              "path": "data-modernization/tsql-procedures/corpus/len/source.sql",
+              "line_start": 2,
+              "line_end": 7
+            }
+          ],
+          "provenance": "source-observed",
+          "confidence": "observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null,
+          "implemented_by": [
+            "modern:tsql-procedure:len"
+          ],
+          "verified_by": [
+            "scenario:tsql-rule:len"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "workload:tsql:isnull-length",
+      "name": "isnull-length",
+      "status": "public-rule-fixture",
+      "source_language": "T-SQL",
+      "source_assets": {
+        "source": {
+          "path": "data-modernization/tsql-procedures/corpus/isnull-length/source.sql",
+          "sha256": "fc5c3b77c67808e0363a1b3964224ce607f0dc9b7b7fb9d3cbdb20cd394e6f4e"
+        },
+        "correct": {
+          "path": "data-modernization/tsql-procedures/corpus/isnull-length/correct.sql",
+          "sha256": "9631ed0d5976a4e019d4f72f56c3f2c520c103ff5e0e78b579ec2c8ce0c90b6e"
+        }
+      },
+      "legacy_entrypoints": [
+        "legacy:tsql-procedure:isnull-length"
+      ],
+      "modern_entrypoints": [
+        "modern:tsql-procedure:isnull-length"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:tsql-rule:isnull-length",
+          "name": "Historical public scalar capture",
+          "kind": "captured-record-rule-check"
+        }
+      ],
+      "rules": [
+        {
+          "schema": "lightyear-business-rule/1",
+          "id": "rule:tsql:isnull-length",
+          "name": "isnull-length",
+          "workload": "workload:tsql:isnull-length",
+          "statement": "ISNULL retains the first argument's varchar(3) width, returning abc for the public NULL fallback.",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:tsql-procedure:isnull-length"
+          ],
+          "outputs": [
+            "legacy:tsql-procedure:isnull-length:result:value"
+          ],
+          "bindings": {
+            "input.procedure": {
+              "node": "legacy:tsql-procedure:isnull-length"
+            },
+            "output.value": {
+              "node": "legacy:tsql-procedure:isnull-length:result:value"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.procedure"
+                },
+                {
+                  "literal": "isnull-length"
+                }
+              ]
+            },
+            "condition": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "output.value"
+                },
+                {
+                  "literal": "abc"
+                }
+              ]
+            }
+          },
+          "derived_from": [
+            {
+              "node": "legacy:tsql-procedure:isnull-length",
+              "path": "data-modernization/tsql-procedures/corpus/isnull-length/source.sql",
+              "line_start": 2,
+              "line_end": 7
+            }
+          ],
+          "provenance": "source-observed",
+          "confidence": "observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null,
+          "implemented_by": [
+            "modern:tsql-procedure:isnull-length"
+          ],
+          "verified_by": [
+            "scenario:tsql-rule:isnull-length"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "workload:tsql:money-scale",
+      "name": "money-scale",
+      "status": "public-rule-fixture",
+      "source_language": "T-SQL",
+      "source_assets": {
+        "source": {
+          "path": "data-modernization/tsql-procedures/corpus/money-scale/source.sql",
+          "sha256": "c6c52b65fcc7bc38f77d794454b5ab75431523726c142d16004f5e297d96ebcd"
+        },
+        "correct": {
+          "path": "data-modernization/tsql-procedures/corpus/money-scale/correct.sql",
+          "sha256": "69dd76575932d3cdd0234eacbfff8017ea78858237d00ac2f2fa75904d1df4f0"
+        }
+      },
+      "legacy_entrypoints": [
+        "legacy:tsql-procedure:money-scale"
+      ],
+      "modern_entrypoints": [
+        "modern:tsql-procedure:money-scale"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:tsql-rule:money-scale",
+          "name": "Historical public scalar capture",
+          "kind": "captured-record-rule-check"
+        }
+      ],
+      "rules": [
+        {
+          "schema": "lightyear-business-rule/1",
+          "id": "rule:tsql:money-scale",
+          "name": "money-scale",
+          "workload": "workload:tsql:money-scale",
+          "statement": "Conversion to money rounds the public 1.23456 input to four fractional digits, yielding 1.2346.",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:tsql-procedure:money-scale"
+          ],
+          "outputs": [
+            "legacy:tsql-procedure:money-scale:result:value"
+          ],
+          "bindings": {
+            "input.procedure": {
+              "node": "legacy:tsql-procedure:money-scale"
+            },
+            "output.value": {
+              "node": "legacy:tsql-procedure:money-scale:result:value"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.procedure"
+                },
+                {
+                  "literal": "money-scale"
+                }
+              ]
+            },
+            "condition": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "output.value"
+                },
+                {
+                  "literal": "1.2346"
+                }
+              ]
+            }
+          },
+          "derived_from": [
+            {
+              "node": "legacy:tsql-procedure:money-scale",
+              "path": "data-modernization/tsql-procedures/corpus/money-scale/source.sql",
+              "line_start": 2,
+              "line_end": 7
+            }
+          ],
+          "provenance": "source-observed",
+          "confidence": "observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null,
+          "implemented_by": [
+            "modern:tsql-procedure:money-scale"
+          ],
+          "verified_by": [
+            "scenario:tsql-rule:money-scale"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "workload:tsql:round-negative",
+      "name": "round-negative",
+      "status": "public-rule-fixture",
+      "source_language": "T-SQL",
+      "source_assets": {
+        "source": {
+          "path": "data-modernization/tsql-procedures/corpus/round-negative/source.sql",
+          "sha256": "e6ff5b92b4844041c95f2b7ba962fa9c092812751532ab13bd1d44b8cb29cf94"
+        },
+        "correct": {
+          "path": "data-modernization/tsql-procedures/corpus/round-negative/correct.sql",
+          "sha256": "7e63e75493ff3544bfcc43de3236bf59f659d2e6cffdd00bf2a9d6e6f32b1ba4"
+        }
+      },
+      "legacy_entrypoints": [
+        "legacy:tsql-procedure:round-negative"
+      ],
+      "modern_entrypoints": [
+        "modern:tsql-procedure:round-negative"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:tsql-rule:round-negative",
+          "name": "Historical public scalar capture",
+          "kind": "captured-record-rule-check"
+        }
+      ],
+      "rules": [
+        {
+          "schema": "lightyear-business-rule/1",
+          "id": "rule:tsql:round-negative",
+          "name": "round-negative",
+          "workload": "workload:tsql:round-negative",
+          "statement": "ROUND(-150, -2) rounds the halfway value away from zero to -200.",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:tsql-procedure:round-negative"
+          ],
+          "outputs": [
+            "legacy:tsql-procedure:round-negative:result:value"
+          ],
+          "bindings": {
+            "input.procedure": {
+              "node": "legacy:tsql-procedure:round-negative"
+            },
+            "output.value": {
+              "node": "legacy:tsql-procedure:round-negative:result:value"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.procedure"
+                },
+                {
+                  "literal": "round-negative"
+                }
+              ]
+            },
+            "condition": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "output.value"
+                },
+                {
+                  "literal": "-200"
+                }
+              ]
+            }
+          },
+          "derived_from": [
+            {
+              "node": "legacy:tsql-procedure:round-negative",
+              "path": "data-modernization/tsql-procedures/corpus/round-negative/source.sql",
+              "line_start": 2,
+              "line_end": 7
+            }
+          ],
+          "provenance": "source-observed",
+          "confidence": "observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null,
+          "implemented_by": [
+            "modern:tsql-procedure:round-negative"
+          ],
+          "verified_by": [
+            "scenario:tsql-rule:round-negative"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "workload:tsql:datediff-day",
+      "name": "datediff-day",
+      "status": "public-rule-fixture",
+      "source_language": "T-SQL",
+      "source_assets": {
+        "source": {
+          "path": "data-modernization/tsql-procedures/corpus/datediff-day/source.sql",
+          "sha256": "dae0bb003e3bfb169cf5ecaed296b851808334017a9730446816fff347bf74f0"
+        },
+        "correct": {
+          "path": "data-modernization/tsql-procedures/corpus/datediff-day/correct.sql",
+          "sha256": "affb983782e3355a911f058f7cecefc4a726aaf6016e574d58dbe532fb934086"
+        }
+      },
+      "legacy_entrypoints": [
+        "legacy:tsql-procedure:datediff-day"
+      ],
+      "modern_entrypoints": [
+        "modern:tsql-procedure:datediff-day"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:tsql-rule:datediff-day",
+          "name": "Historical public scalar capture",
+          "kind": "captured-record-rule-check"
+        }
+      ],
+      "rules": [
+        {
+          "schema": "lightyear-business-rule/1",
+          "id": "rule:tsql:datediff-day",
+          "name": "datediff-day",
+          "workload": "workload:tsql:datediff-day",
+          "statement": "DATEDIFF(day) counts crossed midnight boundaries; the public two adjacent timestamps yield 1.",
+          "kind": "calculation",
+          "inputs": [
+            "legacy:tsql-procedure:datediff-day"
+          ],
+          "outputs": [
+            "legacy:tsql-procedure:datediff-day:result:value"
+          ],
+          "bindings": {
+            "input.procedure": {
+              "node": "legacy:tsql-procedure:datediff-day"
+            },
+            "output.value": {
+              "node": "legacy:tsql-procedure:datediff-day:result:value"
+            }
+          },
+          "executable": {
+            "form": "record_predicate",
+            "when": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "input.procedure"
+                },
+                {
+                  "literal": "datediff-day"
+                }
+              ]
+            },
+            "condition": {
+              "op": "eq",
+              "args": [
+                {
+                  "field": "output.value"
+                },
+                {
+                  "literal": "1"
+                }
+              ]
+            }
+          },
+          "derived_from": [
+            {
+              "node": "legacy:tsql-procedure:datediff-day",
+              "path": "data-modernization/tsql-procedures/corpus/datediff-day/source.sql",
+              "line_start": 2,
+              "line_end": 7
+            }
+          ],
+          "provenance": "source-observed",
+          "confidence": "observed",
+          "legacy_behaviour": "faithful",
+          "decision_ref": null,
+          "implemented_by": [
+            "modern:tsql-procedure:datediff-day"
+          ],
+          "verified_by": [
+            "scenario:tsql-rule:datediff-day"
+          ]
+        }
+      ]
+    }
+  ]
+}

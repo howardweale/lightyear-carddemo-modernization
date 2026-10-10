@@ -28,6 +28,9 @@ class PostingBroker:
         self.process, self.thread, self.failure = None, None, None
         self.done, self.ready, self.stop_requested = threading.Event(), threading.Event(), threading.Event()
         self.records, self.previous = [], None
+        from tools.ms94_b06_unmatched_return import enabled
+        self.diagnostic_unmatched = enabled(self.spec)
+        self.unmatched_returns = []
         self.runtime_files, self.v2_records = {}, []
 
     def start(self):
@@ -118,7 +121,8 @@ class PostingBroker:
             stderr_stream = (self.private / 'collector.stderr').open('xb')
             self.process = subprocess.Popen(['docker', 'exec', '-i', self.name, 'java', '--add-modules', 'jdk.jdi',
                 '-cp', '/observer-classes', 'lightyear.observer.PostingObserver', self.app, '5005',
-                *(['observer-binding-v2'] if self.spec.get('observer_binding_v2') is not None else [])],
+                *(['observer-binding-v2'] if self.spec.get('observer_binding_v2') is not None else []),
+                *(['diagnostic-unmatched-return-v1'] if self.diagnostic_unmatched else [])],
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_stream)
             stderr_stream.close()
             events = queue.Queue(maxsize=16)
@@ -158,6 +162,11 @@ class PostingBroker:
                     else:
                         evidence_count += 1
                         check(evidence_count <= 50000, 'observer-sequence-invalid')
+                    if event['kind'] == 'diagnostic-unmatched-return':
+                        from tools.ms94_b06_unmatched_return import validate_event
+                        check(self.diagnostic_unmatched and self.ready.is_set(), 'diagnostic-unmatched-return-unapproved')
+                        validate_event(event, self.records[-1]['event'] if self.records else {})
+                        self.unmatched_returns.append(sequence)
                     readback = None
                     if event.get('document'):
                         check(event['checkpoint'] is True, 'observer-readback-without-suspension')
@@ -179,6 +188,9 @@ class PostingBroker:
                         from tools.ms94_b06_observer_audit import POLICY
                         check(event.get('audit_policy') in (None, POLICY), 'observer-audit-policy')
                         audit_required = event.get('audit_policy') == POLICY
+                        from tools.ms94_b06_unmatched_return import POLICY as UNMATCHED
+                        check(event.get('unmatched_return_policy') == (UNMATCHED if self.diagnostic_unmatched else None),
+                              'diagnostic-unmatched-return-ready-policy')
                         self.ready.set()
                     if event['kind'] == 'vm-death':
                         if audit_required: audit.complete()
@@ -219,6 +231,7 @@ class PostingBroker:
                     'v2_records':self.v2_records, 'runtime_files':self.runtime_files,
                     'event_file_sha256':hashlib.sha256((self.private/'events.jsonl').read_bytes()).hexdigest(),
                     'native_qualification':False, 'model_calls':0,
+                    **self.diagnostic_result(),
                 }, self.signer)
             except Exception as census_error:
                 self.failure = (self.failure or '') + '; census-record:' + type(census_error).__name__
@@ -226,6 +239,14 @@ class PostingBroker:
             if self.process is not None and self.process.poll() is None:
                 self.process.kill(); self.process.wait()
             self.done.set()
+
+    def diagnostic_result(self):
+        if not self.diagnostic_unmatched: return {}
+        return dict(diagnostic_only=True, observation_complete=self.failure is None and not bool(self.unmatched_returns),
+                    unmatched_return_sequences=list(self.unmatched_returns),
+                    diagnostic_outcome='indeterminate' if self.unmatched_returns else 'no-unmatched-return-observed',
+                    qualification_credit=False, measurement_credit=False,
+                    unmatched_return_policy='diagnostic-unmatched-return-v1')
 
     def finish(self, execution):
         check(self.done.wait(15), 'observer-finalization-timeout')
@@ -240,6 +261,7 @@ class PostingBroker:
             'host_jar_entries': self.host_jar_entries,
             'v2_records': self.v2_records, 'runtime_files': self.runtime_files,
             'complete': True, 'native_qualification': False,
+            **self.diagnostic_result(),
         }, self.signer)
 
     def cancel(self):

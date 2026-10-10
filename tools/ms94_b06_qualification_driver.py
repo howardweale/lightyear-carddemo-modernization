@@ -149,6 +149,13 @@ def finalize(root, run, directory, public_key, signer):
 def intended(plan, result):
     """No generic 'any failure is a killed mutant' acceptance."""
     expected = plan['expected']; actual = result['replay']
+    from tools.ms94_b06_unmatched_return import enabled
+    if enabled(plan.get('posting_observer', {})):
+        check(actual['full_entry_replayed'] is True and actual.get('diagnostic_capture_audited') is True and
+              actual['status']=='diagnostic-only' and actual.get('qualification_credit') is False and
+              actual.get('measurement_credit') is False and actual['complete_gate_replayed'] is False and
+              actual['observer_replayed'] is False, 'diagnostic-capture-not-audited')
+        return
     check(actual['full_entry_replayed'] is True, 'qualification-entry-not-replayed')
     if plan['control'] == 'genuine-equipment-fault':
         check(actual.get('database_fault_replayed') is True and actual['equipment_suspect'] is True,
@@ -195,6 +202,12 @@ def intended(plan, result):
 def preliminary(plan, receipt, cleanup):
     """Signal unexpected native outcomes before expensive independent replay."""
     check(cleanup['complete'] is True, 'qualification-native-cleanup-failed')
+    from tools.ms94_b06_unmatched_return import enabled
+    if enabled(plan.get('posting_observer', {})) and receipt['status']=='diagnostic-only':
+        check(receipt.get('diagnostic_only') is True and receipt['qualification_credit'] is False and
+              receipt.get('measurement_credit') is False and receipt['gate_sha256'] is None and
+              receipt['runtime_delivery_sha256'] is None, 'diagnostic-no-adjudication')
+        return
     expected = plan['expected']
     if 'equipment_suspect' in expected:
         check(receipt['equipment_suspect'] == expected['equipment_suspect'], 'qualification-unexpected-suspicion')

@@ -17,6 +17,7 @@ def prepare(repository,commit,snapshot,public,baseline,historical,tower_key,java
  if git('rev-parse',commit).decode().strip()!=commit:raise ValueError('full-commit-required')
  names=git('ls-tree','-r','--name-only',commit).decode().splitlines()
  selected={n:n for n in names if n.startswith(('src/','tools/')) and n.endswith(('.py','.java'))}
+ selected.update({n.removeprefix('src/'):n for n in names if n.startswith('src/lightyear_evidence/') and n.endswith('.py')})
  from .runtime_launch import REQUIRED
  from .runtime_practice import WORKER,EXTRA
  for n in REQUIRED|WORKER|EXTRA:

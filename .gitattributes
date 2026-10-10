@@ -212,3 +212,6 @@ src/lightyear_data/tsql_procedures/** -text whitespace=blank-at-eol,blank-at-eof
 tools/tsql_scriptdom/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/run_tsql_native.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/replay_tsql_native.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+tests/fixtures/build-once-public-v1/** -text
+tools/build_public_consumer_fixture.py -text

@@ -24,8 +24,15 @@ def incomplete_equipment(run, plan, receipt, public_key):
     import hashlib, json
     from tools.ms94_b06_forwarding_stub import receipt_records
     from tools.ms94_b06_observer_v2 import commitments
-    check(receipt['status'] == 'equipment-failure' and receipt['equipment_suspect'] is True and
-          receipt.get('error', {}).get('kind') == 'equipment-failure', 'partial-audit-not-equipment')
+    from tools.ms94_b06_unmatched_return import enabled, validate_event, POLICY
+    diagnostic = receipt['status'] == 'diagnostic-only'
+    check(receipt['equipment_suspect'] is True and
+          ((receipt['status'] == 'equipment-failure' and receipt.get('error', {}).get('kind') == 'equipment-failure') or
+           (diagnostic and enabled(plan.get('posting_observer', {})) and receipt.get('diagnostic_only') is True and
+            receipt.get('qualification_credit') is False and receipt.get('measurement_credit') is False and
+            receipt.get('error', {}) == dict(kind='diagnostic-only', exception_type='DiagnosticOnly',
+                                          closed_reason='observer-diagnostic-not-admissible'))),
+          'partial-audit-not-equipment')
     check(receipt.get('runtime_delivery_sha256') is None and receipt.get('gate_sha256') is None and
           not any((run/n).exists() for n in ('zero-model-builder-inbox.json','runtime-diagnostic.json','gate.json')),
           'partial-equipment-unexpected-verdict-or-feedback')
@@ -54,6 +61,34 @@ def incomplete_equipment(run, plan, receipt, public_key):
               'partial-frame-commitments')
         if plan.get('posting_observer', {}).get('observer_binding_v2') is not None:
             check(census['v2_records'] == commitments(events), 'partial-v2-commitments')
+        anomalies=[]
+        if enabled(plan.get('posting_observer', {})):
+            from tools.ms94_b06_observer_audit import Audit
+            audit=Audit()
+            for i,item in enumerate(events):
+                e=item['event']
+                if e['kind']=='observer-audit': audit.event(e)
+                if e['kind']=='diagnostic-unmatched-return':
+                    validate_event(e,events[i-1]['event'] if i else {})
+                    anomalies.append(e['sequence'])
+            if diagnostic:
+                audit.complete()
+                check(events[0]['event'].get('unmatched_return_policy') == POLICY and
+                      events[-1]['event']['kind']=='vm-death', 'diagnostic-collection-lifecycle')
+                collector=signed(folder/'receipt.json',public_key)
+                execution=read_json(run/'cases/operations/1/execution'/lane/'execution.json');verify(execution)
+                check(collector['execution_sha256']==execution['content_sha256']==receipt['execution_sha256'][lane] and
+                      collector['plan_sha256']==plan['content_sha256'] and collector['lane']==lane,
+                      'diagnostic-collector-execution-binding')
+                for record in (census,collector):
+                    check(record.get('diagnostic_only') is True and record.get('unmatched_return_policy')==POLICY and
+                          record.get('unmatched_return_sequences')==anomalies and
+                          record.get('observation_complete')==(not bool(anomalies)) and
+                          record.get('qualification_credit') is False and record.get('measurement_credit') is False and
+                          record.get('diagnostic_outcome')==('indeterminate' if anomalies else 'no-unmatched-return-observed') and
+                          record['event_file_sha256']==census['event_file_sha256'] and record['event_count']==len(events) and
+                          record['last_event_sha256']==previous and record['complete'] is True,
+                          'diagnostic-disposition-binding')
         failure = None
         if failure_path.exists():
             failure = signed(failure_path, public_key)
@@ -65,13 +100,21 @@ def incomplete_equipment(run, plan, receipt, public_key):
             check(census['complete'] is True, 'partial-missing-failure-record')
         records.append({'lane':lane,'census_sha256':census['content_sha256'],
                         'failure_sha256':failure['content_sha256'] if failure else None,
-                        'event_count':len(events),'prefix_authenticated':True})
-    return {'partial_evidence':True, 'equipment_failure_audited':True,
-            'collector_prefixes':records, 'missing_artifacts':[
-                name for name in ('b06-clock-evidence.json', 'gate.json',
-                    *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
-                if not (run/name).exists()],
-            'audit_scope':'authenticated preserved evidence only; no completed-stage or provenance claim'}
+                        'event_count':len(events),'prefix_authenticated':True,
+                        **({'unmatched_return_sequences': anomalies} if diagnostic else {})})
+    if diagnostic:
+        check(len(records)==2 and not any(r['failure_sha256'] for r in records), 'diagnostic-pair-incomplete')
+        replay_clocks(run, public_key)
+    from lightyear_evidence.completeness import partial_equipment_summary
+    required = ('b06-clock-evidence.json', 'gate.json',
+                *('cases/operations/1/execution/'+lane+'/execution.json' for lane in LANES))
+    summary = partial_equipment_summary(records, required, (name for name in required if (run/name).exists()))
+    if diagnostic:
+        summary.update(equipment_failure_audited=False, diagnostic_capture_audited=True,
+                       qualification_credit=False, measurement_credit=False,
+                       diagnostic_outcome='indeterminate' if any(r['unmatched_return_sequences'] for r in records)
+                                          else 'no-unmatched-return-observed')
+    return summary
 
 
 def replay_pair(root, run, public_key):
@@ -105,7 +148,7 @@ def replay_pair(root, run, public_key):
               'database-fault-delivered-feedback')
         check(not (run / 'zero-model-builder-inbox.json').exists(), 'database-fault-unexpected-inbox')
         return result
-    if receipt['status'] == 'equipment-failure':
+    if receipt['status'] in ('equipment-failure', 'diagnostic-only'):
         result.update(incomplete_equipment(run, plan, receipt, public_key))
         return result
     result.update(replay_clocks(run, public_key))

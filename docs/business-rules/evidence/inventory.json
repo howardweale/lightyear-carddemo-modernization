@@ -1,0 +1,23 @@
+{
+  "catalogue.html": "64367118f2a3c6f482a3a530add6597c84d7ef21a7e83c1a60930d698d90d4ed",
+  "catalogue.json": "50a53487a768b0f94877e670a4adf81b7c95b153f13d56123a60b451a0052994",
+  "coverage.json": "f485c988bd9add50a3dc0a2e17843b03eb7071cb7e1abfc5555f71d7bae963ad",
+  "intcalc-capture-binding.json": "8b6089265e085272a32aa04f083bd151bafef3c274c4c8d62314710f1f3d7e82",
+  "intcalc-receipt.json": "56ad8e3327ec1ea7140963fcd8877ddf44f3cebc569dfd7ecb35e613669ffb5b",
+  "intcalc-records.json": "94294f53447ebc868707437a4a58cdc37bae780152b3f5ff66a0c6dd63cd1b47",
+  "intcalc-replay.json": "1155f321b87ee81ca9b88f22b09d359546693d527264bb8b2c0518d2151a700c",
+  "judge-test.public.pem": "80d1c6f7ba7b78c2a26cc2d4c5a2157d9db6f30ef60e43fade5f34fe1884dfc1",
+  "mutations.json": "36bfa7ef129435b4fc31a2743b535e61ffb8cb726dcd9621d83cd3e65b61bf67",
+  "rules.dmn": "f878555bb3eabbda7d2b2ecc50d38bee473de546df53949a3cfbcf411b0c4578",
+  "scenarios.feature": "d9921153c9878cf8b49e028643de47c49e42a9068c8f82828a1698cae1649529",
+  "summary.json": "3fc840afeb8c27bfce73361069f5fcfb139979a53d0ff239e7acd77a92b02a87",
+  "tower-test-proof.json": "f097ee71587dda36019868e9fe9f4fc69a6e4e7b88544a2a8906bfca202c1966",
+  "tower-test.public.pem": "d16b7ef04b3b0dea268ee5c16437b67f2b44ddc954e0d48373db9fa25fd9ed36",
+  "tsql-binding.json": "510e62768325552b0ad23b711acd9d9ebe8249cfd3b2dd82b4f3b6aa3b4d5b9d",
+  "tsql-correct-receipt.json": "8f7357cd352abf4a26dadbcb1a3121db82cd9b3fbd8a790198db621e97326908",
+  "tsql-correct-records.json": "b5516ab14257d88641c6bb819b9aa7a325a4820f0763f8c75a0c04884225941b",
+  "tsql-source-receipt.json": "ac415315ada7b4cb32834d6c79831ee671faab03026b62a84798a61e7ba94b15",
+  "tsql-source-records.json": "f1a67ef510208bbe7ca54b0b5a695c9506cbf0a0fbe7b4d9742f50dcb37c1465",
+  "tsql-wrong-receipt.json": "23249ceefa9384987dc9d4e3cebf3fb613a3206f344985a736b26abebc0ea4c0",
+  "tsql-wrong-records.json": "00c989e199d780ad582033f43dcb0566065b8267e2cb847f852d8a78ca65e5f9"
+}

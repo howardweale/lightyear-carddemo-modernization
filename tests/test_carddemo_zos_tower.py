@@ -274,6 +274,17 @@ class TowerIntakeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.s.release(self.token, self.release["id"])
 
+    def test_business_rules_unavailable_without_reading_confidential_catalogue(self):
+        api = ConsoleAPI(self.s)
+        with patch("lightyear_business_rules.tower.read_catalogue") as read_catalogue:
+            self.assertEqual(
+                {"available": False, "catalogues": []},
+                api.read("business-rules", self.token, {}),
+            )
+            with self.assertRaises(DecisionUnauthorized):
+                api.read("business-rules", "invalid-session", {})
+            read_catalogue.assert_not_called()
+
     def test_no_record_values_in_any_route_sse_mcp_or_export(self):
         markers = ["Q9Z7A6B5C4", "R8Y6D5E4F3"]
         # Values planted in a real public fixed-width record, both raw and decoded.

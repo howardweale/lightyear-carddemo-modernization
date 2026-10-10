@@ -92,7 +92,7 @@ def sources(lane, root):
 
 def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
           out, signer, *, source_root, watch=(), annotation_ledger=None, hybrid=False, include_inferred=False,
-          embedding_provider=None):
+          embedding_provider=None, rule_evidence=None):
     out = Path(out)
     if out.exists():
         raise ValueError("graph-output-exists")
@@ -123,6 +123,8 @@ def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
     nodes, excluded = [], Counter()
     for n in graph["nodes"]:
         kind, props = n["kind"], n.get("properties", {})
+        if kind == "business_rule" and props.get("provenance") == "model-proposed":
+            excluded["unapproved-rule-proposal"] += 1; continue
         if kind not in policy["node_properties"]:
             excluded["node-kind"] += 1; continue
         if not clean_chain(n) or props.get("customer_id", customer_id) != customer_id:
@@ -170,6 +172,11 @@ def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
             clean.pop("statement", None)
         nodes.append(dict(id=n["id"], kind=kind, name=n["name"], properties=clean, evidence=[],
                           source=excerpts))
+        if rule_evidence and kind == "business_rule" and mode == "field":
+            from lightyear_business_rules.projection import enrich
+            nodes[-1] = enrich(nodes[-1], **rule_evidence,
+                public_lane=lane.get("public_fixture_only") is True,
+                approved_source="\n".join("\n".join(v) for v in approved.values()))
     ids = {n["id"] for n in nodes}
     edges, verified = [], []
     for e in graph["edges"]:

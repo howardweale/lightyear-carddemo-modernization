@@ -52,7 +52,7 @@ def _add_file_node(
     )
 
 
-def extract_legacy(graph: KnowledgeGraph, root: Path) -> None:
+def extract_legacy(graph: KnowledgeGraph, root: Path, *, include_decisions=False) -> None:
     app_root = root / "app"
     assembler_programs = {
         path.stem.upper()
@@ -64,7 +64,7 @@ def extract_legacy(graph: KnowledgeGraph, root: Path) -> None:
             continue
         suffix = path.suffix.lower()
         if suffix in {".cbl"}:
-            _extract_cobol(graph, path, root, assembler_programs)
+            _extract_cobol(graph, path, root, assembler_programs, include_decisions=include_decisions)
         elif suffix in {".cpy"}:
             _extract_copybook(graph, path, root)
         elif suffix == ".bms":
@@ -93,6 +93,7 @@ def _extract_cobol(
     path: Path,
     root: Path,
     assembler_programs: set[str] | None = None,
+    *, include_decisions=False,
 ) -> None:
     lines = _lines(path)
     relative = _relative(path, root)
@@ -112,6 +113,12 @@ def _extract_cobol(
         evidence_items=[evidence(LEGACY_SOURCE_ID, relative, program_line)],
     )
     graph.add_edge(file_id, "DECLARES", program_id)
+
+    from lightyear_business_rules.coverage import decisions
+    for point in decisions(joined, program_name, relative) if include_decisions else []:
+        ev = [evidence(LEGACY_SOURCE_ID, relative, point["line_start"], point["line_end"])]
+        graph.add_node(point["id"], "cobol_decision", point["construct"], properties=point, evidence_items=ev)
+        graph.add_edge(program_id, "CONTAINS", point["id"], evidence_items=ev)
 
     file_handles: dict[str, str] = {}
     select_pattern = re.compile(

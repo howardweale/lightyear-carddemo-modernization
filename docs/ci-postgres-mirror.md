@@ -35,3 +35,17 @@ Local validation passed seven focused mocked Customer startup tests in 2.282
 seconds, Python syntax validation, equality of the two pinned references and
 `git diff --check`. Anonymous HTTP also fetched both the index and Linux AMD64
 manifest by digest from ECR and verified their hashes; no image layers were pulled.
+
+## October 10 CI startup diagnostics
+
+The Customer startup job returned Docker exit 125, but its wrapper discarded
+stderr. That log alone cannot establish whether acquisition or container creation
+failed. Both CI paths now acquire the identical pinned ECR image explicitly before
+running with `--pull=never`. Only recognized transient download errors receive up
+to three acquisition attempts (2/5-second backoff); permanent errors fail at once.
+Container startup and the actual test are never retried. Daemon stderr is retained.
+No image digest, runtime configuration or test assertion changes.
+
+Validation: 12 focused mocked image-acquisition and existing Customer startup tests
+passed in 2.235 seconds. Actual Docker startup remains a hosted CI check; no local
+Docker command was used. The prior exit-125 failure remains recorded.

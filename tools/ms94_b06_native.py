@@ -169,8 +169,15 @@ def execute_pair(root, run, signer):
             except Exception as exc:
                 emit('J1-observer-publication-failure', {'lane': observer.lane, 'exception_type': type(exc).__name__})
                 error = error or failure_record(exc)
-    if not cleaned['complete']:
-        error = {'kind': 'equipment-failure', 'exception_type': 'CleanupIncomplete'}
+    from lightyear_evidence.completeness import cleanup_error
+    error = cleanup_error(error, cleaned['complete'])
+    from tools.ms94_b06_unmatched_return import enabled
+    diagnostic_only = enabled(plan.get('posting_observer', {}))
+    if error is None and diagnostic_only:
+        # This collection was explicitly barred from adjudication, even if no
+        # missing entry occurred. Keep J1's business judge unchanged and unused.
+        error = {'kind': 'diagnostic-only', 'exception_type': 'DiagnosticOnly',
+                 'closed_reason': 'observer-diagnostic-not-admissible'}
     if error is None:
         if any(x['exit_code'] == 124 for x in executions.values()):
             error = {'kind': 'candidate-timeout', 'exception_type': 'CandidateTimeout', 'closed_reason': 'candidate-timeout'}
@@ -224,4 +231,5 @@ def execute_pair(root, run, signer):
             bool(error and error['kind'] not in ('business-failure', 'candidate-timeout', 'execution-failure')) or
             bool(error and error['kind'] == 'execution-failure' and delivery is None)),
         'qualification_credit': False, 'independently_attested': False,
+        **({'diagnostic_only': True, 'measurement_credit': False} if diagnostic_only else {}),
     }, signer)

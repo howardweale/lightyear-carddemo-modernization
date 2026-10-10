@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Lightyear | Verified business rules</title><style>body{font:16px system-ui;margin:2em;color:#17334c}table{border-collapse:collapse}td,th{padding:.5em;border:1px solid #ccd;overflow-wrap:anywhere}th{text-align:left}</style><h1>Lightyear | Business rules</h1><p>TEST AUTHORITY ONLY: no production/customer decision. Statuses describe only these captured records; no mainframe equivalence claim.</p><table><thead><tr><th>Rule</th><th>Statement</th><th>Status</th><th>Applicable</th><th>Disagree</th><th>Receipt SHA-256</th></tr></thead><tbody><tr><td>rule:intcalc:account-boundary</td><td>When the account identifier changes, persist the previous account total, reset accumulated interest, and load the new account and card cross-reference.</td><td>verified</td><td>49</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:account-update</td><td>Add accumulated interest to the current balance, reset current-cycle credit and debit to zero, and rewrite the account record.</td><td>verified</td><td>49</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:default-rate</td><td>If the account-group disclosure is missing, retry the lookup using the DEFAULT group and fail if that record is also missing.</td><td>verified</td><td>50</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:disclosure-rate</td><td>Use the account group, transaction type, and category to obtain the applicable annual disclosure rate.</td><td>untested</td><td>0</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:fixed-width-contract</td><td>Read and write the account, disclosure, cross-reference, category-balance, and transaction layouts with their pinned field positions and COBOL signed-zoned decimal representation.</td><td>verified</td><td>50</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:interest-transaction</td><td>For every non-zero monthly interest amount, write a system transaction with a deterministic processing-date identifier and the account card number.</td><td>verified</td><td>50</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:monthly-interest</td><td>Monthly interest is category balance multiplied by annual percentage rate, divided by 1200, and represented with COBOL-compatible two-decimal truncation.</td><td>verified</td><td>50</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:nonzero-rate-emission</td><td>A nonzero disclosure rate emits an interest transaction even when truncation makes its amount zero.</td><td>verified</td><td>50</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:source-final-account</td><td>In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.</td><td>verified</td><td>1</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr><tr><td>rule:intcalc:zero-rate</td><td>A zero disclosure rate creates no interest transaction and contributes no interest to the account.</td><td>untested</td><td>0</td><td>0</td><td>e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075</td></tr></tbody></table><h2>Keep or fix</h2><pre>[
+  {
+    &quot;id&quot;: &quot;rule:intcalc:source-final-account&quot;,
+    &quot;statement&quot;: &quot;In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.&quot;,
+    &quot;source&quot;: [
+      {
+        &quot;node&quot;: &quot;legacy:cobol-program:CBACT04C&quot;,
+        &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+        &quot;line_start&quot;: 188,
+        &quot;line_end&quot;: 221
+      },
+      {
+        &quot;node&quot;: &quot;legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT&quot;,
+        &quot;path&quot;: &quot;app/cbl/CBACT04C.cbl&quot;,
+        &quot;line_start&quot;: 325,
+        &quot;line_end&quot;: 340
+      }
+    ],
+    &quot;status&quot;: &quot;verified&quot;,
+    &quot;applicable_count&quot;: 1,
+    &quot;agree_count&quot;: 1,
+    &quot;disagree_count&quot;: 0,
+    &quot;indeterminate_count&quot;: 0,
+    &quot;first_disagreement&quot;: null,
+    &quot;reasons&quot;: [],
+    &quot;legacy_behaviour&quot;: &quot;defect-candidate&quot;,
+    &quot;receipt_sha256&quot;: &quot;e9584dca84b6da1cdfad80aa8edd3c76fb856dfd83070b1766d40e3f16a7b075&quot;,
+    &quot;mutation&quot;: {
+      &quot;id&quot;: &quot;rule:intcalc:source-final-account&quot;,
+      &quot;generated&quot;: 7,
+      &quot;killed&quot;: 1,
+      &quot;kill_rate&quot;: 0.14285714285714285,
+      &quot;mutants&quot;: [
+        {
+          &quot;name&quot;: &quot;boundary-shift&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;e3283c79039c1adb01177c3693f0ca91809b3656ee714e1c6befe0a1e2ee766e&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;rounding-mode&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;16fc866dd2175080c510defb02bcf8f98d19acb3d558132e50cbc4f818fc45d8&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;operand-swap&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;a17ab4bf39fce8e52138f55b10761cd0de21e1f7e22e962a92f913288417a707&quot;,
+          &quot;status&quot;: &quot;execution-failure&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;dropped-branch&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;8127da6b10d81c4725328cf69228fd02cd73fc54e79d7fd69e621419a6520082&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;scale-plus-one&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;17cb6cb5f268542a8f0917b3637c8d0914541d7e547b02a9cb5e8d2df74e295f&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;scale-minus-one&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;e981d602ed3452439b658da96b46cdeea76301ce46f258b865e3660cb890b675&quot;,
+          &quot;status&quot;: &quot;equivalent&quot;,
+          &quot;fields&quot;: [],
+          &quot;killed&quot;: false
+        },
+        {
+          &quot;name&quot;: &quot;one-cent-smoke&quot;,
+          &quot;target&quot;: &quot;service&quot;,
+          &quot;source_sha256&quot;: &quot;5bf569116a504579b2087e687c5d1a107735e8ee787009b4a6d9536a7ac4af0b&quot;,
+          &quot;status&quot;: &quot;divergent&quot;,
+          &quot;fields&quot;: [
+            &quot;legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:7&quot;,
+            &quot;legacy:cobol-field:CVTRA05Y:TRAN-AMT:10&quot;,
+            &quot;legacy:copybook:CVACT01Y&quot;,
+            &quot;legacy:copybook:CVTRA05Y&quot;
+          ],
+          &quot;killed&quot;: true
+        }
+      ],
+      &quot;limitation&quot;: null
+    },
+    &quot;decision&quot;: {
+      &quot;decision_sha256&quot;: &quot;278775d8deece0c9f6f980df34a03465a07c808fe9b4a78f40d8d1dbc36d3e26&quot;,
+      &quot;outcome&quot;: &quot;preserve&quot;,
+      &quot;candidate_mode&quot;: &quot;source-faithful&quot;
+    }
+  }
+]</pre></html>

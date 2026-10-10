@@ -31,9 +31,15 @@ fd index-file.
 01 index-key pic x.
 working-storage section.
 01 fs pic xx.
+01 first-character pic x.
+01 second-character pic x.
 procedure division.
- if 'a' < 'A' display 'COMPARISON=a-before-A'
- else display 'COMPARISON=A-before-a' end-if
+ if 'a' < 'A' display 'LITERAL=a-before-A'
+ else display 'LITERAL=A-before-a' end-if
+ accept first-character from environment 'PROBE_LEFT'
+ accept second-character from environment 'PROBE_RIGHT'
+ if first-character < second-character display 'DATA=a-before-A'
+ else display 'DATA=A-before-a' end-if
  open output source-file
  move 'a' to source-key write source-key
  move '0' to source-key write source-key
@@ -42,13 +48,7 @@ procedure division.
  sort work-file on ascending key work-key using source-file giving sorted-file
  open output left-file right-file
  move 'A' to left-key write left-key
- if 'a' < '0'
-   move 'a' to right-key write right-key
-   move '0' to right-key write right-key
- else
-   move '0' to right-key write right-key
-   move 'a' to right-key write right-key
- end-if
+ move 'a' to right-key write right-key
  close left-file right-file
  merge work-file on ascending key work-key using left-file right-file giving merged-file
  open output index-file

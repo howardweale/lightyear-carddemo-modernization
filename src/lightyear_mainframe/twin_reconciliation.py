@@ -119,15 +119,15 @@ def collation_experiment(output):
             'object-computer. x86 program collating sequence is ebcdic-order.\nspecial-names. alphabet ebcdic-order is ebcdic.')
         source=folder/'probe.cob';source.write_text(text)
         execute(['cobc','-x','-free',*FLAGS,source,'-o',folder/'probe'],folder,folder/'compile')
-        result=execute([folder/'probe'],folder,folder/'run')
+        result=execute([folder/'probe'],folder,folder/'run',extra_env={'PROBE_LEFT':'a','PROBE_RIGHT':'A'})
         results[mode]={'stdout':result.stdout.decode(),'sort':(folder/'sorted.bin').read_text(),
                        'merge':(folder/'merged.bin').read_text(),'source_sha256':sha(source.read_bytes())}
     receipt(output/'collation.json',phase='collation-experiment',results=results,
             limitation='Program collating sequence does not establish EBCDIC indexed-file key order or z/OS equivalence.')
     if results['native-ascii']['sort']!='0Aa' or results['program-ebcdic']['sort']!='aA0':
         raise AssertionError('Unexpected SORT collation; inspect preserved experiment')
-    if any(v['merge']!=v['sort'] for v in results.values()):
-        raise AssertionError('MERGE collation differs from SORT')
+    if results['native-ascii']['merge']!='Aa' or results['program-ebcdic']['merge']!='aA':
+        raise AssertionError('MERGE collation differs on individually sorted one-record inputs')
     return results
 
 

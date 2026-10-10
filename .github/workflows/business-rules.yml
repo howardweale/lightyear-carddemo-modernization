@@ -19,7 +19,7 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
           PYTHONDONTWRITEBYTECODE: '1'
-        run: python -B -m unittest test_business_rules test_knowledge_graph test_verify_graph_projection test_decision_console test_decision_console_http test_verify_graph
+        run: python -B -m unittest test_business_rules test_knowledge_graph test_verify_graph_projection test_decision_console test_decision_console_http test_verify_graph test_carddemo_zos_tower.TowerIntakeTests.test_business_rules_unavailable_without_reading_confidential_catalogue test_carddemo_zos_tower.TowerIntakeTests.test_no_record_values_in_any_route_sse_mcp_or_export
       - name: Replay public acceptance receipts
         env:
           PYTHONPATH: src:.

@@ -54,6 +54,18 @@ remain unchanged. The integration does not arm, run, or authorize any B06
 practice, census, qualification, or measurement. This is operator review of
 public synthetic/historical evidence, not independent attestation.
 
+## Publication integration correction
+
+The first PR graph check found that the new `business-rules` read route returned
+404 in the confidential `carddemo-zos` lane. The dedicated lane intentionally
+does not expose this public catalogue. It now returns an authenticated
+`available: false` response with an empty catalogue list, without invoking the
+catalogue reader. Invalid sessions remain refused. The existing all-routes
+HTTP/SSE/MCP/export no-values test and a new direct authentication/no-read
+regression are included in the focused business-rules CI job. The failed CI run
+is preserved; this correction grants no new private-data access. Both focused
+regressions passed locally in 1.803 seconds; broad CI is the publication gate.
+
 ## Remaining human decisions and external validation
 
 The test-authority Tower proof satisfies the integration demonstration only.

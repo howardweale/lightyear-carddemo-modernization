@@ -54,6 +54,9 @@ class ConsoleAPI:
             if route == "knowledge":
                 self.service._read_access(token)
                 return {"available": False}
+            if route == "business-rules":
+                self.service._read_access(token)
+                return {"available": False, "catalogues": []}
             return self.carddemo.read(route, token, args)
         s = self.service
         if route == "workspace":

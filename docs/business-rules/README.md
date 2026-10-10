@@ -4,6 +4,11 @@ The existing curated mapping entries now support executable rules and earned,
 signed statuses. This is an offline operator workflow. It adds no agent tools,
 model calls, Docker runs, or production authorization.
 
+Select `knowledge/mappings/carddemo-intcalc-executable.json` for executable
+INTCALC rules. It is authored from the existing curated mapping with the same
+rule IDs and added executable fields. The default `carddemo-intcalc.json` remains
+byte-identical for historical graph and source-evidence reproducibility.
+
 See [design and inventory](design.md), [milestone](milestone-2026-10-10.md), and
 the [public acceptance catalogue](evidence/catalogue.html).
 
@@ -15,9 +20,9 @@ All output paths must be new. The commands below use the existing
 `lightyear-judge` entrypoint; `python -m lightyear_judge.cli` is equivalent.
 
 ```text
-lightyear-judge rule-check --mapping knowledge/mappings/carddemo-intcalc.json --records public-records.json --judge-key operator/judge.pem --visibility public-development --output rule-receipt.json
-lightyear-judge rule-replay --mapping knowledge/mappings/carddemo-intcalc.json --records public-records.json --receipt rule-receipt.json --public-key operator/judge.public.pem --output replay.json
-lightyear-judge rule-export --mapping knowledge/mappings/carddemo-intcalc.json --records public-records.json --receipt rule-receipt.json --public-key operator/judge.public.pem --output exports
+lightyear-judge rule-check --mapping knowledge/mappings/carddemo-intcalc-executable.json --records public-records.json --judge-key operator/judge.pem --visibility public-development --output rule-receipt.json
+lightyear-judge rule-replay --mapping knowledge/mappings/carddemo-intcalc-executable.json --records public-records.json --receipt rule-receipt.json --public-key operator/judge.public.pem --output replay.json
+lightyear-judge rule-export --mapping knowledge/mappings/carddemo-intcalc-executable.json --records public-records.json --receipt rule-receipt.json --public-key operator/judge.public.pem --output exports
 ```
 
 `rule-check` defaults to private visibility. Private receipts contain aggregate

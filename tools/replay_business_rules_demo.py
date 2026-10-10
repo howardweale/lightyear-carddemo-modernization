@@ -18,7 +18,7 @@ def verify(root=ROOT):
         assert Path(name).name == name
         assert sha256((evidence/name).read_bytes()).hexdigest() == expected, name
     key = (evidence/"judge-test.public.pem").read_bytes()
-    rules = rules_from_mappings([read(root/"knowledge/mappings/carddemo-intcalc.json")])
+    rules = rules_from_mappings([read(root/"knowledge/mappings/carddemo-intcalc-executable.json")])
     receipt = read(evidence/"intcalc-receipt.json")
     replay(receipt, rules, read(evidence/"intcalc-records.json"), key)
     mutations = read(evidence/"mutations.json")

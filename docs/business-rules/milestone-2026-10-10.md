@@ -66,6 +66,14 @@ regression are included in the focused business-rules CI job. The failed CI run
 is preserved; this correction grants no new private-data access. Both focused
 regressions passed locally in 1.803 seconds; broad CI is the publication gate.
 
+The full Linux suite then passed 2,996 tests (71 optional skips), but its graph
+snapshot check exposed executable mappings leaking into the default historical
+graph. Executable INTCALC rules now use an explicitly selected mapping generated
+from the original curated entries. The default mapping is restored byte-for-byte;
+its graph and source-evidence hashes remain binding. Public signed rule receipts
+retain their original rule-set hashes. A regression checks both the default graph
+identity and its mapping-file evidence hash, alongside opt-in rule validation.
+
 ## Remaining human decisions and external validation
 
 The test-authority Tower proof satisfies the integration demonstration only.

@@ -4,8 +4,10 @@ The supplied October 9 specification described 34 curated rules across five
 CardDemo workloads, including nine INTCALC rules. The implementation extends
 those existing mapping records, adds one INTCALC emission rule, and adds five
 public T-SQL procedure rules: 40 rules in total. Existing statement-only entries
-remain valid and receive `untested` with `no executable form`. No parallel rule
-store or regenerated historical graph snapshot is introduced.
+remain valid and receive `untested` with `no executable form`. The executable INTCALC variant is generated from the original curated mapping
+under `knowledge/mappings/carddemo-intcalc-executable.json` and selected explicitly.
+Its rule IDs are unchanged. The default mapping and historical graph/evidence
+snapshots remain byte-identical; no separate registry is introduced.
 
 Howard authorized implementation and confirmed public-only agent statuses,
 sequence predicates in scope, named customer approvers, and no partnership

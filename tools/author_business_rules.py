@@ -78,6 +78,7 @@ def main():
             outputs=sorted({bindings[p]["node"] for p in used if p.startswith("output.")}),
             bindings={p: bindings[p] for p in used}, executable=form, provenance="source-observed",
             legacy_behaviour="defect-candidate" if r["id"].endswith("source-final-account") else "faithful", decision_ref=None)
+    path = ROOT / "knowledge/mappings/carddemo-intcalc-executable.json"
     path.write_text(json.dumps(manifest, indent=2)+"\n", encoding="utf-8")
 
 

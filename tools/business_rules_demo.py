@@ -34,7 +34,7 @@ def main():
     args=parser.parse_args()
     args.output.mkdir(parents=True,exist_ok=False)
     load=lambda p:json.loads(p.read_text(encoding="utf-8"))
-    rules=rules_from_mappings([load(ROOT/"knowledge/mappings/carddemo-intcalc.json")])
+    rules=rules_from_mappings([load(ROOT/"knowledge/mappings/carddemo-intcalc-executable.json")])
     records,binding=captured_records(ROOT/"tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05")
     with tempfile.TemporaryDirectory() as temp:
         temp=Path(temp)

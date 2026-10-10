@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def fixture():
-    rules = rules_from_mappings([json.loads((ROOT/"knowledge/mappings/carddemo-intcalc.json").read_text())])
+    rules = rules_from_mappings([json.loads((ROOT/"knowledge/mappings/carddemo-intcalc-executable.json").read_text())])
     records, _ = captured_records(ROOT/"tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05")
     return rules, records
 
@@ -113,6 +113,43 @@ class RulesTests(unittest.TestCase):
         self.assertFalse(killed(dict(status="execution-failure",fields=["TRAN-AMT"]),["TRAN-AMT"]))
         self.assertTrue(killed(dict(status="divergent",fields=["TRAN-AMT"]),["TRAN-AMT"]))
 
+    def test_executable_mapping_is_generated_without_changing_default(self):
+        import shutil
+        from unittest.mock import patch
+        from tools import author_business_rules
+        base = self.root/"knowledge/mappings/carddemo-intcalc.json"
+        base.parent.mkdir(parents=True)
+        original = (ROOT/"knowledge/mappings/carddemo-intcalc.json").read_bytes()
+        base.write_bytes(original)
+        copybooks = self.root/"spec/mainframe/copybooks"
+        copybooks.mkdir(parents=True)
+        for name in ("CVTRA01Y", "CVTRA02Y", "CVTRA05Y", "CVACT01Y"):
+            shutil.copyfile(ROOT/f"spec/mainframe/copybooks/{name}.cpy", copybooks/f"{name}.cpy")
+        with patch.object(author_business_rules, "ROOT", self.root):
+            author_business_rules.main()
+        self.assertEqual(original, base.read_bytes())
+        self.assertEqual(json.loads((ROOT/"knowledge/mappings/carddemo-intcalc-executable.json").read_text()),
+                         json.loads((base.parent/"carddemo-intcalc-executable.json").read_text()))
+
+    def test_default_mapping_preserves_historical_graph_identity(self):
+        from lightyear_knowledge_graph.model import KnowledgeGraph, load_graph
+        from lightyear_knowledge_graph.builder import _apply_manifest
+        snapshot = load_graph(ROOT/"knowledge/graph.snapshot.json.gz")
+        graph = KnowledgeGraph(snapshot["graph_id"], snapshot["sources"], snapshot["relationship_ontology"])
+        graph.nodes = {n["id"]: copy.deepcopy(n) for n in snapshot["nodes"]}
+        graph.edges = {e["id"]: copy.deepcopy(e) for e in snapshot["edges"]}
+        _apply_manifest(graph, ROOT/"knowledge/mappings/carddemo-intcalc.json")
+        self.assertEqual(snapshot["content_sha256"], graph.to_dict()["content_sha256"])
+        # The default source evidence must still bind the exact historical file.
+        from hashlib import sha256
+        from lightyear_knowledge_graph.evidence_pack import load_evidence_pack
+        pack = load_evidence_pack(ROOT/"knowledge/evidence/source.pack.json.gz")
+        capsules = [c for c in pack["capsules"] if c["path"] == "knowledge/mappings/carddemo-intcalc.json"]
+        self.assertTrue(capsules)
+        from lightyear_common.io import normalize_logical_source
+        actual = sha256(normalize_logical_source((ROOT/"knowledge/mappings/carddemo-intcalc.json").read_bytes())).hexdigest()
+        self.assertEqual({actual}, {c["file_sha256"] for c in capsules})
+
     def test_graph_extension_resolves_inputs_and_preserves_snapshot(self):
         from lightyear_knowledge_graph.model import KnowledgeGraph, load_graph
         from lightyear_knowledge_graph.ontology import business_rules_ontology, ontology_identity
@@ -123,7 +160,7 @@ class RulesTests(unittest.TestCase):
         graph=KnowledgeGraph("business-rules-demo",snapshot["sources"],ontology_identity(ontology))
         graph.nodes={n["id"]:copy.deepcopy(n) for n in snapshot["nodes"]}
         graph.edges={e["id"]:copy.deepcopy(e) for e in snapshot["edges"]}
-        _apply_manifest(graph,ROOT/"knowledge/mappings/carddemo-intcalc.json")
+        _apply_manifest(graph,ROOT/"knowledge/mappings/carddemo-intcalc-executable.json")
         _apply_manifest(graph,ROOT/"knowledge/mappings/public-tsql-rules.json")
         self.assertEqual([],validate_graph(graph.to_dict(),ontology))
         validate_rules(self.rules,graph.nodes)
@@ -143,7 +180,7 @@ class RulesTests(unittest.TestCase):
         records=self.root/"records.json";records.write_text(json.dumps(self.records))
         key=self.root/"public.pem";key.write_bytes(self.signer.public)
         receipt=self.root/"receipt.json"
-        common=["--mapping",str(ROOT/"knowledge/mappings/carddemo-intcalc.json"),"--records",str(records)]
+        common=["--mapping",str(ROOT/"knowledge/mappings/carddemo-intcalc-executable.json"),"--records",str(records)]
         main(["rule-check",*common,"--judge-key",str(self.root/"judge.pem"),"--output",str(receipt)])
         main(["rule-replay",*common,"--public-key",str(key),"--receipt",str(receipt),"--output",str(self.root/"replay.json")])
         self.assertEqual("private",json.loads(receipt.read_bytes())["visibility"])
@@ -212,7 +249,7 @@ class RulesTests(unittest.TestCase):
             (self.root/(name+".json")).write_text(json.dumps(value),encoding="utf-8")
         (self.root/"judge.public.pem").write_bytes(self.signer.public)
         (self.root/"tower.public.pem").write_bytes(service.public_key)
-        main(["rule-mode","--mapping",str(ROOT/"knowledge/mappings/carddemo-intcalc.json"),
+        main(["rule-mode","--mapping",str(ROOT/"knowledge/mappings/carddemo-intcalc-executable.json"),
               "--records",str(self.root/"records.json"),"--receipt",str(self.root/"receipt.json"),
               "--public-key",str(self.root/"judge.public.pem"),"--proof",str(self.root/"proof.json"),
               "--tower-public-key",str(self.root/"tower.public.pem"),"--tower-head",proof["journal"]["journal_head_sha256"],

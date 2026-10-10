@@ -1,0 +1,59 @@
+# Factory 2.2: public three-way reconciliation
+
+This deliverable executes unchanged public INTCALC source with the GnuCOBOL twin,
+the existing Python reference model, and the existing Java interest-calculation
+service. Inputs come from the same hash-verified public fixtures. No expected
+after-image is supplied to any of those executions. No model calls or containers
+are used. `Factory three-way reconciliation` on Ubuntu 24.04 compiles and runs all
+three, including the missing-disclosure failure, and retains the full report.
+
+The Java harness compiles the actual service, record codec, zoned decimal and
+record classes with Java 21; its only framework substitute is an inert `@Service`
+annotation declaration. Harness and original source hashes are recorded. This is
+not a test of Spring wiring. The Python reference is not promoted to twin truth.
+
+## Comparison policy
+
+Each pair receives a keyed field comparison AND a raw output hash comparison.
+Filler, timestamp, numeric-sign representation and record-order differences are
+reported, not silently normalized. Duplicate keys refuse comparison. The public
+artifact retains all raw output, execution logs and individual differing fields.
+A broad shared failure class is not sufficient: the negative case also checks the
+source-specific missing-default-disclosure diagnostic. Agreement grants no z/OS
+confirmation, release permission or qualification/measurement credit.
+
+`reconciliation.md` and digest-bound `reconciliation.json` are generated from the
+actual hosted executions. Disagreements start as **unresolved**, blocking oracle
+promotion until source/operand evidence identifies the defective model or adapter.
+The runner never edits a fixture or expected result to manufacture agreement.
+
+## Platform probes and scope
+
+The compiled platform probe checks signed packed decimal bytes and DISPLAY signs,
+ASCII ordering of `A` / `a`, negative `ROUNDED` versus truncation, narrow numeric
+assignment, leap-date intrinsics and the controlled clock. Real indexed operations
+check missing file 35, duplicate key 22, missing key 23 and end of file 10. Assertions
+pin observed GnuCOBOL behavior under the declared compiler flags; every z/OS match
+is **unknown** until tested against an authorised Enterprise COBOL baseline.
+No portable-language expectation is relabeled a measured z/OS result.
+
+The public POSTTRAN scenario is executed by the twin, but current Python/Java
+implement only INTCALC. Its row is explicitly `not-three-way-supported`, not pass
+or agreement. Adding those independent implementations is outstanding. Future
+workstream 1 scenarios must be registered with provenance and added to this matrix;
+no unbuilt scenarios or coverage/mutant improvement numbers are claimed here.
+
+## Reproduction and acceptance
+
+On the same Ubuntu 24.04 / pinned GnuCOBOL environment as PR 2.1, set `JAVA_HOME`
+to Java 21 and `PYTHONPATH=src:.`:
+
+```sh
+python -B -m unittest discover -s tests -p test_twin_reconciliation.py -v
+python -B -m lightyear_mainframe.twin_reconciliation work/three-way-new
+```
+
+Do not reuse an output directory. Hosted execution/table and classification of
+all actual disagreements are required before calling 2.2 complete. The exact
+commit needs Howard's merge approval; no default oracle or existing evidence gate
+is modified by this PR.

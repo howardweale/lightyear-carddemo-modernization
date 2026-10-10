@@ -120,6 +120,8 @@ def incomplete_equipment(run, plan, receipt, public_key):
 def replay_pair(root, run, public_key):
     root, run = Path(root), Path(run)
     plan = read_json(run / 'plan.json'); verify(plan)
+    from tools.ms94_b06_engineering_boundary import refuse_engineering
+    refuse_engineering(plan, run)
     for name, sha in plan['implementation_sha256'].items(): bound_file(root, name, sha)
     for name, sha in plan['inputs_sha256'].items(): bound_file(run / 'inputs', name, sha)
     receipt = signed(run / 'receipt.json', public_key)

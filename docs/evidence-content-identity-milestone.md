@@ -9,3 +9,5 @@ Validation: six generic tests cover mutation, omission, duplicates, traversal, s
 Next adopter: Oracle saved-package inventory, to share archive identity and a per-replay cache. That adoption is outside this PR.
 
 Standalone worker preparation also copies and hashes the shared package at the worker import root. The package files are copied from the selected Git bytes for frozen preparation. A clean `python -S` import test checks that no installed or checkout package masks a missing worker dependency. Historical snapshots are not modified.
+
+The direct native worker keeps its historical single-file mount destinations and replay contract. Preparation packages the exact frozen shared reader source and unchanged B06 policy into that file; there is no second maintained implementation. A second `python -S` test verifies the single-file import and identical selected byte maps. This prospective packaging change does not modify any current frozen run.

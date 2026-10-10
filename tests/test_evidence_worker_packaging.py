@@ -17,3 +17,16 @@ class WorkerPackagingTests(unittest.TestCase):
    self.assertIn('lightyear_evidence/content.py',plan['source_sha256'])
    env=dict(os.environ,PYTHONPATH=str(out/'source'),PYTHONDONTWRITEBYTECODE='1')
    subprocess.run([sys.executable,'-B','-S','-c','import bundle_content; assert callable(bundle_content.bundle_content_view)'],cwd=out,env=env,check=True,capture_output=True)
+
+ def test_single_file_native_mount_contains_shared_reader_and_same_policy(self):
+  import io, zipfile, json
+  from tools.b06_image_artifacts.standalone_content import reader_bytes
+  from tools.b06_image_artifacts.bundle_content import bundle_content_view
+  raw=io.BytesIO()
+  with zipfile.ZipFile(raw,'w') as z:
+   z.writestr('META-INF/MANIFEST.MF',b'public');z.writestr('a.class',b'class bytes');z.writestr('target/work/x',b'omitted')
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);(root/'bundle_content.py').write_bytes(reader_bytes());(root/'fixture.zip').write_bytes(raw.getvalue())
+   env=dict(os.environ,PYTHONPATH='',PYTHONDONTWRITEBYTECODE='1')
+   result=subprocess.run([sys.executable,'-B','-S','-c',"import bundle_content,json; print(json.dumps(bundle_content.bundle_content_view('fixture.zip',kind='folder-archive')))"] ,cwd=root,env=env,check=True,capture_output=True)
+   self.assertEqual(json.loads(result.stdout),bundle_content_view(raw.getvalue(),kind='folder-archive'))

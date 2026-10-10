@@ -9,6 +9,15 @@ from lightyear_mainframe.records import load_copybook,to_ascii_fixed
 from lightyear_mainframe.zos_bindings import load_bindings,dataset_binding
 
 class ReviewTwinTests(unittest.TestCase):
+    def test_rejection_variants_are_input_only_and_declared(self):
+        for scenario in ['posttran-missing-card','posttran-missing-account','posttran-expired-account']:
+            job,meta,images,hashes=twin.public_inputs(scenario)
+            self.assertEqual(job,'POSTTRAN')
+            self.assertEqual(meta['public_input_variant'],scenario)
+            self.assertEqual(len(images['DALYTRAN']),351)
+            self.assertEqual(images['TRANFILE'],b'')
+            self.assertEqual(images['DALYREJS'],b'')
+            inv.require_collation_independent(images)
     def test_clock_requires_real_intcalc_date_and_posttran_declares_unused(self):
         meta={'candidate_timestamp':'2022-07-18-00.00.00.000000'}
         for value in [None,'','0000000000','2022023000','20220718xx']:

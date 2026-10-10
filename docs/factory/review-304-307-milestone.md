@@ -43,7 +43,7 @@ explains why a skipped workflow cannot serve as the sole required check.
 - A real Spring Boot context test exercises the injected INTCALC service and
   batch-job wiring. The lightweight three-way harness remains explicitly labelled.
 
-Focused local validation: 31 tests passed. This includes refusal before output,
+Focused local validation: 32 tests passed. This includes refusal before output,
 exact-head CI gating, input selection, tampered/missing/duplicated posting outputs,
 reason codes, collation-sensitive input refusal and sample coverage. An actual
 prior public twin artifact was checked against its already-published hashes:
@@ -76,3 +76,10 @@ unsigned. No agent-created signature represents Howard's review. No deployed
 Tower or machine configuration was changed. Sealed B06 evidence is untouched.
 
 No model calls, customer/Maintec data, qualification or measurement credit.
+
+The original 38 rejected records cover only reason102. New input-only public
+variants exercise missing card100, missing account101 and expired account103
+through the real twin, with repeated byte comparisons and invariant checks.
+Their CI review sheets supplement the original public sample; no agent signs
+the pending human review. Reason109 is a runtime REWRITE anomaly, not an input
+validation outcome that can honestly be manufactured as a successful run.

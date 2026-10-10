@@ -45,6 +45,35 @@ def require_collation_independent(images):
     return {'status':'restricted-input-path-proved-order-equivalent','zos_confirmation':False}
 
 
+def rejection_inputs(images, scenario):
+    """Bounded public input mutations only; outputs come from the real twin."""
+    result=dict(images)
+    daily=records(images,'DALYTRAN'); xrefs=records(images,'XREFFILE')
+    account_ids={int(r['ACCT-ID']) for r in records(images,'ACCTFILE')}
+    xref_ids={r['XREF-CARD-NUM']:int(r['XREF-ACCT-ID']) for r in xrefs}
+    ordinal=next(i for i,r in enumerate(daily) if xref_ids.get(r['DALYTRAN-CARD-NUM']) in account_ids)
+    result['DALYTRAN']=images['DALYTRAN'][ordinal*351:(ordinal+1)*351]
+    def replace(dd,field,value):
+        b=dataset_binding(load_bindings(),'POSTTRAN','STEP15',dd)
+        layout=load_copybook(ROOT/b['copybook'])
+        f=next(f for f in layout.fields if f.path.endswith('.'+field))
+        raw=bytearray(result[dd]); value=value.encode('ascii')
+        if len(value)!=f.length: raise ValueError('mutation width mismatch')
+        for i in range(0,len(raw),layout.record_length+1): raw[i+f.offset:i+f.offset+f.length]=value
+        result[dd]=bytes(raw)
+    if scenario=='posttran-missing-card':
+        missing='9999999999999999'
+        if missing in xref_ids: raise ValueError('missing-card probe no longer missing')
+        replace('DALYTRAN','DALYTRAN-CARD-NUM',missing)
+    elif scenario=='posttran-missing-account':
+        if 99999999999 in account_ids: raise ValueError('missing-account probe no longer missing')
+        replace('XREFFILE','XREF-ACCT-ID','99999999999')
+    elif scenario=='posttran-expired-account':
+        replace('ACCTFILE','ACCT-EXPIRAION-DATE','1900-01-01')
+    else: raise ValueError('unknown public rejection variant')
+    return result
+
+
 def check(before,after,*,timestamp):
     require_collation_independent(before)
     daily=records(before,'DALYTRAN'); posted=records(after,'TRANFILE'); rejected=records(after,'DALYREJS')

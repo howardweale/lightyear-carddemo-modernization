@@ -32,6 +32,9 @@ PUBLIC_SCENARIOS = {
     "intcalc-public-2": ("INTCALC", "arrival-rehearsal/INTCALC-run2-2026-10-05"),
     "intcalc-discriminating": ("INTCALC", "intcalc-discriminating-v1"),
     "intcalc-missing-disclosure": ("INTCALC", "intcalc-discriminating-v1"),
+    "posttran-missing-card": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
+    "posttran-missing-account": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
+    "posttran-expired-account": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
     "posttran-public": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
 }
 
@@ -325,6 +328,10 @@ def public_inputs(scenario):
         hashes[dd] = sha(raw)
     if set(images) != set(FILES[job]):
         raise ValueError("incomplete public input set")
+    if scenario.startswith('posttran-') and scenario != 'posttran-public':
+        from .posttran_invariants import rejection_inputs
+        images = rejection_inputs(images, scenario)
+        meta = dict(meta, public_input_variant=scenario)
     return job, meta, images, hashes
 
 
@@ -401,7 +408,8 @@ def run(target, scenario, output):
         write_json(output / 'posttran-review-sheet.json', review_sheet(images, {dd: (output / 'after' / dd).read_bytes() for dd in FILES[job]}))
     return receipt(output / "run-receipt.json", invariants=invariants, phase="run", scenario=scenario, job=job,
                    build_receipt_sha256=sha((target / "build-receipt.json").read_bytes()),
-                   inputs=hashes, outputs=outputs, returncode=result.returncode,
+                   inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
+                   public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,
                    deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env.get("TWIN_PROCESSING_DATE"),
                    processing_date_contract="required" if job == "INTCALC" else "not-used-by-POSTTRAN",
                    adjudication="not-performed", model_calls=0)

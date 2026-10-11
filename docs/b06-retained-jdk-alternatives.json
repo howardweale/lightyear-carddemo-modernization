@@ -1,0 +1,258 @@
+{
+  "schema": "b06-retained-jdk-alternatives/1",
+  "scope": "public synthetic Java fixture on WSL Ubuntu host using exported retained-image JDK; no native application/container run",
+  "export": {
+    "schema": "b06-retained-jdk-export/1",
+    "image": "sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268",
+    "command": "docker image save --output work/retained-jdk-export-r1/image.tar sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268",
+    "archive_bytes": 2323025920,
+    "archive_sha256": "e03eab7c205fc11eca712c88e785c87233674788c0fcf7d77d8882c3a579f89f",
+    "layers": [
+      {
+        "sha256": "01d7766a2e4a62b74e0bebf2cd12c47e675e9221174f6570854203e84ffe68b0",
+        "bytes": 29727611
+      },
+      {
+        "sha256": "868b909f8ce74fe7ddc783497c20e0a48df48b9f555fc57049945f9c47039c95",
+        "bytes": 22962504
+      },
+      {
+        "sha256": "f12c2f6b47b7df253d03d4086c043b302e87c4d2b15e486ecf2ffb4cc12ada74",
+        "bytes": 157867642
+      },
+      {
+        "sha256": "e6b56ff66d06b2f934e91725f7c5fb8077614763b978608b6ec116137cb910a1",
+        "bytes": 158
+      },
+      {
+        "sha256": "c45a8f54c8db9e11d290f2107825fe437f540a499ffbd9b6f1cacdc720e6513c",
+        "bytes": 2282
+      },
+      {
+        "sha256": "fb3ce10e989d0cd06874b65b1dda658724422a842aaada1168763ca7ce1698d9",
+        "bytes": 22540789
+      },
+      {
+        "sha256": "f0c7ffc223a983964f2db2dd53152036d70871f230c7787e84a6bc0c90d37ca0",
+        "bytes": 9312250
+      },
+      {
+        "sha256": "e2ee788762ebb525fd1416be55d22c588dcd94e21e1d62ff50addff1f40aadf5",
+        "bytes": 848
+      },
+      {
+        "sha256": "4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+        "bytes": 32
+      },
+      {
+        "sha256": "d7ab273d6fb9f7364acbe39a9a4c255d5cee98c04b742971efd005dc57632734",
+        "bytes": 156
+      },
+      {
+        "sha256": "449d421aac615ef56b5f0f53b6413837e559e21223883f3c9d9db8797ce8e409",
+        "bytes": 120094211
+      },
+      {
+        "sha256": "878e5c0f4658288f529f0d00607f39e43ab3e04961fc2c0848cb0d47ad21f797",
+        "bytes": 17288021
+      },
+      {
+        "sha256": "2c37b80f7ef33a8c0fb3307910c396eb035f45b2484707f39dd383d3d48dd40a",
+        "bytes": 1418890812
+      },
+      {
+        "sha256": "9a2261fc2c83172f34e785d50e43a3cd77772c0e44d3034a91c1762259734b31",
+        "bytes": 524303925
+      }
+    ],
+    "jdk_prefix": "opt/java/openjdk",
+    "jdk_release": "IMPLEMENTOR=\"Eclipse Adoptium\"\nIMPLEMENTOR_VERSION=\"Temurin-21.0.10+7\"\nJAVA_RUNTIME_VERSION=\"21.0.10+7-LTS\"\nJAVA_VERSION=\"21.0.10\"\nJAVA_VERSION_DATE=\"2026-01-20\"\nLIBC=\"gnu\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"x86_64\"\nOS_NAME=\"Linux\"\nSOURCE=\".:git:a633eafe0fcc\"\nBUILD_SOURCE=\"git:458965074606f027bd5afce2cfd5c1055dea0438\"\nBUILD_SOURCE_REPO=\"https://github.com/adoptium/temurin-build.git\"\nSOURCE_REPO=\"https://github.com/adoptium/jdk21u.git\"\nFULL_VERSION=\"21.0.10+7-LTS\"\nSEMANTIC_VERSION=\"21.0.10+7\"\nBUILD_INFO=\"OS: Linux Version: 6.8.0-1044-azure\"\nJVM_VARIANT=\"Hotspot\"\nJVM_VERSION=\"21.0.10+7-LTS\"\nIMAGE_TYPE=\"JDK\"\n",
+    "jdk_java_sha256": "cb255f2795b07ec5db97aa7694753c37342851f0867a5979b20e74ff2151ccb3",
+    "jdk_files": 452,
+    "jdk_manifest_sha256": "9b182e939d4bfcb32956a333dabe1f294d8ccc50b0c695ce2aac32dc5b5333aa",
+    "containers_started": 0,
+    "model_calls": 0,
+    "application_runs": 0
+  },
+  "matrix_result_sha256": "3021693524cbc607b75c1effe24b1bb43806280b4e2a208de82cc7cc9ea401dc",
+  "iterations": 24,
+  "repetitions": 3,
+  "fixture_source_sha256": "9800e05ad15385457dfba24385fb23a9f6a5800eebabccddb3c9dff9c3a7e140",
+  "counter_source_sha256": "bbfc40b249ef7a248a45e170ea074b88d907a8f61fd918d3950384bb1c792ea1",
+  "jdk_java_sha256": "cb255f2795b07ec5db97aa7694753c37342851f0867a5979b20e74ff2151ccb3",
+  "trace_sha256": "a1e808d8a07df66fc97f03d713d34cd053e5c91884a84c499f1348f8863dd35a",
+  "archive_bytes": 544768,
+  "archive_manifest_sha256": "e6771018f2a98994eadd3145e76f23874e5450b5ae05fb08a4f0a7592e2f7638",
+  "jli_image_bytes": 59783056,
+  "jli_image_manifest_sha256": "a0837341ed13fd89886e6fb380bde66d08fed5a0d66d5cbc377b9881801e4400",
+  "rows": [
+    {
+      "variant": "baseline",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_generation_calls": 240,
+      "wall_seconds": [
+        0.06873939599609002,
+        0.06635342602385208,
+        0.06738936697365716
+      ],
+      "median_wall_seconds": 0.06738936697365716,
+      "dump_files": 0,
+      "dump_bytes": 0,
+      "dump_manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "variant": "jli-control",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 152,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 211
+      },
+      "watched_generation_calls": 388,
+      "wall_seconds": [
+        0.09750682499725372,
+        0.08828629896743223,
+        0.09571020497241989
+      ],
+      "median_wall_seconds": 0.09571020497241989,
+      "dump_files": 0,
+      "dump_bytes": 0,
+      "dump_manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "variant": "jli",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 61,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 110
+      },
+      "watched_generation_calls": 196,
+      "wall_seconds": [
+        0.07279718801146373,
+        0.0715497110504657,
+        0.0760771679924801
+      ],
+      "median_wall_seconds": 0.07279718801146373,
+      "dump_files": 0,
+      "dump_bytes": 0,
+      "dump_manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "variant": "cds",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 61,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 85
+      },
+      "watched_generation_calls": 171,
+      "wall_seconds": [
+        0.05835685704369098,
+        0.05399254901567474,
+        0.06641809601569548
+      ],
+      "median_wall_seconds": 0.05835685704369098,
+      "dump_files": 0,
+      "dump_bytes": 0,
+      "dump_manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "variant": "internals",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_generation_calls": 240,
+      "wall_seconds": [
+        0.09276354900794104,
+        0.09155784401809797,
+        0.09471120499074459
+      ],
+      "median_wall_seconds": 0.09276354900794104,
+      "dump_files": 83,
+      "dump_bytes": 123886,
+      "dump_manifest_sha256": "ccf9059e0115e078288d8b916b8381bb7e7cef24a9707c2335c6448d9fe00739"
+    },
+    {
+      "variant": "lookup",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_generation_calls": 240,
+      "wall_seconds": [
+        0.06545171601464972,
+        0.06735286902403459,
+        0.07344325102167204
+      ],
+      "median_wall_seconds": 0.06735286902403459,
+      "dump_files": 24,
+      "dump_bytes": 8472,
+      "dump_manifest_sha256": "2429d2dc9e40b446d29ea365d53d127bbf070f6933efa7f02385e6b6b8744a58"
+    },
+    {
+      "variant": "proxy",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_generation_calls": 240,
+      "wall_seconds": [
+        0.06741260999115184,
+        0.075644935015589,
+        0.07150946196634322
+      ],
+      "median_wall_seconds": 0.07150946196634322,
+      "dump_files": 25,
+      "dump_bytes": 7000,
+      "dump_manifest_sha256": "cc80698911a3b85999993c8a1a18417d8890da7ad4ce8a9249c1b256eccc7b5c"
+    },
+    {
+      "variant": "all-dumps",
+      "counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_generation_calls": 240,
+      "wall_seconds": [
+        0.10048082296270877,
+        0.10752808500546962,
+        0.09891309699742123
+      ],
+      "median_wall_seconds": 0.10048082296270877,
+      "dump_files": 132,
+      "dump_bytes": 139358,
+      "dump_manifest_sha256": "5141351aa76ff21a7074235560f4dc1df5b64ba5dbb92e3df1a5b68523ec6bad"
+    }
+  ],
+  "jli_generation_reduction_against_matched_control_percent": 49.48453608247423,
+  "cds_generation_reduction_against_installed_baseline_percent": 28.75,
+  "export_preflight": {
+    "latest_native_exited_utc": "2026-10-10T20:00:37.083889Z",
+    "latest_report_sha256": "85065a01fa0ac55875b683af57ac604e8a5ca420ba7ea33eda01b27fa0f10aef",
+    "launcher_pids_absent": [
+      61136,
+      67496
+    ],
+    "journey_container_inventory_empty": true,
+    "current_evidence_window_active": false
+  },
+  "native_runs": 0,
+  "containers_started": 0,
+  "model_calls": 0,
+  "qualification_credit": false,
+  "measurement_credit": false,
+  "limitations": [
+    "Synthetic fixture is not J1 native workload",
+    "WSL timings cannot isolate OS/vendor effects from Windows results",
+    "JDK dumps do not authenticate complete provenance or resolve missing JDI entry",
+    "No Part6 cause conclusion or native count-only authorization"
+  ],
+  "recorded_at_utc": "2026-10-11T21:10:48.517395+00:00"
+}

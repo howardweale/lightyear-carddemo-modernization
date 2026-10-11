@@ -1,0 +1,54 @@
+name: Factory twin reproducibility
+on:
+  pull_request:
+    paths:
+      - 'tools/legacy_twin/**'
+      - 'tests/test_twin_followup.py'
+      - 'src/lightyear_mainframe/legacy_twin.py'
+      - 'src/lightyear_mainframe/cp037_twin.py'
+      - '.github/workflows/factory-twin-reproducibility.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  github-machine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Build pinned clean toolchain environment
+        run: docker build --platform linux/amd64 -f tools/legacy_twin/reproducible.Containerfile -t twin-repro-toolchain .
+      - name: Clean public twins and mixed-key discriminator
+        env:
+          EXACT_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          mkdir -p work/twin-reproduction
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/twin-reproduction",dst=/output \
+            --env PYTHONPATH=/source/src:/source --env PYTHONDONTWRITEBYTECODE=1 \
+            --workdir /source twin-repro-toolchain \
+            python3 -B -m tools.legacy_twin.reproducible_build build \
+            --output /output/build --machine-id "github-${{ github.run_id }}-${{ github.run_attempt }}" \
+            --host-kind github-hosted --commit "$EXACT_HEAD" \
+            --base-image ubuntu@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/twin-reproduction",dst=/output \
+            --env PYTHONPATH=/source/src:/source --env PYTHONDONTWRITEBYTECODE=1 \
+            --workdir /source twin-repro-toolchain \
+            python3 -B -m tools.legacy_twin.mixed_key_probe /output/mixed-keys
+      - name: Preserve one-machine receipt and mixed-key evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twin-reproduction-${{ github.event.pull_request.head.sha || github.sha }}
+          path: work/twin-reproduction
+          retention-days: 30

@@ -98,3 +98,23 @@ modes. The decimal-only production restriction remains regardless of this engine
 result; no z/OS-equivalence or release claim follows from the option.
 
 The prospective engineering CEE3ABD shim records the passed abcode and timing arguments on stderr before RC12. This observes the call boundary; it does not implement or claim z/OS timing behavior. Systematic mutation compares these diagnostics as well as program stdout, RC and logical dataset bytes.
+
+## 2026-10-11 follow-up decision: A9/A10
+
+The old Multipass-specific requirement above is historical. Howard now requires
+[the same digest-pinned Ubuntu24.04 build on two independent machines](two-machine-twin-reproduction.md):
+a GitHub-hosted runner and an operator Mac/cloudVM using linux/amd64. The second
+machine is pending; there is no measured two-machine match or mismatch yet.
+Receipt comparison refuses mismatched commits/images/artifact sets and preserves
+actual differing binary hashes. Two build directories on one host do not close it.
+
+The historical54/54 decimal-key reconciliation means **no regression from cp037
+key mode**, not general EBCDIC-order confirmation. New mixed four-byte indexed
+fixtures discriminate lowercase, uppercase, digits and same-prefix suffix order
+using the actual production LYKEY helper. A successful GnuCOBOL probe establishes
+its physical-key order only. The decimal-only restriction remains until z/OS or
+ZD&T confirmation and explicit review. Historical sealed receipts are unchanged.
+
+[The ZD&T design note](zdt-calibration-design.md) defines a proposed
+`ibm-zos-emulated` rung, scenario and assembler-caller evidence and licensing
+prerequisites. It authorizes no purchase, activation, machine change or execution.

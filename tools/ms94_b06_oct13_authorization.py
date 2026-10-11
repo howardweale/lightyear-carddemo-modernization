@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from pathlib import Path
 import re
-from lightyear_calibration.contracts import read_json, verify
+from lightyear_calibration.contracts import read_json, verify, digest
 
 SCHEMA='b06-oct13-executable-request/1'
 WINDOW=('2026-10-13T16:00:00Z','2026-10-13T19:00:00Z')
@@ -20,6 +20,20 @@ def validate_request(request):
     for name in ('asset_index_sha256','asset_index_file_sha256','cap_projection_sha256','host_witness_validation_sha256','mirror_adapter_source_sha256'):
         require(re.fullmatch('[0-9a-f]{64}',request.get(name,'')) is not None,'oct13-'+name)
     require(len(request['observer_class_files_sha256'])==14,'oct13-compiled-class-count')
+    memory=request.get('host_memory_validation')
+    require(isinstance(memory,dict) and digest(memory)==request.get('host_witness_validation_sha256'),'oct13-memory-evidence-binding')
+    require(memory.get('observer_source_sha256')==request['observer_source_sha256'] and
+            memory.get('compiled_observer_sha256')==request['observer_class_files_sha256'],'oct13-memory-implementation-binding')
+    require(type(request.get('memory_gate')) is bool,'oct13-memory-gate-shape')
+    fit=memory.get('growth_fit',{});interval=fit.get('slope_95_percent',[])
+    witnesses=memory.get('input_witnesses',{})
+    passed=(memory.get('accepted') is True and memory.get('completed') is True and
+            memory.get('host_only') is True and memory.get('heap_bytes')==192*1024**2 and
+            memory.get('generation_entries',0)>=37000 and fit.get('significantly_positive') is False and
+            fit.get('warmup_events')==50000 and fit.get('sample_count',0)>=25 and
+            len(interval)==2 and interval[0]<=0 and
+            witnesses.get('missing')==0 and witnesses.get('validated_generation_entries')==memory.get('generation_entries'))
+    require(request['memory_gate'] is passed,'oct13-memory-gate-evidence')
     require(request.get('source_change_reason')=='B3.4 genuine generation-input witnesses and attempt2 metadata caps; baseline observer preserved','oct13-source-change-disclosure')
     require(request.get('attempt_limits')==[attempt_limits(1),attempt_limits(2)],'oct13-attempt-limits')
     require(utc(request['full_plan_delivered_at_utc'])<=utc('2026-10-13T00:00:00Z'),'oct13-delivery-deadline')
@@ -50,6 +64,7 @@ def authorized(request_path,expected_file_sha256,go):
     path=Path(request_path);request=read_json(path)
     require(sha(path)==expected_file_sha256,'approval-file-changed');validate_request(request)
     require(go==expected_go(request),'oct13-exact-howard-go-required')
+    require(request['memory_gate'] is True,'oct13-memory-gate-unmet')
     require(source_commit(Path(__file__).resolve().parents[1])==request['implementation_commit'],'implementation-commit-changed')
     token=_ACTIVE.set((request['implementation_commit'],request['content_sha256']))
     try:yield request

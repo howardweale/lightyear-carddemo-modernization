@@ -518,6 +518,20 @@ public final class PostingObserver {
             q.setSuspendPolicy(EventRequest.SUSPEND_ALL);if(bounded())owner.enable(q,e.location(),thread);else q.enable();
             exits.put(thread,new ReturnArm(q,method,depth,calls.peek()));
         }
+        static Object inputValue(Value value) throws Exception {
+            // These are structural input identities, not additional executable
+            // definitions. Preserve original generation capture's remember calls
+            // without introducing catalogue/JDI bytecode work for each witness.
+            if(value instanceof ClassObjectReference c) {
+                ReferenceType t=c.reflectedType();
+                return Map.of("class_object_id",c.uniqueID(),"class",t.name(),"loader",loader(t),"signature",t.signature());
+            }
+            if(value instanceof ArrayReference a) {
+                if(a.length()>255)throw new IllegalStateException("generation input parameter bound");
+                List<Object> result=new ArrayList<>();for(Value item:a.getValues())result.add(inputValue(item));return result;
+            }
+            throw new IllegalStateException("generation input is not class identity");
+        }
         static Object requiredField(ObjectReference object,String name) {
             Field field=object.referenceType().fieldByName(name);
             if(field==null)throw new IllegalStateException("missing generation input field: "+name);
@@ -536,14 +550,14 @@ public final class PostingObserver {
                 witness.put("classification","unresolved-bytecode-input-only");
             } else {
                 witness.put("kind","class-objects");Map<String,Object> inputs=new LinkedHashMap<>();
-                if(declaring.equals(FACTORY))inputs.put("receiver.targetClass",value((Value)requiredField(top.thisObject(),"targetClass"),0));
+                if(declaring.equals(FACTORY))inputs.put("receiver.targetClass",inputValue((Value)requiredField(top.thisObject(),"targetClass")));
                 else if(declaring.equals(DEFINER)) {
                     ObjectReference lookup=(ObjectReference)requiredField(top.thisObject(),"lookup");
-                    inputs.put("receiver.lookup.lookupClass",value((Value)requiredField(lookup,"lookupClass"),0));
+                    inputs.put("receiver.lookup.lookupClass",inputValue((Value)requiredField(lookup,"lookupClass")));
                 } else if(declaring.equals(INVOKER)) {
                     ObjectReference type=(ObjectReference)requiredField(top.thisObject(),"invokerType");
-                    inputs.put("receiver.invokerType.rtype",value((Value)requiredField(type,"rtype"),0));
-                    inputs.put("receiver.invokerType.ptypes",value((Value)requiredField(type,"ptypes"),0));
+                    inputs.put("receiver.invokerType.rtype",inputValue((Value)requiredField(type,"rtype")));
+                    inputs.put("receiver.invokerType.ptypes",inputValue((Value)requiredField(type,"ptypes")));
                 } else throw new IllegalStateException("unsupported generation input witness");
                 witness.put("inputs",inputs);
             }

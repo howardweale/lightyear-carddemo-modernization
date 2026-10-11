@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from lightyear_calibration.contracts import seal
+from lightyear_calibration.contracts import seal, digest
 from tools import ms94_b06_engineering as e
 from tools import ms94_b06_oct13_authorization as gate
 from tools import ms94_b06_observer_diagnostics as d
@@ -19,10 +19,14 @@ def request(root):
     value=e.instrumented_proposal(*gate.WINDOW,[],[str(root/'evidence')],root/'b06-engineering',
         implementation_commit='a'*40,native_template_sha256='b'*64,observer_source_sha256='c'*64,
         observer_class_files_sha256={('PostingObserver.class' if i==0 else 'PostingObserver$'+str(i)+'.class'):'d'*64 for i in range(14)},full_plan_delivered_at_utc='2026-10-12T23:00:00Z')
-    return reseal(value,artifact_type=gate.SCHEMA,attempt_limits=[e.attempt_limits(1),e.attempt_limits(2)],
+    memory=dict(observer_source_sha256='c'*64,compiled_observer_sha256=value['observer_class_files_sha256'],
+        accepted=True,completed=True,host_only=True,heap_bytes=192*1024**2,generation_entries=40000,
+        growth_fit=dict(significantly_positive=False,warmup_events=50000,sample_count=50,slope_95_percent=[-.1,.1]),
+        input_witnesses=dict(missing=0,validated_generation_entries=40000))
+    return reseal(value,memory_gate=True,host_memory_validation=memory,artifact_type=gate.SCHEMA,attempt_limits=[e.attempt_limits(1),e.attempt_limits(2)],
         cause_identified_criteria=gate.CAUSE_CRITERIA,class_input_witness_policy='generation-inputs-v1',
         automatic_second_attempt=False,stop_after_two=True,
-        asset_index_sha256='e'*64,asset_index_file_sha256='f'*64,cap_projection_sha256='1'*64,host_witness_validation_sha256='2'*64,mirror_adapter_source_sha256='3'*64,
+        asset_index_sha256='e'*64,asset_index_file_sha256='f'*64,cap_projection_sha256='1'*64,host_witness_validation_sha256=digest(memory),mirror_adapter_source_sha256='3'*64,
         source_change_reason='B3.4 genuine generation-input witnesses and attempt2 metadata caps; baseline observer preserved',
         observer_source_baseline_sha256='02b2f7fd4080bfbcd821ef51147c455d7f57620eac797b809d406d73f935c64b')
 
@@ -42,6 +46,20 @@ class Oct13GateTests(unittest.TestCase):
             with patch('tools.ms94_b06_engineering_run.source_commit',return_value='e'*40):
                 with self.assertRaisesRegex(ValueError,'implementation-commit'):
                     with gate.authorized(path,e.sha(path),gate.expected_go(value)):pass
+
+    def test_failed_memory_stays_blocked_even_with_exact_go(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);value=request(root);memory=copy.deepcopy(value['host_memory_validation'])
+            memory.update(accepted=False);memory['growth_fit'].update(significantly_positive=True,slope_95_percent=[.03,.32])
+            blocked=reseal(value,memory_gate=False,host_memory_validation=memory,host_witness_validation_sha256=digest(memory))
+            gate.validate_request(blocked)
+            path=root/'blocked.json';e.write_new(path,blocked)
+            with self.assertRaisesRegex(ValueError,'memory-gate-unmet'):
+                with gate.authorized(path,e.sha(path),gate.expected_go(blocked)):pass
+            with self.assertRaisesRegex(ValueError,'memory-gate-evidence'):gate.validate_request(reseal(blocked,memory_gate=True))
+            changed=copy.deepcopy(value['host_memory_validation']);changed['observer_source_sha256']='f'*64
+            with self.assertRaisesRegex(ValueError,'implementation-binding'):
+                gate.validate_request(reseal(value,host_memory_validation=changed,host_witness_validation_sha256=digest(changed)))
 
     def test_entire_asset_index_is_checked_before_template_use(self):
         from tools.ms94_b06_engineering_run import template
@@ -118,6 +136,15 @@ class GenerationInputTests(unittest.TestCase):
             bad=copy.deepcopy(row);bad['class_input_witness'].update(change)
             with self.subTest(change=change),self.assertRaises(ValueError):inputs(bad)
 
+class HostWitnessReportTests(unittest.TestCase):
+    def test_missing_input_is_not_hidden_by_existing_stack(self):
+        import json
+        from tools.b06_host_probe.oct13_host_validation import witness_counts
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'events.jsonl'
+            p.write_text(json.dumps(dict(kind='generation-entry',entry_method='unknown',stack=[{'class':'example.Customer'}]))+'\n')
+            with self.assertRaises(ValueError):witness_counts(p)
+
 class ProjectionTests(unittest.TestCase):
     def test_native_and_host_allowances_and_distinct_attempt_caps(self):
         from tools.b06_host_probe.oct13_projection import project
@@ -161,3 +188,33 @@ public class LimitsProbe {
                     result=subprocess.run([str(executable(jdk,'java')),'-Db06.observer.audit_records='+str(records),
                         '-Db06.observer.audit_bytes='+str(bytecap),'-cp',str(out),'LimitsProbe',str(mode).lower()],capture_output=True,text=True,check=True,timeout=20)
                     self.assertEqual(result.stdout,expected)
+
+    def test_input_descriptor_does_not_materialize_definitions_or_extra_class_objects(self):
+        from tools.b06_host_probe.jdk import executable
+        jdk=Path(os.environ['B06_HOST_JDK'])
+        code="""import java.lang.reflect.*;import java.util.*;import com.sun.jdi.*;
+public class InputProbe {
+ static <T>T proxy(Class<T> type,Map<String,Object> allowed) {
+  return type.cast(Proxy.newProxyInstance(type.getClassLoader(),new Class<?>[]{type},(p,m,a)->{
+   if(!allowed.containsKey(m.getName()))throw new AssertionError("forbidden side effect: "+m.getName());return allowed.get(m.getName());
+  }));
+ }
+ public static void main(String[] args)throws Exception {
+  ClassLoaderReference loader=proxy(ClassLoaderReference.class,Map.of("uniqueID",19L));
+  ReferenceType type=proxy(ReferenceType.class,Map.of("name","example.Input","signature","Lexample/Input;","classLoader",loader));
+  ClassObjectReference c=proxy(ClassObjectReference.class,Map.of("uniqueID",123L,"reflectedType",type));
+  ArrayReference array=proxy(ArrayReference.class,Map.of("length",2,"getValues",List.of(c,c)));
+  Class<?> g=Class.forName("lightyear.observer.PostingObserver$Generation");
+  java.lang.reflect.Method m=g.getDeclaredMethod("inputValue",Value.class);m.setAccessible(true);
+  Map<?,?> expected=Map.of("class_object_id",123L,"class","example.Input","loader","19","signature","Lexample/Input;");
+  if(!m.invoke(null,c).equals(expected) || !m.invoke(null,array).equals(List.of(expected,expected)))throw new AssertionError("identity changed");
+  // No classObject(), constantPool(), methods(), fields() or target invocation is allowed by the proxies.
+  System.out.print("same genuine identity; no catalogue side effects");
+ }
+}"""
+        with tempfile.TemporaryDirectory() as t:
+            out=Path(t);(out/'InputProbe.java').write_text(code)
+            source=Path(__file__).resolve().parents[1]/'factory/idempiere/b06-observer/PostingObserver.java'
+            subprocess.run([str(executable(jdk,'javac')),'--add-modules','jdk.jdi','-d',str(out),str(source),str(out/'InputProbe.java')],check=True,capture_output=True,timeout=45)
+            result=subprocess.run([str(executable(jdk,'java')),'--add-modules','jdk.jdi','-cp',str(out),'InputProbe'],capture_output=True,text=True,check=True,timeout=20)
+            self.assertEqual(result.stdout,'same genuine identity; no catalogue side effects')

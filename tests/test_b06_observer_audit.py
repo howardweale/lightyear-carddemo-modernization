@@ -46,7 +46,7 @@ class AuditTests(unittest.TestCase):
         with self.assertRaises(ValueError): audit.event(record(4,'resume-requested',0,{}))
 
 
-def host_capture(java, javac, source, out, *, fault=False, diagnostic=False):
+def host_capture(java, javac, source, out, *, fault=False, diagnostic=False, bounded=False):
     """Public diagnostic fixture only. Fault is injected in a temporary source copy."""
     out.mkdir()
     if fault:
@@ -80,7 +80,7 @@ public class Probe {
     try:
         port=target.stdout.readline().strip().rsplit(':',1)[-1].strip()
         if not port.isdigit(): raise ValueError('no host listener')
-        observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2',*(['diagnostic-unmatched-return-v1'] if diagnostic else [])],input='',capture_output=True,text=True,timeout=60)
+        observed=subprocess.run([str(java),'-XX:SoftRefLRUPolicyMSPerMB=0','-Db06.observer.state_dir='+str(out.resolve()),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2',*(['bounded-observer-v1','native-diagnostics-v1','diagnostic-unmatched-return' if diagnostic else 'strict','unmatched-return-cap=10','heap-guard-percent=85','heap-telemetry-interval=1000','pending-cap=256'] if bounded else ['diagnostic-unmatched-return-v1'] if diagnostic else [])],input='',capture_output=True,text=True,timeout=60)
         elapsed=time.perf_counter()-started
         events=[json.loads(line) for line in observed.stdout.splitlines()]
         return observed, events, elapsed

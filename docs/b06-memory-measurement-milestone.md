@@ -1,5 +1,15 @@
 # B06 memory measurement: redesign gate not met
 
+> **Superseded gate — 2026-10-11.** Howard's decision dated 2026-10-10
+> 17:44 PDT withdraws the requirement to reproduce the native OOM on the host.
+> The measured unbounded retained-heap growth and the host/native payload-tail
+> mismatch are sufficient to proceed with the offline bounded-memory and native
+> diagnostic implementation described in [the replacement specification](b06-observer-native-evidence.md).
+> The historical measurements below remain unchanged. Their conclusion to stop
+> at the unmet reproduction gate is superseded. The engineering hold remains;
+> no native attempt is authorized by this note or implementation work.
+
+
 The requested host baseline did **not** reproduce the native OOM, and its
 after-GC heap curve does **not** reach 192 MiB at r3 event 231,158. Work stops
 at the attachment's measurement gate. The production observer, native adapter,

@@ -1,6 +1,6 @@
 # B06 Oracle engineering mode
 
-## Current decision â€” October 11, 2026
+## Current decision — October 11, 2026
 
 Howard's October 10, 2026 17:44 PT decision replaces the host-reproduction
 prerequisite with bounded-memory implementation and new native evidence. It does
@@ -54,7 +54,7 @@ is created. Existing J1 business predicates and historical artifacts are unchang
 
 ## Approval proposed to Howard
 
-- Calendar: **October 11, 2026, 9:00 AMÃ¢â‚¬â€œ9:00 PM PDT** (16:00 UTC October 11
+- Calendar: **October 11, 2026, 9:00 AM–9:00 PM PDT** (16:00 UTC October 11
   through 04:00 UTC October 12), subject to no overlapping J1/B06 evidence window.
 - At most **10** attempts, **one command per attempt**, including failed attempts.
 - Fixed application image:

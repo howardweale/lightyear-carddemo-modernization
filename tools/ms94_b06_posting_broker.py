@@ -228,7 +228,10 @@ class PostingBroker:
                         if self.diagnostics:
                             check(event.get('observer_format')=='bounded-observer-v1' and
                                   event.get('native_diagnostics')=='native-diagnostics-v1' and
-                                  event.get('audit_policy')=='structural-jdi-v2', 'observer-native-ready-binding')
+                                  event.get('audit_policy')=='structural-jdi-v2' and
+                                  event.get('observer_mode')==self.diagnostics['mode'] and
+                                  event.get('unmatched_return_cap')==10 and event.get('heap_guard_percent')==85 and
+                                  event.get('pending_cap')==256, 'observer-native-ready-binding')
                         from tools.ms94_b06_unmatched_return import POLICY as UNMATCHED
                         check(event.get('unmatched_return_policy') == (UNMATCHED if self.diagnostic_unmatched else None),
                               'diagnostic-unmatched-return-ready-policy')

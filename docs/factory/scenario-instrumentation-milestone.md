@@ -30,3 +30,13 @@ Generators, mutation/solver campaigns, release thresholds and the POSTTRAN
 second opinion are subsequent deliverables. This instrumentation does not
 promote either twin or authorize a model call. All runs are engineering,
 uncredited and public-only. No B06 evidence or hold changed.
+
+## Measured public-only baseline
+
+Ubuntu run 38099854185 completed successfully on implementation 1172055.
+- INTCALC: 46/47 decisions reached; 51/94 outcomes observed; 20/22 paragraphs entered.
+- POSTTRAN: 54/55 decisions reached; 63/110 outcomes observed; 24/26 paragraphs entered.
+
+[Baseline and every gap](public-runtime-coverage-baseline.json). All eight paired
+scenarios preserved identical output bytes and return codes. Generated coverage
+is reported separately in the generator deliverable; no promotion is inferred.

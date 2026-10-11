@@ -78,7 +78,7 @@ class EquivalenceDecisionTests(unittest.TestCase):
  def test_amended_threshold_retains_review_diversity_and_freshness_blockers(self):
   from lightyear_mainframe.equivalence_evidence import amended_threshold_report
   coverage=dict(instrumented=True,program='CBACT04C',source_sha256=SOURCES['CBACT04C'],coverage_by_class={'business-logic':dict(covered=8,total=8),'io-handling':dict(covered=85,total=86)},uncovered=[dict(id='legacy:cobol-decision:CBACT04C:189:671',outcome='false',classification='io-handling')])
-  mutation=dict(claim_scope='twin',mutation_conditions_met=True,compiler_refusals=[])
+  mutation=dict(claim_scope='twin',mutation_conditions_met=True,compiler_refusals=[],targeted_experiments_complete=True)
   r=amended_threshold_report(mutation,coverage,{'A':2},['A'],'a'*40)
   self.assertTrue(r['conditions_met']);self.assertFalse(r['release_authorized']);self.assertFalse(r['measurement_credit'])
   for changed,diversity,head,reason in (({**mutation,'mutation_conditions_met':False},{'A':2},'a'*40,'mutation-or-individual-review-conditions-unmet'),(mutation,{'A':1},'a'*40,'output-fields-below-two-values'),(mutation,{'A':2},'old','fresh-current-head-source-binding-required')):
@@ -92,7 +92,7 @@ class EquivalenceDecisionTests(unittest.TestCase):
   rows=[dict(index=i,case=str(i),fault=None,baseline={'status':'executed'},actual={'status':'executed'},status='survived') for i in range(200)]
   self.assertTrue(targeted_accounting(rows)['targeted_evidence_complete'])
   rows[3]['baseline']['status']='execution-refusal';rows[3]['status']='baseline-refusal'
-  rows[4]['actual']['status']='execution-refusal';rows[4]['status']='killed-failure'
+  rows[4]['actual']['status']='execution-refusal';rows[4]['status']='mutant-execution-refusal'
   result=targeted_accounting(rows)
   self.assertEqual(200,result['targeted_cases']);self.assertEqual(198,result['targeted_valid_comparisons'])
   self.assertFalse(result['targeted_evidence_complete']);self.assertEqual([3,4],[r['index'] for r in result['targeted_evidence_gaps']])
@@ -106,6 +106,24 @@ class EquivalenceDecisionTests(unittest.TestCase):
   self.assertEqual('survived',targeted_outcome(normal,normal))
   self.assertEqual('killed-failure',targeted_outcome(normal,{**normal,'returncode':12}))
   self.assertEqual('killed-divergent',targeted_outcome(normal,{**normal,'outputs':{'OUT':'changed'}}))
+ def test_accepted_equivalent_with_incomplete_targets_blocks_complete_threshold(self):
+  from lightyear_mainframe.equivalence_evidence import mutation_threshold_report,amended_threshold_report
+  identifier='accepted-site';approval={'id':identifier,'source_sha256':'source','scope':'stated-argument-scope'}
+  fresh=[dict(id='kill-'+str(i),status='killed-divergent',baseline={'status':'executed'},actual={'status':'executed'}) for i in range(50)]
+  fresh.append(dict(id=identifier,status='equivalent (argued, listed)'))
+  row=dict(id=identifier,mutant={'source_sha256':'source'},argument={'depends_on_register':[]},TCE={},class_covered=False,targeted_cases=200,targeted_valid_comparisons=199,targeted_evidence_complete=False)
+  mutation=mutation_threshold_report(fresh,[row],[approval],'twin',{'defects':[]})
+  self.assertTrue(mutation['mutation_conditions_met']);self.assertEqual([identifier],mutation['targeted_evidence_gap_ids'])
+  coverage=dict(instrumented=True,program='CBACT04C',source_sha256=SOURCES['CBACT04C'],coverage_by_class={'business-logic':{'covered':8,'total':8},'io-handling':{'covered':86,'total':86}},uncovered=[])
+  result=amended_threshold_report(mutation,coverage,{'A':2},['A'],'a'*40)
+  self.assertFalse(result['conditions_met']);self.assertEqual(['required-targeted-experiment-evidence-incomplete'],result['blocking_reasons'])
+  mutation=mutation_threshold_report([dict(id=identifier,status='not-compiled')],[row],[approval],'twin',{'defects':[]})
+  self.assertEqual([],mutation['targeted_evidence_gap_ids']);self.assertEqual([identifier],mutation['compiler_refusals'])
+ def test_threshold_rejects_a_legacy_kill_with_refused_execution(self):
+  from lightyear_mainframe.equivalence_evidence import mutation_threshold_report
+  fresh=[dict(id='old-claimed-kill',status='killed-failure',baseline={'status':'executed'},actual={'status':'execution-refusal'})]
+  result=mutation_threshold_report(fresh,[],[],'twin',{'defects':[]})
+  self.assertEqual(0,result['killed']);self.assertEqual('unverified-kill-execution-evidence',result['unresolved_survivors'][0]['reason'])
  def test_kept_sign_discriminator(self):
   _,_,images,_=case('posttran-cycle-debit-sign');rows,_,_=chronological_context(images);r=rows[0];s=r['account_state_before']
   self.assertEqual(102,r['reason']);self.assertEqual(Decimal('1101'),Decimal(s['WS-TEMP-BAL']))

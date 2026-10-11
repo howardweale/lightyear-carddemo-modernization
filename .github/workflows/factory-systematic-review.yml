@@ -46,8 +46,12 @@ jobs:
         with:
           name: factory-review-records-${{ matrix.job }}
           path: |
+            work/factory-review-${{ matrix.job }}/campaign-start.json
+            work/factory-review-${{ matrix.job }}/campaign-manifest.json
             work/factory-review-${{ matrix.job }}/review-summary.json
             work/factory-review-${{ matrix.job }}/mutation-results.json
+            work/factory-review-${{ matrix.job }}/mutation-inventory.json
+            work/factory-review-${{ matrix.job }}/systematic-scenario-selection.json
             work/factory-review-${{ matrix.job }}/generation-inventory.json
             work/factory-review-${{ matrix.job }}/fault-results.json
             work/factory-review-${{ matrix.job }}/equivalence-followup/*.json

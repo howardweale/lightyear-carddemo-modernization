@@ -11,6 +11,7 @@ from lightyear_mainframe.systematic_mutation import generate,apply,outcome
 from lightyear_mainframe.equivalence_evidence import appl_result_census,class_covered,register_dependencies,mutation_threshold_report,amended_threshold_report
 from lightyear_mainframe.targeted_witness import profile
 from tools.check_factory_review import attempt
+from lightyear_mainframe.campaign_provenance import validate as validate_campaign
 
 
 def population(job):
@@ -64,7 +65,8 @@ def targeted_accounting(measurements):
 
 def check(campaign,job):
     started=time.monotonic()
-    campaign=Path(campaign).resolve(); output=campaign/'equivalence-followup';output.mkdir()
+    campaign=Path(campaign).resolve();provenance=validate_campaign(campaign,job)
+    output=campaign/'equivalence-followup';output.mkdir()
     program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
     census=appl_result_census(text,program);write_json(output/'appl-result-census.json',census)
     inventory={r['id']:r for r in generate(text,program)}; old=population(job)
@@ -87,7 +89,8 @@ def check(campaign,job):
                 method='GnuCOBOL -O2 generated C, exact after only comment and line-directive removal',scope='pinned-host-compiler only; not z/OS')
         except (RuntimeError,ValueError) as error:row['TCE']=dict(status='compiler-refusal',detail=str(error))
         covered=class_covered(mutant,argument,census);row['class_covered']=covered
-        if fresh[identifier]['status'].startswith('killed-'):
+        if fresh[identifier]['status']=='not-compiled':row['status']='not-compiled (listed exclusion)'
+        elif fresh[identifier]['status'].startswith('killed-'):
             row.update(status='refuted-by-fresh-campaign',refuted=True,witness=fresh[identifier]['killed_by'])
         elif row['TCE'].get('identical'):row['status']='equivalent (compiler-proven)'
         elif covered:row['status']='equivalent (class-proof)'
@@ -140,7 +143,8 @@ def check(campaign,job):
                 for record in from_ascii_fixed(layout,path.read_bytes()):
                     for f in record['fields']:
                         if not f['filler']:values[dd+':'+f['path']].add(str(f['value']))
-    head=__import__('subprocess').check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip()
+    if validate_campaign(campaign,job)['content_sha256']!=provenance['content_sha256']:raise ValueError('campaign-changed-during-followup')
+    head=provenance['binding']['head']
     complete={scope:amended_threshold_report(assessment,current['after_faults'],{k:len(v) for k,v in values.items()},list(values),head)
               for scope,assessment in scoped.items()}
     write_json(output/'threshold-2-by-scope.json',complete)
@@ -156,7 +160,7 @@ def check(campaign,job):
         target_evidence_gap_ids=[r['id'] for r in results if r.get('targeted_cases') and not r['targeted_evidence_complete']],
         target_refutations=sum(r['refuted'] for r in results),
         individually_reviewable=len(review),threshold_by_scope=complete,acceptance_decision=acceptance['decision_content_sha256'],compiler_scope='pinned GnuCOBOL twin, never a z/OS compiler proof',
-        current_head=__import__('subprocess').check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),model_calls=0)
+        current_head=head,campaign_manifest_sha256=provenance['content_sha256'],model_calls=0)
     print(json.dumps(result,indent=2))
     if current['mutant_count']!=result['expected_sites']:raise AssertionError('B1-fresh-site-count')
 

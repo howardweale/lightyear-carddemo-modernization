@@ -103,9 +103,18 @@ def mutation_threshold_report(fresh, followup, accepted, scope, register):
     killed=[];excluded=[];refused=[];unresolved=[]
     for current in fresh:
         identifier=current['id'];row=reviews.get(identifier,{})
-        if current['status'].startswith('killed-') or row.get('refuted'):
-            killed.append(identifier);continue
+        if current['status'].startswith('killed-'):
+            if current.get('baseline',{}).get('status')=='executed' and current.get('actual',{}).get('status')=='executed':killed.append(identifier)
+            else:unresolved.append(dict(id=identifier,reason='unverified-kill-execution-evidence'))
+            continue
+        if row.get('refuted'):
+            witness=row.get('witness',{})
+            if isinstance(witness,dict) and witness.get('baseline',{}).get('status')=='executed' and witness.get('actual',{}).get('status')=='executed':killed.append(identifier)
+            else:unresolved.append(dict(id=identifier,reason='unverified-targeted-kill-execution-evidence'))
+            continue
         if current['status']=='not-compiled':refused.append(identifier);continue
+        if current['status']=='evidence-gap':
+            unresolved.append(dict(id=identifier,reason='fresh-campaign-execution-evidence-gap'));continue
         a=row.get('argument',{});validate_dependencies(a,register)
         host_only=(identifier=='CBTRN02C-delete-MOVE-718-447' or bool(a.get('compiler_storage_semantics') or a.get('compiler_runtime_contract'))
             or 'not z/OS' in a.get('argument','') or 'not native z/OS' in a.get('argument','')
@@ -119,8 +128,9 @@ def mutation_threshold_report(fresh, followup, accepted, scope, register):
         if basis and not(scope=='zos-facing' and host_only):excluded.append(dict(id=identifier,basis=basis))
         else:unresolved.append(dict(id=identifier,reason='host-compiler-scoped argument unresolved for z/OS' if host_only and scope=='zos-facing' else 'individual operator review required'))
     eligible=len(fresh)-len(excluded)-len(refused)
+    target_gaps=[r['id'] for r in followup if 'targeted_cases' in r and (r['targeted_cases']!=200 or not r.get('targeted_evidence_complete')) and r['id'] not in refused]
     return dict(schema='scenario-threshold-2-mutation-assessment/1',claim_scope=scope,sites=len(fresh),killed=len(killed),
-        compiler_refusals=refused,excluded_equivalents=excluded,eligible=eligible,kill_rate=f'{len(killed)}/{eligible}',
+        compiler_refusals=refused,targeted_evidence_gap_ids=target_gaps,targeted_experiments_complete=not target_gaps,excluded_equivalents=excluded,eligible=eligible,kill_rate=f'{len(killed)}/{eligible}',
         minimum_50_met=eligible>=50,at_least_90_percent=eligible>0 and len(killed)*10>=eligible*9,
         unresolved_survivors=unresolved,mutation_conditions_met=eligible>=50 and len(killed)*10>=eligible*9 and not unresolved,
         whole_threshold_effective=False,other_requirements=['fresh business/I-O coverage bindings','two values per compared output field','complete B1 review dispositions'],
@@ -144,6 +154,7 @@ def amended_threshold_report(mutation, coverage, diversity, compared_fields, cur
     if not fields:reasons.append('compared-field-inventory-required')
     if missing:reasons.append('output-fields-below-two-values')
     if not mutation['mutation_conditions_met']:reasons.append('mutation-or-individual-review-conditions-unmet')
+    if mutation.get('targeted_experiments_complete') is not True or mutation.get('targeted_evidence_gap_ids'):reasons.append('required-targeted-experiment-evidence-incomplete')
     result=dict(schema='scenario-threshold/2-amended-assessment',decision_date='2026-10-11T14:00:00-07:00',
         status='approved-subject-to-B1-completion',current_head=current_head,program=program,source_sha256=source,
         claim_scope=mutation['claim_scope'],mutation=mutation,business=business,

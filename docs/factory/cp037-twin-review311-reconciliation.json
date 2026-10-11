@@ -281,12 +281,20 @@
       "receipt_file_sha256": "be145a2a5378a06b659c9969316c6669812921772476aec9a4d80f5da04ada37",
       "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38147624097",
       "source_receipt_content_sha256": "f3f81eb46efb790c1b49982a66b87eae52337911ca485aed34ade69857b8adf2"
+    },
+    {
+      "count": 54,
+      "matched": 54,
+      "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+      "receipt_file_sha256": "1f0e1346be32a30cfe50e9ba6d14adcf721706afae04d74c131a4a52f399fe31",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929589",
+      "source_receipt_content_sha256": "3f8be299e4adec5f113c379492af24661a8f54926b9672d29b91133e3af3f152"
     }
   ],
   "matched": 54,
   "measurement_credit": false,
   "model_calls": 0,
-  "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+  "observed_head": "3283265d71e268b3dc66b09fb2808e72a18b19ac",
   "oracle_class": "executable-twin",
   "oracle_status": "provisional",
   "phase": "cp037-full-twin-reconciliation",
@@ -294,7 +302,7 @@
   "receipt_file_sha256": "1f0e1346be32a30cfe50e9ba6d14adcf721706afae04d74c131a4a52f399fe31",
   "releasable": false,
   "run_class": "engineering",
-  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929589",
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763",
   "schema": "factory-legacy-twin/1",
   "source_receipt_content_sha256": "3f8be299e4adec5f113c379492af24661a8f54926b9672d29b91133e3af3f152",
   "twin_limits_path": "docs/factory/twin-limits.md",

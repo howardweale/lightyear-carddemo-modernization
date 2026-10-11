@@ -1,113 +1,71 @@
-# Factory review follow-up for PRs 311–317 — 2026-10-11
+# Factory review follow-up for PRs #311–317 — 2026-10-11
 
-The source/data-flow classification confirms that the existing public+generated
-receipt covers all inventoried business outcomes: INTCALC **8/8 business, 56/86
-I/O, 64/94 combined**; POSTTRAN **24/24 business, 49/86 I/O, 73/110 combined**.
-This is a classification of previously observed events, not a new native run.
-`decision-classification.json` lists every outcome with exact source hash and
-reviewed data-flow rationale. A missing tariff chooses a business fallback; a
-missing card/account chooses a business rejection. These are deliberately not
-classified by a status-name regex. EOF traversal and operational failure paths
-are I/O handling. Any source change refuses until classification is reviewed.
+The compiled public host campaign covers every inventoried business outcome. Declared I/O faults improve the operational coverage; one source-bound EOF edge in each program remains unobserved and unaccepted.
 
-The prospective lexical-overlap corrections are in
-`docs/oct10-factory-foundations-milestone.md` and
-`docs/business-rules/milestone-2026-10-10.md`. The instrumentation milestone already
-labels 16/47 correctly. No signed historical evidence was rewritten. Repository
-search found no other literal 16/47 coverage claim in docs, catalogues or views.
+| Program | Business outcomes | I/O before faults | I/O after faults | Combined after faults | Declared faults matched |
+|---|---:|---:|---:|---:|---:|
+| INTCALC | 8/8 | 56/86 | 85/86 | 93/94 | 24/24 |
+| POSTTRAN | 24/24 | 49/86 | 85/86 | 109/110 | 29/29 |
 
-Systematic generation currently inventories **426 INTCALC and 489 POSTTRAN**
-source-site mutants. These counts are generated, not claims of compiled mutants
-or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs, program stderr and program stdout (excluding probe records), separates divergent
-kills, failure kills, survivors and compilation refusals, and preserves every
-result. A survivor is unresolved unless a scenario kills it or a reviewed
-individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel or indistinguishable-failure-value arguments may exclude a surviving compiled mutant; each excluded survivor carries its own exact source-bound rationale. Binary-layout arguments additionally require a recorded compiler LENGTH probe. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
-Mutants with altered FD layout may legitimately not compile or fail admission;
-those outcomes remain visible. Receiving-field mutations also cover every numeric PIC site in the pinned included copybooks. Each operand is hash-bound; originals are preserved.
+The systematic campaign attempts compilation at every generated site and executes the compiled mutants; failure and divergent kills are distinct. Compiler refusals remain in both denominators. Only individually listed argued equivalents are excluded from the second denominator.
 
-Engineering-only I/O fault declarations select a specific operation, status,
-expected diagnostic and RC before compilation. Derived executables keep original
-source bytes and source-line probe identities. Expected CEE3ABD refusals have RC12.
-The account REWRITE handler sets reason109; its actual downstream behaviour is
-recorded by the campaign rather than treated as an assumed abend. No z/OS failure
-mechanism equivalence is claimed. The compiled cp037-vs-ASCII twin reconciliation matched **54/54** public/generated cases at head `7fb0566`; the [receipt summary](cp037-twin-review311-reconciliation.json) binds the exact run and full receipt. This includes returned bytes, status and refusal classes. Decimal-only production restrictions remain; these cases do not establish z/OS alphanumeric-key semantics.
+| Program | Sites | Failure kills | Divergent kills | Argued equivalents | Survivors | Compiler refusals | Raw kills | Kills after listed exclusions |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| INTCALC | 426 | 162 | 146 | 113 | 0 | 5 | 308/426 (72.3%) | 308/313 (98.4%) |
+| POSTTRAN | 489 | 194 | 175 | 111 | 3 | 6 | 369/489 (75.5%) | 369/378 (97.6%) |
 
-The unsigned revised threshold proposes 100% business outcomes, all I/O outcomes
-covered or individually accepted in an exact signed operator policy, 90% kills
-over at least 50 systematic eligible mutants with listed equivalence exclusions,
-and two distinct values in each compared output field. Compiler refusals and
-unresolved survivors block adequacy. Howard has not approved this threshold.
+| Program | Additional individually argued survivors | Remaining unexplained | Kill rate after both listed argument sets |
+|---|---:|---:|---:|
+| INTCALC | 0 | 0 | 308/313 (98.4%) |
+| POSTTRAN | 3 | 0 | 369/375 (98.4%) |
 
-The revised POSTTRAN preregistration is
-[revised-plan.json](posttran-second-opinion/revised-plan.json). It pins the actual
-installed Codex0.160.0 bytes (`4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01`)
-and explicitly does not pretend CLI configuration enforces a server token cap.
-The proposed dispatch path is an explicitly supplied Responses API transport with
-`max_output_tokens=64000`, including reasoning. The offline broker requires the
-new exact plan approval and rejects prior approval, attempt/dollar reservation
-exhaustion, changed inputs/client bytes, missing usage, cap breach and incomplete
-responses. It is not connected to credentials or a live transport.
-
-Prior public factory evidence records 89,246 aggregate output tokens across ten
-calls (8,924.6 mean), but does not separate reasoning or record per-call tails.
-64,000 is therefore proposed headroom, not a measured tail percentile. Phase1
-proposes three calls, 750,000 input/192,000 output tokens, two hours and $36
-API-equivalent cap; phase2 proposes two calls and $24, still separately blocked
-on adjudication and approval. Conservative retained planning rates reserve
-$11.05/call. Fresh official price verification is required before dispatch.
-The previous approved $25/48,000-token plan does not authorize this revision.
-**Zero model calls, compilations of model output or candidates were produced.**
-
-The readable [POSTTRAN review page](posttran-human-review.html) is a standalone
-HTML file: download/open locally, enter each decision/reason and your name, then
-return its unsigned JSON in chat. No GitHub Pages deployment is claimed, and no
-operator signature is created by the page.
-
-Actual compiled campaign results and final-head CI will be recorded before this
-PR is offered for commit-specific merge approval. No B06 native run or hold was
-changed by this work.
-
-The first completed older INTCALC campaign (497 source-only mutants, before stdout strengthening and copybook sites) measured58 divergent kills,135 failure kills,191 survivors and113 compiler refusals. This193/497 result is preserved as preliminary evidence, not replaced by the old8/8 narrative. Current full-set results remain required.
-
-Surviving mutants also receive up to three declared fault challenges chosen from their source paragraph or representative error/extended-status/INVALID-KEY paths. The same fault seam is applied to the baseline and mutant; an incompatible seam or a derived compile refusal is recorded as unavailable, never counted as a kill of a normally compiled survivor. Predicate probes in these fault-mutant copies are not claimed as changed-code coverage. New killing fault/scenario pairs are retained explicitly.
-
-Review of the earlier compiler refusals found a generator defect: digit-prefixed paragraph identifiers such as `1000-READ` had been split into numeric constants. Those false sites are removed, rather than silently treated as meaningful invalid mutants; their old results remain preserved. Numeric receiving-site generation now handles both literal/repeated PIC digits and parenthesized scales. The corrected427/490 inventories therefore supersede the preliminary497/499/531 and604 denominators. A new large-rate INTCALC scenario targets narrowed monthly/total receiving fields. Individually listed dead-counter and empty-fee-paragraph arguments make no claim about other survivors.
-
-Survivor-driven synthetic cases add a third account, successful DEFAULT tariff fallback, cyclic debit, invalid-then-valid and new-then-existing transaction sequences, and expiry-prefix boundaries. These are new witnesses, not assumed kills. A compiled LENGTH probe records binary storage classes before any corresponding ABI-preservation argument is permitted. All new outcomes remain subject to the full compiled campaign.
-
-Completed pre-challenge fault campaigns reached **INTCALC 8/8 business, 85/86 I/O, 93/94 combined**, and **POSTTRAN 24/24 business, 85/86 I/O, 109/110 combined**; all 24/24 and 29/29 declared fault expectations matched respectively. The only unobserved edge in each is the first EOF guard false edge. [Source-bound gap arguments](io-gap-arguments.json) explain why TEST BEFORE prevents that edge; these arguments neither remove it from the denominator nor count as Howard's acceptance. POSTTRAN reason109 returned RC0; this observed failure propagation gap remains visible.
-
-The completed427-site INTCALC run at29ac9d9 measured162 failure kills,130 divergent kills,70 individually argued equivalents,59 survivors and6 compiler refusals: **292/427 raw;292/357 after listed-equivalent exclusions**. Its results are preserved. Inspecting the actual compiler logs identified one additional false relational site: the assignment equals sign in COMPUTE. Removing this generator defect gives the prospective426/489 inventories, awaiting new compiled outcomes. Genuine out-of-bounds reference/PIC mutants remain in the not-compiled bucket and denominator.
-
-Mutation comparison now includes stderr, which contains the existing actual CEE3ABD code. The engineering shim also records its actual timing argument; these are observable call parameters, not a claim to simulate z/OS abend timing. Official [OpenAI reasoning documentation](https://developers.openai.com/api/docs/guides/reasoning) confirms the broker's max_output_tokens parameter caps reasoning and non-visible tokens as well as visible output; incomplete responses remain failures.
+The [three post-campaign arguments](post-campaign-equivalence-review311.json) bind each actual surviving site to its source and, for the receiving-scale case, the verified runtime bytes. Two are unconsumed validation-description stores; the third truncates an unused fractional byte on every account-ID consumer. These are listed arguments for Howard’s review, not additional measured kills or accepted policy exceptions.
 
 
-The revised proposal now has plan hash
-`20d137ab2a44046b49d378a1fccddd01ec8381f3c19c8fcb3a74b0e70ba68e4b`.
-Fresh approval must cover the transport change as well as the client provenance,
-token limits and budget. The byte-verified Codex0.160.0 binary is provenance only;
-the proposed capped calls would use an explicitly supplied Responses API transport.
-The CLI is neither invoked nor claimed to enforce this cap. The broker refuses
-live dispatch while current pricing or transport verification is absent, even
-with an otherwise matching approval. The $36 figure is API-equivalent at explicit
-planning rates, not verified current billing. A pricing/transport-bound fresh
-approved plan is still required before execution. Historical pricing metadata is
-separated from the current unverified status. Phase2 remains blocked.
+Raw campaign survival is retained above. The separate post-campaign source/runtime review can list a survivor as argued equivalent without rewriting that observation. Unexplained survivors and compiler refusals still block adequacy, even if a numerical kill threshold is met. [Every mutant and its disposition](systematic-review311-summary.json), [INTCALC detail](systematic-intcalc-review311.json), [POSTTRAN detail](systematic-posttran-review311.json), and [survivor review and compiler refusals](systematic-survivors-review311.md) preserve the actual results. No unexplained survivor is relabeled equivalent to improve a percentage.
 
-The expanded [generated classification receipt](generated-review311-classification.json)
-records46 cases. Missing disclosure/account/xref are source-specific expected-failure
-agreements. Duplicate indexed-category input is an adapter refusal before execution.
-Only the POSTTRAN duplicate-ID invariant remains unresolved in that cohort. The
-older eight curated mutants are now labeled regression-only and cannot supply the
-systematic adequacy denominator. The systematic selector retains each demonstrated
-mutant's exact scenario or scenario-plus-fault witness, even if it adds no new branch.
+The revised POSTTRAN preregistration awaits a new decision; the old budget approval does not cover it.
 
-Final operator review corrected whole-predicate negation across continuation
-OR/AND lines. Individual equivalence arguments refuse any unreviewed program hash.
-A tiny pinned-compiler probe measures binary widths/default initialization and
-all256 possible second status bytes under0/+1/-1 initializers; only the exact
-512-comparison result can support the associated narrow storage arguments. Failed
-probe expectations leave mutants unresolved. This is an engineering host argument,
-not z/OS equivalence. A separate source-bound argument covers11 success assignments
-whose preceding control flow already guarantees APPL-RESULT0; sentinel operations
-that first assign8 are excluded. No new threshold or release approval is implied.
+- Plan: `97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e` ([full proposal](posttran-second-opinion/revised-plan.json)).
+- Installed client provenance: Codex 0.160.0, SHA-256 `4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01`; actual bytes checked.
+- Proposed broker: `40697064deeea86bfd85ff8d924049f0d1624fe42040743a07832e34b2d7e5c0`; explicitly supplied Responses API transport, **not CLI dispatch**.
+- Phase 1 proposal: three calls/attempts/compilations, 750,000 input tokens, 192,000 output tokens, 64,000 maximum output tokens per call including reasoning, two hours, $36 API-equivalent with conservative reservations above dated verified Standard rates.
+- Phase 2: two calls and $24 API-equivalent, still blocked on adjudication and separate approval.
+
+Fresh approval must cover the transport change as well as the client provenance, tokens and budget. The broker sends `max_output_tokens=64000`, disables truncation, verifies exact public packet/client bytes and approval, and rejects incomplete/missing-usage/over-cap responses. Official [reasoning documentation](https://developers.openai.com/api/docs/guides/reasoning) states this cap includes reasoning and non-visible output tokens. Tests use a fake transport only.
+
+Official model, pricing and Responses contracts were checked 2026-10-11. Standard input/cached/cache-write/output prices are $10/$1/$12.50/$50 per million. The exact-input counting endpoint refuses more than 250,000 tokens before generation, below the 272,000 long-context threshold; service_tier default selects Standard. Maximum token-cost estimates are $18.975/$12.65 for phases 1/2; conservative reservations stay $33.15/$22.10 beneath the proposed $36/$24 caps. No tools or regional/higher-tier transport is proposed. The live transport is unexercised; all tests use fakes and fresh approval remains required. The broker atomically reserves the next attempt and full allowance in a fixed plan-bound ledger before any callback; failures consume reservations without refund. Live HTTP timeout enforcement remains the supplied transport contract; none is connected here. The verified Codex binary is provenance only; no claim is made that it executes or enforces the Responses cap. Prior public evidence has 89,246 aggregate output tokens over 10 calls (mean 8,924.6), with neither a reasoning split nor per-call tail measurement. 64,000 is proposed headroom, not a measured percentile. Zero model calls, model-output compilations or candidates were produced.
+
+## Source classification and I/O limits
+
+`decision-classification.json` binds all 102 decisions/204 outcomes to reviewed source hashes and data flow. Missing tariff selects business fallback; missing card/account selects business rejection. File traversal, EOF and operational failure paths are I/O handling. Source changes refuse reuse of classification and equivalence arguments.
+
+Prospective lexical-overlap corrections are in `docs/oct10-factory-foundations-milestone.md` and `docs/business-rules/milestone-2026-10-10.md`; the instrumentation milestone already labels 16/47 correctly. No other literal 16/47 coverage claim was found in docs, catalogues or views. Signed historical receipts remain unchanged.
+
+[INTCALC fault mappings](fault-intcalc-review311.json) and [POSTTRAN mappings](fault-posttran-review311.json) bind each declared status/display/RC to observed outcomes. Missing/permission OPEN, READ, WRITE, REWRITE, CLOSE and premature EOF are derived engineering seams. They do not recreate RACF, VSAM, devices or z/OS allocation; the limits register marks that equivalence unknown. Most abend paths return RC 12. POSTTRAN account REWRITE reason 109 actually returns RC 0: the original failure-propagation gap is visible and unchanged.
+
+The first EOF IF false edge is source-unreachable under the enclosing TEST BEFORE loop, as detailed in [the exact source arguments](io-gap-arguments.json). It remains in the coverage denominator; Howard has not accepted an exception. INTCALC final-account update inside that unreachable ELSE is not silently repaired.
+
+## Mutation evidence and retained witnesses
+
+INTCALC observed source head `3283265d71e268b3dc66b09fb2808e72a18b19ac`, [run](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763), receipt seal `8c26a427392e7a43eade0f4e5e53652fc6709ee12cd2a54bf3e384d7b55abf31`.
+
+POSTTRAN observed source head `3283265d71e268b3dc66b09fb2808e72a18b19ac`, [run](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763), receipt seal `18efe77ba378eb2dd38aebb10ec92751bf9364d861f6b5e270fa6d5ba1615cd3`.
+
+Every killed mutant retains its exact normal scenario or scenario-plus-fault witness. Up to three declared fault challenges target the surviving mutant’s operation/callee or diagnostic path. Incompatible derived seams are recorded as unavailable, never counted as kills. Raw outputs, RC, stdout (excluding probes) and actual abend stderr parameters are compared. The CEE3ABD shim records code/timing and stops; it does not simulate z/OS timing.
+
+False generator sites involving numeric paragraph labels and COMPUTE assignment equals signs were corrected; prior results were preserved. Whole multiline predicates are negated together. The old 8/8 hand-picked result is regression-only and cannot populate the systematic adequacy denominator. Earlier corrected 427/490-site results were 292/427 and 337/490 raw; neither was presented as 90%.
+
+Narrow listed arguments identify dead/overwritten stores, unused fields or source-bound control-flow invariants. Binary arguments require a recorded compiler LENGTH probe; storage arguments additionally require the exact measured default/overlay probe. Otherwise the case stays unresolved. These are pinned host arguments for review, never blanket equivalence, operator acceptance or z/OS proof.
+
+## Reconciliation, policy and human review
+
+ASCII and opt-in physical cp037 key modes matched **54/54** public/generated cases at `3283265d71e268b3dc66b09fb2808e72a18b19ac` ([receipt](cp037-twin-review311-reconciliation.json)). Logical record bytes stay unchanged. Decimal-only production restrictions remain; no general alphanumeric z/OS key-order claim follows.
+
+The expanded **46**-case [generated receipt](generated-review311-classification.json) separates source-specific missing disclosure/account/xref expected-failure agreement from duplicate indexed-key adapter refusal before execution. The POSTTRAN duplicate-ID invariant remains unresolved. No customer data or handwritten POSTTRAN answer key was used.
+
+The unsigned scenario-threshold/2 proposal requires 100% business outcomes; I/O outcomes covered or individually accepted by Howard; at least 90% systematic kills over at least 50 eligible mutants with only listed equivalents excluded; and two distinct values per compared output field. Compiler refusals and unexplained survivors remain separate blockers. It is not approved.
+
+The [POSTTRAN human review HTML](posttran-human-review.html) is a standalone file: download and open it locally, enter your name and each decision/reason, download the unsigned JSON, and return it in chat. No GitHub Pages deployment or automatic operator signature is claimed.
+
+Focused host validation passed 25 tests plus lint. Final-head CI must complete green before merge, followed by Howard’s exact-commit approval. Public compiled campaign receipts bind their observed algorithm head; broker and documentation updates do not alter the measured mutation algorithms or rewrite their receipts. No B06 native work, engineering hold, customer data, machine configuration or private key was changed.

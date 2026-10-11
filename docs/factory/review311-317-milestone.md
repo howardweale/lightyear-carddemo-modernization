@@ -1,5 +1,10 @@
 # Factory review follow-up for PRs #311–317 — 2026-10-11
 
+## Howard decision update — 2026-10-11
+
+The [dated decision milestone](howard-decisions-2026-10-11-milestone.md) supersedes the compiler-refusal blocker and unaccepted-EOF conclusions below: listed compiler refusals are excluded, and Howard accepted the two source-bound EOF false edges. REWRITE-109 and the unreachable final-account update are legacy defects to preserve by default. Raw campaign records remain historical. The [20-mutant independent review](equivalence-review-sample-2026-10-11.md) is pending; scenario-threshold/2 is not approved.
+
+
 The compiled public host campaign covers every inventoried business outcome. Declared I/O faults improve the operational coverage; one source-bound EOF edge in each program remains unobserved and unaccepted.
 
 | Program | Business outcomes | I/O before faults | I/O after faults | Combined after faults | Declared faults matched |

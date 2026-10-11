@@ -92,7 +92,7 @@ def outcome(baseline,changed):
     return 'survived'
 
 
-def generate(text,program):
+def candidates(text,program):
     """All pinned program sites plus every receiving PIC in included copybooks."""
     from .zos_bindings import ROOT
     rows=_source_sites(text,program)
@@ -101,6 +101,83 @@ def generate(text,program):
         for row in _source_sites(path.read_text(),program+'-'+book):
             row['source_path']=f'{book}.cpy';rows.append(row)
     return rows
+
+
+
+def _display_lengths(text):
+    """Prove only simple, local DISPLAY layouts; unknown usages stay unknown."""
+    nodes=[];stack=[]
+    for raw in text.splitlines():
+        line=code(raw).strip()
+        if line.startswith('PROCEDURE DIVISION'):break
+        m=re.match(r'(\d{2})\s+([A-Z0-9-]+)\b(.*)',line)
+        if not m:
+            if line and stack:stack[-1]['unknown']=True
+            continue
+        level=int(m[1])
+        if level==88:continue
+        while stack and stack[-1]['level']>=level:stack.pop()
+        tail=m[3];pic=re.search(r'\bPIC\s+([SX9V0-9()]+)(?=\s|\.|$)',tail)
+        node=dict(name=m[2],level=level,children=[],size=None,unknown=False)
+        node['unknown']=bool(re.search(r'\b(?:REDEFINES|OCCURS|COMP|BINARY|PACKED|SIGN|SYNC|USAGE)\b',tail))
+        if pic:
+            picture=pic[1]
+            atoms=list(re.finditer(r'([SX9V])(?:\((\d+)\))?',picture))
+            if ''.join(a[0] for a in atoms)!=picture:node['unknown']=True
+            node['size']=sum(int(a[2] or 1) for a in atoms if a[1] not in 'SV')
+        elif 'PIC' in tail:node['unknown']=True
+        if stack:stack[-1]['children'].append(node)
+        nodes.append(node);stack.append(node)
+    def size(n):
+        if n['unknown']:return None
+        if n['size'] is not None:return n['size']
+        children=[size(c) for c in n['children']]
+        return sum(children) if children and all(x is not None for x in children) else None
+    result={}
+    for n in nodes:
+        # Ambiguous names need qualification analysis; do not guess.
+        result.setdefault(n['name'],[]).append(size(n))
+    return {name:values[0] for name,values in result.items() if len(values)==1 and values[0] is not None}
+
+
+def _invalid_literal_references(text,lengths):
+    errors=set()
+    for line,raw in enumerate(text.splitlines(),1):
+        source=re.sub(r"'[^']*'|\"[^\"]*\"",'',code(raw))
+        for m in re.finditer(r'([A-Z][A-Z0-9-]*)\s*\(\s*(-?\d+)\s*:\s*(-?\d+)\s*\)',source):
+            start,length=int(m[2]),int(m[3]);size=lengths.get(m[1])
+            if start<1 or length<1 or (size is not None and start+length-1>size):
+                errors.add((line,m[1],start,length,size))
+    return errors
+
+
+def generation_inventory(text,program):
+    """Preserve candidate IDs; separately list statically invalid sites avoided.
+
+    This is not a compiler. Dynamic bounds and unknown storage layouts remain
+    candidates and actual compiler refusals must still be reported separately.
+    """
+    retained=[];avoided=[];lengths=_display_lengths(text)
+    original_errors=_invalid_literal_references(text,lengths)
+    for row in candidates(text,program):
+        if row.get('source_path'):
+            # COPY layouts require whole-program expansion; defer to compiler.
+            retained.append(row);continue
+        if row['operator'] not in ('constant','receiving-size','receiving-scale'):
+            retained.append(row);continue
+        changed=apply(text,row)
+        bound=_display_lengths(changed) if row['operator'].startswith('receiving-') else lengths
+        errors=_invalid_literal_references(changed,bound)-original_errors
+        if errors:
+            avoided.append(dict(mutant=row,reason='statically-invalid-literal-reference-modification',
+                                violations=[dict(line=e[0],field=e[1],offset=e[2],length=e[3],proven_size=e[4]) for e in sorted(errors)]))
+        else:retained.append(row)
+    return dict(candidates=retained,avoided=avoided,
+                generated_site_count=len(retained)+len(avoided),avoided_count=len(avoided))
+
+
+def generate(text,program):
+    return generation_inventory(text,program)['candidates']
 
 
 def apply_derived(original, derived, mutant):

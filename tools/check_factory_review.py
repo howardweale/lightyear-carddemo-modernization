@@ -4,7 +4,7 @@ from collections import Counter
 from pathlib import Path
 from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,build,run,new_output,write_json,receipt,execute,FLAGS
 from lightyear_mainframe.scenario_generation import manifest
-from lightyear_mainframe.systematic_mutation import generate,outcome
+from lightyear_mainframe.systematic_mutation import generation_inventory,outcome
 from lightyear_mainframe.io_faults import declarations
 from lightyear_mainframe.scenario_coverage import observe
 from lightyear_mainframe.mutant_equivalence import argument
@@ -168,7 +168,8 @@ def check(output,job):
             faults.append(dict(declaration=fault,actual=actual,expectation_met=matched,coverage=observe(inv,transcript)))
         except (RuntimeError,ValueError) as e:faults.append(dict(declaration=fault,status='not-compiled',detail=str(e)))
         write_json(output/'fault-results.json',faults)
-    mutants=generate(text,program);write_json(output/'mutation-inventory.json',mutants);results=[]
+    generation=generation_inventory(text,program);write_json(output/'generation-inventory.json',generation)
+    mutants=generation['candidates'];write_json(output/'mutation-inventory.json',mutants);results=[]
     for mutant in mutants:
         folder=output/'mutants'/mutant['id'];folder.mkdir(parents=True)
         record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None)
@@ -216,10 +217,11 @@ def check(output,job):
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
         compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,compiler_runtime_contract=runtime,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
-        eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']}",
+        eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']-counts['not-compiled']}",
+        generator_avoided_count=generation['avoided_count'],not_compiled=[r['id'] for r in results if r['status']=='not-compiled'],
         unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],
         retained_killing_scenarios=sorted({r['killed_by'] for r in results if r['killed_by']}),model_calls=0,
-        limitation='Systematic pinned-source mutation; survivors and compiler refusals block adequacy. Public engineering, not z/OS equivalence.')
+        limitation='Systematic pinned-source mutation; unexplained survivors block adequacy; listed compiler refusals are excluded from eligible denominators. Public engineering, not z/OS equivalence.')
     print(json.dumps(summary,indent=2))
     if not all(r.get('expectation_met') for r in faults):raise AssertionError('declared fault expectation mismatch; preserved actual outcomes')
 

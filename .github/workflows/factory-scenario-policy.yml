@@ -1,7 +1,7 @@
 name: Factory scenario policy
 on:
   pull_request:
-    paths: ['src/lightyear_factory/scenario_policy.py', 'src/lightyear_business_rules/**', 'tests/test_scenario_policy.py', '.github/workflows/factory-scenario-policy.yml']
+    paths: ['src/lightyear_factory/scenario_policy.py', 'src/lightyear_business_rules/**', 'tests/test_scenario_policy.py', 'tests/test_factory_decisions.py', 'tools/build_factory_decision_review.py', 'src/lightyear_mainframe/systematic_mutation.py', 'docs/factory/**', '.github/workflows/factory-scenario-policy.yml']
   push:
     branches: [main]
   workflow_dispatch:
@@ -20,6 +20,6 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install cryptography
-      - run: python -B -m unittest test_scenario_policy test_business_rules test_rule_evidence_strength
+      - run: python -B -m unittest test_scenario_policy test_factory_decisions test_business_rules test_rule_evidence_strength
         env:
           PYTHONPATH: src:tests:.

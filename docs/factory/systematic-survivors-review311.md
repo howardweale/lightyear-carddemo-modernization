@@ -1,5 +1,10 @@
 # Systematic survivor review and compiler refusals
 
+## Howard decision update — 2026-10-11
+
+The [dated decision milestone](howard-decisions-2026-10-11-milestone.md) supersedes the compiler-refusal blocker and unaccepted-EOF conclusions below: listed compiler refusals are excluded, and Howard accepted the two source-bound EOF false edges. REWRITE-109 and the unreachable final-account update are legacy defects to preserve by default. Raw campaign records remain historical. The [20-mutant independent review](equivalence-review-sample-2026-10-11.md) is pending; scenario-threshold/2 is not approved.
+
+
 Observed code: `3283265d71e268b3dc66b09fb2808e72a18b19ac`. [Compiled run](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763).
 
 The measured campaign has zero unexplained INTCALC survivors and three POSTTRAN survivors, each with an individual post-campaign source/runtime argument. Raw statuses remain unchanged. Every killed mutant and every listed argument is retained in the program JSON records. Compiler refusals remain a separate failure bucket in both denominators. No operator acceptance or release is claimed.

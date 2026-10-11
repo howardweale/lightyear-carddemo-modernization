@@ -2,6 +2,15 @@
 from fractions import Fraction
 from lightyear_control_tower.decisions import digest,verify_envelope
 
+# Howard's explicit 2026-10-11 chat decision accepts only these pinned EOF edges.
+# This is an exception record, not a signed threshold/release authorization.
+IO_ACCEPTANCES=(
+    dict(program='CBACT04C',source_sha256='5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4',
+         id='legacy:cobol-decision:CBACT04C:189:671',outcome='false',accepted_by='Howard',accepted_on='2026-10-11'),
+    dict(program='CBTRN02C',source_sha256='708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f',
+         id='legacy:cobol-decision:CBTRN02C:203:684',outcome='false',accepted_by='Howard',accepted_on='2026-10-11'),
+)
+
 PROPOSAL=dict(schema='scenario-threshold/2',business_logic_outcomes='1/1',legacy_mutants_killed='9/10',
               minimum_systematic_mutants=50,io_policy='fault-covered-or-exact-operator-exception',
               accepted_io_outcomes=[],distinct_values_per_output_field=2,status='proposed-not-approved')
@@ -25,7 +34,7 @@ def assess(adequacy,threshold,compared_fields):
             counts=mutants['counts']
             names=('killed-divergent','killed-failure','survived','not-compiled','equivalent (argued, listed)')
             if set(counts)!=set(names) or any(type(v)!=int or v<0 for v in counts.values()):raise ValueError('mutant-counts')
-            eligible=sum(counts.values())-counts['equivalent (argued, listed)']
+            eligible=sum(counts.values())-counts['equivalent (argued, listed)']-counts['not-compiled']
             killed=counts['killed-divergent']+counts['killed-failure']
             if (mutants['eligible_count']!=eligible or mutants['excluded_equivalents']!=counts['equivalent (argued, listed)']
                 or len(mutants['unresolved_survivors'])!=counts['survived'] or len(mutants['not_compiled'])!=counts['not-compiled']
@@ -34,9 +43,14 @@ def assess(adequacy,threshold,compared_fields):
             if len({d['mutant_id'] for d in dispositions})!=len(dispositions) or any(not d.get('argument') or not d.get('source_sha256') for d in dispositions):raise ValueError('mutant-equivalence-binding')
             if mutants['eligible_count']<threshold['minimum_systematic_mutants']:reasons.append('systematic-mutant-set-too-small')
             if mutants.get('unresolved_survivors'):reasons.append('unresolved-mutant-survivors')
-            if mutants.get('not_compiled'):reasons.append('uncompiled-mutants-require-review')
+            # Howard, 2026-10-11: compiler refusals are listed exclusions, not blockers.
+            refused=mutants['not_compiled']
+            if any(not isinstance(x,str) or not x for x in refused) or len(set(refused))!=len(refused):raise ValueError('compiler-refusal-inventory')
+            if set(refused)&{d['mutant_id'] for d in dispositions}:raise ValueError('overlapping-mutant-exclusions')
             if mutants['excluded_equivalents']!=len(mutants['equivalent_dispositions']):raise ValueError('equivalent-inventory')
             accepted={tuple(x) for x in threshold.get('accepted_io_outcomes',[])}
+            accepted.update((a['id'],a['outcome']) for a in IO_ACCEPTANCES
+                if a['program']==adequacy.get('program') and a['source_sha256']==adequacy.get('source_sha256'))
             for x in adequacy.get('uncovered',[]):
                 if not isinstance(x,dict):raise ValueError('outcome-shape')
                 if x.get('classification')!='io-handling' or (x['id'],x['outcome']) not in accepted:reasons.append('unaccepted-outcome-gap')

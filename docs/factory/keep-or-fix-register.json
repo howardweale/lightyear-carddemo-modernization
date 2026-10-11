@@ -1,0 +1,68 @@
+{
+  "decision_by": "Howard",
+  "decision_date": "2026-10-11",
+  "default_conversion_policy": "Preserve recorded legacy behavior. A fix requires a separate explicit behavior-change decision.",
+  "defects": [
+    {
+      "classification": "legacy-defect-not-twin-defect",
+      "disposition": "keep-by-default",
+      "evidence": "docs/factory/fault-posttran-review311.json",
+      "evidence_lf_sha256": "f2f8a3fa162b1602767a514c77d0d3b34a36e4562b7981d7eaf00333cf71ffbc",
+      "evidence_record_sha256": "db2e216b20a57795e6d0861c85b23e0f5556398d50949b974613fce2d45a8da8",
+      "fix_authorized": false,
+      "id": "REWRITE-109",
+      "observed_behavior": "Injected account REWRITE status23 enters INVALID KEY, sets reason109 and ACCOUNT RECORD NOT FOUND, returns to posting and writes the transaction. The compiled fault case returned0, with no subsequent reject-path selection for109.",
+      "program": "CBTRN02C",
+      "source_lines": [
+        211,
+        212,
+        213,
+        214,
+        215,
+        424,
+        554,
+        555,
+        556,
+        557,
+        558,
+        559,
+        560,
+        562,
+        564
+      ],
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    {
+      "classification": "legacy-defect-not-twin-defect",
+      "disposition": "keep-by-default",
+      "evidence": "docs/factory/io-gap-arguments.json",
+      "evidence_lf_sha256": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90",
+      "fix_authorized": false,
+      "id": "CBACT04C-FINAL-ACCOUNT-EOF-ELSE",
+      "observed_behavior": "The final-account PERFORM1050 at220 is in the outer EOF ELSE. TEST BEFORE loop entry requires EOF=N; the final READ setsY inside the true branch and exits on the next loop test. Thus this final flush is not executed. Earlier accounts flush on account change at196; the last account is not flushed by the EOF ELSE. Recorded I/O coverage leaves the189 false edge unobserved.",
+      "program": "CBACT04C",
+      "source_lines": [
+        137,
+        188,
+        189,
+        190,
+        191,
+        194,
+        195,
+        196,
+        219,
+        220,
+        222,
+        340,
+        350,
+        352,
+        353,
+        354,
+        356
+      ],
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "supporting_campaign": "docs/factory/systematic-review311-summary.json"
+    }
+  ],
+  "schema": "factory-keep-or-fix-register/1"
+}

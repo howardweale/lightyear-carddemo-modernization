@@ -38,6 +38,8 @@ def admit(run, signer):
 
 
 def replay_entry(run, public_key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(public_key)
     from tools.ms94_a3_entry import check as inherited_check
     run = Path(run); plan = read_json(run / 'plan.json'); inputs(run, plan)
     entry = read_json(run / 'a3-entry-admission.json'); wrapper = read_json(run / 'b06-entry-admission.json')
@@ -51,6 +53,8 @@ def replay_entry(run, public_key):
 
 
 def evaluate(run, public_key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(public_key)
     from tools.ms94_v6_gate import evaluate as unchanged_judge
     run = Path(run)
     replay_entry(run, public_key)

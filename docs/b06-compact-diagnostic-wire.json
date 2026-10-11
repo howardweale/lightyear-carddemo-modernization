@@ -1,0 +1,55 @@
+{
+  "schema": "b06-compact-diagnostic-wire/1",
+  "host_only": true,
+  "model_calls": 0,
+  "native_admission": false,
+  "source_stream_sha256": "fbd8d18a53a27d2a38952d23dafd9e79dc6180d083e231648ef5d61775aae1fe",
+  "complete_input_scanned": true,
+  "source_records": 347256,
+  "diagnostic_records": 273061,
+  "old_wire_bytes": 134217565,
+  "new_wire_bytes": 52562139,
+  "new_to_old_ratio": 0.3916189285657209,
+  "fields_round_tripped": true,
+  "audit_state_equivalent_except_byte_quota": true,
+  "dictionary_sha256": "f3e94093d2b54fe08dfa8e2649d3ce3cdf7cbf333e88eb2e8de5a9b3b26322c6",
+  "dictionary_bytes": 32768,
+  "byte_cap_unchanged": 134217728,
+  "record_cap_unchanged": 500000,
+  "complete_observation": false,
+  "provenance_replayed": false,
+  "qualification_credit": false,
+  "measurement_credit": false,
+  "by_kind": {
+    "breakpoint-lifecycle:created": {
+      "records": 27261,
+      "old_wire_bytes": 11036100,
+      "new_wire_bytes": 5051350
+    },
+    "breakpoint-lifecycle:enabled": {
+      "records": 27261,
+      "old_wire_bytes": 11036100,
+      "new_wire_bytes": 5051450
+    },
+    "observer-audit:jdi-event": {
+      "records": 82025,
+      "old_wire_bytes": 65953325,
+      "new_wire_bytes": 22421102
+    },
+    "observer-audit:event-set-close": {
+      "records": 82024,
+      "old_wire_bytes": 24105124,
+      "new_wire_bytes": 9940104
+    },
+    "breakpoint-lifecycle:disabled": {
+      "records": 27245,
+      "old_wire_bytes": 11057080,
+      "new_wire_bytes": 5049086
+    },
+    "breakpoint-lifecycle:deleted": {
+      "records": 27245,
+      "old_wire_bytes": 11029836,
+      "new_wire_bytes": 5049047
+    }
+  }
+}

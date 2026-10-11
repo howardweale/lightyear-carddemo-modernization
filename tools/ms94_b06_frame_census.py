@@ -60,14 +60,18 @@ def binding(frame, classes):
 
 
 def checked(record, key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(key)
     if not verify_envelope(record, key):
         raise ValueError('signature invalid: ' + str(record.get('artifact_type')))
     return record
 
 
 def census_lane(root, run, lane, plan, key, classes):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
     from tools.ms94_b06_engineering_boundary import refuse_engineering
     refuse_engineering(plan, run)
+    refuse_engineering_key(key)
     folder = run / 'posting-observer' / lane
     receipt = checked(read_json(folder / 'receipt.json'), key)
     refuse_engineering(receipt, folder)

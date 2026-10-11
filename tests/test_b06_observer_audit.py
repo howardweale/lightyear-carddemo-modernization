@@ -46,7 +46,7 @@ class AuditTests(unittest.TestCase):
         with self.assertRaises(ValueError): audit.event(record(4,'resume-requested',0,{}))
 
 
-def host_capture(java, javac, source, out, *, fault=False, diagnostic=False):
+def host_capture(java, javac, source, out, *, fault=False, diagnostic=False, bounded=False):
     """Public diagnostic fixture only. Fault is injected in a temporary source copy."""
     out.mkdir()
     if fault:
@@ -74,13 +74,13 @@ public class Probe {
   }
  }
 }''')
-    subprocess.run([str(javac),'--add-modules','jdk.jdi','-d',str(out),str(out/'PostingObserver.java'),str(out/'Probe.java')],check=True,capture_output=True,timeout=45)
+    subprocess.run([str(javac),'--add-modules','jdk.jdi','-d',str(out),str(out/'PostingObserver.java'),str(out/'Probe.java')]+([str(Path(__file__).resolve().parents[1]/'factory/idempiere/b06-observer/BoundedJdiMirrors.java')] if bounded else []),check=True,capture_output=True,timeout=45)
     started=time.perf_counter()
     target=subprocess.Popen([str(java),'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=127.0.0.1:0','-cp',str(out),'fixture.Probe'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
     try:
         port=target.stdout.readline().strip().rsplit(':',1)[-1].strip()
         if not port.isdigit(): raise ValueError('no host listener')
-        observed=subprocess.run([str(java),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2',*(['diagnostic-unmatched-return-v1'] if diagnostic else [])],input='',capture_output=True,text=True,timeout=60)
+        observed=subprocess.run([str(java),'--add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED','-XX:SoftRefLRUPolicyMSPerMB=0','-Db06.observer.state_dir='+str(out.resolve()),'--add-modules','jdk.jdi','-cp',str(out),'lightyear.observer.PostingObserver','127.0.0.1',port,'observer-binding-v2',*(['bounded-observer-v1','native-diagnostics-v1','diagnostic-unmatched-return' if diagnostic else 'strict','unmatched-return-cap=10','heap-guard-percent=85','heap-telemetry-interval=1000','pending-cap=512'] if bounded else ['diagnostic-unmatched-return-v1'] if diagnostic else [])],input='',capture_output=True,text=True,timeout=60)
         elapsed=time.perf_counter()-started
         events=[json.loads(line) for line in observed.stdout.splitlines()]
         return observed, events, elapsed

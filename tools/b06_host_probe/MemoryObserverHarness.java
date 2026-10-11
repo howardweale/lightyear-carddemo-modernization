@@ -88,17 +88,18 @@ public final class MemoryObserverHarness {
         var constructor=OBS.getDeclaredConstructor();constructor.setAccessible(true);observer=constructor.newInstance();
         generation=field(observer,"generation");set(observer,"bindingV2",true);set(generation,"v2",true);
         set(observer,"diagnosticUnmatchedReturn",true); // Same narrow policy as the failed r3 baseline.
+        boolean bounded=args.length==6 && args[5].equals("bounded-observer-v1");
+        if(bounded){System.setProperty("b06.observer.state_dir",directory.toAbsolutePath().toString());call("boundedMode",new Class<?>[]{});}
         samples=new PrintWriter(Files.newBufferedWriter(directory.resolve("heap.csv"),StandardCharsets.UTF_8));
         samples.println("events,generation_calls,heap_used_after_gc,heap_max,pending,completed,definitions,distinct_stack_classes,suppressed_returns");
         injections=new PrintWriter(Files.newBufferedWriter(directory.resolve("suppressed-returns.csv"),StandardCharsets.UTF_8));
         injections.println("events,thread,generation_id,depth");
         PrintStream output=System.out;
-        System.setOut(new PrintStream(output,true,StandardCharsets.UTF_8) {
-            @Override public void println(String line) {
-                super.println(line);events++;
-                if(events%1000==0)try { sample(true); }catch(Exception e){throw new RuntimeException(e);}
-            }
-        });
+        System.setOut(new PrintStream(new FilterOutputStream(output) {
+            void count(int value){if(value=='\n'){events++;if(events%1000==0)try {sample(true);}catch(Exception e){throw new RuntimeException(e);}}}
+            public void write(int value)throws IOException {out.write(value);count(value);}
+            public void write(byte[] values,int off,int len)throws IOException {out.write(values,off,len);for(int i=off;i<off+len;i++)count(values[i]);}
+        },true,StandardCharsets.UTF_8));
         AttachingConnector connector=Bootstrap.virtualMachineManager().attachingConnectors().stream()
             .filter(c->c.name().equals("com.sun.jdi.SocketAttach")).findFirst().orElseThrow();
         var options=connector.defaultArguments();options.get("hostname").setValue(args[0]);options.get("port").setValue(args[1]);
@@ -110,7 +111,10 @@ public final class MemoryObserverHarness {
         types.addAll(List.of("java.lang.invoke.InnerClassLambdaMetafactory","java.lang.invoke.InvokerBytecodeGenerator",
             "java.lang.invoke.MethodHandles$Lookup$ClassDefiner","java.lang.ClassLoader"));
         for(String type:types){var request=vm.eventRequestManager().createClassPrepareRequest();request.addClassFilter(type);request.setSuspendPolicy(EventRequest.SUSPEND_ALL);request.enable();}
-        for(ReferenceType type:vm.allClasses())call("configure",new Class<?>[]{ReferenceType.class},type);
+        if(bounded){
+            call("initializeMirrors",new Class<?>[]{});
+            for(String name:types)for(ReferenceType type:vm.classesByName(name))call("configure",new Class<?>[]{ReferenceType.class},type);
+        } else for(ReferenceType type:vm.allClasses())call("configure",new Class<?>[]{ReferenceType.class},type);
         var exceptions=vm.eventRequestManager().createExceptionRequest(null,true,true);exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL);exceptions.enable();
         call("emit",new Class<?>[]{Map.class,boolean.class},new LinkedHashMap<>(Map.of("kind","host-memory-probe-ready","native_admission",false)),false);
         boolean running=true;long sets=0;
@@ -122,7 +126,7 @@ public final class MemoryObserverHarness {
                 audit("event-set-open",Map.of("size",batch.size(),"suspend_policy",batch.suspendPolicy()));
                 int position=0;
                 for(Event event:batch) {
-                    set(observer,"auditPosition",position++);
+                    set(observer,"auditPosition",position++);set(observer,"observedEvents",sets);
                     call("auditEvent",new Class<?>[]{Event.class},event);
                     if(event instanceof ClassPrepareEvent e)call("configure",new Class<?>[]{ReferenceType.class},e.referenceType());
                     else if(event instanceof BreakpointEvent e) {
@@ -138,7 +142,7 @@ public final class MemoryObserverHarness {
                     else if(event instanceof VMDeathEvent || event instanceof VMDisconnectEvent)running=false;
                     call("auditState",new Class<?>[]{Event.class},event);
                 }
-                if(running){audit("resume-requested",Map.of("scope","event-set"));batch.resume();audit("resume-completed",Map.of("scope","event-set"));}
+                if(running){if(bounded)call("pruneMirrors",new Class<?>[]{});audit("resume-requested",Map.of("scope","event-set"));batch.resume();audit("resume-completed",Map.of("scope","event-set"));}
             }
             sample(true);
             // Deliberately suppressed returns remain incomplete, never a native pass.

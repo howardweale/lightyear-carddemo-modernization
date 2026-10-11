@@ -26,13 +26,66 @@ class EngineeringTests(unittest.TestCase):
     def test_review_hold_precedes_cli_parsing_signing_and_docker(self):
         from tools.ms94_b06_engineering_run import main as supervisor
         from tools.ms94_b06_engineering_worker import main as worker
-        from tools.ms94_b06_engineering_native import execute
-        for call in (supervisor, worker, lambda: execute(None,None,None,None)):
+        from tools.ms94_b06_engineering_native import execute, OracleEngineeringRunner
+        for call in (supervisor, worker, lambda: execute(None,None,None,None),
+                     lambda: OracleEngineeringRunner.prepare(None),
+                     lambda: OracleEngineeringRunner.worker(None,None,None,None)):
             with self.subTest(call=call), patch('argparse.ArgumentParser.parse_args') as parse, \
                     patch('tools.ms94_b06_engineering_native.docker') as docker:
                 with self.assertRaisesRegex(ValueError,'engineering-on-hold-review-291-302'):
                     call()
                 parse.assert_not_called(); docker.assert_not_called()
+
+    def test_worker_actual_checkout_checked_before_signing_and_native(self):
+        from types import SimpleNamespace
+        from tools import ms94_b06_engineering_worker as w
+        from tools import ms94_b06_engineering_run as supervisor
+        approval={'implementation_commit':'a'*40}
+        args=SimpleNamespace(run=str(self.root/'run'),approval=str(self.root/'approval.json'),
+                             approved_sha256='b'*64,authority='unused',assets='unused')
+        for actual in ('c'*40, ValueError('dirty-implementation')):
+            with self.subTest(actual=actual), patch.object(e,'require_execution_ready'), \
+                    patch('argparse.ArgumentParser.parse_args',return_value=args), \
+                    patch.object(w,'read_json',return_value=approval), \
+                    patch.object(w,'approve_check'),patch.object(w,'guard'), \
+                    patch.object(supervisor,'source_commit',return_value=actual if isinstance(actual,str) else None,
+                                 side_effect=actual if isinstance(actual,Exception) else None) as checkout, \
+                    patch.object(e,'validate_run_binding') as binding, \
+                    patch('tools.ms94_b06_engineering_key.DedicatedEngineeringSigner') as signer, \
+                    patch('tools.ms94_b06_engineering_native.execute') as execute, \
+                    patch.object(w,'write_new') as write:
+                with self.assertRaisesRegex(ValueError,'worker-implementation-commit|dirty-implementation'):
+                    w.main()
+                checkout.assert_called_once_with(Path(w.__file__).resolve().parents[1])
+                binding.assert_not_called();signer.assert_not_called();execute.assert_not_called();write.assert_not_called()
+
+    def test_worker_rechecks_reserved_attempt_budget_before_signer(self):
+        from types import SimpleNamespace
+        from tools import ms94_b06_engineering_worker as w
+        from tools import ms94_b06_engineering_run as supervisor
+        approval={'implementation_commit':'a'*40,'content_sha256':'b'*64}
+        root=self.root/'b06-engineering';root.mkdir();(root/'active.lock').write_text('b'*64)
+        run=root/('b'*64)/'runs'/('journey-'+'c'*32)
+        args=SimpleNamespace(run=str(run),approval=str(self.root/'approval.json'),
+                             approved_sha256='b'*64,authority='unused',assets='unused')
+        record={'approval_sha256':'b'*64,'owner':run.name,'run_number':2}
+        with patch.object(e,'require_execution_ready'),patch('argparse.ArgumentParser.parse_args',return_value=args), \
+                patch.object(w,'read_json',return_value=approval),patch.object(w,'approve_check'), \
+                patch.object(supervisor,'source_commit',return_value='a'*40), \
+                patch.object(e,'validate_run_binding',return_value=record), \
+                patch.object(w,'guard',side_effect=[None,ValueError('engineering-full-run-budget')]) as check, \
+                patch('tools.ms94_b06_engineering_key.DedicatedEngineeringSigner') as signer, \
+                patch('tools.ms94_b06_engineering_native.execute') as execute,patch.object(w,'write_new') as write:
+            with self.assertRaisesRegex(ValueError,'full-run-budget'):w.main()
+            self.assertEqual(check.call_count,2)
+            self.assertEqual(check.call_args.kwargs,{'starting':True,'attempt_number':2})
+            signer.assert_not_called();execute.assert_not_called();write.assert_not_called()
+
+    def test_hold_does_not_block_read_only_owned_cleanup_verification(self):
+        from tools import ms94_b06_engineering_native as n
+        with patch.object(n,'docker',return_value=Mock(stdout='')) as docker:
+            self.assertTrue(n.absence('journey-'+'a'*32))
+        self.assertEqual(docker.call_count,3)
 
     def test_direct_census_and_replay_reject_relocated_engineering_paths(self):
         from tools.ms94_b06_frame_census import census_lane
@@ -49,7 +102,12 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'approval-required'): e.approve_check(self.a,e.sha(path),path)
 
     def test_exact_approval_digest_required(self):
-        a=reseal(self.a,artifact_type='b06-engineering-standing-approval/1',approved=True,
+        proposal=e.instrumented_proposal('2026-10-10T23:00:00Z','2026-10-11T23:00:00Z',[],
+            [str(self.evidence)],self.root/'b06-engineering',implementation_commit='a'*40,
+            native_template_sha256='b'*64,observer_source_sha256='c'*64,
+            observer_class_files_sha256={'PostingObserver.class':'d'*64},
+            full_plan_delivered_at_utc='2026-10-10T19:00:00Z')
+        a=reseal(proposal,artifact_type='b06-engineering-standing-approval/1',approved=True,
             approved_by='Howard',approval_reference='chat-123',approved_at_utc='2026-10-10T23:00:00Z')
         path=self.root/'approval.json'; e.write_new(path,a); e.approve_check(a,e.sha(path),path)
         with self.assertRaisesRegex(ValueError,'approval-file-changed'): e.approve_check(a,'0'*64,path)
@@ -70,6 +128,52 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'outside-window'):
             e.guard(self.a,datetime(2026,10,11,23,tzinfo=timezone.utc))
 
+    def test_remaining_attempt_budget_boundaries(self):
+        a=reseal(self.a,not_before_utc='2026-10-11T16:00:00Z',deadline_utc='2026-10-11T19:00:00Z')
+        for number,hour,minute in ((1,16,40),(2,17,50)):
+            boundary=datetime(2026,10,11,hour,minute,tzinfo=timezone.utc)
+            e.guard(a,boundary,starting=True,attempt_number=number)
+            from datetime import timedelta
+            with self.assertRaisesRegex(ValueError,'full-run-budget'):
+                e.guard(a,boundary+timedelta(microseconds=1),starting=True,attempt_number=number)
+        for number in (True,0,3):
+            with self.assertRaisesRegex(ValueError,'attempt-number'):
+                e.guard(a,datetime(2026,10,11,16,tzinfo=timezone.utc),starting=True,attempt_number=number)
+
+    def test_reservation_budgets_follow_consumed_failed_attempts(self):
+        a=reseal(self.a,not_before_utc='2026-10-11T16:00:00Z',deadline_utc='2026-10-11T19:00:00Z')
+        ledger=e.Ledger(self.root/'b06-engineering',a)
+        with ledger.lock():
+            with patch.object(e,'now',return_value=datetime(2026,10,11,16,40,1,tzinfo=timezone.utc)):
+                with self.assertRaisesRegex(ValueError,'full-run-budget'):ledger.reserve('a'*40)
+            self.assertFalse((ledger.session/'runs').exists())
+            with patch.object(e,'now',return_value=datetime(2026,10,11,16,40,tzinfo=timezone.utc)):
+                first=ledger.reserve('a'*40)
+            e.write_new(first/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
+            e.write_new(first/'artifacts.json',dict(**e.LABEL))
+            self.assertEqual(ledger.next_attempt_number(),2)
+            with patch.object(e,'now',return_value=datetime(2026,10,11,17,50,1,tzinfo=timezone.utc)):
+                with self.assertRaisesRegex(ValueError,'full-run-budget'):ledger.reserve('a'*40)
+            with patch.object(e,'now',return_value=datetime(2026,10,11,17,50,tzinfo=timezone.utc)):
+                second=ledger.reserve('a'*40)
+            record=json.loads((second/'engineering.json').read_text())
+            self.assertEqual(record['run_number'],2);self.assertEqual(record['mode'],'diagnostic-unmatched-return')
+            e.write_new(second/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
+            e.write_new(second/'artifacts.json',dict(**e.LABEL))
+            with self.assertRaisesRegex(ValueError,'run-cap-exhausted'):ledger.reserve('a'*40)
+
+    def test_low_level_prepare_rechecks_budget_before_docker(self):
+        from tools import ms94_b06_engineering_native as n
+        runner=Mock(run=self.root/'run',approval=self.a,plan={})
+        with patch.object(e,'require_execution_ready'), \
+                patch.object(e,'validate_run_binding',return_value={'run_number':2}), \
+                patch.object(n,'guard',side_effect=ValueError('engineering-full-run-budget')) as check, \
+                patch.object(n,'docker') as docker:
+            with self.assertRaisesRegex(ValueError,'full-run-budget'):
+                n.OracleEngineeringRunner.prepare(runner)
+            check.assert_called_once_with(self.a,starting=True,attempt_number=2)
+            runner.checkpoint.assert_not_called();docker.assert_not_called()
+
     def test_armed_evidence_blocks_even_before_started(self):
         e.write_new(self.evidence/'armed.json',{})
         with self.assertRaisesRegex(ValueError,'evidence-launcher-active'): e.guard(self.a)
@@ -87,10 +191,10 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaises(FileExistsError):
             with ledger.lock(): self.fail('must not enter')
 
-    def test_ten_consumed_attempts_stop(self):
+    def test_two_consumed_attempts_stop(self):
         ledger=e.Ledger(self.root/'b06-engineering',self.a)
         with ledger.lock():
-            for i in range(10):
+            for i in range(2):
                 run=ledger.reserve('a'*40)
                 self.assertEqual(json.loads((run/'engineering.json').read_text())['run_number'],i+1)
                 e.write_new(run/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
@@ -146,13 +250,13 @@ class EngineeringTests(unittest.TestCase):
         runner=n.OracleEngineeringRunner(self.root,run,plan,lambda *_:None,self.a)
         runner.checkpoint=Mock();runner.assert_real_runtime=Mock();runner.rotate_passwords=Mock();runner.worker=Mock()
         calls=[]
-        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'):runner.prepare()
+        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'),patch.object(e,'require_execution_ready'),patch.object(e,'validate_run_binding',return_value={'run_number':1}):runner.prepare()
         self.assertEqual(set(runner.names),{'oracle'})
         self.assertFalse(any('postgresql' in str(c) or c[:2]==('volume','create') for c in calls))
         creates=[c for c in calls if c[0]=='create'];self.assertEqual(len(creates),2)
         self.assertTrue(all('--memory' in c and '--cpus' in c for c in creates))
         self.assertEqual(runner.worker.call_args.args[1]['lane'],'oracle')
-        with self.assertRaisesRegex(ValueError,'oracle-only'):
+        with patch.object(e,'require_execution_ready'),self.assertRaisesRegex(ValueError,'oracle-only'):
             n.OracleEngineeringRunner.worker(runner,'execute',dict(lane='postgresql'),10)
 
     def test_prepare_failure_always_cleans_owned_resources(self):

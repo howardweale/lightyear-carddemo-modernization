@@ -115,6 +115,8 @@ class Replay:
         self.captured_fields = set()
 
     def event(self, event):
+        from tools.ms94_b06_observer_format import normalize
+        event = normalize(event)
         kind = event['kind']
         if kind == 'class-definition-v2':
             d = event['definition']; key = str(d['class_object_id'])
@@ -133,6 +135,11 @@ class Replay:
             return True
         check(stack, 'observer-v2-return-without-entry')
         entry = stack.pop()
+        if event.get('observer_format') == 'bounded-observer-v1':
+            check(all(r.get(k) == entry.get(k) for k in ('kind', 'thread_id', 'generation_id', 'entry_depth', 'entry_method', 'entry_event_index')), 'observer-bounded-return-identity')
+            check(all(k not in entry or entry[k] == v for k, v in r.items()), 'observer-bounded-entry-overwrite')
+            r = {**entry, **r}
+            event = {**event, 'record': r}
         check(all(r.get(k) == v for k, v in entry.items()), 'observer-v2-return-binding')
         if kind == 'generation-unwind':
             from tools.ms94_b06_generation_catch import validate_unwind
@@ -392,6 +399,6 @@ class Replay:
 def commitments(records):
     return [{'sequence': r['event']['sequence'], 'kind': r['event']['kind'],
              'event_sha256': r['content_sha256']} for r in records
-            if r['event']['kind'] in ('class-definition-v2', 'generation-entry',
+            if r['event']['kind'] in ('class-definition-v2', 'class-definition-v3', 'generation-entry',
                                      'generation-return', 'generation-unwind') or
             r['event'].get('frames')]

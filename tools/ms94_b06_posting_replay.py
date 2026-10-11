@@ -245,6 +245,8 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
 
 
 def replay(root, run, lane, public_key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(public_key)
     root, run = Path(root), Path(run)
     plan = read_json(run / 'plan.json'); verify(plan)
     for name, expected in plan['implementation_sha256'].items():

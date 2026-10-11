@@ -42,10 +42,17 @@ class ObservedRunner(NativeRunner):
         image = launch['image'] if built else self.plan['local']['runner_image']
         carrier = ['--entrypoint','/bin/sh'] if built else []
         tail = ['-c','exec sleep infinity'] if built else []
-        docker('create', '--name', app, '--label', self.label, '--network', self.network, '--memory', '8g', '--cpus', '4',
+        resource_args=['--memory','8g','--cpus','4']
+        if self.plan.get('run_class')=='engineering':
+            from tools.ms94_b06_engineering import LIMITS
+            require(self.plan.get('engineering_limits')==LIMITS,'Engineering application limits changed')
+            resource_args=['--memory',str(LIMITS['application_memory_mib'])+'m',
+                           '--cpus',str(LIMITS['application_cpus'])]
+        self.remember('container', app)
+        docker('create', '--name', app, '--label', self.label, '--network', self.network, *resource_args,
                '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--tmpfs', '/secrets:rw,noexec,nosuid,size=268435456',
                *mount_args, *carrier, image, *tail)
-        self.remember('container', app); docker('start', app)
+        docker('start', app)
         app_info = inspect('container', app); mounts = app_info['Mounts']
         require(sorted((m['Destination'],m['RW']) for m in mounts if m['Type']=='bind') ==
                 sorted((m['destination'],m['writable']) for m in expected_mounts), 'Unexpected application mount')
@@ -72,6 +79,7 @@ class ObservedRunner(NativeRunner):
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.emit('application-worker-started', {'lane': lane, 'watchdog_seconds': timeout,
                 'candidate_timeout_seconds': payload['timeout_seconds']})
+            broker.phase_marker('application-worker-started')
             data = canonical({'lane': lane, 'password': self.password, 'timeout_seconds': payload['timeout_seconds'],
                               'scenario_date': self.plan['calendar']['scenario_date']})
             while True:
@@ -85,11 +93,13 @@ class ObservedRunner(NativeRunner):
                         self.emit('application-watchdog-expired', {'lane': lane,
                             'elapsed_seconds': round(time.monotonic() - execution_started, 3),
                             'watchdog_seconds': timeout})
+                        broker.phase_marker('application-watchdog-expired')
                         raise CandidateTimeout()
             require(process.returncode == 0, 'Separate application worker failed')
             response = json.loads(stdout); code = response['exit_code']
             self.emit('application-worker-returned', {'lane': lane, 'exit_code': code,
                 'elapsed_seconds': round(time.monotonic() - execution_started, 3)})
+            broker.phase_marker('application-worker-returned')
             if built:
                 require(response.get('launch_sha256')==launch['content_sha256'] and response.get('offline_maven') is False,
                         'Built worker response binding')
@@ -102,6 +112,7 @@ class ObservedRunner(NativeRunner):
             raise
         finally:
             try:
+                broker.phase_marker('application-stop-requested')
                 self.emit('application-stop-requested', {'lane': lane,
                     'worker_running': process is not None and process.poll() is None})
             finally:

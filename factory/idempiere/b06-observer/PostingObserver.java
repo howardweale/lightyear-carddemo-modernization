@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
+import java.lang.management.*;
 
 /** External JDI collector. Never invokes a target method or consumes candidate trace text. */
 public final class PostingObserver {
@@ -22,6 +23,83 @@ public final class PostingObserver {
     private final Set<String> configured = new HashSet<>();
     private VirtualMachine vm;
     private boolean bindingV2;
+    // Loaded only by explicit bounded engineering mode; legacy compilation is standalone.
+    private Object mirrorCache;
+    private void initializeMirrors() throws Exception {
+        if(bounded)mirrorCache=Class.forName("lightyear.observer.BoundedJdiMirrors")
+            .getConstructor(VirtualMachine.class).newInstance(vm);
+    }
+    private Object mirrorCall(String name,Class<?>[] types,Object... args)throws Exception {
+        try{return mirrorCache.getClass().getMethod(name,types).invoke(mirrorCache,args);}
+        catch(java.lang.reflect.InvocationTargetException e){
+            if(e.getCause() instanceof Exception failure)throw failure;throw e;
+        }
+    }
+    private void pruneMirrors()throws Exception {
+        if(!bounded)return;
+        Set<ReferenceType> keep=new HashSet<>();
+        for(var calls:active.values())for(Call call:calls)keep.add(call.method().declaringType());
+        for(var request:vm.eventRequestManager().breakpointRequests())keep.add(request.location().declaringType());
+        for(var arm:generation.exits.values())keep.add(arm.method().declaringType());
+        try {mirrorCall("prune",new Class<?>[]{Collection.class},keep);}
+        catch(IllegalStateException failure){resourceStop(failure.getMessage());}
+    }
+    private boolean bounded, nativeDiagnostics;
+    private int unmatchedCount;
+    private long observedEvents, heapHighWater;
+    private static final int PENDING_CAP=512;
+    private static final String FORMAT="bounded-observer-v1";
+    private long suppressedDispatch, suppressedResume, diagnosticRecords;
+    private Map<String,Object> refusalContext;
+    private PendingSnapshot refusalPending;
+    private int currentSetSize,currentSuspendPolicy;
+    private void boundedMode() throws Exception {
+        String directory=System.getProperty("b06.observer.state_dir");
+        if(directory==null)throw new IllegalArgumentException("owned observer state directory required");
+        Generation.definitions=new DefinitionIndex(java.nio.file.Path.of(directory).resolve("definitions.idx"));
+        bounded=true;bindingV2=true;generation.v2=true;Generation.owner=this;
+        generation.pendingPool=new PendingPool();refusalPending=new PendingSnapshot();
+    }
+    private void resourceStop(String reason) throws Exception {
+        var usage=ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+        emit(new LinkedHashMap<>(Map.of("kind","observer-resource-limit","reason",reason,
+            "observer_pid",ProcessHandle.current().pid(),"generation_entry_count",generation.generationSequence,
+            "heap_used",usage.getUsed(),"heap_max",usage.getMax(),"heap_guard_percent",85)),true);
+        throw new IllegalStateException("observer-resource-limit:"+reason);
+    }
+    private void telemetry() throws Exception {
+        if(!nativeDiagnostics)return;
+        var usage=ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+        heapHighWater=Math.max(heapHighWater,usage.getUsed());
+        if(usage.getUsed()>=usage.getMax()*85/100)resourceStop("heap-85-percent");
+        if(observedEvents%1000!=0)return;
+        long count=0,time=0;
+        for(var gc:ManagementFactory.getGarbageCollectorMXBeans()) {
+            count+=Math.max(0,gc.getCollectionCount());time+=Math.max(0,gc.getCollectionTime());
+        }
+        Map<String,Object> heap=new LinkedHashMap<>(Map.of("kind","observer-heap-telemetry","event_count",observedEvents,
+            "heap_used",usage.getUsed(),"heap_max",usage.getMax(),"heap_high_water",heapHighWater,
+            "gc_count",count,"gc_time_ms",time,"generation_entry_count",generation.generationSequence));
+        if(mirrorCache!=null)for(var item:((Map<?,?>)mirrorCall("telemetry",new Class<?>[]{})).entrySet())heap.put(item.getKey().toString(),item.getValue());
+        emit(heap,false);
+    }
+    private void lifecycle(String action,EventRequest request,Location location,Long thread) throws Exception {
+        if(!bounded)return;
+        if(location!=null)request.putProperty("b06-location",auditLocation(location));
+        if(thread!=null)request.putProperty("b06-thread-filter",thread);
+        Map<String,Object> r=new LinkedHashMap<>();r.put("kind","breakpoint-lifecycle");r.put("action",action);
+        r.put("request_id",requestId(request));r.put("location",request.getProperty("b06-location"));
+        r.put("request_kind",request instanceof BreakpointRequest?"breakpoint":request instanceof MethodExitRequest?"method-exit":request instanceof ClassPrepareRequest?"class-prepare":"exception");
+        r.put("thread_filter",request.getProperty("b06-thread-filter"));r.put("monotonic_ns",System.nanoTime());r.put("audit_index",auditIndex);
+        emit(r,false);
+    }
+    private void enable(EventRequest request,Location location,Long thread) throws Exception {
+        lifecycle("created",request,location,thread);request.enable();lifecycle("enabled",request,location,thread);
+    }
+    private void delete(EventRequest request) throws Exception {
+        if(bounded){request.disable();lifecycle("disabled",request,null,null);}vm.eventRequestManager().deleteEventRequest(request);
+        lifecycle("deleted",request,null,null);
+    }
     private boolean diagnosticUnmatchedReturn;
     private static final String UNMATCHED_POLICY="diagnostic-unmatched-return-v1";
     private final Map<String,String> emittedV2Definitions=new HashMap<>();
@@ -42,14 +120,29 @@ public final class PostingObserver {
         return ((Number)id).longValue();
     }
     private void audit(String action, Map<String,Object> detail) throws Exception {
+        if(bounded && action.equals("event-set-open")) {
+            currentSetSize=((Number)detail.get("size")).intValue();currentSuspendPolicy=((Number)detail.get("suspend_policy")).intValue();return;
+        }
+        if(bounded && action.equals("jdi-event") && auditPosition==0){
+            detail=new LinkedHashMap<>(detail);detail.put("set_size",currentSetSize);detail.put("suspend_policy",currentSuspendPolicy);
+        }
+        if(bounded && action.equals("dispatch-completed")){suppressedDispatch++;return;}
+        if(bounded && action.equals("resume-requested")){suppressedResume++;return;}
+        if(bounded && action.equals("resume-completed")){
+            action="event-set-close";detail=Map.of("dispatch_completed",suppressedDispatch,"resume_requested",suppressedResume,"resume_completed",1);
+            suppressedDispatch=0;suppressedResume=0;
+        }
         Map<String,Object> record=new LinkedHashMap<>();
-        record.put("kind","observer-audit");record.put("policy","structural-jdi-v1");
+        record.put("kind","observer-audit");record.put("policy",bounded?"structural-jdi-v2":"structural-jdi-v1");
         record.put("audit_index",++auditIndex);record.put("event_set_id",auditSet);
         record.put("event_position",auditPosition);record.put("action",action);record.put("detail",detail);
-        auditBytes+=json(record).getBytes(StandardCharsets.UTF_8).length;
-        if(auditIndex>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)
-            throw new IllegalStateException("observer structural audit bound exceeded");
-        emit(record,false);
+        if(bounded) {
+            emitDiagnostic(record);
+        } else {
+            auditBytes+=json(record).getBytes(StandardCharsets.UTF_8).length;
+            if(auditIndex>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)throw new IllegalStateException("observer structural audit bound exceeded");
+            emit(record,false);
+        }
     }
     private void auditEvent(Event event) throws Exception {
         Map<String,Object> d=new LinkedHashMap<>();
@@ -72,20 +165,32 @@ public final class PostingObserver {
             if(arm!=null)d.put("arm",Map.of("request_id",requestId(arm.request()),
                 "method",Generation.methodName(arm.method()),"depth",arm.depth(),
                 "generation_id",arm.entry().get("generation_id")));
-            List<Object> pending=new ArrayList<>();
-            for(Map<String,Object> p:generation.pending.getOrDefault(t.uniqueID(),new ArrayDeque<>()))
-                pending.add(Map.of("generation_id",p.get("generation_id"),"method",p.get("entry_method"),"depth",p.get("entry_depth")));
-            if(pending.size()>256)throw new IllegalStateException("generation audit pending bound exceeded");
-            d.put("pending",pending);
+            Collection<Map<String,Object>> calls=generation.pending.getOrDefault(t.uniqueID(),new ArrayDeque<>());
+            if(bounded){refusalPending.capture(calls);d.put("pending",refusalPending);}
+            else {
+                List<Object> pending=new ArrayList<>();
+                for(Map<String,Object> p:calls)pending.add(Map.of("generation_id",p.get("generation_id"),"method",p.get("entry_method"),"depth",p.get("entry_depth")));
+                if(pending.size()>256)throw new IllegalStateException("generation audit pending bound exceeded");
+                d.put("pending",pending);
+            }
             if(event instanceof ExceptionEvent x) {
                 d.put("exception_class",x.exception().referenceType().name());
                 d.put("catch_location",x.catchLocation()==null?null:auditLocation(x.catchLocation()));
                 d.put("exceptional_exit","unknown-until-handler");
             } else if(event instanceof MethodExitEvent) d.put("exceptional_exit",false);
         }
+        if(bounded) {
+            refusalContext=d;
+            d=new LinkedHashMap<>(d);
+            if(d.get("pending") instanceof List<?> pending){
+                d.put("pending_count",pending.size());
+                d.put("pending",pending.isEmpty()?List.of():List.of(((Map<?,?>)pending.get(0)).get("generation_id")));
+            }
+        }
         audit("jdi-event",d);
     }
     private void auditState(Event event) throws Exception {
+        if(bounded){suppressedDispatch++;refusalContext=null;return;}
         if(!(event instanceof LocatableEvent e))return;
         long thread=e.thread().uniqueID();
         Generation.ReturnArm arm=generation.exits.get(thread);
@@ -110,7 +215,103 @@ public final class PostingObserver {
         }
         return result;
     }
+    /** Disk identity index with a fixed 256-entry heap cache. Payloads live only in the stream.
+     * The index is disposable lookup state, not an authority or an evidence substitute. */
+    private static final class DefinitionIndex extends AbstractMap<String,Object> {
+        static final int SLOTS=1<<18,WIDTH=48;
+        final RandomAccessFile file;
+        int count;
+        final Map<String,Object> cache=new LinkedHashMap<>(256,0.75f,true){
+            protected boolean removeEldestEntry(Map.Entry<String,Object> item){return size()>256;}
+        };
+        DefinitionIndex(java.nio.file.Path path)throws IOException {
+            if(!path.isAbsolute() || !java.nio.file.Files.isDirectory(path.getParent()))throw new IOException("owned state directory missing");
+            java.nio.file.Files.createFile(path);file=new RandomAccessFile(path.toFile(),"rw");file.setLength((long)SLOTS*WIDTH);
+        }
+        long slot(long key)throws IOException {
+            int start=(int)(key^(key>>>32))&(SLOTS-1);
+            for(int i=0;i<SLOTS;i++){
+                long offset=(long)((start+i)&(SLOTS-1))*WIDTH;file.seek(offset);long stored=file.readLong();
+                if(stored==0 || stored==key)return offset;
+            }throw new IOException("definition identity index capacity exceeded");
+        }
+        public Object get(Object id){
+            if(cache.containsKey(id))return cache.get(id);
+            try {
+                long key=Long.parseLong(id.toString());if(key<=0)throw new IOException("invalid class identity");
+                file.seek(slot(key));if(file.readLong()==0)return null;
+                boolean prepared=file.readBoolean();byte[] sha=new byte[32];file.readFully(sha);
+                Object value=Map.of("prepared",prepared,"sha256",HexFormat.of().formatHex(sha));cache.put(id.toString(),value);return value;
+            }catch(IOException failure){throw new UncheckedIOException(failure);}
+        }
+        public Object put(String id,Object value){
+            try {
+                long key=Long.parseLong(id);if(key<=0)throw new IOException("invalid class identity");
+                long offset=slot(key);file.seek(offset);if(file.readLong()==0)count++;
+                Map<?,?> row=(Map<?,?>)value;boolean prepared=!Boolean.FALSE.equals(row.get("prepared"));
+                byte[] sha=row.get("sha256") instanceof String digest?HexFormat.of().parseHex(digest):new byte[32];
+                file.seek(offset);file.writeLong(key);file.writeBoolean(prepared);file.write(sha);
+                cache.put(id,Map.of("prepared",prepared,"sha256",HexFormat.of().formatHex(sha)));return null;
+            }catch(IOException failure){throw new UncheckedIOException(failure);}
+        }
+        public int size(){return count;}
+        public Set<Map.Entry<String,Object>> entrySet(){throw new UnsupportedOperationException("streamed definition index is not an in-memory catalogue");}
+    }
     /** Generation evidence only: factory names select VM breakpoints, never grant trust. */
+    /** Pre-dispatch witness stays exact if dispatch mutates/releases a pending slot. */
+    private static final class PendingSnapshot extends AbstractList<Object> {
+        private final PendingWitness[] entries=new PendingWitness[PENDING_CAP];private int count;
+        PendingSnapshot(){for(int i=0;i<entries.length;i++)entries[i]=new PendingWitness();}
+        void capture(Collection<Map<String,Object>> calls){
+            if(calls.size()>entries.length)throw new IllegalStateException("generation audit pending bound exceeded");
+            int previous=count;count=0;
+            for(Map<String,Object> call:calls){PendingWitness r=entries[count++];
+                r.id=((Number)call.get("generation_id")).longValue();r.depth=((Number)call.get("entry_depth")).intValue();
+                r.method=((String)call.get("entry_method")).intern();}
+            for(int i=count;i<previous;i++)entries[i].method=null;
+        }
+        @Override public int size(){return count;}
+        @Override public Object get(int index){Objects.checkIndex(index,count);return entries[index];}
+    }
+    private static final class PendingWitness extends AbstractMap<String,Object> {
+        long id;int depth;String method;
+        @Override public Object get(Object key){return switch(key.toString()){
+            case "generation_id"->id;case "depth"->depth;case "method"->method;default->null;};}
+        @Override public Set<Map.Entry<String,Object>> entrySet(){return Map.<String,Object>of(
+            "generation_id",id,"depth",depth,"method",method).entrySet();}
+    }
+    /** Fixed retained storage: suppressed returns cannot add map nodes or boxed IDs. */
+    private static final class PendingPool {
+        private final PendingEntry[] entries=new PendingEntry[PENDING_CAP];
+        PendingPool(){for(int i=0;i<entries.length;i++)entries[i]=new PendingEntry(this);}
+        Map<String,Object> retain(Map<String,Object> value){
+            for(PendingEntry entry:entries)if(!entry.used){entry.assign(value);return entry;}
+            throw new IllegalStateException("pending pool capacity invariant");
+        }
+        void release(Map<String,Object> value){
+            if(!(value instanceof PendingEntry entry) || entry.owner!=this || !entry.used)
+                throw new IllegalStateException("pending pool release invariant");
+            entry.used=false;entry.kind=null;entry.method=null;
+        }
+    }
+    private static final class PendingEntry extends AbstractMap<String,Object> {
+        final PendingPool owner;boolean used;String kind,method;long thread,generation,age;int depth;
+        PendingEntry(PendingPool owner){this.owner=owner;}
+        void assign(Map<String,Object> r){
+            kind=(String)r.get("kind");method=((String)r.get("entry_method")).intern();
+            thread=((Number)r.get("thread_id")).longValue();generation=((Number)r.get("generation_id")).longValue();
+            age=((Number)r.get("entry_event_index")).longValue();depth=((Number)r.get("entry_depth")).intValue();used=true;
+        }
+        @Override public Object get(Object key){return switch(key.toString()){
+            case "kind"->kind;case "entry_method"->method;case "thread_id"->thread;
+            case "generation_id"->generation;case "entry_event_index"->age;case "entry_depth"->depth;default->null;};}
+        @Override public Set<Map.Entry<String,Object>> entrySet(){
+            LinkedHashSet<Map.Entry<String,Object>> result=new LinkedHashSet<>();
+            for(String key:List.of("kind","thread_id","generation_id","entry_depth","entry_method","entry_event_index"))
+                result.add(Map.entry(key,get(key)));
+            return Collections.unmodifiableSet(result);
+        }
+    }
     private static final class Generation {
         static final String FACTORY="java.lang.invoke.InnerClassLambdaMetafactory";
         static final String INVOKER="java.lang.invoke.InvokerBytecodeGenerator";
@@ -118,10 +319,16 @@ public final class PostingObserver {
         static final String DEFINE="(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;";
         static final Set<String> EMITTERS=Set.of("generateCustomizedCodeBytes","generateLambdaFormInterpreterEntryPointBytes","generateNamedFunctionInvokerImpl");
         boolean v2;
+        static PostingObserver owner;
+        static boolean bounded(){return owner!=null && owner.bounded;}
+        static void binary(Map<String,Object> row,String key,byte[] bytes){
+            row.put(key+(bounded()?"_base64":"_hex"),bounded()?bytes:HexFormat.of().formatHex(bytes));
+        }
         long generationSequence;
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
-        static final Map<String,Object> definitions=new LinkedHashMap<>();
+        static Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
+        PendingPool pendingPool;
         private record ReturnArm(MethodExitRequest request, Method method, int depth,
                                  Map<String,Object> entry) {}
         final Map<Long,ReturnArm> exits=new HashMap<>();
@@ -134,10 +341,10 @@ public final class PostingObserver {
         r.put("module_loader",type.module().classLoader()==null?"bootstrap":Long.toString(type.module().classLoader().uniqueID()));
         r.put("loader_class",type.classLoader()==null?null:type.classLoader().referenceType().name());
         r.put("loader_class_object_id",type.classLoader()==null?null:type.classLoader().referenceType().classObject().uniqueID());r.put("class_object_id",type.classObject().uniqueID());r.put("modifiers",type.modifiers());
-        r.put("constant_pool_count",type.constantPoolCount());r.put("constant_pool_hex",HexFormat.of().formatHex(cp));r.put("constant_pool_sha256",hash(cp));
+        r.put("constant_pool_count",type.constantPoolCount());binary(r,"constant_pool",cp);r.put("constant_pool_sha256",hash(cp));
         List<Object> methods=new ArrayList<>();
         for(Method m:type.methods()) { Map<String,Object> x=new LinkedHashMap<>();x.put("name",m.name());x.put("signature",m.signature());x.put("modifiers",m.modifiers());
-            if(!m.isNative()&&!m.isAbstract()){byte[] b=m.bytecodes();x.put("bytecode_hex",HexFormat.of().formatHex(b));x.put("sha256",hash(b));}methods.add(x); }
+            if(!m.isNative()&&!m.isAbstract()){byte[] b=m.bytecodes();binary(x,"bytecode",b);x.put("sha256",hash(b));}methods.add(x); }
         r.put("methods",methods);return r;
     }
     static Object graph(Value seed) throws Exception {
@@ -204,14 +411,22 @@ public final class PostingObserver {
     static void remember(ReferenceType t) throws Exception {
         String id=Long.toString(t.classObject().uniqueID());
         Object prior=definitions.get(id);
+        if(bounded() && prior==null && definitions.size()>=DefinitionIndex.SLOTS)owner.resourceStop("definition-index-capacity");
         if(prior==null || (prior instanceof Map<?,?> p && Boolean.FALSE.equals(p.get("prepared")) && t.isPrepared())){
             // Insert first: metadata can recursively refer to the same class.
-            definitions.put(id,Map.of("class",t.name(),"class_object_id",t.classObject().uniqueID(),"prepared",t.isPrepared(),"signature",t.signature(),"loader",loader(t)));
-            if(!t.isPrepared() || t instanceof ArrayType)return;
+            Map<String,Object> metadata=Map.of("class",t.name(),"class_object_id",t.classObject().uniqueID(),"prepared",t.isPrepared(),"signature",t.signature(),"loader",loader(t));
+            definitions.put(id,metadata);
+            if(!t.isPrepared() || t instanceof ArrayType){
+                if(bounded())owner.emit(new LinkedHashMap<>(Map.of("kind","class-definition-v3","definition",metadata)),false);
+                return;
+            }
             Map<String,Object> d=readDefinition(t);
             if(t.classLoader()!=null)remember(t.classLoader().referenceType());
             List<Object> fields=new ArrayList<>();for(Field f:t.fields())fields.add(Map.of("name",f.name(),"signature",f.signature(),"modifiers",f.modifiers()));d.put("fields",fields);
-            definitions.put(id,d);
+            if(bounded()) {
+                String digest=owner.emitDefinition(d);
+                definitions.put(id,Map.of("sha256",digest,"prepared",true));
+            } else definitions.put(id,d);
         }
     }
     static List<Object> stack(ThreadReference thread) throws Exception {
@@ -231,14 +446,14 @@ public final class PostingObserver {
                 || (m.declaringType().name().equals(FACTORY) && m.name().equals("spinInnerClass") && m.signature().equals("()Ljava/lang/Class;"))
                 || (m.declaringType().name().equals(DEFINER) && m.name().equals("defineClass") && m.signature().equals("(ZLjava/lang/Object;)Ljava/lang/Class;"));
         }
-        void configure(VirtualMachine vm,ReferenceType t) {
+        void configure(VirtualMachine vm,ReferenceType t) throws Exception {
             if(!(v2?Set.of(FACTORY,DEFINER,INVOKER,LOADER):Set.of(FACTORY,DEFINER)).contains(t.name()) || !installed.add(t.name()+":"+loader(t)))return;
             for(Method m:t.methods())if(selected(m)){
                 BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(m.location());
-                q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
+                q.setSuspendPolicy(EventRequest.SUSPEND_ALL);if(bounded())owner.enable(q,m.location(),null);else q.enable();
                 for(int index:returnInstructions(m.bytecodes())) {
                     BreakpointRequest ret=vm.eventRequestManager().createBreakpointRequest(m.locationOfCodeIndex(index));
-                    ret.putProperty("generation-return",true);ret.setSuspendPolicy(EventRequest.SUSPEND_ALL);ret.enable();
+                    ret.putProperty("generation-return",true);ret.setSuspendPolicy(EventRequest.SUSPEND_ALL);if(bounded())owner.enable(ret,ret.location(),null);else ret.enable();
                 }
             }
         }
@@ -291,11 +506,12 @@ public final class PostingObserver {
                 throw new IllegalStateException("generation return arm without matching activation");
             MethodExitRequest q=vm.eventRequestManager().createMethodExitRequest();
             q.addThreadFilter(e.thread());q.addClassFilter(e.location().declaringType());
-            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
+            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);if(bounded())owner.enable(q,e.location(),thread);else q.enable();
             exits.put(thread,new ReturnArm(q,method,depth,calls.peek()));
         }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
+            if(bounded() && pending.values().stream().mapToInt(Deque::size).sum()>=PENDING_CAP)owner.resourceStop("pending-cap-512");
             Map<String,Object> r=new LinkedHashMap<>();r.put("kind","generation");r.put("thread_id",t.uniqueID());
             r.put("generation_id",++generationSequence);
             r.put("entry_depth",t.frameCount());r.put("entry_method",e.location().declaringType().name()+"."+e.location().method().name()+e.location().method().signature());
@@ -308,7 +524,7 @@ public final class PostingObserver {
                             int offset=((IntegerValue)argv.get(2)).value(),length=((IntegerValue)argv.get(3)).value();
                             if(length<0 || length>1024*1024 || offset<0 || offset+length>bytes.length())throw new IllegalStateException("class definition size");
                             byte[] raw=readBytes(bytes,offset,length);
-                            r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));
+                            binary(r,"definition_input",raw);r.put("definition_input_sha256",hash(raw));
                             r.put("requested_name",value(argv.get(0),0));r.put("defining_loader",Long.toString(top.thisObject().uniqueID()));
                             if(argv.get(4) instanceof ObjectReference pd){
                                 Field cs=pd.referenceType().fieldByName("codesource");ObjectReference source=cs==null?null:(ObjectReference)pd.getValue(cs);
@@ -327,7 +543,7 @@ public final class PostingObserver {
                         ArrayReference bytes=(ArrayReference)top.thisObject().getValue(top.thisObject().referenceType().fieldByName("bytes"));
                         if(bytes.length()>1024*1024)throw new IllegalStateException("definition size bound");
                         byte[] raw=readBytes(bytes,0,bytes.length());
-                        r.put("definition_input_hex",HexFormat.of().formatHex(raw));r.put("definition_input_sha256",hash(raw));r.put("definition_input_object_id",bytes.uniqueID());
+                        binary(r,"definition_input",raw);r.put("definition_input_sha256",hash(raw));r.put("definition_input_object_id",bytes.uniqueID());
                         r.put("class_data_graph",graph(top.getArgumentValues().get(1)));
                         for(StackFrame f:t.frames())if(f.location().declaringType().name().equals("java.lang.invoke.InvokerBytecodeGenerator")&&f.thisObject()!=null){
                             Field field=f.thisObject().referenceType().fieldByName("lambdaForm");
@@ -338,7 +554,12 @@ public final class PostingObserver {
             if(e.location().declaringType().name().equals(FACTORY)){
                 r.put("lambda_factory",selected(t.frame(0).thisObject(),List.of("targetClass","factoryType","interfaceClass","interfaceMethodName","interfaceMethodType","implementation","implMethodType","implInfo","implKind","implIsInstanceMethod","implClass","dynamicMethodType","isSerializable","altInterfaces","altMethods","implMethodClassName","implMethodName","implMethodDesc","argNames","argDescs","useImplMethodHandle"),2));
             }
-            pending.computeIfAbsent(t.uniqueID(),k->new ArrayDeque<>()).push(r);
+            Map<String,Object> retained=r;
+            if(bounded()) {
+                r.put("entry_event_index",owner.observedEvents);
+                retained=pendingPool.retain(r);
+            }
+            pending.computeIfAbsent(t.uniqueID(),k->new ArrayDeque<>()).push(retained);
             return r;
         }
         Map<String,Object> returned(VirtualMachine vm,MethodExitEvent e) throws Exception {
@@ -348,23 +569,26 @@ public final class PostingObserver {
                q==null || q.isEmpty() || q.peek()!=armed.entry() ||
                armed.depth()!=e.thread().frameCount() || !selected(e.method()))
                 throw new IllegalStateException("generation exit does not match armed activation");
-            Map<String,Object> r=q.peek();
+            Map<String,Object> retained=q.peek();
+            Map<String,Object> r=bounded()?new LinkedHashMap<>(retained):retained;
             String name=e.method().declaringType().name()+"."+e.method().name()+e.method().signature();
             if(!r.get("entry_method").equals(name) || !r.get("entry_depth").equals(e.thread().frameCount()))throw new IllegalStateException("generation return mismatch");
             if(e.returnValue() instanceof ClassObjectReference c){
                 remember(c.reflectedType());r.put("returned_class",value(c,0));
-                if(name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
+                if(!bounded() && name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
             }else if(v2 && e.returnValue() instanceof ArrayReference a && a.referenceType().signature().equals("[B")){
                 if(a.length()>1024*1024)throw new IllegalStateException("generated byte array bound exceeded");
                 byte[] bytes=readBytes(a,0,a.length());
-                r.put("returned_bytes_object_id",a.uniqueID());r.put("returned_bytes_hex",HexFormat.of().formatHex(bytes));r.put("returned_bytes_sha256",hash(bytes));
+                r.put("returned_bytes_object_id",a.uniqueID());binary(r,"returned_bytes",bytes);r.put("returned_bytes_sha256",hash(bytes));
             }else throw new IllegalStateException("generation return unsupported");
             exits.remove(e.thread().uniqueID());q.pop();
-            vm.eventRequestManager().deleteEventRequest(armed.request());
+            if(bounded())pendingPool.release(retained);
+            if(bounded())owner.delete(armed.request());else vm.eventRequestManager().deleteEventRequest(armed.request());
             if(q.isEmpty())pending.remove(e.thread().uniqueID());
             return r;
         }
         Map<String,Object> proof(ReferenceType t) throws Exception {
+            if(bounded())return null;
             Map<String,Object> record=completed.get(t.classObject().uniqueID());
             if(record==null)return null;
             remember(t);
@@ -404,10 +628,124 @@ public final class PostingObserver {
         }
         return out.append('"').toString();
     }
+    private static void writeJson(Writer out,Object value,boolean line) throws IOException {
+        if(value==null)out.write("null");
+        else if(value instanceof Number || value instanceof Boolean)out.write(value.toString());
+        else if(value instanceof Map<?,?> map){
+            out.write('{');boolean comma=false;
+            for(var entry:map.entrySet()) {if(comma)out.write(',');comma=true;writeJson(out,entry.getKey().toString(),false);out.write(':');writeJson(out,entry.getValue(),false);}out.write('}');
+        } else if(value instanceof Iterable<?> list){
+            out.write('[');boolean comma=false;for(Object item:list){if(comma)out.write(',');comma=true;writeJson(out,item,false);}out.write(']');
+        } else if(value instanceof byte[] bytes){
+            out.write('"');for(int i=0;i<bytes.length;i+=768)out.write(Base64.getEncoder().encodeToString(Arrays.copyOfRange(bytes,i,Math.min(bytes.length,i+768))));out.write('"');
+        } else {
+            String text=value.toString();out.write('"');
+            for(int i=0;i<text.length();i++){
+                char c=text.charAt(i);
+                if(c=='"' || c=='\\'){out.write('\\');out.write(c);}
+                else if(c<32){out.write("\\u");out.write("0123456789abcdef".charAt((c>>12)&15));out.write("0123456789abcdef".charAt((c>>8)&15));out.write("0123456789abcdef".charAt((c>>4)&15));out.write("0123456789abcdef".charAt(c&15));}
+                else out.write(c);
+            }out.write('"');
+        }
+        if(line){out.write('\n');out.flush();}
+    }
+    // d3 is stateless and lossless. Its preset dictionary contains only fixed
+    // public JDK templates and synthetic zeros, never target or prior-event data.
+    private static final class DiagnosticDictionary {
+        static final byte[] BYTES=build();
+        private static Map<String,Object> object(Object... fields) {
+            Map<String,Object> out=new LinkedHashMap<>();
+            for(int i=0;i<fields.length;i+=2)out.put((String)fields[i],fields[i+1]);return out;
+        }
+        private static void permutations(Map<String,Object> location,List<String> keys,List<String> prefix,List<Object> out) {
+            if(keys.isEmpty()) {
+                Map<String,Object> copy=new LinkedHashMap<>();for(String key:prefix)copy.put(key,location.get(key));out.add(copy);return;
+            }
+            for(String key:keys) {
+                var rest=new ArrayList<>(keys);rest.remove(key);var next=new ArrayList<>(prefix);next.add(key);
+                permutations(location,rest,next,out);
+            }
+        }
+        private static byte[] build() {
+            String[][] locations={
+                {"java.lang.invoke.InnerClassLambdaMetafactory","spinInnerClass","()Ljava/lang/Class;"},
+                {"java.lang.invoke.MethodHandles$Lookup$ClassDefiner","defineClass","(ZLjava/lang/Object;)Ljava/lang/Class;"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateCustomizedCodeBytes","()[B"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateLambdaFormInterpreterEntryPointBytes","()[B"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateNamedFunctionInvokerImpl","(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MemberName;"}};
+            List<Object> patterns=new ArrayList<>();
+            for(String[] row:locations) {
+                Map<String,Object> location=object("class",row[0],"method",row[1],"signature",row[2],"code_index",0);
+                permutations(location,new ArrayList<>(location.keySet()),List.of(),patterns);
+                for(String action:List.of("created","enabled","disabled","deleted"))
+                    patterns.add(object("action",action,"request_id",0,"location",location,"request_kind","breakpoint",
+                        "thread_filter",0,"monotonic_ns",0,"audit_index",0,"observer_format",FORMAT));
+                for(boolean armed:new boolean[]{false,true}) {
+                    Map<String,Object> detail=object("event_type","breakpoint","request_id",0,"thread_id",0,
+                        "thread_name_sha256","0".repeat(64),"location",location,"depth",0,"top_location",location,
+                        "selected_generation",true,"return_breakpoint",armed,"catch_breakpoint",false,
+                        "pending_count",armed?1:0,"pending",armed?List.of(0):List.of(),"set_size",1,"suspend_policy",2);
+                    if(armed)detail.put("arm",object("request_id",0,"method",row[0]+"."+row[1]+row[2],"depth",0,"generation_id",0));
+                    patterns.add(object("policy","structural-jdi-v2","audit_index",0,"event_set_id",0,"event_position",0,
+                        "action","jdi-event","detail",detail,"observer_format",FORMAT));
+                }
+            }
+            patterns.add(object("policy","structural-jdi-v2","audit_index",0,"event_set_id",0,"event_position",0,
+                "action","event-set-close","detail",object("dispatch_completed",1,"resume_requested",1,"resume_completed",1),"observer_format",FORMAT));
+            try {
+                StringWriter writer=new StringWriter();writeJson(writer,patterns,false);
+                byte[] bytes=writer.toString().getBytes(StandardCharsets.UTF_8);
+                return Arrays.copyOfRange(bytes,Math.max(0,bytes.length-32768),bytes.length);
+            }catch(IOException failure){throw new ExceptionInInitializerError(failure);}
+        }
+    }
+    private static OutputStream diagnosticLimit(ByteArrayOutputStream buffer) {
+        return new FilterOutputStream(buffer){
+            public void write(int value)throws IOException {if(buffer.size()>=256*1024)throw new IOException("diagnostic record size bound");out.write(value);}
+            public void write(byte[] values,int off,int len)throws IOException {if(buffer.size()+len>256*1024)throw new IOException("diagnostic record size bound");out.write(values,off,len);}
+        };
+    }
+    private static Map<String,Object> diagnosticWire(Map<String,Object> record)throws Exception {
+        // Serialize the logical body once into a bounded buffer. The final wire
+        // record is then serialized once for both byte accounting and output.
+        Map<String,Object> body=new LinkedHashMap<>(record);
+        body.remove("kind");body.remove("sequence");body.remove("checkpoint");
+        ByteArrayOutputStream raw=new ByteArrayOutputStream(4096);
+        Writer writer=new OutputStreamWriter(diagnosticLimit(raw),StandardCharsets.UTF_8);
+        writeJson(writer,body,false);writer.flush();
+        ByteArrayOutputStream packed=new ByteArrayOutputStream(4096);
+        var deflater=new java.util.zip.Deflater();deflater.setDictionary(DiagnosticDictionary.BYTES);
+        try(var zip=new java.util.zip.DeflaterOutputStream(packed,deflater)){raw.writeTo(zip);}
+        finally{deflater.end();}
+        Map<String,Object> wire=new LinkedHashMap<>();
+        wire.put("kind",record.get("kind"));wire.put("sequence",record.get("sequence"));wire.put("checkpoint",false);
+        wire.put("d3",Base64.getEncoder().encodeToString(packed.toByteArray()));return wire;
+    }
+    private long emitDiagnostic(Map<String,Object> record)throws Exception {
+        record.put("sequence",++sequence);record.put("checkpoint",false);record.put("observer_format",FORMAT);
+        Map<String,Object> wire="dispatch-refused".equals(record.get("action"))?record:diagnosticWire(record);
+        ByteArrayOutputStream buffer=new ByteArrayOutputStream(4096);
+        Writer writer=new OutputStreamWriter(diagnosticLimit(buffer),StandardCharsets.UTF_8);writeJson(writer,wire,false);writer.flush();
+        auditBytes+=buffer.size();diagnosticRecords++;
+        if(diagnosticRecords>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)throw new IllegalStateException("observer structural audit bound exceeded");
+        buffer.writeTo(System.out);System.out.write('\n');System.out.flush();return sequence;
+    }
+    private String emitDefinition(Map<String,Object> definition) throws Exception {
+        MessageDigest digest=MessageDigest.getInstance("SHA-256");
+        Writer sink=new OutputStreamWriter(new java.security.DigestOutputStream(OutputStream.nullOutputStream(),digest),StandardCharsets.UTF_8);
+        writeJson(sink,definition,false);sink.flush();
+        String sha=HexFormat.of().formatHex(digest.digest());
+        emit(new LinkedHashMap<>(Map.of("kind","class-definition-v3","definition",definition,"definition_sha256",sha)),false);
+        return sha;
+    }
     private long emit(Map<String,Object> value, boolean checkpoint) throws Exception {
+        if(bounded && Set.of("breakpoint-lifecycle","watched-class-prepare","observer-heap-telemetry").contains(value.get("kind")))return emitDiagnostic(value);
         value.put("sequence", ++sequence);
         value.put("checkpoint", checkpoint);
-        System.out.println(json(value)); System.out.flush();
+        if(bounded) {
+            value.put("observer_format",FORMAT);
+            writeJson(new OutputStreamWriter(System.out,StandardCharsets.UTF_8),value,true);
+        } else {System.out.println(json(value)); System.out.flush();}
         if (checkpoint && !Long.toString(sequence).equals(acknowledgements.readLine()))
             throw new IOException("Missing trusted native-readback acknowledgement");
         return sequence;
@@ -444,6 +782,15 @@ public final class PostingObserver {
         String methodHash = unavailable ? "unavailable" : hash(bytes), poolHash = hash(pool);
         String id = loader + ":" + type.classObject().uniqueID() + ":" + method.name() + method.signature()
             + ":" + poolHash + ":" + methodHash;
+        if(bounded) {
+            // First-sight class records carry executable bytes; checkpoint frames carry references only.
+            // Do not retain a second, ever-growing set of per-method definitions.
+            Generation.remember(type);
+            Map<String,Object> frame=new LinkedHashMap<>(Map.of("class",type.name(),"method",method.name(),"signature",method.signature(),
+                "line",location.lineNumber(),"code_index",location.codeIndex(),"method_sha256",methodHash,
+                "constant_pool_sha256",poolHash,"loader",loader,"definition_id",id));
+            frame.put("class_object_id",type.classObject().uniqueID());frame.put("module",type.module().name());return frame;
+        }
         // Capture every definition, including all hidden classes, without a name allowlist.
         // This external JDI read invokes no target method and reads no captured values.
         if (definitions.add(id)) {
@@ -469,7 +816,7 @@ public final class PostingObserver {
         Map<String,Object> result=new LinkedHashMap<>(Map.of("class", type.name(), "method", method.name(), "signature", method.signature(), "line", location.lineNumber(),
                       "code_index", location.codeIndex(), "method_sha256", methodHash,
                       "constant_pool_sha256", poolHash, "loader", loader, "definition_id", id));
-        if(bindingV2){Generation.definitions.remove(Long.toString(type.classObject().uniqueID()));Generation.remember(type);result.put("class_object_id",type.classObject().uniqueID());result.put("module",type.module().name());}
+        if(bindingV2){if(!bounded)Generation.definitions.remove(Long.toString(type.classObject().uniqueID()));Generation.remember(type);result.put("class_object_id",type.classObject().uniqueID());result.put("module",type.module().name());}
         return result;
     }
     private List<Map<String,Object>> frames(ThreadReference thread) throws Exception {
@@ -491,6 +838,7 @@ public final class PostingObserver {
         return result;
     }
     private void flushDefinitions() throws Exception {
+        if(bounded)return;
         for(var entry:Generation.definitions.entrySet()) {
             String sha=hash(json(entry.getValue()).getBytes(StandardCharsets.UTF_8));
             if(!sha.equals(emittedV2Definitions.get(entry.getKey()))) {
@@ -515,12 +863,14 @@ public final class PostingObserver {
             || (type.equals("org.compiere.acct.DocManager") && name.equals("postDocument")
                 && signature.equals("([Lorg/compiere/model/MAcctSchema;IIZZLjava/lang/String;)Ljava/lang/String;"));
     }
-    private void configure(ReferenceType type) {
+    private void configure(ReferenceType type) throws Exception {
+        if(bounded && (TYPES.contains(type.name()) || Set.of(Generation.FACTORY,Generation.DEFINER,Generation.INVOKER,Generation.LOADER).contains(type.name())))
+            mirrorCall("pin",new Class<?>[]{ReferenceType.class},type);
         generation.configure(vm,type);
         if (!TYPES.contains(type.name()) || !configured.add(type.name() + ":" + type.classLoader())) return;
         for (Method method : type.methods()) if (selected(method)) {
             BreakpointRequest request = vm.eventRequestManager().createBreakpointRequest(method.location());
-            request.setSuspendPolicy(EventRequest.SUSPEND_ALL); request.enable();
+            request.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(request,method.location(),null);
         }
     }
     private void entry(BreakpointEvent event) throws Exception {
@@ -528,6 +878,7 @@ public final class PostingObserver {
         if(Boolean.TRUE.equals(event.request().getProperty("generation-return"))) {
             Map<String,Object> missing=diagnosticUnmatchedReturn?generation.unmatchedReturnContext(event):null;
             if(missing!=null) {
+                if(nativeDiagnostics && ++unmatchedCount>10)resourceStop("unmatched-return-cap-10");
                 emit(new LinkedHashMap<>(Map.of("kind","diagnostic-unmatched-return","policy",UNMATCHED_POLICY,
                     "context",missing,"observation_complete",false,"provenance_created",false)),false);
                 return;
@@ -566,7 +917,7 @@ public final class PostingObserver {
         long id = emit(record, true);
         MethodExitRequest exit = vm.eventRequestManager().createMethodExitRequest();
         exit.addThreadFilter(thread); exit.addClassFilter(method.declaringType());
-        exit.setSuspendPolicy(EventRequest.SUSPEND_ALL); exit.enable();
+        exit.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(exit,method.location(),thread.uniqueID());
         active.computeIfAbsent(thread.uniqueID(), unused -> new ArrayDeque<>()).push(new Call(id, method, document, exit, thread.frameCount()));
     }
     private void terminal(ThreadReference thread, List<Map<String,Object>> stack) throws Exception {
@@ -600,7 +951,7 @@ public final class PostingObserver {
         Deque<Call> calls = active.get(event.thread().uniqueID());
         if (calls == null || calls.isEmpty() || !calls.peek().method().equals(event.method())
                 || !calls.peek().exit().equals(event.request())) return;
-        Call call = calls.pop(); vm.eventRequestManager().deleteEventRequest(call.exit());
+        Call call = calls.pop(); delete(call.exit());
         Value returned = event.returnValue(); Object value = null;
         if (returned instanceof BooleanValue b) value = b.value();
         else if (returned instanceof IntegerValue i) value = i.value();
@@ -620,6 +971,7 @@ public final class PostingObserver {
             Map<String,Object> unwound=generated.pop();
             emit(new LinkedHashMap<>(Map.of("kind","generation-unwind","record",unwound,
                 "exception_class",exceptionClass,"catch_depth",depth,"catch_resolution",resolution)),false);
+            if(bounded)generation.pendingPool.release(unwound);
         }
         if(generated.isEmpty())generation.pending.remove(thread.uniqueID());
     }
@@ -627,7 +979,7 @@ public final class PostingObserver {
         GenerationCatch pending=generationCatches.remove(event.thread().uniqueID());
         if(pending==null || !pending.request().equals(event.request()) ||
            !pending.request().location().equals(event.location()))throw new IllegalStateException("unarmed generation catch");
-        vm.eventRequestManager().deleteEventRequest(pending.request());
+        delete(pending.request());
         // JDI gives a catch Location, not an activation identity. Observe the
         // handler itself: its top frame is now the actual selected activation,
         // even if recursive invocations of the same Method were on the stack.
@@ -640,7 +992,7 @@ public final class PostingObserver {
     private void failure(ExceptionEvent event) throws Exception {
         long threadId=event.thread().uniqueID();
         GenerationCatch prior=generationCatches.remove(threadId);
-        if(prior!=null)vm.eventRequestManager().deleteEventRequest(prior.request());
+        if(prior!=null)delete(prior.request());
         Deque<Map<String,Object>> generated=generation.pending.get(threadId);
         if(generated!=null) {
             // A superseding exception (for example in a finally block) selects
@@ -652,10 +1004,10 @@ public final class PostingObserver {
                 BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(event.catchLocation());
                 q.addThreadFilter(event.thread());q.putProperty("generation-catch",true);
                 q.setSuspendPolicy(EventRequest.SUSPEND_ALL);
-                generationCatches.put(threadId,new GenerationCatch(q,event.exception().referenceType().name()));q.enable();
+                generationCatches.put(threadId,new GenerationCatch(q,event.exception().referenceType().name()));enable(q,event.catchLocation(),threadId);
             }
             Generation.ReturnArm armed=generation.exits.remove(threadId);
-            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed.request());
+            if(armed!=null)delete(armed.request());
         }
         if(!relevant(event.thread()))return;
         List<Map<String,Object>> stack = frames(event.thread());
@@ -687,7 +1039,7 @@ public final class PostingObserver {
         Deque<Call> calls = active.get(event.thread().uniqueID());
         while (calls != null && !calls.isEmpty() && calls.peek().depth() > catchDepth) {
             Call call = calls.pop(); unwound.add(call.sequence());
-            vm.eventRequestManager().deleteEventRequest(call.exit());
+            delete(call.exit());
         }
         record.put("unwound_calls", unwound);
         if(bindingV2)flushDefinitions();
@@ -700,18 +1052,26 @@ public final class PostingObserver {
         args.get("timeout").setValue("30000"); vm = connector.attach(args);
         if (!vm.canGetBytecodes() || !vm.canGetConstantPool() || !vm.canGetMethodReturnValues())
             throw new IllegalStateException("Required VM inspection unavailable");
+        initializeMirrors();
+        Map<String,Object> ready=new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1"));
+        if(bounded){ready.put("observer_format",FORMAT);ready.put("audit_policy","structural-jdi-v2");}
+        if(nativeDiagnostics){
+            ready.put("native_diagnostics","native-diagnostics-v1");
+            ready.put("observer_mode",diagnosticUnmatchedReturn?"diagnostic-unmatched-return":"strict");
+            ready.put("unmatched_return_cap",10);ready.put("heap_guard_percent",85);ready.put("pending_cap",PENDING_CAP);
+        }
+        if(diagnosticUnmatchedReturn)ready.put("unmatched_return_policy",UNMATCHED_POLICY);
+        emit(ready,false);
         Set<String> observedTypes=new HashSet<>(TYPES);observedTypes.add(Generation.FACTORY);observedTypes.add(Generation.DEFINER);
         if(bindingV2){observedTypes.add(Generation.INVOKER);observedTypes.add(Generation.LOADER);}
         for (String type : observedTypes) {
             ClassPrepareRequest request = vm.eventRequestManager().createClassPrepareRequest();
-            request.addClassFilter(type); request.setSuspendPolicy(EventRequest.SUSPEND_ALL); request.enable();
+            request.addClassFilter(type); request.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(request,null,null);
         }
-        for (ReferenceType type : vm.allClasses()) configure(type);
+        if(bounded){for(String name:observedTypes)for(ReferenceType type:vm.classesByName(name))configure(type);}
+        else for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
-        exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); exceptions.enable();
-        Map<String,Object> ready=new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1"));
-        if(diagnosticUnmatchedReturn)ready.put("unmatched_return_policy",UNMATCHED_POLICY);
-        emit(ready,false);
+        exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(exceptions,null,null);
         // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
         // below. Resuming here too can release a later breakpoint suspension
         // before its handler runs, causing a missed exit and a stale return arm.
@@ -723,12 +1083,15 @@ public final class PostingObserver {
             audit("event-set-open",Map.of("size",set.size(),"suspend_policy",set.suspendPolicy()));
             boolean deathObserved=false;
             for (Event event : set) {
-                auditPosition++;
+                auditPosition++;observedEvents++;telemetry();
                 // Emit before dispatch: a guard failure must retain the actual
                 // failing event, live operands and arm, not just its predecessor.
                 auditEvent(event);
                 try {
-                if (event instanceof ClassPrepareEvent prepared) configure(prepared.referenceType());
+                if (event instanceof ClassPrepareEvent prepared) {
+                    if(bounded)emit(new LinkedHashMap<>(Map.of("kind","watched-class-prepare","class",prepared.referenceType().name(),"class_object_id",prepared.referenceType().classObject().uniqueID(),"audit_index",auditIndex)),false);
+                    configure(prepared.referenceType());
+                }
                 else if (event instanceof BreakpointEvent breakpoint) entry(breakpoint);
                 else if (event instanceof MethodExitEvent methodExit) exit(methodExit);
                 else if (event instanceof ExceptionEvent exception) failure(exception);
@@ -739,12 +1102,13 @@ public final class PostingObserver {
                 } else if (event instanceof VMDisconnectEvent) running = false;
                 auditState(event);
                 } catch(Exception failure) {
-                    audit("dispatch-refused",Map.of("exception_class",failure.getClass().getName()));
+                    audit("dispatch-refused",bounded?Map.of("exception_class",failure.getClass().getName(),"context",refusalContext):Map.of("exception_class",failure.getClass().getName()));
                     throw failure;
                 }
             }
             if(deathObserved)emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false);
             if (running) {
+                pruneMirrors();
                 audit("resume-requested",Map.of("scope","event-set"));
                 set.resume();
                 audit("resume-completed",Map.of("scope","event-set"));
@@ -752,11 +1116,21 @@ public final class PostingObserver {
         }
     }
     public static void main(String[] args) throws Exception {
-        if (!(args.length==2 || (args.length==3 && args[2].equals("observer-binding-v2")) ||
-              (args.length==4 && args[2].equals("observer-binding-v2") && args[3].equals(UNMATCHED_POLICY))))
-            throw new IllegalArgumentException("host, port, optional observer-binding-v2 and exact diagnostic policy required");
-        PostingObserver observer=new PostingObserver();observer.bindingV2=args.length>=3;
-        observer.diagnosticUnmatchedReturn=args.length==4;
-        observer.generation.v2=observer.bindingV2;observer.run(args[0],args[1]);
+        PostingObserver observer=new PostingObserver();
+        if(args.length>=3 && Arrays.asList(args).contains(FORMAT)) {
+            Set<String> flags=new HashSet<>(Arrays.asList(args).subList(2,args.length));
+            Set<String> common=Set.of("observer-binding-v2",FORMAT,"native-diagnostics-v1","unmatched-return-cap=10","heap-guard-percent=85","heap-telemetry-interval=1000","pending-cap=512");
+            boolean diagnostic=flags.remove("diagnostic-unmatched-return");
+            boolean strict=flags.remove("strict");
+            if(diagnostic==strict || !flags.equals(common))throw new IllegalArgumentException("exact bounded diagnostics arguments required");
+            observer.boundedMode();observer.nativeDiagnostics=true;observer.diagnosticUnmatchedReturn=diagnostic;
+        } else {
+            if (!(args.length==2 || (args.length==3 && args[2].equals("observer-binding-v2")) ||
+                  (args.length==4 && args[2].equals("observer-binding-v2") && args[3].equals(UNMATCHED_POLICY))))
+                throw new IllegalArgumentException("host, port, optional observer-binding-v2 and exact diagnostic policy required");
+            observer.bindingV2=args.length>=3;observer.diagnosticUnmatchedReturn=args.length==4;
+            observer.generation.v2=observer.bindingV2;
+        }
+        observer.run(args[0],args[1]);
     }
 }

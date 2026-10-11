@@ -1,5 +1,51 @@
 # B06 Oracle engineering mode
 
+## Current decision — October 11, 2026
+
+Howard's October 10, 2026 17:44 PT decision replaces the host-reproduction
+prerequisite with bounded-memory implementation and new native evidence. It does
+**not** lift the October 11 engineering hold. Supervisor, child and execution
+entrypoints still refuse before parsing arguments, opening a signing key or
+calling Docker. No native attempt is authorized by this document.
+
+The next prospective request is exactly **two Oracle-only J1 retained-reference
+attempts**, strict first and diagnostic-unmatched-return second, then stop. Each
+has 3,600 work seconds, 600 cleanup seconds and a 1,800-second candidate timeout.
+Diagnostic mode permits at most 10 accepted empty-pending unmatched returns; all
+other anomalies stop. Neither attempt receives qualification or measurement credit.
+
+Observer resource settings come from `LIMITS`: Java `-Xmx1536m`, container
+`--memory 2048m`, one CPU, telemetry every 1,000 events, an 85% heap guard, and a
+256-entry pending cap. The bounded class catalogue uses 262,144 on-disk slots
+and a 256-entry heap cache in the owned observer state directory. Java explicitly
+uses `-XX:SoftRefLRUPolicyMSPerMB=0` to bound retained JDI soft-cache pressure;
+this is part of the proposed measured runtime, not an unstated host-only setting.
+Audit bounds remain 500,000 records / 128 MiB; ordinary
+evidence remains capped at 50,000 records. The application image remains
+`sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268`.
+Owned observer-only private output receives any OOM dump and guard-stop histogram.
+The signed stop binds the histogram digest and explicitly records capture failure;
+a missing histogram is never reported complete. Signed phase records correlate
+observed generation-entry counts with existing application worker stages, without
+inventing a finer application phase or inferring the cause of a refusal.
+
+A new, separate engineering Ed25519 identity has public fingerprint
+`4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0`.
+Its public key is [engineering.public.pem](calibration/idempiere-ms94/stage-b-06/preparation/engineering.public.pem).
+Only that fingerprint can load through the dedicated engineering signer. The
+qualification key is never reused. Evidence admission rejects this identity even
+if an engineering label is removed or a record relocated.
+
+`instrumented_proposal` prepares an unsigned request binding the implementation
+commit, observer source and compiled hashes, native template hash, fingerprint,
+limits, image, mode sequence, output root, evidence exclusions and actual full-plan
+delivery time. The proposed start must be at least four hours after full-plan
+delivery. Howard must approve that exact request before a separate reviewed change
+could lift the hold; a JSON field or old approval cannot lift it. The old ten-attempt
+calendar below is preserved for history and is not runnable or reusable approval.
+
+## Historical proposal (superseded; preserved)
+
 Status: implementation prepared; native validation and standing approval pending.
 This is a separate, uncredited Oracle-only investigation path based on the strict
 #293 diagnostic observer. It does not use #296's accepted unmatched-return mode.

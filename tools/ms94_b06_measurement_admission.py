@@ -14,6 +14,8 @@ def builder_gate(plan, context):
     refuse_engineering(context)
     check(isinstance(context, dict) and isinstance(plan.get('builder_boundary'), dict),
           'measurement-builder-probe-required')
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(context['public_key'])
     spec = plan['builder_boundary']
     check(spec.get('transport_sha256') == digest(context['transport']),
           'measurement-builder-transport-changed')

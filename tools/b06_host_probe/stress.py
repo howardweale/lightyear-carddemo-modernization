@@ -115,11 +115,12 @@ if __name__ == '__main__':
     parser.add_argument('--timeout', type=int)
     parser.add_argument('--native-volume-memory', action='store_true',
                         help='Measure unchanged observer with 3000 distinct stack classes and return-loss injection')
+    parser.add_argument("--bounded-observer", action="store_true", help="Use the versioned bounded observer on the identical host workload")
     args = parser.parse_args()
     if args.native_volume_memory:
         from tools.b06_host_probe.native_memory import run as memory_run
         memory_run(args.jdk, args.out, iterations=args.iterations if args.iterations is not None else 1400,
-                   timeout=args.timeout if args.timeout is not None else 10800, heap=args.observer_heap_mib)
+                   timeout=args.timeout if args.timeout is not None else 10800, heap=args.observer_heap_mib, bounded=args.bounded_observer)
     else:
         run(args.jdk, args.out, iterations=args.iterations if args.iterations is not None else 800,
             timeout=args.timeout if args.timeout is not None else 600, observer_heap_mib=args.observer_heap_mib)

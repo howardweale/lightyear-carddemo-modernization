@@ -10,6 +10,7 @@ import tempfile
 from lightyear_calibration.contracts import canonical, verify
 from lightyear_control_tower.decisions import verify_envelope
 from tools.ms94_b06_observer_audit import Audit
+from tools.ms94_b06_observer_format import audit_detail
 
 
 def signed(value, key):
@@ -25,36 +26,44 @@ def derive(folder, key):
     for v in (census, failure): signed(v, key)
     if census['complete'] or failure['complete']: raise ValueError('not a failed prefix')
     audit = Audit(); previous = None; digest = hashlib.sha256(); counts = Counter()
-    histories = {}; pending = {}; last_jdi = None; refused = None
-    for index, line in enumerate((folder/'events.jsonl').open('rb'), 1):
-        digest.update(line); row = json.loads(line); verify(row); e = row['event']
-        if row['previous_sha256'] != previous or e['sequence'] != index:
-            raise ValueError('event chain differs')
-        previous = row['content_sha256']; kind = e['kind']; counts[kind] += 1
-        if kind == 'observer-audit':
-            audit.event(e)
-            if e['action'] == 'jdi-event':
-                last_jdi = e; d = e['detail']; thread = d.get('thread_id')
-                if thread is not None:
-                    # A closed structural export. No arguments, values, names or blobs.
-                    keep = ('event_type','request_id','depth','location','top_location',
-                            'selected_generation','return_breakpoint','catch_breakpoint','pending','arm')
-                    item = {k:d[k] for k in keep if k in d}
-                    histories.setdefault(thread, []).append(dict(sequence=index,kind='jdi-event',
-                        event_set_id=e['event_set_id'],event_position=e['event_position'],detail=item))
-                    if d['pending'] != list(reversed(pending.get(thread, []))):
-                        raise ValueError('recorded pending differs from reconstructed lifecycles')
-            elif e['action'] == 'dispatch-refused':
-                if last_jdi is None: raise ValueError('missing refusal context')
-                refused = dict(event_sequence=last_jdi['sequence'], refusal_sequence=index,
-                    thread=last_jdi['detail']['thread_id'], exception_class=e['detail']['exception_class'])
-        elif kind in ('generation-entry','generation-return','generation-unwind'):
-            r=e['record']; thread=r['thread_id']; call=dict(generation_id=r['generation_id'],
-                method=r['entry_method'],depth=r['entry_depth'])
-            stack=pending.setdefault(thread, [])
-            if kind == 'generation-entry': stack.append(call)
-            elif not stack or stack.pop() != call: raise ValueError('generation lifecycle differs')
-            histories.setdefault(thread, []).append(dict(sequence=index,kind=kind,**call))
+    histories = {}; pending = {}; last_jdi = None; refused = None; bounded_pending = False
+    with (folder/'events.jsonl').open('rb') as stream:
+        for index, line in enumerate(stream, 1):
+            digest.update(line); row = json.loads(line); verify(row); e = row['event']
+            if row['previous_sha256'] != previous or e['sequence'] != index:
+                raise ValueError('event chain differs')
+            previous = row['content_sha256']; kind = e['kind']; counts[kind] += 1
+            if kind == 'observer-audit':
+                audit.event(e)  # Authenticate and count the original wire record.
+                e = audit_detail(e)  # Expand only the structural analysis view.
+                if e['action'] == 'jdi-event':
+                    last_jdi = e; d = e['detail']; thread = d.get('thread_id')
+                    if thread is not None:
+                        # A closed structural export. No arguments, values, names or blobs.
+                        keep = ('event_type','request_id','depth','location','top_location',
+                                'selected_generation','return_breakpoint','catch_breakpoint','pending','pending_count','arm')
+                        item = {k:d[k] for k in keep if k in d}
+                        histories.setdefault(thread, []).append(dict(sequence=index,kind='jdi-event',
+                            event_set_id=e['event_set_id'],event_position=e['event_position'],detail=item))
+                        expected = list(reversed(pending.get(thread, [])))
+                        if 'pending_count' in d:
+                            bounded_pending = True
+                            if type(d['pending_count']) is not int or d['pending_count'] != len(expected):
+                                raise ValueError('recorded pending count differs from reconstructed lifecycles')
+                            expected = [call['generation_id'] for call in expected[:1]]
+                        if d['pending'] != expected:
+                            raise ValueError('recorded pending differs from reconstructed lifecycles')
+                elif e['action'] == 'dispatch-refused':
+                    if last_jdi is None: raise ValueError('missing refusal context')
+                    refused = dict(event_sequence=last_jdi['sequence'], refusal_sequence=index,
+                        thread=last_jdi['detail']['thread_id'], exception_class=e['detail']['exception_class'])
+            elif kind in ('generation-entry','generation-return','generation-unwind'):
+                r=e['record']; thread=r['thread_id']; call=dict(generation_id=r['generation_id'],
+                    method=r['entry_method'],depth=r['entry_depth'])
+                stack=pending.setdefault(thread, [])
+                if kind == 'generation-entry': stack.append(call)
+                elif not stack or stack.pop() != call: raise ValueError('generation lifecycle differs')
+                histories.setdefault(thread, []).append(dict(sequence=index,kind=kind,**call))
     if not refused or not audit.refused: raise ValueError('no recorded refusal')
     if (digest.hexdigest()!=census['event_file_sha256'] or index!=census['event_count'] or
         index!=failure['event_count'] or previous!=census['last_event_sha256'] or
@@ -66,18 +75,21 @@ def derive(folder, key):
                  [row['detail'][k]['class'] for k in ('location','top_location') if k in row['detail']])
         if any(not n.startswith('java.lang.') for n in names):
             raise ValueError('public fixture contains non-JDK location')
+    limits = ({'pending_proof': 'count-and-top-summary-only; omitted pending entries are not witnessed'}
+              if bounded_pending else {})
     return dict(schema='b06-captured-refusal/1',source_event_sha256=digest.hexdigest(),
         census_sha256=census['content_sha256'],failure_sha256=failure['content_sha256'],
         event_count=index,counts=dict(counts),audit_records=audit.count,**refused,
         thread_events=rows,remaining_open_calls=sum(map(len,pending.values())),
-        target_jvm_executed=False,tracker_fix_proven=False,native_credit=False)
+        target_jvm_executed=False,tracker_fix_proven=False,native_credit=False,**limits)
 
 
 def reproduce(fixture, source, jdk):
     """Run the real Java guard against its captured operands, no target JVM/JDI session."""
     e=fixture['thread_events'][-1]; d=e['detail']
     if (e['sequence']!=fixture['event_sequence'] or d['event_type']!='breakpoint' or
-        not d['return_breakpoint'] or not d['selected_generation'] or d['pending'] or 'arm' in d or
+        not d['return_breakpoint'] or not d['selected_generation'] or d['pending'] or
+        d.get('pending_count', 0) != 0 or 'arm' in d or
         d['location']!=d['top_location']):
         raise ValueError('fixture is not the captured empty-pending return refusal')
     loc=d['location']; source=Path(source); jdk=Path(jdk)

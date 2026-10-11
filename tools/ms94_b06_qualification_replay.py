@@ -10,6 +10,8 @@ from tools.ms94_b06_admission import check, bound_file, replay_entry, replay_clo
 
 
 def signed(path, key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(key)
     record = read_json(path)
     check(verify_envelope(record, key), 'qualification-signature-invalid')
     return record

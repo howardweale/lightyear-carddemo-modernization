@@ -1,4 +1,4 @@
-"""Oracle-only adapter; imports #293 observer unchanged. Never a pair adapter."""
+"""Oracle-only adapter with approval-bound observer diagnostics. Never a pair adapter."""
 import secrets
 import time
 from pathlib import Path
@@ -40,6 +40,8 @@ class OracleEngineeringRunner(ObservedRunner):
         self.emit('stage', dict(stage=stage, real_utc=now().isoformat()))
 
     def worker(self, command, payload, timeout):
+        from tools.ms94_b06_engineering import require_execution_ready
+        require_execution_ready()
         require(payload.get('lane') == 'oracle', 'oracle-only')
         return super().worker(command, payload, min(timeout, max(1, self.deadline-time.monotonic())))
 
@@ -50,6 +52,10 @@ class OracleEngineeringRunner(ObservedRunner):
         (self.run/'resources.json').write_bytes(canonical(dict(**LABEL, resources=self.resources)))
 
     def prepare(self, case='operations', attempt=1):
+        from tools.ms94_b06_engineering import require_execution_ready, validate_run_binding
+        require_execution_ready()
+        record=validate_run_binding(self.run,self.approval,self.plan)
+        guard(self.approval,starting=True,attempt_number=record['run_number'])
         require(case == 'operations' and attempt == 1, 'retained-reference-only')
         self.checkpoint('prepare-oracle')
         prefix = self.owner+'-operations-1'
@@ -60,12 +66,12 @@ class OracleEngineeringRunner(ObservedRunner):
         self.names = dict(oracle=prefix+'-oracle')
         database = self.names['oracle']; self.remember('container', database)
         docker('create','--name',database,'--label',self.label,'--network',self.network,
-               '--network-alias','oracle','--memory','6g','--cpus','2',
+               '--network-alias','oracle','--memory',str(LIMITS['database_memory_mib'])+'m','--cpus',str(LIMITS['database_cpus']),
                '--security-opt','no-new-privileges',self.plan['declaration']['environment']['engines']['oracle']['image_digest'])
         docker('start',database)
         self.runner = prefix+'-runner'; self.remember('container', self.runner)
         docker('create','--name',self.runner,'--label',self.label,'--network',self.network,
-               '--memory','8g','--cpus','4','--cap-drop','ALL','--security-opt','no-new-privileges',
+               '--memory',str(LIMITS['carrier_memory_mib'])+'m','--cpus',str(LIMITS['carrier_cpus']),'--cap-drop','ALL','--security-opt','no-new-privileges',
                '--tmpfs','/secrets:rw,noexec,nosuid,size=268435456',
                '--mount',f'type=bind,src={self.root / "src"},dst=/verifier/src,readonly',
                '--mount',f'type=bind,src={self.run},dst=/output',self.plan['local']['runner_image'])

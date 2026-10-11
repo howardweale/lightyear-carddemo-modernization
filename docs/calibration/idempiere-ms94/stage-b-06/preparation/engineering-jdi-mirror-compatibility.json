@@ -1,0 +1,67 @@
+{
+  "all_pins_match": true,
+  "artifact_type": "b06-preserved-public-jdi-compatibility/1",
+  "checked_at_utc": "2026-10-11T14:49:25.929075+00:00",
+  "classes": [
+    {
+      "actual_blob_sha256": "ff54285e8868622c148d0bced1ecca42983030da6c7a7a3b29ccdf8a42b669b7",
+      "adapter_pin_sha256": "ff54285e8868622c148d0bced1ecca42983030da6c7a7a3b29ccdf8a42b669b7",
+      "class_name": "com.sun.tools.jdi.ClassTypeImpl",
+      "manifest_sha256": "ff54285e8868622c148d0bced1ecca42983030da6c7a7a3b29ccdf8a42b669b7",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "8ba1eb2830d3bc480220634b508d23929bd8a098d746b288b4d856c60c0ecce8",
+      "adapter_pin_sha256": "8ba1eb2830d3bc480220634b508d23929bd8a098d746b288b4d856c60c0ecce8",
+      "class_name": "com.sun.tools.jdi.EventSetImpl",
+      "manifest_sha256": "8ba1eb2830d3bc480220634b508d23929bd8a098d746b288b4d856c60c0ecce8",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "ae52d68eac3adbc8dc479d2a02c2b5ca2b80280ba0b3b71cf1ec94aff56fec44",
+      "adapter_pin_sha256": "ae52d68eac3adbc8dc479d2a02c2b5ca2b80280ba0b3b71cf1ec94aff56fec44",
+      "class_name": "com.sun.tools.jdi.InterfaceTypeImpl",
+      "manifest_sha256": "ae52d68eac3adbc8dc479d2a02c2b5ca2b80280ba0b3b71cf1ec94aff56fec44",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "5e4e8a24662ccfe16bd1b895c0896b62d10f874ccd5627aba47193bf645fcf43",
+      "adapter_pin_sha256": "5e4e8a24662ccfe16bd1b895c0896b62d10f874ccd5627aba47193bf645fcf43",
+      "class_name": "com.sun.tools.jdi.InternalEventHandler",
+      "manifest_sha256": "5e4e8a24662ccfe16bd1b895c0896b62d10f874ccd5627aba47193bf645fcf43",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "2fafad3289570b560a24bd2733ea2c93fcacf78ebbcbcf227999f4b543273b5b",
+      "adapter_pin_sha256": "2fafad3289570b560a24bd2733ea2c93fcacf78ebbcbcf227999f4b543273b5b",
+      "class_name": "com.sun.tools.jdi.MethodImpl",
+      "manifest_sha256": "2fafad3289570b560a24bd2733ea2c93fcacf78ebbcbcf227999f4b543273b5b",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "53ad89c11c3b782d6342f9fc3ff65313a99aa0b499c39c4e3d1cf307cc41a718",
+      "adapter_pin_sha256": "53ad89c11c3b782d6342f9fc3ff65313a99aa0b499c39c4e3d1cf307cc41a718",
+      "class_name": "com.sun.tools.jdi.ReferenceTypeImpl",
+      "manifest_sha256": "53ad89c11c3b782d6342f9fc3ff65313a99aa0b499c39c4e3d1cf307cc41a718",
+      "matched": true
+    },
+    {
+      "actual_blob_sha256": "8796f85b3a7181d6db9e79831f67b8606345482e4dbb739e0f4a0ed789a4e10a",
+      "adapter_pin_sha256": "8796f85b3a7181d6db9e79831f67b8606345482e4dbb739e0f4a0ed789a4e10a",
+      "class_name": "com.sun.tools.jdi.VirtualMachineImpl",
+      "manifest_sha256": "8796f85b3a7181d6db9e79831f67b8606345482e4dbb739e0f4a0ed789a4e10a",
+      "matched": true
+    }
+  ],
+  "content_sha256": "0ced07a3f034b126a805bb6ea6747da95fb1bf2ccccb9d2c483292841819f2ce",
+  "docker_calls": 0,
+  "image": "sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268",
+  "jdk_module_origin": "/opt/java/openjdk/lib/modules",
+  "live_runtime_verified": false,
+  "manifest_sha256": "2b4bf062bc205bb9081f54814fcbb756069ca0b6ff6bedbbec6d0d3e5e6cbe08",
+  "measurement_credit": false,
+  "native_attempts": 0,
+  "public_class_blob_hashes_verified": 7,
+  "qualification_credit": false,
+  "review_scope": "operator read-only verification of preserved public class bytes; runtime constructor must verify again"
+}

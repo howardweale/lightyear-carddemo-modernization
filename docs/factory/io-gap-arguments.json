@@ -1,0 +1,72 @@
+{
+  "schema": "factory-io-gap-arguments/1",
+  "status": "proposed-for-operator-review",
+  "gaps": [
+    {
+      "program": "CBACT04C",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "outcome_id": "legacy:cobol-decision:CBACT04C:189:671",
+      "line": 189,
+      "outcome": "false",
+      "classification": "io-handling",
+      "argument": "The flag is initialized to N and assigned only Y. TEST BEFORE PERFORM UNTIL flag=Y admits only N; the first IF tests N before the READ that can set Y. Therefore its false edge cannot occur under this pinned program and declared fault seams. This is a source argument, not an observed event or an operator acceptance.",
+      "supporting_source": [
+        {
+          "line": 137,
+          "source": "01  END-OF-FILE             PIC X(01)    VALUE 'N'."
+        },
+        {
+          "line": 188,
+          "source": "PERFORM UNTIL END-OF-FILE = 'Y'"
+        },
+        {
+          "line": 189,
+          "source": "IF  END-OF-FILE = 'N'"
+        },
+        {
+          "line": 191,
+          "source": "IF  END-OF-FILE = 'N'"
+        },
+        {
+          "line": 340,
+          "source": "MOVE 'Y' TO END-OF-FILE"
+        }
+      ],
+      "denominator_excluded": false,
+      "operator_accepted": false
+    },
+    {
+      "program": "CBTRN02C",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "outcome_id": "legacy:cobol-decision:CBTRN02C:203:684",
+      "line": 203,
+      "outcome": "false",
+      "classification": "io-handling",
+      "argument": "The flag is initialized to N and assigned only Y. TEST BEFORE PERFORM UNTIL flag=Y admits only N; the first IF tests N before the READ that can set Y. Therefore its false edge cannot occur under this pinned program and declared fault seams. This is a source argument, not an observed event or an operator acceptance.",
+      "supporting_source": [
+        {
+          "line": 146,
+          "source": "01  END-OF-FILE             PIC X(01)    VALUE 'N'."
+        },
+        {
+          "line": 202,
+          "source": "PERFORM UNTIL END-OF-FILE = 'Y'"
+        },
+        {
+          "line": 203,
+          "source": "IF  END-OF-FILE = 'N'"
+        },
+        {
+          "line": 205,
+          "source": "IF  END-OF-FILE = 'N'"
+        },
+        {
+          "line": 361,
+          "source": "MOVE 'Y' TO END-OF-FILE"
+        }
+      ],
+      "denominator_excluded": false,
+      "operator_accepted": false
+    }
+  ]
+}

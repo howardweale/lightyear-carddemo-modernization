@@ -56,6 +56,26 @@ class FactoryReviewTests(unittest.TestCase):
     self.assertEqual(row['id'],proof['mutant_id']);self.assertTrue(proof['supporting_source_lines'])
    with self.assertRaisesRegex(ValueError,'source-changed'):argument(text+'\n',p,proofs[0][0])
 
+ def test_close_fault_challenge_follows_callee_and_preserves_same_paragraph(self):
+  from tools.check_factory_review import relevant_faults
+  p='CBTRN02C';text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text();inv=inventory(text,p)
+  faults=[dict(declaration=d,expectation_met=True) for d in declarations(text,p)]
+  rows=generate(text,p)
+  for line,operator in ((222,'skip-PERFORM'),(606,'delete-MOVE')):
+   mutant=next(r for r in rows if r['line']==line and r['operator']==operator)
+   selected=relevant_faults(mutant,inv,faults)
+   self.assertTrue(selected);self.assertTrue(all(r['declaration']['operation']=='CLOSE' for r in selected))
+
+ def test_binary_equivalence_requires_actual_compiler_layout(self):
+  from lightyear_mainframe.mutant_equivalence import argument
+  for p,line in [('CBACT04C',133),('CBTRN02C',142)]:
+   text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text()
+   row=next(r for r in generate(text,p) if r['operator']=='receiving-size' and r['line']==line)
+   self.assertIsNone(argument(text,p,row))
+   self.assertIsNone(argument(text,p,row,{'S9(9)':8}))
+   proof=argument(text,p,row,{'S9(9)':4,'S9(8)':4,'S9(4)':2,'S9(3)':2})
+   self.assertIn('recorded compiler LENGTH probe',proof['argument'])
+
  def test_fault_mutant_changes_bound_original_not_status_seam(self):
   from lightyear_mainframe.systematic_mutation import apply_derived
   for p in ('CBACT04C','CBTRN02C'):

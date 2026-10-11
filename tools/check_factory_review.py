@@ -2,7 +2,7 @@
 import argparse,json,subprocess
 from collections import Counter
 from pathlib import Path
-from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,build,run,new_output,write_json,receipt
+from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,build,run,new_output,write_json,receipt,execute,FLAGS
 from lightyear_mainframe.scenario_generation import manifest
 from lightyear_mainframe.systematic_mutation import generate,outcome
 from lightyear_mainframe.io_faults import declarations
@@ -33,8 +33,12 @@ def relevant_faults(mutant, inv, rows):
     lines=sorted(p['line'] for p in inv['paragraphs'])
     def paragraph(n):return max((p for p in lines if p<=n),default=0)
     scope=paragraph(mutant['line']) if not mutant.get('source_path') else 0
+    if mutant['operator']=='skip-PERFORM':
+        words=code(mutant['original']).split()
+        target=words[1].rstrip('.') if len(words)>1 else ''
+        scope=next((p['line'] for p in inv['paragraphs'] if p['name']==target),scope)
     selected=[r for r in rows if paragraph(r['declaration']['line'])==scope]
-    if not selected or scope>=600:
+    if not selected:
         selected=[r for r in rows if r['declaration']['kind'] in ('missing','extended-read-error','rewrite-error')]
     # At most one of each status/site family, three bounded derived builds.
     seen=set();result=[]
@@ -44,9 +48,32 @@ def relevant_faults(mutant, inv, rows):
         seen.add(key);result.append(row)
     return result[:3]
 
+def measure_binary_layout(output):
+    folder=output/'binary-layout';folder.mkdir()
+    source="""identification division.
+program-id. layout-probe.
+data division.
+working-storage section.
+01 a pic s9(9) binary.
+01 b pic s9(8) binary.
+01 c pic s9(4) binary.
+01 d pic s9(3) binary.
+procedure division.
+ display function length(a) ' ' function length(b) ' '
+         function length(c) ' ' function length(d)
+ stop run.
+"""
+    (folder/'layout.cob').write_text(source)
+    execute(['cobc','-x','-free',*FLAGS,'layout.cob','-o','layout'],folder,folder/'compile')
+    actual=execute([folder/'layout'],folder,folder/'run').stdout.decode().split()
+    result=dict(zip(('S9(9)','S9(8)','S9(4)','S9(3)'),map(int,actual)))
+    write_json(folder/'measured.json',result)
+    return result
+
+
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
-    build(output/'baseline',instrument=True,jobs=[job]);cases=[s['id'] for s in manifest() if s['job']==job]
+    build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
     from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
     for public,(scope,_) in PUBLIC_SCENARIOS.items():
@@ -74,7 +101,7 @@ def check(output,job):
             display=fault['expected_display'];display_ok=not display or display in transcript
             if display=='LYF-REASON=109':display_ok='LYF-REASON=000000109' in transcript or 'LYF-REASON=109' in transcript
             matched=actual.get('returncode')==fault['expected_returncode'] and display_ok and f"LYF|{fault['id']}|{fault['expected_status']}" in transcript
-            faults.append(dict(declaration=fault,actual=actual,expectation_met=matched))
+            faults.append(dict(declaration=fault,actual=actual,expectation_met=matched,coverage=observe(inv,transcript)))
         except (RuntimeError,ValueError) as e:faults.append(dict(declaration=fault,status='not-compiled',detail=str(e)))
         write_json(output/'fault-results.json',faults)
     mutants=generate(text,program);write_json(output/'mutation-inventory.json',mutants);results=[]
@@ -110,13 +137,13 @@ def check(output,job):
                     record['fault_challenges'].append(attempt_row)
                     if record['status']!='survived':break
             if record['status']=='survived':
-                proof=argument(text,program,mutant)
+                proof=argument(text,program,mutant,compiler_layout)
                 if proof:record.update(status='equivalent (argued, listed)',disposition=proof)
                 else:record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
         results.append(record);write_json(output/'mutation-results.json',results)
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
-        fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
+        compiler_binary_layout=compiler_layout,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
         eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']}",
         unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],

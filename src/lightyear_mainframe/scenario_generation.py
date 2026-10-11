@@ -47,13 +47,13 @@ def manifest():
     # The half-cent boundary for rate 15% is balance .40; adjacent cents straddle it.
     for amount in ('0.39','0.40','0.41','0.79','0.80','0.81','-0.39','-0.40','-0.41'):
         add('INTCALC','round-'+amount.replace('-','n').replace('.','_'),'rounding-boundary','CBACT04C:464 truncation versus ROUNDED',balance=amount,rate='15.00')
-    add('INTCALC','large-rate','boundary','receiving monthly/total integer width',balance='999999999.99',rate='999.99')
-    for name in ('empty','two-categories','two-accounts','missing-disclosure','missing-account','missing-xref','duplicate-category'):
+    add('INTCALC','large-rate','boundary','receiving monthly/total integer width',balance='999999999.99',rate='999.99',variant='two-accounts')
+    for name in ('empty','two-categories','two-accounts','three-accounts','default-disclosure','missing-disclosure','missing-account','missing-xref','duplicate-category'):
         add('INTCALC',name,'cross-record','account/category/final/empty/duplicate boundaries',variant=name,balance='10.01',rate='15.00')
     for truth in (False,True):
         witness=solve({'rate':[D('-.01'),D(0),D('.01'),D('15')]},lambda x:(x['rate']!=0)==truth)
         add('INTCALC','solver-rate-'+str(truth).lower(),'decision-directed-finite-solver','CBACT04C:214 '+str(truth),rate=str(witness['witness']['rate']),balance='10.01',solver={**witness,'witness':{'rate':str(witness['witness']['rate'])}})
-    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','large-amount'):
+    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','large-amount','cycle-debit','invalid-then-valid','new-then-existing','expiry-next-day','expiry-equal-dash'):
         add('POSTTRAN',name,'boundary-or-cross-record','CBTRN02C validation/posting/EOF',variant=name)
     for truth in (False,True):
         witness=solve({'amount':[D('999.99'),D('1000'),D('1000.01')]},lambda x:(D('1000')>=x['amount'])==truth)
@@ -79,9 +79,9 @@ def case(identifier):
     meta=dict(meta,public_input_variant=identifier)
     def render(rows):return b''.join((r.render()+'\n').encode('ascii') for r in rows)
     if job=='INTCALC':
-        accounts=[Account.parse(s) for s in images['ACCTFILE'].decode().splitlines()][:2]
+        accounts=[Account.parse(s) for s in images['ACCTFILE'].decode().splitlines()][:3 if p.get('variant')=='three-accounts' else 2]
         accounts=[replace(a,current_balance=D('10'),group_id='DIRECT    ') for a in accounts]
-        xrefs=[CardXref.parse(s) for s in images['XREFFILE'].decode().splitlines()][:2]
+        xrefs=[CardXref.parse(s) for s in images['XREFFILE'].decode().splitlines()][:3 if p.get('variant')=='three-accounts' else 2]
         balances=[CategoryBalance(accounts[0].account_id,'01','0001',D(p['balance']))]
         disclosures=[Disclosure('DIRECT    ','01','0001',D(p['rate']))]
         variant=p.get('variant')
@@ -89,7 +89,9 @@ def case(identifier):
         if variant=='two-categories':
             balances.append(replace(balances[0],category_code='0002'))
             disclosures.append(replace(disclosures[0],category_code='0002'))
-        if variant=='two-accounts':balances.append(replace(balances[0],account_id=accounts[1].account_id))
+        if variant in ('two-accounts','three-accounts'):balances.append(replace(balances[0],account_id=accounts[1].account_id))
+        if variant=='three-accounts':balances.append(replace(balances[0],account_id=accounts[2].account_id))
+        if variant=='default-disclosure':disclosures=[replace(disclosures[0],group_id='DEFAULT   ')]
         if variant=='missing-disclosure':disclosures=[]
         if variant=='missing-account':accounts=[]
         if variant=='missing-xref':xrefs=[]
@@ -117,6 +119,23 @@ def case(identifier):
         if variant=='empty':images['DALYTRAN']=b''
         if variant=='duplicate-id':images['DALYTRAN']*=2
         if variant=='new-category':images['TCATBALF']=b''
+        if variant=='cycle-debit':
+            setfield('ACCTFILE','ACCT-CURR-CYC-CREDIT','1000');setfield('ACCTFILE','ACCT-CURR-CYC-DEBIT','100')
+            setfield('DALYTRAN','DALYTRAN-AMT','100')
+        if variant=='expiry-next-day':
+            setfield('ACCTFILE','ACCT-EXPIRAION-DATE','2022-06-10')
+            setfield('DALYTRAN','DALYTRAN-ORIG-TS','2022-06-11 19:27:53.000000')
+        if variant=='expiry-equal-dash':
+            setfield('ACCTFILE','ACCT-EXPIRAION-DATE','2022-06-10')
+            setfield('DALYTRAN','DALYTRAN-ORIG-TS','2022-06-10-19.27.53.000000')
+        if variant in ('invalid-then-valid','new-then-existing'):
+            first=images['DALYTRAN']
+            setfield('DALYTRAN','DALYTRAN-ID','0000000000683581');second=images['DALYTRAN']
+            images['DALYTRAN']=first
+            if variant=='invalid-then-valid':setfield('DALYTRAN','DALYTRAN-CARD-NUM','9999999999999999')
+            else:setfield('DALYTRAN','DALYTRAN-CAT-CD','9999')
+            images['DALYTRAN']+=second
+
     return job,meta,images,{**spec,'input_sha256':{dd:sha(raw) for dd,raw in images.items()}}
 
 

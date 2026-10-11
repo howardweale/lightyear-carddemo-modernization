@@ -22,6 +22,16 @@ def assess(adequacy,threshold,compared_fields):
             split=adequacy['coverage_by_class']
             if fraction(split['business-logic']['fraction'])<fraction(threshold['business_logic_outcomes']):reasons.append('business-outcomes-below-threshold')
             mutants=adequacy['systematic_mutation']
+            counts=mutants['counts']
+            names=('killed-divergent','killed-failure','survived','not-compiled','equivalent (argued, listed)')
+            if set(counts)!=set(names) or any(type(v)!=int or v<0 for v in counts.values()):raise ValueError('mutant-counts')
+            eligible=sum(counts.values())-counts['equivalent (argued, listed)']
+            killed=counts['killed-divergent']+counts['killed-failure']
+            if (mutants['eligible_count']!=eligible or mutants['excluded_equivalents']!=counts['equivalent (argued, listed)']
+                or len(mutants['unresolved_survivors'])!=counts['survived'] or len(mutants['not_compiled'])!=counts['not-compiled']
+                or adequacy['legacy_mutants_killed']!=f'{killed}/{eligible}'):raise ValueError('mutant-denominator-binding')
+            dispositions=mutants['equivalent_dispositions']
+            if len({d['mutant_id'] for d in dispositions})!=len(dispositions) or any(not d.get('argument') or not d.get('source_sha256') for d in dispositions):raise ValueError('mutant-equivalence-binding')
             if mutants['eligible_count']<threshold['minimum_systematic_mutants']:reasons.append('systematic-mutant-set-too-small')
             if mutants.get('unresolved_survivors'):reasons.append('unresolved-mutant-survivors')
             if mutants.get('not_compiled'):reasons.append('uncompiled-mutants-require-review')

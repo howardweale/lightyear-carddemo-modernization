@@ -649,29 +649,83 @@ public final class PostingObserver {
         }
         if(line){out.write('\n');out.flush();}
     }
-    // Lossless per-detail compression; both decompressed and wire buffers are bounded.
-    // This serializes the detail once, not a second pass merely to count audit bytes.
-    private Object packedDetail(Object detail)throws Exception {
-        ByteArrayOutputStream raw=new ByteArrayOutputStream(4096);
-        OutputStream limited=new FilterOutputStream(raw){
-            public void write(int value)throws IOException {if(raw.size()>=256*1024)throw new IOException("diagnostic detail size bound");out.write(value);}
-            public void write(byte[] values,int off,int len)throws IOException {if(raw.size()+len>256*1024)throw new IOException("diagnostic detail size bound");out.write(values,off,len);}
-        };
-        Writer writer=new OutputStreamWriter(limited,StandardCharsets.UTF_8);writeJson(writer,detail,false);writer.flush();
-        ByteArrayOutputStream packed=new ByteArrayOutputStream();
-        try(var zip=new java.util.zip.DeflaterOutputStream(packed)){raw.writeTo(zip);}
-        return Map.of("encoding","deflate-json-v1","base64",Base64.getEncoder().encodeToString(packed.toByteArray()),
-            "bytes",raw.size(),"sha256",hash(raw.toByteArray()));
+    // d3 is stateless and lossless. Its preset dictionary contains only fixed
+    // public JDK templates and synthetic zeros, never target or prior-event data.
+    private static final class DiagnosticDictionary {
+        static final byte[] BYTES=build();
+        private static Map<String,Object> object(Object... fields) {
+            Map<String,Object> out=new LinkedHashMap<>();
+            for(int i=0;i<fields.length;i+=2)out.put((String)fields[i],fields[i+1]);return out;
+        }
+        private static void permutations(Map<String,Object> location,List<String> keys,List<String> prefix,List<Object> out) {
+            if(keys.isEmpty()) {
+                Map<String,Object> copy=new LinkedHashMap<>();for(String key:prefix)copy.put(key,location.get(key));out.add(copy);return;
+            }
+            for(String key:keys) {
+                var rest=new ArrayList<>(keys);rest.remove(key);var next=new ArrayList<>(prefix);next.add(key);
+                permutations(location,rest,next,out);
+            }
+        }
+        private static byte[] build() {
+            String[][] locations={
+                {"java.lang.invoke.InnerClassLambdaMetafactory","spinInnerClass","()Ljava/lang/Class;"},
+                {"java.lang.invoke.MethodHandles$Lookup$ClassDefiner","defineClass","(ZLjava/lang/Object;)Ljava/lang/Class;"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateCustomizedCodeBytes","()[B"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateLambdaFormInterpreterEntryPointBytes","()[B"},
+                {"java.lang.invoke.InvokerBytecodeGenerator","generateNamedFunctionInvokerImpl","(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MemberName;"}};
+            List<Object> patterns=new ArrayList<>();
+            for(String[] row:locations) {
+                Map<String,Object> location=object("class",row[0],"method",row[1],"signature",row[2],"code_index",0);
+                permutations(location,new ArrayList<>(location.keySet()),List.of(),patterns);
+                for(String action:List.of("created","enabled","disabled","deleted"))
+                    patterns.add(object("action",action,"request_id",0,"location",location,"request_kind","breakpoint",
+                        "thread_filter",0,"monotonic_ns",0,"audit_index",0,"observer_format",FORMAT));
+                for(boolean armed:new boolean[]{false,true}) {
+                    Map<String,Object> detail=object("event_type","breakpoint","request_id",0,"thread_id",0,
+                        "thread_name_sha256","0".repeat(64),"location",location,"depth",0,"top_location",location,
+                        "selected_generation",true,"return_breakpoint",armed,"catch_breakpoint",false,
+                        "pending_count",armed?1:0,"pending",armed?List.of(0):List.of(),"set_size",1,"suspend_policy",2);
+                    if(armed)detail.put("arm",object("request_id",0,"method",row[0]+"."+row[1]+row[2],"depth",0,"generation_id",0));
+                    patterns.add(object("policy","structural-jdi-v2","audit_index",0,"event_set_id",0,"event_position",0,
+                        "action","jdi-event","detail",detail,"observer_format",FORMAT));
+                }
+            }
+            patterns.add(object("policy","structural-jdi-v2","audit_index",0,"event_set_id",0,"event_position",0,
+                "action","event-set-close","detail",object("dispatch_completed",1,"resume_requested",1,"resume_completed",1),"observer_format",FORMAT));
+            try {
+                StringWriter writer=new StringWriter();writeJson(writer,patterns,false);
+                byte[] bytes=writer.toString().getBytes(StandardCharsets.UTF_8);
+                return Arrays.copyOfRange(bytes,Math.max(0,bytes.length-32768),bytes.length);
+            }catch(IOException failure){throw new ExceptionInInitializerError(failure);}
+        }
     }
-    private long emitDiagnostic(Map<String,Object> record)throws Exception {
-        if(record.get("detail") instanceof Map<?,?> detail && detail.containsKey("thread_id") && "jdi-event".equals(record.get("action")))record.put("detail",packedDetail(record.get("detail")));
-        ByteArrayOutputStream buffer=new ByteArrayOutputStream(4096);
-        OutputStream limited=new FilterOutputStream(buffer){
+    private static OutputStream diagnosticLimit(ByteArrayOutputStream buffer) {
+        return new FilterOutputStream(buffer){
             public void write(int value)throws IOException {if(buffer.size()>=256*1024)throw new IOException("diagnostic record size bound");out.write(value);}
             public void write(byte[] values,int off,int len)throws IOException {if(buffer.size()+len>256*1024)throw new IOException("diagnostic record size bound");out.write(values,off,len);}
         };
+    }
+    private static Map<String,Object> diagnosticWire(Map<String,Object> record)throws Exception {
+        // Serialize the logical body once into a bounded buffer. The final wire
+        // record is then serialized once for both byte accounting and output.
+        Map<String,Object> body=new LinkedHashMap<>(record);
+        body.remove("kind");body.remove("sequence");body.remove("checkpoint");
+        ByteArrayOutputStream raw=new ByteArrayOutputStream(4096);
+        Writer writer=new OutputStreamWriter(diagnosticLimit(raw),StandardCharsets.UTF_8);
+        writeJson(writer,body,false);writer.flush();
+        ByteArrayOutputStream packed=new ByteArrayOutputStream(4096);
+        var deflater=new java.util.zip.Deflater();deflater.setDictionary(DiagnosticDictionary.BYTES);
+        try(var zip=new java.util.zip.DeflaterOutputStream(packed,deflater)){raw.writeTo(zip);}
+        finally{deflater.end();}
+        Map<String,Object> wire=new LinkedHashMap<>();
+        wire.put("kind",record.get("kind"));wire.put("sequence",record.get("sequence"));wire.put("checkpoint",false);
+        wire.put("d3",Base64.getEncoder().encodeToString(packed.toByteArray()));return wire;
+    }
+    private long emitDiagnostic(Map<String,Object> record)throws Exception {
         record.put("sequence",++sequence);record.put("checkpoint",false);record.put("observer_format",FORMAT);
-        Writer writer=new OutputStreamWriter(limited,StandardCharsets.UTF_8);writeJson(writer,record,false);writer.flush();
+        Map<String,Object> wire="dispatch-refused".equals(record.get("action"))?record:diagnosticWire(record);
+        ByteArrayOutputStream buffer=new ByteArrayOutputStream(4096);
+        Writer writer=new OutputStreamWriter(diagnosticLimit(buffer),StandardCharsets.UTF_8);writeJson(writer,wire,false);writer.flush();
         auditBytes+=buffer.size();diagnosticRecords++;
         if(diagnosticRecords>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)throw new IllegalStateException("observer structural audit bound exceeded");
         buffer.writeTo(System.out);System.out.write('\n');System.out.flush();return sequence;

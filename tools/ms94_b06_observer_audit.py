@@ -20,15 +20,18 @@ class Audit:
         self.vm_died = False
 
     def metadata(self, event):
-        from tools.ms94_b06_observer_format import java_json, FORMAT
+        from tools.ms94_b06_observer_format import java_json, FORMAT, diagnostic_wire
+        wire = event; event = diagnostic_wire(event)
         check(event.get('observer_format') == FORMAT and event.get('checkpoint') is False and
               event['kind'] in ('breakpoint-lifecycle','watched-class-prepare','observer-heap-telemetry'),
               'observer-diagnostic-metadata')
         self.diagnostic_count += 1
-        self.bytes += len(java_json(event).encode('utf-8'))
+        self.bytes += len(java_json(wire).encode('utf-8'))
         check(self.diagnostic_count <= MAX_EVENTS and self.bytes <= MAX_BYTES, 'observer-audit-bound')
 
     def event(self, event):
+        from tools.ms94_b06_observer_format import diagnostic_wire
+        wire = event; event = diagnostic_wire(event)
         check(not self.refused, 'observer-audit-after-refusal')
         policy = event.get('policy')
         check(policy in POLICIES and self.policy in (None, policy), 'observer-audit-policy-change')
@@ -44,7 +47,7 @@ class Audit:
         body = {k: v for k, v in event.items() if k not in ('sequence', 'checkpoint')}
         if bounded:
             from tools.ms94_b06_observer_format import java_json
-            self.bytes += len(java_json(event).encode('utf-8'))
+            self.bytes += len(java_json(wire).encode('utf-8'))
         else:
             self.bytes += len(canonical(body))
         check(self.diagnostic_count <= MAX_EVENTS and self.bytes <= MAX_BYTES, 'observer-audit-bound')

@@ -1,7 +1,7 @@
 import base64
 import copy
 import unittest
-from tools.ms94_b06_observer_format import normalize, FORMAT
+from tools.ms94_b06_observer_format import normalize, FORMAT, diagnostic_wire
 from tools.ms94_b06_observer_v2 import Replay
 from tools.ms94_b06_observer_audit import Audit
 from test_b06_observer_audit import record
@@ -97,6 +97,6 @@ class BoundedHostTests(unittest.TestCase):
                     self.assertEqual(observed.returncode,0,observed.stderr)
                     audit.complete()
                     self.assertTrue(any(e['kind']=='class-definition-v3' for e in events))
-                    self.assertTrue(any(e['kind']=='breakpoint-lifecycle' and e['action']=='deleted' for e in events))
+                    self.assertTrue(any(e['kind']=='breakpoint-lifecycle' and diagnostic_wire(e)['action']=='deleted' for e in events))
                     self.assertTrue(all('stack' not in e['record'] for e in events if e['kind']=='generation-return'))
                     self.assertEqual(sum(e['kind']=='generation-entry' for e in events),sum(e['kind']=='generation-return' for e in events))

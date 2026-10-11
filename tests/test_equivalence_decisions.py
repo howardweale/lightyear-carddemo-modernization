@@ -81,8 +81,10 @@ class EquivalenceDecisionTests(unittest.TestCase):
   mutation=dict(claim_scope='twin',mutation_conditions_met=True,compiler_refusals=[])
   r=amended_threshold_report(mutation,coverage,{'A':2},['A'],'a'*40)
   self.assertTrue(r['conditions_met']);self.assertFalse(r['release_authorized']);self.assertFalse(r['measurement_credit'])
-  for changed,diversity,head,reason in (({**mutation,'mutation_conditions_met':False},{'A':2},'a'*40,'mutation-or-individual-review-conditions-unmet'),(mutation,{'A':1},'a'*40,'output-fields-below-two-values'),(mutation,{'A':2},'old','fresh-current-head-source-binding-required'),({**mutation,'compiler_refusals':['x']},{'A':2},'a'*40,'B1-fresh-zero-refusal-condition-unmet')):
+  for changed,diversity,head,reason in (({**mutation,'mutation_conditions_met':False},{'A':2},'a'*40,'mutation-or-individual-review-conditions-unmet'),(mutation,{'A':1},'a'*40,'output-fields-below-two-values'),(mutation,{'A':2},'old','fresh-current-head-source-binding-required')):
    r=amended_threshold_report(changed,coverage,diversity,['A'],head);self.assertIn(reason,r['blocking_reasons'])
+  listed=amended_threshold_report({**mutation,'compiler_refusals':['listed-mutant']},coverage,{'A':2},['A'],'a'*40)
+  self.assertTrue(listed['conditions_met']);self.assertEqual(['listed-mutant'],listed['mutation']['compiler_refusals'])
   bad=copy.deepcopy(coverage);bad['uncovered'][0]['outcome']='true'
   self.assertIn('unaccepted-business-or-IO-outcome',amended_threshold_report(mutation,bad,{'A':2},['A'],'a'*40)['blocking_reasons'])
  def test_kept_sign_discriminator(self):

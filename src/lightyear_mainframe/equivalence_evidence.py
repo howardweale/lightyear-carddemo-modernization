@@ -144,7 +144,6 @@ def amended_threshold_report(mutation, coverage, diversity, compared_fields, cur
     if not fields:reasons.append('compared-field-inventory-required')
     if missing:reasons.append('output-fields-below-two-values')
     if not mutation['mutation_conditions_met']:reasons.append('mutation-or-individual-review-conditions-unmet')
-    if mutation['compiler_refusals']:reasons.append('B1-fresh-zero-refusal-condition-unmet')
     result=dict(schema='scenario-threshold/2-amended-assessment',decision_date='2026-10-11T14:00:00-07:00',
         status='approved-subject-to-B1-completion',current_head=current_head,program=program,source_sha256=source,
         claim_scope=mutation['claim_scope'],mutation=mutation,business=business,

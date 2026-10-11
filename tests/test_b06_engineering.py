@@ -26,13 +26,44 @@ class EngineeringTests(unittest.TestCase):
     def test_review_hold_precedes_cli_parsing_signing_and_docker(self):
         from tools.ms94_b06_engineering_run import main as supervisor
         from tools.ms94_b06_engineering_worker import main as worker
-        from tools.ms94_b06_engineering_native import execute
-        for call in (supervisor, worker, lambda: execute(None,None,None,None)):
+        from tools.ms94_b06_engineering_native import execute, OracleEngineeringRunner
+        for call in (supervisor, worker, lambda: execute(None,None,None,None),
+                     lambda: OracleEngineeringRunner.prepare(None),
+                     lambda: OracleEngineeringRunner.worker(None,None,None,None)):
             with self.subTest(call=call), patch('argparse.ArgumentParser.parse_args') as parse, \
                     patch('tools.ms94_b06_engineering_native.docker') as docker:
                 with self.assertRaisesRegex(ValueError,'engineering-on-hold-review-291-302'):
                     call()
                 parse.assert_not_called(); docker.assert_not_called()
+
+    def test_worker_actual_checkout_checked_before_signing_and_native(self):
+        from types import SimpleNamespace
+        from tools import ms94_b06_engineering_worker as w
+        from tools import ms94_b06_engineering_run as supervisor
+        approval={'implementation_commit':'a'*40}
+        args=SimpleNamespace(run=str(self.root/'run'),approval=str(self.root/'approval.json'),
+                             approved_sha256='b'*64,authority='unused',assets='unused')
+        for actual in ('c'*40, ValueError('dirty-implementation')):
+            with self.subTest(actual=actual), patch.object(e,'require_execution_ready'), \
+                    patch('argparse.ArgumentParser.parse_args',return_value=args), \
+                    patch.object(w,'read_json',return_value=approval), \
+                    patch.object(w,'approve_check'),patch.object(w,'guard'), \
+                    patch.object(supervisor,'source_commit',return_value=actual if isinstance(actual,str) else None,
+                                 side_effect=actual if isinstance(actual,Exception) else None) as checkout, \
+                    patch.object(e,'validate_run_binding') as binding, \
+                    patch('tools.ms94_b06_engineering_key.DedicatedEngineeringSigner') as signer, \
+                    patch('tools.ms94_b06_engineering_native.execute') as execute, \
+                    patch.object(w,'write_new') as write:
+                with self.assertRaisesRegex(ValueError,'worker-implementation-commit|dirty-implementation'):
+                    w.main()
+                checkout.assert_called_once_with(Path(w.__file__).resolve().parents[1])
+                binding.assert_not_called();signer.assert_not_called();execute.assert_not_called();write.assert_not_called()
+
+    def test_hold_does_not_block_read_only_owned_cleanup_verification(self):
+        from tools import ms94_b06_engineering_native as n
+        with patch.object(n,'docker',return_value=Mock(stdout='')) as docker:
+            self.assertTrue(n.absence('journey-'+'a'*32))
+        self.assertEqual(docker.call_count,3)
 
     def test_direct_census_and_replay_reject_relocated_engineering_paths(self):
         from tools.ms94_b06_frame_census import census_lane
@@ -151,13 +182,13 @@ class EngineeringTests(unittest.TestCase):
         runner=n.OracleEngineeringRunner(self.root,run,plan,lambda *_:None,self.a)
         runner.checkpoint=Mock();runner.assert_real_runtime=Mock();runner.rotate_passwords=Mock();runner.worker=Mock()
         calls=[]
-        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'):runner.prepare()
+        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'),patch.object(e,'require_execution_ready'):runner.prepare()
         self.assertEqual(set(runner.names),{'oracle'})
         self.assertFalse(any('postgresql' in str(c) or c[:2]==('volume','create') for c in calls))
         creates=[c for c in calls if c[0]=='create'];self.assertEqual(len(creates),2)
         self.assertTrue(all('--memory' in c and '--cpus' in c for c in creates))
         self.assertEqual(runner.worker.call_args.args[1]['lane'],'oracle')
-        with self.assertRaisesRegex(ValueError,'oracle-only'):
+        with patch.object(e,'require_execution_ready'),self.assertRaisesRegex(ValueError,'oracle-only'):
             n.OracleEngineeringRunner.worker(runner,'execute',dict(lane='postgresql'),10)
 
     def test_prepare_failure_always_cleans_owned_resources(self):

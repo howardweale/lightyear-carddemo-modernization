@@ -12,6 +12,9 @@ def main():
     for name in ('assets','run','authority','approval','approved-sha256'): p.add_argument('--'+name,required=True)
     a=p.parse_args(); run=Path(a.run).resolve()
     approval=read_json(Path(a.approval)); approve_check(approval,a.approved_sha256,a.approval); guard(approval)
+    from tools.ms94_b06_engineering_run import source_commit
+    require(source_commit(Path(__file__).resolve().parents[1]) == approval['implementation_commit'],
+            'worker-implementation-commit')
     from tools.ms94_b06_engineering import validate_run_binding
     record=validate_run_binding(run,approval,read_json(run/'plan.json'))
     require(record['approval_sha256']==approval['content_sha256'] and record['owner']==run.name and

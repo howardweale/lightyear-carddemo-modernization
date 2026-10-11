@@ -40,6 +40,8 @@ class OracleEngineeringRunner(ObservedRunner):
         self.emit('stage', dict(stage=stage, real_utc=now().isoformat()))
 
     def worker(self, command, payload, timeout):
+        from tools.ms94_b06_engineering import require_execution_ready
+        require_execution_ready()
         require(payload.get('lane') == 'oracle', 'oracle-only')
         return super().worker(command, payload, min(timeout, max(1, self.deadline-time.monotonic())))
 
@@ -50,6 +52,8 @@ class OracleEngineeringRunner(ObservedRunner):
         (self.run/'resources.json').write_bytes(canonical(dict(**LABEL, resources=self.resources)))
 
     def prepare(self, case='operations', attempt=1):
+        from tools.ms94_b06_engineering import require_execution_ready
+        require_execution_ready()
         require(case == 'operations' and attempt == 1, 'retained-reference-only')
         self.checkpoint('prepare-oracle')
         prefix = self.owner+'-operations-1'

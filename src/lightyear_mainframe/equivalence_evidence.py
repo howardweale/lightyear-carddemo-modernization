@@ -113,6 +113,8 @@ def mutation_threshold_report(fresh, followup, accepted, scope, register):
         approval=approvals.get(identifier)
         individual=bool(approval and approval['source_sha256']==row.get('mutant',{}).get('source_sha256')
                         and not (scope=='zos-facing' and approval['scope']=='host-compiler-scoped'))
+        if individual and approval.get('explicit_zos_scope_basis') and identifier in ('CBACT04C-receiving-size-133-19','CBTRN02C-constant-718-445'):
+            host_only=False
         basis='compiler-proven' if scope=='twin' and row.get('TCE',{}).get('identical') else 'APPL-RESULT-class-proof' if row.get('class_covered') else 'individually-accepted' if individual else None
         if basis and not(scope=='zos-facing' and host_only):excluded.append(dict(id=identifier,basis=basis))
         else:unresolved.append(dict(id=identifier,reason='host-compiler-scoped argument unresolved for z/OS' if host_only and scope=='zos-facing' else 'individual operator review required'))
@@ -123,3 +125,32 @@ def mutation_threshold_report(fresh, followup, accepted, scope, register):
         unresolved_survivors=unresolved,mutation_conditions_met=eligible>=50 and len(killed)*10>=eligible*9 and not unresolved,
         whole_threshold_effective=False,other_requirements=['fresh business/I-O coverage bindings','two values per compared output field','complete B1 review dispositions'],
         release_authorized=False)
+
+
+def amended_threshold_report(mutation, coverage, diversity, compared_fields, current_head):
+    """Assess every October11 amended condition, without authorizing release."""
+    from lightyear_factory.scenario_policy import IO_ACCEPTANCES
+    reasons=[]; program=coverage.get('program'); source=coverage.get('source_sha256')
+    if source!=SOURCES.get(program) or not re.fullmatch(r'[0-9a-f]{40}',current_head):
+        reasons.append('fresh-current-head-source-binding-required')
+    if not coverage.get('instrumented'):reasons.append('instrumented-coverage-required')
+    business=coverage.get('coverage_by_class',{}).get('business-logic',{})
+    if type(business.get('total'))!=int or business['total']<=0 or business.get('covered')!=business['total']:
+        reasons.append('business-outcomes-below-100-percent')
+    accepted={(r['id'],r['outcome']) for r in IO_ACCEPTANCES if r['program']==program and r['source_sha256']==source}
+    gaps=[r for r in coverage.get('uncovered',[]) if r.get('classification')!='io-handling' or (r.get('id'),r.get('outcome')) not in accepted]
+    if gaps:reasons.append('unaccepted-business-or-IO-outcome')
+    fields=sorted(set(compared_fields));missing=[f for f in fields if type(diversity.get(f))!=int or diversity[f]<2]
+    if not fields:reasons.append('compared-field-inventory-required')
+    if missing:reasons.append('output-fields-below-two-values')
+    if not mutation['mutation_conditions_met']:reasons.append('mutation-or-individual-review-conditions-unmet')
+    if mutation['compiler_refusals']:reasons.append('B1-fresh-zero-refusal-condition-unmet')
+    result=dict(schema='scenario-threshold/2-amended-assessment',decision_date='2026-10-11T14:00:00-07:00',
+        status='approved-subject-to-B1-completion',current_head=current_head,program=program,source_sha256=source,
+        claim_scope=mutation['claim_scope'],mutation=mutation,business=business,
+        io=coverage.get('coverage_by_class',{}).get('io-handling'),unaccepted_outcomes=gaps,
+        accepted_uncovered_IO=[r for r in coverage.get('uncovered',[]) if (r.get('id'),r.get('outcome')) in accepted],
+        distinct_values_per_output_field=diversity,compared_fields=fields,below_two_values=missing,
+        conditions_met=not reasons,blocking_reasons=reasons,release_authorized=False,
+        qualification_credit=False,measurement_credit=False)
+    return {**result,'content_sha256':seal(result)}

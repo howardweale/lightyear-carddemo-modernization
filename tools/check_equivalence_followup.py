@@ -8,7 +8,7 @@ import shutil
 import time
 from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,FLAGS,execute,receipt,write_json,sha
 from lightyear_mainframe.systematic_mutation import generate,apply,outcome
-from lightyear_mainframe.equivalence_evidence import appl_result_census,class_covered,register_dependencies,mutation_threshold_report
+from lightyear_mainframe.equivalence_evidence import appl_result_census,class_covered,register_dependencies,mutation_threshold_report,amended_threshold_report
 from lightyear_mainframe.targeted_witness import profile
 from tools.check_factory_review import attempt
 
@@ -105,7 +105,27 @@ def check(campaign,job):
     acceptance=json.loads((ROOT/'docs/factory/equivalence-decision-binding-2026-10-11.json').read_text())
     register=json.loads((ROOT/'docs/factory/keep-or-fix-register.json').read_text())
     scoped={scope:mutation_threshold_report(list(fresh.values()),results,acceptance['accepted_mutants'],scope,register) for scope in ('twin','zos-facing')}
-    write_json(output/'threshold-2-by-scope.json',scoped)
+    # Observe diversity on this same compiled head's ordinary public/generated
+    # baseline outputs, never by borrowing a historical or mutant output receipt.
+    from lightyear_mainframe.records import load_copybook,from_ascii_fixed
+    from lightyear_mainframe.zos_bindings import load_bindings,dataset_binding
+    values={}; layouts={}
+    for dd in (('ACCTFILE','TRANSACT') if job=='INTCALC' else ('ACCTFILE','TRANFILE','DALYREJS','TCATBALF')):
+        layout=load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15',dd)['copybook']);layouts[dd]=layout
+        for f in layout.fields:
+            if not f.filler:values[dd+':'+f.path]=set()
+    for group in ('public','cases'):
+        for folder in sorted((campaign/group).glob('*/after')):
+            for dd,layout in layouts.items():
+                path=folder/dd
+                if not path.exists():continue
+                for record in from_ascii_fixed(layout,path.read_bytes()):
+                    for f in record['fields']:
+                        if not f['filler']:values[dd+':'+f['path']].add(str(f['value']))
+    head=__import__('subprocess').check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip()
+    complete={scope:amended_threshold_report(assessment,current['after_faults'],{k:len(v) for k,v in values.items()},list(values),head)
+              for scope,assessment in scoped.items()}
+    write_json(output/'threshold-2-by-scope.json',complete)
     accepted_ids={r['id'] for r in acceptance['accepted_mutants']}
     for row in results:row['operator_review']='accepted by Howard, AI-assisted stated scope' if row['id'] in accepted_ids else 'not individually accepted'
     write_json(output/'results.json',results)
@@ -115,7 +135,7 @@ def check(campaign,job):
         class_census=census['content_sha256'],fresh_sites=current['mutant_count'],expected_sites={'INTCALC':421,'POSTTRAN':483}[job],
         fresh_refusals=current['not_compiled'],retained_disposition_differences=differences,
         target_cases=sum(r.get('targeted_cases',0) for r in results),target_refutations=sum(r['refuted'] for r in results),
-        individually_reviewable=len(review),threshold_by_scope=scoped,acceptance_decision=acceptance['decision_content_sha256'],compiler_scope='pinned GnuCOBOL twin, never a z/OS compiler proof',
+        individually_reviewable=len(review),threshold_by_scope=complete,acceptance_decision=acceptance['decision_content_sha256'],compiler_scope='pinned GnuCOBOL twin, never a z/OS compiler proof',
         current_head=__import__('subprocess').check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),model_calls=0)
     print(json.dumps(result,indent=2))
     if current['mutant_count']!=result['expected_sites'] or current['not_compiled']:raise AssertionError('B1-fresh-site-count-or-compiler-refusal')

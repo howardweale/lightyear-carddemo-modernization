@@ -40,6 +40,18 @@ jobs:
         run: python -B -m tools.check_factory_review work/factory-review-${{ matrix.job }} ${{ matrix.job }}
       - name: Optimized compiler equivalence and 200-case targeted campaigns
         run: python -B -m tools.check_equivalence_followup work/factory-review-${{ matrix.job }} ${{ matrix.job }}
+      - name: Preserve compact public review records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-review-records-${{ matrix.job }}
+          path: |
+            work/factory-review-${{ matrix.job }}/review-summary.json
+            work/factory-review-${{ matrix.job }}/mutation-results.json
+            work/factory-review-${{ matrix.job }}/generation-inventory.json
+            work/factory-review-${{ matrix.job }}/fault-results.json
+            work/factory-review-${{ matrix.job }}/equivalence-followup/*.json
+          retention-days: 14
       - name: Preserve every refusal and survivor
         if: always()
         uses: actions/upload-artifact@v4

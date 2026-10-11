@@ -39,6 +39,7 @@
     {
       "accepted_by": "Howard",
       "accepted_on": "2026-10-11",
+      "explicit_zos_scope_basis": "A1 Appendix1 explicitly accepts S9(9)/S9(8) as four bytes on GnuCOBOL and z/OS with small values.",
       "id": "CBACT04C-receiving-size-133-19",
       "independent_human_attestation": false,
       "review_class": "AI-assisted operator review",
@@ -174,6 +175,7 @@
     {
       "accepted_by": "Howard",
       "accepted_on": "2026-10-11",
+      "explicit_zos_scope_basis": "A1 Appendix1 explicitly accepts the unsigned -1 byte overwrite argument as the same on z/OS.",
       "id": "CBTRN02C-constant-718-445",
       "independent_human_attestation": false,
       "review_class": "AI-assisted operator review",
@@ -185,5 +187,6 @@
   "decision_file": "docs/factory/howard-decisions-2026-10-11b.json",
   "decision_file_sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4",
   "review_class": "AI-assisted operator review accepted by Howard; not independent human attestation",
-  "schema": "factory-equivalence-decision-binding/1"
+  "schema": "factory-equivalence-decision-binding/1",
+  "scope_note": "The two explicit Appendix1 z/OS-facing scope acceptances are recorded prospectively; other host assumptions are not broadened and the TWO-BYTES deletion stays host-only."
 }

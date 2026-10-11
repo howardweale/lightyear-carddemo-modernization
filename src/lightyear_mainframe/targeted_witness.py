@@ -40,6 +40,8 @@ def case(identifier):
     if not 0<=index<200:raise ValueError('target-witness-bound')
     rng=random.Random(SEED+job+kind+str(index))
     base='intcalc-three-accounts' if job=='INTCALC' else 'posttran-positive'
+    if job=='POSTTRAN' and kind=='status-path':
+        base=('posttran-positive','posttran-invalid-then-valid','posttran-new-then-existing','posttran-missing-card','posttran-missing-account')[index%5]
     _,meta,images,_=curated(base);images=dict(images);meta=dict(meta)
     changes=[]
     def field(dd,name,value):
@@ -54,7 +56,24 @@ def case(identifier):
         for start in range(0,len(rows),layout.record_length+1):rows[start+item.offset:start+item.offset+item.length]=raw
         images[dd]=bytes(rows);changes.append(dict(dataset=dd,field=name,value=str(value)))
     if kind=='xref-suffix':
+        if job=='POSTTRAN':
+            # Keep the selected transaction's foreign-key chain coherent while
+            # changing the exact receiving account suffix claimed irrelevant.
+            from .posttran_invariants import records
+            card=records(images,'DALYTRAN')[0]['DALYTRAN-CARD-NUM']
+            xrefs=records(images,'XREFFILE'); xi=next(i for i,r in enumerate(xrefs) if r['XREF-CARD-NUM']==card)
+            aid=xrefs[xi]['XREF-ACCT-ID']; ai=next(i for i,r in enumerate(records(images,'ACCTFILE')) if r['ACCT-ID']==aid)
+            for dd,ordinal in [('XREFFILE',xi),('ACCTFILE',ai)]:
+                size=load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15',dd)['copybook']).record_length+1
+                images[dd]=images[dd][ordinal*size:(ordinal+1)*size]
+            images['TCATBALF']=b''
+            field('XREFFILE','XREF-ACCT-ID',100000+index);field('ACCTFILE','ACCT-ID',100000+index)
         field('XREFFILE','XREF-CUST-ID',rng.randint(0,999999999))
+        # The scale mutation reads the first unused suffix byte as fractional
+        # storage; vary it over printable bytes without changing an indexed key.
+        xref=bytearray(images['XREFFILE'])
+        for start in range(0,len(xref),51):xref[start+36]=33+index%94
+        images['XREFFILE']=bytes(xref);changes.append(dict(field='XREF-unused-filler-first-byte',value=33+index%94))
         # INTCALC alternate account lookup must remain coherent with balances.
         if job=='INTCALC':
             for dd,name in [('XREFFILE','XREF-ACCT-ID'),('ACCTFILE','ACCT-ID'),('TCATBALF','TRANCAT-ACCT-ID')]:
@@ -63,9 +82,15 @@ def case(identifier):
                 images[dd]=images[dd][:size];field(dd,name,100000+index)
     elif kind=='timestamp':
         day=1+index%28;hour=index%24;minute=index%60
-        meta['candidate_timestamp']=f'2022-06-{day:02d}-{hour:02d}.{minute:02d}.00.000000'
+        meta['candidate_timestamp']=f'2022-06-{day:02d}-{hour:02d}.{minute:02d}.00.{index%100:02d}0000'
         if job=='INTCALC':meta['processing_date']=f'202206{day:02d}{hour:02d}'
         changes.append(dict(field='runtime-clock',value=meta['candidate_timestamp']))
+        if job=='INTCALC':
+            # Exercise more than the first suffix value, retaining valid category
+            # and disclosure keys for each account transition.
+            size=load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15','TCATBALF')['copybook']).record_length+1
+            images['TCATBALF']=images['TCATBALF'][:size*(1+index%3)]
+            changes.append(dict(field='TCATBALF-record-count',value=1+index%3))
     elif kind=='record-count':
         dd='TCATBALF' if job=='INTCALC' else 'DALYTRAN';size=load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15',dd)['copybook']).record_length+1
         first=images[dd][:size];rows=[]

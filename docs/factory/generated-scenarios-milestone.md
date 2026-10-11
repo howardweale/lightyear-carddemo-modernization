@@ -37,3 +37,14 @@ will be recorded from the completed Ubuntu 24.04 artifact, not inferred locally.
 INTCALC missing disclosure/account/xref and duplicate-category cases remain explicit unresolved refusal/comparison records. POSTTRAN duplicate IDs fail the independent ambiguity invariant and remain unresolved. No autorepair or promotion occurred. All eight source mutants compiled and were killed by generated inputs, including ROUNDED addition and scale truncation. The original source has no ROUNDED to remove.
 
 **Acceptance limitation:** complete reachable-path coverage has not been established. The remaining30/37 outcomes are individually listed as not solved with source conditions; none is called unreachable without proof. Runtime I/O fault paths need a separately controlled experiment. These metrics are not a 100% coverage or production-release claim.
+
+## Integration cleanup regression
+
+After PR311 merged, the updated PR312 integration head exposed an existing
+macOS worker-exit race in Control Tower CI (run 38108080917). A process-group
+signal could return PermissionError while enforcing the output cap, masking
+the original worker-output-limit refusal. Cleanup now suppresses that signal
+error only after a fresh poll confirms the worker has exited, then reaps it.
+Permission denial for a live worker still fails. The output and timeout limits
+are unchanged. Two deterministic regressions cover both outcomes; the original
+failed run remains evidence and is not relabeled successful.

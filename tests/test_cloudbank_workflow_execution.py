@@ -236,5 +236,49 @@ class CloudBankWorkflowTests(unittest.TestCase):
                 action_for(plan, service, lane)
 
 
+class WorkerCleanupRaceTests(unittest.TestCase):
+    def exercise_permission_race(self, after_signal):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        import os
+        process = Mock(pid=123, returncode=0)
+        # Output limit fires while the worker is live; it may exit during cleanup.
+        process.poll.side_effect = [None, None, after_signal]
+        process.stdin = Mock()
+        fake_os = SimpleNamespace(
+            name="posix", environ=os.environ, fstat=os.fstat,
+            killpg=Mock(side_effect=PermissionError("process group no longer signalable")),
+        )
+
+        def spawn(*args, **kwargs):
+            kwargs["stdout"].write(b"{}")
+            kwargs["stdout"].flush()
+            return process
+
+        with patch("lightyear_workflow.execution.os", fake_os), patch(
+            "lightyear_workflow.execution.signal", SimpleNamespace(SIGKILL=9)
+        ), patch(
+            "lightyear_workflow.execution.subprocess.Popen", side_effect=spawn
+        ):
+            try:
+                run_worker(Path("."), {"service": "account", "lane": "contract"},
+                           {"max_output_bytes": 1}, 15)
+            finally:
+                self.process = process
+                self.signal_attempt = fake_os.killpg
+
+    def test_exit_race_preserves_output_limit_and_reaps_worker(self):
+        with self.assertRaisesRegex(WorkerFailure, "worker-output-limit"):
+            self.exercise_permission_race(0)
+        self.signal_attempt.assert_called_once()
+        self.process.wait.assert_called_once()
+
+    def test_live_worker_signal_denial_is_not_suppressed(self):
+        with self.assertRaises(PermissionError):
+            self.exercise_permission_race(None)
+        self.signal_attempt.assert_called_once()
+        self.process.wait.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

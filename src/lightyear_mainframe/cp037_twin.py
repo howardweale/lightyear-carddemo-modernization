@@ -40,7 +40,7 @@ def derive(text,program):
                     _,key,alt=specs[fd]
                     result += [f'01 LY-{fd}-RECORD.',f' 05 LY-{fd}-KEY PIC X({key}).']
                     if alt:result += [f' 05 LY-{fd}-ALT PIC X({alt[1]}).']
-                c=f'{level+5:02d} {rest}'
+                c=f'{5 if level==1 else level+5:02d} {rest}'
         if t.startswith('PROCEDURE DIVISION'):body=True
         if body:
             parts=t.rstrip('.').split();verb=parts[0] if parts else ''
@@ -83,7 +83,13 @@ def derive(text,program):
         else:
             result.append(c)
             result.extend(after.get(i,[]))
-    return '\n'.join(result)+'\n'
+    from .zos_bindings import ROOT
+    expanded=[]
+    for line in result:
+        m=re.fullmatch(r'COPY ([A-Z0-9]+)\.',line.strip())
+        if m:expanded.extend(code(x) for x in (ROOT/'spec/mainframe/copybooks'/f'{m[1]}.cpy').read_text().splitlines())
+        else:expanded.append(line)
+    return '\n'.join(expanded)+'\n'
 
 
 def adapter(source,key,alternate=False):

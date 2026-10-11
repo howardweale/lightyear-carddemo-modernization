@@ -1,0 +1,92 @@
+{
+  "schema": "b06-failed-stream-supplement/1",
+  "stream_sha256": "14f354d75cfcc91beaf8ebc09cc7068a828e48c936ec3309d4982a390d53ddfd",
+  "event_count": 231158,
+  "last_event_sha256": "f1a322624e109e266a16fcf0fec7059a393a6145b676e1e695599fd77dcd229e",
+  "event_counts": {
+    "ready": 1,
+    "observer-audit": 206365,
+    "generation-entry": 12396,
+    "generation-return": 12389,
+    "frame-definition": 2,
+    "diagnostic-unmatched-return": 5
+  },
+  "last_audit": {
+    "sequence": 231158,
+    "audit_index": 206365,
+    "event_set_id": 41275,
+    "event_position": 0,
+    "action": "jdi-event"
+  },
+  "last_jdi_event": {
+    "event_type": "breakpoint",
+    "thread_id": 69950,
+    "depth": 110,
+    "location": {
+      "class": "java.lang.invoke.MethodHandles$Lookup$ClassDefiner",
+      "code_index": 0,
+      "method": "defineClass",
+      "signature": "(ZLjava/lang/Object;)Ljava/lang/Class;"
+    }
+  },
+  "accepted_unmatched_return_sequences": [
+    230866,
+    230910,
+    230949,
+    230994,
+    231011
+  ],
+  "distinct_stack_class_objects": 1756,
+  "payload_sizes": {
+    "entry_bytes": {
+      "count": 12396,
+      "min": 4767,
+      "median": 28209,
+      "p90": 42890,
+      "p99": 98335,
+      "max": 550300
+    },
+    "depth": {
+      "count": 12396,
+      "min": 12,
+      "median": 100,
+      "p90": 122,
+      "p99": 164,
+      "max": 213
+    },
+    "definition_input_bytes": {
+      "count": 12396,
+      "min": 0,
+      "median": 1140,
+      "p90": 7863,
+      "p99": 30869,
+      "max": 262269
+    },
+    "lambda_form_graph_nodes": {
+      "count": 925,
+      "min": 11,
+      "median": 114,
+      "p90": 201,
+      "p99": 286,
+      "max": 356
+    },
+    "class_data_graph_nodes": {
+      "count": 472,
+      "min": 1,
+      "median": 110,
+      "p90": 188,
+      "p99": 276,
+      "max": 284
+    }
+  },
+  "qualification_credit": false,
+  "measurement_credit": false,
+  "model_calls": 0,
+  "review": "operator review; not independent attestation",
+  "census_sha256": "ed58b838da5ff5dae0d44f3b944261ac7bcf64b9c7f8e3ec0f93d8d9f124838e",
+  "failure_sha256": "8ddfc6eaa12c5dcdb72f7ce99f36c1ed0c8d4d6f64fe8abcb3b10950339b7cc8",
+  "public_key_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+  "signatures_verified": 2,
+  "complete_observation": false,
+  "provenance_replayed": false
+}

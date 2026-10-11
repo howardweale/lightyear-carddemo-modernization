@@ -8,6 +8,7 @@ on:
       - 'tools/ms94_b06*.py'
       - 'src/lightyear_evidence/**'
       - 'tests/test_b06*.py'
+      - 'tests/fixtures/B06GenerationStress.java'
       - 'tests/test_evidence_content.py'
       - '.github/workflows/b06-host-review.yml'
   workflow_dispatch:
@@ -41,7 +42,8 @@ jobs:
         run: |
           export B06_HOST_JDK="$JAVA_HOME"
           python -B -m unittest -v test_b06_captured_refusal test_b06_unmatched_return test_b06_observer_startup test_b06_observer_bulk_reads test_b06_observer_host_r3 test_b06_observer_audit test_b06_engineering test_evidence_content test_b06_host_tools test_ms94_b06_observer_v2 test_ms94_b06_frame_census test_ms94_b06_posting_replay test_evidence_worker_packaging test_evidence_completeness
-      - name: Changed source uses LF
+          python -B -m unittest -v test_b06_memory_profile
+      - name: Changed source uses LF and Markdown round-trips as UTF-8
         if: github.event_name == 'pull_request'
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}

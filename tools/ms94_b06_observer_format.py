@@ -148,6 +148,9 @@ def diagnostic_wire(event):
     try:
         packed=base64.b64decode(event['d3'],validate=True)
         check(base64.b64encode(packed).decode('ascii')==event['d3'],'observer-diagnostic-wire-base64')
+        check(len(packed)>=6 and packed[1] & 32 and
+              int.from_bytes(packed[2:6],'big')==zlib.adler32(DIAGNOSTIC_DICTIONARY),
+              'observer-diagnostic-wire-dictionary')
         decoder=zlib.decompressobj(zdict=DIAGNOSTIC_DICTIONARY)
         raw=decoder.decompress(packed,256*1024+1)
         check(0<len(raw)<=256*1024 and decoder.eof and not decoder.unconsumed_tail and not decoder.unused_data,

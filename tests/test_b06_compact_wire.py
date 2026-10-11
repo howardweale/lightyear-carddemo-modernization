@@ -86,7 +86,7 @@ class CompactWireTests(unittest.TestCase):
             compressor=zlib.compressobj(zdict=DIAGNOSTIC_DICTIONARY);value=compressor.compress(raw)+compressor.flush()
             with self.assertRaises(ValueError):diagnostic_wire({**original,'d3':base64.b64encode(value).decode()})
         compressed=base64.b64decode(original['d3'])
-        for value in (compressed+b'trailing',compressed[:-1],zlib.compress(b'{}')):
+        for value in (compressed+b'trailing',compressed[:-1],zlib.compress(java_json(body).encode())):
             with self.assertRaises(ValueError):diagnostic_wire({**original,'d3':base64.b64encode(value).decode()})
 
     @unittest.skipUnless(os.environ.get('B06_HOST_JDK'),'host JDK explicitly enabled')

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from lightyear_mainframe.legacy_twin import receipt
 from tools.legacy_twin.mixed_key_probe import KEYS, EXPECTED_CP037, program
-from tools.legacy_twin.reproducible_build import BASE_IMAGE, compare
+from tools.legacy_twin.reproducible_build import BASE_IMAGE, compare, expected_binaries
 
 
 class TwinFollowupTests(unittest.TestCase):
@@ -19,7 +19,7 @@ class TwinFollowupTests(unittest.TestCase):
     def make_receipt(self, path, *, kind='github-hosted', machine='first', binary='a'*64, commit='b'*40):
         return receipt(path, phase='independent-machine-build', host_kind=kind, machine_id=machine,
                        repository_commit=commit, base_image=BASE_IMAGE, platform='linux/amd64',
-                       installer_sha256='c'*64, binaries={'ascii/INTCALC/bin/twin':binary})
+                       installer_sha256='c'*64, binaries={name:binary for name in expected_binaries()})
 
     def test_same_host_does_not_become_second_machine(self):
         with tempfile.TemporaryDirectory() as d:
@@ -51,3 +51,13 @@ class TwinFollowupTests(unittest.TestCase):
             (p/'b.json').write_text(json.dumps(altered))
             with self.assertRaisesRegex(ValueError, 'seal-mismatch'):
                 compare(p/'a.json',p/'b.json',p/'bad.json')
+
+    def test_matching_partial_manifests_are_not_full_reproduction(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)
+            for name,kind,machine in [('a','github-hosted','first'),('b','operator-machine','second')]:
+                receipt(p/(name+'.json'), phase='independent-machine-build', host_kind=kind, machine_id=machine,
+                        repository_commit='b'*40, base_image=BASE_IMAGE, platform='linux/amd64',
+                        installer_sha256='c'*64, binaries={'ascii/INTCALC/bin/twin':'a'*64})
+            with self.assertRaisesRegex(ValueError, 'artifact-set-mismatch'):
+                compare(p/'a.json',p/'b.json',p/'out.json')

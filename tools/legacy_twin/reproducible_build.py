@@ -3,9 +3,15 @@ import argparse
 import json
 import platform
 from pathlib import Path
-from lightyear_mainframe.legacy_twin import build, receipt, sha, ROOT
+from lightyear_mainframe.legacy_twin import build, receipt, sha, ROOT, FILES
 
 BASE_IMAGE = 'ubuntu@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b'
+
+
+def expected_binaries():
+    return {mode + "/" + job + "/bin/" + name
+            for mode in ("ascii", "cp037") for job, descriptors in FILES.items()
+            for name in ["twin", *(dd for dd, (_, key) in descriptors.items() if key)]}
 
 
 def sealed(record):
@@ -29,6 +35,8 @@ def make(output, machine_id, host_kind, commit, base_image):
         result = build(output / mode, cp037_keys=mode == 'cp037')
         builds[mode] = result['content_sha256']
         artifacts.update({mode + '/' + name: digest for name, digest in result['files'].items() if '/bin/' in name})
+    if set(artifacts) != expected_binaries():
+        raise ValueError('incomplete-compiled-binary-set')
     return receipt(output / 'reproduction.json', phase='independent-machine-build', machine_id=machine_id,
                    host_kind=host_kind, repository_commit=commit, base_image=base_image, platform='linux/amd64',
                    kernel=platform.release(), build_receipt_seals=builds, binaries=artifacts,
@@ -43,7 +51,7 @@ def compare(first, second, output):
     for field in ('repository_commit', 'base_image', 'platform', 'installer_sha256'):
         if a.get(field) != b.get(field):
             raise ValueError('reproduction-binding-mismatch:' + field)
-    if a.get('base_image') != BASE_IMAGE or not a.get('binaries') or set(a['binaries']) != set(b.get('binaries', {})):
+    if a.get('base_image') != BASE_IMAGE or set(a.get('binaries', {})) != expected_binaries() or set(b.get('binaries', {})) != expected_binaries():
         raise ValueError('reproduction-artifact-set-mismatch')
     differences = [name for name in sorted(a['binaries']) if a['binaries'][name] != b['binaries'][name]]
     result = receipt(Path(output), phase='two-machine-build-comparison', receipt_seals=[a['content_sha256'], b['content_sha256']],

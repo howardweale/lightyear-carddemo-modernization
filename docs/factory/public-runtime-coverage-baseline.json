@@ -1,0 +1,1354 @@
+{
+  "schema": "public-runtime-coverage-baseline/1",
+  "source_receipt_sha256": "d205e8e566f4de3423c65a420b2b52bff140660e4320f936fccdf9f0ae4732f3",
+  "ci_run": 38099854185,
+  "implementation_commit": "1172055",
+  "programs": {
+    "INTCALC": {
+      "generated_status": "not-run-in-instrumentation-deliverable",
+      "public_only": {
+        "decision_outcomes": "51/94",
+        "decision_points": "46/47",
+        "distinct_values_per_output_field": {},
+        "entered_paragraph_lines": [
+          234,
+          252,
+          270,
+          289,
+          307,
+          325,
+          350,
+          372,
+          393,
+          415,
+          443,
+          462,
+          473,
+          518,
+          522,
+          541,
+          559,
+          577,
+          595,
+          613
+        ],
+        "file_statuses": [
+          {
+            "count": 2,
+            "field": "TCATBALF-STATUS",
+            "line": 236,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "XREFFILE-STATUS",
+            "line": 254,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "DISCGRP-STATUS",
+            "line": 272,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "ACCTFILE-STATUS",
+            "line": 291,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "TRANFILE-STATUS",
+            "line": 309,
+            "status": "00"
+          },
+          {
+            "count": 100,
+            "field": "TCATBALF-STATUS",
+            "line": 326,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "TCATBALF-STATUS",
+            "line": 326,
+            "status": "10"
+          },
+          {
+            "count": 98,
+            "field": "ACCTFILE-STATUS",
+            "line": 356,
+            "status": "00"
+          },
+          {
+            "count": 100,
+            "field": "ACCTFILE-STATUS",
+            "line": 373,
+            "status": "00"
+          },
+          {
+            "count": 100,
+            "field": "XREFFILE-STATUS",
+            "line": 394,
+            "status": "00"
+          },
+          {
+            "count": 100,
+            "field": "DISCGRP-STATUS",
+            "line": 416,
+            "status": "23"
+          },
+          {
+            "count": 100,
+            "field": "DISCGRP-STATUS",
+            "line": 444,
+            "status": "00"
+          },
+          {
+            "count": 100,
+            "field": "TRANFILE-STATUS",
+            "line": 500,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "TCATBALF-STATUS",
+            "line": 524,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "XREFFILE-STATUS",
+            "line": 543,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "DISCGRP-STATUS",
+            "line": 561,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "ACCTFILE-STATUS",
+            "line": 579,
+            "status": "00"
+          },
+          {
+            "count": 2,
+            "field": "TRANFILE-STATUS",
+            "line": 597,
+            "status": "00"
+          }
+        ],
+        "instrumented": true,
+        "legacy_mutants_killed": null,
+        "observed_outcomes": [
+          {
+            "line": 188,
+            "outcome": "false"
+          },
+          {
+            "line": 188,
+            "outcome": "true"
+          },
+          {
+            "line": 189,
+            "outcome": "true"
+          },
+          {
+            "line": 191,
+            "outcome": "false"
+          },
+          {
+            "line": 191,
+            "outcome": "true"
+          },
+          {
+            "line": 194,
+            "outcome": "true"
+          },
+          {
+            "line": 195,
+            "outcome": "false"
+          },
+          {
+            "line": 195,
+            "outcome": "true"
+          },
+          {
+            "line": 214,
+            "outcome": "true"
+          },
+          {
+            "line": 237,
+            "outcome": "true"
+          },
+          {
+            "line": 242,
+            "outcome": "true"
+          },
+          {
+            "line": 255,
+            "outcome": "true"
+          },
+          {
+            "line": 260,
+            "outcome": "true"
+          },
+          {
+            "line": 273,
+            "outcome": "true"
+          },
+          {
+            "line": 278,
+            "outcome": "true"
+          },
+          {
+            "line": 292,
+            "outcome": "true"
+          },
+          {
+            "line": 297,
+            "outcome": "true"
+          },
+          {
+            "line": 310,
+            "outcome": "true"
+          },
+          {
+            "line": 315,
+            "outcome": "true"
+          },
+          {
+            "line": 327,
+            "outcome": "false"
+          },
+          {
+            "line": 327,
+            "outcome": "true"
+          },
+          {
+            "line": 330,
+            "outcome": "true"
+          },
+          {
+            "line": 336,
+            "outcome": "false"
+          },
+          {
+            "line": 336,
+            "outcome": "true"
+          },
+          {
+            "line": 339,
+            "outcome": "true"
+          },
+          {
+            "line": 357,
+            "outcome": "true"
+          },
+          {
+            "line": 362,
+            "outcome": "true"
+          },
+          {
+            "line": 374,
+            "outcome": "false"
+          },
+          {
+            "line": 378,
+            "outcome": "true"
+          },
+          {
+            "line": 383,
+            "outcome": "true"
+          },
+          {
+            "line": 396,
+            "outcome": "false"
+          },
+          {
+            "line": 400,
+            "outcome": "true"
+          },
+          {
+            "line": 405,
+            "outcome": "true"
+          },
+          {
+            "line": 417,
+            "outcome": "true"
+          },
+          {
+            "line": 422,
+            "outcome": "true"
+          },
+          {
+            "line": 428,
+            "outcome": "true"
+          },
+          {
+            "line": 436,
+            "outcome": "true"
+          },
+          {
+            "line": 446,
+            "outcome": "true"
+          },
+          {
+            "line": 452,
+            "outcome": "true"
+          },
+          {
+            "line": 501,
+            "outcome": "true"
+          },
+          {
+            "line": 507,
+            "outcome": "true"
+          },
+          {
+            "line": 525,
+            "outcome": "true"
+          },
+          {
+            "line": 530,
+            "outcome": "true"
+          },
+          {
+            "line": 544,
+            "outcome": "true"
+          },
+          {
+            "line": 549,
+            "outcome": "true"
+          },
+          {
+            "line": 562,
+            "outcome": "true"
+          },
+          {
+            "line": 567,
+            "outcome": "true"
+          },
+          {
+            "line": 580,
+            "outcome": "true"
+          },
+          {
+            "line": 585,
+            "outcome": "true"
+          },
+          {
+            "line": 598,
+            "outcome": "true"
+          },
+          {
+            "line": 603,
+            "outcome": "true"
+          }
+        ],
+        "paragraphs": "20/22",
+        "program": "CBACT04C",
+        "releasable": false,
+        "schema": "scenario-adequacy/1",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "threshold_status": "not-approved",
+        "uncovered": [
+          {
+            "id": "legacy:cobol-decision:CBACT04C:189:671",
+            "line": 189,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:194:683",
+            "line": 194,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:214:732",
+            "line": 214,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:237:777",
+            "line": 237,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:242:789",
+            "line": 242,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:255:815",
+            "line": 255,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:260:827",
+            "line": 260,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:273:854",
+            "line": 273,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:278:866",
+            "line": 278,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:292:892",
+            "line": 292,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:297:904",
+            "line": 297,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:310:930",
+            "line": 310,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:315:942",
+            "line": 315,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:330:972",
+            "line": 330,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:339:989",
+            "line": 339,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:357:1026",
+            "line": 357,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:362:1038",
+            "line": 362,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:374:1060",
+            "line": 374,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:378:1065",
+            "line": 378,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:383:1077",
+            "line": 383,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:396:1102",
+            "line": 396,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:400:1107",
+            "line": 400,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:405:1119",
+            "line": 405,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:417:1141",
+            "line": 417,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:422:1147",
+            "line": 422,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:428:1160",
+            "line": 428,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:436:1174",
+            "line": 436,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:446:1190",
+            "line": 446,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:452:1202",
+            "line": 452,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:501:1305",
+            "line": 501,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:507:1317",
+            "line": 507,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:525:1346",
+            "line": 525,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:530:1358",
+            "line": 530,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:544:1383",
+            "line": 544,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:549:1395",
+            "line": 549,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:562:1420",
+            "line": 562,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:567:1432",
+            "line": 567,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:580:1457",
+            "line": 580,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:585:1469",
+            "line": 585,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:598:1494",
+            "line": 598,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:603:1506",
+            "line": 603,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:636:1590",
+            "line": 636,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBACT04C:636:1590",
+            "line": 636,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          }
+        ]
+      },
+      "public_plus_generated": null,
+      "scenarios": [
+        "intcalc-public-1",
+        "intcalc-public-2"
+      ]
+    },
+    "POSTTRAN": {
+      "generated_status": "not-run-in-instrumentation-deliverable",
+      "public_only": {
+        "decision_outcomes": "63/110",
+        "decision_points": "54/55",
+        "distinct_values_per_output_field": {},
+        "entered_paragraph_lines": [
+          236,
+          254,
+          273,
+          291,
+          309,
+          327,
+          345,
+          370,
+          380,
+          393,
+          424,
+          446,
+          467,
+          503,
+          526,
+          545,
+          562,
+          582,
+          600,
+          619,
+          637,
+          655,
+          674,
+          692
+        ],
+        "file_statuses": [
+          {
+            "count": 1,
+            "field": "DALYTRAN-STATUS",
+            "line": 238,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "TRANFILE-STATUS",
+            "line": 256,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "XREFFILE-STATUS",
+            "line": 275,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "DALYREJS-STATUS",
+            "line": 293,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "ACCTFILE-STATUS",
+            "line": 311,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "TCATBALF-STATUS",
+            "line": 329,
+            "status": "00"
+          },
+          {
+            "count": 300,
+            "field": "DALYTRAN-STATUS",
+            "line": 346,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "DALYTRAN-STATUS",
+            "line": 346,
+            "status": "10"
+          },
+          {
+            "count": 300,
+            "field": "XREFFILE-STATUS",
+            "line": 383,
+            "status": "00"
+          },
+          {
+            "count": 300,
+            "field": "ACCTFILE-STATUS",
+            "line": 395,
+            "status": "00"
+          },
+          {
+            "count": 38,
+            "field": "DALYREJS-STATUS",
+            "line": 451,
+            "status": "00"
+          },
+          {
+            "count": 212,
+            "field": "TCATBALF-STATUS",
+            "line": 474,
+            "status": "00"
+          },
+          {
+            "count": 50,
+            "field": "TCATBALF-STATUS",
+            "line": 474,
+            "status": "23"
+          },
+          {
+            "count": 50,
+            "field": "TCATBALF-STATUS",
+            "line": 510,
+            "status": "00"
+          },
+          {
+            "count": 212,
+            "field": "TCATBALF-STATUS",
+            "line": 528,
+            "status": "00"
+          },
+          {
+            "count": 262,
+            "field": "ACCTFILE-STATUS",
+            "line": 554,
+            "status": "00"
+          },
+          {
+            "count": 262,
+            "field": "TRANFILE-STATUS",
+            "line": 564,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "DALYTRAN-STATUS",
+            "line": 584,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "TRANFILE-STATUS",
+            "line": 602,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "XREFFILE-STATUS",
+            "line": 621,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "DALYREJS-STATUS",
+            "line": 639,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "ACCTFILE-STATUS",
+            "line": 657,
+            "status": "00"
+          },
+          {
+            "count": 1,
+            "field": "TCATBALF-STATUS",
+            "line": 676,
+            "status": "00"
+          }
+        ],
+        "instrumented": true,
+        "legacy_mutants_killed": null,
+        "observed_outcomes": [
+          {
+            "line": 202,
+            "outcome": "false"
+          },
+          {
+            "line": 202,
+            "outcome": "true"
+          },
+          {
+            "line": 203,
+            "outcome": "true"
+          },
+          {
+            "line": 205,
+            "outcome": "false"
+          },
+          {
+            "line": 205,
+            "outcome": "true"
+          },
+          {
+            "line": 211,
+            "outcome": "false"
+          },
+          {
+            "line": 211,
+            "outcome": "true"
+          },
+          {
+            "line": 229,
+            "outcome": "true"
+          },
+          {
+            "line": 239,
+            "outcome": "true"
+          },
+          {
+            "line": 244,
+            "outcome": "true"
+          },
+          {
+            "line": 257,
+            "outcome": "true"
+          },
+          {
+            "line": 262,
+            "outcome": "true"
+          },
+          {
+            "line": 276,
+            "outcome": "true"
+          },
+          {
+            "line": 281,
+            "outcome": "true"
+          },
+          {
+            "line": 294,
+            "outcome": "true"
+          },
+          {
+            "line": 299,
+            "outcome": "true"
+          },
+          {
+            "line": 312,
+            "outcome": "true"
+          },
+          {
+            "line": 317,
+            "outcome": "true"
+          },
+          {
+            "line": 330,
+            "outcome": "true"
+          },
+          {
+            "line": 335,
+            "outcome": "true"
+          },
+          {
+            "line": 347,
+            "outcome": "false"
+          },
+          {
+            "line": 347,
+            "outcome": "true"
+          },
+          {
+            "line": 351,
+            "outcome": "true"
+          },
+          {
+            "line": 357,
+            "outcome": "false"
+          },
+          {
+            "line": 357,
+            "outcome": "true"
+          },
+          {
+            "line": 360,
+            "outcome": "true"
+          },
+          {
+            "line": 372,
+            "outcome": "true"
+          },
+          {
+            "line": 384,
+            "outcome": "false"
+          },
+          {
+            "line": 388,
+            "outcome": "true"
+          },
+          {
+            "line": 396,
+            "outcome": "false"
+          },
+          {
+            "line": 400,
+            "outcome": "true"
+          },
+          {
+            "line": 407,
+            "outcome": "false"
+          },
+          {
+            "line": 407,
+            "outcome": "true"
+          },
+          {
+            "line": 414,
+            "outcome": "true"
+          },
+          {
+            "line": 452,
+            "outcome": "true"
+          },
+          {
+            "line": 457,
+            "outcome": "true"
+          },
+          {
+            "line": 475,
+            "outcome": "false"
+          },
+          {
+            "line": 475,
+            "outcome": "true"
+          },
+          {
+            "line": 481,
+            "outcome": "true"
+          },
+          {
+            "line": 486,
+            "outcome": "true"
+          },
+          {
+            "line": 495,
+            "outcome": "false"
+          },
+          {
+            "line": 495,
+            "outcome": "true"
+          },
+          {
+            "line": 512,
+            "outcome": "true"
+          },
+          {
+            "line": 517,
+            "outcome": "true"
+          },
+          {
+            "line": 530,
+            "outcome": "true"
+          },
+          {
+            "line": 535,
+            "outcome": "true"
+          },
+          {
+            "line": 548,
+            "outcome": "false"
+          },
+          {
+            "line": 548,
+            "outcome": "true"
+          },
+          {
+            "line": 555,
+            "outcome": "false"
+          },
+          {
+            "line": 566,
+            "outcome": "true"
+          },
+          {
+            "line": 571,
+            "outcome": "true"
+          },
+          {
+            "line": 585,
+            "outcome": "true"
+          },
+          {
+            "line": 590,
+            "outcome": "true"
+          },
+          {
+            "line": 603,
+            "outcome": "true"
+          },
+          {
+            "line": 608,
+            "outcome": "true"
+          },
+          {
+            "line": 622,
+            "outcome": "true"
+          },
+          {
+            "line": 627,
+            "outcome": "true"
+          },
+          {
+            "line": 640,
+            "outcome": "true"
+          },
+          {
+            "line": 645,
+            "outcome": "true"
+          },
+          {
+            "line": 658,
+            "outcome": "true"
+          },
+          {
+            "line": 663,
+            "outcome": "true"
+          },
+          {
+            "line": 677,
+            "outcome": "true"
+          },
+          {
+            "line": 682,
+            "outcome": "true"
+          }
+        ],
+        "paragraphs": "24/26",
+        "program": "CBTRN02C",
+        "releasable": false,
+        "schema": "scenario-adequacy/1",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "threshold_status": "not-approved",
+        "uncovered": [
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:203:684",
+            "line": 203,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:229:743",
+            "line": 229,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:239:765",
+            "line": 239,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:244:777",
+            "line": 244,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:257:803",
+            "line": 257,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:262:815",
+            "line": 262,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:276:841",
+            "line": 276,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:281:853",
+            "line": 281,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:294:879",
+            "line": 294,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:299:891",
+            "line": 299,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:312:917",
+            "line": 312,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:317:929",
+            "line": 317,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:330:955",
+            "line": 330,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:335:967",
+            "line": 335,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:351:997",
+            "line": 351,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:360:1014",
+            "line": 360,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:372:1038",
+            "line": 372,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:384:1058",
+            "line": 384,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:388:1068",
+            "line": 388,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:396:1084",
+            "line": 396,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:400:1094",
+            "line": 400,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:414:1114",
+            "line": 414,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:452:1214",
+            "line": 452,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:457:1226",
+            "line": 457,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:481:1272",
+            "line": 481,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:486:1285",
+            "line": 486,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:512:1334",
+            "line": 512,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:517:1346",
+            "line": 517,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:530:1371",
+            "line": 530,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:535:1383",
+            "line": 535,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:555:1421",
+            "line": 555,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:566:1445",
+            "line": 566,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:571:1457",
+            "line": 571,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:585:1482",
+            "line": 585,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:590:1494",
+            "line": 590,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:603:1519",
+            "line": 603,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:608:1531",
+            "line": 608,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:622:1556",
+            "line": 622,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:627:1568",
+            "line": 627,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:640:1593",
+            "line": 640,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:645:1605",
+            "line": 645,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:658:1630",
+            "line": 658,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:663:1642",
+            "line": 663,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:677:1667",
+            "line": 677,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:682:1679",
+            "line": 682,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:715:1763",
+            "line": 715,
+            "outcome": "true",
+            "reason": "not-observed; no unreachability claim"
+          },
+          {
+            "id": "legacy:cobol-decision:CBTRN02C:715:1763",
+            "line": 715,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          }
+        ]
+      },
+      "public_plus_generated": null,
+      "scenarios": [
+        "posttran-public"
+      ]
+    }
+  },
+  "historical_16_of_47": "lexical rule-anchor overlap, not runtime coverage",
+  "run_class": "engineering",
+  "releasable": false
+}

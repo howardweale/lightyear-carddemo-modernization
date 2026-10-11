@@ -102,6 +102,8 @@ def lint():
         assert "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
         assert 'github.run_id' in d['concurrency']['group'],p
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()
+    from tools.check_source_lf import check_paths
+    check_paths(Path.cwd(), files)
     for name in files:
         p=Path(name)
         if not p.is_file(): continue

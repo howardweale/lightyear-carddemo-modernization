@@ -1,8 +1,8 @@
-# PRs 291Ã¢â‚¬â€œ302 review: first corrective batch
+# PRs 291-302 review: first corrective batch
 
 This batch implements the urgent execution hold and focused admission, cache and
 host-test fixes from Howard's October 10 review. It is not completion of the
-whole review list. Historical evidence, signed catalogues, fixture v2, B04Ã¢â‚¬â€œB06,
+whole review list. Historical evidence, signed catalogues, fixture v2, B04-B06,
 work/ms94, template-r1 and J1 are unchanged. No private intake, native/container
 run, model call, private-key read or machine configuration change is involved.
 

@@ -110,8 +110,16 @@ def run(jdk, out, threads=4, iterations=800, depth=128, timeout=600, observer_he
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--jdk', type=Path, required=True); parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--iterations', type=int, default=800)
+    parser.add_argument('--iterations', type=int)
     parser.add_argument('--observer-heap-mib', type=int, default=192)
-    parser.add_argument('--timeout', type=int, default=600)
+    parser.add_argument('--timeout', type=int)
+    parser.add_argument('--native-volume-memory', action='store_true',
+                        help='Measure unchanged observer with 3000 distinct stack classes and return-loss injection')
     args = parser.parse_args()
-    run(args.jdk, args.out, iterations=args.iterations, timeout=args.timeout, observer_heap_mib=args.observer_heap_mib)
+    if args.native_volume_memory:
+        from tools.b06_host_probe.native_memory import run as memory_run
+        memory_run(args.jdk, args.out, iterations=args.iterations if args.iterations is not None else 1400,
+                   timeout=args.timeout if args.timeout is not None else 10800, heap=args.observer_heap_mib)
+    else:
+        run(args.jdk, args.out, iterations=args.iterations if args.iterations is not None else 800,
+            timeout=args.timeout if args.timeout is not None else 600, observer_heap_mib=args.observer_heap_mib)

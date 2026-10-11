@@ -23,3 +23,16 @@ independent attestation. Howard's decisions and signature remain outstanding.
 Two focused tests passed: all ten records/source excerpts render, incomplete
 decisions refuse, a test operator can sign and verify, and tampering fails.
 Only ephemeral test keys were used. B06 and customer data remain untouched.
+
+## 2026-10-11: where Howard reviews and returns decisions
+
+Open [the readable review page](posttran-human-review.html) from a local checkout
+in a browser, or use the GitHub file page and download the HTML:
+https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/factory/posttran-human-review.html.
+GitHub's source preview does not execute the page; no GitHub Pages deployment is claimed.
+
+Enter your name, select accept/reject/investigate and a reason for each of the ten
+records, then click **Download my unsigned decisions**. Send the downloaded
+`posttran-decisions-unsigned.json` back in this chat. It is a proposed operator
+review, not a signature or permission to run. Use the existing operator signing
+flow on your authority host only after reviewing the file; never send the key.

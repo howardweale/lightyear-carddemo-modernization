@@ -1,0 +1,596 @@
+{
+  "case_count": 46,
+  "cases": [
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-pic-0",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": true
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-pic-1",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-pic-2",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-pic-3",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-pic-4",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_39",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_40",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_41",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_79",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_80",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-0_81",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-n0_39",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-n0_40",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-round-n0_41",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-large-rate",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-empty",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-two-categories",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": true
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-two-accounts",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-three-accounts",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-default-disclosure",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": false
+    },
+    {
+      "classification": "expected-failure-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-missing-disclosure",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 1,
+        "python": "execution-failure",
+        "twin": 12
+      },
+      "refusal_evidence": {
+        "java": "DEFAULT DISCLOSURE MISSING",
+        "python": "DEFAULT DISCLOSURE MISSING",
+        "source_path": "missing-disclosure",
+        "twin": "ERROR READING DEFAULT DISCLOSURE GROUP"
+      },
+      "selected": true
+    },
+    {
+      "classification": "expected-failure-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-missing-account",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 1,
+        "python": "execution-failure",
+        "twin": 12
+      },
+      "refusal_evidence": {
+        "java": "ACCOUNT NOT FOUND",
+        "python": "ACCOUNT NOT FOUND",
+        "source_path": "missing-account",
+        "twin": "ERROR READING ACCOUNT FILE"
+      },
+      "selected": true
+    },
+    {
+      "classification": "expected-failure-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-missing-xref",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 1,
+        "python": "execution-failure",
+        "twin": 12
+      },
+      "refusal_evidence": {
+        "java": "XREF NOT FOUND",
+        "python": "XREF NOT FOUND",
+        "source_path": "missing-xref",
+        "twin": "ERROR READING XREF FILE"
+      },
+      "selected": true
+    },
+    {
+      "classification": "adapter-refusal-before-execution",
+      "disagreeing_fields": null,
+      "id": "intcalc-duplicate-category",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-solver-rate-false",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": true
+    },
+    {
+      "classification": "byte-agreement",
+      "disagreeing_fields": {},
+      "id": "intcalc-solver-rate-true",
+      "invariant_failures": [],
+      "job": "INTCALC",
+      "refusal_classes": {
+        "java": 0,
+        "python": "completed",
+        "twin": 0
+      },
+      "refusal_evidence": {},
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-zero",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-positive",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-negative",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-credit-equal",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-credit-above",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-expiry-equal",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-expiry-before",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-missing-card",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-missing-account",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-empty",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-duplicate-id",
+      "invariant_failures": [
+        "record-count-conservation",
+        "record-id-conservation",
+        "ambiguous-duplicate-input-id"
+      ],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": true
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-new-category",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-large-amount",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-cycle-debit",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-invalid-then-valid",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-new-then-existing",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-expiry-next-day",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-expiry-equal-dash",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-solver-credit-false",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    },
+    {
+      "classification": "provisional-invariants-only",
+      "disagreeing_fields": null,
+      "id": "posttran-solver-credit-true",
+      "invariant_failures": [],
+      "job": "POSTTRAN",
+      "refusal_classes": null,
+      "refusal_evidence": null,
+      "selected": false
+    }
+  ],
+  "model_calls": 0,
+  "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+  "qualification_credit": false,
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929609",
+  "schema": "factory-generated-classification-summary/1",
+  "source_receipt_content_sha256": "47b36cc8f0b54fd712031036c718b73637e51a882cfd65e1ffb39794ddca315b",
+  "unresolved": [
+    {
+      "reason": "POSTTRAN invariant failure/refusal",
+      "scenario": "posttran-duplicate-id"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ Docker, and model endpoints were not changed or invoked.
 | INTCALC executable rules | 10 signed statuses: 8 verified, 2 untested |
 | Public T-SQL source / correct twins | 5 verified / 5 verified |
 | Public T-SQL wrong twins | 5 contradicted |
-| CBACT04C decision coverage | 16 of 47 explained (34.04%); all 31 gaps listed |
+| CBACT04C lexical rule-anchor overlap (not execution coverage) | 16 of 47 anchors explained (34.04%); all 31 anchor gaps listed |
 | Mutation rates | Seven verified service rules: 1/7 each; fixed-width codec rule: 0/1 |
 | Monthly-interest one-cent mutant | Killed; named amount/account output fields diverged |
 | Register seed | Signed test-customer `preserve` for source-final-account |

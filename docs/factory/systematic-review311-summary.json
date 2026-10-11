@@ -1,0 +1,341 @@
+{
+  "denominator": "Raw count includes every generated site including compiler refusals. Eligible count excludes only individually listed argued equivalents. Unexplained survivors and compiler refusals still block adequacy.",
+  "operator_policy_approved": false,
+  "preserved_prior_campaigns": [
+    {
+      "eligible_kill_rate": "292/357",
+      "job": "INTCALC",
+      "kill_rate": "292/427",
+      "mutant_count": 427,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 70,
+        "killed-divergent": 130,
+        "killed-failure": 162,
+        "not-compiled": 6,
+        "survived": 59
+      },
+      "observed_head": "29ac9d97c73e66ab8e6251dbf8d4227ec772f17a",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38149074818",
+      "source_receipt_content_sha256": "02a372cfa1684e1c570dbbdbe40773a659cdbb59905bbe0761392a88a3847cbb"
+    },
+    {
+      "eligible_kill_rate": "337/412",
+      "job": "POSTTRAN",
+      "kill_rate": "337/490",
+      "mutant_count": 490,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 78,
+        "killed-divergent": 152,
+        "killed-failure": 185,
+        "not-compiled": 7,
+        "survived": 68
+      },
+      "observed_head": "29ac9d97c73e66ab8e6251dbf8d4227ec772f17a",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38149074818",
+      "source_receipt_content_sha256": "aa17cd0985e36eb41baddcd4d77f7ef4444ced8a639ba282333acc50ec001474"
+    },
+    {
+      "eligible_kill_rate": "286/333",
+      "job": "INTCALC",
+      "kill_rate": "286/426",
+      "mutant_count": 426,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 93,
+        "killed-divergent": 131,
+        "killed-failure": 155,
+        "not-compiled": 5,
+        "survived": 42
+      },
+      "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929589",
+      "source_receipt_content_sha256": "2b4e38b1a15aa1f5010e6c4587211618e0517bcc51ee48de56420863b7cfb7ab"
+    },
+    {
+      "eligible_kill_rate": "341/390",
+      "job": "POSTTRAN",
+      "kill_rate": "341/489",
+      "mutant_count": 489,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 99,
+        "killed-divergent": 155,
+        "killed-failure": 186,
+        "not-compiled": 6,
+        "survived": 43
+      },
+      "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929589",
+      "source_receipt_content_sha256": "3781bf180d1dfea2cd088bcc83bf7df30911886182ef64bf94cf93c99a86e1db"
+    }
+  ],
+  "programs": {
+    "INTCALC": {
+      "after_faults": {
+        "coverage_by_class": {
+          "business-logic": {
+            "covered": 8,
+            "fraction": "8/8",
+            "total": 8
+          },
+          "io-handling": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          }
+        },
+        "decision_outcomes": "93/94",
+        "uncovered": [
+          {
+            "classification": "io-handling",
+            "id": "legacy:cobol-decision:CBACT04C:189:671",
+            "line": 189,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          }
+        ]
+      },
+      "before_faults": {
+        "coverage_by_class": {
+          "business-logic": {
+            "covered": 8,
+            "fraction": "8/8",
+            "total": 8
+          },
+          "io-handling": {
+            "covered": 56,
+            "fraction": "56/86",
+            "total": 86
+          }
+        },
+        "decision_outcomes": "64/94"
+      },
+      "compiler_binary_layout": {
+        "S9(3)": 2,
+        "S9(4)": 2,
+        "S9(8)": 4,
+        "S9(9)": 4
+      },
+      "compiler_runtime_contract": {
+        "library_sha256": "67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429",
+        "package": "3.1.2-5.1ubuntu1"
+      },
+      "compiler_storage_semantics": {
+        "initial_defaults": true,
+        "overlay_equalities": 512,
+        "overlay_maximum": 255,
+        "timing_lengths": [
+          4,
+          8
+        ],
+        "unsigned_lengths": [
+          2,
+          2
+        ]
+      },
+      "eligible_kill_rate": "308/313",
+      "fault_count": 24,
+      "fault_expectations_met": 24,
+      "job": "INTCALC",
+      "kill_rate": "308/426",
+      "measurement_credit": false,
+      "model_calls": 0,
+      "mutant_count": 426,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 113,
+        "killed-divergent": 146,
+        "killed-failure": 162,
+        "not-compiled": 5
+      },
+      "not_compiled": [
+        "CBACT04C-receiving-size-131-17",
+        "CBACT04C-constant-638-379",
+        "CBACT04C-constant-638-381",
+        "CBACT04C-constant-645-391",
+        "CBACT04C-constant-645-393"
+      ],
+      "observed_head": "3283265d71e268b3dc66b09fb2808e72a18b19ac",
+      "post_campaign_adjusted_kill_rate": "308/313",
+      "post_campaign_reviewed_equivalents": [],
+      "qualification_credit": false,
+      "receipt_file_sha256": "ade7bc67fb36fa331b75361e81e12f66588194bddedc74228351d1f1755ec55b",
+      "releasable": false,
+      "remaining_unexplained_survivors": [],
+      "retained_killing_scenarios": [
+        "fault:236-missing:intcalc-two-accounts",
+        "fault:254-missing:intcalc-two-accounts",
+        "fault:272-missing:intcalc-two-accounts",
+        "fault:291-missing:intcalc-two-accounts",
+        "fault:309-missing:intcalc-two-accounts",
+        "fault:326-extended-read-error:intcalc-two-accounts",
+        "fault:326-read-error:intcalc-two-accounts",
+        "fault:356-rewrite-error:intcalc-two-accounts",
+        "fault:416-read-error:intcalc-two-accounts",
+        "fault:500-write-error:intcalc-two-accounts",
+        "fault:524-close-error:intcalc-two-accounts",
+        "fault:543-close-error:intcalc-two-accounts",
+        "fault:561-close-error:intcalc-two-accounts",
+        "fault:579-close-error:intcalc-two-accounts",
+        "fault:597-close-error:intcalc-two-accounts",
+        "intcalc-default-disclosure",
+        "intcalc-large-rate",
+        "intcalc-missing-account",
+        "intcalc-missing-disclosure",
+        "intcalc-missing-xref",
+        "intcalc-pic-0",
+        "intcalc-round-n0_39",
+        "intcalc-solver-rate-false",
+        "intcalc-three-accounts",
+        "intcalc-two-categories"
+      ],
+      "review_adjustment": "Measured status and raw counts unchanged; only individually source/runtime-bound post-campaign arguments are added as listed exclusions. No operator acceptance.",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763",
+      "source_receipt_content_sha256": "8c26a427392e7a43eade0f4e5e53652fc6709ee12cd2a54bf3e384d7b55abf31",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "unresolved_survivors": []
+    },
+    "POSTTRAN": {
+      "after_faults": {
+        "coverage_by_class": {
+          "business-logic": {
+            "covered": 24,
+            "fraction": "24/24",
+            "total": 24
+          },
+          "io-handling": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          }
+        },
+        "decision_outcomes": "109/110",
+        "uncovered": [
+          {
+            "classification": "io-handling",
+            "id": "legacy:cobol-decision:CBTRN02C:203:684",
+            "line": 203,
+            "outcome": "false",
+            "reason": "not-observed; no unreachability claim"
+          }
+        ]
+      },
+      "before_faults": {
+        "coverage_by_class": {
+          "business-logic": {
+            "covered": 24,
+            "fraction": "24/24",
+            "total": 24
+          },
+          "io-handling": {
+            "covered": 49,
+            "fraction": "49/86",
+            "total": 86
+          }
+        },
+        "decision_outcomes": "73/110"
+      },
+      "compiler_binary_layout": {
+        "S9(3)": 2,
+        "S9(4)": 2,
+        "S9(8)": 4,
+        "S9(9)": 4
+      },
+      "compiler_runtime_contract": {
+        "library_sha256": "67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429",
+        "package": "3.1.2-5.1ubuntu1"
+      },
+      "compiler_storage_semantics": {
+        "initial_defaults": true,
+        "overlay_equalities": 512,
+        "overlay_maximum": 255,
+        "timing_lengths": [
+          4,
+          8
+        ],
+        "unsigned_lengths": [
+          2,
+          2
+        ]
+      },
+      "eligible_kill_rate": "369/378",
+      "fault_count": 29,
+      "fault_expectations_met": 29,
+      "job": "POSTTRAN",
+      "kill_rate": "369/489",
+      "measurement_credit": false,
+      "model_calls": 0,
+      "mutant_count": 489,
+      "mutation_counts": {
+        "equivalent (argued, listed)": 111,
+        "killed-divergent": 175,
+        "killed-failure": 194,
+        "not-compiled": 6,
+        "survived": 3
+      },
+      "not_compiled": [
+        "CBTRN02C-receiving-size-140-11",
+        "CBTRN02C-constant-414-207",
+        "CBTRN02C-constant-717-440",
+        "CBTRN02C-constant-717-442",
+        "CBTRN02C-constant-724-452",
+        "CBTRN02C-constant-724-454"
+      ],
+      "observed_head": "3283265d71e268b3dc66b09fb2808e72a18b19ac",
+      "post_campaign_adjusted_kill_rate": "369/375",
+      "post_campaign_reviewed_equivalents": [
+        "CBTRN02C-delete-MOVE-209-47",
+        "CBTRN02C-delete-MOVE-557-314",
+        "CBTRN02C-CVACT03Y-receiving-scale-7-4"
+      ],
+      "qualification_credit": false,
+      "receipt_file_sha256": "f0844dbd249c8621144446dd75cde1ea3f4568e725ec02f05e63d12df6effdbf",
+      "releasable": false,
+      "remaining_unexplained_survivors": [],
+      "retained_killing_scenarios": [
+        "fault:238-missing:posttran-positive",
+        "fault:256-missing:posttran-positive",
+        "fault:275-missing:posttran-positive",
+        "fault:293-missing:posttran-positive",
+        "fault:311-missing:posttran-positive",
+        "fault:329-missing:posttran-positive",
+        "fault:346-extended-read-error:posttran-positive",
+        "fault:346-read-error:posttran-positive",
+        "fault:451-write-error:posttran-missing-card",
+        "fault:474-read-error:posttran-positive",
+        "fault:510-write-error:posttran-new-category",
+        "fault:528-rewrite-error:posttran-positive",
+        "fault:554-rewrite-error:posttran-positive",
+        "fault:584-close-error:posttran-positive",
+        "fault:602-close-error:posttran-positive",
+        "fault:621-close-error:posttran-positive",
+        "fault:639-close-error:posttran-positive",
+        "fault:657-close-error:posttran-positive",
+        "fault:676-close-error:posttran-positive",
+        "posttran-credit-above",
+        "posttran-cycle-debit",
+        "posttran-duplicate-id",
+        "posttran-empty",
+        "posttran-expiry-before",
+        "posttran-expiry-equal-dash",
+        "posttran-expiry-next-day",
+        "posttran-invalid-then-valid",
+        "posttran-large-amount",
+        "posttran-missing-account",
+        "posttran-missing-card",
+        "posttran-negative",
+        "posttran-new-category",
+        "posttran-new-then-existing",
+        "posttran-positive",
+        "posttran-zero"
+      ],
+      "review_adjustment": "Measured status and raw counts unchanged; only individually source/runtime-bound post-campaign arguments are added as listed exclusions. No operator acceptance.",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763",
+      "source_receipt_content_sha256": "18efe77ba378eb2dd38aebb10ec92751bf9364d861f6b5e270fa6d5ba1615cd3",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "unresolved_survivors": [
+        "CBTRN02C-delete-MOVE-209-47",
+        "CBTRN02C-delete-MOVE-557-314",
+        "CBTRN02C-CVACT03Y-receiving-scale-7-4"
+      ]
+    }
+  },
+  "schema": "factory-systematic-public-summary/1"
+}

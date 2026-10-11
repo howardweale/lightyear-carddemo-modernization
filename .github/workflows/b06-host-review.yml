@@ -32,16 +32,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - uses: actions/setup-java@v4
-        with:
-          distribution: corretto
-          java-version: '21.0.10'
+      - name: Exact Corretto JDI runtime (official archive and SHA-256)
+        shell: bash
+        run: |
+          # https://github.com/corretto/corretto-21/releases/tag/21.0.10.7.1
+          archive="$RUNNER_TEMP/corretto-21.0.10.7.1.tar.gz"
+          curl --fail --location --retry 3 --output "$archive" https://corretto.aws/downloads/resources/21.0.10.7.1/amazon-corretto-21.0.10.7.1-linux-x64.tar.gz
+          echo "770f85bf2bbbb99dbe0248409e9424755d94dd6caf38fb9c1ef6434c4f650d48  $archive" | sha256sum --check --strict
+          mkdir "$RUNNER_TEMP/b06-corretto"
+          tar -xzf "$archive" -C "$RUNNER_TEMP/b06-corretto" --strip-components=1
+          echo "JAVA_HOME=$RUNNER_TEMP/b06-corretto" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/b06-corretto/bin" >> "$GITHUB_PATH"
       - run: python -m pip install 'cryptography>=46,<47'
       - name: Exercise real host JDI and refusal boundaries (no containers)
         shell: bash
         run: |
           export B06_HOST_JDK="$JAVA_HOME"
-          python -B -m unittest -v test_b06_jdi_mirrors test_b06_bounded_report test_b06_audit_compatibility test_b06_bounded_format test_b06_transient_peak test_b06_native_diagnostics test_b06_captured_refusal test_b06_unmatched_return test_b06_observer_startup test_b06_observer_bulk_reads test_b06_observer_host_r3 test_b06_observer_audit test_b06_engineering test_evidence_content test_b06_host_tools test_ms94_b06_observer_v2 test_ms94_b06_frame_census test_ms94_b06_posting_replay test_evidence_worker_packaging test_evidence_completeness
+          python -B -m unittest -v test_b06_jdi_mirrors test_b06_packed_consumers test_b06_bounded_report test_b06_audit_compatibility test_b06_bounded_format test_b06_transient_peak test_b06_native_diagnostics test_b06_captured_refusal test_b06_unmatched_return test_b06_observer_startup test_b06_observer_bulk_reads test_b06_observer_host_r3 test_b06_observer_audit test_b06_engineering test_evidence_content test_b06_host_tools test_ms94_b06_observer_v2 test_ms94_b06_frame_census test_ms94_b06_posting_replay test_evidence_worker_packaging test_evidence_completeness
           python -B -m unittest -v test_b06_memory_profile
       - name: Changed source uses LF and Markdown round-trips as UTF-8
         if: github.event_name == 'pull_request'

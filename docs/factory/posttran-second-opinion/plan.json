@@ -16,7 +16,7 @@
     "sha256": "bc45017e8239dc150258f69309ced9df6bbcdf5b8e4f346decf780ac0999e226",
     "version": "codex-cli 0.155.0-alpha.9.2"
   },
-  "content_sha256": "77470c9d8607933358d76c3e0be4af455a7913a90eddad983b47b8d9a0f01f3d",
+  "content_sha256": "c022241cb0e4a62656daf9f889119fdab9441adcd4c6645be3f71da776ab9ebb",
   "execution_authorized": false,
   "human_candidate_edits": false,
   "independence": [
@@ -111,14 +111,49 @@
       "posttran-solver-credit-false",
       "posttran-solver-credit-true"
     ],
-    "generator_commit": "88dbf55",
+    "generated_manifest_sha256": "3ed2e3becd08f4ab04160975994a9637b4b4f0215849a4c3d318d4f189c1691a",
+    "generator_commit": "88dbf5542eba50922078b89609b899c59a997c74",
     "public": [
       "posttran-public",
       "posttran-missing-card",
       "posttran-missing-account",
       "posttran-expired-account"
     ],
-    "required_before_call": "Exact generated input manifest and hashes sealed; no subset selection"
+    "public_input_hashes": {
+      "posttran-expired-account": {
+        "ACCTFILE": "f8c7028069f142bb47393f2d70c44950fb91d0ac10450fe0416d3c7078441492",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "posttran-missing-account": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "942e2a172840e615a0d4351df94322c3953e54b7fab51caf1fb38723b8f96be0"
+      },
+      "posttran-missing-card": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "466093ef4c07a443de460bf03a641c051fd671f3770e5d2a78966de1f8fa7b9e",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "posttran-public": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "1605206de7009cba771a921bf13f4dfcd1673fc13f1b844150355e9a95fa8da3",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      }
+    },
+    "required_before_call": "Recompute every sealed input hash in the isolated evaluation directory; no subset selection"
   },
   "schema": "posttran-independent-preregistration/1",
   "server_snapshot_limitation": "Exact requested model string; official page provides no dated snapshot. No immutable server identity claim.",

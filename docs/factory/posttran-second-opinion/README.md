@@ -32,7 +32,10 @@ invariants and repeatability are evaluated by the judge, never exposed during
 Phase 1. The first accepted candidate is frozen; no person edits it. Compare
 that accepted candidate on all four public POSTTRAN scenarios and all fourteen
 generated POSTTRAN scenarios from the pinned generator. Seal their exact input
-manifest before the first call. A changed manifest requires a new plan hash.
+manifest before the first call. The measured fourteen-case input hashes are now
+sealed in [the generated input manifest](generated-input-manifest.json), from
+Ubuntu run38100613787. All four public input sets are also hash-bound in the
+plan. A changed manifest requires a new plan hash.
 
 Every mismatch gets a stable register ID with candidate/twin hashes, field,
 scenario, values and pinned source lines. Howard or his named reviewer signs

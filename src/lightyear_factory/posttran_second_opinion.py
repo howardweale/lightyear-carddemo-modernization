@@ -23,6 +23,10 @@ def prepare():
     b05=json.loads((ROOT/'docs/calibration/idempiere-ms94/stage-b-05/plan.json').read_bytes())
     cost=json.loads((ROOT/'docs/calibration/idempiere-ms94/stage-b-05/cost-estimate.json').read_bytes());usage=cost['observed_b04_usage']
     phases={}
+    from lightyear_mainframe.legacy_twin import public_inputs
+    public_names=['posttran-public','posttran-missing-card','posttran-missing-account','posttran-expired-account']
+    public_hashes={name:{dd:sha256(raw).hexdigest() for dd,raw in public_inputs(name)[2].items()} for name in public_names}
+    generated=json.loads((DIRECTORY/'generated-input-manifest.json').read_bytes())
     for number,calls,hours,dollars in ((1,3,2,25),(2,2,1,17)):
         phases[str(number)]=dict(attempts=calls,model_calls=calls,compilations=calls,hours=hours,
             input_tokens=250000*calls,output_tokens=16000*calls,per_call_input_tokens=250000,
@@ -39,9 +43,10 @@ def prepare():
         phases=phases,budget_basis=dict(path='docs/calibration/idempiere-ms94/stage-b-05/cost-estimate.json',content_sha256=cost['content_sha256'],observed_usage=usage,
         intcalc='Three successful public INTCALC three-way cases and one refusal establish harness scope only; their model usage is not recorded. No invented INTCALC call-cost average.',
         intcalc_receipt_sha256=sha256((ROOT/'docs/factory/three-way-reconciliation-result.json').read_bytes()).hexdigest()),
-        scenarios=dict(public=['posttran-public','posttran-missing-card','posttran-missing-account','posttran-expired-account'],
+        scenarios=dict(public=public_names,public_input_hashes=public_hashes,
             generated=['posttran-'+n for n in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','solver-credit-false','solver-credit-true')],
-            generator_commit='88dbf55',required_before_call='Exact generated input manifest and hashes sealed; no subset selection'),
+            generator_commit=generated['generator_commit'],generated_manifest_sha256=digest(generated),
+            required_before_call='Recompute every sealed input hash in the isolated evaluation directory; no subset selection'),
         phase1_gate=['compile Java21','structural contract','own-output conservation/rejection/repeatability invariants'],
         independence=['no twin outputs','no invariant results to builder','no human review sheet','no twin-driven repair'],
         phase2_gate='All phase1 disagreements human-adjudicated with source lines; all twin defects resolved; separate phase2 approval',

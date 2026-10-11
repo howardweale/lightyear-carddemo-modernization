@@ -55,7 +55,7 @@ retained and linked in the implementation milestones.
 
 ## Boundaries and remaining milestones
 
-- INTCALC decision coverage: prior baseline 16/47 (34.04%); no new coverage measurement is claimed. Instrumentation and generators remain next work.
+- INTCALC lexical rule-anchor overlap: prior baseline 16/47 (34.04%); this is not execution coverage; no new coverage measurement is claimed. Instrumentation and generators remain next work.
 - Twin versus reference: zero remaining differences in the three exercised INTCALC success cases, plus matching expected missing-disclosure refusal. This does not establish agreement on unexercised paths.
 - Legacy mutant kill rate: not newly measured by this delivery.
 - Multipass acceptance is outstanding because the runtime was unavailable. Reproducibility is established within the recorded Ubuntu toolchain, not across arbitrary toolchains.

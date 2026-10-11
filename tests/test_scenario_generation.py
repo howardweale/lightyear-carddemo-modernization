@@ -20,6 +20,16 @@ class GeneratorTests(unittest.TestCase):
             self.assertEqual(spec['id'],provenance['id'])
         with self.assertRaisesRegex(ValueError,'unknown-generated'):case('../../customer')
 
+    def test_survivor_witnesses_cover_cross_record_state_and_tariff_fallback(self):
+        _,_,three,_=case('intcalc-three-accounts')
+        self.assertEqual(3,len(three['TCATBALF'].splitlines()))
+        _,_,default,_=case('intcalc-default-disclosure')
+        self.assertTrue(default['DISCGRP'].startswith(b'DEFAULT'))
+        for name in ('invalid-then-valid','new-then-existing'):
+            _,_,images,_=case('posttran-'+name)
+            rows=images['DALYTRAN'].splitlines()
+            self.assertEqual(2,len(rows));self.assertNotEqual(rows[0],rows[1])
+
     def test_finite_solver_does_not_claim_unreachable(self):
         self.assertEqual({'x':1},solve({'x':[0,1]},lambda r:r['x']>0)['witness'])
         self.assertEqual('not-solved',solve({'x':[0,1]},lambda r:r['x']>2)['status'])

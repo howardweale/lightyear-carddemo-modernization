@@ -217,6 +217,7 @@ linkage section.
 01 timing pic s9(9) binary.
 procedure division using abcode timing.
  display 'TWIN-CEE3ABD=' abcode upon syserr
+ display 'TWIN-CEE3ABD-TIMING=' timing upon syserr
  stop run returning 12.
 """
 
@@ -243,7 +244,7 @@ procedure division.
 """
 
 
-def build(target, *, instrument=False, mutant=None):
+def build(target, *, instrument=False, mutant=None, systematic=None, fault=None, jobs=None, cp037_keys=False):
     host = linux_platform()
     clock = compiler_clock()
     host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
@@ -256,6 +257,7 @@ def build(target, *, instrument=False, mutant=None):
     target = new_output(target)
     sources = {}
     for job, program in PROGRAMS.items():
+        if jobs and job not in jobs:continue
         folder = target / job
         folder.mkdir()
         (folder / "bin").mkdir()
@@ -276,21 +278,56 @@ def build(target, *, instrument=False, mutant=None):
             changed=mutate((folder/compile_source).read_text(),job,mutant)
             compile_source=program+'-mutant.cbl'
             (folder/compile_source).write_text(changed,encoding='ascii')
-        if instrument:
+        fault_declaration=None
+        if systematic and not (fault and not systematic.get("source_path")):
+            from .systematic_mutation import apply
+            operand=folder/systematic.get('source_path',compile_source)
+            if operand.parent!=folder or operand.suffix not in ('.cpy','.cbl'):raise ValueError('mutant-operand-boundary')
+            changed=apply(operand.read_text(),systematic)
+            if systematic.get('source_path'):
+                operand.write_text(changed,encoding='ascii')
+            else:
+                compile_source=program+"-systematic.cbl"
+                (folder/compile_source).write_text(changed,encoding="ascii")
+        if fault:
+            from .io_faults import derive
+            traced,inventory,fault_declaration=derive((folder/compile_source).read_text(),program,fault)
+            if systematic and not systematic.get("source_path"):
+                from .systematic_mutation import apply_derived
+                traced=apply_derived((folder/compile_source).read_text(),traced,systematic)
+            compile_source=program+"-fault.cbl"
+            (folder/compile_source).write_text(traced,encoding="ascii")
+            write_json(folder/"coverage-inventory.json",inventory)
+        if instrument and not fault:
             from .scenario_coverage import instrument as add_probes
             traced,inventory=add_probes((folder/compile_source).read_text(),program)
             compile_source=program+'-traced.cbl'
             (folder/compile_source).write_text(traced,encoding='ascii')
             write_json(folder/'coverage-inventory.json',inventory)
-        execute(["cobc", "-c", "-fixed", *FLAGS, "-I", ".", compile_source, "-o", "program.o"], folder, folder / "logs/compile-original")
-        execute(["cobc", "-x", "-free", *FLAGS, "-fstatic-call", "main.cob", "abend.cob", "program.o", "-o", "bin/twin"], folder, folder / "logs/link")
+        source_format="-fixed"
+        key_objects=[]
+        if cp037_keys:
+            if instrument or fault or systematic:raise ValueError("cp037-experiment-modes-exclusive")
+            from .cp037_twin import derive,helper
+            changed=derive((folder/compile_source).read_text(),program)
+            compile_source=program+"-cp037.cob"
+            (folder/compile_source).write_text(changed,encoding="ascii")
+            (folder/"key.cob").write_text(helper(),encoding="ascii")
+            execute(["cobc","-c","-free",*FLAGS,"key.cob","-o","key.o"],folder,folder/"logs/key-compile")
+            key_objects=["key.o"];source_format="-free"
+        execute(["cobc", "-c", source_format, *FLAGS, "-I", ".", compile_source, "-o", "program.o"], folder, folder / "logs/compile-original")
+        execute(["cobc", "-x", "-free", *FLAGS, "-fstatic-call", "main.cob", "abend.cob", "program.o", *key_objects, "-o", "bin/twin"], folder, folder / "logs/link")
         for dd, (_, key) in FILES[job].items():
             if key:
-                (folder / (dd + ".cob")).write_text(indexed_adapter(job, dd), encoding="ascii")
-                execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
+                bridge=indexed_adapter(job, dd)
+                if cp037_keys:
+                    from .cp037_twin import adapter
+                    bridge=adapter(bridge,key,job=="INTCALC" and dd=="XREFFILE")
+                (folder / (dd + ".cob")).write_text(bridge, encoding="ascii")
+                execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", *key_objects, "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
-    return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
-                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument, legacy_mutant=mutant,
+    return receipt(target / "build-receipt.json", phase="build", cp037_keys=cp037_keys, source_commit=SOURCE_COMMIT,
+                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=(instrument or bool(fault)) and not bool(systematic), legacy_mutant=mutant, systematic_mutant=systematic, fault_declaration=fault_declaration,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,
@@ -379,7 +416,7 @@ def runtime_clock(job, meta):
     return env
 
 
-def run(target, scenario, output, *, generated=None):
+def run(target, scenario, output, *, generated=None, timeout=120):
     linux_platform()
     target = Path(target).resolve()
     build_record=verify_build(target)
@@ -408,7 +445,7 @@ def run(target, scenario, output, *, generated=None):
         else:
             physical.write_bytes(flat.read_bytes())
         env["DD_" + dd] = str(physical)
-    result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12))
+    result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12), timeout=timeout)
     outputs = {}
     for dd, (length, key) in FILES[job].items():
         flat = output / "after" / (dd + ".fixed")
@@ -420,7 +457,7 @@ def run(target, scenario, output, *, generated=None):
         (output / "after" / dd).write_bytes(raw)
         outputs[dd] = {"sha256": sha(raw), "records": len(raw) // (length+1)}
     invariants = None
-    if job == "POSTTRAN":
+    if job == "POSTTRAN" and not build_record.get("systematic_mutant"):
         from .posttran_invariants import check, review_sheet
         invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'])
         write_json(output / 'posttran-invariants.json', invariants)
@@ -435,6 +472,8 @@ def run(target, scenario, output, *, generated=None):
                    build_receipt_sha256=sha((target / "build-receipt.json").read_bytes()),
                    inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
                    public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,
+                   program_stdout_sha256=sha(b"\n".join(line for line in result.stdout.splitlines() if not line.startswith(b"LYC|"))),
+                   program_stderr_sha256=sha(result.stderr),
                    deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env.get("TWIN_PROCESSING_DATE"),
                    processing_date_contract="required" if job == "INTCALC" else "not-used-by-POSTTRAN",
                    adjudication="not-performed", model_calls=0)

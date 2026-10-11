@@ -1,0 +1,65 @@
+name: Factory systematic review
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_mainframe/**'
+      - 'src/lightyear_factory/scenario_policy.py'
+      - 'tools/check_factory_review.py'
+      - 'docs/factory/decision-classification.json'
+      - '.github/workflows/factory-systematic-review.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  engineering:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        job: [INTCALC, POSTTRAN]
+    env:
+      PYTHONPATH: src:.
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned public compiler
+        run: bash tools/legacy_twin/install-pinned.sh
+      - name: Compile and measure systematic public cases
+        run: python -B -m tools.check_factory_review work/factory-review-${{ matrix.job }} ${{ matrix.job }}
+      - name: Preserve every refusal and survivor
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-review-${{ matrix.job }}
+          path: work/factory-review-${{ matrix.job }}
+          retention-days: 14
+  cp037:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src:.
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned compiler
+        run: bash tools/legacy_twin/install-pinned.sh
+      - name: Reconcile all public and generated scenarios with both key modes
+        run: python -B -m tools.check_cp037_twin work/cp037-twin
+      - name: Preserve both outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cp037-twin-reconciliation
+          path: work/cp037-twin

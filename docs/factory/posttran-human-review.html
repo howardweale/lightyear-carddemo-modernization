@@ -1,0 +1,827 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>POSTTRAN operator review</title>
+<style>body{font:16px system-ui;max-width:1150px;margin:2rem auto;padding:1rem;color:#183148;background:#f7f9fc}section{background:white;border:1px solid #ccd;padding:1rem;margin:1rem 0}table{border-collapse:collapse;width:100%;font:13px monospace}td,th{border:1px solid #ccd;padding:.4rem;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere}pre{overflow:auto;font-size:12px}textarea{width:98%}button,select,input{font:inherit;padding:.5rem}</style>
+<h1>POSTTRAN: ten public records for operator review</h1><p>The twin remains provisional. Review each input, output and source-based expected result. This page creates an unsigned decision file; it neither signs nor promotes evidence.</p>
+<label>Your name <input id="reviewer" autocomplete="name"></label><section><h2>1. posttran-public / 0000000040455859</h2><p><b>Expected:</b> Reject102: credit/cycle condition exceeds limit (independently checked)</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>715.44</td><td>715.44</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>1142167692878931</td><td>1142167692878931</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>1</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Brekke, Bradtke and Weimann                                                             </td><td>Purchase at Brekke, Bradtke and Weimann                                                             </td></tr><tr><td>DALYTRAN-ID</td><td>0000000040455859</td><td>0000000040455859</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>Veummouth                                         </td><td>Veummouth                                         </td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>800000000</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Brekke, Bradtke and Weimann                       </td><td>Brekke, Bradtke and Weimann                       </td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>18481-5013</td><td>18481-5013</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>                          </td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>POS TERM  </td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>01</td></tr><tr><td>WS-VALIDATION-FAIL-REASON</td><td>—</td><td>102</td></tr><tr><td>WS-VALIDATION-FAIL-REASON-DESC</td><td>—</td><td>OVERLIMIT TRANSACTION                                                       </td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-0"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-0" rows="2"></textarea></label></section><section><h2>2. posttran-public / 0000000569807281</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>-998.33</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>9349107475869214</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Return item at Kiehn, Russel and Schaefer                                                           </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000569807281</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>New Loren                                         </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Kiehn, Russel and Schaefer                        </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>41813     </td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>OPERATOR  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>03</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>-998.33</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>9349107475869214</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Return item at Kiehn, Russel and Schaefer                                                           </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000569807281</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>New Loren                                         </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Kiehn, Russel and Schaefer                        </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>41813     </td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>OPERATOR  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>03</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-1"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-1" rows="2"></textarea></label></section><section><h2>3. posttran-public / 0000000085824369</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>999.77</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>3999169246375885</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Pollich-Mosciski                                                                        </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000085824369</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>Georgettemouth                                    </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Pollich-Mosciski                                  </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>85890     </td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>999.77</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>3999169246375885</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Purchase at Pollich-Mosciski                                                                        </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000085824369</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>Georgettemouth                                    </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Pollich-Mosciski                                  </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>85890     </td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>POS TERM  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>01</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-2"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-2" rows="2"></textarea></label></section><section><h2>4. posttran-public / 0000000000683580</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>504.77</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>4859452612877065</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Abshire-Lowe                                                                            </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000000683580</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>North Enoshaven                                   </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Abshire-Lowe                                      </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>72112     </td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>504.77</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>4859452612877065</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Purchase at Abshire-Lowe                                                                            </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000000683580</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>North Enoshaven                                   </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Abshire-Lowe                                      </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>72112     </td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>POS TERM  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>01</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-3"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-3" rows="2"></textarea></label></section><section><h2>5. posttran-public / 0000000001774260</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>-919.00</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>0927987108636232</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Return item at Nitzsche, Nicolas and Lowe                                                           </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000001774260</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>Fidelshire                                        </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Nitzsche, Nicolas and Lowe                        </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>53378     </td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>OPERATOR  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>03</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>-919.00</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>0927987108636232</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Return item at Nitzsche, Nicolas and Lowe                                                           </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000001774260</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>Fidelshire                                        </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Nitzsche, Nicolas and Lowe                        </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>53378     </td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>OPERATOR  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>03</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-4"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-4" rows="2"></textarea></label></section><section><h2>6. posttran-public / 0000000006292564</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>67.88</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>6009619150674526</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Ernser, Roob and Gleason                                                                </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000006292564</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>North Makenziemouth                               </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Ernser, Roob and Gleason                          </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>78487-7965</td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>67.88</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>6009619150674526</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Purchase at Ernser, Roob and Gleason                                                                </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000006292564</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>North Makenziemouth                               </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Ernser, Roob and Gleason                          </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>78487-7965</td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>POS TERM  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>01</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-5"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-5" rows="2"></textarea></label></section><section><h2>7. posttran-public / 0000000009101861</h2><p><b>Expected:</b> Post unchanged amount/identifiers under source validation</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>281.77</td><td>—</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>8040580410348680</td><td>—</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>—</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Guann LLC                                                                               </td><td>—</td></tr><tr><td>DALYTRAN-ID</td><td>0000000009101861</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>South Lynn                                        </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Guann LLC                                         </td><td>—</td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>51508-9166</td><td>—</td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>—</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>—</td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>—</td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>—</td></tr><tr><td>TRAN-AMT</td><td>—</td><td>281.77</td></tr><tr><td>TRAN-CARD-NUM</td><td>—</td><td>8040580410348680</td></tr><tr><td>TRAN-CAT-CD</td><td>—</td><td>1</td></tr><tr><td>TRAN-DESC</td><td>—</td><td>Purchase at Guann LLC                                                                               </td></tr><tr><td>TRAN-ID</td><td>—</td><td>0000000009101861</td></tr><tr><td>TRAN-MERCHANT-CITY</td><td>—</td><td>South Lynn                                        </td></tr><tr><td>TRAN-MERCHANT-ID</td><td>—</td><td>800000000</td></tr><tr><td>TRAN-MERCHANT-NAME</td><td>—</td><td>Guann LLC                                         </td></tr><tr><td>TRAN-MERCHANT-ZIP</td><td>—</td><td>51508-9166</td></tr><tr><td>TRAN-ORIG-TS</td><td>—</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>TRAN-PROC-TS</td><td>—</td><td>2022-07-18-00.00.00.000000</td></tr><tr><td>TRAN-SOURCE</td><td>—</td><td>POS TERM  </td></tr><tr><td>TRAN-TYPE-CD</td><td>—</td><td>01</td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-6"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-6" rows="2"></textarea></label></section><section><h2>8. posttran-missing-card / 0000000000683580</h2><p><b>Expected:</b> Reject100: No matching XREFFILE card</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>504.77</td><td>504.77</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>9999999999999999</td><td>9999999999999999</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>1</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Abshire-Lowe                                                                            </td><td>Purchase at Abshire-Lowe                                                                            </td></tr><tr><td>DALYTRAN-ID</td><td>0000000000683580</td><td>0000000000683580</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>North Enoshaven                                   </td><td>North Enoshaven                                   </td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>800000000</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Abshire-Lowe                                      </td><td>Abshire-Lowe                                      </td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>72112     </td><td>72112     </td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>                          </td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>POS TERM  </td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>01</td></tr><tr><td>WS-VALIDATION-FAIL-REASON</td><td>—</td><td>100</td></tr><tr><td>WS-VALIDATION-FAIL-REASON-DESC</td><td>—</td><td>INVALID CARD NUMBER FOUND                                                   </td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-7"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-7" rows="2"></textarea></label></section><section><h2>9. posttran-missing-account / 0000000000683580</h2><p><b>Expected:</b> Reject101: XREF account absent from ACCTFILE</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>504.77</td><td>504.77</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>4859452612877065</td><td>4859452612877065</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>1</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Abshire-Lowe                                                                            </td><td>Purchase at Abshire-Lowe                                                                            </td></tr><tr><td>DALYTRAN-ID</td><td>0000000000683580</td><td>0000000000683580</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>North Enoshaven                                   </td><td>North Enoshaven                                   </td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>800000000</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Abshire-Lowe                                      </td><td>Abshire-Lowe                                      </td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>72112     </td><td>72112     </td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>                          </td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>POS TERM  </td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>01</td></tr><tr><td>WS-VALIDATION-FAIL-REASON</td><td>—</td><td>101</td></tr><tr><td>WS-VALIDATION-FAIL-REASON-DESC</td><td>—</td><td>ACCOUNT RECORD NOT FOUND                                                    </td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-8"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-8" rows="2"></textarea></label></section><section><h2>10. posttran-expired-account / 0000000000683580</h2><p><b>Expected:</b> Reject103: ISO origin date is after expiry; overrides over-limit102</p><table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr><tr><td>DALYTRAN-AMT</td><td>504.77</td><td>504.77</td></tr><tr><td>DALYTRAN-CARD-NUM</td><td>4859452612877065</td><td>4859452612877065</td></tr><tr><td>DALYTRAN-CAT-CD</td><td>1</td><td>1</td></tr><tr><td>DALYTRAN-DESC</td><td>Purchase at Abshire-Lowe                                                                            </td><td>Purchase at Abshire-Lowe                                                                            </td></tr><tr><td>DALYTRAN-ID</td><td>0000000000683580</td><td>0000000000683580</td></tr><tr><td>DALYTRAN-MERCHANT-CITY</td><td>North Enoshaven                                   </td><td>North Enoshaven                                   </td></tr><tr><td>DALYTRAN-MERCHANT-ID</td><td>800000000</td><td>800000000</td></tr><tr><td>DALYTRAN-MERCHANT-NAME</td><td>Abshire-Lowe                                      </td><td>Abshire-Lowe                                      </td></tr><tr><td>DALYTRAN-MERCHANT-ZIP</td><td>72112     </td><td>72112     </td></tr><tr><td>DALYTRAN-ORIG-TS</td><td>2022-06-10 19:27:53.000000</td><td>2022-06-10 19:27:53.000000</td></tr><tr><td>DALYTRAN-PROC-TS</td><td>                          </td><td>                          </td></tr><tr><td>DALYTRAN-SOURCE</td><td>POS TERM  </td><td>POS TERM  </td></tr><tr><td>DALYTRAN-TYPE-CD</td><td>01</td><td>01</td></tr><tr><td>WS-VALIDATION-FAIL-REASON</td><td>—</td><td>103</td></tr><tr><td>WS-VALIDATION-FAIL-REASON-DESC</td><td>—</td><td>TRANSACTION RECEIVED AFTER ACCT EXPIRATION                                  </td></tr></table><details><summary>spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561</summary><pre>379:                                                                                 
+380:        1500-A-LOOKUP-XREF.                                                      
+381:       *    DISPLAY &#x27;CARD NUMBER: &#x27; DALYTRAN-CARD-NUM                            
+382:            MOVE DALYTRAN-CARD-NUM TO FD-XREF-CARD-NUM                           
+383:            READ XREF-FILE INTO CARD-XREF-RECORD                                 
+384:               INVALID KEY                                                       
+385:                 MOVE 100 TO WS-VALIDATION-FAIL-REASON                           
+386:                 MOVE &#x27;INVALID CARD NUMBER FOUND&#x27;                                
+387:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+388:               NOT INVALID KEY                                                   
+389:       *           DISPLAY &#x27;ACCOUNT RECORD FOUND&#x27;                                
+390:                   CONTINUE                                                      
+391:            END-READ                                                             
+392:            EXIT.                                                                
+393:        1500-B-LOOKUP-ACCT.                                                      
+394:            MOVE XREF-ACCT-ID TO FD-ACCT-ID                                      
+395:            READ ACCOUNT-FILE INTO ACCOUNT-RECORD                                
+396:               INVALID KEY                                                       
+397:                 MOVE 101 TO WS-VALIDATION-FAIL-REASON                           
+398:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+399:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+400:               NOT INVALID KEY                                                   
+401:       *         DISPLAY &#x27;ACCT-CREDIT-LIMIT:&#x27; ACCT-CREDIT-LIMIT                  
+402:       *         DISPLAY &#x27;TRAN-AMT         :&#x27; DALYTRAN-AMT                       
+403:                 COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      
+404:                                     - ACCT-CURR-CYC-DEBIT                       
+405:                                     + DALYTRAN-AMT                              
+406:                                                                                 
+407:                 IF ACCT-CREDIT-LIMIT &gt;= WS-TEMP-BAL                             
+408:                   CONTINUE                                                      
+409:                 ELSE                                                            
+410:                   MOVE 102 TO WS-VALIDATION-FAIL-REASON                         
+411:                   MOVE &#x27;OVERLIMIT TRANSACTION&#x27;                                  
+412:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+413:                 END-IF                                                          
+414:                 IF ACCT-EXPIRAION-DATE &gt;= DALYTRAN-ORIG-TS (1:10)               
+415:                   CONTINUE                                                      
+416:                 ELSE                                                            
+417:                   MOVE 103 TO WS-VALIDATION-FAIL-REASON                         
+418:                   MOVE &#x27;TRANSACTION RECEIVED AFTER ACCT EXPIRATION&#x27;             
+419:                     TO WS-VALIDATION-FAIL-REASON-DESC                           
+420:                 END-IF                                                          
+423:       *---------------------------------------------------------------*         
+424:        2000-POST-TRANSACTION.                                                   
+425:            MOVE  DALYTRAN-ID            TO    TRAN-ID                           
+426:            MOVE  DALYTRAN-TYPE-CD       TO    TRAN-TYPE-CD                      
+427:            MOVE  DALYTRAN-CAT-CD        TO    TRAN-CAT-CD                       
+428:            MOVE  DALYTRAN-SOURCE        TO    TRAN-SOURCE                       
+429:            MOVE  DALYTRAN-DESC          TO    TRAN-DESC                         
+430:            MOVE  DALYTRAN-AMT           TO    TRAN-AMT                          
+431:            MOVE  DALYTRAN-MERCHANT-ID   TO    TRAN-MERCHANT-ID                  
+432:            MOVE  DALYTRAN-MERCHANT-NAME TO    TRAN-MERCHANT-NAME                
+433:            MOVE  DALYTRAN-MERCHANT-CITY TO    TRAN-MERCHANT-CITY                
+434:            MOVE  DALYTRAN-MERCHANT-ZIP  TO    TRAN-MERCHANT-ZIP                 
+435:            MOVE  DALYTRAN-CARD-NUM      TO    TRAN-CARD-NUM                     
+436:            MOVE  DALYTRAN-ORIG-TS       TO    TRAN-ORIG-TS                      
+437:            PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   
+438:            MOVE  DB2-FORMAT-TS          TO    TRAN-PROC-TS                      
+439:                                                                                 
+440:            PERFORM 2700-UPDATE-TCATBAL                                          
+441:            PERFORM 2800-UPDATE-ACCOUNT-REC                                      
+442:            PERFORM 2900-WRITE-TRANSACTION-FILE                                  
+443:                                                                                 
+444:            EXIT.                                                                
+445:                                                                                 
+446:        2500-WRITE-REJECT-REC.                                                   
+545:        2800-UPDATE-ACCOUNT-REC.                                                 
+546:       * Update the balances in account record to reflect posted trans.          
+547:            ADD DALYTRAN-AMT  TO ACCT-CURR-BAL                                   
+548:            IF DALYTRAN-AMT &gt;= 0                                                 
+549:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-CREDIT                          
+550:            ELSE                                                                 
+551:               ADD DALYTRAN-AMT TO ACCT-CURR-CYC-DEBIT                           
+552:            END-IF                                                               
+553:                                                                                 
+554:            REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         
+555:               INVALID KEY                                                       
+556:                 MOVE 109 TO WS-VALIDATION-FAIL-REASON                           
+557:                 MOVE &#x27;ACCOUNT RECORD NOT FOUND&#x27;                                 
+558:                   TO WS-VALIDATION-FAIL-REASON-DESC                             
+559:            END-REWRITE.                                                         
+560:            EXIT.                                                                
+561:       *---------------------------------------------------------------*         </pre></details><p><label>Decision <select id="decision-9"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-9" rows="2"></textarea></label></section>
+<button id="download">Download my unsigned decisions</button><p id="message" role="status"></p>
+<h2>Sign through the existing operator flow</h2><p>After reviewing the downloaded JSON, run the documented <code>python -m lightyear_mainframe.posttran_review sign</code> command on your authority host. Keep your operator key local. No key is entered into this page.</p>
+<script>const packet={"schema": "posttran-human-review/1", "sheet_sha256": "07e1a1401fe5fe8ad0f88d4cc89034d361678891637863f28f037d59fc9165f9", "source_sha256": "6f27b0c39e2e44ad736caf36d2f9c8b7275451b41c9c3fbfe24d034577f4a064", "acceptance_sha256": "a28664ab3c24755e0bfaa804448d3abe0200cc88f42aa7ecb222ad3d9eb9774c", "reviewer": null, "decisions": [{"index": 0, "scenario": "posttran-public", "id": "0000000040455859", "decision": null, "reason": null}, {"index": 1, "scenario": "posttran-public", "id": "0000000569807281", "decision": null, "reason": null}, {"index": 2, "scenario": "posttran-public", "id": "0000000085824369", "decision": null, "reason": null}, {"index": 3, "scenario": "posttran-public", "id": "0000000000683580", "decision": null, "reason": null}, {"index": 4, "scenario": "posttran-public", "id": "0000000001774260", "decision": null, "reason": null}, {"index": 5, "scenario": "posttran-public", "id": "0000000006292564", "decision": null, "reason": null}, {"index": 6, "scenario": "posttran-public", "id": "0000000009101861", "decision": null, "reason": null}, {"index": 7, "scenario": "posttran-missing-card", "id": "0000000000683580", "decision": null, "reason": null}, {"index": 8, "scenario": "posttran-missing-account", "id": "0000000000683580", "decision": null, "reason": null}, {"index": 9, "scenario": "posttran-expired-account", "id": "0000000000683580", "decision": null, "reason": null}]};document.getElementById('download').onclick=()=>{packet.reviewer=document.getElementById('reviewer').value.trim();for(const row of packet.decisions){row.decision=document.getElementById('decision-'+row.index).value;row.reason=document.getElementById('reason-'+row.index).value.trim();}if(!packet.reviewer||packet.decisions.some(r=>!r.decision||!r.reason)){document.getElementById('message').textContent='Enter your name and a decision and reason for every record.';return;}const url=URL.createObjectURL(new Blob([JSON.stringify(packet,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='posttran-decisions-unsigned.json';a.click();URL.revokeObjectURL(url);document.getElementById('message').textContent='Unsigned decisions downloaded. Review before signing.';};</script></html>

@@ -47,6 +47,12 @@ class Oct13GateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'implementation-commit'):
                     with gate.authorized(path,e.sha(path),gate.expected_go(value)):pass
 
+    def test_native_relative_class_paths_match_host_compilation_basenames(self):
+        with tempfile.TemporaryDirectory() as temp:
+            value=request(Path(temp))
+            value=reseal(value,observer_class_files_sha256={'lightyear/observer/'+n:h for n,h in value['observer_class_files_sha256'].items()})
+            gate.validate_request(value)
+
     def test_failed_memory_stays_blocked_even_with_exact_go(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);value=request(root);memory=copy.deepcopy(value['host_memory_validation'])

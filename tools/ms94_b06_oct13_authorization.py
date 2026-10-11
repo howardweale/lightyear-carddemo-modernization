@@ -19,11 +19,11 @@ def validate_request(request):
     require((request['not_before_utc'],request['deadline_utc'])==WINDOW,'oct13-calendar')
     for name in ('asset_index_sha256','asset_index_file_sha256','cap_projection_sha256','host_witness_validation_sha256','mirror_adapter_source_sha256'):
         require(re.fullmatch('[0-9a-f]{64}',request.get(name,'')) is not None,'oct13-'+name)
-    require(len(request['observer_class_files_sha256'])==14,'oct13-compiled-class-count')
+    require(len({Path(name).name for name in request['observer_class_files_sha256']})==14,'oct13-compiled-class-count')
     memory=request.get('host_memory_validation')
     require(isinstance(memory,dict) and digest(memory)==request.get('host_witness_validation_sha256'),'oct13-memory-evidence-binding')
     require(memory.get('observer_source_sha256')==request['observer_source_sha256'] and
-            memory.get('compiled_observer_sha256')==request['observer_class_files_sha256'],'oct13-memory-implementation-binding')
+            memory.get('compiled_observer_sha256')=={Path(name).name:value for name,value in request['observer_class_files_sha256'].items()},'oct13-memory-implementation-binding')
     require(type(request.get('memory_gate')) is bool,'oct13-memory-gate-shape')
     fit=memory.get('growth_fit',{});interval=fit.get('slope_95_percent',[])
     witnesses=memory.get('input_witnesses',{})

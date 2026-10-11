@@ -73,7 +73,11 @@ def check(output):
         control=run_case(output/'control',name,folder/'control',True)
         traced=run_case(output/'traced',name,folder/'traced',True)
         if control['status']!='executed' or traced['status']!='executed':
-            raise AssertionError('generated control execution unavailable:'+name+':'+str(control)+':'+str(traced))
+            expected_duplicate=(name=='intcalc-duplicate-category' and all(
+                r['status']=='refused' and 'rc=66;' in r['reason'] and r['reason'].endswith('/logs/load-TCATBALF')
+                for r in (control,traced)))
+            if not expected_duplicate:raise AssertionError('generated control execution unavailable:'+name+':'+str(control)+':'+str(traced))
+            traced['input_admission']='duplicate indexed key refused before legacy execution; no coverage/kill credit'
         if signature(control)!=signature(traced):raise AssertionError('generated instrumentation control differs:'+name)
         stdout=folder/'traced/logs/program.stdout'
         if stdout.exists():all_stdout[job].append(stdout.read_text())

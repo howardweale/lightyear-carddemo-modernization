@@ -144,7 +144,7 @@ def check(before,after,*,timestamp,returncode=None):
     require(cats==actual_cats,'category-conservation')
     return dict(schema='posttran-independent-invariants/2',passed=not problems,failures=problems,
         depends_on_register=['POSTTRAN-DUPLICATE-ID-NONATOMIC','POSTTRAN-CYCLE-DEBIT-SIGN'],
-        duplicate_abend=abend,processed_prefix=len(expected),unprocessed_suffix=len(daily)-len(expected),
+        duplicate_abend=abend,observed_returncode=returncode,processed_prefix=len(expected),unprocessed_suffix=len(daily)-len(expected),
         unresolved_register=runtime_register(rejected),inputs=len(daily),posted=len(posted),rejected=len(rejected),
         oracle_class='executable-twin',oracle_status='provisional',zos_confirmation=False,releasable=False,
         repeatability='requires-separate-second-run',human_review='pending',java_second_opinion='unavailable')
@@ -187,12 +187,13 @@ def review_sheet(before,after):
 def main():
     import argparse
     p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--timestamp',required=True)
+    p.add_argument('--returncode',type=int,help='Observed candidate exit code; required to authenticate duplicate-write RC12')
     a=p.parse_args()
     from .legacy_twin import FILES,write_json
     before={dd:(a.run/'before'/dd).read_bytes() for dd in FILES['POSTTRAN']}
     # Shared candidate integration expects newline-framed images, same as twin after/.
     after={dd:(a.run/'after'/dd).read_bytes() for dd in FILES['POSTTRAN']}
-    result=check(before,after,timestamp=a.timestamp)
+    result=check(before,after,timestamp=a.timestamp,returncode=a.returncode)
     write_json(a.run/'posttran-invariants.json',result)
     if not result['passed']: raise SystemExit(1)
 

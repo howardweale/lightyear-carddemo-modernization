@@ -10,13 +10,18 @@ native OOM's initiating cause.
 The new opt-in `bounded-observer-v1` format streams class definitions on first
 sight. A private disk index stores class identity, definition hash and prepared
 state, with a fixed 256-entry heap cache and 262,144 slots. Pending activations
-retain matching identifiers and entry age, with a hard 256-activation cap.
+retain matching identifiers and entry age in 256 preallocated slots, with a hard
+256-activation cap. Pre-dispatch refusal witnesses also use fixed storage, so
+releasing or reusing a slot cannot change the captured refusal operands.
 Return records reference the already emitted entry. Completed payloads are not
 retained. Checkpoint frames reference class definitions rather than duplicating
 constant pools and method bodies. Binary fields are base64; the JSON writer uses
-bounded chunks. Audit records use a bounded record buffer. Large routine event details are
-losslessly DEFLATE/base64 encoded once, with length and SHA-256 checks; quotas
-count their wire bytes. Refusal context stays directly inspectable.
+bounded chunks. Audit records use a bounded record buffer. Diagnostic metadata uses a stateless
+versioned DEFLATE/base64 envelope with a fixed public dictionary; quotas count
+original wire bytes and readers reconstruct every field. Refusal context stays
+directly inspectable. The older detail encoding remains readable. The
+[full-stream comparison](b06-compact-diagnostic-wire.json) preserves all 273,061
+diagnostic records while reducing 134,217,565 bytes to 52,562,139 (2.55×).
 
 The engineering-only JDI mirror adapter bounds the JDK's own strong class cache
 to 1,024 mirrors (512 low-water), retaining active and unprepared types. It uses
@@ -50,6 +55,29 @@ minutes cleanup, a 30-minute candidate timeout, zero models and zero credit.
 The exact implementation/classes/template hashes and proposed calendar will be
 published after validation; no approval or native execution is implied.
 
+## Preserved native evidence and limits of the inference
+
+The prior r3 stream contains 12,396 generation entries, compared with 12,394 in
+diagnostic r1 and 12,414 in practice r1. More audit records did not establish
+further application progress. Its five accepted unmatched returns are at records
+230,866, 230,910, 230,949, 230,994 and 231,011; the OOM follows 147 records after
+the last. The final audit identifies `ClassDefiner.defineClass` at depth 110.
+A shared application phase is a hypothesis, not an established cause.
+
+The historical host baseline retained about 560 bytes/event. Native definition
+inputs reached about 262 KB versus 10 KB on the host; native class-data graphs
+had median 110 nodes versus one, and depths reached 213 versus 131. After-GC
+sampling misses serialization peaks. These differences explain why failure to
+reproduce the native OOM did not justify postponing bounded-memory work.
+
+The [historical audit comparison](b06-historical-audit-compatibility.json) checks
+both signed incomplete streams using the old and current structural readers.
+Neither is upgraded to a complete provenance replay or a qualification pass.
+[Host alternatives measurements](https://github.com/howardweale/lightyear-carddemo-modernization/pull/319)
+are a separate deliverable. After two explicitly approved native attempts, an
+unresolved initiating cause requires Howard to choose the next design; no further
+observer repair attempt is automatic.
+
 ## Validation record
 
 - Existing historical readers remain available for their original formats.
@@ -65,8 +93,12 @@ published after validation; no approval or native execution is implied.
 - The first mirror-cache variant stopped at its pin guard: unknown JDI
   preparation status was conservatively retained. The correction reads actual
   status outside the JDI cache lock; genuinely unprepared mirrors remain pinned.
-- The corrected full-volume 192 MiB host experiment is running. Flatness and
-  completion are not yet claimed.
+- The fourth variant bounded JDI mirrors and stayed below 6,736,736 bytes after
+  GC, but stopped at 27,388 generation entries on the unchanged 128 MiB metadata
+  cap. Its slope was still positive: 0.564 bytes/emitted record, 95% interval
+  0.181–0.947. It is preserved as a failed acceptance attempt. Fixed retained
+  pending/witness storage and further lossless metadata compaction are now being
+  validated; completion and a flat curve are not yet claimed.
 - A production-serializer transient test passed with a 1 MiB definition and
   4,096-node graph resident at 85% occupancy of a 192 MiB heap. Final-source
   measurements will accompany the final validation record.

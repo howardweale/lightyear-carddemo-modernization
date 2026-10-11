@@ -29,6 +29,8 @@ def validate_scope(group):
           'diagnostic-review-exception-window')
 
 def validate_event(event, prior):
+    from tools.ms94_b06_observer_format import audit_detail
+    prior=audit_detail(prior)
     check(event.get('policy') == POLICY and event.get('checkpoint') is False and
           event.get('observation_complete') is False and event.get('provenance_created') is False,
           'diagnostic-unmatched-return-event')

@@ -60,10 +60,10 @@ def run(jdk, out, *, iterations=1400, timeout=10800, heap=192, suppress_every=20
     generated = out/'MemoryStacks.java'; generated.write_text(stacks_source(), encoding='utf-8')
     with (out/'compile.stdout').open('w') as stdout, (out/'compile.stderr').open('w') as stderr:
         subprocess.run([str(javac), '-J-Xmx512m', '--add-modules', 'jdk.jdi', '-d', str(classes),
-                        str(source), str(fixture), str(harness), str(generated)],
+                        str(source), str(fixture), str(harness), str(generated)]+([str(source.with_name('BoundedJdiMirrors.java'))] if bounded else []),
                        check=True, stdout=stdout, stderr=stderr, timeout=180)
     manifest = dict(schema='b06-memory-baseline/1', host_only=True, native_admission=False,
-                    observer_source_sha256=digest(source), harness_sha256=digest(harness),
+                    observer_source_sha256=digest(source), mirror_adapter_sha256=digest(source.with_name('BoundedJdiMirrors.java')) if bounded else None, harness_sha256=digest(harness),
                     fixture_sha256=digest(fixture), generated_fixture_sha256=digest(generated),
                     threads=3, iterations_per_thread=iterations, minimum_requested_generation_calls=3*3*iterations,
                     observer_mode='bounded-observer-v1' if bounded else 'diagnostic-unmatched-return-v1',
@@ -83,7 +83,7 @@ def run(jdk, out, *, iterations=1400, timeout=10800, heap=192, suppress_every=20
             banner = target.stdout.readline(); port = banner.strip().rsplit(':',1)[-1].strip()
             if not port.isdigit():
                 raise ValueError('host-listener-unavailable')
-            observer = subprocess.Popen([str(java), '-Xmx192m']+(['-XX:SoftRefLRUPolicyMSPerMB=0'] if bounded else [])+['-XX:+HeapDumpOnOutOfMemoryError',
+            observer = subprocess.Popen([str(java), '-Xmx192m']+(['-XX:SoftRefLRUPolicyMSPerMB=0','--add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED'] if bounded else [])+['-XX:+HeapDumpOnOutOfMemoryError',
                 '-XX:HeapDumpPath='+str(out/'observer-private.hprof'), '--add-modules','jdk.jdi', '-cp',str(classes),
                 'MemoryObserverHarness','127.0.0.1',port,str(out),str(jcmd),str(suppress_every)]+(['bounded-observer-v1'] if bounded else []),
                 stdin=subprocess.DEVNULL, stdout=output, stderr=error)

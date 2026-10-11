@@ -111,7 +111,10 @@ public final class MemoryObserverHarness {
         types.addAll(List.of("java.lang.invoke.InnerClassLambdaMetafactory","java.lang.invoke.InvokerBytecodeGenerator",
             "java.lang.invoke.MethodHandles$Lookup$ClassDefiner","java.lang.ClassLoader"));
         for(String type:types){var request=vm.eventRequestManager().createClassPrepareRequest();request.addClassFilter(type);request.setSuspendPolicy(EventRequest.SUSPEND_ALL);request.enable();}
-        for(ReferenceType type:vm.allClasses())call("configure",new Class<?>[]{ReferenceType.class},type);
+        if(bounded){
+            call("initializeMirrors",new Class<?>[]{});
+            for(String name:types)for(ReferenceType type:vm.classesByName(name))call("configure",new Class<?>[]{ReferenceType.class},type);
+        } else for(ReferenceType type:vm.allClasses())call("configure",new Class<?>[]{ReferenceType.class},type);
         var exceptions=vm.eventRequestManager().createExceptionRequest(null,true,true);exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL);exceptions.enable();
         call("emit",new Class<?>[]{Map.class,boolean.class},new LinkedHashMap<>(Map.of("kind","host-memory-probe-ready","native_admission",false)),false);
         boolean running=true;long sets=0;
@@ -139,7 +142,7 @@ public final class MemoryObserverHarness {
                     else if(event instanceof VMDeathEvent || event instanceof VMDisconnectEvent)running=false;
                     call("auditState",new Class<?>[]{Event.class},event);
                 }
-                if(running){audit("resume-requested",Map.of("scope","event-set"));batch.resume();audit("resume-completed",Map.of("scope","event-set"));}
+                if(running){if(bounded)call("pruneMirrors",new Class<?>[]{});audit("resume-requested",Map.of("scope","event-set"));batch.resume();audit("resume-completed",Map.of("scope","event-set"));}
             }
             sample(true);
             // Deliberately suppressed returns remain incomplete, never a native pass.

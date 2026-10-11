@@ -14,7 +14,16 @@ retain matching identifiers and entry age, with a hard 256-activation cap.
 Return records reference the already emitted entry. Completed payloads are not
 retained. Checkpoint frames reference class definitions rather than duplicating
 constant pools and method bodies. Binary fields are base64; the JSON writer uses
-bounded chunks. Audit records are serialized once into a bounded record buffer.
+bounded chunks. Audit records use a bounded record buffer. Large routine event details are
+losslessly DEFLATE/base64 encoded once, with length and SHA-256 checks; quotas
+count their wire bytes. Refusal context stays directly inspectable.
+
+The engineering-only JDI mirror adapter bounds the JDK's own strong class cache
+to 1,024 mirrors (512 low-water), retaining active and unprepared types. It uses
+exact-name JDWP queries and refuses full enumeration or unsupported runtime
+bytes. All seven pinned JDI class hashes match the preserved public image
+catalogue; actual runtime bytes are rechecked before collection. See
+[binding and lifecycle tests](b06-jdi-mirror-adapter.md).
 
 Routine set-open/dispatch/resume traffic is aggregated. Every dispatched event
 retains request, method, thread, depth and arm information; a refusal adds the
@@ -49,7 +58,14 @@ published after validation; no approval or native execution is implied.
 - The exploratory bounded payload variant avoided OOM but hit the unchanged
   audit byte cap after 29,360 generation entries. Peak sampled after-GC heap was
   34,200,992 bytes. That run is preserved and is not an acceptance pass.
-- The revised full-volume 192 MiB host experiment is running. Flatness and
+- The second variant stayed below 17,565,256 bytes after GC but reached the
+  128 MiB metadata quota at 27,907 generation entries. Its fitted retained
+  growth remained positive: 32.07 bytes/emitted record, 95% interval
+  31.82–32.33. This is not a flat-curve pass.
+- The first mirror-cache variant stopped at its pin guard: unknown JDI
+  preparation status was conservatively retained. The correction reads actual
+  status outside the JDI cache lock; genuinely unprepared mirrors remain pinned.
+- The corrected full-volume 192 MiB host experiment is running. Flatness and
   completion are not yet claimed.
 - A production-serializer transient test passed with a 1 MiB definition and
   4,096-node graph resident at 85% occupancy of a 192 MiB heap. Final-source

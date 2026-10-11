@@ -23,6 +23,27 @@ public final class PostingObserver {
     private final Set<String> configured = new HashSet<>();
     private VirtualMachine vm;
     private boolean bindingV2;
+    // Loaded only by explicit bounded engineering mode; legacy compilation is standalone.
+    private Object mirrorCache;
+    private void initializeMirrors() throws Exception {
+        if(bounded)mirrorCache=Class.forName("lightyear.observer.BoundedJdiMirrors")
+            .getConstructor(VirtualMachine.class).newInstance(vm);
+    }
+    private Object mirrorCall(String name,Class<?>[] types,Object... args)throws Exception {
+        try{return mirrorCache.getClass().getMethod(name,types).invoke(mirrorCache,args);}
+        catch(java.lang.reflect.InvocationTargetException e){
+            if(e.getCause() instanceof Exception failure)throw failure;throw e;
+        }
+    }
+    private void pruneMirrors()throws Exception {
+        if(!bounded)return;
+        Set<ReferenceType> keep=new HashSet<>();
+        for(var calls:active.values())for(Call call:calls)keep.add(call.method().declaringType());
+        for(var request:vm.eventRequestManager().breakpointRequests())keep.add(request.location().declaringType());
+        for(var arm:generation.exits.values())keep.add(arm.method().declaringType());
+        try {mirrorCall("prune",new Class<?>[]{Collection.class},keep);}
+        catch(IllegalStateException failure){resourceStop(failure.getMessage());}
+    }
     private boolean bounded, nativeDiagnostics;
     private int unmatchedCount;
     private long observedEvents, heapHighWater;
@@ -54,9 +75,11 @@ public final class PostingObserver {
         for(var gc:ManagementFactory.getGarbageCollectorMXBeans()) {
             count+=Math.max(0,gc.getCollectionCount());time+=Math.max(0,gc.getCollectionTime());
         }
-        emit(new LinkedHashMap<>(Map.of("kind","observer-heap-telemetry","event_count",observedEvents,
+        Map<String,Object> heap=new LinkedHashMap<>(Map.of("kind","observer-heap-telemetry","event_count",observedEvents,
             "heap_used",usage.getUsed(),"heap_max",usage.getMax(),"heap_high_water",heapHighWater,
-            "gc_count",count,"gc_time_ms",time,"generation_entry_count",generation.generationSequence)),false);
+            "gc_count",count,"gc_time_ms",time,"generation_entry_count",generation.generationSequence));
+        if(mirrorCache!=null)for(var item:((Map<?,?>)mirrorCall("telemetry",new Class<?>[]{})).entrySet())heap.put(item.getKey().toString(),item.getValue());
+        emit(heap,false);
     }
     private void lifecycle(String action,EventRequest request,Location location,Long thread) throws Exception {
         if(!bounded)return;
@@ -565,7 +588,22 @@ public final class PostingObserver {
         }
         if(line){out.write('\n');out.flush();}
     }
+    // Lossless per-detail compression; both decompressed and wire buffers are bounded.
+    // This serializes the detail once, not a second pass merely to count audit bytes.
+    private Object packedDetail(Object detail)throws Exception {
+        ByteArrayOutputStream raw=new ByteArrayOutputStream(4096);
+        OutputStream limited=new FilterOutputStream(raw){
+            public void write(int value)throws IOException {if(raw.size()>=256*1024)throw new IOException("diagnostic detail size bound");out.write(value);}
+            public void write(byte[] values,int off,int len)throws IOException {if(raw.size()+len>256*1024)throw new IOException("diagnostic detail size bound");out.write(values,off,len);}
+        };
+        Writer writer=new OutputStreamWriter(limited,StandardCharsets.UTF_8);writeJson(writer,detail,false);writer.flush();
+        ByteArrayOutputStream packed=new ByteArrayOutputStream();
+        try(var zip=new java.util.zip.DeflaterOutputStream(packed)){raw.writeTo(zip);}
+        return Map.of("encoding","deflate-json-v1","base64",Base64.getEncoder().encodeToString(packed.toByteArray()),
+            "bytes",raw.size(),"sha256",hash(raw.toByteArray()));
+    }
     private long emitDiagnostic(Map<String,Object> record)throws Exception {
+        if(record.get("detail") instanceof Map<?,?> detail && detail.containsKey("thread_id") && "jdi-event".equals(record.get("action")))record.put("detail",packedDetail(record.get("detail")));
         ByteArrayOutputStream buffer=new ByteArrayOutputStream(4096);
         OutputStream limited=new FilterOutputStream(buffer){
             public void write(int value)throws IOException {if(buffer.size()>=256*1024)throw new IOException("diagnostic record size bound");out.write(value);}
@@ -711,6 +749,8 @@ public final class PostingObserver {
                 && signature.equals("([Lorg/compiere/model/MAcctSchema;IIZZLjava/lang/String;)Ljava/lang/String;"));
     }
     private void configure(ReferenceType type) throws Exception {
+        if(bounded && (TYPES.contains(type.name()) || Set.of(Generation.FACTORY,Generation.DEFINER,Generation.INVOKER,Generation.LOADER).contains(type.name())))
+            mirrorCall("pin",new Class<?>[]{ReferenceType.class},type);
         generation.configure(vm,type);
         if (!TYPES.contains(type.name()) || !configured.add(type.name() + ":" + type.classLoader())) return;
         for (Method method : type.methods()) if (selected(method)) {
@@ -896,6 +936,7 @@ public final class PostingObserver {
         args.get("timeout").setValue("30000"); vm = connector.attach(args);
         if (!vm.canGetBytecodes() || !vm.canGetConstantPool() || !vm.canGetMethodReturnValues())
             throw new IllegalStateException("Required VM inspection unavailable");
+        initializeMirrors();
         Map<String,Object> ready=new LinkedHashMap<>(Map.of("kind", "ready", "vm_version", vm.version(), "binding_version", bindingV2?2:1, "generation_catch_policy", "handler-activation-v1", "audit_policy", "structural-jdi-v1"));
         if(bounded){ready.put("observer_format",FORMAT);ready.put("audit_policy","structural-jdi-v2");}
         if(nativeDiagnostics){
@@ -911,7 +952,8 @@ public final class PostingObserver {
             ClassPrepareRequest request = vm.eventRequestManager().createClassPrepareRequest();
             request.addClassFilter(type); request.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(request,null,null);
         }
-        for (ReferenceType type : vm.allClasses()) configure(type);
+        if(bounded){for(String name:observedTypes)for(ReferenceType type:vm.classesByName(name))configure(type);}
+        else for (ReferenceType type : vm.allClasses()) configure(type);
         ExceptionRequest exceptions = vm.eventRequestManager().createExceptionRequest(null, true, true);
         exceptions.setSuspendPolicy(EventRequest.SUSPEND_ALL); enable(exceptions,null,null);
         // The suspend=y VMStartEvent is still queued. Resume its EventSet once,
@@ -950,6 +992,7 @@ public final class PostingObserver {
             }
             if(deathObserved)emit(new LinkedHashMap<>(Map.of("kind", "vm-death", "generation_pending", generation.pending.size())), false);
             if (running) {
+                pruneMirrors();
                 audit("resume-requested",Map.of("scope","event-set"));
                 set.resume();
                 audit("resume-completed",Map.of("scope","event-set"));

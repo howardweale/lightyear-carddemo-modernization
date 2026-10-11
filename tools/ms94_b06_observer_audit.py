@@ -49,7 +49,8 @@ class Audit:
             self.bytes += len(canonical(body))
         check(self.diagnostic_count <= MAX_EVENTS and self.bytes <= MAX_BYTES, 'observer-audit-bound')
         check(event['audit_index'] == self.count, 'observer-audit-index')
-        action, detail = event['action'], event['detail']
+        from tools.ms94_b06_observer_format import audit_detail
+        action, detail = event['action'], audit_detail(event)['detail']
         if bounded and action == 'jdi-event' and event['event_set_id'] == self.set_id + 1:
             check(event['event_position'] == 0 and (self.set_id == 0 or self.resumed), 'observer-audit-set-order')
             check(type(detail.get('set_size')) is int and 0 < detail['set_size'] <= 10000 and detail.get('suspend_policy') in (0,1,2), 'observer-audit-set-shape')

@@ -188,6 +188,8 @@ def refusal_context(run):
                 require(len(line) <= 4*1024*1024+1, 'event-too-large')
                 row = json.loads(line); event = row.get('event', row)
                 if event.get('kind') == 'observer-audit':
+                    from tools.ms94_b06_observer_format import audit_detail
+                    event=audit_detail(event)
                     if event.get('action') == 'jdi-event': last = event
                     if event.get('action') == 'dispatch-refused':
                         return dict(refusal=event, preceding_event=last)

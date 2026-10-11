@@ -42,6 +42,7 @@ def java_options(plan):
     if validate(plan) is None:
         return []
     return ['-Xmx'+str(LIMITS['observer_heap_mib'])+'m',
+            '--add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED',
             '-XX:SoftRefLRUPolicyMSPerMB='+str(LIMITS['soft_ref_lru_ms_per_mb']),
             '-Db06.observer.state_dir=/observer-private', '-XX:+HeapDumpOnOutOfMemoryError',
             '-XX:HeapDumpPath=/observer-private/heap.hprof']

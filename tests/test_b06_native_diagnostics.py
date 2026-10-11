@@ -28,6 +28,7 @@ class DiagnosticsTests(unittest.TestCase):
         self.assertEqual(args[:4],['--memory','2048m','--cpus','1'])
         self.assertIn('dst=/observer-private',args[-1])
         self.assertEqual(diagnostics.java_options(self.plan),['-Xmx1536m',
+            '--add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED',
             '-XX:SoftRefLRUPolicyMSPerMB=0','-Db06.observer.state_dir=/observer-private',
             '-XX:+HeapDumpOnOutOfMemoryError','-XX:HeapDumpPath=/observer-private/heap.hprof'])
         self.assertEqual(diagnostics.observer_args(self.plan),['bounded-observer-v1','native-diagnostics-v1','strict',

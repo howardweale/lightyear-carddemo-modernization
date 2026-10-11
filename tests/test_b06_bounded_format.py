@@ -8,6 +8,22 @@ from test_b06_observer_audit import record
 from test_ms94_b06_observer_v2 import minimal
 
 class BoundedFormatTests(unittest.TestCase):
+    def test_lossless_diagnostic_detail_bounds_and_tampering(self):
+        import hashlib,json,zlib
+        from tools.ms94_b06_observer_format import audit_detail
+        detail={'event_type':'breakpoint','thread_id':7,'location':{'method':'x'*2000},'pending':[]}
+        raw=json.dumps(detail,separators=(',',':')).encode()
+        packed={'encoding':'deflate-json-v1','base64':base64.b64encode(zlib.compress(raw)).decode(),
+                'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+        event={'observer_format':FORMAT,'kind':'observer-audit','action':'jdi-event','detail':packed}
+        self.assertEqual(audit_detail(event)['detail'],detail)
+        self.assertIs(event['detail'],packed)
+        for update in ({'bytes':len(raw)-1},{'sha256':'0'*64},{'base64':packed['base64']+'==='},
+                       {'base64':base64.b64encode(zlib.compress(raw)+b'extra').decode()},
+                       {'base64':base64.b64encode(zlib.compress(b'x'*(256*1024+1))).decode()}):
+            with self.subTest(update=list(update)),self.assertRaises(ValueError):
+                audit_detail({**event,'detail':{**packed,**update}})
+
     def test_historical_shape_passes_unchanged(self):
         old={'kind':'generation-entry','record':{'definition_input_hex':'ff'}}
         self.assertIs(normalize(old),old)

@@ -18,11 +18,10 @@ search found no other literal 16/47 coverage claim in docs, catalogues or views.
 
 Systematic generation currently inventories **531 INTCALC and 604 POSTTRAN**
 source-site mutants. These counts are generated, not claims of compiled mutants
-or kills. The remote Ubuntu24 campaign compiles every member, separates divergent
+or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs and program stdout (excluding probe records), separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
 result. A survivor is unresolved unless a scenario kills it or a reviewed
-individual equivalence proof exists. No equivalence exclusions are currently
-asserted; the old eight hand-picked mutants do not form the new denominator.
+individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel arguments may exclude a surviving compiled mutant;30 INTCALC and42 POSTTRAN sites/edits are eligible for those arguments. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
 Mutants with altered FD layout may legitimately not compile or fail admission;
 those outcomes remain visible. Receiving-field mutations also cover every numeric PIC site in the pinned included copybooks. Each operand is hash-bound; originals are preserved.
 
@@ -68,3 +67,5 @@ operator signature is created by the page.
 Actual compiled campaign results and final-head CI will be recorded before this
 PR is offered for commit-specific merge approval. No B06 native run or hold was
 changed by this work.
+
+The first completed older INTCALC campaign (497 source-only mutants, before stdout strengthening and copybook sites) measured58 divergent kills,135 failure kills,191 survivors and113 compiler refusals. This193/497 result is preserved as preliminary evidence, not replaced by the old8/8 narrative. Current full-set results remain required.

@@ -12,6 +12,7 @@ def declarations(text, program):
     for op in inv['file_operations']:
         statuses={'OPEN':[('missing','35'),('permission','37')], 'READ':[('read-error','30'),('premature-eof','10')],
                   'WRITE':[('write-error','30')], 'REWRITE':[('rewrite-error','23')], 'CLOSE':[('close-error','30')]}[op['operation']]
+        if op['operation']=='READ' and op['line'] in (326,346):statuses.append(('extended-read-error','90'))
         for kind,status in statuses:
             # EOF is meaningful only on the stream-driving sequential read.
             if kind=='premature-eof' and op['line'] not in (326,346):continue

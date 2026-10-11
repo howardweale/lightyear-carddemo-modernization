@@ -7,6 +7,7 @@ from lightyear_mainframe.scenario_generation import manifest
 from lightyear_mainframe.systematic_mutation import generate,outcome
 from lightyear_mainframe.io_faults import declarations
 from lightyear_mainframe.scenario_coverage import observe
+from lightyear_mainframe.mutant_equivalence import argument
 
 
 def attempt(target,case,folder):
@@ -21,6 +22,12 @@ def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
     build(output/'baseline',instrument=True,jobs=[job]);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
+    from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
+    for public,(scope,_) in PUBLIC_SCENARIOS.items():
+        if scope!=job:continue
+        folder=output/'public'/public;folder.parent.mkdir(exist_ok=True)
+        run(output/'baseline',public,folder)
+        streams.append((folder/'logs/program.stdout').read_text())
     for case in cases:
         folder=output/'cases'/case;folder.parent.mkdir(exist_ok=True)
         baselines[case]=attempt(output/'baseline',case,folder)
@@ -59,12 +66,16 @@ def check(output,job):
                 changed=attempt(folder/'build',case,folder/case);classification=outcome(baseline,changed)
                 if classification!='survived':
                     record.update(status=classification,killed_by=case,actual=changed,baseline=baseline);break
-            if record['status']=='survived':record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
+            if record['status']=='survived':
+                proof=argument(text,program,mutant)
+                if proof:record.update(status='equivalent (argued, listed)',disposition=proof)
+                else:record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
         results.append(record);write_json(output/'mutation-results.json',results)
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
         fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
-        kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[],
+        kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
+        eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']}",
         unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],
         retained_killing_scenarios=sorted({r['killed_by'] for r in results if r['killed_by']}),model_calls=0,
         limitation='Systematic pinned-source mutation; survivors and compiler refusals block adequacy. Public engineering, not z/OS equivalence.')

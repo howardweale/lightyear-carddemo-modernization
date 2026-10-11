@@ -37,3 +37,13 @@ class FactoryReviewTests(unittest.TestCase):
     changed,inv,declaration=derive(text,program,row['id']);self.assertIn('LYF|'+row['id'],changed)
     self.assertEqual(row,declaration)
    with self.assertRaisesRegex(ValueError,'undeclared'):derive(text,program,'unbound')
+
+ def test_equivalence_is_individually_source_bound_not_blanket_survivor_waiver(self):
+  from lightyear_mainframe.mutant_equivalence import argument
+  for p,n in [('CBACT04C',30),('CBTRN02C',42)]:
+   text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text();rows=generate(text,p)
+   proofs=[(r,argument(text,p,r)) for r in rows if argument(text,p,r)]
+   self.assertEqual(n,len(proofs))
+   for row,proof in proofs:
+    self.assertEqual(row['id'],proof['mutant_id']);self.assertTrue(proof['supporting_source_lines'])
+   with self.assertRaisesRegex(ValueError,'source-changed'):argument(text+'\n',p,proofs[0][0])

@@ -81,7 +81,7 @@ def main():
         p.add_argument('--'+name,required=True)
     args=p.parse_args(); repo=Path(__file__).resolve().parents[1]
     approval=read_json(Path(args.approval)); approve_check(approval,args.approved_sha256,args.approval)
-    guard(approval,starting=True)
+    guard(approval)
     output=Path(args.output).resolve()
     require(not any(x in output.parts for x in ('factory','b06-execution-snapshots')), 'output-in-evidence-tree')
     commit=source_commit(repo)
@@ -96,6 +96,7 @@ def main():
     from tools.ms94_b05_supervisor import wait_process, terminate
     require(shutil.disk_usage(output.parent).free>=LIMITS['minimum_free_bytes'], 'free-space')
     ledger=Ledger(output,approval)
+    guard(approval,starting=True,attempt_number=ledger.next_attempt_number())
     with ledger.lock():
         # All Docker calls are downstream of exact standing approval/calendar.
         signer=EngineeringSigner(DedicatedEngineeringSigner(args.authority, approval['engineering_key_sha256']))
@@ -112,7 +113,9 @@ def main():
         opts={'creationflags':subprocess.CREATE_NO_WINDOW} if os.name=='nt' else {'start_new_session':True}
         terminal=None
         try:
-            guard(approval,starting=True)
+            from tools.ms94_b06_engineering import validate_run_binding
+            record=validate_run_binding(run,approval,read_json(run/'plan.json'))
+            guard(approval,starting=True,attempt_number=record['run_number'])
             require(time.monotonic()-started < LIMITS['run_seconds'], 'preparation-deadline')
             with (run/'controller.stdout').open('xb') as out, (run/'controller.stderr').open('xb') as err:
                 child=subprocess.Popen(command,cwd=repo,env=environment,stdout=out,stderr=err,**opts)

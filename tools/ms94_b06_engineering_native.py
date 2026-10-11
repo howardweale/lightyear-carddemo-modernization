@@ -52,8 +52,10 @@ class OracleEngineeringRunner(ObservedRunner):
         (self.run/'resources.json').write_bytes(canonical(dict(**LABEL, resources=self.resources)))
 
     def prepare(self, case='operations', attempt=1):
-        from tools.ms94_b06_engineering import require_execution_ready
+        from tools.ms94_b06_engineering import require_execution_ready, validate_run_binding
         require_execution_ready()
+        record=validate_run_binding(self.run,self.approval,self.plan)
+        guard(self.approval,starting=True,attempt_number=record['run_number'])
         require(case == 'operations' and attempt == 1, 'retained-reference-only')
         self.checkpoint('prepare-oracle')
         prefix = self.owner+'-operations-1'

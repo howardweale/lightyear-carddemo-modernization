@@ -21,6 +21,7 @@ def main():
             run.parent.parent.parent.name=='b06-engineering','worker-run-binding')
     require((run.parent.parent.parent/'active.lock').read_text()==approval['content_sha256'],'worker-lease')
     require(not (run/'worker-started.json').exists(),'worker-restart')
+    guard(approval,starting=True,attempt_number=record['run_number'])
     from tools.ms94_b06_engineering_key import DedicatedEngineeringSigner
     from tools.ms94_b06_engineering_native import execute
     signer=EngineeringSigner(DedicatedEngineeringSigner(a.authority, approval['engineering_key_sha256']))

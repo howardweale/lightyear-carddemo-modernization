@@ -105,12 +105,14 @@ def approve_check(approval, expected_file_sha256, path):
     validate_instrumented(approval)
 
 
-def guard(approval, moment=None, starting=False):
+def guard(approval, moment=None, starting=False, attempt_number=1):
     validate(approval)
     moment = moment or now()
     require(utc(approval['not_before_utc']) <= moment < utc(approval['deadline_utc']), 'outside-window')
     remaining = (utc(approval['deadline_utc'])-moment).total_seconds()
-    require(not starting or remaining >= LIMITS['run_seconds']+LIMITS['cleanup_seconds'], 'full-run-budget')
+    require(type(attempt_number) is int and 1 <= attempt_number <= approval['run_cap'], 'attempt-number')
+    attempts_remaining=approval['run_cap']-attempt_number+1
+    require(not starting or remaining >= attempts_remaining*(LIMITS['run_seconds']+LIMITS['cleanup_seconds']), 'full-run-budget')
     for name in approval['evidence_runs']:
         path = Path(name)
         require(path.is_dir(), 'evidence-registry-unavailable')
@@ -141,8 +143,14 @@ class Ledger:
             if sys.exc_info()[0] is None and all((r/'artifacts.json').is_file() and (r/'terminal.json').is_file() and read_json(r/'terminal.json').get('cleanup_verified') is True for r in runs):
                 path.unlink()
 
+    def next_attempt_number(self):
+        number=len(list((self.session/'runs').glob('journey-*')))+1
+        require(number <= self.approval['run_cap'], 'run-cap-exhausted')
+        return number
+
     def reserve(self, source_commit):
-        guard(self.approval, starting=True)
+        number=self.next_attempt_number()
+        guard(self.approval, starting=True, attempt_number=number)
         require(re.fullmatch('[0-9a-f]{40}', source_commit) is not None, 'source-commit')
         runs = sorted((self.session/'runs').glob('journey-*'))
         require(len(runs) < self.approval['run_cap'], 'run-cap-exhausted')

@@ -95,6 +95,9 @@ def check(campaign,job):
                 if classification.startswith('killed-') and not row['refuted']:row.update(refuted=True,witness=item)
             write_json(output/'targets'/identifier/'results.json',measurements)
             row['targeted_counts']=dict(Counter(r['status'] for r in measurements));row['targeted_cases']=len(measurements)
+            row['targeted_fault_case_counts']=dict(Counter(r['fault'] or 'normal' for r in measurements))
+            row['targeted_valid_comparisons']=sum(r['baseline']['status']=='executed' and r['actual']['status']=='executed' for r in measurements)
+            row['targeted_limitation']='Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.'
             row['status']='refuted-by-targeted-campaign' if row['refuted'] else 'equivalent (argued, individual review pending)'
         results.append(row);write_json(output/'results.json',results)
     counts=Counter(r['status'] for r in results)

@@ -44,10 +44,10 @@ forbids the extra operations, and real-host JDI witness tests pass. This is a
 concrete correction, not a proven explanation of the measured slope. The [second named same-workload run](b06-oct13-host-witness-r2.json) passed the
 unchanged criterion: 40,985 generation entries / 517,283 emitted records,
 1,195.937 seconds, no OOM, peak after-GC heap 6,170,168 bytes. Its slope is
-**Ã¢Ë†â€™0.076915 bytes per emitted record**, Newey-West 95% interval
-**[Ã¢Ë†â€™0.227845, 0.074015]**, using 469 samples after the original 50,000-record
+**-0.076915 bytes per emitted record**, Newey-West 95% interval
+**[-0.227845, 0.074015]**, using 469 samples after the original 50,000-record
 warmup. The accepted baseline's slope was +0.046911 bytes per emitted record,
-95% interval [Ã¢Ë†â€™0.133845, 0.227666], on the same unit and acceptance method.
+95% interval [-0.133845, 0.227666], on the same unit and acceptance method.
 
 All 40,985 input witnesses validated: 12,608 application-derived inputs,
 25,374 bootstrap-only captured-input candidates, and 3,003 explicitly unresolved

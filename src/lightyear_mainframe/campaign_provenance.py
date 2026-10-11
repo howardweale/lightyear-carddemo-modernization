@@ -38,6 +38,17 @@ def current_binding():
     return dict(head=head,files=files)
 
 
+def baseline_outputs(campaign):
+    campaign=Path(campaign).resolve();files={}
+    for group in ('public','cases'):
+        for after in sorted((campaign/group).glob('*/after')):
+            for path in sorted(after.rglob('*')):
+                if path.is_symlink() or not path.resolve().is_relative_to(campaign):raise ValueError('campaign-output-link-or-escape')
+                if path.is_file():files[path.relative_to(campaign).as_posix()]=hashlib.sha256(path.read_bytes()).hexdigest()
+    if not files:raise ValueError('campaign-baseline-output-inventory-empty')
+    return files
+
+
 def begin(campaign,job):
     value=sealed(dict(schema='factory-campaign-start/1',job=job,binding=current_binding(),
         started_at=datetime.now(timezone.utc).isoformat(),run_class='engineering',model_calls=0))
@@ -56,7 +67,7 @@ def finish(campaign,job):
     if 'baseline/build-receipt.json' not in builds:raise ValueError('campaign-baseline-build-missing')
     records={name:hashlib.sha256((campaign/name).read_bytes()).hexdigest() for name in RECORDS}
     value=sealed(dict(schema='factory-campaign-manifest/1',job=job,binding=binding,
-        campaign_start_sha256=start['content_sha256'],build_receipts=builds,records=records,
+        campaign_start_sha256=start['content_sha256'],build_receipts=builds,records=records,baseline_outputs=baseline_outputs(campaign),
         completed_at=datetime.now(timezone.utc).isoformat(),run_class='engineering',model_calls=0))
     write_json(campaign/'campaign-manifest.json',value)
     return value
@@ -76,5 +87,6 @@ def validate(campaign,job):
         path=(campaign/name).resolve()
         if not path.is_relative_to(campaign) or hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
             raise ValueError('campaign-retained-artifact-mismatch:'+name)
+    if manifest.get('baseline_outputs')!=baseline_outputs(campaign):raise ValueError('campaign-baseline-output-inventory-mismatch')
     for name in manifest['build_receipts']:verify_build((campaign/name).parent)
     return manifest

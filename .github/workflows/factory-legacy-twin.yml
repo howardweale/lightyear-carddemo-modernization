@@ -39,6 +39,8 @@ jobs:
       - name: Install pinned compiler (no containers)
         run: |
           bash tools/legacy_twin/install-pinned.sh
+      - name: Install signed-boundary test dependency
+        run: python -m pip install -e ".[control-tower]"
       - name: Focused refusal and adapter tests
         run: python -B -m unittest discover -s tests -p test_legacy_twin.py -v
       - name: Posting invariant and refusal regressions

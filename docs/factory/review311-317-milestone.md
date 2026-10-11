@@ -65,7 +65,7 @@ Narrow listed arguments identify dead/overwritten stores, unused fields or sourc
 
 ## Reconciliation, policy and human review
 
-ASCII and opt-in physical cp037 key modes matched **54/54** public/generated cases at `3283265d71e268b3dc66b09fb2808e72a18b19ac` ([receipt](cp037-twin-review311-reconciliation.json)). Logical record bytes stay unchanged. Decimal-only production restrictions remain; no general alphanumeric z/OS key-order claim follows.
+ASCII and opt-in physical cp037 key modes matched **54/54** public/generated cases (**no regression from cp037 key mode**, all decimal-key cases; this does not establish general EBCDIC order) at `3283265d71e268b3dc66b09fb2808e72a18b19ac` ([receipt](cp037-twin-review311-reconciliation.json)). Logical record bytes stay unchanged. Decimal-only production restrictions remain; no general alphanumeric z/OS key-order claim follows.
 
 The expanded **46**-case [generated receipt](generated-review311-classification.json) separates source-specific missing disclosure/account/xref expected-failure agreement from duplicate indexed-key adapter refusal before execution. The POSTTRAN duplicate-ID invariant remains unresolved. No customer data or handwritten POSTTRAN answer key was used.
 

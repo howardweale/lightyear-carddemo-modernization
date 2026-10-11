@@ -1,5 +1,15 @@
 # POSTTRAN independent conversion preregistration
 
+The current [revised proposal](revised-plan.json), `97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e`, requires fresh exact approval. No API requests, model calls, output compilations or candidates have occurred. It supersedes the unexecuted original plan and the [unapproved pricing-blocked revision](superseded-plan-20d137ab.json); their approval/status is not transferred.
+
+The installed Codex 0.160.0 binary is byte-verified provenance only. Proposed dispatch uses an explicitly supplied Responses API transport, not that CLI. The broker verifies exact approval and packet bytes, counts the same input through `/v1/responses/input_tokens` before generation, refuses more than 250,000 input tokens, and sends `service_tier=default`, `max_output_tokens=64000`, `truncation=disabled`. The output cap includes reasoning. Missing, malformed, mismatched or over-cap usage and incomplete attempts fail closed. Tests use a fake transport; the live transport has not been exercised.
+
+Official [model](https://developers.openai.com/api/docs/models/gpt-6-astra), [pricing](https://developers.openai.com/api/docs/pricing) and [API contract](https://developers.openai.com/api/reference/resources/responses/methods/create) were checked October 11, 2026. Standard per-million rates are $10 input, $1 cached input, $12.50 cache write and $50 output. Pre-count 250,000 stays below the 272,000 long-context threshold; no tools, regional or higher-tier service is proposed. At maximum tokens and charging every input at the higher cache-write rate, Phase 1 is $18.975 and Phase 2 $12.65. Conservative reservations remain $33.15/$22.10 beneath proposed $36/$24 API-equivalent caps. These dated equivalents are not subscription invoice amounts or immutable future prices.
+
+Phase 1 proposes 3 calls/attempts/compilations, 750,000 input/192,000 output tokens and 2 hours. Phase 2 proposes 2 calls and requires completed adjudication plus separate approval. 64,000 per call is proposed headroom above the prior aggregate mean 8,924.6; no per-call tail or reasoning split was measured. A fixed plan-bound ledger durably reserves a full attempt and allowance before the input count. Failed counting or generation consumes that reservation; no refunds, retries or alternate ledger paths. A supplied live HTTP transport must additionally enforce its timeout within the remaining phase time; none is connected here. Fresh approval must cover the transport, counting endpoint, client provenance, limits and dated budget.
+
+## Preserved original preregistration and blocked preflight
+
 Phase 1 budget approved; execution preflight is blocked. No model call or
 candidate code has been produced. The published
 [plan](plan.json) seals the exact public input allowlist, prompts, client and

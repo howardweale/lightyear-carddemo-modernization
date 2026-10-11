@@ -1,0 +1,311 @@
+{
+  "cases": [
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "intcalc-public-1"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "intcalc-public-2"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "intcalc-discriminating"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "intcalc-missing-disclosure"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "posttran-missing-card"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "posttran-missing-account"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "posttran-expired-account"
+    },
+    {
+      "kind": "public",
+      "matched": true,
+      "scenario": "posttran-public"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-pic-0"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-pic-1"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-pic-2"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-pic-3"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-pic-4"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_39"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_40"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_41"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_79"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_80"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-0_81"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-n0_39"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-n0_40"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-round-n0_41"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-large-rate"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-empty"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-two-categories"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-two-accounts"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-three-accounts"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-default-disclosure"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-missing-disclosure"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-missing-account"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-missing-xref"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-duplicate-category"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-solver-rate-false"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "intcalc-solver-rate-true"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-zero"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-positive"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-negative"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-credit-equal"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-credit-above"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-expiry-equal"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-expiry-before"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-missing-card"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-missing-account"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-empty"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-duplicate-id"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-new-category"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-large-amount"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-cycle-debit"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-invalid-then-valid"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-new-then-existing"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-expiry-next-day"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-expiry-equal-dash"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-solver-credit-false"
+    },
+    {
+      "kind": "generated",
+      "matched": true,
+      "scenario": "posttran-solver-credit-true"
+    }
+  ],
+  "count": 54,
+  "decimal_key_restriction_retained": true,
+  "historical_observations": [
+    {
+      "count": 46,
+      "matched": 46,
+      "observed_head": "2cb581d853c72a65b52f4f0f1c376e5a737f962f",
+      "receipt_file_sha256": "be145a2a5378a06b659c9969316c6669812921772476aec9a4d80f5da04ada37",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38147624097",
+      "source_receipt_content_sha256": "f3f81eb46efb790c1b49982a66b87eae52337911ca485aed34ade69857b8adf2"
+    },
+    {
+      "count": 54,
+      "matched": 54,
+      "observed_head": "7fb056623de761fa5c88a053176da0e1b0cc4550",
+      "receipt_file_sha256": "1f0e1346be32a30cfe50e9ba6d14adcf721706afae04d74c131a4a52f399fe31",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38151929589",
+      "source_receipt_content_sha256": "3f8be299e4adec5f113c379492af24661a8f54926b9672d29b91133e3af3f152"
+    }
+  ],
+  "matched": 54,
+  "measurement_credit": false,
+  "model_calls": 0,
+  "observed_head": "3283265d71e268b3dc66b09fb2808e72a18b19ac",
+  "oracle_class": "executable-twin",
+  "oracle_status": "provisional",
+  "phase": "cp037-full-twin-reconciliation",
+  "qualification_credit": false,
+  "receipt_file_sha256": "1f0e1346be32a30cfe50e9ba6d14adcf721706afae04d74c131a4a52f399fe31",
+  "releasable": false,
+  "run_class": "engineering",
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763",
+  "schema": "factory-legacy-twin/1",
+  "source_receipt_content_sha256": "3f8be299e4adec5f113c379492af24661a8f54926b9672d29b91133e3af3f152",
+  "twin_limits_path": "docs/factory/twin-limits.md",
+  "twin_limits_sha256": "9b47cf87b1c3df391376222a335cfd578711f4b0cd24c15c8e08d7f0c45fd0d5",
+  "zos_confirmation": false
+}

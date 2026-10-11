@@ -1,0 +1,379 @@
+{
+  "authority": "Explicit user chat decisions; documentation of acceptance, not a cryptographic approval receipt.",
+  "compiler_policy": "List compiler refusals and exclude from adequacy denominators; they are neither kills nor blockers.",
+  "decided_by": "Howard",
+  "decided_on": "2026-10-11",
+  "eof_exceptions": [
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-11",
+      "argument": "The flag is initialized to N and assigned only Y. TEST BEFORE PERFORM UNTIL flag=Y admits only N; the first IF tests N before the READ that can set Y. Therefore its false edge cannot occur under this pinned program and declared fault seams. This is a source argument, not an observed event or an operator acceptance.",
+      "argument_record_sha256": "5905fe8a67f25d49fd250b60c1f8ffe5f0e95ed3537a52fabd3032b1fd3544f2",
+      "id": "legacy:cobol-decision:CBACT04C:189:671",
+      "measured_coverage_unchanged": true,
+      "outcome": "false",
+      "program": "CBACT04C",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-11",
+      "argument": "The flag is initialized to N and assigned only Y. TEST BEFORE PERFORM UNTIL flag=Y admits only N; the first IF tests N before the READ that can set Y. Therefore its false edge cannot occur under this pinned program and declared fault seams. This is a source argument, not an observed event or an operator acceptance.",
+      "argument_record_sha256": "10b46bd0d42492a27d7048d365504e5fe9c8ccbb5d96787090174c1c3beeefe7",
+      "id": "legacy:cobol-decision:CBTRN02C:203:684",
+      "measured_coverage_unchanged": true,
+      "outcome": "false",
+      "program": "CBTRN02C",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    }
+  ],
+  "input_lf_sha256": {
+    "io-gap-arguments.json": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90",
+    "post-campaign-equivalence-review311.json": "ef60f0de0e9b3a70284caa4c6aa30aba24b4ab6aa4f674351e5a16e7ff89cb43",
+    "systematic-intcalc-review311.json": "85207ba702a93187e32e69cb951e1a0fe8465da1b39f337af8c12e4cf3bf718a",
+    "systematic-posttran-review311.json": "c27b29a576e91be93de2f966df16563f17f861101ddf453f28ada5ec62038876",
+    "systematic-review311-summary.json": "626a331da623b464d8ccb2e6d59c8534862aacb2f22b6908a5188b3cce8a4da7"
+  },
+  "programs": {
+    "INTCALC": {
+      "accepted_unobserved_io_exceptions": 1,
+      "compiler_refusal_count": 5,
+      "compiler_refusals": [
+        {
+          "compiler_diagnostic": "CBACT04C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBACT04C-systematic.cbl:645: error: length of 'IO-STATUS-04' out of bounds: 2\n",
+          "id": "CBACT04C-receiving-size-131-17",
+          "line": 131,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        {
+          "compiler_diagnostic": "CBACT04C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBACT04C-systematic.cbl:638: error: offset of 'IO-STATUS-04' out of bounds: 0\n",
+          "id": "CBACT04C-constant-638-379",
+          "line": 638,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        {
+          "compiler_diagnostic": "CBACT04C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBACT04C-systematic.cbl:638: error: length of 'IO-STATUS-04' out of bounds: 0\n",
+          "id": "CBACT04C-constant-638-381",
+          "line": 638,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        {
+          "compiler_diagnostic": "CBACT04C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBACT04C-systematic.cbl:645: error: length of 'IO-STATUS-04' out of bounds: 2\n",
+          "id": "CBACT04C-constant-645-391",
+          "line": 645,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        {
+          "compiler_diagnostic": "CBACT04C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBACT04C-systematic.cbl:645: error: length of 'IO-STATUS-04' out of bounds: 3\n",
+          "id": "CBACT04C-constant-645-393",
+          "line": 645,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        }
+      ],
+      "condition": "Listed equivalence arguments await independent review; this is not threshold approval.",
+      "conditional_eligible_kill_fraction": "308/308",
+      "eligible_count": 308,
+      "generator_avoided": [
+        {
+          "mutant": {
+            "end_line": 131,
+            "id": "CBACT04C-receiving-size-131-17",
+            "line": 131,
+            "operator": "receiving-size",
+            "original": "           05  IO-STATUS-0403      PIC 999 VALUE 0.                             ",
+            "replacement": "       05  IO-STATUS-0403      PIC 9(2) VALUE 0.",
+            "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 2,
+              "line": 645,
+              "offset": 3,
+              "proven_size": 3
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 638,
+            "id": "CBACT04C-constant-638-379",
+            "line": 638,
+            "operator": "constant",
+            "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+            "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(0:1)",
+            "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 1,
+              "line": 638,
+              "offset": 0,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 638,
+            "id": "CBACT04C-constant-638-381",
+            "line": 638,
+            "operator": "constant",
+            "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+            "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(1:0)",
+            "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 0,
+              "line": 638,
+              "offset": 1,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 645,
+            "id": "CBACT04C-constant-645-391",
+            "line": 645,
+            "operator": "constant",
+            "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+            "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(4:2)",
+            "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 2,
+              "line": 645,
+              "offset": 4,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 645,
+            "id": "CBACT04C-constant-645-393",
+            "line": 645,
+            "operator": "constant",
+            "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+            "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(3:3)",
+            "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 3,
+              "line": 645,
+              "offset": 3,
+              "proven_size": 4
+            }
+          ]
+        }
+      ],
+      "generator_avoided_count": 5,
+      "generator_retained_count": 421,
+      "generator_validation": "Static source checks prevent these sites; no new compiled campaign claimed.",
+      "listed_argued_equivalents": 113,
+      "program": "CBACT04C",
+      "raw_generated": 426,
+      "raw_kill_fraction": "308/426",
+      "raw_killed": 308,
+      "recorded_io_fraction": "85/86"
+    },
+    "POSTTRAN": {
+      "accepted_unobserved_io_exceptions": 1,
+      "compiler_refusal_count": 6,
+      "compiler_refusals": [
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBTRN02C-systematic.cbl:724: error: length of 'IO-STATUS-04' out of bounds: 2\n",
+          "id": "CBTRN02C-receiving-size-140-11",
+          "line": 140,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        },
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '1500-B-LOOKUP-ACCT':\nCBTRN02C-systematic.cbl:414: error: offset of 'DALYTRAN-ORIG-TS' out of bounds: 0\n",
+          "id": "CBTRN02C-constant-414-207",
+          "line": 414,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        },
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBTRN02C-systematic.cbl:717: error: offset of 'IO-STATUS-04' out of bounds: 0\n",
+          "id": "CBTRN02C-constant-717-440",
+          "line": 717,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        },
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBTRN02C-systematic.cbl:717: error: length of 'IO-STATUS-04' out of bounds: 0\n",
+          "id": "CBTRN02C-constant-717-442",
+          "line": 717,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        },
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBTRN02C-systematic.cbl:724: error: length of 'IO-STATUS-04' out of bounds: 2\n",
+          "id": "CBTRN02C-constant-724-452",
+          "line": 724,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        },
+        {
+          "compiler_diagnostic": "CBTRN02C-systematic.cbl: in paragraph '9910-DISPLAY-IO-STATUS':\nCBTRN02C-systematic.cbl:724: error: length of 'IO-STATUS-04' out of bounds: 3\n",
+          "id": "CBTRN02C-constant-724-454",
+          "line": 724,
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+        }
+      ],
+      "condition": "Listed equivalence arguments await independent review; this is not threshold approval.",
+      "conditional_eligible_kill_fraction": "369/369",
+      "eligible_count": 369,
+      "generator_avoided": [
+        {
+          "mutant": {
+            "end_line": 140,
+            "id": "CBTRN02C-receiving-size-140-11",
+            "line": 140,
+            "operator": "receiving-size",
+            "original": "           05  IO-STATUS-0403      PIC 999 VALUE 0.                             ",
+            "replacement": "       05  IO-STATUS-0403      PIC 9(2) VALUE 0.",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 2,
+              "line": 724,
+              "offset": 3,
+              "proven_size": 3
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 414,
+            "id": "CBTRN02C-constant-414-207",
+            "line": 414,
+            "operator": "constant",
+            "original": "                IF ACCT-EXPIRAION-DATE >= DALYTRAN-ORIG-TS (1:10)               ",
+            "replacement": "       IF ACCT-EXPIRAION-DATE >= DALYTRAN-ORIG-TS (0:10)",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "DALYTRAN-ORIG-TS",
+              "length": 10,
+              "line": 414,
+              "offset": 0,
+              "proven_size": null
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 717,
+            "id": "CBTRN02C-constant-717-440",
+            "line": 717,
+            "operator": "constant",
+            "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+            "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(0:1)",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 1,
+              "line": 717,
+              "offset": 0,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 717,
+            "id": "CBTRN02C-constant-717-442",
+            "line": 717,
+            "operator": "constant",
+            "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+            "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(1:0)",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 0,
+              "line": 717,
+              "offset": 1,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 724,
+            "id": "CBTRN02C-constant-724-452",
+            "line": 724,
+            "operator": "constant",
+            "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+            "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(4:2)",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 2,
+              "line": 724,
+              "offset": 4,
+              "proven_size": 4
+            }
+          ]
+        },
+        {
+          "mutant": {
+            "end_line": 724,
+            "id": "CBTRN02C-constant-724-454",
+            "line": 724,
+            "operator": "constant",
+            "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+            "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(3:3)",
+            "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+          },
+          "reason": "statically-invalid-literal-reference-modification",
+          "violations": [
+            {
+              "field": "IO-STATUS-04",
+              "length": 3,
+              "line": 724,
+              "offset": 3,
+              "proven_size": 4
+            }
+          ]
+        }
+      ],
+      "generator_avoided_count": 6,
+      "generator_retained_count": 483,
+      "generator_validation": "Static source checks prevent these sites; no new compiled campaign claimed.",
+      "listed_argued_equivalents": 114,
+      "program": "CBTRN02C",
+      "raw_generated": 489,
+      "raw_kill_fraction": "369/489",
+      "raw_killed": 369,
+      "recorded_io_fraction": "85/86"
+    }
+  },
+  "release_approved": false,
+  "schema": "factory-howard-decisions/1",
+  "threshold_approved": false
+}

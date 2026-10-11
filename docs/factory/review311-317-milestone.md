@@ -1,6 +1,6 @@
-# Factory review follow-up for PRs #311â€“317 â€” 2026-10-11
+# Factory review follow-up for PRs #311–317 — 2026-10-11
 
-## Howard decision update â€” 2026-10-11
+## Howard decision update — 2026-10-11
 
 The [dated decision milestone](howard-decisions-2026-10-11-milestone.md) supersedes the compiler-refusal blocker and unaccepted-EOF conclusions below: listed compiler refusals are excluded, and Howard accepted the two source-bound EOF false edges. REWRITE-109 and the unreachable final-account update are legacy defects to preserve by default. Raw campaign records remain historical. The [20-mutant independent review](equivalence-review-sample-2026-10-11.md) is pending; scenario-threshold/2 is not approved.
 
@@ -24,7 +24,7 @@ The systematic campaign attempts compilation at every generated site and execute
 | INTCALC | 0 | 0 | 308/313 (98.4%) |
 | POSTTRAN | 3 | 0 | 369/375 (98.4%) |
 
-The [three post-campaign arguments](post-campaign-equivalence-review311.json) bind each actual surviving site to its source and, for the receiving-scale case, the verified runtime bytes. Two are unconsumed validation-description stores; the third truncates an unused fractional byte on every account-ID consumer. These are listed arguments for Howardâ€™s review, not additional measured kills or accepted policy exceptions.
+The [three post-campaign arguments](post-campaign-equivalence-review311.json) bind each actual surviving site to its source and, for the receiving-scale case, the verified runtime bytes. Two are unconsumed validation-description stores; the third truncates an unused fractional byte on every account-ID consumer. These are listed arguments for Howard’s review, not additional measured kills or accepted policy exceptions.
 
 
 Raw campaign survival is retained above. The separate post-campaign source/runtime review can list a survivor as argued equivalent without rewriting that observation. Unexplained survivors and compiler refusals still block adequacy, even if a numerical kill threshold is met. [Every mutant and its disposition](systematic-review311-summary.json), [INTCALC detail](systematic-intcalc-review311.json), [POSTTRAN detail](systematic-posttran-review311.json), and [survivor review and compiler refusals](systematic-survivors-review311.md) preserve the actual results. No unexplained survivor is relabeled equivalent to improve a percentage.
@@ -57,7 +57,7 @@ INTCALC observed source head `3283265d71e268b3dc66b09fb2808e72a18b19ac`, [run](h
 
 POSTTRAN observed source head `3283265d71e268b3dc66b09fb2808e72a18b19ac`, [run](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38154818763), receipt seal `18efe77ba378eb2dd38aebb10ec92751bf9364d861f6b5e270fa6d5ba1615cd3`.
 
-Every killed mutant retains its exact normal scenario or scenario-plus-fault witness. Up to three declared fault challenges target the surviving mutantâ€™s operation/callee or diagnostic path. Incompatible derived seams are recorded as unavailable, never counted as kills. Raw outputs, RC, stdout (excluding probes) and actual abend stderr parameters are compared. The CEE3ABD shim records code/timing and stops; it does not simulate z/OS timing.
+Every killed mutant retains its exact normal scenario or scenario-plus-fault witness. Up to three declared fault challenges target the surviving mutant’s operation/callee or diagnostic path. Incompatible derived seams are recorded as unavailable, never counted as kills. Raw outputs, RC, stdout (excluding probes) and actual abend stderr parameters are compared. The CEE3ABD shim records code/timing and stops; it does not simulate z/OS timing.
 
 False generator sites involving numeric paragraph labels and COMPUTE assignment equals signs were corrected; prior results were preserved. Whole multiline predicates are negated together. The old 8/8 hand-picked result is regression-only and cannot populate the systematic adequacy denominator. Earlier corrected 427/490-site results were 292/427 and 337/490 raw; neither was presented as 90%.
 
@@ -73,4 +73,4 @@ The unsigned scenario-threshold/2 proposal requires 100% business outcomes; I/O 
 
 The [POSTTRAN human review HTML](posttran-human-review.html) is a standalone file: download and open it locally, enter your name and each decision/reason, download the unsigned JSON, and return it in chat. No GitHub Pages deployment or automatic operator signature is claimed.
 
-Focused host validation passed 25 tests plus lint. Final-head CI must complete green before merge, followed by Howardâ€™s exact-commit approval. Public compiled campaign receipts bind their observed algorithm head; broker and documentation updates do not alter the measured mutation algorithms or rewrite their receipts. No B06 native work, engineering hold, customer data, machine configuration or private key was changed.
+Focused host validation passed 25 tests plus lint. Final-head CI must complete green before merge, followed by Howard’s exact-commit approval. Public compiled campaign receipts bind their observed algorithm head; broker and documentation updates do not alter the measured mutation algorithms or rewrite their receipts. No B06 native work, engineering hold, customer data, machine configuration or private key was changed.

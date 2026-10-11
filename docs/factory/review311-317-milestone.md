@@ -21,7 +21,7 @@ source-site mutants. These counts are generated, not claims of compiled mutants
 or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs and program stdout (excluding probe records), separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
 result. A survivor is unresolved unless a scenario kills it or a reviewed
-individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel arguments may exclude a surviving compiled mutant;30 INTCALC and42 POSTTRAN sites/edits are eligible for those arguments. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
+individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel or indistinguishable-failure-value arguments may exclude a surviving compiled mutant; 64 INTCALC and 78 POSTTRAN sites/edits are eligible for those arguments. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
 Mutants with altered FD layout may legitimately not compile or fail admission;
 those outcomes remain visible. Receiving-field mutations also cover every numeric PIC site in the pinned included copybooks. Each operand is hash-bound; originals are preserved.
 
@@ -30,8 +30,7 @@ expected diagnostic and RC before compilation. Derived executables keep original
 source bytes and source-line probe identities. Expected CEE3ABD refusals have RC12.
 The account REWRITE handler sets reason109; its actual downstream behaviour is
 recorded by the campaign rather than treated as an assumed abend. No z/OS failure
-mechanism equivalence is claimed. Full public/generated cp037-vs-ASCII twin
-reconciliation is a separate remote job; decimal-only restrictions remain.
+mechanism equivalence is claimed. The compiled cp037-vs-ASCII twin reconciliation matched **46/46** public/generated cases at head `2cb581d`; the [receipt summary](cp037-twin-review311-reconciliation.json) binds the exact run and full receipt. This includes returned bytes, status and refusal classes. Decimal-only production restrictions remain; these cases do not establish z/OS alphanumeric-key semantics.
 
 The unsigned revised threshold proposes 100% business outcomes, all I/O outcomes
 covered or individually accepted in an exact signed operator policy, 90% kills
@@ -69,3 +68,5 @@ PR is offered for commit-specific merge approval. No B06 native run or hold was
 changed by this work.
 
 The first completed older INTCALC campaign (497 source-only mutants, before stdout strengthening and copybook sites) measured58 divergent kills,135 failure kills,191 survivors and113 compiler refusals. This193/497 result is preserved as preliminary evidence, not replaced by the old8/8 narrative. Current full-set results remain required.
+
+Surviving mutants also receive up to three declared fault challenges chosen from their source paragraph or representative error/extended-status/INVALID-KEY paths. The same fault seam is applied to the baseline and mutant; an incompatible seam or a derived compile refusal is recorded as unavailable, never counted as a kill of a normally compiled survivor. Predicate probes in these fault-mutant copies are not claimed as changed-code coverage. New killing fault/scenario pairs are retained explicitly.

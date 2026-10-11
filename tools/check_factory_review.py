@@ -8,6 +8,7 @@ from lightyear_mainframe.systematic_mutation import generate,outcome
 from lightyear_mainframe.io_faults import declarations
 from lightyear_mainframe.scenario_coverage import observe
 from lightyear_mainframe.mutant_equivalence import argument
+from lightyear_mainframe.scenario_coverage import code
 
 
 def attempt(target,case,folder):
@@ -17,6 +18,31 @@ def attempt(target,case,folder):
     except (ValueError,RuntimeError,subprocess.TimeoutExpired,OSError) as e:
         return dict(status='execution-refusal',error_type=type(e).__name__,detail=str(e))
 
+
+
+def fault_case(job,fault):
+    case='posttran-missing-card' if fault['file']=='FD-REJS-RECORD' else 'intcalc-two-accounts' if job=='INTCALC' else 'posttran-positive'
+    if job=='INTCALC' and fault['line']==444:case='intcalc-missing-disclosure'
+    if job=='POSTTRAN' and fault['line']==510:case='posttran-new-category'
+    return case
+
+
+def relevant_faults(mutant, inv, rows):
+    # Same source paragraph activates a handler mutation. Storage/display/abend
+    # survivors also see representative normal, extended and INVALID statuses.
+    lines=sorted(p['line'] for p in inv['paragraphs'])
+    def paragraph(n):return max((p for p in lines if p<=n),default=0)
+    scope=paragraph(mutant['line']) if not mutant.get('source_path') else 0
+    selected=[r for r in rows if paragraph(r['declaration']['line'])==scope]
+    if not selected or scope>=600:
+        selected=[r for r in rows if r['declaration']['kind'] in ('missing','extended-read-error','rewrite-error')]
+    # At most one of each status/site family, three bounded derived builds.
+    seen=set();result=[]
+    for row in selected:
+        key=row['declaration']['expected_status']
+        if key in seen or not row.get('expectation_met'):continue
+        seen.add(key);result.append(row)
+    return result[:3]
 
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
@@ -40,9 +66,7 @@ def check(output,job):
         try:
             build(folder/'build',fault=fault['id'],jobs=[job])
             # A rejected transaction is needed to reach the rejects WRITE.
-            case='posttran-missing-card' if fault['file']=='FD-REJS-RECORD' else 'intcalc-two-accounts' if job=='INTCALC' else 'posttran-positive'
-            if job=='INTCALC' and fault['line']==444:case='intcalc-missing-disclosure'
-            if job=='POSTTRAN' and fault['line']==510:case='posttran-new-category'
+            case=fault_case(job,fault)
             actual=attempt(folder/'build',case,folder/'run')
             stdout=folder/'run/logs/program.stdout';stderr=folder/'run/logs/program.stderr'
             transcript=(stdout.read_text() if stdout.exists() else '')+(stderr.read_text() if stderr.exists() else '')
@@ -66,6 +90,25 @@ def check(output,job):
                 changed=attempt(folder/'build',case,folder/case);classification=outcome(baseline,changed)
                 if classification!='survived':
                     record.update(status=classification,killed_by=case,actual=changed,baseline=baseline);break
+            if record['status']=='survived':
+                record['fault_challenges']=[]
+                for fault_row in relevant_faults(mutant,inv,faults):
+                    fault=fault_row['declaration'];case=fault_case(job,fault)
+                    challenge=folder/('fault-'+fault['id']);challenge.mkdir()
+                    attempt_row=dict(fault=fault['id'],case=case)
+                    try:
+                        build(challenge/'build',systematic=mutant,fault=fault['id'],jobs=[job])
+                        changed=attempt(challenge/'build',case,challenge/'run')
+                        classification=outcome(fault_row['actual'],changed)
+                        attempt_row.update(status=classification,actual=changed)
+                        if classification!='survived':
+                            record.update(status=classification,killed_by='fault:'+fault['id']+':'+case,actual=changed,baseline=fault_row['actual'])
+                    except (ValueError,RuntimeError) as e:
+                        # An incompatible seam/compile is not a killed original
+                        # mutant; its normal compilation/survival is preserved.
+                        attempt_row.update(status='fault-challenge-unavailable',detail=str(e))
+                    record['fault_challenges'].append(attempt_row)
+                    if record['status']!='survived':break
             if record['status']=='survived':
                 proof=argument(text,program,mutant)
                 if proof:record.update(status='equivalent (argued, listed)',disposition=proof)

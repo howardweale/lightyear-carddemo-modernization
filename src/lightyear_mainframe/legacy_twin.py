@@ -278,7 +278,7 @@ def build(target, *, instrument=False, mutant=None, systematic=None, fault=None,
             compile_source=program+'-mutant.cbl'
             (folder/compile_source).write_text(changed,encoding='ascii')
         fault_declaration=None
-        if systematic:
+        if systematic and not (fault and not systematic.get("source_path")):
             from .systematic_mutation import apply
             operand=folder/systematic.get('source_path',compile_source)
             if operand.parent!=folder or operand.suffix not in ('.cpy','.cbl'):raise ValueError('mutant-operand-boundary')
@@ -291,6 +291,9 @@ def build(target, *, instrument=False, mutant=None, systematic=None, fault=None,
         if fault:
             from .io_faults import derive
             traced,inventory,fault_declaration=derive((folder/compile_source).read_text(),program,fault)
+            if systematic and not systematic.get("source_path"):
+                from .systematic_mutation import apply_derived
+                traced=apply_derived((folder/compile_source).read_text(),traced,systematic)
             compile_source=program+"-fault.cbl"
             (folder/compile_source).write_text(traced,encoding="ascii")
             write_json(folder/"coverage-inventory.json",inventory)
@@ -323,7 +326,7 @@ def build(target, *, instrument=False, mutant=None, systematic=None, fault=None,
                 execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", *key_objects, "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
     return receipt(target / "build-receipt.json", phase="build", cp037_keys=cp037_keys, source_commit=SOURCE_COMMIT,
-                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument or bool(fault), legacy_mutant=mutant, systematic_mutant=systematic, fault_declaration=fault_declaration,
+                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=(instrument or bool(fault)) and not bool(systematic), legacy_mutant=mutant, systematic_mutant=systematic, fault_declaration=fault_declaration,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,

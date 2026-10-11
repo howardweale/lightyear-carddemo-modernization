@@ -86,3 +86,23 @@ def generate(text,program):
         for row in _source_sites(path.read_text(),program+'-'+book):
             row['source_path']=f'{book}.cpy';rows.append(row)
     return rows
+
+
+def apply_derived(original, derived, mutant):
+    """One-line source-bound changes in a fault copy; never mutate the seam.
+
+    Instrumented predicate probes describe the original, so this mode is only
+    for output/RC mutation comparison, never for claimed changed-code coverage.
+    Removed operation/handler lines or multi-line statements are incompatible.
+    """
+    apply(original, mutant)  # Validate exact source and operand first.
+    if mutant.get('source_path') or mutant['line'] != mutant['end_line']:
+        raise ValueError('fault-mutant-incompatible-site')
+    lines=derived.splitlines();marker=f"      *LY-ORIGINAL-LINE={mutant['line']}"
+    if lines.count(marker)!=1:raise ValueError('fault-mutant-site-removed')
+    at=lines.index(marker)+1;before=code(mutant['original']).strip();actual=code(lines[at]).strip()
+    if actual.rstrip('.')!=before.rstrip('.'):raise ValueError('fault-mutant-operand-changed')
+    replacement=mutant['replacement']
+    if before.endswith('.') and not actual.endswith('.'):replacement=replacement.rstrip().removesuffix('.')
+    lines[at]=replacement
+    return '\n'.join(lines)+'\n'

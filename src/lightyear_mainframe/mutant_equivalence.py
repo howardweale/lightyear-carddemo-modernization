@@ -10,7 +10,21 @@ SITES={'CBACT04C':{235,253,271,290,308,523,542,560,578,596},
 
 def argument(text,program,mutant):
     if not mutant.get('source_path') and sha256(text.encode()).hexdigest()!=mutant['source_sha256']:raise ValueError('equivalence-source-changed')
-    if mutant.get('source_path') or mutant['line'] not in SITES[program]:return None
+    if mutant.get('source_path'):return None
+    # All consumers of APPL-RESULT are the 0/16 condition names. The raw
+    # working-storage item is neither displayed nor passed/aliased externally.
+    reviewed=[code(x).strip() for x in text.splitlines()]
+    raw_uses=[x for x in reviewed if 'APPL-RESULT' in x]
+    uses_bounded=all(x.startswith(('01  APPL-RESULT','MOVE ')) for x in raw_uses)
+    words=code(mutant['original']).split()
+    replacement=code(mutant['replacement']).split()
+    if (uses_bounded and mutant['operator']=='constant' and words==['MOVE','12','TO','APPL-RESULT']
+            and replacement in (['MOVE','11','TO','APPL-RESULT'],['MOVE','13','TO','APPL-RESULT'])):
+        return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
+          argument='Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.',
+          supporting_source_lines=[i+1 for i,x in enumerate(reviewed) if 'APPL-RESULT' in x or '88  APPL-' in x],
+          approval='listed-for-operator-review; not a release approval')
+    if mutant['line'] not in SITES[program]:return None
     if mutant['operator'] not in ('constant','delete-MOVE'):return None
     lines=[code(x).strip() for x in text.splitlines()]
     if lines[mutant['line']-1].replace('  ',' ').split()!=['MOVE','8','TO','APPL-RESULT.'] and lines[mutant['line']-1].split()!=['MOVE','8','TO','APPL-RESULT']:

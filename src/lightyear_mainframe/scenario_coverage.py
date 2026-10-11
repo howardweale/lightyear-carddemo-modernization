@@ -125,6 +125,7 @@ def instrument(text, program):
     result=[]
     for i,line in enumerate(raw):
         result+=emit(before[i])
+        result.append(f"      *LY-ORIGINAL-LINE={i+1}")
         # Preserve sentence scope when a probe follows a terminating period.
         c=lines[i]
         if after[i] and c.rstrip().endswith('.') and i not in {p['line']-1 for p in inv['paragraphs']}:

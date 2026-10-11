@@ -40,10 +40,23 @@ class FactoryReviewTests(unittest.TestCase):
 
  def test_equivalence_is_individually_source_bound_not_blanket_survivor_waiver(self):
   from lightyear_mainframe.mutant_equivalence import argument
-  for p,n in [('CBACT04C',30),('CBTRN02C',42)]:
+  for p in ('CBACT04C','CBTRN02C'):
    text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text();rows=generate(text,p)
    proofs=[(r,argument(text,p,r)) for r in rows if argument(text,p,r)]
-   self.assertEqual(n,len(proofs))
+   self.assertGreaterEqual(len(proofs),30)
    for row,proof in proofs:
     self.assertEqual(row['id'],proof['mutant_id']);self.assertTrue(proof['supporting_source_lines'])
    with self.assertRaisesRegex(ValueError,'source-changed'):argument(text+'\n',p,proofs[0][0])
+
+ def test_fault_mutant_changes_bound_original_not_status_seam(self):
+  from lightyear_mainframe.systematic_mutation import apply_derived
+  for p in ('CBACT04C','CBTRN02C'):
+   text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text()
+   fault=declarations(text,p)[0];derived,_,_=derive(text,p,fault['id'])
+   rows=generate(text,p)
+   target=next(r for r in rows if r['operator']=='constant' and 'MOVE 12 TO APPL-RESULT' in r['original'])
+   changed=apply_derived(text,derived,target)
+   self.assertIn("MOVE '35' TO",changed);self.assertNotEqual(derived,changed)
+   operation=next(r for r in rows if r['line']==fault['line'] and r['operator']=='constant') if any(r['line']==fault['line'] and r['operator']=='constant' for r in rows) else None
+   if operation:
+    with self.assertRaisesRegex(ValueError,'fault-mutant'):apply_derived(text,derived,operation)

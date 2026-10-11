@@ -1,0 +1,31 @@
+name: Twin indexed key experiment
+on:
+  pull_request:
+    paths: ['tools/legacy_twin/index_order.py', 'src/lightyear_mainframe/posttran_invariants.py', 'tests/test_twin_index_order.py', '.github/workflows/twin-index-order.yml']
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  real-indexed-storage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src:tests:.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: bash tools/legacy_twin/install-pinned.sh
+      - run: python -B -m unittest test_twin_index_order
+      - run: mkdir -p work && python -B -m tools.legacy_twin.index_order work/index-order
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-index-order-experiment
+          path: work/index-order

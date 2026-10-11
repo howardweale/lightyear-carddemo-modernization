@@ -1,0 +1,22 @@
+{
+  "allocation_upper_bound_bytes": 197898696,
+  "definition_bytes": 1048576,
+  "elapsed_nanoseconds": 43155000,
+  "graph_nodes": 4096,
+  "harness_source_sha256": "5ec3514acb62bb05a3e8aec2aab420d47ee7cbf6d3ac46902f53c3dd3356a03f",
+  "heap_before_bytes": 171157312,
+  "heap_max_bytes": 201326592,
+  "independent_reference_equal": true,
+  "limitation": "Peak sampled at output-buffer writes; thread allocation upper bound separately retained; input and ballast are resident before timing.",
+  "measurement_credit": false,
+  "model_calls": 0,
+  "native_runs": 0,
+  "observer_source_sha256": "02b2f7fd4080bfbcd821ef51147c455d7f57620eac797b809d406d73f935c64b",
+  "oom": false,
+  "output_bytes": 1661086,
+  "qualification_credit": false,
+  "sampled_peak_bytes": 181605808,
+  "schema": "b06-transient-peak/1",
+  "serialization_allocated_bytes": 26741384,
+  "sha256": "dacbe2e353b58c8d30365b4cfb7f7f9ed61c7d75e2020ef5b1aa8e96f469e183"
+}

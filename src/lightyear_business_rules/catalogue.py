@@ -11,9 +11,10 @@ def bound(rules, rule, receipt):
     return dict(rule_set=digest(rules), rule=digest(rule), receipt=digest(receipt))
 
 
-def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None):
+def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None,adequacy_report=None):
     require(bool(head) and bool(scope), "fresh-tower-head-and-scope-required")
     expected = bound(rules, rule, receipt)
+    if adequacy_report:expected['scenario_assessment']=digest(adequacy_report)
     event = next(e for e in proof["journal"]["events"] if e["content_sha256"] == proof["decision_sha256"])
     actual = event["payload"]["bound"]
     require(set(actual) == set(expected) | {"request"} and all(actual[k] == v for k,v in expected.items()), "disposition-bindings")
@@ -54,7 +55,7 @@ def catalogue(rules, receipt, judge_key, *, adequacy_report=None, kill_report=No
         if s['status']=='verified' and scenario_reasons:s['display_status']='verified (weak scenarios)'
         decision = None
         if (decisions or {}).get(rule["id"]):
-            decision = disposition(rules, rule, receipt, decisions[rule["id"]], tower_key, tower_head, tower_scope)
+            decision = disposition(rules, rule, receipt, decisions[rule["id"]], tower_key, tower_head, tower_scope,adequacy_report=adequacy_report)
         entries.append(dict(id=rule["id"], statement=rule["statement"], source=rule["derived_from"],
             **{k:v for k,v in s.items() if k != "id"}, legacy_behaviour=rule["legacy_behaviour"],
             receipt_sha256=receipt["content_sha256"], mutation=kills.get(rule["id"]),

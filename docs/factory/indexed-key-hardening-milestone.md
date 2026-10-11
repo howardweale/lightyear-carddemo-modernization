@@ -15,6 +15,17 @@ key changes and integration with every legacy I/O statement remain unproven.
 **The decimal-only production restriction stays.** No input or frozen twin
 adapter has been silently changed.
 
+The actual Ubuntu experiment passed in [run38101317214](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38101317214)
+at implementation `f44f464ebc2690b105a03eecbd4977ae69a936ac`.
+ASCII READ NEXT returned `space, 0, 9, A, Z, a, z`; cp037 storage returned
+`space, a, z, A, Z, 0, 9`. Both returned duplicate22, EOF10, random READ00,
+REWRITE00 and START00. The public [result](indexed-key-order-result.json)
+retains the exact source and result hashes and the limited proof scope.
+The earlier run38101028397 failed because the probe's build path was relative
+to an already changed working directory. That infrastructure failure remains
+preserved; it is not a failed collation result. The corrected run resolves the
+output directory before compilation. Fourteen focused tests passed.
+
 CBTRN02C's REWRITE failure109 now always appears in new invariant receipts'
 unresolved register. Observed109 reject IDs are retained; absence does not mean
 unreachable or tested. It is a runtime I/O failure, not a generated business

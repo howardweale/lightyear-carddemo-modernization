@@ -39,3 +39,24 @@ jobs:
           name: factory-review-${{ matrix.job }}
           path: work/factory-review-${{ matrix.job }}
           retention-days: 14
+  cp037:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src:.
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned compiler
+        run: bash tools/legacy_twin/install-pinned.sh
+      - name: Reconcile all public and generated scenarios with both key modes
+        run: python -B -m tools.check_cp037_twin work/cp037-twin
+      - name: Preserve both outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cp037-twin-reconciliation
+          path: work/cp037-twin

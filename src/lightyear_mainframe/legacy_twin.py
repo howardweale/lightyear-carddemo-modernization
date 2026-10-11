@@ -243,7 +243,7 @@ procedure division.
 """
 
 
-def build(target, *, instrument=False, mutant=None, systematic=None, fault=None, jobs=None):
+def build(target, *, instrument=False, mutant=None, systematic=None, fault=None, jobs=None, cp037_keys=False):
     host = linux_platform()
     clock = compiler_clock()
     host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
@@ -295,14 +295,29 @@ def build(target, *, instrument=False, mutant=None, systematic=None, fault=None,
             compile_source=program+'-traced.cbl'
             (folder/compile_source).write_text(traced,encoding='ascii')
             write_json(folder/'coverage-inventory.json',inventory)
-        execute(["cobc", "-c", "-fixed", *FLAGS, "-I", ".", compile_source, "-o", "program.o"], folder, folder / "logs/compile-original")
-        execute(["cobc", "-x", "-free", *FLAGS, "-fstatic-call", "main.cob", "abend.cob", "program.o", "-o", "bin/twin"], folder, folder / "logs/link")
+        source_format="-fixed"
+        key_objects=[]
+        if cp037_keys:
+            if instrument or fault or systematic:raise ValueError("cp037-experiment-modes-exclusive")
+            from .cp037_twin import derive,helper
+            changed=derive((folder/compile_source).read_text(),program)
+            compile_source=program+"-cp037.cob"
+            (folder/compile_source).write_text(changed,encoding="ascii")
+            (folder/"key.cob").write_text(helper(),encoding="ascii")
+            execute(["cobc","-c","-free",*FLAGS,"key.cob","-o","key.o"],folder,folder/"logs/key-compile")
+            key_objects=["key.o"];source_format="-free"
+        execute(["cobc", "-c", source_format, *FLAGS, "-I", ".", compile_source, "-o", "program.o"], folder, folder / "logs/compile-original")
+        execute(["cobc", "-x", "-free", *FLAGS, "-fstatic-call", "main.cob", "abend.cob", "program.o", *key_objects, "-o", "bin/twin"], folder, folder / "logs/link")
         for dd, (_, key) in FILES[job].items():
             if key:
-                (folder / (dd + ".cob")).write_text(indexed_adapter(job, dd), encoding="ascii")
-                execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
+                bridge=indexed_adapter(job, dd)
+                if cp037_keys:
+                    from .cp037_twin import adapter
+                    bridge=adapter(bridge,key,job=="INTCALC" and dd=="XREFFILE")
+                (folder / (dd + ".cob")).write_text(bridge, encoding="ascii")
+                execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", *key_objects, "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
-    return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
+    return receipt(target / "build-receipt.json", phase="build", cp037_keys=cp037_keys, source_commit=SOURCE_COMMIT,
                    source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument or bool(fault), legacy_mutant=mutant, systematic_mutant=systematic, fault_declaration=fault_declaration,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),

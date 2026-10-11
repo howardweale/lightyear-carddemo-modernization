@@ -29,6 +29,8 @@ def signature(r):
 
 
 def three_way(meta,images,folder,twin,java):
+    if twin['status']=='refused' and 'rc=66;' in twin.get('reason','') and '/logs/load-' in twin['reason']:
+        return dict(status='adapter-refusal-before-execution',states={'twin':twin},comparisons={},unresolved=False,reason='duplicate indexed-key admission; no legacy execution or agreement claim')
     inputs=folder/'compare-inputs';inputs.mkdir()
     for dd,raw in images.items():(inputs/dd).write_bytes(raw)
     try:py=reference(meta,images,folder/'python')
@@ -48,8 +50,23 @@ def three_way(meta,images,folder,twin,java):
             for left,right in (('twin','python'),('twin','java'),('python','java')):
                 comparisons[left+'-'+right+'-'+dd]=compare_images(paths[left].read_bytes(),paths[right].read_bytes(),layout,binding['keys'])
     agrees=complete and all(x['byte_identical'] for x in comparisons.values())
-    return dict(states=states,comparisons=comparisons,status='byte-agreement' if agrees else 'unresolved',
-                auto_repair=False,adjudication='required' if not agrees else 'none')
+    expected_failure=False
+    refusal_evidence={}
+    if twin.get('returncode')==12 and py.get('status')=='execution-failure' and r.returncode!=0:
+        twin_log=(folder/'traced/logs/program.stdout').read_text()
+        py_log=py.get('detail','')+(folder/'python/failure.txt').read_text() if (folder/'python/failure.txt').exists() else py.get('detail','')
+        java_log=r.stderr.decode()
+        paths=[('missing-disclosure','ERROR READING DEFAULT DISCLOSURE GROUP','DEFAULT DISCLOSURE MISSING'),
+               ('missing-account','ERROR READING ACCOUNT FILE','ACCOUNT NOT FOUND'),
+               ('missing-xref','ERROR READING XREF FILE','XREF NOT FOUND')]
+        for kind,twin_message,other_message in paths:
+            if twin_message in twin_log and other_message in py_log and other_message in java_log:
+                expected_failure=True;refusal_evidence=dict(source_path=kind,twin=twin_message,python=other_message,java=other_message)
+    status='byte-agreement' if agrees else 'expected-failure-agreement' if expected_failure else 'real-disagreement'
+    return dict(states=states,comparisons=comparisons,status=status,refusal_evidence=refusal_evidence,
+                disagreeing_fields={k:v['fields'] for k,v in comparisons.items() if not v['byte_identical']},
+                refusal_classes=dict(twin=twin.get('returncode'),python=py.get('status'),java=r.returncode),
+                auto_repair=False,unresolved=status=='real-disagreement',adjudication='required' if status=='real-disagreement' else 'none')
 
 
 def check(output):
@@ -116,7 +133,7 @@ def check(output):
         combined['distinct_values_per_output_field']={k:len(v) for k,v in distinct[job].items()}
         combined['unsolved_outcomes']=[dict(x,solver_status='not-solved',domain='input-only public fixture generator; I/O fault outcomes not inferred') for x in combined['uncovered']]
         programs[job]=dict(public_only=baseline,public_plus_generated=combined)
-    unresolved=[dict(scenario=r['id'],reason='three-way disagreement or execution refusal') for r in rows if r['reconciliation']['status']=='unresolved']
+    unresolved=[dict(scenario=r['id'],reason='real-disagreement',details=r['reconciliation']) for r in rows if r['reconciliation']['status']=='real-disagreement']
     unresolved += [dict(scenario=r['id'],reason='POSTTRAN invariant failure/refusal') for r in rows if r['job']=='POSTTRAN' and (not r['invariants'] or not r['invariants']['passed'])]
     return receipt(output/'generated-summary.json',phase='generated-scenario-campaign',programs=programs,
                    cases=rows,mutants=mutants,unresolved=unresolved,model_calls=0,

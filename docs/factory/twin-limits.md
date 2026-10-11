@@ -81,3 +81,18 @@ assumption of compiler nondeterminism.
 ## Observed pinned 3.1.2 collation result
 
 [Hosted experiment](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38095372644): native runtime-data and literal comparisons both A-before-a; explicit EBCDIC runtime-data comparison a-before-A, but literal comparison still A-before-a. SORT changed from0Aa to aA0; MERGE of two valid one-record inputs changed fromAa to aA. Indexed READ NEXT remained0Aa in both. Thus program collation alone is insufficient for general z/OS equivalence. [Observed results](review-304-307-observed-results.json) retain the source and artifact hashes. Original source remains unchanged.
+
+## 2026-10-11 engineering fault and physical-key limits
+
+Declared fault injection substitutes an operation status in a derived public
+engineering executable. Missing OPEN (`35`) stands for absent allocation; permission
+OPEN (`37`) for denied access; READ/WRITE/CLOSE (`30`) for generic I/O failure;
+REWRITE (`23`) for absent record; premature EOF (`10`) for early stream exhaustion.
+These are **unknown relative to z/OS**: no RACF, VSAM, device, JCL allocation or
+Enterprise COBOL condition is recreated or claimed equivalent. Per-site declarations
+bind expected status, display and RC before compilation. Original source stays pinned.
+
+The cp037 option projects indexed keys into separate physical key bytes while
+preserving logical record bytes. Full public reconciliation is required in both
+modes. The decimal-only production restriction remains regardless of this engineering
+result; no z/OS-equivalence or release claim follows from the option.

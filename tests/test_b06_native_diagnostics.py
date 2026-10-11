@@ -32,7 +32,7 @@ class DiagnosticsTests(unittest.TestCase):
             '-XX:SoftRefLRUPolicyMSPerMB=0','-Db06.observer.state_dir=/observer-private',
             '-XX:+HeapDumpOnOutOfMemoryError','-XX:HeapDumpPath=/observer-private/heap.hprof'])
         self.assertEqual(diagnostics.observer_args(self.plan),['bounded-observer-v1','native-diagnostics-v1','strict',
-            'unmatched-return-cap=10','heap-guard-percent=85','heap-telemetry-interval=1000','pending-cap=256'])
+            'unmatched-return-cap=10','heap-guard-percent=85','heap-telemetry-interval=1000','pending-cap=512'])
         self.plan['posting_observer']['native_diagnostics']=diagnostics.configuration('diagnostic-unmatched-return')
         self.assertIn('diagnostic-unmatched-return',diagnostics.observer_args(self.plan))
 

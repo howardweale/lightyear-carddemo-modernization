@@ -19,7 +19,7 @@ OBSERVER_SOURCE = 'b0d5749c0a876b7977d8c64bdeca65706b6c129f'
 LIMITS = dict(run_seconds=3600, cleanup_seconds=600, candidate_seconds=1800,
               database_memory_mib=6144, carrier_memory_mib=8192,
               application_memory_mib=8192, observer_memory_mib=2048, observer_heap_mib=1536,
-              unmatched_return_cap=10, heap_guard_percent=85, telemetry_events=1000, pending_cap=256,
+              unmatched_return_cap=10, heap_guard_percent=85, telemetry_events=1000, pending_cap=512,
               class_index_slots=262144, class_cache_entries=256, soft_ref_lru_ms_per_mb=0,
               database_cpus=2, carrier_cpus=4, application_cpus=4, observer_cpus=1,
               output_bytes=8*1024**3, minimum_free_bytes=60*1024**3,
@@ -224,7 +224,7 @@ def validate_instrumented(value):
     require(bool(classes) and all(name.endswith('.class') and re.fullmatch('[0-9a-f]{64}',digest)
             for name,digest in classes.items()),'compiled-observer-bindings')
     require(value.get('observer_configuration') == dict(mode_sequence=['strict','diagnostic-unmatched-return'],
-        format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=256), 'observer-configuration')
+        format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=512), 'observer-configuration')
     require((utc(value['not_before_utc'])-utc(value['full_plan_delivered_at_utc'])).total_seconds() >= 4*3600,
             'four-hour-plan-review')
 
@@ -239,7 +239,7 @@ def instrumented_proposal(start,end,excluded_windows,evidence_runs,output_root,*
         observer_source_sha256=observer_source_sha256,observer_class_files_sha256=observer_class_files_sha256,
         full_plan_delivered_at_utc=full_plan_delivered_at_utc,
         observer_configuration=dict(mode_sequence=['strict','diagnostic-unmatched-return'],
-            format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=256))
+            format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=512))
     result=seal(body);validate(result);validate_instrumented(result);return result
 
 

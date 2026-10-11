@@ -10,4 +10,4 @@ class PendingPoolTests(unittest.TestCase):
                 str(root/"factory/idempiere/b06-observer/PostingObserver.java"),str(root/"tests/fixtures/B06PendingPoolProbe.java")],capture_output=True,text=True,timeout=60)
             self.assertEqual(built.returncode,0,built.stderr)
             result=subprocess.run([str(jdk/("java"+suffix)),"--add-modules","jdk.jdi","-cp",tmp,"B06PendingPoolProbe"],capture_output=True,text=True,timeout=30)
-            self.assertEqual(result.returncode,0,result.stderr);self.assertIn("fixed_slots=256",result.stdout)
+            self.assertEqual(result.returncode,0,result.stderr);self.assertIn("fixed_slots=512",result.stdout)

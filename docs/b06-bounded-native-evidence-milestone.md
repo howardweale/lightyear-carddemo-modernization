@@ -10,8 +10,8 @@ native OOM's initiating cause.
 The new opt-in `bounded-observer-v1` format streams class definitions on first
 sight. A private disk index stores class identity, definition hash and prepared
 state, with a fixed 256-entry heap cache and 262,144 slots. Pending activations
-retain matching identifiers and entry age in 256 preallocated slots, with a hard
-256-activation cap. Pre-dispatch refusal witnesses also use fixed storage, so
+retain matching identifiers and entry age in 512 preallocated slots, with a hard
+512-activation cap. Pre-dispatch refusal witnesses also use fixed storage, so
 releasing or reusing a slot cannot change the captured refusal operands.
 Return records reference the already emitted entry. Completed payloads are not
 retained. Checkpoint frames reference class definitions rather than duplicating
@@ -99,6 +99,15 @@ observer repair attempt is automatic.
   0.181–0.947. It is preserved as a failed acceptance attempt. Fixed retained
   pending/witness storage and further lossless metadata compaction are now being
   validated; completion and a flat curve are not yet claimed.
+- The fifth variant reached 37,560 generation entries with peak after-GC heap
+  5,937,600 bytes and slope -0.133 bytes/record (95% interval -0.302 to 0.036),
+  but the unchanged synthetic suppression workload exhausted the proposed
+  256 pending slots. Its [preserved result](b06-bounded-memory-r5.json) is not
+  an acceptance pass. The fixed pending/witness pools are now sized to 512;
+  the extra capacity is preallocated and its exhaustion still stops. This is
+  a proposed implementation resource limit, not an increase to the 128 MiB,
+  500,000-audit or 50,000 ordinary-evidence limits. The unchanged full workload
+  is being rerun; the fit and completion must both pass.
 - A production-serializer transient test passed with a 1 MiB definition and
   4,096-node graph resident at 85% occupancy of a 192 MiB heap. Final-source
   measurements will accompany the final validation record.

@@ -47,7 +47,7 @@ public final class PostingObserver {
     private boolean bounded, nativeDiagnostics;
     private int unmatchedCount;
     private long observedEvents, heapHighWater;
-    private static final int PENDING_CAP=256;
+    private static final int PENDING_CAP=512;
     private static final String FORMAT="bounded-observer-v1";
     private long suppressedDispatch, suppressedResume, diagnosticRecords;
     private Map<String,Object> refusalContext;
@@ -511,7 +511,7 @@ public final class PostingObserver {
         }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
-            if(bounded() && pending.values().stream().mapToInt(Deque::size).sum()>=PENDING_CAP)owner.resourceStop("pending-cap-256");
+            if(bounded() && pending.values().stream().mapToInt(Deque::size).sum()>=PENDING_CAP)owner.resourceStop("pending-cap-512");
             Map<String,Object> r=new LinkedHashMap<>();r.put("kind","generation");r.put("thread_id",t.uniqueID());
             r.put("generation_id",++generationSequence);
             r.put("entry_depth",t.frameCount());r.put("entry_method",e.location().declaringType().name()+"."+e.location().method().name()+e.location().method().signature());
@@ -1119,7 +1119,7 @@ public final class PostingObserver {
         PostingObserver observer=new PostingObserver();
         if(args.length>=3 && Arrays.asList(args).contains(FORMAT)) {
             Set<String> flags=new HashSet<>(Arrays.asList(args).subList(2,args.length));
-            Set<String> common=Set.of("observer-binding-v2",FORMAT,"native-diagnostics-v1","unmatched-return-cap=10","heap-guard-percent=85","heap-telemetry-interval=1000","pending-cap=256");
+            Set<String> common=Set.of("observer-binding-v2",FORMAT,"native-diagnostics-v1","unmatched-return-cap=10","heap-guard-percent=85","heap-telemetry-interval=1000","pending-cap=512");
             boolean diagnostic=flags.remove("diagnostic-unmatched-return");
             boolean strict=flags.remove("strict");
             if(diagnostic==strict || !flags.equals(common))throw new IllegalArgumentException("exact bounded diagnostics arguments required");

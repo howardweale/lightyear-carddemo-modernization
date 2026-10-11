@@ -7,7 +7,7 @@ public class B06PendingPoolProbe {
     var release=cls.getDeclaredMethod("release",Map.class);release.setAccessible(true);
     List<Map<String,Object>> entries=new ArrayList<>();
     Map<String,Object> first=null,snapshot=null;
-    for(int i=0;i<256;i++){
+    for(int i=0;i<512;i++){
       Map<String,Object> input=Map.of("kind","generation","thread_id",7L,"generation_id",1000L+i,
         "entry_depth",103,"entry_method","selected.method()V","entry_event_index",4000L+i);
       @SuppressWarnings("unchecked") Map<String,Object> entry=(Map<String,Object>)retain.invoke(pool,input);
@@ -15,7 +15,7 @@ public class B06PendingPoolProbe {
       if(i==0){first=entry;snapshot=new LinkedHashMap<>(entry);}
     }
     Set<Object> identities=Collections.newSetFromMap(new IdentityHashMap<>());identities.addAll(entries);
-    if(identities.size()!=256)throw new AssertionError("active slot reused");
+    if(identities.size()!=512)throw new AssertionError("active slot reused");
     try{retain.invoke(pool,snapshot);throw new AssertionError("capacity bypass");}
     catch(java.lang.reflect.InvocationTargetException expected){if(!(expected.getCause() instanceof IllegalStateException))throw expected;}
     Class<?> snapshotClass=Class.forName("lightyear.observer.PostingObserver$PendingSnapshot");
@@ -35,6 +35,6 @@ public class B06PendingPoolProbe {
     catch(java.lang.reflect.InvocationTargetException expected){}
     for(String name:List.of("thread","generation","age","depth"))
       if(!reused.getClass().getDeclaredField(name).getType().isPrimitive())throw new AssertionError("retained boxed ID");
-    System.out.println("fixed_slots=256; exact_fields=true; identity=true; snapshot=true; guards=true");
+    System.out.println("fixed_slots=512; exact_fields=true; identity=true; snapshot=true; guards=true");
   }
 }

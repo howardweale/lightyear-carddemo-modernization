@@ -124,9 +124,19 @@ def check(before,after,*,timestamp):
     require(len(actual_cats)==len(records(after,'TCATBALF')),'duplicate-category-output')
     require(cats==actual_cats,'category-conservation')
     return dict(schema='posttran-independent-invariants/1',passed=not problems,failures=problems,
+                unresolved_register=runtime_register(rejected),
                 inputs=len(daily),posted=len(posted),rejected=len(rejected),oracle_class='executable-twin',
                 oracle_status='provisional',zos_confirmation=False,releasable=False,
                 repeatability='requires-separate-second-run',human_review='pending',java_second_opinion='unavailable')
+
+
+def runtime_register(rejected):
+    observed=[r['DALYTRAN-ID'] for r in rejected if int(r['WS-VALIDATION-FAIL-REASON'])==109]
+    return [dict(id='posttran-runtime-rewrite-109',status='unresolved',promotion_blocker=True,
+        source='spec/mainframe/public-source/CBTRN02C.cbl:554-558',
+        condition='REWRITE FD-ACCTFILE-REC INVALID KEY, not a business input rejection',
+        observed_rejection_ids=observed,
+        limitation='Absence from reject output does not prove the I/O path was exercised or unreachable; requires controlled runtime fault evidence and source review.')]
 
 
 def review_sheet(before,after):

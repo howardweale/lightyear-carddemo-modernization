@@ -16,6 +16,12 @@ is not evidence that those prerequisites have passed.
 
 ## POSTTRAN amendment
 
+The following original proposal remains historical. The dated
+[dedicated transport and attempt-1 milestone](posttran-dedicated-phase1-milestone.md)
+supersedes its dispatch/preflight status: operator preflight is outside the
+reservation ledger and attempt 1 has completed. The old sealed plan remains
+unchanged. Phase 1 validation and separate Phase 2 approval remain outstanding.
+
 [Amended plan](posttran-second-opinion/amended-plan-2026-10-11.json):
 `bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5`.
 [Machine-readable diff](posttran-second-opinion/amendment-2026-10-11.json) is against

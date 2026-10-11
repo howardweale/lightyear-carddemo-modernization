@@ -15,8 +15,8 @@
       "lf_sha256": "02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc"
     },
     {
-      "path": "docs/factory/posttran-second-opinion/amended-plan-2026-10-11.json",
-      "lf_sha256": "4eb8739628793217bb104bbfe02e6571266343e992b61332f4a749108490da0c"
+      "path": "docs/factory/posttran-second-opinion/dedicated-transport-plan-2026-10-11.json",
+      "lf_sha256": "380eeedac982d0a0334456366dc205e102e9dd08a46a18d0fe03d6cc370f046a"
     },
     {
       "path": "docs/factory/b07-prefreeze-power-2026-10-11.json",
@@ -25,6 +25,10 @@
     {
       "path": "docs/factory/ci-times-316-320-2026-10-11.json",
       "lf_sha256": "03aeed2a2a72b29b9fdc2997e6ffdac6832f16306ccb140039a34c139f10e3cf"
+    },
+    {
+      "path": "docs/factory/posttran-second-opinion/attempt-1-public-summary-2026-10-11.json",
+      "lf_sha256": "08cf36d5ad44dcc18ebfd7159008ad9db67825f5ecd063436d6fbc700682d83a"
     }
   ],
   "conditional_threshold": {
@@ -46,8 +50,42 @@
   },
   "unsigned_review_accepted": 10,
   "signature_verified": false,
-  "posttran_plan_sha256": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+  "posttran_plan_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
   "model_execution_authorized": false,
+  "posttran_attempt_1": {
+    "agent_credential_reads": 0,
+    "agent_model_calls": 0,
+    "artifact_sha256": "d33c66bc97294354e93e245eddc9884f6245185c4556d792f0ada1e329f169ae",
+    "attempt": 1,
+    "compilations_verified": 0,
+    "content_sha256": "efe60ce23a701abaafd0c3b32b25b8947e1d1823baab8abaa60d285f15be4923",
+    "finished_at": "2026-10-11T23:12:20.953571+00:00",
+    "ledger_sha256": "1a070c8be895d6db3a6433c4c001993950bb95bc9ac2b7f45c1e8205c1b8c201",
+    "operator_invoked": true,
+    "phase1_validation_completed": false,
+    "phase2_authorized": false,
+    "plan_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
+    "preflight_sha256": "24fd354e9097966b36249eb7eb14c14fe2c9c9f25dbe10daf39d30da874c2111",
+    "request_sha256": "084007f9fa824acac06762cf2c50c10e37da4be50e2f6aad419cebe6055938b0",
+    "reserved_usd": 11.05,
+    "response_sha256": "1da6e3327cb9d67fca6391f05d47b29e45a386cd38064ef2a4566a39bd594833",
+    "schema": "posttran-operator-attempt-public-summary/1",
+    "started_at": "2026-10-11T23:07:44.801536+00:00",
+    "status": "generation-completed-validation-pending",
+    "usage": {
+      "input_tokens": 147242,
+      "input_tokens_details": {
+        "cache_write_tokens": 147239,
+        "cached_tokens": 0
+      },
+      "output_tokens": 17969,
+      "output_tokens_details": {
+        "reasoning_tokens": 8779
+      },
+      "total_tokens": 165211
+    }
+  },
+  "posttran_phase2_authorized": false,
   "b06_execution_authorized": false,
   "b06_window": [
     "2026-10-13T09:00:00-07:00",
@@ -74,5 +112,5 @@
   ],
   "b07_freeze_ready": false,
   "latest_ci_collection": "2026-10-11T21:04:46.316159+00:00",
-  "content_sha256": "8b20c72a5399aa4e22be30a8929331905dc6b2c066a1ef69e9dbc896b2d9d0e4"
+  "content_sha256": "67b8515528f580d4b76b62c1b3f0eb0716a6e7c06f92ca6ba6694e45a640871c"
 }

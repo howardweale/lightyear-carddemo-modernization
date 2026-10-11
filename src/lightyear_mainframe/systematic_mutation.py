@@ -73,7 +73,7 @@ def outcome(baseline,changed):
     if changed.get('status')=='not-compiled':return 'not-compiled'
     if changed.get('status')!='executed':return 'killed-failure'
     if changed.get('returncode')!=baseline.get('returncode'):return 'killed-failure'
-    if changed.get('outputs')!=baseline.get('outputs'):return 'killed-divergent'
+    if changed.get('outputs')!=baseline.get('outputs') or changed.get('stdout_sha256')!=baseline.get('stdout_sha256'):return 'killed-divergent'
     return 'survived'
 
 

@@ -15,7 +15,7 @@ def check(output):
    r=run(output/mode,case,output/(mode+'-'+case));actual[mode]={k:r[k] for k in ('returncode','outputs','invariants')}
   rows.append(dict(scenario=case,kind='public',matched=actual['ascii']==actual['cp037'],actual=actual))
  for spec in manifest():
-  case=spec['id'];actual={mode:attempt(output/mode,case,output/(mode+'-'+case)) for mode in ('ascii','cp037')}
+  case=spec['id'];actual={mode:attempt(output/mode,case,output/(mode+'-generated-'+case)) for mode in ('ascii','cp037')}
   # Admission-refusal paths differ by output directory; compare refusal type only.
   matched=actual['ascii']==actual['cp037'] if actual['ascii']['status']=='executed' else all(x['status']=='execution-refusal' and x.get('error_type')=='RuntimeError' and 'rc=66;' in x.get('detail','') for x in actual.values())
   rows.append(dict(scenario=case,kind='generated',matched=matched,actual=actual))

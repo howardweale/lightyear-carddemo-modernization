@@ -52,7 +52,7 @@ def manifest():
     for truth in (False,True):
         witness=solve({'rate':[D('-.01'),D(0),D('.01'),D('15')]},lambda x:(x['rate']!=0)==truth)
         add('INTCALC','solver-rate-'+str(truth).lower(),'decision-directed-finite-solver','CBACT04C:214 '+str(truth),rate=str(witness['witness']['rate']),balance='10.01',solver={**witness,'witness':{'rate':str(witness['witness']['rate'])}})
-    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category'):
+    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','large-amount'):
         add('POSTTRAN',name,'boundary-or-cross-record','CBTRN02C validation/posting/EOF',variant=name)
     for truth in (False,True):
         witness=solve({'amount':[D('999.99'),D('1000'),D('1000.01')]},lambda x:(D('1000')>=x['amount'])==truth)
@@ -108,7 +108,7 @@ def case(identifier):
         variant=p['variant']
         setfield('ACCTFILE','ACCT-CURR-CYC-CREDIT','0');setfield('ACCTFILE','ACCT-CURR-CYC-DEBIT','0')
         setfield('ACCTFILE','ACCT-CREDIT-LIMIT','1000');setfield('ACCTFILE','ACCT-EXPIRAION-DATE','2030-01-01')
-        amount=p.get('amount',{'zero':'0','negative':'-0.01','credit-equal':'1000','credit-above':'1000.01'}.get(variant,'0.01'))
+        amount=p.get('amount',{'zero':'0','negative':'-0.01','credit-equal':'1000','credit-above':'1000.01','large-amount':'100000000.01'}.get(variant,'0.01'))
         setfield('DALYTRAN','DALYTRAN-AMT',amount)
         if variant.startswith('expiry-'):setfield('ACCTFILE','ACCT-EXPIRAION-DATE','2022-06-10' if variant=='expiry-equal' else '1900-01-01')
         if variant=='missing-card':setfield('DALYTRAN','DALYTRAN-CARD-NUM','9999999999999999')

@@ -72,7 +72,8 @@ def derive(text,program):
                     # Move logical data before original INVALID/NOT INVALID handler.
                     if into:
                         # INTO must copy logical only; execute after END-READ before predicates.
-                        after.setdefault(end,[]).append(f'MOVE {logical} TO {into}')
+                        status={'TCATBAL-FILE':'TCATBALF-STATUS','XREF-FILE':'XREFFILE-STATUS','ACCOUNT-FILE':'ACCTFILE-STATUS','DISCGRP-FILE':'DISCGRP-STATUS','TRANSACT-FILE':'TRANFILE-STATUS'}[file]
+                        after.setdefault(end,[]).extend([f"IF {status} = '00'",f'MOVE {logical} TO {into}','END-IF'])
                         for k in range(i+1,end):
                             if lines[k].strip().startswith('NOT INVALID KEY'):after.setdefault(k,[]).append(f'MOVE {logical} TO {into}')
                     if t.endswith('.'):c+='.'

@@ -468,6 +468,7 @@ def run(target, scenario, output, *, generated=None, timeout=120):
                    build_receipt_sha256=sha((target / "build-receipt.json").read_bytes()),
                    inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
                    public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,
+                   program_stdout_sha256=sha(b"\n".join(line for line in result.stdout.splitlines() if not line.startswith(b"LYC|"))),
                    deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env.get("TWIN_PROCESSING_DATE"),
                    processing_date_contract="required" if job == "INTCALC" else "not-used-by-POSTTRAN",
                    adjudication="not-performed", model_calls=0)

@@ -151,6 +151,19 @@ class HostWitnessReportTests(unittest.TestCase):
             p.write_text(json.dumps(dict(kind='generation-entry',entry_method='unknown',stack=[{'class':'example.Customer'}]))+'\n')
             with self.assertRaises(ValueError):witness_counts(p)
 
+    def test_host_envelope_uses_nested_generation_record(self):
+        import json
+        from tools.b06_host_probe.oct13_host_validation import witness_counts
+        ref=dict(class_object_id=2,**{'class':'example.Customer','loader':'17','signature':'Lexample/Customer;'})
+        record=dict(entry_method='java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B',
+                    class_input_witness=dict(policy='generation-inputs-v1',kind='class-objects',
+                         inputs={'receiver.invokerType.rtype':ref,'receiver.invokerType.ptypes':[]}))
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'events.jsonl';p.write_text(json.dumps(dict(kind='generation-entry',record=record))+'\n')
+            result=witness_counts(p)
+            self.assertEqual(result['validated_generation_entries'],1)
+            self.assertEqual(result['counts'],{'application-derived-input':1})
+
 class ProjectionTests(unittest.TestCase):
     def test_native_and_host_allowances_and_distinct_attempt_caps(self):
         from tools.b06_host_probe.oct13_projection import project

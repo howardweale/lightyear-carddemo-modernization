@@ -14,6 +14,7 @@ def witness_counts(path):
             if len(line)>4*1024*1024:raise ValueError('host-event-size')
             event=json.loads(line)
             if event.get('kind')!='generation-entry':continue
+            event=event.get('record',{})
             validate(event)
             if 'class_input_witness' not in event:raise ValueError('missing-input-witness')
             label,_=classify(event);counts[label]+=1;total+=1

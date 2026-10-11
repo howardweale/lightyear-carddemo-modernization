@@ -1,0 +1,22 @@
+name: POSTTRAN public review
+on:
+  pull_request:
+    paths: ['src/lightyear_mainframe/posttran_review.py', 'tests/test_posttran_review.py', 'docs/factory/posttran-human-review*', 'docs/factory/posttran-review-milestone.md', '.github/workflows/posttran-review.yml']
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unsigned-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install cryptography
+      - run: python -B -m unittest test_posttran_review
+        env:
+          PYTHONPATH: src:tests:.

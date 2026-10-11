@@ -55,7 +55,7 @@ class PackedConsumerTests(unittest.TestCase):
                     entry_method=c['method'],entry_depth=c['depth'])) for c in calls]
         detail = dict(event_type='breakpoint',thread_id=42,depth=122,
                       location=dict(**{'class':'java.lang.invoke.LambdaForm'},method='compileToBytecode'),
-                      pending=[calls[-1]] if packed_mode else list(reversed(calls)))
+                      pending=[calls[-1]['generation_id']] if packed_mode else list(reversed(calls)))
         if packed_mode: detail['pending_count'] = 2
         if mutate: mutate(detail)
         event = dict(kind='observer-audit',action='jdi-event',event_set_id=1,event_position=0,
@@ -88,7 +88,7 @@ class PackedConsumerTests(unittest.TestCase):
 
     def test_refusal_rejects_changed_count_or_top(self):
         for mutate in (lambda d:d.update(pending_count=3),
-                       lambda d:d['pending'][0].update(generation_id=99)):
+                       lambda d:d.update(pending=[99])):
             with self.assertRaisesRegex(ValueError,'pending.*differs'):self.refusal(mutate)
 
     def test_historical_full_pending_behavior_is_unchanged(self):

@@ -50,7 +50,7 @@ def derive(folder, key):
                             bounded_pending = True
                             if type(d['pending_count']) is not int or d['pending_count'] != len(expected):
                                 raise ValueError('recorded pending count differs from reconstructed lifecycles')
-                            expected = expected[:1]
+                            expected = [call['generation_id'] for call in expected[:1]]
                         if d['pending'] != expected:
                             raise ValueError('recorded pending differs from reconstructed lifecycles')
                 elif e['action'] == 'dispatch-refused':

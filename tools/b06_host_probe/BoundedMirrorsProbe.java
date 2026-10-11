@@ -70,12 +70,12 @@ public final class BoundedMirrorsProbe {
                             require(unknownCount>0,"fixture did not recreate unknown-status mirrors");
                             require(((Number)cache.telemetry().get("jdi_mirror_status_queries")).longValue()>0,"unknown statuses not resolved");
                             require(ids(vm).size()<=BoundedJdiMirrors.HIGH_WATER,"unknown mirrors caused false pins");
-                            require(old.size()==1300,"concurrent prepare events missing: "+old.size());
+                            require(old.size()==2600,"concurrent prepare events missing: "+old.size());
                             require(((Number)cache.telemetry().get("jdi_mirror_evictions")).longValue()>0,"no eviction");
                             ReferenceType evicted=old.stream().filter(t->{try{return !ids(vm).containsValue(t);}catch(Exception e){throw new RuntimeException(e);}}).findFirst().orElseThrow();
                             com.sun.jdi.Method previous=evicted.methodsByName("value").get(0);
                             List<ReferenceType> found=vm.classesByName("BoundedMirrorsTarget$Payload");
-                            require(found.size()==1300,"exact-name query lost dual-loader classes");
+                            require(found.size()==2600,"exact-name query lost dual-loader classes");
                             ReferenceType revisited=found.stream().filter(evicted::equals).findFirst().orElseThrow();
                             require(revisited!=evicted,"mirror was not recreated");
                             require(previous.equals(revisited.methodsByName("value").get(0)),"method identity changed");

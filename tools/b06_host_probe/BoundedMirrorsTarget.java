@@ -16,7 +16,7 @@ public final class BoundedMirrorsTarget {
         List<Thread> threads=new ArrayList<>();
         for(int t=0;t<4;t++){
             Thread thread=new Thread(()->{try{
-                for(int i=0;i<325;i++){
+                for(int i=0;i<650;i++){
                     Class<?> c=new Loader().define(bytes);c.getDeclaredConstructor().newInstance();LIVE.add(c);
                 }
             }catch(Exception e){throw new RuntimeException(e);}});

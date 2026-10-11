@@ -90,7 +90,9 @@ mirrors unnecessarily. Before an over-cap prune, the adapter now snapshots
 unknown mirrors under the VM monitor, resolves them through the public read-only
 status API outside that monitor, then rechecks both caches before any removal.
 Known unprepared mirrors remain pinned; no status is fabricated. Telemetry counts
-these status queries. The strengthened fixture repeatedly recreates 1,300 mirrors
+these status queries. The strengthened fixture repeatedly recreates 2,600 mirrors
 through actual ClassObjectReference.reflectedType calls. Both focused host tests
-passed in 2.533 seconds. These tests establish adapter behavior, not the full
+passed in 3.192 seconds. Running the prior adapter against this strengthened
+fixture reproduced exactly `jdi-mirror-pins-limit`; the corrected adapter passed.
+These tests establish adapter behavior, not the full
 native-volume memory criterion. The earlier stopped experiment remains preserved.

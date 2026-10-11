@@ -7,12 +7,13 @@ REPO='howardweale/lightyear-carddemo-modernization'
 
 def api(path):return json.loads(subprocess.check_output(['gh','api','repos/'+REPO+'/'+path],text=True))
 
-def pages(path,key=None):
+def pages(path,key=None,limit=100):
     rows=[]
-    for n in range(1,101):
+    for n in range(1,limit+1):
         data=api(path+('&' if '?' in path else '?')+f'per_page=100&page={n}');page=data[key] if key else data
         rows.extend(page)
         if len(page)<100:return rows
+    if path=='events':return rows # GitHub Events retains at most 300; absence stays unknown.
     raise RuntimeError('pagination bound')
 
 def elapsed(start,end):return (datetime.fromisoformat(end.replace('Z','+00:00'))-datetime.fromisoformat(start.replace('Z','+00:00'))).total_seconds()
@@ -36,7 +37,7 @@ def summarize(pr,runs,push_events):
 def collect(numbers):
     # GitHub repository Events is retention-limited; never replace a missing push
     # timestamp with a commit author timestamp or claim the proxy is exact.
-    events=pages('events');rows=[]
+    events=pages('events',limit=3);rows=[]
     for number in numbers:
         pr=api(f'pulls/{number}');runs=pages('actions/runs?head_sha='+pr['head']['sha']+'&event=pull_request','workflow_runs')
         rows.append(summarize(pr,runs,events))

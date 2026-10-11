@@ -58,3 +58,11 @@ Implementation waits for review of the one-page plans, in priority order: the
 generic scenario engine (separate B1/B2 PR), [dual-run prototype](dual-run-prototype-plan.md),
 [production and evidence modes](production-evidence-mode-plan.md), then
 [parallel candidates](parallel-candidates-plan.md).
+
+## Preserved CI findings
+
+Initial PR CI runs 38175575983 and 38175576007 failed because the generated-scenario
+and coverage workflows did not install the declared cryptography dependency now
+required by the engineering evidence-boundary test. Both workflows install the
+existing control-tower extra before those tests. The tests and boundary remain
+unchanged; fresh final-head CI must pass. Historical failed attempts remain visible.

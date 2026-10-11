@@ -54,7 +54,7 @@ procedure division.
 '''
 
 def probe(output):
-    linux_platform();output=Path(output);output.mkdir()
+    linux_platform();output=Path(output).resolve();output.mkdir()
     results={}
     for codec in ('ascii','cp037'):
         folder=output/codec;folder.mkdir();source=folder/'probe.cob';source.write_text(PROGRAM,encoding='ascii')

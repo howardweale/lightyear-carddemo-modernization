@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-15]
+        os: [ubuntu-24.04, macos-15]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
@@ -73,7 +73,7 @@ jobs:
           python tools/test_cloudbank_transfer_framing.py
 
   windows-gcloud-recovery:
-    runs-on: windows-latest
+    runs-on: windows-2025
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
@@ -124,7 +124,7 @@ jobs:
           exit $LASTEXITCODE
 
   cloudbank-sql-recovery:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
@@ -164,7 +164,7 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_platform_qualification.py -v
 
   cloudbank-source-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
@@ -344,7 +344,7 @@ jobs:
           if-no-files-found: error
 
   pli-build-attestation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       contents: read
@@ -391,7 +391,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-24.04, windows-2025]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
 
@@ -417,11 +417,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-24.04, windows-2025]
     runs-on: ${{ matrix.os }}
     # Windows' 2,167-test suite took 27 minutes before the remaining estate checks.
     # Preserve every verification stage; allow time for them after the unit suite.
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && 45 || 20 }}
+    timeout-minutes: ${{ matrix.os == 'windows-2025' && 45 || 20 }}
 
     steps:
       - name: Check out source

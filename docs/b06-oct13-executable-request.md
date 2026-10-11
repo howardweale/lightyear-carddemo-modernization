@@ -208,3 +208,11 @@ has content seal `20c368edcec03c2dd0dfa6c5a0347cc0e079c1ba7769e0cc36c659601367ad
 That immutable technical record was assembled before delivery and preserves its
 then-pending fields. The later [unsigned request summary](calibration/idempiere-ms94/stage-b-06/preparation/engineering-oct13-r3/request-summary.json)
 records the actual delivery and request seal; it grants no approval.
+
+The [final offline verification](calibration/idempiere-ms94/stage-b-06/preparation/engineering-oct13-r3/verification.json)
+checked all **111,311 bound files, 872 sources and 14 compiled classes** against
+the exact unsigned request in **73.234 seconds**, with zero native, Docker,
+model or production-signing calls. Verification seal:
+`31104e11e35cc28c036a8bbc4aa76c46b14b3d3ab0e871a110569ab721d914ef`.
+Final publication-head CI must complete green; no merge or exact-go decision is
+implied by these offline results.

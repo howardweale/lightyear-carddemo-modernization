@@ -110,3 +110,11 @@ Windows fixture correction resolves its temporary assets path exactly as the
 production supervisor already does. Earlier Windows fixture failures and the
 external Trivy HTTP 403 failure are preserved; fresh source-head Windows
 synthetic, pinned Linux host-JDI and cloudbank SQL recovery checks succeeded.
+
+The [final offline verification](calibration/idempiere-ms94/stage-b-06/preparation/engineering-oct13-r3/verification.json)
+checked all **111,311 bound files, 872 sources and 14 compiled classes** against
+the exact unsigned request in **73.234 seconds**, with zero native, Docker,
+model or production-signing calls. Verification seal:
+`31104e11e35cc28c036a8bbc4aa76c46b14b3d3ab0e871a110569ab721d914ef`.
+Final publication-head CI must complete green; no merge or exact-go decision is
+implied by these offline results.

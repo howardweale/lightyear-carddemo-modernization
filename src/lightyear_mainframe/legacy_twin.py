@@ -243,7 +243,7 @@ procedure division.
 """
 
 
-def build(target):
+def build(target, *, instrument=False):
     host = linux_platform()
     clock = compiler_clock()
     host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
@@ -270,15 +270,22 @@ def build(target):
             shutil.copyfile(ROOT / "spec/mainframe/copybooks" / name, folder / name)
         (folder / "main.cob").write_text(wrapper(job), encoding="ascii")
         (folder / "abend.cob").write_text(ABEND, encoding="ascii")
-        execute(["cobc", "-c", "-fixed", *FLAGS, "-I", ".", program + ".cbl", "-o", "program.o"], folder, folder / "logs/compile-original")
+        compile_source=program+'.cbl'
+        if instrument:
+            from .scenario_coverage import instrument as add_probes
+            traced,inventory=add_probes((folder/compile_source).read_text(),program)
+            compile_source=program+'-traced.cbl'
+            (folder/compile_source).write_text(traced,encoding='ascii')
+            write_json(folder/'coverage-inventory.json',inventory)
+        execute(["cobc", "-c", "-fixed", *FLAGS, "-I", ".", compile_source, "-o", "program.o"], folder, folder / "logs/compile-original")
         execute(["cobc", "-x", "-free", *FLAGS, "-fstatic-call", "main.cob", "abend.cob", "program.o", "-o", "bin/twin"], folder, folder / "logs/link")
         for dd, (_, key) in FILES[job].items():
             if key:
                 (folder / (dd + ".cob")).write_text(indexed_adapter(job, dd), encoding="ascii")
                 execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
-    hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy"))}
+    hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
     return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
-                   source_tree=SOURCE_TREE, license="Apache-2.0",
+                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,
@@ -370,7 +377,7 @@ def runtime_clock(job, meta):
 def run(target, scenario, output):
     linux_platform()
     target = Path(target).resolve()
-    verify_build(target)
+    build_record=verify_build(target)
     job, meta, images, hashes = public_inputs(scenario)
     env = runtime_clock(job, meta)
     if job == "POSTTRAN":
@@ -406,7 +413,13 @@ def run(target, scenario, output):
         invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'])
         write_json(output / 'posttran-invariants.json', invariants)
         write_json(output / 'posttran-review-sheet.json', review_sheet(images, {dd: (output / 'after' / dd).read_bytes() for dd in FILES[job]}))
-    return receipt(output / "run-receipt.json", invariants=invariants, phase="run", scenario=scenario, job=job,
+    adequacy=dict(schema='scenario-adequacy/1',instrumented=False,decision_outcomes=None,
+                  reason='uninstrumented control',releasable=False)
+    if build_record.get('coverage_instrumented'):
+        from .scenario_coverage import observe
+        adequacy=observe(json.loads((target/job/'coverage-inventory.json').read_text()),result.stdout.decode())
+        write_json(output/'scenario-adequacy.json',adequacy)
+    return receipt(output / "run-receipt.json", scenario_adequacy=adequacy, invariants=invariants, phase="run", scenario=scenario, job=job,
                    build_receipt_sha256=sha((target / "build-receipt.json").read_bytes()),
                    inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
                    public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,

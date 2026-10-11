@@ -2,6 +2,8 @@
 from collections import Counter, defaultdict
 import hashlib
 import re
+import json
+from pathlib import Path
 
 from lightyear_business_rules.coverage import decisions
 
@@ -29,10 +31,17 @@ def inventory(text, program):
         if c.startswith('PROCEDURE DIVISION'):active=True
         if active and re.fullmatch(r'[0-9A-Z][0-9A-Z-]*\.',c) and c[:-1] not in VERBS and not c.startswith('END-'):
             paragraphs.append(dict(line=n,name=c[:-1]))
+    classification=json.loads((Path(__file__).resolve().parents[2]/'docs/factory/decision-classification.json').read_text())['programs'][program]
+    if classification['source_sha256']!=hashlib.sha256(text.encode()).hexdigest():
+        raise ValueError('classification-source-changed-requires-review')
+    classified={p['line']:p for p in classification['decisions']}
+    if set(classified)!={p['line_start'] for p in points}:raise ValueError('classification-inventory-mismatch')
     for p in points:
         if p['construct'] not in ('IF','PERFORM UNTIL','INVALID KEY'):
             raise ValueError('unsupported-coverage-construct:'+p['construct'])
         p['outcomes']=['true','false']
+        reviewed=classified[p['line_start']]
+        p.update(classification=reviewed['classification'],outcome_classification=reviewed['outcomes'],data_flow=reviewed['data_flow'])
     return dict(schema='twin-decision-inventory/1',program=program,
                 source_sha256=hashlib.sha256(text.encode()).hexdigest(),
                 points=points,paragraphs=paragraphs,
@@ -140,9 +149,14 @@ def observe(inv, stdout):
         elif len(bits)==5 and bits[1]=='S' and bits[2] in operations and bits[3]==operations[bits[2]]['status'] and len(bits[4])==2:
             statuses[(bits[2],bits[3],bits[4])]+=1
         else:raise ValueError('coverage-trace-not-in-inventory')
-    uncovered=[dict(id=p['id'],line=p['line_start'],outcome=o,reason='not-observed; no unreachability claim')
+    uncovered=[dict(id=p['id'],line=p['line_start'],outcome=o,classification=p['classification'],reason='not-observed; no unreachability claim')
                for p in inv['points'] for o in p['outcomes'] if (str(p['line_start']),o) not in outcomes]
-    return dict(schema='scenario-adequacy/1',instrumented=True,program=inv['program'],
+    split={}
+    for category in ('business-logic','io-handling'):
+        selected=[p for p in inv['points'] if p['classification']==category]
+        covered=sum((str(p['line_start']),o) in outcomes for p in selected for o in p['outcomes'])
+        split[category]=dict(covered=covered,total=2*len(selected),fraction=f'{covered}/{2*len(selected)}')
+    return dict(coverage_by_class=split,schema='scenario-adequacy/2',instrumented=True,program=inv['program'],
                 source_sha256=inv['source_sha256'],paragraphs=f'{len(entered)}/{len(paragraphs)}',
                 decision_points=f'{len({n for n,o in outcomes})}/{len(points)}',
                 decision_outcomes=f'{len(outcomes)}/{2*len(points)}',

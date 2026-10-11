@@ -1,0 +1,1036 @@
+{
+  "schema": "reviewed-decision-classification/1",
+  "method": "Explicit source/data-flow review against exact pinned source; no name/regex classifier",
+  "programs": {
+    "CBACT04C": {
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "decisions": [
+        {
+          "line": 188,
+          "condition": "PERFORM UNTIL END-OF-FILE = 'Y'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 189,
+          "condition": "IF  END-OF-FILE = 'N'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 191,
+          "condition": "IF  END-OF-FILE = 'N'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 194,
+          "condition": "IF TRANCAT-ACCT-ID NOT= WS-LAST-ACCT-NUM",
+          "classification": "business-logic",
+          "data_flow": "TRANCAT-ACCT-ID versus WS-LAST-ACCT-NUM: group boundary decides account interest posting",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 195,
+          "condition": "IF WS-FIRST-TIME NOT = 'Y'",
+          "classification": "business-logic",
+          "data_flow": "WS-FIRST-TIME set by processed category/account: suppress initial account posting",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 214,
+          "condition": "IF DIS-INT-RATE NOT = 0",
+          "classification": "business-logic",
+          "data_flow": "DIS-INT-RATE from disclosure record: zero interest business rule",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 237,
+          "condition": "IF  TCATBALF-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 242,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 255,
+          "condition": "IF  XREFFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 260,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 273,
+          "condition": "IF  DISCGRP-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 278,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 292,
+          "condition": "IF  ACCTFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 297,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 310,
+          "condition": "IF  TRANFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 315,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 327,
+          "condition": "IF  TCATBALF-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 330,
+          "condition": "IF  TCATBALF-STATUS  = '10'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 336,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 339,
+          "condition": "IF  APPL-EOF",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 357,
+          "condition": "IF  ACCTFILE-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 362,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 374,
+          "condition": "INVALID KEY",
+          "classification": "io-handling",
+          "data_flow": "REWRITE/READ runtime handler dispatch; operational I/O failure path, not business validation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 378,
+          "condition": "IF  ACCTFILE-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 383,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 396,
+          "condition": "INVALID KEY",
+          "classification": "io-handling",
+          "data_flow": "REWRITE/READ runtime handler dispatch; operational I/O failure path, not business validation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 400,
+          "condition": "IF  XREFFILE-STATUS   = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 405,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 417,
+          "condition": "INVALID KEY",
+          "classification": "io-handling",
+          "data_flow": "REWRITE/READ runtime handler dispatch; operational I/O failure path, not business validation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 422,
+          "condition": "IF  DISCGRP-STATUS  = '00'  OR '23'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 428,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 436,
+          "condition": "IF  DISCGRP-STATUS  = '23'",
+          "classification": "business-logic",
+          "data_flow": "DISCGRP lookup status 23 chooses default rate: deliberate tariff fallback, not an operational failure",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 446,
+          "condition": "IF  DISCGRP-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 452,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 501,
+          "condition": "IF  TRANFILE-STATUS   = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 507,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 525,
+          "condition": "IF  TCATBALF-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 530,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 544,
+          "condition": "IF  XREFFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 549,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 562,
+          "condition": "IF  DISCGRP-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 567,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 580,
+          "condition": "IF  ACCTFILE-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 585,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 598,
+          "condition": "IF  TRANFILE-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 603,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 636,
+          "condition": "IF  IO-STATUS NOT NUMERIC",
+          "classification": "io-handling",
+          "data_flow": "IO-STATUS receives file status for diagnostic formatting; numeric test selects diagnostic representation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        }
+      ]
+    },
+    "CBTRN02C": {
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "decisions": [
+        {
+          "line": 202,
+          "condition": "PERFORM UNTIL END-OF-FILE = 'Y'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 203,
+          "condition": "IF  END-OF-FILE = 'N'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 205,
+          "condition": "IF  END-OF-FILE = 'N'",
+          "classification": "io-handling",
+          "data_flow": "END-OF-FILE is initialized N and set Y only after sequential READ status 10; controls I/O traversal",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 211,
+          "condition": "IF WS-VALIDATION-FAIL-REASON = 0",
+          "classification": "business-logic",
+          "data_flow": "WS-VALIDATION-FAIL-REASON from card/account/limit/expiry predicates selects posting or rejection",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 229,
+          "condition": "IF WS-REJECT-COUNT > 0",
+          "classification": "business-logic",
+          "data_flow": "WS-REJECT-COUNT accumulated from business validation sets business rejection return code",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 239,
+          "condition": "IF  DALYTRAN-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 244,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 257,
+          "condition": "IF  TRANFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 262,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 276,
+          "condition": "IF  XREFFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 281,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 294,
+          "condition": "IF  DALYREJS-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 299,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 312,
+          "condition": "IF  ACCTFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 317,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 330,
+          "condition": "IF  TCATBALF-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 335,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 347,
+          "condition": "IF  DALYTRAN-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 351,
+          "condition": "IF  DALYTRAN-STATUS = '10'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 357,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 360,
+          "condition": "IF  APPL-EOF",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 372,
+          "condition": "IF WS-VALIDATION-FAIL-REASON = 0",
+          "classification": "business-logic",
+          "data_flow": "WS-VALIDATION-FAIL-REASON selects account lookup after card validation",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 384,
+          "condition": "INVALID KEY",
+          "classification": "business-logic",
+          "data_flow": "Missing card key maps to business rejection reason 100",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 388,
+          "condition": "NOT INVALID KEY",
+          "classification": "business-logic",
+          "data_flow": "Existing card key admits account validation",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 396,
+          "condition": "INVALID KEY",
+          "classification": "business-logic",
+          "data_flow": "Missing account key maps to business rejection reason 101",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 400,
+          "condition": "NOT INVALID KEY",
+          "classification": "business-logic",
+          "data_flow": "Existing account admits credit and expiry validation",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 407,
+          "condition": "IF ACCT-CREDIT-LIMIT >= WS-TEMP-BAL",
+          "classification": "business-logic",
+          "data_flow": "ACCT-CREDIT-LIMIT and cycle amounts versus transaction amount: credit policy",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 414,
+          "condition": "IF ACCT-EXPIRAION-DATE >= DALYTRAN-ORIG-TS (1:10)",
+          "classification": "business-logic",
+          "data_flow": "Account expiry date versus transaction date: expiry policy",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 452,
+          "condition": "IF DALYREJS-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 457,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 475,
+          "condition": "INVALID KEY",
+          "classification": "business-logic",
+          "data_flow": "Missing category key sets create-category flag; business upsert choice",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 481,
+          "condition": "IF  TCATBALF-STATUS = '00'  OR '23'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 486,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 495,
+          "condition": "IF WS-CREATE-TRANCAT-REC = 'Y'",
+          "classification": "business-logic",
+          "data_flow": "WS-CREATE-TRANCAT-REC chooses new category versus balance update",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 512,
+          "condition": "IF  TCATBALF-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 517,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 530,
+          "condition": "IF  TCATBALF-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 535,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 548,
+          "condition": "IF DALYTRAN-AMT >= 0",
+          "classification": "business-logic",
+          "data_flow": "DALYTRAN-AMT sign selects credit or debit accumulator",
+          "outcomes": {
+            "true": "business-logic",
+            "false": "business-logic"
+          }
+        },
+        {
+          "line": 555,
+          "condition": "INVALID KEY",
+          "classification": "io-handling",
+          "data_flow": "REWRITE/READ runtime handler dispatch; operational I/O failure path, not business validation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 566,
+          "condition": "IF  TRANFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 571,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 585,
+          "condition": "IF  DALYTRAN-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 590,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 603,
+          "condition": "IF  TRANFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 608,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 622,
+          "condition": "IF  XREFFILE-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 627,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 640,
+          "condition": "IF  DALYREJS-STATUS = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 645,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 658,
+          "condition": "IF  ACCTFILE-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 663,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 677,
+          "condition": "IF  TCATBALF-STATUS  = '00'",
+          "classification": "io-handling",
+          "data_flow": "Named FILE STATUS item written by the preceding OPEN/READ/WRITE/REWRITE/CLOSE; tests operational success/EOF",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 682,
+          "condition": "IF  APPL-AOK",
+          "classification": "io-handling",
+          "data_flow": "APPL-AOK/APPL-EOF are 88 levels of APPL-RESULT, set from preceding operation status (0 success, 16 EOF, 12 failure)",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        },
+        {
+          "line": 715,
+          "condition": "IF  IO-STATUS NOT NUMERIC",
+          "classification": "io-handling",
+          "data_flow": "IO-STATUS receives file status for diagnostic formatting; numeric test selects diagnostic representation",
+          "outcomes": {
+            "true": "io-handling",
+            "false": "io-handling"
+          }
+        }
+      ]
+    }
+  }
+}

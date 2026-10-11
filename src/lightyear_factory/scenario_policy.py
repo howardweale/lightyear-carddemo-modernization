@@ -2,8 +2,9 @@
 from fractions import Fraction
 from lightyear_control_tower.decisions import digest,verify_envelope
 
-PROPOSAL=dict(schema='scenario-threshold/1',decision_outcomes='1/1',legacy_mutants_killed='9/10',
-              distinct_values_per_output_field=2,status='proposed-not-approved')
+PROPOSAL=dict(schema='scenario-threshold/2',business_logic_outcomes='1/1',legacy_mutants_killed='9/10',
+              minimum_systematic_mutants=50,io_policy='fault-covered-or-exact-operator-exception',
+              accepted_io_outcomes=[],distinct_values_per_output_field=2,status='proposed-not-approved')
 
 
 def fraction(value):
@@ -17,14 +18,26 @@ def assess(adequacy,threshold,compared_fields):
     reasons=[]
     if not adequacy or not adequacy.get('instrumented'):return ['scenario-coverage-unavailable']
     try:
-        if fraction(adequacy['decision_outcomes'])<fraction(threshold['decision_outcomes']):reasons.append('decision-outcomes-below-threshold')
+        if threshold.get('schema')=='scenario-threshold/2':
+            split=adequacy['coverage_by_class']
+            if fraction(split['business-logic']['fraction'])<fraction(threshold['business_logic_outcomes']):reasons.append('business-outcomes-below-threshold')
+            mutants=adequacy['systematic_mutation']
+            if mutants['eligible_count']<threshold['minimum_systematic_mutants']:reasons.append('systematic-mutant-set-too-small')
+            if mutants.get('unresolved_survivors'):reasons.append('unresolved-mutant-survivors')
+            if mutants.get('not_compiled'):reasons.append('uncompiled-mutants-require-review')
+            if mutants['excluded_equivalents']!=len(mutants['equivalent_dispositions']):raise ValueError('equivalent-inventory')
+            accepted={tuple(x) for x in threshold.get('accepted_io_outcomes',[])}
+            for x in adequacy.get('uncovered',[]):
+                if not isinstance(x,dict):raise ValueError('outcome-shape')
+                if x.get('classification')!='io-handling' or (x['id'],x['outcome']) not in accepted:reasons.append('unaccepted-outcome-gap')
+        elif fraction(adequacy['decision_outcomes'])<fraction(threshold['decision_outcomes']):reasons.append('decision-outcomes-below-threshold')
         if fraction(adequacy['legacy_mutants_killed'])<fraction(threshold['legacy_mutants_killed']):reasons.append('legacy-mutants-below-threshold')
         values=adequacy['distinct_values_per_output_field']; minimum=threshold['distinct_values_per_output_field']
         if type(minimum)!=int or minimum<2:raise ValueError('diversity-threshold')
         if not compared_fields or not set(compared_fields)<=set(values):reasons.append('compared-field-inventory-incomplete')
         if any(type(values.get(f))!=int or values[f]<minimum for f in compared_fields):reasons.append('output-diversity-below-threshold')
         # Listed/unsolved branches are not proven unreachable and cannot shrink a denominator.
-        if adequacy.get('uncovered'):reasons.append('unresolved-decision-outcomes')
+        if threshold.get('schema')!='scenario-threshold/2' and adequacy.get('uncovered'):reasons.append('unresolved-decision-outcomes')
     except (KeyError,TypeError,ValueError,ZeroDivisionError):reasons.append('malformed-scenario-evidence')
     return sorted(set(reasons))
 

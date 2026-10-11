@@ -243,7 +243,7 @@ procedure division.
 """
 
 
-def build(target, *, instrument=False, mutant=None):
+def build(target, *, instrument=False, mutant=None, systematic=None, fault=None, jobs=None):
     host = linux_platform()
     clock = compiler_clock()
     host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
@@ -256,6 +256,7 @@ def build(target, *, instrument=False, mutant=None):
     target = new_output(target)
     sources = {}
     for job, program in PROGRAMS.items():
+        if jobs and job not in jobs:continue
         folder = target / job
         folder.mkdir()
         (folder / "bin").mkdir()
@@ -276,7 +277,19 @@ def build(target, *, instrument=False, mutant=None):
             changed=mutate((folder/compile_source).read_text(),job,mutant)
             compile_source=program+'-mutant.cbl'
             (folder/compile_source).write_text(changed,encoding='ascii')
-        if instrument:
+        fault_declaration=None
+        if systematic:
+            from .systematic_mutation import apply
+            changed=apply((folder/compile_source).read_text(),systematic)
+            compile_source=program+"-systematic.cbl"
+            (folder/compile_source).write_text(changed,encoding="ascii")
+        if fault:
+            from .io_faults import derive
+            traced,inventory,fault_declaration=derive((folder/compile_source).read_text(),program,fault)
+            compile_source=program+"-fault.cbl"
+            (folder/compile_source).write_text(traced,encoding="ascii")
+            write_json(folder/"coverage-inventory.json",inventory)
+        if instrument and not fault:
             from .scenario_coverage import instrument as add_probes
             traced,inventory=add_probes((folder/compile_source).read_text(),program)
             compile_source=program+'-traced.cbl'
@@ -290,7 +303,7 @@ def build(target, *, instrument=False, mutant=None):
                 execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
     return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
-                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument, legacy_mutant=mutant,
+                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument or bool(fault), legacy_mutant=mutant, systematic_mutant=systematic, fault_declaration=fault_declaration,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,
@@ -379,7 +392,7 @@ def runtime_clock(job, meta):
     return env
 
 
-def run(target, scenario, output, *, generated=None):
+def run(target, scenario, output, *, generated=None, timeout=120):
     linux_platform()
     target = Path(target).resolve()
     build_record=verify_build(target)
@@ -408,7 +421,7 @@ def run(target, scenario, output, *, generated=None):
         else:
             physical.write_bytes(flat.read_bytes())
         env["DD_" + dd] = str(physical)
-    result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12))
+    result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12), timeout=timeout)
     outputs = {}
     for dd, (length, key) in FILES[job].items():
         flat = output / "after" / (dd + ".fixed")

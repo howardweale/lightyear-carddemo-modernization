@@ -8,7 +8,9 @@ class ScenarioPolicyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             key=Path(d)/'test.pem';initialize_key(key);s=Signer(key)
             v=s.sign(dict(verdict='equivalent'))
-            a=dict(instrumented=True,decision_outcomes='4/4',legacy_mutants_killed='9/10',
+            a=dict(instrumented=True,decision_outcomes='4/4',legacy_mutants_killed='45/50',
+                   coverage_by_class={'business-logic':{'fraction':'4/4'}},
+                   systematic_mutation=dict(eligible_count=50,excluded_equivalents=0,equivalent_dispositions=[],unresolved_survivors=[],not_compiled=[]),
                    distinct_values_per_output_field={'amount':2},uncovered=[])
             r=issue(v,a,['amount'],s)
             self.assertFalse(release(v,r,s.public)['releasable'])

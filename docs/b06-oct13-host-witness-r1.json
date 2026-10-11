@@ -1,0 +1,111 @@
+{
+  "accepted": false,
+  "baseline_observer_source_sha256": "02b2f7fd4080bfbcd821ef51147c455d7f57620eac797b809d406d73f935c64b",
+  "comparison": {
+    "native_performance_claim": false,
+    "same_generated_stack_fixture": true,
+    "same_harness": true,
+    "same_target_fixture": true,
+    "same_threads_iterations_heap_suppression": true
+  },
+  "compiled_observer_sha256": {
+    "BoundedJdiMirrors.class": "2765b6bf3b38f1beddfac6eac1eacd2804bc48f92bc262a363888dfb1f2b48bc",
+    "PostingObserver$1.class": "bf387829f60eb5a0aff6c91ed7be6f50e43a74c2a760c4b3570e191c6b236362",
+    "PostingObserver$Call.class": "37d8862727ee89d25cd0141708dea58a62c5f9a06b67a74135b6fc069221876b",
+    "PostingObserver$DefinitionIndex$1.class": "d0be0c08a4c10a0da516724c3c11ccd3c25f273a7c7947243659dbe442b35b79",
+    "PostingObserver$DefinitionIndex.class": "eae23423f17251c26cff23a8debf61620a64b6fef9377587893bf930d125e39a",
+    "PostingObserver$DiagnosticDictionary.class": "f1e0961f6e1941285a1a9f3a395e4d59ce423f74f174011c809925cfb0db2875",
+    "PostingObserver$Generation$ReturnArm.class": "52b245343a0232d4135bc40fbfc5545137abe436c07c1985a83297aa4b58a223",
+    "PostingObserver$Generation.class": "2b4bd6d0c7815b4f7554aaf373a22aeddad79421ad8178b30011f4c7881e7520",
+    "PostingObserver$GenerationCatch.class": "889fa175fa70f11ef88e4dad8ebc9ebe9afdf711c138deddf6158f54c88948c6",
+    "PostingObserver$PendingEntry.class": "7f7d25dfb69dcfe93078d338c4cf0f1bdc71c54972c44c321c2c987329018f31",
+    "PostingObserver$PendingPool.class": "a3cd895fad478289564d1aa91cba6cacafc34a3bd317eea153a2a18583fd4980",
+    "PostingObserver$PendingSnapshot.class": "135300ca4fdcad33c182f76596bc2af748b3f0d0bea8dc264da37c9afeb449ff",
+    "PostingObserver$PendingWitness.class": "9fecb8c779b4a4e81c9cafed69719e8df04aeff2de41a2f6aa3d294d35c15a17",
+    "PostingObserver.class": "e12c3534ccef0878656df667c9ddd75d53032e30aa3f1a15e83152d3ab196f58"
+  },
+  "completed": true,
+  "diagnostic_bytes": 78249660,
+  "diagnostic_records": 408393,
+  "diagnostic_records_per_generation": 9.964450408686105,
+  "elapsed_seconds": 1196.219,
+  "event_counts": {
+    "breakpoint-lifecycle": 162972,
+    "class-definition-v3": 27066,
+    "diagnostic-unmatched-return": 66,
+    "generation-entry": 40985,
+    "generation-return": 40736,
+    "host-memory-probe-ready": 1,
+    "observer-audit": 245421
+  },
+  "event_denominator": "emitted records; compare generation counts separately because audit volume changed",
+  "generation_entries": 40985,
+  "growth_fit": {
+    "bytes_per_emitted_event": 0.17597840934515988,
+    "first_event": 50000,
+    "intercept_bytes": 5515184.341792333,
+    "last_event": 517247,
+    "method": "OLS; Newey-West Bartlett lag 10; asymptotic two-sided 95% interval",
+    "sample_count": 469,
+    "significantly_positive": true,
+    "slope_95_percent": [
+      0.03260884702400338,
+      0.31934797166631634
+    ],
+    "warmup_events": 50000
+  },
+  "heap_bytes": 201326592,
+  "host_only": true,
+  "input_witnesses": {
+    "caller_stack_used_as_input": false,
+    "counts": {
+      "application-derived-input": 12608,
+      "bootstrap-only-captured-input-candidate": 25374,
+      "unresolved-bytecode-input-only": 3003
+    },
+    "max_json_bytes": 1896,
+    "mean_json_bytes": 266.17035500792974,
+    "missing": 0,
+    "policy": "generation-inputs-v1",
+    "unresolved_bytecode_is_not_application_class_identity": true,
+    "validated_generation_entries": 40985
+  },
+  "last_sample": {
+    "completed": 0,
+    "definitions": 24082,
+    "distinct_stack_classes": 3061,
+    "events": 517247,
+    "generation_calls": 40985,
+    "heap_max": 201326592,
+    "heap_used_after_gc": 5573584,
+    "pending": 249,
+    "suppressed_returns": 183
+  },
+  "measurement_credit": false,
+  "mirror_adapter_sha256": "5783715f5fd5a8bb557fc5d9cc45e6ede3053e49e191e403b2f0432d11dfe75b",
+  "model_calls": 0,
+  "observer_source_sha256": "66207ac612c7fc5f6a540f43eab4b9db25f933190e478d0c4f3f0cd735dd12b9",
+  "output_sha256": {
+    "MemoryStacks.java": "fb59d9e56e587d5b1c7312f5324545e86da1cf56a602b4242ce8ce25a54cb6b9",
+    "compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "completed.txt": "eb9a237b982dd71c196d88be43bae7a3d9edf966dcfba4354963165ccb027fc2",
+    "definitions.idx": "9f695b26ad18c93202882bab4c271e340348a53eb389cb4c48d349dfece360e8",
+    "heap.csv": "88d2806cd7accea8cd953e3f2f0ffdea4934ab3374f9f6f6019d1db6a22ecc94",
+    "histogram.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest.json": "b9734977e8a2c06e44892b15b505c9f7779d68fd1d414c977625c06713e55a62",
+    "observer.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "observer.stdout": "af0862b8f5c9e0d03b33570d768c753acabb315fcb2b7714c77eae5e969933df",
+    "peak-histogram.txt": "878ed771d215d31b2f272db35a0ba0488c88907d0ac4c206ec2a4d1b1535c523",
+    "peak-sample.txt": "79e62568ba15605fa86d0636d7db4bd3a31d9182ff181fa85a8d3bb38b6dd23b",
+    "processes.json": "ac1a62faf6cbf4f1d4997858b26912418b60d0d9be3e2e0e0510dbf709173fde",
+    "suppressed-returns.csv": "ccb3c6b7f6c1c85c6f337c1f76a90d160c1a20e61a9bcc302f6fcd99b5267a15",
+    "target.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "target.stdout": "2219c7c335a6ee541c5b58b1ffa00f66a2477f5f167363a1a54a8900e904ba6d"
+  },
+  "peak_after_gc_bytes": 6063072,
+  "qualification_credit": false,
+  "result_sha256": "cb78bcb4ecbe73f404beab5326bcf5fdf1b842df0c511af5c6ae7a90f287f904",
+  "schema": "b06-bounded-host-memory/1",
+  "soft_reference_policy_ms_per_mib": 0
+}

@@ -1,0 +1,199 @@
+{
+  "schema": "b06-host-memory-report/1",
+  "host_only": true,
+  "model_calls": 0,
+  "qualification_credit": false,
+  "measurement_credit": false,
+  "baseline_gate_met": false,
+  "completed_workload": false,
+  "oom_reproduced": false,
+  "termination": "structural-audit-bound",
+  "elapsed_seconds": 375.297,
+  "observer_heap_bytes": 201326592,
+  "event_counts": {
+    "host-memory-probe-ready": 1,
+    "observer-audit": 208282,
+    "generation-entry": 13906,
+    "generation-return": 13841
+  },
+  "payload_sizes": {
+    "entry_bytes": {
+      "count": 13906,
+      "min": 3766,
+      "median": 29472,
+      "p90": 90825,
+      "p99": 93833,
+      "max": 119231
+    },
+    "depth": {
+      "count": 13906,
+      "min": 8,
+      "median": 122,
+      "p90": 124,
+      "p99": 125,
+      "max": 131
+    },
+    "definition_input_bytes": {
+      "count": 13906,
+      "min": 0,
+      "median": 897,
+      "p90": 1707,
+      "p99": 1707,
+      "max": 10173
+    },
+    "lambda_form_graph_nodes": {
+      "count": 7315,
+      "min": 30,
+      "median": 78,
+      "p90": 357,
+      "p99": 357,
+      "max": 357
+    },
+    "class_data_graph_nodes": {
+      "count": 3657,
+      "min": 1,
+      "median": 1,
+      "p90": 1,
+      "p99": 141,
+      "max": 239
+    }
+  },
+  "last_sample": {
+    "events": 236000,
+    "generation_calls": 13905,
+    "heap_used_after_gc": 143979208,
+    "heap_max": 201326592,
+    "pending": 65,
+    "completed": 1191,
+    "definitions": 9095,
+    "distinct_stack_classes": 3061,
+    "suppressed_returns": 63
+  },
+  "peak_after_gc_bytes": 143979208,
+  "suppressed_fraction": 0.004530418524377966,
+  "ordinary_least_squares_fits": [
+    {
+      "first_event": 1000,
+      "last_event": 236000,
+      "sample_count": 236,
+      "bytes_per_event": 561.9861500782865,
+      "intercept_bytes": 11486013.419112869,
+      "at_event": 231158,
+      "fitted_bytes": 141393607.89890942
+    },
+    {
+      "first_event": 50000,
+      "last_event": 236000,
+      "sample_count": 187,
+      "bytes_per_event": 545.5177002044344,
+      "intercept_bytes": 14222069.833332717,
+      "at_event": 231158,
+      "fitted_bytes": 140322850.37718937
+    },
+    {
+      "first_event": 100000,
+      "last_event": 236000,
+      "sample_count": 137,
+      "bytes_per_event": 555.2276435865365,
+      "intercept_bytes": 12327368.548994705,
+      "at_event": 231158,
+      "fitted_bytes": 140672680.1851713
+    },
+    {
+      "first_event": 150000,
+      "last_event": 236000,
+      "sample_count": 87,
+      "bytes_per_event": 580.831172997011,
+      "intercept_bytes": 7327159.059852749,
+      "at_event": 231158,
+      "fitted_bytes": 141590931.34749582
+    },
+    {
+      "first_event": 200000,
+      "last_event": 236000,
+      "sample_count": 37,
+      "bytes_per_event": 572.9259364627786,
+      "intercept_bytes": 9161054.824087232,
+      "at_event": 231158,
+      "fitted_bytes": 141597468.44495022
+    }
+  ],
+  "histogram_semantics": "shallow live class totals; not dominator retained sizes",
+  "largest_live_classes": [
+    {
+      "instances": 507007,
+      "shallow_bytes": 43504384,
+      "class_name": "[B (java.base@21.0.10)"
+    },
+    {
+      "instances": 563845,
+      "shallow_bytes": 22553800,
+      "class_name": "java.util.LinkedHashMap$Entry (java.base@21.0.10)"
+    },
+    {
+      "instances": 194458,
+      "shallow_bytes": 20353912,
+      "class_name": "[Ljava.lang.Object; (java.base@21.0.10)"
+    },
+    {
+      "instances": 503844,
+      "shallow_bytes": 12092256,
+      "class_name": "java.lang.String (java.base@21.0.10)"
+    },
+    {
+      "instances": 113638,
+      "shallow_bytes": 10291160,
+      "class_name": "[Ljava.util.HashMap$Node; (java.base@21.0.10)"
+    },
+    {
+      "instances": 113901,
+      "shallow_bytes": 7289664,
+      "class_name": "java.util.LinkedHashMap (java.base@21.0.10)"
+    },
+    {
+      "instances": 260874,
+      "shallow_bytes": 6260976,
+      "class_name": "java.lang.Long (java.base@21.0.10)"
+    },
+    {
+      "instances": 162994,
+      "shallow_bytes": 5215808,
+      "class_name": "java.util.ImmutableCollections$MapN (java.base@21.0.10)"
+    },
+    {
+      "instances": 6255,
+      "shallow_bytes": 3045976,
+      "class_name": "[Ljdk.internal.vm.FillerElement; (java.base@21.0.10)"
+    },
+    {
+      "instances": 79640,
+      "shallow_bytes": 1911360,
+      "class_name": "java.util.LinkedHashMap$LinkedEntrySet (java.base@21.0.10)"
+    }
+  ],
+  "observer_source_sha256": "6945d3ad0a98429010a54f685061d836dfccee26eec6903a1e790012c4adeeae",
+  "compiled_observer_sha256": {
+    "PostingObserver$Call.class": "7e4b5d9cd6747c7546888091a067bfcad0bc90672f2963c895a1a8a1a9c4c95c",
+    "PostingObserver$Generation$ReturnArm.class": "ee75d0df8c2a4658d71412c4b251ac61270299cd2c208e0a6fc2b666b3b4efa0",
+    "PostingObserver$Generation.class": "f21f5ccce6e8c6ed52894d012e8c62e49592bcbd0cda718bb742266a48dcdce8",
+    "PostingObserver$GenerationCatch.class": "9f042bc4e123a82cce4b4b60f0a672a4b4c76f2825a6e6dac2d54ec355a28f3c",
+    "PostingObserver.class": "0ed3c0e5101c648981abf38b90403e0318f943394fc959a0026b16c655a59924"
+  },
+  "local_result_sha256": "02d945b15681bbe578ed5630f62ecebfa7ad88ea0ac73a2eebb58e0cf20e723e",
+  "local_output_sha256": {
+    "compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "heap.csv": "ad3302b9e03f46fbe3714f7b3a06b9d431aa5c5c05d24290e741cc2dd9ae0083",
+    "histogram.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest.json": "ea800dd58130206ef0e2858048ed88837cd6a5b9992113a8565dadf082386a62",
+    "MemoryStacks.java": "fb59d9e56e587d5b1c7312f5324545e86da1cf56a602b4242ce8ce25a54cb6b9",
+    "observer.stderr": "cad17272dd2b207425251512f74499ddcc04527c55469ee9f34db4d11a5a4072",
+    "observer.stdout": "786801db6e10f08bbd345a01c6088bf0bca32ae18becf8fb158d5ec7830f648a",
+    "peak-histogram.txt": "53c91a259768985db661e10a25b7fcfe0a780d552c3bdf1b7cf3e3760c8b16df",
+    "peak-sample.txt": "33e9f31a5622dc3f9ef69b7dc6640bf7b05545fd12e570913847710cf579addf",
+    "processes.json": "23e4f0e8c9489b6ab397795a5d40d01772b091d3fde50abb2e7f2779091bdbd4",
+    "suppressed-returns.csv": "e3963a6759f26d6409c1ad5f3f3064d535e59cc2794663e00b50775a7bfc4477",
+    "target.stderr": "d732d3150657004de1bdc3cbbb8e90cbdefefe39a4e8e5184a896658a698c65f",
+    "target.stdout": "d829453615264d4280698a806c21fb90b405059606b69fe3620baa79e7ae3c18"
+  }
+}

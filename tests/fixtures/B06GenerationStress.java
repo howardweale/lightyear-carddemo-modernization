@@ -7,10 +7,31 @@ import java.util.concurrent.atomic.*;
 
 /** Public host-only fixture; no application, database, container or private inputs. */
 public class B06GenerationStress {
+    @FunctionalInterface public interface Work { void run() throws Throwable; }
     static final AtomicReference<Throwable> failure = new AtomicReference<>();
     static final AtomicInteger completed = new AtomicInteger();
     static volatile long sink;
     public static void target() {}
+    static void nativeVolume(int worker, int iterations, byte[] bytes, CyclicBarrier barrier) throws Throwable {
+        var lookup=MethodHandles.lookup();
+        var target=lookup.findStatic(B06GenerationStress.class,"target",MethodType.methodType(void.class));
+        var stacks=lookup.findStatic(Class.forName("fixture.MemoryStacks"),"walk",
+            MethodType.methodType(void.class,int.class,Work.class));
+        Work work=()->{
+            var hidden=lookup.defineHiddenClass(bytes,true);
+            var getter=hidden.findStatic(hidden.lookupClass(),"value",MethodType.methodType(int.class));
+            var identity=MethodHandles.identity(int.class);
+            for(int k=0;k<12;k++)getter=MethodHandles.filterReturnValue(getter,identity);
+            var adapted=MethodHandles.dropArguments(getter,0,Object.class)
+                .asType(MethodType.methodType(Object.class,Object.class));
+            for(int k=0;k<40;k++){Object value=adapted.invokeExact((Object)null);sink=(Integer)value;}
+            var site=LambdaMetafactory.metafactory(lookup,"run",MethodType.methodType(Runnable.class),
+                MethodType.methodType(void.class),target,MethodType.methodType(void.class));
+            ((Runnable)site.getTarget().invokeExact()).run();completed.incrementAndGet();
+        };
+        barrier.await();
+        for(int i=0;i<iterations;i++)stacks.invokeExact((i*3+worker)%30,work);
+    }
     static void deep(int depth, int iterations, byte[] bytes, CyclicBarrier barrier) throws Throwable {
         if (depth > 0) { deep(depth - 1, iterations, bytes, barrier); return; }
         var lookup = MethodHandles.lookup();
@@ -35,8 +56,12 @@ public class B06GenerationStress {
         var barrier = new CyclicBarrier(threads);
         Thread[] workers = new Thread[threads];
         for (int i = 0; i < threads; i++) {
+            final int worker=i;
             workers[i] = new Thread(() -> {
-                try { deep(depth, iterations, bytes, barrier); }
+                try {
+                    if(args.length==5 && args[4].equals("native-volume"))nativeVolume(worker,iterations,bytes,barrier);
+                    else deep(depth, iterations, bytes, barrier);
+                }
                 catch (Throwable t) { failure.compareAndSet(null, t); barrier.reset(); }
             }, "public-stress-worker-" + i);
         }

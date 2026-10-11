@@ -8,7 +8,7 @@ TOKEN=re.compile(r"'[^']*'|\"[^\"]*\"|[A-Z][A-Z0-9-]*|[0-9]+(?:\.[0-9]+)?|>=|<=|
 
 
 def generate(text,program):
-    raw=text.splitlines(); lines=[code(x) for x in raw]; rows=[]; active=False
+    raw=text.splitlines(); lines=[code(x) for x in raw]; rows=[]; active=False; statement=None
     def add(i,operator,new,end=None):
         end=i if end is None else end
         old='\n'.join(raw[i:end+1]); replacement='\n'.join('       '+s for s in new.split('\n'))
@@ -26,12 +26,13 @@ def generate(text,program):
             continue
         if not t or t.endswith('.') and len(t.split())==1:continue
         matches=list(TOKEN.finditer(t)); verb=matches[0][0] if matches else ''
+        if verb in VERBS or verb.startswith('END-') or verb in ('ELSE','INVALID','NOT'):statement=verb
         # Token spans exclude literals and hyphens embedded in identifiers.
         for m in matches:
             tok=m[0]
             if tok in ('=','>','<','>=','<=','<>'):
                 add(i,'relational',t[:m.start()]+{'=':'<>','<>':'=','>':'<=','<':'>=','>=':'<','<=':'>'}[tok]+t[m.end():])
-            if tok in ('+','-','*','/') and verb=='COMPUTE':
+            if tok in ('+','-','*','/') and statement=='COMPUTE':
                 add(i,'arithmetic',t[:m.start()]+{'+':'-','-':'+','*':'/','/':'*'}[tok]+t[m.end():])
             if tok.isdigit():
                 for delta in (-1,1):add(i,'constant',t[:m.start()]+str(int(tok)+delta)+t[m.end():])

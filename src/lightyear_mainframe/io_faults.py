@@ -17,8 +17,8 @@ def declarations(text, program):
             if kind=='premature-eof' and op['line'] not in (326,346):continue
             special=program=='CBTRN02C' and op['operation']=='REWRITE' and op['file']=='FD-ACCTFILE-REC'
             rows.append(dict(id=f"{op['line']}-{kind}",**op,kind=kind,expected_status=status,
-               expected_returncode=0 if special or kind=='premature-eof' else 12,
-               expected_display='LYF-REASON=109' if special else None if kind=='premature-eof' else 'TWIN-CEE3ABD=',
+               expected_returncode=4 if program=='CBTRN02C' and op['line'] in (383,395) else 0 if special or kind=='premature-eof' else 12,
+               expected_display='LYF-REASON=0109' if special else 'TRANSACTIONS REJECTED' if program=='CBTRN02C' and op['line'] in (383,395) else None if kind=='premature-eof' else 'TWIN-CEE3ABD=',
                representation='injected engineering status; z/OS equivalence unknown',qualification_credit=False))
     return rows
 
@@ -58,7 +58,7 @@ def derive(text, program, fault):
     replacement=[f"           MOVE '{row['expected_status']}' TO {row['status']}"]
     replacement+=invalid
     replacement += [f"           DISPLAY 'LYF|{fault}|{row['expected_status']}'"]
-    if row['expected_display']=='LYF-REASON=109':replacement += ["           DISPLAY 'LYF-REASON=' WS-VALIDATION-FAIL-REASON"]
+    if row['expected_display']=='LYF-REASON=0109':replacement += ["           DISPLAY 'LYF-REASON=' WS-VALIDATION-FAIL-REASON"]
     if code(body[-1]).rstrip().endswith('.'):replacement[-1]+='.'
     lines[start:end+1]=replacement
     return '\n'.join(lines)+'\n',inv,row

@@ -448,7 +448,7 @@ def run(target, scenario, output, *, generated=None, timeout=120):
         (output / "after" / dd).write_bytes(raw)
         outputs[dd] = {"sha256": sha(raw), "records": len(raw) // (length+1)}
     invariants = None
-    if job == "POSTTRAN":
+    if job == "POSTTRAN" and not build_record.get("systematic_mutant"):
         from .posttran_invariants import check, review_sheet
         invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'])
         write_json(output / 'posttran-invariants.json', invariants)

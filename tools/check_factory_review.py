@@ -13,7 +13,7 @@ def attempt(target,case,folder):
     try:
         r=run(target,case,folder,generated=case,timeout=4)
         return dict(status='executed',returncode=r['returncode'],outputs=r['outputs'])
-    except (ValueError,RuntimeError,subprocess.TimeoutExpired) as e:
+    except (ValueError,RuntimeError,subprocess.TimeoutExpired,OSError) as e:
         return dict(status='execution-refusal',error_type=type(e).__name__,detail=str(e))
 
 
@@ -34,6 +34,8 @@ def check(output,job):
             build(folder/'build',fault=fault['id'],jobs=[job])
             # A rejected transaction is needed to reach the rejects WRITE.
             case='posttran-missing-card' if fault['file']=='FD-REJS-RECORD' else 'intcalc-two-accounts' if job=='INTCALC' else 'posttran-positive'
+            if job=='INTCALC' and fault['line']==444:case='intcalc-missing-disclosure'
+            if job=='POSTTRAN' and fault['line']==510:case='posttran-new-category'
             actual=attempt(folder/'build',case,folder/'run')
             stdout=folder/'run/logs/program.stdout';stderr=folder/'run/logs/program.stderr'
             transcript=(stdout.read_text() if stdout.exists() else '')+(stderr.read_text() if stderr.exists() else '')

@@ -1,6 +1,7 @@
 # POSTTRAN independent conversion preregistration
 
-Prepared; no model call or candidate code has been produced. The published
+Phase 1 budget approved; execution preflight is blocked. No model call or
+candidate code has been produced. The published
 [plan](plan.json) seals the exact public input allowlist, prompts, client and
 budgets. Model: `gpt-6-astra`, high reasoning, standard service. Client:
 `codex-cli 0.155.0-alpha.9.2`, SHA256
@@ -48,3 +49,28 @@ success. POSTTRAN remains provisional throughout preparation.
 Two focused tests check allowlist exclusion and fail-closed adjudication.
 No provider-calling entrypoint is installed by this PR. Exact budget approval,
 isolated execution preflight and all declared bindings are launch prerequisites.
+
+Howard approved the exact Phase 1 budget for plan
+`c022241cb0e4a62656daf9f889119fdab9441adcd4c6645be3f71da776ab9ebb`
+in chat. That approval is recorded separately; the preregistration bytes stay
+unchanged, and Phase 2 is not authorized. The [preflight result](phase1-preflight.json)
+records 16 independently staged public packet files and all 18 public/generated
+evaluation input sets matching the approved hashes. Neither twin outputs nor
+invariant results are in the builder packet.
+
+The locally installed clients do not match the approved binary. The official
+release archive for the same `0.155.0-alpha.9.2` version was retrieved and its
+archive digest verified against OpenAI's release metadata; its executable is
+`384285237e5bd33b96f6d9de4644bfd203efdee5dbbecee24dbe8eebddce2020`,
+which differs from the approved `bc45017e…` binary. A version string alone is
+insufficient. No client was installed or substituted.
+
+The release's configuration schema also does not establish enforcement of the
+promised 16,000 output-token limit including hidden reasoning. Post-call usage
+accounting would not enforce a hard per-call cap. Dispatch therefore remains
+blocked until an approved exact client and enforceable transport limits are
+available. A replacement client/transport requires a concrete amended plan and
+approval; the existing approval is not being treated as permission to weaken
+the caps. Five focused tests cover the allowlist, exact approval, client-byte
+refusal, isolated packet and Phase 2 boundary. No candidate was authored by a
+person, and no model budget was spent.

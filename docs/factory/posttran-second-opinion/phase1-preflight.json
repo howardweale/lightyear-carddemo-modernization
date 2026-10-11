@@ -1,0 +1,31 @@
+{
+  "all_input_hashes_match": true,
+  "approval_scope": "The approved plan is preserved byte-for-byte. No replacement client, transport or weaker cap is authorized.",
+  "approved_client": {
+    "sha256": "bc45017e8239dc150258f69309ced9df6bbcdf5b8e4f346decf780ac0999e226",
+    "version": "codex-cli 0.155.0-alpha.9.2"
+  },
+  "blockers": [
+    "approved-client-bytes-not-found; official same-version release hash differs",
+    "hard output-token cap including reasoning is not established by the CLI configuration schema; no dispatch until enforced"
+  ],
+  "candidate_exists": false,
+  "checked_at_utc": "2026-10-11T01:31:52.657671+00:00",
+  "compilations": 0,
+  "content_sha256": "a76638c34f658d55075d49808244bdbc25a9635327d899f5f6352c6f86c77b16",
+  "evaluation_input_sets": 18,
+  "execution_ready": false,
+  "independent_packet_files": 16,
+  "model_calls": 0,
+  "official_release_client": {
+    "archive_sha256": "76e31044f8a95398e9007cb7f888c07ecdf7be84d7c87358061cb66983660ff4",
+    "config_schema_sha256": "56f3e1cfd9678c2e64319a2424a8522488becb5a1ddbaf6e910e6d2ee9ef4d83",
+    "release": "https://github.com/openai/codex/releases/tag/rust-v0.155.0-alpha.9.2",
+    "sha256": "384285237e5bd33b96f6d9de4644bfd203efdee5dbbecee24dbe8eebddce2020",
+    "version": "codex-cli 0.155.0-alpha.9.2"
+  },
+  "phase1_budget_approved": true,
+  "phase2_authorized": false,
+  "plan_sha256": "c022241cb0e4a62656daf9f889119fdab9441adcd4c6645be3f71da776ab9ebb",
+  "schema": "posttran-phase1-preflight/1"
+}

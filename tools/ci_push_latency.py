@@ -45,8 +45,27 @@ def collect(numbers):
     return dict(schema='pr-push-gate-latencies/1',checked_at=datetime.now(timezone.utc).isoformat(),prs=rows,
                 queued_workflows=len(queued),active_workflows=len(active),post_merge_latency=False)
 
+def preserve_history(result,previous):
+    """Retain superseded heads and exact PushEvents after API retention expires."""
+    history=list(previous.get('head_history',[]))
+    current={(r['pr'],r['head']) for r in result['prs']}
+    old={(r['pr'],r['head']):r for r in previous.get('prs',[])}
+    for key,row in old.items():
+        if key not in current and not any((r['pr'],r['head'])==key for r in history):
+            history.append(row)
+    for row in result['prs']:
+        prior=old.get((row['pr'],row['head']),{})
+        if not row['push_at'] and prior.get('push_at'):
+            row['push_at']=prior['push_at']
+            row['push_time_source']='Retained GitHub PushEvent'
+            if row['all_workflows_green_at']:
+                row['push_to_green_seconds']=elapsed(row['push_at'],row['all_workflows_green_at'])
+    result['head_history']=history
+    result['delivered_notifications']=previous.get('delivered_notifications',[])
+    return result
+
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--prs',nargs='+',type=int,default=[311,312,313,314,315]);p.add_argument('--output',type=Path,required=True)
     a=p.parse_args();result=collect(a.prs)
-    if a.output.exists():result['delivered_notifications']=json.loads(a.output.read_bytes()).get('delivered_notifications',[])
+    if a.output.exists():result=preserve_history(result,json.loads(a.output.read_bytes()))
     a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(result,indent=2)+'\n')

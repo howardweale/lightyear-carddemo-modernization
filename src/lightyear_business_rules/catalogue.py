@@ -11,9 +11,10 @@ def bound(rules, rule, receipt):
     return dict(rule_set=digest(rules), rule=digest(rule), receipt=digest(receipt))
 
 
-def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None):
+def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None,adequacy_report=None):
     require(bool(head) and bool(scope), "fresh-tower-head-and-scope-required")
     expected = bound(rules, rule, receipt)
+    if adequacy_report:expected['scenario_assessment']=digest(adequacy_report)
     event = next(e for e in proof["journal"]["events"] if e["content_sha256"] == proof["decision_sha256"])
     actual = event["payload"]["bound"]
     require(set(actual) == set(expected) | {"request"} and all(actual[k] == v for k,v in expected.items()), "disposition-bindings")
@@ -25,7 +26,7 @@ def disposition(rules, rule, receipt, proof, tower_key, head, scope, *, now=None
                 candidate_mode={"preserve": "source-faithful", "fix": corrected, "investigate": "blocked"}[outcome])
 
 
-def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, tower_key=None, tower_head=None, tower_scope=None):
+def catalogue(rules, receipt, judge_key, *, adequacy_report=None, kill_report=None, decisions=None, tower_key=None, tower_head=None, tower_scope=None):
     require(verify_envelope(receipt, judge_key) and receipt["rule_set_sha256"] == digest(rules), "catalogue-receipt-binding")
     require(receipt.get("schema") in {"lightyear-rule-verdict/1", "lightyear-rule-verdict/2"}, "catalogue-receipt-schema")
     status = {r["id"]: r for r in receipt["rules"]}
@@ -35,6 +36,9 @@ def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, to
         require(verify_envelope(kill_report, judge_key), "mutation-signature")
         require(kill_report["rule_set_sha256"] == digest(rules) and kill_report["receipt_sha256"] == receipt.get("original_receipt", receipt)["content_sha256"], "mutation-binding")
     kills = {r["id"]: r for r in (kill_report or {}).get("rules", [])}
+    from lightyear_factory.scenario_policy import verified_assessment,assess,PROPOSAL
+    adequacy=verified_assessment(receipt,adequacy_report,judge_key) if adequacy_report else None
+    scenario_reasons=assess(adequacy,PROPOSAL,(adequacy_report or {}).get('compared_fields',[]))
     entries = []
     for rule in rules:
         # Proposals are quarantined until a separate verified promotion into a
@@ -46,10 +50,13 @@ def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, to
         mutation = kills.get(rule["id"]) if (kill_report or {}).get("schema") == "lightyear-rule-mutations/2" else None
         strength, reason = assess(s["status"], s.get("output_diversity", {}), mutation)
         s.update(evidence_strength=strength, evidence_strength_reason=reason,
-                 display_status=display(s["status"], strength))
+                 display_status=display(s["status"], strength),
+                 evidence_display_status=display(s["status"], strength))
+        s.update(scenario_adequacy=adequacy,scenario_reasons=scenario_reasons)
+        if s['status']=='verified' and scenario_reasons:s['display_status']='verified (weak scenarios)'
         decision = None
         if (decisions or {}).get(rule["id"]):
-            decision = disposition(rules, rule, receipt, decisions[rule["id"]], tower_key, tower_head, tower_scope)
+            decision = disposition(rules, rule, receipt, decisions[rule["id"]], tower_key, tower_head, tower_scope,adequacy_report=adequacy_report)
         entries.append(dict(id=rule["id"], statement=rule["statement"], source=rule["derived_from"],
             **{k:v for k,v in s.items() if k != "id"}, legacy_behaviour=rule["legacy_behaviour"],
             receipt_sha256=receipt["content_sha256"], mutation=kills.get(rule["id"]),
@@ -60,6 +67,7 @@ def catalogue(rules, receipt, judge_key, *, kill_report=None, decisions=None, to
                 verified_total=sum(e["status"] == "verified" and e["evidence_strength"] == "discriminating" for e in entries),
                 verified_weak_total=sum(e["status"] == "verified" and e["evidence_strength"] == "weak" for e in entries),
                 verified_not_assessed_total=sum(e["status"] == "verified" and e["evidence_strength"] == "not-assessed" for e in entries),
+                scenario_adequacy=adequacy,scenario_threshold_status='proposed-not-approved',
                 limitation=receipt["limitation"])
 
 
@@ -68,7 +76,10 @@ def html(payload):
     if payload.get("test_authority_only"):
         payload = {**payload, "limitation": "TEST AUTHORITY ONLY: no production/customer decision. " + payload["limitation"]}
     for e in payload["entries"]:
-        rows.append("<tr>" + "".join("<td>"+escape(str(e[k]))+"</td>" for k in ("id", "statement", "display_status", "applicable_count", "disagree_count", "receipt_sha256")) + "</tr>")
+        # Scenario coverage is an additional dimension, not a replacement for
+        # the original signed rule-evidence strength.
+        shown={**e,'display_status':e['display_status']+'; rule evidence: '+e.get('evidence_display_status',e['display_status'])+'; scenario adequacy: '+json.dumps(e.get('scenario_adequacy'))}
+        rows.append("<tr>" + "".join("<td>"+escape(str(shown[k]))+"</td>" for k in ("id", "statement", "display_status", "applicable_count", "disagree_count", "receipt_sha256")) + "</tr>")
     return '<!doctype html><html lang="en"><meta charset="utf-8"><title>Lightyear | Verified business rules</title><style>body{font:16px system-ui;margin:2em;color:#17334c}table{border-collapse:collapse}td,th{padding:.5em;border:1px solid #ccd;overflow-wrap:anywhere}th{text-align:left}</style><h1>Lightyear | Business rules</h1><p>'+escape(payload["limitation"])+"</p><table><thead><tr><th>Rule</th><th>Statement</th><th>Status</th><th>Applicable</th><th>Disagree</th><th>Receipt SHA-256</th></tr></thead><tbody>"+"".join(rows)+"</tbody></table><h2>Keep or fix</h2><pre>"+escape(json.dumps(payload["register"], indent=2))+"</pre></html>"
 
 

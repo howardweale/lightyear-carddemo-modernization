@@ -1,0 +1,74 @@
+{
+  "content_sha256": "5fcc143dccbd489ded23d405da04987a0ec6ec2577202d1984482f6fe9896f7b",
+  "decimal_key_restriction_retained": true,
+  "measurement_credit": false,
+  "oracle_class": "executable-twin",
+  "oracle_status": "provisional",
+  "phase": "indexed-order-probe",
+  "qualification_credit": false,
+  "releasable": false,
+  "results": {
+    "ascii": {
+      "expected": [
+        " ",
+        "0",
+        "9",
+        "A",
+        "Z",
+        "a",
+        "z"
+      ],
+      "order": [
+        " ",
+        "0",
+        "9",
+        "A",
+        "Z",
+        "a",
+        "z"
+      ],
+      "source_sha256": "6286638f50f95755879c427becd766e3588531362b2f7d03c1d51bd502fdf9e9",
+      "statuses": {
+        "DUPLICATE": "22",
+        "EOF": "10",
+        "RANDOM": "00",
+        "REWRITE": "00",
+        "START": "00"
+      }
+    },
+    "cp037": {
+      "expected": [
+        " ",
+        "a",
+        "z",
+        "A",
+        "Z",
+        "0",
+        "9"
+      ],
+      "order": [
+        " ",
+        "a",
+        "z",
+        "A",
+        "Z",
+        "0",
+        "9"
+      ],
+      "source_sha256": "6286638f50f95755879c427becd766e3588531362b2f7d03c1d51bd502fdf9e9",
+      "statuses": {
+        "DUPLICATE": "22",
+        "EOF": "10",
+        "RANDOM": "00",
+        "REWRITE": "00",
+        "START": "00"
+      }
+    }
+  },
+  "run_class": "engineering",
+  "schema": "factory-legacy-twin/1",
+  "scope": "Primary one-byte keys only; no full program adapter or z/OS equivalence",
+  "twin_limits_path": "docs/factory/twin-limits.md",
+  "twin_limits_sha256": "83316232b883b538e925cc409cf94390d17ecec59e1efd2e9286ecb6d3014cd8",
+  "zos_confirmation": false
+}

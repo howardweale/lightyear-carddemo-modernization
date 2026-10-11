@@ -69,6 +69,8 @@ def argument(text,program,mutant,compiler_layout=None,storage=None):
             message='The pinned compiler probe records initial TIMING0. The only assignment is MOVE0 and the only read is the one terminal host CEE3ABD call; that shim stops the process. Deleting this zero assignment cannot expose another value in this one-invocation execution contract.'
         if program=='CBACT04C' and mutant['operator']=='delete-MOVE' and mutant['line'] in (491,492,493,494):
             message='The pinned compiler probe confirms initial numeric storage0 and alphanumeric storage spaces. These four working-storage merchant fields have no other writer/alias or group initialization; each transaction only writes the same0/spaces before output. By induction all records preserve those values when this single redundant assignment is deleted. Scoped to this recorded one-invocation host runtime; no implicit z/OS equivalence.'
+        if mutant['operator']=='delete-MOVE' and old.split()==['MOVE','0','TO','TWO-BYTES-BINARY']:
+            message='The pinned compiler probe confirms this unsigned binary item initially has numeric0. Its only other writer overwrites the right byte before every read; the left byte is never changed. The unchanged whole-item zero assignment only re-zeroes that already-zero left byte, while the following right-byte write replaces the other byte. Induction over all calls preserves both final bytes for the entire256-byte input domain.'
         if message:
             return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],argument=message,
               compiler_storage_semantics=storage,supporting_source_lines=[mutant['line']],approval='listed-for-operator-review; not a release approval')
@@ -76,6 +78,10 @@ def argument(text,program,mutant,compiler_layout=None,storage=None):
         return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
           argument='The only additional write is padding destination byte2 with a space. Before any display/read of IO-STATUS-04, the unchanged MOVE TWO-BYTES-BINARY TO IO-STATUS-0403 overwrites bytes2-4 completely. Byte1 is unchanged and intermediate operations access only the separate TWO-BYTES item. Thus the extra destination byte is a dead store for every status byte value.',
           supporting_source_lines=list(range(mutant['line'],mutant['line']+5)),approval='listed-for-operator-review; not a release approval')
+    if mutant['operator']=='delete-MOVE' and words==["MOVE","'0000'","TO","IO-STATUS-04"]:
+        return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
+          argument='IO-STATUS-04 consists of PIC9 VALUE0 followed by PIC999 VALUE0, so its initial four bytes are0000. In this numeric-status branch, the following MOVE overwrites bytes3-4. Bytes1-2 remain their initial00. Every call is on an error path immediately followed by the terminating host CEE3ABD shim; there is no subsequent invocation with a previously formatted nonnumeric status. Thus this single deletion preserves all displayed bytes under the recorded one-invocation host contract, not an arbitrary returning abend implementation.',
+          supporting_source_lines=([129,130,131,644,645,646,632] if program=='CBACT04C' else [138,139,140,723,724,725,711]),approval='listed-for-operator-review; not a release approval')
     dead_reason=None
     if program=='CBACT04C':
         count_uses=[x for x in reviewed if 'WS-RECORD-COUNT' in x]

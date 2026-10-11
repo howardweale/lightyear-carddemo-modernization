@@ -98,7 +98,7 @@ working-storage section.
 procedure division.
  display 'LENGTHS ' function length(u) ' ' function length(v)
          ' ' function length(timing) ' ' function length(timing-frac)
- if timing = 0 and merchant-n = 0 and merchant-x = spaces
+ if u = 0 and timing = 0 and merchant-n = 0 and merchant-x = spaces
      display 'DEFAULTS-OK'
  end-if
  perform varying i from 1 by 1 until i > 256

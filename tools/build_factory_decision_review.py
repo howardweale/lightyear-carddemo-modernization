@@ -117,7 +117,7 @@ def render(packet):
         lines += [f"## {job}: 10 of {group['population_count']}",'',f"Population SHA-256: `{group['population_sha256']}`",'']
         for row in group['sample']:
             proof=row['argument']
-            lines += [f"### {row['id']}",'',f"Source: `{row['source_path']}` lines {row['line']}â€“{row['end_line']}; SHA-256 `{row['source_sha256']}`.",'',
+            lines += [f"### {row['id']}",'',f"Source: `{row['source_path']}` lines {row['line']}-{row['end_line']}; SHA-256 `{row['source_sha256']}`.",'',
                 f"Historical status: {row['historical_status']}; argument origin: {row['argument_origin']}.",'',
                 'Original:','```cobol',row['original'].rstrip(),'```','Replacement:','```cobol',row['replacement'],'```','',
                 proof['argument'],'',f"Supporting source lines: {proof.get('supporting_source_lines', [])}.",'']

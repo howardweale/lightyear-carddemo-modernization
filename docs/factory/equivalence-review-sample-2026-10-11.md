@@ -12,7 +12,7 @@ Population SHA-256: `86e8f54c59db20247a42e836a6deea09d02fbe1871b813caa002b7616c8
 
 ### CBACT04C-constant-403-212
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 403â€“403; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 403-403; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -33,7 +33,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-MOVE-601-355
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 601â€“601; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 601-601; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -54,7 +54,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-ADD-192-50
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 192â€“192; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 192-192; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -75,7 +75,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-MOVE-401-211
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 401â€“401; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 401-401; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -96,7 +96,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-receiving-size-133-19
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 133â€“133; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 133-133; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -117,7 +117,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-constant-523-286
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 523â€“523; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 523-523; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -138,7 +138,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-MOVE-502-277
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 502â€“502; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 502-502; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -159,7 +159,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-MOVE-290-128
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 290â€“290; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 290-290; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -180,7 +180,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-constant-235-81
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 235â€“235; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 235-235; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -201,7 +201,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBACT04C-delete-MOVE-240-91
 
-Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 240â€“240; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
+Source: `spec/mainframe/public-source/CBACT04C.cbl` lines 240-240; SHA-256 `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -226,7 +226,7 @@ Population SHA-256: `c6369d761dbf2c9894df7251126145c9e3e06ae6a5edbcf7abcb1bef6d6
 
 ### CBTRN02C-constant-583-332
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 583â€“583; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 583-583; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -247,7 +247,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-delete-MOVE-718-447
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 718â€“718; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 718-718; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -268,7 +268,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-638-377
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 638â€“638; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 638-638; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -289,7 +289,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-515-283
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 515â€“515; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 515-515; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -310,7 +310,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-255-87
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 255â€“255; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 255-255; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -331,7 +331,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-515-282
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 515â€“515; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 515-515; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -352,7 +352,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-delete-MOVE-455-246
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 455â€“455; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 455-455; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -373,7 +373,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-680-414
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 680â€“680; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 680-680; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -394,7 +394,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-588-339
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 588â€“588; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 588-588; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 
@@ -415,7 +415,7 @@ Independent finding: **pending**. Reviewer / date / reasons: ___________________
 
 ### CBTRN02C-constant-718-445
 
-Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 718â€“718; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
+Source: `spec/mainframe/public-source/CBTRN02C.cbl` lines 718-718; SHA-256 `708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f`.
 
 Historical status: equivalent (argued, listed); argument origin: inline.
 

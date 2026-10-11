@@ -63,6 +63,8 @@ class FactoryDecisionsTests(unittest.TestCase):
         self.assertFalse(_invalid_literal_references("           DISPLAY 'GROUP-A(0:0)'",{'GROUP-A':4}))
 
     def test_sample_reproducible_complete_pool_pending_and_raw_records_preserved(self):
+        from tools.check_source_lf import check_paths
+        check_paths(ROOT,['docs/factory/equivalence-review-sample-2026-10-11.md','docs/factory/howard-decisions-2026-10-11-milestone.md'])
         packet,report,register=build(ROOT)
         self.assertEqual(packet,json.loads((ROOT/'docs/factory/equivalence-review-sample-2026-10-11.json').read_text(encoding='utf-8')))
         self.assertEqual(render(packet),(ROOT/'docs/factory/equivalence-review-sample-2026-10-11.md').read_text(encoding='utf-8'))

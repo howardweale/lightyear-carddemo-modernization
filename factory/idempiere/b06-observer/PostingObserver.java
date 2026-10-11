@@ -57,6 +57,7 @@ public final class PostingObserver {
         if(directory==null)throw new IllegalArgumentException("owned observer state directory required");
         Generation.definitions=new DefinitionIndex(java.nio.file.Path.of(directory).resolve("definitions.idx"));
         bounded=true;bindingV2=true;generation.v2=true;Generation.owner=this;
+        generation.pendingPool=new PendingPool();
     }
     private void resourceStop(String reason) throws Exception {
         var usage=ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
@@ -253,6 +254,38 @@ public final class PostingObserver {
         public Set<Map.Entry<String,Object>> entrySet(){throw new UnsupportedOperationException("streamed definition index is not an in-memory catalogue");}
     }
     /** Generation evidence only: factory names select VM breakpoints, never grant trust. */
+    /** Fixed retained storage: suppressed returns cannot add map nodes or boxed IDs. */
+    private static final class PendingPool {
+        private final PendingEntry[] entries=new PendingEntry[PENDING_CAP];
+        PendingPool(){for(int i=0;i<entries.length;i++)entries[i]=new PendingEntry(this);}
+        Map<String,Object> retain(Map<String,Object> value){
+            for(PendingEntry entry:entries)if(!entry.used){entry.assign(value);return entry;}
+            throw new IllegalStateException("pending pool capacity invariant");
+        }
+        void release(Map<String,Object> value){
+            if(!(value instanceof PendingEntry entry) || entry.owner!=this || !entry.used)
+                throw new IllegalStateException("pending pool release invariant");
+            entry.used=false;entry.kind=null;entry.method=null;
+        }
+    }
+    private static final class PendingEntry extends AbstractMap<String,Object> {
+        final PendingPool owner;boolean used;String kind,method;long thread,generation,age;int depth;
+        PendingEntry(PendingPool owner){this.owner=owner;}
+        void assign(Map<String,Object> r){
+            kind=(String)r.get("kind");method=((String)r.get("entry_method")).intern();
+            thread=((Number)r.get("thread_id")).longValue();generation=((Number)r.get("generation_id")).longValue();
+            age=((Number)r.get("entry_event_index")).longValue();depth=((Number)r.get("entry_depth")).intValue();used=true;
+        }
+        @Override public Object get(Object key){return switch(key.toString()){
+            case "kind"->kind;case "entry_method"->method;case "thread_id"->thread;
+            case "generation_id"->generation;case "entry_event_index"->age;case "entry_depth"->depth;default->null;};}
+        @Override public Set<Map.Entry<String,Object>> entrySet(){
+            LinkedHashSet<Map.Entry<String,Object>> result=new LinkedHashSet<>();
+            for(String key:List.of("kind","thread_id","generation_id","entry_depth","entry_method","entry_event_index"))
+                result.add(Map.entry(key,get(key)));
+            return Collections.unmodifiableSet(result);
+        }
+    }
     private static final class Generation {
         static final String FACTORY="java.lang.invoke.InnerClassLambdaMetafactory";
         static final String INVOKER="java.lang.invoke.InvokerBytecodeGenerator";
@@ -269,6 +302,7 @@ public final class PostingObserver {
         static final String DEFINER="java.lang.invoke.MethodHandles$Lookup$ClassDefiner";
         static Map<String,Object> definitions=new LinkedHashMap<>();
         final Map<Long,Deque<Map<String,Object>>> pending=new HashMap<>();
+        PendingPool pendingPool;
         private record ReturnArm(MethodExitRequest request, Method method, int depth,
                                  Map<String,Object> entry) {}
         final Map<Long,ReturnArm> exits=new HashMap<>();
@@ -497,8 +531,7 @@ public final class PostingObserver {
             Map<String,Object> retained=r;
             if(bounded()) {
                 r.put("entry_event_index",owner.observedEvents);
-                retained=new LinkedHashMap<>();
-                for(String key:List.of("kind","thread_id","generation_id","entry_depth","entry_method","entry_event_index"))retained.put(key,r.get(key));
+                retained=pendingPool.retain(r);
             }
             pending.computeIfAbsent(t.uniqueID(),k->new ArrayDeque<>()).push(retained);
             return r;
@@ -510,7 +543,8 @@ public final class PostingObserver {
                q==null || q.isEmpty() || q.peek()!=armed.entry() ||
                armed.depth()!=e.thread().frameCount() || !selected(e.method()))
                 throw new IllegalStateException("generation exit does not match armed activation");
-            Map<String,Object> r=q.peek();
+            Map<String,Object> retained=q.peek();
+            Map<String,Object> r=bounded()?new LinkedHashMap<>(retained):retained;
             String name=e.method().declaringType().name()+"."+e.method().name()+e.method().signature();
             if(!r.get("entry_method").equals(name) || !r.get("entry_depth").equals(e.thread().frameCount()))throw new IllegalStateException("generation return mismatch");
             if(e.returnValue() instanceof ClassObjectReference c){
@@ -522,6 +556,7 @@ public final class PostingObserver {
                 r.put("returned_bytes_object_id",a.uniqueID());binary(r,"returned_bytes",bytes);r.put("returned_bytes_sha256",hash(bytes));
             }else throw new IllegalStateException("generation return unsupported");
             exits.remove(e.thread().uniqueID());q.pop();
+            if(bounded())pendingPool.release(retained);
             if(bounded())owner.delete(armed.request());else vm.eventRequestManager().deleteEventRequest(armed.request());
             if(q.isEmpty())pending.remove(e.thread().uniqueID());
             return r;
@@ -856,6 +891,7 @@ public final class PostingObserver {
             Map<String,Object> unwound=generated.pop();
             emit(new LinkedHashMap<>(Map.of("kind","generation-unwind","record",unwound,
                 "exception_class",exceptionClass,"catch_depth",depth,"catch_resolution",resolution)),false);
+            if(bounded)generation.pendingPool.release(unwound);
         }
         if(generated.isEmpty())generation.pending.remove(thread.uniqueID());
     }

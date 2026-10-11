@@ -16,7 +16,7 @@ The prospective lexical-overlap corrections are in
 labels 16/47 correctly. No signed historical evidence was rewritten. Repository
 search found no other literal 16/47 coverage claim in docs, catalogues or views.
 
-Systematic generation currently inventories **427 INTCALC and 490 POSTTRAN**
+Systematic generation currently inventories **426 INTCALC and 489 POSTTRAN**
 source-site mutants. These counts are generated, not claims of compiled mutants
 or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs and program stdout (excluding probe records), separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
@@ -76,3 +76,7 @@ Review of the earlier compiler refusals found a generator defect: digit-prefixed
 Survivor-driven synthetic cases add a third account, successful DEFAULT tariff fallback, cyclic debit, invalid-then-valid and new-then-existing transaction sequences, and expiry-prefix boundaries. These are new witnesses, not assumed kills. A compiled LENGTH probe records binary storage classes before any corresponding ABI-preservation argument is permitted. All new outcomes remain subject to the full compiled campaign.
 
 Completed pre-challenge fault campaigns reached **INTCALC 8/8 business, 85/86 I/O, 93/94 combined**, and **POSTTRAN 24/24 business, 85/86 I/O, 109/110 combined**; all 24/24 and 29/29 declared fault expectations matched respectively. The only unobserved edge in each is the first EOF guard false edge. [Source-bound gap arguments](io-gap-arguments.json) explain why TEST BEFORE prevents that edge; these arguments neither remove it from the denominator nor count as Howard's acceptance. POSTTRAN reason109 returned RC0; this observed failure propagation gap remains visible.
+
+The completed427-site INTCALC run at29ac9d9 measured162 failure kills,130 divergent kills,70 individually argued equivalents,59 survivors and6 compiler refusals: **292/427 raw;292/357 after listed-equivalent exclusions**. Its results are preserved. Inspecting the actual compiler logs identified one additional false relational site: the assignment equals sign in COMPUTE. Removing this generator defect gives the prospective426/489 inventories, awaiting new compiled outcomes. Genuine out-of-bounds reference/PIC mutants remain in the not-compiled bucket and denominator.
+
+Mutation comparison now includes stderr, which contains the existing actual CEE3ABD code. The engineering shim also records its actual timing argument; these are observable call parameters, not a claim to simulate z/OS abend timing. Official [OpenAI reasoning documentation](https://developers.openai.com/api/docs/guides/reasoning) confirms the broker's max_output_tokens parameter caps reasoning and non-visible tokens as well as visible output; incomplete responses remain failures.

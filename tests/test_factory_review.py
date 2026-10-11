@@ -29,6 +29,8 @@ class FactoryReviewTests(unittest.TestCase):
   labels="       PROCEDURE DIVISION.\n           PERFORM 1000-READ.\n       1000-READ.\n           EXIT.\n"
   label_rows=_source_sites(labels,'P')
   self.assertEqual(['skip-PERFORM'],[r['operator'] for r in label_rows])
+  assignment='       PROCEDURE DIVISION.\n           COMPUTE A = B + 1.\n'
+  self.assertNotIn('relational',[r['operator'] for r in _source_sites(assignment,'P')])
   pic="       01 A PIC 999.\n       01 B PIC S9(3)V9(2).\n"
   rows=_source_sites(pic,'P')
   self.assertEqual(4,len(rows));self.assertIn('V9(3)',rows[3]['replacement'])
@@ -37,6 +39,7 @@ class FactoryReviewTests(unittest.TestCase):
   self.assertEqual('killed-failure',outcome(base,{**base,'returncode':12}))
   self.assertEqual('killed-divergent',outcome(base,{**base,'outputs':{}}))
   self.assertEqual('survived',outcome(base,base))
+  self.assertEqual('killed-divergent',outcome({**base,'stderr_sha256':'a'},{**base,'stderr_sha256':'b'}))
  def test_faults_declared_and_no_source_mutation(self):
   for program in ('CBACT04C','CBTRN02C'):
    text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text();rows=declarations(text,program)

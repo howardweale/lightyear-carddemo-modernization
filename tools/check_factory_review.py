@@ -14,7 +14,7 @@ from lightyear_mainframe.scenario_coverage import code
 def attempt(target,case,folder):
     try:
         r=run(target,case,folder,generated=case,timeout=4)
-        return dict(status='executed',returncode=r['returncode'],outputs=r['outputs'],stdout_sha256=r['program_stdout_sha256'])
+        return dict(status='executed',returncode=r['returncode'],outputs=r['outputs'],stdout_sha256=r['program_stdout_sha256'],stderr_sha256=r['program_stderr_sha256'])
     except (ValueError,RuntimeError,subprocess.TimeoutExpired,OSError) as e:
         return dict(status='execution-refusal',error_type=type(e).__name__,detail=str(e))
 

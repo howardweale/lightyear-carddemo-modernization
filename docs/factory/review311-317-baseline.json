@@ -228,7 +228,7 @@
           "reason": "not-observed; no unreachability claim"
         }
       ],
-      "systematic_mutants_generated": 427
+      "systematic_mutants_generated": 426
     },
     "POSTTRAN": {
       "decision_outcomes": "73/110",
@@ -505,7 +505,7 @@
           "reason": "not-observed; no unreachability claim"
         }
       ],
-      "systematic_mutants_generated": 490
+      "systematic_mutants_generated": 489
     }
   },
   "mutation_execution": "pending compiled campaign; generated is not compiled or killed",

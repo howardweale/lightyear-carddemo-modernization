@@ -96,3 +96,5 @@ The cp037 option projects indexed keys into separate physical key bytes while
 preserving logical record bytes. Full public reconciliation is required in both
 modes. The decimal-only production restriction remains regardless of this engineering
 result; no z/OS-equivalence or release claim follows from the option.
+
+The prospective engineering CEE3ABD shim records the passed abcode and timing arguments on stderr before RC12. This observes the call boundary; it does not implement or claim z/OS timing behavior. Systematic mutation compares these diagnostics as well as program stdout, RC and logical dataset bytes.

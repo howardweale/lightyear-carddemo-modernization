@@ -35,7 +35,7 @@ def _source_sites(text,program):
         # Token spans exclude literals and hyphens embedded in identifiers.
         for m in matches:
             tok=m[0]
-            if tok in ('=','>','<','>=','<=','<>'):
+            if tok in ('=','>','<','>=','<=','<>') and statement!='COMPUTE':
                 add(i,'relational',t[:m.start()]+{'=':'<>','<>':'=','>':'<=','<':'>=','>=':'<','<=':'>'}[tok]+t[m.end():])
             if tok in ('+','-','*','/') and statement=='COMPUTE':
                 add(i,'arithmetic',t[:m.start()]+{'+':'-','-':'+','*':'/','/':'*'}[tok]+t[m.end():])
@@ -78,7 +78,7 @@ def outcome(baseline,changed):
     if changed.get('status')=='not-compiled':return 'not-compiled'
     if changed.get('status')!='executed':return 'killed-failure'
     if changed.get('returncode')!=baseline.get('returncode'):return 'killed-failure'
-    if changed.get('outputs')!=baseline.get('outputs') or changed.get('stdout_sha256')!=baseline.get('stdout_sha256'):return 'killed-divergent'
+    if changed.get('outputs')!=baseline.get('outputs') or changed.get('stdout_sha256')!=baseline.get('stdout_sha256') or changed.get('stderr_sha256')!=baseline.get('stderr_sha256'):return 'killed-divergent'
     return 'survived'
 
 

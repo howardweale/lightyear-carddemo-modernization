@@ -217,6 +217,7 @@ linkage section.
 01 timing pic s9(9) binary.
 procedure division using abcode timing.
  display 'TWIN-CEE3ABD=' abcode upon syserr
+ display 'TWIN-CEE3ABD-TIMING=' timing upon syserr
  stop run returning 12.
 """
 
@@ -472,6 +473,7 @@ def run(target, scenario, output, *, generated=None, timeout=120):
                    inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
                    public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,
                    program_stdout_sha256=sha(b"\n".join(line for line in result.stdout.splitlines() if not line.startswith(b"LYC|"))),
+                   program_stderr_sha256=sha(result.stderr),
                    deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env.get("TWIN_PROCESSING_DATE"),
                    processing_date_contract="required" if job == "INTCALC" else "not-used-by-POSTTRAN",
                    adjudication="not-performed", model_calls=0)

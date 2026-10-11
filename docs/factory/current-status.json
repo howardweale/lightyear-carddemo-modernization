@@ -8,7 +8,7 @@
     },
     {
       "path": "docs/factory/keep-or-fix-register.json",
-      "lf_sha256": "18dacc3f2e6397866845446e465721eeccfaeea725594c163e4d93093e84ca4b"
+      "lf_sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
     },
     {
       "path": "docs/factory/posttran-decisions-unsigned-2026-10-11.json",
@@ -62,9 +62,17 @@
     {
       "id": "CBACT04C-FINAL-ACCOUNT-EOF-ELSE",
       "disposition": "keep-by-default"
+    },
+    {
+      "id": "POSTTRAN-DUPLICATE-ID-NONATOMIC",
+      "disposition": "keep"
+    },
+    {
+      "id": "POSTTRAN-CYCLE-DEBIT-SIGN",
+      "disposition": "keep"
     }
   ],
   "b07_freeze_ready": false,
   "latest_ci_collection": "2026-10-11T21:04:46.316159+00:00",
-  "content_sha256": "8c78181131a47ea6d1e53659851d241896ae6f0d97593fbb1e563e90b115d8a2"
+  "content_sha256": "8b20c72a5399aa4e22be30a8929331905dc6b2c066a1ef69e9dbc896b2d9d0e4"
 }

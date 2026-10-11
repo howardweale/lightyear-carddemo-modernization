@@ -15,16 +15,18 @@ Decision time: 2026-10-11T14:00:00-07:00.
 
 - REWRITE-109: keep-by-default
 - CBACT04C-FINAL-ACCOUNT-EOF-ELSE: keep-by-default
+- POSTTRAN-DUPLICATE-ID-NONATOMIC: keep
+- POSTTRAN-CYCLE-DEBIT-SIGN: keep
 
 ## Evidence inputs
 
 - [howard-decisions-2026-10-11b.json](howard-decisions-2026-10-11b.json): LF-normalized SHA-256 `74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4`
-- [keep-or-fix-register.json](keep-or-fix-register.json): LF-normalized SHA-256 `18dacc3f2e6397866845446e465721eeccfaeea725594c163e4d93093e84ca4b`
+- [keep-or-fix-register.json](keep-or-fix-register.json): LF-normalized SHA-256 `d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a`
 - [posttran-decisions-unsigned-2026-10-11.json](posttran-decisions-unsigned-2026-10-11.json): LF-normalized SHA-256 `02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc`
 - [amended-plan-2026-10-11.json](posttran-second-opinion/amended-plan-2026-10-11.json): LF-normalized SHA-256 `4eb8739628793217bb104bbfe02e6571266343e992b61332f4a749108490da0c`
 - [b07-prefreeze-power-2026-10-11.json](b07-prefreeze-power-2026-10-11.json): LF-normalized SHA-256 `fb0af41a345b7e40738b1368d2451a82b5e46379da27c223e80563aaf2c44f1c`
 - [ci-times-316-320-2026-10-11.json](ci-times-316-320-2026-10-11.json): LF-normalized SHA-256 `03aeed2a2a72b29b9fdc2997e6ffdac6832f16306ccb140039a34c139f10e3cf`
 
-Generated view seal: `8c78181131a47ea6d1e53659851d241896ae6f0d97593fbb1e563e90b115d8a2`.
+Generated view seal: `8b20c72a5399aa4e22be30a8929331905dc6b2c066a1ef69e9dbc896b2d9d0e4`.
 
 Regenerate with `python -B tools/build_factory_current_status.py`; CI uses `--check` to refuse stale output. Missing or changed source records require regeneration and review. No approval is inferred from a filename, unsigned acceptance or a green CI badge.

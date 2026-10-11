@@ -66,3 +66,20 @@ and coverage workflows did not install the declared cryptography dependency now
 required by the engineering evidence-boundary test. Both workflows install the
 existing control-tower extra before those tests. The tests and boundary remain
 unchanged; fresh final-head CI must pass. Historical failed attempts remain visible.
+
+## Current register integration
+
+The generated current status includes the two additional Howard-approved keeps:
+duplicate transaction posting retains its non-atomic RC12 behavior, and negative
+cycle debits retain the legacy over-limit calculation. The register bytes match
+the B1/B2 branch (LF SHA-256
+`22ff2cd34c41b672ca307584e104451e7ae83d723bb0387c18e2c9c49ef74769`).
+The earlier two-entry decision artifact remains unchanged and reproducible; five
+focused historical-decision regressions passed.
+
+On head `1b0b2e1574e14f12a4ada339853664545f1dc7d7`, verification run
+38175904711 encountered a pinned public-ECR PostgreSQL image rate limit after
+three acquisition attempts. Its application Maven tests passed before that
+infrastructure failure. The failed attempt remains preserved; it is not reported
+as green. The subsequent documentation/register integration requires fresh CI
+on its new exact head, so no redundant retry of the superseded head is needed.

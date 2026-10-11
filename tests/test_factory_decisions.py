@@ -69,7 +69,13 @@ class FactoryDecisionsTests(unittest.TestCase):
         self.assertEqual(packet,json.loads((ROOT/'docs/factory/equivalence-review-sample-2026-10-11.json').read_text(encoding='utf-8')))
         self.assertEqual(render(packet),(ROOT/'docs/factory/equivalence-review-sample-2026-10-11.md').read_text(encoding='utf-8'))
         self.assertEqual(report,json.loads((ROOT/'docs/factory/howard-decisions-2026-10-11.json').read_text(encoding='utf-8')))
-        self.assertEqual(register,json.loads((ROOT/'docs/factory/keep-or-fix-register.json').read_text(encoding='utf-8')))
+        current_register=json.loads((ROOT/'docs/factory/keep-or-fix-register.json').read_text(encoding='utf-8'))
+        # The earlier review remains reproducible; later dated keep decisions append
+        # entries without rewriting those historical dispositions.
+        historical_ids={r['id'] for r in register['defects']}
+        self.assertEqual(register,{**current_register,'defects':[r for r in current_register['defects'] if r['id'] in historical_ids]})
+        self.assertEqual({'POSTTRAN-DUPLICATE-ID-NONATOMIC','POSTTRAN-CYCLE-DEBIT-SIGN'},
+                         {r['id'] for r in current_register['defects']}-historical_ids)
         self.assertFalse(packet['threshold_approved']);self.assertFalse(report['release_approved'])
         for job,total in [('INTCALC',113),('POSTTRAN',114)]:
             group=packet['programs'][job];self.assertEqual(total,group['population_count'])

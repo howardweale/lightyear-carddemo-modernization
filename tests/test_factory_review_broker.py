@@ -18,6 +18,22 @@ class RevisedBrokerTests(unittest.TestCase):
    with self.assertRaisesRegex(ValueError,'approval'):request(plan,old,executable,packet,attempt=1)
    with self.assertRaisesRegex(ValueError,'attempt'):request(plan,approval,executable,packet,attempt=4)
    with self.assertRaisesRegex(ValueError,'dollar'):request(plan,approval,executable,packet,attempt=3,spent_usd=30)
+   for bad in (-1,float('nan'),float('inf'),True):
+    with self.assertRaisesRegex(ValueError,'invalid-prior-spend'):request(plan,approval,executable,packet,attempt=1,spent_usd=bad)
+   forbidden=[]
+   with self.assertRaisesRegex(ValueError,'live-dispatch-blocked'):
+    dispatch(plan,approval,executable,packet,lambda e,b:forbidden.append(b),attempt=1)
+   self.assertEqual([],forbidden)
+   # Simulated approval metadata solely for testing the fake capped transport.
+   plan.update(pricing_status='verified-current-pricing-bound-to-plan',pricing_checked_date='offline-test-fixture',live_transport_verified=True)
+   plan.pop('content_sha256');plan['content_sha256']=digest(plan)
+   approval['plan_sha256']=plan['content_sha256']
+   for usage in ({'output_tokens':64001,'input_tokens':100},{'output_tokens':10,'input_tokens':250001}):
+    with self.assertRaisesRegex(ValueError,'token-cap-breach'):dispatch(plan,approval,executable,packet,lambda e,b:dict(status='completed',usage=usage),attempt=1)
+   for usage in ({},{'output_tokens':-1,'input_tokens':100},{'output_tokens':False,'input_tokens':100}):
+    with self.assertRaisesRegex(ValueError,'missing-billed-usage'):dispatch(plan,approval,executable,packet,lambda e,b:dict(status='completed',usage=usage),attempt=1)
+   corrupted={**packet,'phase1-work-order.md':b'changed'}
+   with self.assertRaisesRegex(ValueError,'packet-bytes'):request(plan,approval,executable,corrupted,attempt=1)
    calls=[]
    def fake(endpoint,body):
     calls.append((endpoint,body));return dict(status='incomplete',usage=dict(output_tokens=64000,input_tokens=100))

@@ -18,7 +18,7 @@ search found no other literal 16/47 coverage claim in docs, catalogues or views.
 
 Systematic generation currently inventories **426 INTCALC and 489 POSTTRAN**
 source-site mutants. These counts are generated, not claims of compiled mutants
-or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs and program stdout (excluding probe records), separates divergent
+or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs, program stderr and program stdout (excluding probe records), separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
 result. A survivor is unresolved unless a scenario kills it or a reviewed
 individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel or indistinguishable-failure-value arguments may exclude a surviving compiled mutant; each excluded survivor carries its own exact source-bound rationale. Binary-layout arguments additionally require a recorded compiler LENGTH probe. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
@@ -30,7 +30,7 @@ expected diagnostic and RC before compilation. Derived executables keep original
 source bytes and source-line probe identities. Expected CEE3ABD refusals have RC12.
 The account REWRITE handler sets reason109; its actual downstream behaviour is
 recorded by the campaign rather than treated as an assumed abend. No z/OS failure
-mechanism equivalence is claimed. The compiled cp037-vs-ASCII twin reconciliation matched **46/46** public/generated cases at head `2cb581d`; the [receipt summary](cp037-twin-review311-reconciliation.json) binds the exact run and full receipt. This includes returned bytes, status and refusal classes. Decimal-only production restrictions remain; these cases do not establish z/OS alphanumeric-key semantics.
+mechanism equivalence is claimed. The compiled cp037-vs-ASCII twin reconciliation matched **54/54** public/generated cases at head `7fb0566`; the [receipt summary](cp037-twin-review311-reconciliation.json) binds the exact run and full receipt. This includes returned bytes, status and refusal classes. Decimal-only production restrictions remain; these cases do not establish z/OS alphanumeric-key semantics.
 
 The unsigned revised threshold proposes 100% business outcomes, all I/O outcomes
 covered or individually accepted in an exact signed operator policy, 90% kills
@@ -80,3 +80,34 @@ Completed pre-challenge fault campaigns reached **INTCALC 8/8 business, 85/86 I/
 The completed427-site INTCALC run at29ac9d9 measured162 failure kills,130 divergent kills,70 individually argued equivalents,59 survivors and6 compiler refusals: **292/427 raw;292/357 after listed-equivalent exclusions**. Its results are preserved. Inspecting the actual compiler logs identified one additional false relational site: the assignment equals sign in COMPUTE. Removing this generator defect gives the prospective426/489 inventories, awaiting new compiled outcomes. Genuine out-of-bounds reference/PIC mutants remain in the not-compiled bucket and denominator.
 
 Mutation comparison now includes stderr, which contains the existing actual CEE3ABD code. The engineering shim also records its actual timing argument; these are observable call parameters, not a claim to simulate z/OS abend timing. Official [OpenAI reasoning documentation](https://developers.openai.com/api/docs/guides/reasoning) confirms the broker's max_output_tokens parameter caps reasoning and non-visible tokens as well as visible output; incomplete responses remain failures.
+
+
+The revised proposal now has plan hash
+`20d137ab2a44046b49d378a1fccddd01ec8381f3c19c8fcb3a74b0e70ba68e4b`.
+Fresh approval must cover the transport change as well as the client provenance,
+token limits and budget. The byte-verified Codex0.160.0 binary is provenance only;
+the proposed capped calls would use an explicitly supplied Responses API transport.
+The CLI is neither invoked nor claimed to enforce this cap. The broker refuses
+live dispatch while current pricing or transport verification is absent, even
+with an otherwise matching approval. The $36 figure is API-equivalent at explicit
+planning rates, not verified current billing. A pricing/transport-bound fresh
+approved plan is still required before execution. Historical pricing metadata is
+separated from the current unverified status. Phase2 remains blocked.
+
+The expanded [generated classification receipt](generated-review311-classification.json)
+records46 cases. Missing disclosure/account/xref are source-specific expected-failure
+agreements. Duplicate indexed-category input is an adapter refusal before execution.
+Only the POSTTRAN duplicate-ID invariant remains unresolved in that cohort. The
+older eight curated mutants are now labeled regression-only and cannot supply the
+systematic adequacy denominator. The systematic selector retains each demonstrated
+mutant's exact scenario or scenario-plus-fault witness, even if it adds no new branch.
+
+Final operator review corrected whole-predicate negation across continuation
+OR/AND lines. Individual equivalence arguments refuse any unreviewed program hash.
+A tiny pinned-compiler probe measures binary widths/default initialization and
+all256 possible second status bytes under0/+1/-1 initializers; only the exact
+512-comparison result can support the associated narrow storage arguments. Failed
+probe expectations leave mutants unresolved. This is an engineering host argument,
+not z/OS equivalence. A separate source-bound argument covers11 success assignments
+whose preceding control flow already guarantees APPL-RESULT0; sentinel operations
+that first assign8 are excluded. No new threshold or release approval is implied.

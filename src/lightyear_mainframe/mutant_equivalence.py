@@ -8,7 +8,10 @@ SITES={'CBACT04C':{235,253,271,290,308,523,542,560,578,596},
        'CBTRN02C':{237,255,274,292,310,328,450,563,583,601,620,638,656,675}}
 
 
-def argument(text,program,mutant,compiler_layout=None):
+def argument(text,program,mutant,compiler_layout=None,storage=None):
+    reviewed_sources={'CBACT04C':'5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4',
+                      'CBTRN02C':'708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f'}
+    if sha256(text.encode()).hexdigest()!=reviewed_sources.get(program):raise ValueError('equivalence-source-changed-needs-new-review')
     if not mutant.get('source_path') and sha256(text.encode()).hexdigest()!=mutant['source_sha256']:raise ValueError('equivalence-source-changed')
     if mutant.get('source_path'):
         if program=='CBACT04C' and mutant['source_path']=='CVACT03Y.cpy' and mutant['line'] in (6,7) and mutant['operator'] in ('receiving-size','receiving-scale'):
@@ -46,6 +49,33 @@ def argument(text,program,mutant,compiler_layout=None):
                 return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
                   argument='The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.',
                   supporting_source_lines=list(range(start,mutant['line']+1)),approval='listed-for-operator-review; not a release approval')
+    success_sites={'CBACT04C':{328,358,379,401,423,447,502},'CBTRN02C':{348,482,513,531}}
+    if uses_bounded and mutant['operator']=='delete-MOVE' and mutant['line'] in success_sites[program] and words==['MOVE','0','TO','APPL-RESULT']:
+        return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
+          argument='Pinned whole-program control-flow invariant: each successful OPEN returns APPL-RESULT0; a failed OPEN terminates through the host CEE3ABD shim. Before each listed non-sentinel operation, the prior successful operation left0. A failed operation sets12 and terminates before another such operation; EOF16 exits the loop before another iteration. INTCALC tariff status23 is explicitly converted to0 before DEFAULT lookup; POSTTRAN validation rejects do not change APPL-RESULT and their reject WRITE returns0. Therefore this single deletion of a success assignment retains0 on its success branch. The unchanged failure branch still sets12 or16. This excludes OPEN/CLOSE/reject-WRITE initializers that first assign8, and assumes the recorded host CEE3ABD terminating shim, not an arbitrary replacement that returns.',
+          supporting_source_lines=([182,186,188,190,191,197,203,205,213,215,220,224,328,331,333,340,423,435,438,447,632] if program=='CBACT04C' else [195,200,202,204,205,208,210,213,216,348,352,354,362,370,382,395,450,453,482,495,496,498,513,531,563,566]),
+          approval='listed-for-operator-review; not a release approval')
+    host_storage=storage==dict(unsigned_lengths=[2,2],timing_lengths=[4,8],initial_defaults=True,overlay_equalities=512,overlay_maximum=255)
+    if host_storage:
+        old=code(mutant['original'])
+        message=None
+        if mutant['operator']=='receiving-size' and 'TWO-BYTES-BINARY' in old:
+            message='The pinned compiler probe records both unsigned9(4) and9(3) as2-byte storage. Every possible second status byte is exercised (256 values); after the unchanged zero-and-right-byte writes, the largest numeric value is255, fitting both pictures. The same byte representation/offset and every representable use are preserved.'
+        if mutant['operator']=='constant' and 'MOVE 0' in old and 'TWO-BYTES-BINARY' in old:
+            message='The pinned compiler exhaustively tested every256 possible right-byte value: both unsigned initializers+1 and-1 followed by the unchanged right-byte write matched initializer0 (512 equalities). The left byte and final numeric/display value are thus identical for the full byte domain, not merely the declared fault statuses.'
+        if mutant['operator']=='receiving-scale' and 'TIMING' in old:
+            message='TIMING has a sole integral assignment0 immediately before its only external read. The pinned compiler records the original and scaled binary storage as4/8 bytes; binary zero consists entirely of zero bytes, so the terminating host shim reading its declared4-byte parameter still receives0. No other field offset or raw group is consumed. This is scoped to the recorded host ABI, not native z/OS.'
+        if mutant['operator']=='delete-MOVE' and old.split()==['MOVE','0','TO','TIMING']:
+            message='The pinned compiler probe records initial TIMING0. The only assignment is MOVE0 and the only read is the one terminal host CEE3ABD call; that shim stops the process. Deleting this zero assignment cannot expose another value in this one-invocation execution contract.'
+        if program=='CBACT04C' and mutant['operator']=='delete-MOVE' and mutant['line'] in (491,492,493,494):
+            message='The pinned compiler probe confirms initial numeric storage0 and alphanumeric storage spaces. These four working-storage merchant fields have no other writer/alias or group initialization; each transaction only writes the same0/spaces before output. By induction all records preserve those values when this single redundant assignment is deleted. Scoped to this recorded one-invocation host runtime; no implicit z/OS equivalence.'
+        if message:
+            return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],argument=message,
+              compiler_storage_semantics=storage,supporting_source_lines=[mutant['line']],approval='listed-for-operator-review; not a release approval')
+    if mutant['operator']=='constant' and words==['MOVE','IO-STAT1','TO','IO-STATUS-04(1:1)'] and replacement==['MOVE','IO-STAT1','TO','IO-STATUS-04(1:2)']:
+        return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=mutant['line'],
+          argument='The only additional write is padding destination byte2 with a space. Before any display/read of IO-STATUS-04, the unchanged MOVE TWO-BYTES-BINARY TO IO-STATUS-0403 overwrites bytes2-4 completely. Byte1 is unchanged and intermediate operations access only the separate TWO-BYTES item. Thus the extra destination byte is a dead store for every status byte value.',
+          supporting_source_lines=list(range(mutant['line'],mutant['line']+5)),approval='listed-for-operator-review; not a release approval')
     dead_reason=None
     if program=='CBACT04C':
         count_uses=[x for x in reviewed if 'WS-RECORD-COUNT' in x]

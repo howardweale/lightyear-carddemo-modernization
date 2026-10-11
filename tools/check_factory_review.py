@@ -71,9 +71,60 @@ procedure division.
     return result
 
 
+def measure_storage_semantics(output):
+    folder=output/'storage-semantics';folder.mkdir()
+    source="""identification division.
+program-id. storage-probe.
+data division.
+working-storage section.
+01 u pic 9(4) binary.
+01 ux redefines u.
+  05 ul pic x.
+  05 ur pic x.
+01 v pic 9(3) binary.
+01 timing pic s9(9) binary.
+01 timing-frac pic s9(9)v9 binary.
+01 merchant-n pic 9(9).
+01 merchant-x pic x(50).
+01 hits pic 9(4) value 0.
+01 maximum pic 9(4) value 0.
+01 base pic 9(4).
+01 i pic s9(9) comp.
+procedure division.
+ display 'LENGTHS ' function length(u) ' ' function length(v)
+         ' ' function length(timing) ' ' function length(timing-frac)
+ if timing = 0 and merchant-n = 0 and merchant-x = spaces
+     display 'DEFAULTS-OK'
+ end-if
+ perform varying i from 1 by 1 until i > 256
+     move 0 to u
+     move function char(i) to ur
+     move u to base
+     if u > maximum move u to maximum end-if
+     move 1 to u
+     move function char(i) to ur
+     if u = base add 1 to hits end-if
+     move -1 to u
+     move function char(i) to ur
+     if u = base add 1 to hits end-if
+ end-perform
+ display 'OVERLAY ' hits ' ' maximum
+ stop run.
+"""
+    (folder/'storage.cob').write_text(source)
+    execute(['cobc','-x','-free',*FLAGS,'storage.cob','-o','storage'],folder,folder/'compile')
+    lines=execute([folder/'storage'],folder,folder/'run').stdout.decode().splitlines()
+    lengths=next(x.split()[1:] for x in lines if x.startswith('LENGTHS '))
+    overlay=next(x.split()[1:] for x in lines if x.startswith('OVERLAY '))
+    result=dict(unsigned_lengths=list(map(int,lengths[:2])),timing_lengths=list(map(int,lengths[2:])),
+                initial_defaults='DEFAULTS-OK' in lines,overlay_equalities=int(overlay[0]),overlay_maximum=int(overlay[1]))
+    write_json(folder/'measured.json',result)
+    return result
+
+
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
-    build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);cases=[s['id'] for s in manifest() if s['job']==job]
+    build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);storage=measure_storage_semantics(output);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
     from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
     for public,(scope,_) in PUBLIC_SCENARIOS.items():
@@ -137,13 +188,20 @@ def check(output,job):
                     record['fault_challenges'].append(attempt_row)
                     if record['status']!='survived':break
             if record['status']=='survived':
-                proof=argument(text,program,mutant,compiler_layout)
+                proof=argument(text,program,mutant,compiler_layout,storage)
                 if proof:record.update(status='equivalent (argued, listed)',disposition=proof)
                 else:record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
         results.append(record);write_json(output/'mutation-results.json',results)
+    # Each demonstrated mutant kill keeps its exact scenario/fault witness;
+    # a greedy coverage selector may not drop it merely for adding no branch.
+    selected=sorted({r['killed_by'] for r in results if r['killed_by']})
+    write_json(output/'systematic-scenario-selection.json',dict(
+        policy='retain-every-demonstrated-systematic-kill-witness',selected=selected,
+        mutant_witnesses={r['id']:r['killed_by'] for r in results if r['killed_by']},
+        unresolved=[r['id'] for r in results if r['status']=='survived']))
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
-        compiler_binary_layout=compiler_layout,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
+        compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
         eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']}",
         unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],

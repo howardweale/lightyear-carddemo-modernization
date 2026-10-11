@@ -129,7 +129,9 @@ def check(output):
         inv=json.loads((output/'traced'/job/'coverage-inventory.json').read_text())
         baseline=observe(inv,'\n'.join(base_stdout[job]));combined=observe(inv,'\n'.join(all_stdout[job]))
         relevant=[m for m in mutants.values() if m['job']==job]
-        combined['legacy_mutants_killed']=f"{sum(bool(m['killed_by']) for m in relevant)}/{len(relevant)}"
+        combined['curated_legacy_mutants_killed']=f"{sum(bool(m['killed_by']) for m in relevant)}/{len(relevant)}"
+        combined['legacy_mutants_killed']=None
+        combined['mutation_denominator_status']='curated regression subset only; systematic receipt required for threshold assessment'
         combined['distinct_values_per_output_field']={k:len(v) for k,v in distinct[job].items()}
         combined['unsolved_outcomes']=[dict(x,solver_status='not-solved',domain='input-only public fixture generator; I/O fault outcomes not inferred') for x in combined['uncovered']]
         programs[job]=dict(public_only=baseline,public_plus_generated=combined)

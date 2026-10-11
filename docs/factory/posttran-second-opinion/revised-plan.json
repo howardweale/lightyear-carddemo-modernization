@@ -1,6 +1,6 @@
 {
   "budget_basis": {
-    "content_sha256": "9bae91d3b555574e89317d3303cf3d5d2a6503d2ee4ceb466bea8f4cc218f9c8",
+    "historical_source_content_sha256": "9bae91d3b555574e89317d3303cf3d5d2a6503d2ee4ceb466bea8f4cc218f9c8",
     "intcalc": "Three successful public INTCALC three-way cases and one refusal establish harness scope only; their model usage is not recorded. No invented INTCALC call-cost average.",
     "intcalc_receipt_sha256": "4b150f938164a5af01d799b7d9bb451d1baa562fc47c1eac1fcf5d6424aa7831",
     "observed_usage": {
@@ -33,10 +33,10 @@
     "sha256": "4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01",
     "version": "codex-cli 0.160.0"
   },
-  "content_sha256": "ff87db3bb3cf2f09906b76685bd177d2dc43d3c459594861281d853d44b74125",
+  "content_sha256": "20d137ab2a44046b49d378a1fccddd01ec8381f3c19c8fcb3a74b0e70ba68e4b",
   "dispatch": {
     "broker": "src/lightyear_factory/posttran_broker.py",
-    "broker_sha256": "62baebaf652794a7fe8c8a418cf56f21707c74e3abd2e4dcfc55708263c6aa96",
+    "broker_sha256": "d7bbfa36a3182dc10568015839631b6c7f532f876fc4415f2b30fe34447fcb85",
     "endpoint": "/v1/responses",
     "includes_reasoning": true,
     "output_cap_parameter": "max_output_tokens",
@@ -44,6 +44,13 @@
     "transport": "explicit credential-owning transport must implement HTTP API; no model dispatch performed or credentials loaded"
   },
   "execution_authorized": false,
+  "fresh_approval_scope": [
+    "installed Codex0.160.0 artifact as byte-checked provenance only; not the dispatch client",
+    "explicit supplied Responses API transport replaces CLI dispatch",
+    "64000 maximum output tokens per call including reasoning",
+    "Phase1 three calls/192000 output tokens/$36 cap; Phase2 remains separately blocked"
+  ],
+  "historical_pricing_checked_date": "2026-10-11",
   "human_candidate_edits": false,
   "independence": [
     "no twin outputs",
@@ -68,6 +75,8 @@
     "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
   },
+  "live_dispatch_status": "blocked until fresh pricing and transport verification are bound into a newly approved plan; $36 is API-equivalent at planning rates, not verified current billing",
+  "live_transport_verified": false,
   "model": "gpt-6-astra",
   "model_calls_made": 0,
   "oracle_status": "provisional",
@@ -107,8 +116,9 @@
       "worst_case_token_cap_usd": 22.1
     }
   },
-  "pricing_checked_date": "2026-10-11",
+  "pricing_checked_date": null,
   "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "pricing_status": "Fresh official pricing check required before dispatch; retained rates are conservative planning inputs only",
   "prompts": {
     "phase1-work-order.md": "847a4976cd30426df60f445f1a3d992783e59bfb86900c3dd5f9d4c10c7a61dd",
     "phase2-work-order.md": "f576c66d12e5b825ce0d3ba0a3e5acc525eb949e5d413fa0fde96fefd1612b0e"

@@ -29,6 +29,9 @@ class FactoryReviewTests(unittest.TestCase):
   labels="       PROCEDURE DIVISION.\n           PERFORM 1000-READ.\n       1000-READ.\n           EXIT.\n"
   label_rows=_source_sites(labels,'P')
   self.assertEqual(['skip-PERFORM'],[r['operator'] for r in label_rows])
+  compound='       PROCEDURE DIVISION.\n           IF A = 1\n           OR B = 2\n               CONTINUE\n           END-IF.\n'
+  neg=next(r for r in _source_sites(compound,'P') if r['operator']=='negate-condition')
+  self.assertEqual(3,neg['end_line']);self.assertIn('OR B = 2)',neg['replacement'])
   assignment='       PROCEDURE DIVISION.\n           COMPUTE A = B + 1.\n'
   self.assertNotIn('relational',[r['operator'] for r in _source_sites(assignment,'P')])
   pic="       01 A PIC 999.\n       01 B PIC S9(3)V9(2).\n"
@@ -58,6 +61,9 @@ class FactoryReviewTests(unittest.TestCase):
    for row,proof in proofs:
     self.assertEqual(row['id'],proof['mutant_id']);self.assertTrue(proof['supporting_source_lines'])
    with self.assertRaisesRegex(ValueError,'source-changed'):argument(text+'\n',p,proofs[0][0])
+   from hashlib import sha256
+   altered=text+'\n';forged={**proofs[0][0],'source_sha256':sha256(altered.encode()).hexdigest()}
+   with self.assertRaisesRegex(ValueError,'needs-new-review'):argument(altered,p,forged)
 
  def test_close_fault_challenge_follows_callee_and_preserves_same_paragraph(self):
   from tools.check_factory_review import relevant_faults
@@ -91,3 +97,21 @@ class FactoryReviewTests(unittest.TestCase):
    operation=next(r for r in rows if r['line']==fault['line'] and r['operator']=='constant') if any(r['line']==fault['line'] and r['operator']=='constant' for r in rows) else None
    if operation:
     with self.assertRaisesRegex(ValueError,'fault-mutant'):apply_derived(text,derived,operation)
+
+ def test_success_assignment_arguments_exclude_sentinel_operations(self):
+  from lightyear_mainframe.mutant_equivalence import argument
+  for p,yes,no in [('CBACT04C',328,238),('CBTRN02C',348,240)]:
+   text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text();rows=generate(text,p)
+   target=next(r for r in rows if r['line']==yes and r['operator']=='delete-MOVE')
+   proof=argument(text,p,target);self.assertIn('whole-program control-flow invariant',proof['argument'])
+   sentinel=next(r for r in rows if r['line']==no and r['operator']=='delete-MOVE')
+   self.assertIsNone(argument(text,p,sentinel))
+
+ def test_storage_arguments_require_complete_measured_probe(self):
+  from lightyear_mainframe.mutant_equivalence import argument
+  p='CBACT04C';text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text()
+  row=next(r for r in generate(text,p) if r['line']==491 and r['operator']=='delete-MOVE')
+  self.assertIsNone(argument(text,p,row))
+  facts=dict(unsigned_lengths=[2,2],timing_lengths=[4,8],initial_defaults=True,overlay_equalities=512,overlay_maximum=255)
+  self.assertIsNone(argument(text,p,row,storage={**facts,'overlay_equalities':511}))
+  self.assertIn('induction',argument(text,p,row,storage=facts)['argument'])

@@ -42,7 +42,17 @@ def _source_sites(text,program):
             if tok.isdigit():
                 for delta in (-1,1):add(i,'constant',t[:m.start()]+str(int(tok)+delta)+t[m.end():])
         if verb=='IF':
-            expr=t[2:].strip();add(i,'negate-condition','IF NOT ('+expr+')')
+            # Negate the complete predicate, including continuation OR/AND
+            # lines, rather than accidentally changing only its first operand.
+            end=i;expr=[t[2:].strip()]
+            while end+1<len(lines):
+                nxt=lines[end+1].strip()
+                if not nxt:break
+                first=nxt.split()[0]
+                if first in VERBS or first.startswith('END-') or first in ('ELSE','INVALID','NOT'):break
+                expr.append(nxt);end+=1
+            expr[0]='IF NOT ('+expr[0];expr[-1]+=')'
+            add(i,'negate-condition','\n'.join(expr),end)
         if verb=='COMPUTE':
             parts=t.split();at=parts.index('ROUNDED') if 'ROUNDED' in parts else None
             if at is None:parts.insert(2,'ROUNDED')

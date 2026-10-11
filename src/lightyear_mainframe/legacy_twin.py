@@ -243,7 +243,7 @@ procedure division.
 """
 
 
-def build(target, *, instrument=False):
+def build(target, *, instrument=False, mutant=None):
     host = linux_platform()
     clock = compiler_clock()
     host["compiler_clock"] = {"package": "libfaketime=0.9.10-2.1",
@@ -271,6 +271,11 @@ def build(target, *, instrument=False):
         (folder / "main.cob").write_text(wrapper(job), encoding="ascii")
         (folder / "abend.cob").write_text(ABEND, encoding="ascii")
         compile_source=program+'.cbl'
+        if mutant:
+            from .scenario_generation import mutate
+            changed=mutate((folder/compile_source).read_text(),job,mutant)
+            compile_source=program+'-mutant.cbl'
+            (folder/compile_source).write_text(changed,encoding='ascii')
         if instrument:
             from .scenario_coverage import instrument as add_probes
             traced,inventory=add_probes((folder/compile_source).read_text(),program)
@@ -285,7 +290,7 @@ def build(target, *, instrument=False):
                 execute(["cobc", "-x", "-free", *FLAGS, dd + ".cob", "-o", "bin/" + dd], folder, folder / ("logs/compile-" + dd))
     hashes = {p.relative_to(target).as_posix(): sha(p.read_bytes()) for p in sorted(target.rglob("*")) if p.is_file() and (p.parent.name == "bin" or p.suffix in (".cob", ".cbl", ".cpy") or p.name=='coverage-inventory.json')}
     return receipt(target / "build-receipt.json", phase="build", source_commit=SOURCE_COMMIT,
-                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument,
+                   source_tree=SOURCE_TREE, license="Apache-2.0", coverage_instrumented=instrument, legacy_mutant=mutant,
                    license_sha256=sha((ROOT / "spec/mainframe/copybooks/LICENSE").read_bytes()),
                    driver_sha256=sha(Path(__file__).read_bytes()),
                    source_hashes=sources, files=hashes, host=host, flags=FLAGS,
@@ -374,11 +379,18 @@ def runtime_clock(job, meta):
     return env
 
 
-def run(target, scenario, output):
+def run(target, scenario, output, *, generated=None):
     linux_platform()
     target = Path(target).resolve()
     build_record=verify_build(target)
-    job, meta, images, hashes = public_inputs(scenario)
+    if generated is None:
+        job, meta, images, hashes = public_inputs(scenario)
+    else:
+        from .scenario_generation import case
+        # Reconstruct solely from the pinned public generator, never caller data.
+        job, meta, images, provenance = case(generated)
+        scenario=generated
+        hashes={dd:sha(raw) for dd,raw in images.items()}
     env = runtime_clock(job, meta)
     if job == "POSTTRAN":
         from .posttran_invariants import require_collation_independent

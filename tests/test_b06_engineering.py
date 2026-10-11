@@ -35,7 +35,7 @@ class EngineeringTests(unittest.TestCase):
         e.write_new(run/'plan.json',seal({'fixture':'no native execution'}))
         bound=binding(run,approval);signer=e.EngineeringSigner(self.signer)
         e.write_new(run/'supervisor-handoff.json',signer.sign(dict(**bound,artifact_type='b06-engineering-handoff/1',
-            assets_root=str(self.root/'assets'),template_path='templates/j1/plan.json',asset_index_sha256=approval.get('asset_index_sha256'),
+            assets_root=str((self.root/'assets').resolve()),template_path='templates/j1/plan.json',asset_index_sha256=approval.get('asset_index_sha256'),
             native_template_sha256=approval.get('native_template_sha256'))))
         e.write_new(run/'cleanup.json',signer.sign(dict(**bound,complete=True,actual_absence_verified=True)))
         e.write_new(run/'terminal.json',signer.sign(dict(**bound,cleanup_verified=True,outcome='refused',

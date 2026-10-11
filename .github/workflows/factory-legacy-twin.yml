@@ -4,12 +4,26 @@ on:
     paths:
       - 'src/lightyear_mainframe/legacy_twin.py'
       - 'tools/check_legacy_twin.py'
+      - 'tests/test_twin_review.py'
       - 'tests/test_legacy_twin.py'
       - '.github/workflows/factory-legacy-twin.yml'
       - 'spec/mainframe/**'
+      - 'src/lightyear_mainframe/records.py'
+      - 'src/lightyear_mainframe/zos_bindings.py'
+      - 'tests/mainframe/fixtures/**'
+      - 'tools/legacy_twin/**'
+      - 'src/lightyear_mainframe/posttran_invariants.py'
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   public-twin:
     runs-on: ubuntu-24.04
@@ -24,10 +38,11 @@ jobs:
           python-version: '3.13'
       - name: Install pinned compiler (no containers)
         run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1 libfaketime=0.9.10-2.1
+          bash tools/legacy_twin/install-pinned.sh
       - name: Focused refusal and adapter tests
         run: python -B -m unittest discover -s tests -p test_legacy_twin.py -v
+      - name: Posting invariant and refusal regressions
+        run: python -B -m unittest discover -s tests -p test_twin_review.py -v
       - name: Two clean builds and five public executions
         run: python -B -m tools.check_legacy_twin work/factory-twin-ci
       - name: Preserve engineering receipts and failure logs

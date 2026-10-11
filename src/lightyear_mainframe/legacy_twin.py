@@ -1,6 +1,7 @@
 """Public CardDemo GnuCOBOL engineering twin; never a z/OS evidence producer."""
 from __future__ import annotations
 import argparse
+from datetime import datetime
 import hashlib
 import json
 import os
@@ -31,6 +32,9 @@ PUBLIC_SCENARIOS = {
     "intcalc-public-2": ("INTCALC", "arrival-rehearsal/INTCALC-run2-2026-10-05"),
     "intcalc-discriminating": ("INTCALC", "intcalc-discriminating-v1"),
     "intcalc-missing-disclosure": ("INTCALC", "intcalc-discriminating-v1"),
+    "posttran-missing-card": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
+    "posttran-missing-account": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
+    "posttran-expired-account": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
     "posttran-public": ("POSTTRAN", "arrival-rehearsal/POSTTRAN-run1-2026-10-05"),
 }
 
@@ -46,7 +50,9 @@ def write_json(path, data):
 def receipt(path, **data):
     data = dict(schema="factory-legacy-twin/1", run_class="engineering",
                 oracle_class="executable-twin", qualification_credit=False,
-                measurement_credit=False, zos_confirmation=False, **data)
+                measurement_credit=False, zos_confirmation=False, releasable=False,
+                oracle_status="provisional", twin_limits_path="docs/factory/twin-limits.md",
+                twin_limits_sha256=sha((ROOT / "docs/factory/twin-limits.md").read_bytes()), **data)
     data["content_sha256"] = sha(json.dumps(data, sort_keys=True, separators=(",", ":")).encode())
     write_json(path, data)
     return data
@@ -322,6 +328,10 @@ def public_inputs(scenario):
         hashes[dd] = sha(raw)
     if set(images) != set(FILES[job]):
         raise ValueError("incomplete public input set")
+    if scenario.startswith('posttran-') and scenario != 'posttran-public':
+        from .posttran_invariants import rejection_inputs
+        images = rejection_inputs(images, scenario)
+        meta = dict(meta, public_input_variant=scenario)
     return job, meta, images, hashes
 
 
@@ -339,15 +349,36 @@ def frame(raw, length):
     return b"".join(raw[i:i+length] + b"\n" for i in range(0, len(raw), length))
 
 
+def runtime_clock(job, meta):
+    timestamp = meta['candidate_timestamp']
+    if not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}\.[0-9]{2}\.[0-9]{2}\.000000', timestamp):
+        raise ValueError('unsupported deterministic timestamp')
+    datetime.strptime(timestamp, '%Y-%m-%d-%H.%M.%S.%f')
+    env = {'COB_CURRENT_DATE': timestamp[:10].replace('-', '/') + ' ' + timestamp[11:19].replace('.', ':') + '.000000000'}
+    if job == 'INTCALC':
+        value = meta.get('processing_date')
+        if not isinstance(value,str) or not re.fullmatch(r'[0-9]{10}', value):
+            raise ValueError('INTCALC requires explicit processing_date')
+        datetime.strptime(value, '%Y%m%d%H')
+        env['TWIN_PROCESSING_DATE'] = value
+    elif job != 'POSTTRAN':
+        raise ValueError('unknown job processing-date contract')
+    # POSTTRAN explicitly has no parameter date; only its runtime clock applies.
+    return env
+
+
 def run(target, scenario, output):
     linux_platform()
     target = Path(target).resolve()
     verify_build(target)
     job, meta, images, hashes = public_inputs(scenario)
+    env = runtime_clock(job, meta)
+    if job == "POSTTRAN":
+        from .posttran_invariants import require_collation_independent
+        require_collation_independent(images)
     output = new_output(output)
     for name in ("files", "before", "after", "logs"):
         (output / name).mkdir()
-    env = {}
     for dd, raw in images.items():
         length, key = FILES[job][dd]
         flat = output / "before" / dd
@@ -358,11 +389,6 @@ def run(target, scenario, output):
         else:
             physical.write_bytes(flat.read_bytes())
         env["DD_" + dd] = str(physical)
-    timestamp = meta["candidate_timestamp"]
-    if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}\.[0-9]{2}\.[0-9]{2}\.000000", timestamp):
-        raise ValueError("unsupported deterministic timestamp")
-    env["COB_CURRENT_DATE"] = timestamp[:10].replace("-", "/") + " " + timestamp[11:19].replace(".", ":") + ".000000000"
-    env["TWIN_PROCESSING_DATE"] = meta.get("processing_date") or "0000000000"
     result = execute([target / job / "bin/twin"], output, output / "logs/program", extra_env=env, allowed=(0, 4, 12))
     outputs = {}
     for dd, (length, key) in FILES[job].items():
@@ -374,10 +400,18 @@ def run(target, scenario, output):
         raw = frame(flat.read_bytes(), length)
         (output / "after" / dd).write_bytes(raw)
         outputs[dd] = {"sha256": sha(raw), "records": len(raw) // (length+1)}
-    return receipt(output / "run-receipt.json", phase="run", scenario=scenario, job=job,
+    invariants = None
+    if job == "POSTTRAN":
+        from .posttran_invariants import check, review_sheet
+        invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'])
+        write_json(output / 'posttran-invariants.json', invariants)
+        write_json(output / 'posttran-review-sheet.json', review_sheet(images, {dd: (output / 'after' / dd).read_bytes() for dd in FILES[job]}))
+    return receipt(output / "run-receipt.json", invariants=invariants, phase="run", scenario=scenario, job=job,
                    build_receipt_sha256=sha((target / "build-receipt.json").read_bytes()),
-                   inputs=hashes, outputs=outputs, returncode=result.returncode,
-                   deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env["TWIN_PROCESSING_DATE"],
+                   inputs=hashes, input_ascii_sha256={dd: sha(raw) for dd, raw in images.items()},
+                   public_input_variant=meta.get("public_input_variant"), outputs=outputs, returncode=result.returncode,
+                   deterministic_clock=env["COB_CURRENT_DATE"], processing_date=env.get("TWIN_PROCESSING_DATE"),
+                   processing_date_contract="required" if job == "INTCALC" else "not-used-by-POSTTRAN",
                    adjudication="not-performed", model_calls=0)
 
 

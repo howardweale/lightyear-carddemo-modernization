@@ -22,6 +22,7 @@ working-storage section.
 01 truncated-number pic s9(3)v99.
 01 edited-number pic +999.99.
 01 narrow-number pic 99.
+01 amount pic s9(3)v99 comp-3.
 01 signed-display pic s9(5)v99.
 01 signed-bytes redefines signed-display pic x(7).
 01 current-stamp pic x(21).
@@ -43,6 +44,8 @@ procedure division.
  display 'TRUNCATED=' edited-number
  move 123 to narrow-number
  display 'SIZE-TRUNCATION=' narrow-number
+ move 999.99 to amount
+ add 0.01 to amount on size error display 'PACKED-OVERFLOW=detected' end-add
  if 'a' < 'A' display 'COLLATION=a-before-A'
  else display 'COLLATION=A-before-a' end-if
  move function date-of-integer(function integer-of-date(20240229))
@@ -61,13 +64,18 @@ procedure division.
  write item-record
  display 'DUPLICATE-KEY=' fs
  close indexed-file
- open input indexed-file
+ open i-o indexed-file
  if fs not = '00' stop run returning 65 end-if
  move '99' to item-key
  read indexed-file key item-key
  display 'MISSING-KEY=' fs
  move '01' to item-key
  read indexed-file key item-key
+ display 'READ-EXISTING=' fs
+ if fs not = '00' stop run returning 65 end-if
+ move 'next' to item-value
+ rewrite item-record
+ display 'REWRITE-EXISTING=' fs
  if fs not = '00' stop run returning 65 end-if
  read indexed-file next record
  display 'EOF=' fs

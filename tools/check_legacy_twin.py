@@ -15,7 +15,7 @@ def check(output):
     results = {}
     for scenario in PUBLIC_SCENARIOS:
         result = run(output/'build-a', scenario, output/'runs'/scenario)
-        expected = 12 if scenario == 'intcalc-missing-disclosure' else (0, 4) if scenario == 'posttran-public' else 0
+        expected = 12 if scenario == 'intcalc-missing-disclosure' else (0, 4) if scenario.startswith('posttran-') else 0
         allowed = expected if isinstance(expected, tuple) else (expected,)
         if result['returncode'] not in allowed:
             raise AssertionError(f'{scenario}: unexpected return code {result["returncode"]}')
@@ -25,6 +25,19 @@ def check(output):
             lines = (output/'runs'/scenario/'after/TRANSACT').read_text().splitlines()
             if not all('2022-07-18-00.00.00.000000' in line for line in lines):
                 raise AssertionError('GnuCOBOL deterministic clock did not take effect')
+        if scenario.startswith('posttran-'):
+            if not result['invariants']['passed']:
+                raise AssertionError('POSTTRAN invariant failure: preserve unresolved observations')
+            if scenario != 'posttran-public':
+                from lightyear_mainframe.posttran_invariants import records
+                reason={'posttran-missing-card':100,'posttran-missing-account':101,'posttran-expired-account':103}[scenario]
+                rows=records({'DALYREJS':(output/'runs'/scenario/'after/DALYREJS').read_bytes()},'DALYREJS')
+                if len(rows)!=1 or int(rows[0]['WS-VALIDATION-FAIL-REASON'])!=reason:
+                    raise AssertionError('Actual twin did not exercise intended rejection reason')
+            repeat = run(output/'build-a', scenario, output/'runs'/(scenario+'-repeat'))
+            if result['outputs'] != repeat['outputs']:
+                raise AssertionError('POSTTRAN repeat output bytes differ')
+            result = dict(result, repeatability='byte-identical', repeat_receipt=repeat['content_sha256'])
         results[scenario] = result
     receipt(output/'acceptance.json', phase='acceptance', reproducible_binaries=binaries,
             scenarios=results, status='engineering-executed', equivalence='not-yet-adjudicated')

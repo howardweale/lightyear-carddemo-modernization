@@ -5,13 +5,28 @@ on:
       - 'src/lightyear_mainframe/twin_reconciliation.py'
       - 'src/lightyear_mainframe/legacy_twin.py'
       - 'src/carddemo_oracle/**'
-      - 'candidate-java/src/main/java/**'
+      - 'candidate-java/**'
       - 'tools/legacy_twin/**'
+      - 'tests/test_twin_review.py'
       - 'tests/test_twin_reconciliation.py'
       - '.github/workflows/factory-reconciliation.yml'
+      - 'src/lightyear_mainframe/records.py'
+      - 'src/lightyear_mainframe/zos_bindings.py'
+      - 'tests/mainframe/fixtures/**'
+      - 'spec/mainframe/**'
+      - 'tools/check_legacy_twin.py'
+      - 'src/lightyear_mainframe/posttran_invariants.py'
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   public-reconciliation:
     runs-on: ubuntu-24.04
@@ -30,10 +45,11 @@ jobs:
           java-version: '21'
       - name: Install pinned GnuCOBOL (no containers)
         run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends gnucobol3=3.1.2-5.1ubuntu1 libfaketime=0.9.10-2.1
+          TWIN_FORCE_SNAPSHOT=1 bash tools/legacy_twin/install-pinned.sh
       - name: Focused no-suppression tests
         run: python -B -m unittest discover -s tests -p test_twin_reconciliation.py -v
+      - name: Verify real Spring application context
+        run: mvn -B -f candidate-java/pom.xml -Dtest=TwinApplicationContextTest test
       - name: Run real twin, Python, Java and platform probes
         run: python -B -m lightyear_mainframe.twin_reconciliation work/factory-reconciliation-ci
       - name: Publish engineering table

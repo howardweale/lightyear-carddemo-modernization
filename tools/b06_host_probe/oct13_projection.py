@@ -47,7 +47,7 @@ def project(native,host,target=37000):
     # Preserve old full native payload sizes plus all new metadata and a 2 KiB
     # input witness allowance per entry, with a heap dump and fixed index reserve.
     output=native['raw_bytes']/n+host['diagnostic_bytes']/h+2048
-    fixed=1536*1024**2+12*1024**2+64*1024**2
+    fixed=1536*1024**2+12*1024**2+1024*1024**2
     pending=max(native['observed_max_pending_entries']/n,host['last_sample']['pending']/h)
     rates=dict(ordinary_records=ordinary,metadata_records=records,metadata_bytes=metadata,output_bytes=output,pending_entries=pending)
     attempts=[]
@@ -70,5 +70,6 @@ def project(native,host,target=37000):
           'All host metadata is added as an allowance; this double-counts shared work.',
           'Native time to 37000, future payload tails, retention and first anomaly are not predicted.',
           'Strict mode or diagnostic cap10 can stop before any projected resource limit.',
+          'Non-stream baseline/capture/log overhead is unmeasured; 1GiB is a scenario reserve, not a proven bound.',
           'No cap is automatically extended; output8GiB and free60GiB guards remain authoritative.'],
         native_run_authorized=False,qualification_credit=False,measurement_credit=False,model_calls=0)

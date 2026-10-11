@@ -1,4 +1,4 @@
-# B1/B2 equivalence and kept-behavior work â€” 2026-10-11
+# B1/B2 equivalence and kept-behavior work - 2026-10-11
 
 This work implements Howard's October11 2PM PT decisions prospectively. Historical campaign receipts and accepted sample files remain unchanged. The full dated decision file is published in the separate decision PR; this branch's extracted acceptance binding records its exact content/file hashes and all20 accepted IDs. The review is AI-assisted operator review accepted by Howard, not independent human attestation.
 

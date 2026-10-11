@@ -1,0 +1,91 @@
+{
+  "after": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+  "api_requests": 0,
+  "before": "97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e",
+  "changes": [
+    {
+      "after": "Howard 2026-10-11 14:00 PDT A4; exact go still required",
+      "before": null,
+      "path": "/amendment_authority"
+    },
+    {
+      "after": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+      "before": "97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e",
+      "path": "/content_sha256"
+    },
+    {
+      "after": "3154b498dfa100a461f4b076ff78c7699b4a9e412ed5e117cdb4a6879516b674",
+      "before": null,
+      "path": "/dispatch/approval_verifier_sha256"
+    },
+    {
+      "after": "b409fd68a07fe5268434c6184b753e5caa4d0be9272d08bcfb88c34d85d0e642",
+      "before": "40697064deeea86bfd85ff8d924049f0d1624fe42040743a07832e34b2d7e5c0",
+      "path": "/dispatch/broker_sha256"
+    },
+    {
+      "after": {
+        "endpoint": "/v1/responses/input_tokens",
+        "exact_fields": [
+          "model",
+          "input",
+          "reasoning"
+        ],
+        "failure_consumes_reserved_attempt": true,
+        "generation": false,
+        "ledger": "same fixed plan-bound reservation ledger",
+        "recorded": [
+          "request digest",
+          "each public packet file hash",
+          "count and response digest",
+          "failure type",
+          "timestamps"
+        ],
+        "required_before_every_generation": true
+      },
+      "before": null,
+      "path": "/dispatch/preflight_evidence"
+    },
+    {
+      "after": "go POSTTRAN <this content_sha256>",
+      "before": null,
+      "path": "/go_requirement"
+    },
+    {
+      "after": "Blocked until Howard supplies go POSTTRAN <this exact hash>. Phase2 remains unapproved. No live request made.",
+      "before": "Fresh exact approval and explicit credential-owning Responses transport required. Contract verified from official documentation and fake tests; no live API request or model call has occurred.",
+      "path": "/live_dispatch_status"
+    },
+    {
+      "after": "independent model-built candidate",
+      "before": null,
+      "path": "/result_label"
+    },
+    {
+      "after": "posttran-independent-preregistration/3",
+      "before": "posttran-independent-preregistration/2",
+      "path": "/schema"
+    },
+    {
+      "after": "approved-subject-to-amendments-awaiting-exact-go",
+      "before": "revised-proposal-requires-new-exact-approval",
+      "path": "/status"
+    },
+    {
+      "after": "97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e",
+      "before": "c022241cb0e4a62656daf9f889119fdab9441adcd4c6645be3f71da776ab9ebb",
+      "path": "/supersedes_plan_sha256"
+    }
+  ],
+  "content_sha256": "981295084822f14d4ff74e34a8c157c386a194c999994a71641c6301caacf2b6",
+  "schema": "posttran-plan-amendment/1",
+  "unchanged": [
+    "budgets",
+    "model",
+    "reasoning",
+    "service tier",
+    "inputs",
+    "prompts",
+    "Phase2 gate"
+  ]
+}

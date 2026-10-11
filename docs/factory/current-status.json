@@ -1,0 +1,70 @@
+{
+  "schema": "factory-current-status/1",
+  "decision_time": "2026-10-11T14:00:00-07:00",
+  "inputs": [
+    {
+      "path": "docs/factory/howard-decisions-2026-10-11b.json",
+      "lf_sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+    },
+    {
+      "path": "docs/factory/keep-or-fix-register.json",
+      "lf_sha256": "18dacc3f2e6397866845446e465721eeccfaeea725594c163e4d93093e84ca4b"
+    },
+    {
+      "path": "docs/factory/posttran-decisions-unsigned-2026-10-11.json",
+      "lf_sha256": "02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc"
+    },
+    {
+      "path": "docs/factory/posttran-second-opinion/amended-plan-2026-10-11.json",
+      "lf_sha256": "4eb8739628793217bb104bbfe02e6571266343e992b61332f4a749108490da0c"
+    },
+    {
+      "path": "docs/factory/b07-prefreeze-power-2026-10-11.json",
+      "lf_sha256": "fb0af41a345b7e40738b1368d2451a82b5e46379da27c223e80563aaf2c44f1c"
+    },
+    {
+      "path": "docs/factory/ci-times-316-320-2026-10-11.json",
+      "lf_sha256": "03aeed2a2a72b29b9fdc2997e6ffdac6832f16306ccb140039a34c139f10e3cf"
+    }
+  ],
+  "conditional_threshold": {
+    "approval": "conditional",
+    "effective": false,
+    "conditions": [
+      "B1 compiler/class evidence and targeted attempts complete",
+      "remaining individual reviews accepted",
+      "fresh current-head compiled campaign",
+      "register dependencies bound"
+    ],
+    "requirements": {
+      "business_coverage": 1.0,
+      "io": "fault-covered or individually accepted",
+      "kill_rate": 0.9,
+      "eligible_minimum": 50,
+      "output_distinct_values_minimum": 2
+    }
+  },
+  "unsigned_review_accepted": 10,
+  "signature_verified": false,
+  "posttran_plan_sha256": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+  "model_execution_authorized": false,
+  "b06_execution_authorized": false,
+  "b06_window": [
+    "2026-10-13T09:00:00-07:00",
+    "2026-10-13T12:00:00-07:00"
+  ],
+  "b06_request_due": "2026-10-12T17:00:00-07:00",
+  "register_dispositions": [
+    {
+      "id": "REWRITE-109",
+      "disposition": "keep-by-default"
+    },
+    {
+      "id": "CBACT04C-FINAL-ACCOUNT-EOF-ELSE",
+      "disposition": "keep-by-default"
+    }
+  ],
+  "b07_freeze_ready": false,
+  "latest_ci_collection": "2026-10-11T21:04:46.316159+00:00",
+  "content_sha256": "8c78181131a47ea6d1e53659851d241896ae6f0d97593fbb1e563e90b115d8a2"
+}

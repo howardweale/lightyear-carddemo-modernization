@@ -1,0 +1,79 @@
+{
+  "schema": "posttran-human-review/1",
+  "sheet_sha256": "07e1a1401fe5fe8ad0f88d4cc89034d361678891637863f28f037d59fc9165f9",
+  "source_sha256": "6f27b0c39e2e44ad736caf36d2f9c8b7275451b41c9c3fbfe24d034577f4a064",
+  "acceptance_sha256": "a28664ab3c24755e0bfaa804448d3abe0200cc88f42aa7ecb222ad3d9eb9774c",
+  "reviewer": "Howard Weale",
+  "decisions": [
+    {
+      "index": 0,
+      "scenario": "posttran-public",
+      "id": "0000000040455859",
+      "decision": "accept",
+      "reason": "Accept. Reject 102 is correct: account 00000000037 has credit limit 446.00; WS-TEMP-BAL = cycle credit - cycle debit + 715.44 is at least 715.44 (no earlier posting on this account in the batch), which exceeds 446.00 (CBTRN02C 1500-B, lines 403-413). Expiry 2023-10-24 is after 2022-06-10, so 103 does not override. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 1,
+      "scenario": "posttran-public",
+      "id": "0000000569807281",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000017, limit 568.00, WS-TEMP-BAL -654.56 after the earlier posting on this account in the same batch; expiry 2025-03-01 after 2022-06-10. Posted TRAN fields equal the input; TRAN-PROC-TS is the pinned processing timestamp. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 2,
+      "scenario": "posttran-public",
+      "id": "0000000085824369",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000003, limit 4909.00, WS-TEMP-BAL 999.77; expiry 2024-01-10 after 2022-06-10. Posted TRAN fields equal the input. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 3,
+      "scenario": "posttran-public",
+      "id": "0000000000683580",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000007, limit 2065.00, WS-TEMP-BAL 504.77; expiry 2024-12-13 after 2022-06-10. Posted TRAN fields equal the input. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 4,
+      "scenario": "posttran-public",
+      "id": "0000000001774260",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000020, limit 3767.00, WS-TEMP-BAL -919.00; expiry 2024-03-13 after 2022-06-10. Posted TRAN fields equal the input. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 5,
+      "scenario": "posttran-public",
+      "id": "0000000006292564",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000005, limit 3819.00, WS-TEMP-BAL 67.88; expiry 2025-03-09 after 2022-06-10. Posted TRAN fields equal the input. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 6,
+      "scenario": "posttran-public",
+      "id": "0000000009101861",
+      "decision": "accept",
+      "reason": "Accept. Post is correct: account 00000000026, limit 2181.00, WS-TEMP-BAL 281.77; expiry 2024-12-19 after 2022-06-10. Posted TRAN fields equal the input. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 7,
+      "scenario": "posttran-missing-card",
+      "id": "0000000000683580",
+      "decision": "accept",
+      "reason": "Accept. Card 9999999999999999 is absent from XREFFILE, so the READ takes INVALID KEY and sets 100 'INVALID CARD NUMBER FOUND' (lines 383-387); the account lookup is not reached. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 8,
+      "scenario": "posttran-missing-account",
+      "id": "0000000000683580",
+      "decision": "accept",
+      "reason": "Accept. XREF resolves the card but the account is absent from ACCTFILE, so the READ takes INVALID KEY and sets 101 'ACCOUNT RECORD NOT FOUND' (lines 395-399). Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    },
+    {
+      "index": 9,
+      "scenario": "posttran-expired-account",
+      "id": "0000000000683580",
+      "decision": "accept",
+      "reason": "Accept. Both IFs in 1500-B run in sequence; the expiry test (lines 414-420) moves 103 after any 102, so 103 correctly overrides an over-limit result when the origin date is after expiry. Checked by recomputing the full 300-record public batch in order (262 posted, 38 rejected, matching the twin); AI-assisted check, reviewed by Howard."
+    }
+  ]
+}

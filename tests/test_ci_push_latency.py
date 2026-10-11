@@ -21,3 +21,11 @@ class TimingTests(unittest.TestCase):
         self.assertEqual('a',updated2['head_history'][0]['head'])
         self.assertTrue(updated2['head_history'][0]['green'])
         self.assertIsNone(updated2['prs'][0]['push_at'])
+
+    def test_merged_pr_empty_association_requires_exact_branch_and_sha(self):
+        pr=dict(number=1,merged=True,head=dict(sha='final',ref='branch'))
+        r=dict(id=2,head_sha='final',head_branch='branch',event='pull_request',pull_requests=[],path='.github/workflows/required-ci.yml',status='completed',conclusion='success',created_at='2026-10-11T00:01:00Z',updated_at='2026-10-11T00:03:00Z')
+        self.assertTrue(summarize(pr,[r],[])['green'])
+        for other in (dict(r,head_branch='other'),dict(r,head_sha='old'),dict(r,pull_requests=[dict(number=2)])):
+            self.assertFalse(summarize(pr,[other],[])['green'])
+        self.assertFalse(summarize(dict(pr,merged=False),[r],[])['green'])

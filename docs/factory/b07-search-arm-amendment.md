@@ -114,3 +114,9 @@ B06 is not yet a complete nonvoid baseline, and B07 static/runtime coverage and
 audit are not complete. Therefore no B07 sealing date is available. Howard selected G + S with no fresh curated drift arm. Later gates require the actual coverage proof, audit, merged
 implementations, frozen client/model/images/context, zero-model preflight,
 approved budget/window and full-plan review lead. None is bypassed here.
+
+## October11 current decision
+
+The current [comparison and power plan](b07-primary-comparison-plan.md) supersedes
+the96-hour cap and unspecified margin above:14days,two runners,15points,unchanged
+slots,no drift arm. The historical estimates above remain estimates,not spending approval.

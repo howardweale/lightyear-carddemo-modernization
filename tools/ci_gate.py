@@ -99,6 +99,7 @@ def lint():
     for p in Path('.github/workflows').glob('*.yml'):
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p
+        assert not re.search(r'\b(?:ubuntu|windows|macos)-latest\b',p.read_text()),p
         assert "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
         assert 'github.run_id' in d['concurrency']['group'],p
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()

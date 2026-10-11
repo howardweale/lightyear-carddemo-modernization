@@ -39,7 +39,7 @@ public final class BoundedMirrorsProbe {
             ClassUnloadRequest unloaded=vm.eventRequestManager().createClassUnloadRequest();
             unloaded.addClassFilter("BoundedMirrorsTarget$Payload");unloaded.enable();
             List<ReferenceType> old=new ArrayList<>();int checkpoints=0,unloads=0;
-            Set<Long> oldIds=new HashSet<>();
+            Set<ReferenceType> oldTypes=new HashSet<>();
             while(true){
                 EventSet events=vm.eventQueue().remove(30000);require(events!=null,"event timeout");
                 boolean ending=false;
@@ -102,13 +102,34 @@ public final class BoundedMirrorsProbe {
                             // The exact query refreshed the old mirror; restore false.
                             state.setBoolean(revisited,false);cache.prune(List.of());
                             require(ids(vm).containsValue(revisited),"unprepared mirror evicted");state.setBoolean(revisited,true);
-                            for(var entry:ids(vm).entrySet())if(entry.getValue().name().equals("BoundedMirrorsTarget$Payload"))oldIds.add(entry.getKey());
+                            oldTypes.addAll(old);
+                            require(oldTypes.size()==2600,"original type identities missing");
                             old.clear();
                         }else{
                             List<ReferenceType> reloaded=vm.classesByName("BoundedMirrorsTarget$Payload");
                             require(!reloaded.isEmpty(),"reload missing");
                             require(unloads>0,"no unload observed");
-                            require(ids(vm).entrySet().stream().anyMatch(e->e.getValue().name().equals("BoundedMirrorsTarget$Payload")&&!oldIds.contains(e.getKey())),"reload identity reused");
+                            // JDWP forbids referenceTypeID reuse even after unload.
+                            // Check the exact query result, not mutable JDI caches:
+                            // InternalEventHandler can process a delayed unload and
+                            // remove ALL same-signature cache entries after lookup.
+                            ReferenceType fresh=reloaded.stream().filter(t->!oldTypes.contains(t)).findFirst()
+                                .orElseThrow(()->new AssertionError("reload identity reused"));
+                            com.sun.jdi.Method freshMethod=fresh.methodsByName("value").get(0);
+                            // Deterministically model the internal unload handler's
+                            // removal between lookup and assertion. The returned
+                            // live mirror must retain identity despite cache absence.
+                            synchronized(vm){
+                                @SuppressWarnings("unchecked") Set<ReferenceType> signatures=(Set<ReferenceType>)field(vm,"typesBySignature").get(vm);
+                                ids(vm).entrySet().removeIf(e->e.getValue().equals(fresh));
+                                signatures.remove(fresh);
+                                require(!ids(vm).containsValue(fresh),"fixture did not remove reloaded cache entry");
+                            }
+                            require(!oldTypes.contains(fresh),"reload identity reused without cache entry");
+                            ReferenceType recreated=vm.classesByName("BoundedMirrorsTarget$Payload").stream()
+                                .filter(fresh::equals).findFirst().orElseThrow(()->new AssertionError("reload exact-name query lost live type"));
+                            require(freshMethod.equals(recreated.methodsByName("value").get(0)),"reloaded method identity changed");
+                            require(freshMethod.location().equals(recreated.methodsByName("value").get(0).location()),"reloaded location identity changed");
                             // A caller must never be able to silently use a partial
                             // complete-type cache. Refuse before making any edits.
                             vm.allClasses();int before=ids(vm).size();

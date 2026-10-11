@@ -22,7 +22,7 @@ versioned DEFLATE/base64 envelope with a fixed public dictionary; quotas count
 original wire bytes and readers reconstruct every field. Refusal context stays
 directly inspectable. The older detail encoding remains readable. The
 [full-stream comparison](b06-compact-diagnostic-wire.json) preserves all 273,061
-diagnostic records while reducing 134,217,565 bytes to 52,562,139 (2.55Ã—).
+diagnostic records while reducing 134,217,565 bytes to 52,562,139 (2.55×).
 
 The engineering-only JDI mirror adapter bounds the JDK's own strong class cache
 to 1,024 mirrors (512 low-water), retaining active and unprepared types. It uses
@@ -53,8 +53,14 @@ Only its public PEM is versioned. All engineering entry points remain held.
 The prospective request is limited to two Oracle-only retained-reference J1
 attempts: strict first, diagnostic second. Each has 60 minutes work and ten
 minutes cleanup, a 30-minute candidate timeout, zero models and zero credit.
-The exact implementation/classes/template hashes and proposed calendar are being
-bound in the held two-attempt request; no approval or native execution is implied.
+The [held two-attempt request](b06-engineering-two-attempt-request.md) binds
+implementation `3080de6a5483bcffb8275451123cdc0172e1c82e`, fourteen compiled
+classes and the proposed October 12, 9 AM-noon PDT calendar. Its seal is
+`00a037b87f50305928718d3b5282e7692d4e0d883214942750779de31cb4e3d4`.
+The local asset index binds 111,291 files, including 852 public source files,
+and has seal `94e57ee681bc70d12cbfce9e6ba03352ca647d2f7f0914129719e1b3fb6c4f77`.
+The request is unsigned and unapproved; no native execution is implied. A future
+hold-release code change requires new exact implementation bindings and approval.
 
 ## Preserved native evidence and limits of the inference
 
@@ -90,14 +96,14 @@ observer repair attempt is automatic.
 - The second variant stayed below 17,565,256 bytes after GC but reached the
   128 MiB metadata quota at 27,907 generation entries. Its fitted retained
   growth remained positive: 32.07 bytes/emitted record, 95% interval
-  31.82â€“32.33. This is not a flat-curve pass.
+  31.82–32.33. This is not a flat-curve pass.
 - The first mirror-cache variant stopped at its pin guard: unknown JDI
   preparation status was conservatively retained. The correction reads actual
   status outside the JDI cache lock; genuinely unprepared mirrors remain pinned.
 - The fourth variant bounded JDI mirrors and stayed below 6,736,736 bytes after
   GC, but stopped at 27,388 generation entries on the unchanged 128 MiB metadata
   cap. Its slope was still positive: 0.564 bytes/emitted record, 95% interval
-  0.181â€“0.947. It is preserved as a failed acceptance attempt. Fixed retained
+  0.181–0.947. It is preserved as a failed acceptance attempt. Fixed retained
   pending/witness storage and further lossless metadata compaction are now being
   validated in the later sixth run recorded below. This fourth run remains failed.
 - The fifth variant reached 37,560 generation entries with peak after-GC heap

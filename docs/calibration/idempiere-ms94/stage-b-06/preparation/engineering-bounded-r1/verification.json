@@ -1,0 +1,22 @@
+{
+  "all_asset_hashes_verified": true,
+  "artifact_type": "b06-held-engineering-verification/1",
+  "asset_index_sha256": "94e57ee681bc70d12cbfce9e6ba03352ca647d2f7f0914129719e1b3fb6c4f77",
+  "compiled_classes": 14,
+  "content_sha256": "d3acd66f5ad4478261476a79a1665d4109026d0ae141b10bd9a50da76ed41e48",
+  "docker_calls": 0,
+  "engineering_hold": true,
+  "host_memory_report_sha256": "63b6e60e51b34f8e3f2c1a58e87de8b474b95538a89181fc22df3f11e1294e88",
+  "host_transient_report_sha256": "ad8c414c69ab345f9892c2504506796d42e8903cbad7e221069a63c9a5040d0e",
+  "implementation_commit": "3080de6a5483bcffb8275451123cdc0172e1c82e",
+  "measurement_credit": false,
+  "model_calls": 0,
+  "native_launch": false,
+  "native_template_sha256": "b2be5fd81163f3b8c98dce79a755036074a271e5fe3dd1c342928272c1dc34cc",
+  "pure_template_validation_passed": true,
+  "qualification_credit": false,
+  "request_content_sha256": "00a037b87f50305928718d3b5282e7692d4e0d883214942750779de31cb4e3d4",
+  "source_files": 852,
+  "verified_at_utc": "2026-10-11T16:19:11.285522+00:00",
+  "verified_bound_files": 111291
+}

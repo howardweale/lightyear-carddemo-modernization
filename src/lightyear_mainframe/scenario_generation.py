@@ -47,6 +47,7 @@ def manifest():
     # The half-cent boundary for rate 15% is balance .40; adjacent cents straddle it.
     for amount in ('0.39','0.40','0.41','0.79','0.80','0.81','-0.39','-0.40','-0.41'):
         add('INTCALC','round-'+amount.replace('-','n').replace('.','_'),'rounding-boundary','CBACT04C:464 truncation versus ROUNDED',balance=amount,rate='15.00')
+    add('INTCALC','large-rate','boundary','receiving monthly/total integer width',balance='999999999.99',rate='999.99')
     for name in ('empty','two-categories','two-accounts','missing-disclosure','missing-account','missing-xref','duplicate-category'):
         add('INTCALC',name,'cross-record','account/category/final/empty/duplicate boundaries',variant=name,balance='10.01',rate='15.00')
     for truth in (False,True):

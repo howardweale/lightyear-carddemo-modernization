@@ -4,7 +4,7 @@ from hashlib import sha256
 from .scenario_coverage import code, VERBS
 
 OPERATORS=('relational','arithmetic','constant','rounded','receiving-scale','receiving-size','delete-MOVE','delete-ADD','delete-COMPUTE','delete-WRITE','delete-REWRITE','negate-condition','skip-PERFORM')
-TOKEN=re.compile(r"'[^']*'|\"[^\"]*\"|[A-Z][A-Z0-9-]*|[0-9]+(?:\.[0-9]+)?|>=|<=|<>|[=><+*/-]|[^\s]",re.I)
+TOKEN=re.compile(r"'[^']*'|\"[^\"]*\"|[0-9]+-[A-Z][A-Z0-9-]*|[A-Z][A-Z0-9-]*|[0-9]+(?:\.[0-9]+)?|>=|<=|<>|[=><+*/-]|[^\s]",re.I)
 
 
 def _source_sites(text,program):
@@ -19,10 +19,15 @@ def _source_sites(text,program):
         t=c.strip()
         if t.startswith('PROCEDURE DIVISION'):active=True;continue
         if not active:
-            m=re.search(r'PIC\s+S?9\((\d+)\)(V9+)?',t)
+            m=re.search(r'PIC\s+(S?)(9(?:\(\d+\)|9*))(?:V(9(?:\(\d+\)|9*)))?',t)
             if m:
-                n=int(m[1]); add(i,'receiving-size',t[:m.start(1)]+str(max(1,n-1) if n>1 else 2)+t[m.end(1):])
-                scale=m[2] or '';add(i,'receiving-scale',t[:m.end()]+('V9' if not scale else '9')+t[m.end():])
+                def digits(part):return int(part[2:-1]) if '(' in part else len(part)
+                n=digits(m[2]);scale=digits(m[3]) if m[3] else 0
+                smaller='9('+str(n-1 if n>1 else 2)+')'
+                add(i,'receiving-size',t[:m.start(2)]+smaller+t[m.end(2):])
+                fraction='V9('+str(scale+1)+')'
+                suffix=m.end(3) if m[3] else m.end(2)
+                add(i,'receiving-scale',t[:m.end(2)]+fraction+t[suffix:])
             continue
         if not t or t.endswith('.') and len(t.split())==1:continue
         matches=list(TOKEN.finditer(t)); verb=matches[0][0] if matches else ''

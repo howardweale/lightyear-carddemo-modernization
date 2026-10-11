@@ -25,6 +25,14 @@ class FactoryReviewTests(unittest.TestCase):
     operand=(ROOT/'spec/mainframe/copybooks'/row['source_path']).read_text() if row.get('source_path') else text
     self.assertNotEqual(operand,apply(operand,row))
    self.assertTrue(any(r.get('source_path') for r in rows))
+  from lightyear_mainframe.systematic_mutation import _source_sites
+  labels="       PROCEDURE DIVISION.\n           PERFORM 1000-READ.\n       1000-READ.\n           EXIT.\n"
+  label_rows=_source_sites(labels,'P')
+  self.assertEqual(['skip-PERFORM'],[r['operator'] for r in label_rows])
+  pic="       01 A PIC 999.\n       01 B PIC S9(3)V9(2).\n"
+  rows=_source_sites(pic,'P')
+  self.assertEqual(4,len(rows));self.assertIn('V9(3)',rows[3]['replacement'])
+  self.assertIn('9(2)',rows[0]['replacement'])
   base=dict(status='executed',returncode=0,outputs={'a':'b'})
   self.assertEqual('killed-failure',outcome(base,{**base,'returncode':12}))
   self.assertEqual('killed-divergent',outcome(base,{**base,'outputs':{}}))

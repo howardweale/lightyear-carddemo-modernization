@@ -16,12 +16,12 @@ The prospective lexical-overlap corrections are in
 labels 16/47 correctly. No signed historical evidence was rewritten. Repository
 search found no other literal 16/47 coverage claim in docs, catalogues or views.
 
-Systematic generation currently inventories **531 INTCALC and 604 POSTTRAN**
+Systematic generation currently inventories **427 INTCALC and 490 POSTTRAN**
 source-site mutants. These counts are generated, not claims of compiled mutants
 or kills. The remote Ubuntu24 campaign compiles every member, compares return codes, complete logical outputs and program stdout (excluding probe records), separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
 result. A survivor is unresolved unless a scenario kills it or a reviewed
-individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel or indistinguishable-failure-value arguments may exclude a surviving compiled mutant; 64 INTCALC and 78 POSTTRAN sites/edits are eligible for those arguments. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
+individual equivalence proof exists. Only individually listed source-bound overwritten-sentinel or indistinguishable-failure-value arguments may exclude a surviving compiled mutant; 70 INTCALC and 78 POSTTRAN sites/edits are eligible for those arguments. They are not blanket waivers; the old eight hand-picked mutants do not form the new denominator.
 Mutants with altered FD layout may legitimately not compile or fail admission;
 those outcomes remain visible. Receiving-field mutations also cover every numeric PIC site in the pinned included copybooks. Each operand is hash-bound; originals are preserved.
 
@@ -70,3 +70,5 @@ changed by this work.
 The first completed older INTCALC campaign (497 source-only mutants, before stdout strengthening and copybook sites) measured58 divergent kills,135 failure kills,191 survivors and113 compiler refusals. This193/497 result is preserved as preliminary evidence, not replaced by the old8/8 narrative. Current full-set results remain required.
 
 Surviving mutants also receive up to three declared fault challenges chosen from their source paragraph or representative error/extended-status/INVALID-KEY paths. The same fault seam is applied to the baseline and mutant; an incompatible seam or a derived compile refusal is recorded as unavailable, never counted as a kill of a normally compiled survivor. Predicate probes in these fault-mutant copies are not claimed as changed-code coverage. New killing fault/scenario pairs are retained explicitly.
+
+Review of the earlier compiler refusals found a generator defect: digit-prefixed paragraph identifiers such as `1000-READ` had been split into numeric constants. Those false sites are removed, rather than silently treated as meaningful invalid mutants; their old results remain preserved. Numeric receiving-site generation now handles both literal/repeated PIC digits and parenthesized scales. The corrected427/490 inventories therefore supersede the preliminary497/499/531 and604 denominators. A new large-rate INTCALC scenario targets narrowed monthly/total receiving fields. Individually listed dead-counter and empty-fee-paragraph arguments make no claim about other survivors.

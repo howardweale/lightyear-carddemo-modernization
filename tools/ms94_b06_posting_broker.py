@@ -152,7 +152,8 @@ class PostingBroker:
             threading.Thread(target=consume, daemon=True).start()
             sequence, death = 0, False
             from tools.ms94_b06_observer_audit import Audit
-            audit = Audit()
+            audit = Audit(self.runner.plan if self.diagnostics else None)
+            limits=self.runner.plan.get("engineering_limits",{})
             evidence_count = 0
             diagnostic_count=diagnostic_bytes=0
             audit_required = False
@@ -172,16 +173,15 @@ class PostingBroker:
                         check(self.diagnostics is not None and self.ready.is_set(), 'observer-diagnostics-unannounced')
                         audit.metadata(event)
                     if self.diagnostics and (event['kind']=='observer-audit' or diagnostic_metadata):
-                        from tools.ms94_b06_engineering import LIMITS
                         diagnostic_count+=1;diagnostic_bytes+=len(line.removesuffix(b'\n'))
-                        check(diagnostic_count<=LIMITS['audit_records'] and diagnostic_bytes<=LIMITS['audit_bytes'],
+                        check(diagnostic_count<=limits['audit_records'] and diagnostic_bytes<=limits['audit_bytes'],
                               'observer-diagnostic-bound')
                     if event['kind'] == 'observer-audit':
                         check(audit_required, 'observer-audit-unannounced')
                         audit.event(event)
                     elif not diagnostic_metadata:
                         evidence_count += 1
-                        check(evidence_count <= 50000, 'observer-sequence-invalid')
+                        check(evidence_count <= (limits['evidence_records'] if self.diagnostics else 50000), 'observer-sequence-invalid')
                     if event['kind'] == 'diagnostic-unmatched-return':
                         from tools.ms94_b06_unmatched_return import validate_event
                         check(self.diagnostic_unmatched and self.ready.is_set(), 'diagnostic-unmatched-return-unapproved')
@@ -208,6 +208,9 @@ class PostingBroker:
                     if self.diagnostics and event.get('checkpoint') and event['kind'] in ('method-entry','method-exit','test-terminal'):
                         self.phase_marker('posting-'+event['kind'])
                     if event['kind']=='generation-entry':
+                        if self.diagnostics:
+                            from tools.ms94_b06_generation_inputs import validate as validate_inputs
+                            validate_inputs(event['record'])
                         self.generation_entries+=1
                         if self.diagnostics and self.generation_entries % 1000 == 0:
                             self.phase_marker(self.last_application_phase)
@@ -231,7 +234,10 @@ class PostingBroker:
                                   event.get('audit_policy')=='structural-jdi-v2' and
                                   event.get('observer_mode')==self.diagnostics['mode'] and
                                   event.get('unmatched_return_cap')==10 and event.get('heap_guard_percent')==85 and
-                                  event.get('pending_cap')==512, 'observer-native-ready-binding')
+                                  event.get('pending_cap')==512 and
+                                  event.get('metadata_record_cap')==limits['audit_records'] and
+                                  event.get('metadata_byte_cap')==limits['audit_bytes'] and
+                                  event.get('class_input_witness_policy')=='generation-inputs-v1', 'observer-native-ready-binding')
                         from tools.ms94_b06_unmatched_return import POLICY as UNMATCHED
                         check(event.get('unmatched_return_policy') == (UNMATCHED if self.diagnostic_unmatched else None),
                               'diagnostic-unmatched-return-ready-policy')

@@ -41,7 +41,7 @@ class OracleEngineeringRunner(ObservedRunner):
 
     def worker(self, command, payload, timeout):
         from tools.ms94_b06_engineering import require_execution_ready
-        require_execution_ready()
+        require_execution_ready(getattr(self,"approval",None))
         require(payload.get('lane') == 'oracle', 'oracle-only')
         return super().worker(command, payload, min(timeout, max(1, self.deadline-time.monotonic())))
 
@@ -53,7 +53,7 @@ class OracleEngineeringRunner(ObservedRunner):
 
     def prepare(self, case='operations', attempt=1):
         from tools.ms94_b06_engineering import require_execution_ready, validate_run_binding
-        require_execution_ready()
+        require_execution_ready(getattr(self,"approval",None))
         record=validate_run_binding(self.run,self.approval,self.plan)
         guard(self.approval,starting=True,attempt_number=record['run_number'])
         require(case == 'operations' and attempt == 1, 'retained-reference-only')
@@ -121,7 +121,7 @@ def no_overlap():
 
 def execute(assets, run, approval, signer):
     from tools.ms94_b06_engineering import require_execution_ready
-    require_execution_ready()
+    require_execution_ready(approval)
     run=Path(run); plan=read_json(run/'plan.json')
     def emit(kind, body):
         with (run/'progress.jsonl').open('ab') as stream:

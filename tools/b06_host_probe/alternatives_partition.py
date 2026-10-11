@@ -22,7 +22,12 @@ def class_references(value):
         for item in value:yield from class_references(item)
 
 def classify(record):
-    refs=[ref for key in PAYLOADS for ref in class_references(record.get(key))]
+    if 'class_input_witness' in record:
+        from tools.ms94_b06_generation_inputs import validate
+        refs=validate(record)
+        if not refs:return 'unresolved-bytecode-input-only',0
+    else:
+        refs=[ref for key in PAYLOADS for ref in class_references(record.get(key))]
     # Bootstrap is a runtime identity witness; package-prefix guesses are not used.
     application=[ref for ref in refs if ref['loader']!='bootstrap' and not platform_name(ref['class'])]
     if application:return 'application-derived-input', len(application)

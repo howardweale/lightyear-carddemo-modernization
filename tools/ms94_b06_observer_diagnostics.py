@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import subprocess
 from tools.ms94_b06_admission import check, sign_once
-from tools.ms94_b06_engineering import LIMITS
+from tools.ms94_b06_engineering import LIMITS, attempt_limits
 
 POLICY = 'native-diagnostics-v1'
 MODES = ('strict', 'diagnostic-unmatched-return')
@@ -23,7 +23,8 @@ def validate(plan):
         return None
     check(plan.get('run_class') == 'engineering' and plan.get('qualification_credit') is False and
           plan.get('measurement_credit') is False, 'observer-diagnostics-engineering-only')
-    check(plan.get('engineering_limits') == LIMITS, 'observer-engineering-limits')
+    check(plan.get('engineering_limits') in (LIMITS,attempt_limits(2)) and
+          (plan.get('engineering_limits')==LIMITS or spec.get('mode')=='diagnostic-unmatched-return'), 'observer-engineering-limits')
     check(spec == configuration(spec.get('mode')), 'observer-native-diagnostics-config')
     return spec
 
@@ -41,7 +42,11 @@ def container_args(plan, private):
 def java_options(plan):
     if validate(plan) is None:
         return []
-    return ['-Xmx'+str(LIMITS['observer_heap_mib'])+'m',
+    extra=[]
+    if plan['engineering_limits']!=LIMITS:
+        extra=['-Db06.observer.audit_records='+str(plan['engineering_limits']['audit_records']),
+               '-Db06.observer.audit_bytes='+str(plan['engineering_limits']['audit_bytes'])]
+    return extra+['-Xmx'+str(LIMITS['observer_heap_mib'])+'m',
             '--add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED',
             '-XX:SoftRefLRUPolicyMSPerMB='+str(LIMITS['soft_ref_lru_ms_per_mb']),
             '-Db06.observer.state_dir=/observer-private', '-XX:+HeapDumpOnOutOfMemoryError',

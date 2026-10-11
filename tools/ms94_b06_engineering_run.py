@@ -33,6 +33,14 @@ def template(assets, source, approval):
     assets, source = Path(assets).resolve(), Path(source).resolve()
     require(source.is_relative_to(assets), 'template-path')
     value=read_json(source); verify(value)
+    if approval.get('artifact_type')=='b06-oct13-executable-request/1':
+        index_path=assets/'engineering-assets-index.json'; index=read_json(index_path);verify(index)
+        require(sha(index_path)==approval['asset_index_file_sha256'] and index['content_sha256']==approval['asset_index_sha256'] and
+                index['implementation_commit']==approval['implementation_commit'] and
+                index['native_template_sha256']==approval['native_template_sha256'] and
+                index['observer_class_files_sha256']==approval['observer_class_files_sha256'] and
+                index['mirror_adapter_source_sha256']==approval['mirror_adapter_source_sha256'], 'oct13-asset-index')
+        require(sha(assets/'factory/idempiere/b06-observer/BoundedJdiMirrors.java')==approval['mirror_adapter_source_sha256'], 'oct13-mirror-source')
     from tools.ms94_b06_engineering import validate_instrumented
     validate_instrumented(approval)
     require(value['content_sha256']==approval['native_template_sha256'] and value['journey']=='J1' and
@@ -61,7 +69,8 @@ def prepare_run(assets, source, run, approval):
     plan['posting_observer'].pop('unmatched_return', None)
     plan['posting_observer']['native_diagnostics']=configuration(mode)
     plan['engineering_key_sha256']=approval['engineering_key_sha256']
-    plan['engineering_limits']=dict(LIMITS)
+    from tools.ms94_b06_engineering import attempt_limits
+    plan['engineering_limits']=attempt_limits(validate_run_binding(run,approval)['run_number']) if approval.get('attempt_limits') else dict(LIMITS)
     # No reference to any old native output is copied.
     for name,digest in base['inputs_sha256'].items():
         require(Path(name).name==name,'input-name')
@@ -81,6 +90,7 @@ def main():
         p.add_argument('--'+name,required=True)
     args=p.parse_args(); repo=Path(__file__).resolve().parents[1]
     approval=read_json(Path(args.approval)); approve_check(approval,args.approved_sha256,args.approval)
+    require_execution_ready(approval)
     guard(approval)
     output=Path(args.output).resolve()
     require(not any(x in output.parts for x in ('factory','b06-execution-snapshots')), 'output-in-evidence-tree')
@@ -108,6 +118,11 @@ def main():
         command=[sys.executable,'-B','-m','tools.ms94_b06_engineering_worker',
             '--assets',str(assets),'--run',str(run),'--authority',args.authority,
             '--approval',args.approval,'--approved-sha256',args.approved_sha256]
+        if approval.get('artifact_type')=='b06-oct13-executable-request/1':
+            from tools.ms94_b06_oct13_authorization import active_go
+            command=[sys.executable,'-B','-m','tools.ms94_b06_oct13_run','--worker',
+                '--go',active_go(approval),'--request',args.approval,'--request-file-sha256',args.approved_sha256,
+                '--assets',str(assets),'--run',str(run),'--authority',args.authority]
         environment={**os.environ,'PYTHONPATH':os.pathsep.join((str(repo/'src'),str(repo))),
                      'PYTHONUTF8':'1','PYTHONDONTWRITEBYTECODE':'1'}
         opts={'creationflags':subprocess.CREATE_NO_WINDOW} if os.name=='nt' else {'start_new_session':True}

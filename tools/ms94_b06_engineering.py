@@ -26,11 +26,17 @@ LIMITS = dict(run_seconds=3600, cleanup_seconds=600, candidate_seconds=1800,
               audit_records=500000, audit_bytes=128*1024**2, evidence_records=50000)
 
 
-# October 10 review suspends the old October 11 approval. Removing this hold
-# requires a reviewed memory-bounded implementation and renewed exact approval.
-# A caller-supplied JSON flag or an old approval digest cannot override it.
-def require_execution_ready():
-    raise ValueError('engineering-on-hold-review-291-302-renewed-approval-required')
+# Old approvals remain held. The isolated October 13 branch opens only inside
+# a context bound to the exact new request, actual implementation and Howard go.
+# A JSON approval flag or an old approval digest cannot open that context.
+def require_execution_ready(approval=None):
+    from tools.ms94_b06_oct13_authorization import require_active
+    require_active(approval)
+
+
+def attempt_limits(number):
+    require(type(number) is int and number in (1,2),'attempt-number')
+    return dict(LIMITS,**(dict(evidence_records=150000,audit_records=1500000,audit_bytes=384*1024**2) if number==2 else {}))
 
 
 def require(ok, reason):
@@ -98,6 +104,9 @@ def approve_check(approval, expected_file_sha256, path):
     # manufacture it from a proposal or persist approval on his behalf.
     require(sha(path) == expected_file_sha256, 'approval-file-changed')
     validate(approval)
+    from tools.ms94_b06_oct13_authorization import SCHEMA, validate_request, require_active
+    if approval.get('artifact_type')==SCHEMA:
+        validate_request(approval);require_active(approval);return
     require(approval.get('artifact_type') == 'b06-engineering-standing-approval/1' and
             approval.get('approved') is True and approval.get('approved_by') == 'Howard' and
             isinstance(approval.get('approval_reference'), str) and approval['approval_reference'], 'approval-required')
@@ -216,7 +225,7 @@ def append_log(path, record, terminal, context):
 
 
 def validate_instrumented(value):
-    """Exact future request binding, still blocked unconditionally at all entrypoints."""
+    """Exact implementation binding; execution additionally requires the branch gate."""
     require(re.fullmatch('[0-9a-f]{40}',value.get('implementation_commit','')) is not None,'implementation-commit')
     for name in ('native_template_sha256','observer_source_sha256'):
         require(re.fullmatch('[0-9a-f]{64}',value.get(name,'')) is not None,name)
@@ -267,6 +276,7 @@ def validate_run_binding(run, approval, plan=None):
                 plan.get('engineering_approval_sha256')==approval['content_sha256'] and
                 plan.get('engineering_key_sha256')==approval['engineering_key_sha256'] and
                 plan.get('engineering_template_sha256')==approval['native_template_sha256'] and
+                plan.get('engineering_limits')==(attempt_limits(number) if approval.get('attempt_limits') else LIMITS) and
                 plan.get('posting_observer',{}).get('class_files_sha256')==approval['observer_class_files_sha256'],
                 'attempt-plan-binding')
     return record

@@ -11,7 +11,8 @@ def main():
     p=argparse.ArgumentParser()
     for name in ('assets','run','authority','approval','approved-sha256'): p.add_argument('--'+name,required=True)
     a=p.parse_args(); run=Path(a.run).resolve()
-    approval=read_json(Path(a.approval)); approve_check(approval,a.approved_sha256,a.approval); guard(approval)
+    approval=read_json(Path(a.approval)); approve_check(approval,a.approved_sha256,a.approval)
+    require_execution_ready(approval); guard(approval)
     from tools.ms94_b06_engineering_run import source_commit
     require(source_commit(Path(__file__).resolve().parents[1]) == approval['implementation_commit'],
             'worker-implementation-commit')

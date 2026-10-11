@@ -1,0 +1,125 @@
+{
+  "schema": "b06-historical-audit-compatibility-report/1",
+  "baseline_commit": "aa8fb9dd099388eb737f891dd73d06300667bddd",
+  "comparison_scope": "Structural Audit only; historical incomplete/native failure outcomes remain unchanged. No generation provenance replay.",
+  "streams": {
+    "r1": {
+      "event_count": 231090,
+      "audit_event_count": 206301,
+      "old": {
+        "event_attempts": 206301,
+        "event_error": null,
+        "completion_error": {
+          "type": "EvidenceFailure",
+          "code": "observer-audit-incomplete"
+        },
+        "shared_terminal_state": {
+          "count": 206301,
+          "bytes": 71379851,
+          "set_id": 41262,
+          "position": 0,
+          "size": 1,
+          "resume_requested": false,
+          "resumed": false,
+          "refused": true,
+          "vm_started": true,
+          "vm_died": false
+        }
+      },
+      "new": {
+        "event_attempts": 206301,
+        "event_error": null,
+        "completion_error": {
+          "type": "EvidenceFailure",
+          "code": "observer-audit-incomplete"
+        },
+        "shared_terminal_state": {
+          "count": 206301,
+          "bytes": 71379851,
+          "set_id": 41262,
+          "position": 0,
+          "size": 1,
+          "resume_requested": false,
+          "resumed": false,
+          "refused": true,
+          "vm_started": true,
+          "vm_died": false
+        }
+      },
+      "equivalent": true,
+      "complete_observation": false,
+      "provenance_replayed": false,
+      "qualification_credit": false,
+      "measurement_credit": false,
+      "model_calls": 0,
+      "schema": "b06-historical-audit-compatibility/1",
+      "stream_sha256": "67d18166362f24456af99230063f24a51ea2cbdd011fac7f65c53d643a5b578f",
+      "old_reader_sha256": "ef899ad39af346a37ba66f6638af4523d0a842138e810fcb44f3b2a1847d36a0",
+      "new_reader_sha256": "080e8b87db4450d182b539b5e794ef0ce990e571b7cca945d1e2645e8f73dcc9",
+      "census_sha256": "0df712c9494eb6d7f3f56ac60af9685aa016a6d2f7ad3a1e3870896bde88ec96",
+      "failure_sha256": "15e1c9258bd6c78229cd397cd28fe6bf5a6dc25c42783e3db8b90fac39096790",
+      "signatures_verified": 2,
+      "public_key_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+      "review": "Operator review, not independent attestation"
+    },
+    "r3": {
+      "event_count": 231158,
+      "audit_event_count": 206365,
+      "old": {
+        "event_attempts": 206365,
+        "event_error": null,
+        "completion_error": {
+          "type": "EvidenceFailure",
+          "code": "observer-audit-incomplete"
+        },
+        "shared_terminal_state": {
+          "count": 206365,
+          "bytes": 71396353,
+          "set_id": 41275,
+          "position": 0,
+          "size": 1,
+          "resume_requested": false,
+          "resumed": false,
+          "refused": false,
+          "vm_started": true,
+          "vm_died": false
+        }
+      },
+      "new": {
+        "event_attempts": 206365,
+        "event_error": null,
+        "completion_error": {
+          "type": "EvidenceFailure",
+          "code": "observer-audit-incomplete"
+        },
+        "shared_terminal_state": {
+          "count": 206365,
+          "bytes": 71396353,
+          "set_id": 41275,
+          "position": 0,
+          "size": 1,
+          "resume_requested": false,
+          "resumed": false,
+          "refused": false,
+          "vm_started": true,
+          "vm_died": false
+        }
+      },
+      "equivalent": true,
+      "complete_observation": false,
+      "provenance_replayed": false,
+      "qualification_credit": false,
+      "measurement_credit": false,
+      "model_calls": 0,
+      "schema": "b06-historical-audit-compatibility/1",
+      "stream_sha256": "14f354d75cfcc91beaf8ebc09cc7068a828e48c936ec3309d4982a390d53ddfd",
+      "old_reader_sha256": "ef899ad39af346a37ba66f6638af4523d0a842138e810fcb44f3b2a1847d36a0",
+      "new_reader_sha256": "080e8b87db4450d182b539b5e794ef0ce990e571b7cca945d1e2645e8f73dcc9",
+      "census_sha256": "ed58b838da5ff5dae0d44f3b944261ac7bcf64b9c7f8e3ec0f93d8d9f124838e",
+      "failure_sha256": "8ddfc6eaa12c5dcdb72f7ce99f36c1ed0c8d4d6f64fe8abcb3b10950339b7cc8",
+      "signatures_verified": 2,
+      "public_key_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+      "review": "Operator review, not independent attestation"
+    }
+  }
+}

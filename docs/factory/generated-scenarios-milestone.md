@@ -52,3 +52,9 @@ failed run remains evidence and is not relabeled successful.
 ## 2026-10-11 prospective review correction
 
 The original eight-mutant result above is preserved as a small hand-picked experiment, not a systematic kill-rate estimate. The review311-317 campaign supersedes its unresolved taxonomy prospectively: exact matching source-specific refusals are expected-failure agreement; duplicate indexed input is adapter refusal before execution; only differing outputs/refusal classes are real disagreements. Historical receipts are unchanged. New formal classification confirms business8/8 and I/O56/86 for INTCALC, business24/24 and I/O49/86 for POSTTRAN. Systematic results are reported separately.
+
+## 2026-10-11 2 PM decision: generator and duplicate-posting scope
+
+Prospective receipts call this implementation `curated-finite-witness`. Its program-specific case list and the two finite-domain condition checks are not a generic scenario engine. The historical seed and sealed receipts above retain their original bytes. The generic engine requires review of the [new one-page plan](generic-scenario-engine-plan.md) before implementation.
+
+Howard's new source-bound keep decision replaces the duplicate-ID ambiguity requirement prospectively: posting must retain category/account changes before the duplicate TRANFILE write abends with RC12, preserve the already-posted prefix and add no duplicate row. The cycle-debit sign convention is also kept. A fresh compiled campaign exercises both; historical failed/unresolved receipts are not relabelled.

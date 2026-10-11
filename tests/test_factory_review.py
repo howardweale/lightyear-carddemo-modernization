@@ -75,6 +75,20 @@ class FactoryReviewTests(unittest.TestCase):
    selected=relevant_faults(mutant,inv,faults)
    self.assertTrue(selected);self.assertTrue(all(r['declaration']['operation']=='CLOSE' for r in selected))
 
+ def test_error_helper_skip_faults_activate_the_caller(self):
+  from tools.check_factory_review import relevant_faults
+  for p,lines in [('CBACT04C',(265,266,433,434,608,609)),('CBTRN02C',(247,248,650,651))]:
+   text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text();inv=inventory(text,p)
+   faults=[dict(declaration=d,expectation_met=True) for d in declarations(text,p)];rows=generate(text,p)
+   paragraphs=sorted(x['line'] for x in inv['paragraphs'])
+   def scope(n):return max(x for x in paragraphs if x<=n)
+   for line in lines:
+    targets=[r for r in rows if r['line']==line and r['operator']=='skip-PERFORM']
+    if not targets:continue
+    selected=relevant_faults(targets[0],inv,faults)
+    self.assertTrue(selected)
+    self.assertTrue(all(scope(r['declaration']['line'])==scope(line) for r in selected))
+
  def test_binary_equivalence_requires_actual_compiler_layout(self):
   from lightyear_mainframe.mutant_equivalence import argument
   for p,line in [('CBACT04C',133),('CBTRN02C',142)]:

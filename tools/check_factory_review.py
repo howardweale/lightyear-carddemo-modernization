@@ -32,12 +32,17 @@ def relevant_faults(mutant, inv, rows):
     # survivors also see representative normal, extended and INVALID statuses.
     lines=sorted(p['line'] for p in inv['paragraphs'])
     def paragraph(n):return max((p for p in lines if p<=n),default=0)
-    scope=paragraph(mutant['line']) if not mutant.get('source_path') else 0
+    caller_scope=paragraph(mutant['line']) if not mutant.get('source_path') else 0
+    scope=caller_scope
     if mutant['operator']=='skip-PERFORM':
         words=code(mutant['original']).split()
         target=words[1].rstrip('.') if len(words)>1 else ''
         scope=next((p['line'] for p in inv['paragraphs'] if p['name']==target),scope)
     selected=[r for r in rows if paragraph(r['declaration']['line'])==scope]
+    if not selected and scope!=caller_scope:
+        # Error-report/abend helpers contain no I/O operation of their own.
+        # Activate their call site using the caller's declared fault.
+        selected=[r for r in rows if paragraph(r['declaration']['line'])==caller_scope]
     if not selected:
         selected=[r for r in rows if r['declaration']['kind'] in ('missing','extended-read-error','rewrite-error')]
     # At most one of each status/site family, three bounded derived builds.

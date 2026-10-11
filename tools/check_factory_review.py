@@ -76,6 +76,14 @@ procedure division.
     return result
 
 
+def measure_runtime_contract(output):
+    from hashlib import sha256
+    path=Path('/usr/lib/x86_64-linux-gnu/libcob.so.4.1.0')
+    value=dict(package='3.1.2-5.1ubuntu1',library_sha256=sha256(path.read_bytes()).hexdigest())
+    write_json(output/'runtime-contract.json',value)
+    return value
+
+
 def measure_storage_semantics(output):
     folder=output/'storage-semantics';folder.mkdir()
     source="""identification division.
@@ -129,7 +137,7 @@ procedure division.
 
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
-    build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);storage=measure_storage_semantics(output);cases=[s['id'] for s in manifest() if s['job']==job]
+    build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);storage=measure_storage_semantics(output);runtime=measure_runtime_contract(output);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
     from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
     for public,(scope,_) in PUBLIC_SCENARIOS.items():
@@ -193,7 +201,7 @@ def check(output,job):
                     record['fault_challenges'].append(attempt_row)
                     if record['status']!='survived':break
             if record['status']=='survived':
-                proof=argument(text,program,mutant,compiler_layout,storage)
+                proof=argument(text,program,mutant,compiler_layout,storage,runtime)
                 if proof:record.update(status='equivalent (argued, listed)',disposition=proof)
                 else:record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
         results.append(record);write_json(output/'mutation-results.json',results)
@@ -206,7 +214,7 @@ def check(output,job):
         unresolved=[r['id'] for r in results if r['status']=='survived']))
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
-        compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
+        compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,compiler_runtime_contract=runtime,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
         eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']}",
         unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],

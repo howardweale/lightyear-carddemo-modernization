@@ -129,3 +129,12 @@ class FactoryReviewTests(unittest.TestCase):
   facts=dict(unsigned_lengths=[2,2],timing_lengths=[4,8],initial_defaults=True,overlay_equalities=512,overlay_maximum=255)
   self.assertIsNone(argument(text,p,row,storage={**facts,'overlay_equalities':511}))
   self.assertIn('induction',argument(text,p,row,storage=facts)['argument'])
+
+ def test_xref_fd_scale_argument_requires_exact_runtime_bytes(self):
+  from lightyear_mainframe.mutant_equivalence import argument
+  p='CBACT04C';text=(ROOT/f'spec/mainframe/public-source/{p}.cbl').read_text()
+  row=next(r for r in generate(text,p) if r['line']==72 and r['operator']=='receiving-scale')
+  self.assertIsNone(argument(text,p,row))
+  self.assertIsNone(argument(text,p,row,runtime={'package':'3.1.2-5.1ubuntu1','library_sha256':'0'*64}))
+  contract=dict(package='3.1.2-5.1ubuntu1',library_sha256='67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429')
+  self.assertIn('ordinal1',argument(text,p,row,runtime=contract)['argument'])

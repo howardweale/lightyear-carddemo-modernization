@@ -8,7 +8,7 @@ SITES={'CBACT04C':{235,253,271,290,308,523,542,560,578,596},
        'CBTRN02C':{237,255,274,292,310,328,450,563,583,601,620,638,656,675}}
 
 
-def argument(text,program,mutant,compiler_layout=None,storage=None):
+def argument(text,program,mutant,compiler_layout=None,storage=None,runtime=None):
     reviewed_sources={'CBACT04C':'5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4',
                       'CBTRN02C':'708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f'}
     if sha256(text.encode()).hexdigest()!=reviewed_sources.get(program):raise ValueError('equivalence-source-changed-needs-new-review')
@@ -28,6 +28,12 @@ def argument(text,program,mutant,compiler_layout=None,storage=None):
         return None
     from .systematic_mutation import apply
     apply(text,mutant)
+    if (program=='CBACT04C' and mutant['line']==72 and mutant['operator']=='receiving-scale'
+            and runtime=={'package':'3.1.2-5.1ubuntu1','library_sha256':'67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429'}):
+        return dict(kind='argued',mutant_id=mutant['id'],source_sha256=mutant['source_sha256'],source_line=72,
+          argument='Pinned Berkeley DB host contract: this unused FD customer field gains one byte, shifting the alternate key buffer but changing neither key ordinal1 nor its11-byte value. GnuCOBOL bdb_findkey matches the current field pointer to ordinal1, bdb_setkey copies that field, and indexed_start_internal searches the existing ordinal1 index. The loader-built record remains50bytes, below both record maxima50/51; indexed_read copies its unchanged50bytes and READ INTO copies them to the unchanged50-byte XREF copybook. Only its16-byte card prefix is consumed. Error lookup displays still use the unchanged11-byte requested account value. No writes use this FD. Thus all valid fixed50-byte twin inputs and declared seams preserve observable behavior. This explicitly excludes malformed database files, different runtimes and z/OS; see the source/runtime argument document.',
+          supporting_source_lines=[37,38,70,71,72,73,74,204,393,395,397,495],compiler_runtime_contract=runtime,
+          runtime_source_argument='docs/factory/gnucobol-xref-layout-argument.md',approval='listed-for-operator-review; not a release approval')
     # All consumers of APPL-RESULT are the 0/16 condition names. The raw
     # working-storage item is neither displayed nor passed/aliased externally.
     reviewed=[code(x).strip() for x in text.splitlines()]

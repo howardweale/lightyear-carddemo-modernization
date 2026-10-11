@@ -78,6 +78,11 @@ def run_worker(root: Path, action: dict, policy: dict, timeout: float, *, cancel
                         os.killpg(process.pid, signal.SIGKILL)
                 except ProcessLookupError:
                     pass  # Worker exited between poll and termination.
+                except PermissionError:
+                    # Some hosts deny a signal during exit. Suppress it only
+                    # after confirming termination; live-worker denial is fatal.
+                    if process.poll() is None:
+                        raise
             process.wait()
 
 

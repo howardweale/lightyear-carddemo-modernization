@@ -19,7 +19,7 @@ def check(output):
   # Admission-refusal paths differ by output directory; compare refusal type only.
   matched=actual['ascii']==actual['cp037'] if actual['ascii']['status']=='executed' else all(x['status']=='execution-refusal' and x.get('error_type')=='RuntimeError' and 'rc=66;' in x.get('detail','') for x in actual.values())
   rows.append(dict(scenario=case,kind='generated',matched=matched,actual=actual))
- receipt(output/'cp037-reconciliation.json',phase='cp037-full-twin-reconciliation',cases=rows,matched=sum(r['matched'] for r in rows),count=len(rows),decimal_key_restriction_retained=True,model_calls=0)
+ receipt(output/'cp037-reconciliation.json',phase='cp037-full-twin-reconciliation',cases=rows,matched=sum(r['matched'] for r in rows),count=len(rows),decimal_key_restriction_retained=True,model_calls=0,claim='no regression from cp037 key mode',key_domain='decimal-only',general_ebcdic_order_established=False)
  if not all(r['matched'] for r in rows):raise AssertionError('cp037 reconciliation differs; preserve results')
 
 if __name__=='__main__':

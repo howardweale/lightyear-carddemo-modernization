@@ -27,9 +27,15 @@ class PostingBroker:
         self.private.mkdir(parents=True, exist_ok=False)
         self.process, self.thread, self.failure = None, None, None
         self.done, self.ready, self.stop_requested = threading.Event(), threading.Event(), threading.Event()
-        self.records, self.previous = [], None
+        from tools.ms94_b06_observer_diagnostics import DiskRecords, validate
+        self.diagnostics=validate(runner.plan)
+        self.records, self.previous = DiskRecords(self.private/'events.jsonl'), None
+        self.generation_entries=0
+        self.last_application_phase='observer-preparation'
+        self.phase_lock=threading.Lock()
         from tools.ms94_b06_unmatched_return import enabled
-        self.diagnostic_unmatched = enabled(self.spec)
+        self.diagnostic_unmatched = (self.diagnostics['mode']=='diagnostic-unmatched-return'
+                                     if self.diagnostics else enabled(self.spec))
         self.unmatched_returns = []
         self.runtime_files, self.v2_records = {}, []
 
@@ -76,10 +82,12 @@ class PostingBroker:
             probe = docker('exec', '-i', self.app, 'python', '-c', source.read_text(encoding='utf-8'),
                            input=canonical(host_spec), timeout=60)
             self.host_jar_entries = json.loads(probe.stdout)
+        from tools.ms94_b06_observer_diagnostics import container_args
+        runner.remember('container', self.name)
         docker('create', '--name', self.name, '--label', runner.label, '--network', runner.network,
-               '--memory', '768m', '--cpus', '1', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
+               *container_args(runner.plan, self.private), '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
                '--mount', f'type=bind,src={classes},dst=/observer-classes,readonly', runner.plan['local']['runner_image'])
-        runner.remember('container', self.name); docker('start', self.name)
+        docker('start', self.name)
         runner.assert_real_runtime(self.name)
         self.target = {'container_id': info['Id'], 'image': info['Image'], 'network': runner.network,
                        'addresses': info['NetworkSettings']['Networks'][runner.network],
@@ -118,13 +126,15 @@ class PostingBroker:
                     break
                 check(time.monotonic() < deadline, 'observer-target-listener-timeout')
                 self.stop_requested.wait(.1)
-            stderr_stream = (self.private / 'collector.stderr').open('xb')
-            self.process = subprocess.Popen(['docker', 'exec', '-i', self.name, 'java', '--add-modules', 'jdk.jdi',
-                '-cp', '/observer-classes', 'lightyear.observer.PostingObserver', self.app, '5005',
-                *(['observer-binding-v2'] if self.spec.get('observer_binding_v2') is not None else []),
-                *(['diagnostic-unmatched-return-v1'] if self.diagnostic_unmatched else [])],
-                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_stream)
-            stderr_stream.close()
+            with (self.private / 'collector.stderr').open('xb') as stderr_stream:
+                from tools.ms94_b06_observer_diagnostics import java_options, observer_args
+                self.process = subprocess.Popen(['docker', 'exec', '-i', self.name, 'java',
+                    *java_options(self.runner.plan), '--add-modules', 'jdk.jdi',
+                    '-cp', '/observer-classes', 'lightyear.observer.PostingObserver', self.app, '5005',
+                    *(['observer-binding-v2'] if self.spec.get('observer_binding_v2') is not None else []),
+                    *(['diagnostic-unmatched-return-v1'] if self.diagnostic_unmatched and not self.diagnostics else []),
+                    *observer_args(self.runner.plan)],
+                    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_stream)
             events = queue.Queue(maxsize=16)
             def enqueue(line):
                 while not self.stop_requested.is_set():
@@ -144,6 +154,7 @@ class PostingBroker:
             from tools.ms94_b06_observer_audit import Audit
             audit = Audit()
             evidence_count = 0
+            diagnostic_count=diagnostic_bytes=0
             audit_required = False
             with (self.private / 'events.jsonl').open('xb') as log:
                 while True:
@@ -156,10 +167,18 @@ class PostingBroker:
                     event = json.loads(line)
                     sequence += 1
                     check(event['sequence'] == sequence, 'observer-sequence-invalid')
+                    diagnostic_metadata=event['kind'] in ('breakpoint-lifecycle','watched-class-prepare','observer-heap-telemetry')
+                    if diagnostic_metadata:
+                        check(self.diagnostics is not None and self.ready.is_set(), 'observer-diagnostics-unannounced')
+                    if self.diagnostics and (event['kind']=='observer-audit' or diagnostic_metadata):
+                        from tools.ms94_b06_engineering import LIMITS
+                        diagnostic_count+=1;diagnostic_bytes+=len(line)
+                        check(diagnostic_count<=LIMITS['audit_records'] and diagnostic_bytes<=LIMITS['audit_bytes'],
+                              'observer-diagnostic-bound')
                     if event['kind'] == 'observer-audit':
                         check(audit_required, 'observer-audit-unannounced')
                         audit.event(event)
-                    else:
+                    elif not diagnostic_metadata:
                         evidence_count += 1
                         check(evidence_count <= 50000, 'observer-sequence-invalid')
                     if event['kind'] == 'diagnostic-unmatched-return':
@@ -167,6 +186,9 @@ class PostingBroker:
                         check(self.diagnostic_unmatched and self.ready.is_set(), 'diagnostic-unmatched-return-unapproved')
                         validate_event(event, self.records[-1]['event'] if self.records else {})
                         self.unmatched_returns.append(sequence)
+                        if self.diagnostics:
+                            check(len(self.unmatched_returns) <= self.diagnostics['unmatched_return_cap'],
+                                  'observer-unmatched-return-cap')
                     readback = None
                     if event.get('document'):
                         check(event['checkpoint'] is True, 'observer-readback-without-suspension')
@@ -182,12 +204,30 @@ class PostingBroker:
                                  'real_utc': datetime.now(timezone.utc).isoformat()})
                     log.write(canonical(item) + b'\n'); log.flush()
                     self.previous = item['content_sha256']; self.records.append(item)
+                    if self.diagnostics and event.get('checkpoint') and event['kind'] in ('method-entry','method-exit','test-terminal'):
+                        self.phase_marker('posting-'+event['kind'])
+                    if event['kind']=='generation-entry':
+                        self.generation_entries+=1
+                        if self.diagnostics and self.generation_entries % 1000 == 0:
+                            self.phase_marker(self.last_application_phase)
+                    if self.diagnostics and event['kind']=='observer-resource-limit':
+                        from tools.ms94_b06_observer_diagnostics import guard_stop
+                        guard_stop(self,event,self.previous)
+                        self.process.stdin.write((str(sequence)+'\n').encode());self.process.stdin.flush()
+                        check(False,'observer-resource-limit')
                     from tools.ms94_b06_fault_hook import inject
                     inject(self.runner, self.lane, item, self.signer)
                     if event['kind'] == 'ready':
                         from tools.ms94_b06_observer_audit import POLICY
-                        check(event.get('audit_policy') in (None, POLICY), 'observer-audit-policy')
-                        audit_required = event.get('audit_policy') == POLICY
+                        # New audit reader exports both old and bounded formats.
+                        from tools import ms94_b06_observer_audit as audit_module
+                        policies=getattr(audit_module,'POLICIES',(POLICY,))
+                        check(event.get('audit_policy') is None or event.get('audit_policy') in policies, 'observer-audit-policy')
+                        audit_required = event.get('audit_policy') in policies
+                        if self.diagnostics:
+                            check(event.get('observer_format')=='bounded-observer-v1' and
+                                  event.get('native_diagnostics')=='native-diagnostics-v1' and
+                                  event.get('audit_policy')=='structural-jdi-v2', 'observer-native-ready-binding')
                         from tools.ms94_b06_unmatched_return import POLICY as UNMATCHED
                         check(event.get('unmatched_return_policy') == (UNMATCHED if self.diagnostic_unmatched else None),
                               'diagnostic-unmatched-return-ready-policy')
@@ -211,6 +251,7 @@ class PostingBroker:
                     'exception_type': type(exc).__name__, 'event_count': len(self.records),
                     'last_event_sha256': self.previous, 'complete': False,
                     'native_qualification': False,
+                    'reason': 'observer-resource-limit' if 'observer-resource-limit' in str(exc) else 'collector-failure',
                 }, self.signer)
             except Exception as signing_error:
                 self.failure += '; failure-record:' + type(signing_error).__name__
@@ -239,6 +280,22 @@ class PostingBroker:
             if self.process is not None and self.process.poll() is None:
                 self.process.kill(); self.process.wait()
             self.done.set()
+
+    def phase_marker(self, phase):
+        if not self.diagnostics: return
+        allowed={'observer-preparation','application-worker-started','application-worker-returned',
+                 'application-watchdog-expired','application-stop-requested',
+                 'posting-method-entry','posting-method-exit','posting-test-terminal'}
+        check(phase in allowed,'observer-application-phase')
+        with self.phase_lock:
+            self.last_application_phase=phase
+            marker=self.signer.sign(dict(artifact_type='b06-engineering-application-phase/1',
+                plan_sha256=self.runner.plan['content_sha256'], lane=self.lane,
+                generation_entry_count=self.generation_entries,last_event_sha256=self.previous,
+                phase=phase,real_utc=datetime.now(timezone.utc).isoformat(),
+                qualification_credit=False,measurement_credit=False))
+            with (self.private/'application-phases.jsonl').open('ab') as out:
+                out.write(canonical(marker)+b'\n')
 
     def diagnostic_result(self):
         if not self.diagnostic_unmatched: return {}

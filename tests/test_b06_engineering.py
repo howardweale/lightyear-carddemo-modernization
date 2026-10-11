@@ -49,7 +49,12 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'approval-required'): e.approve_check(self.a,e.sha(path),path)
 
     def test_exact_approval_digest_required(self):
-        a=reseal(self.a,artifact_type='b06-engineering-standing-approval/1',approved=True,
+        proposal=e.instrumented_proposal('2026-10-10T23:00:00Z','2026-10-11T23:00:00Z',[],
+            [str(self.evidence)],self.root/'b06-engineering',implementation_commit='a'*40,
+            native_template_sha256='b'*64,observer_source_sha256='c'*64,
+            observer_class_files_sha256={'PostingObserver.class':'d'*64},
+            full_plan_delivered_at_utc='2026-10-10T19:00:00Z')
+        a=reseal(proposal,artifact_type='b06-engineering-standing-approval/1',approved=True,
             approved_by='Howard',approval_reference='chat-123',approved_at_utc='2026-10-10T23:00:00Z')
         path=self.root/'approval.json'; e.write_new(path,a); e.approve_check(a,e.sha(path),path)
         with self.assertRaisesRegex(ValueError,'approval-file-changed'): e.approve_check(a,'0'*64,path)
@@ -87,10 +92,10 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaises(FileExistsError):
             with ledger.lock(): self.fail('must not enter')
 
-    def test_ten_consumed_attempts_stop(self):
+    def test_two_consumed_attempts_stop(self):
         ledger=e.Ledger(self.root/'b06-engineering',self.a)
         with ledger.lock():
-            for i in range(10):
+            for i in range(2):
                 run=ledger.reserve('a'*40)
                 self.assertEqual(json.loads((run/'engineering.json').read_text())['run_number'],i+1)
                 e.write_new(run/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))

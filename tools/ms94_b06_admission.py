@@ -113,6 +113,8 @@ def full_entry(run, signer):
 
 
 def replay_entry(run, public_key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(public_key)
     run = Path(run)
     plan = read_json(run / "plan.json")
     verify_inputs(run, plan)
@@ -178,6 +180,8 @@ def utc(value):
 
 
 def replay_clocks(run, public_key):
+    from tools.ms94_b06_engineering_boundary import refuse_engineering_key
+    refuse_engineering_key(public_key)
     """Trusted host envelopes, real database clocks, and no clock-setting runtime."""
     run = Path(run)
     plan = read_json(run / "plan.json")

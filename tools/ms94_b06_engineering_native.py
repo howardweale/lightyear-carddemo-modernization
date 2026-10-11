@@ -1,4 +1,4 @@
-"""Oracle-only adapter; imports #293 observer unchanged. Never a pair adapter."""
+"""Oracle-only adapter with approval-bound observer diagnostics. Never a pair adapter."""
 import secrets
 import time
 from pathlib import Path
@@ -60,12 +60,12 @@ class OracleEngineeringRunner(ObservedRunner):
         self.names = dict(oracle=prefix+'-oracle')
         database = self.names['oracle']; self.remember('container', database)
         docker('create','--name',database,'--label',self.label,'--network',self.network,
-               '--network-alias','oracle','--memory','6g','--cpus','2',
+               '--network-alias','oracle','--memory',str(LIMITS['database_memory_mib'])+'m','--cpus',str(LIMITS['database_cpus']),
                '--security-opt','no-new-privileges',self.plan['declaration']['environment']['engines']['oracle']['image_digest'])
         docker('start',database)
         self.runner = prefix+'-runner'; self.remember('container', self.runner)
         docker('create','--name',self.runner,'--label',self.label,'--network',self.network,
-               '--memory','8g','--cpus','4','--cap-drop','ALL','--security-opt','no-new-privileges',
+               '--memory',str(LIMITS['carrier_memory_mib'])+'m','--cpus',str(LIMITS['carrier_cpus']),'--cap-drop','ALL','--security-opt','no-new-privileges',
                '--tmpfs','/secrets:rw,noexec,nosuid,size=268435456',
                '--mount',f'type=bind,src={self.root / "src"},dst=/verifier/src,readonly',
                '--mount',f'type=bind,src={self.run},dst=/output',self.plan['local']['runner_image'])

@@ -18,7 +18,9 @@ IMAGE = 'sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268
 OBSERVER_SOURCE = 'b0d5749c0a876b7977d8c64bdeca65706b6c129f'
 LIMITS = dict(run_seconds=3600, cleanup_seconds=600, candidate_seconds=1800,
               database_memory_mib=6144, carrier_memory_mib=8192,
-              application_memory_mib=8192, observer_memory_mib=768,
+              application_memory_mib=8192, observer_memory_mib=2048, observer_heap_mib=1536,
+              unmatched_return_cap=10, heap_guard_percent=85, telemetry_events=1000, pending_cap=256,
+              class_index_slots=262144, class_cache_entries=256, soft_ref_lru_ms_per_mb=0,
               database_cpus=2, carrier_cpus=4, application_cpus=4, observer_cpus=1,
               output_bytes=8*1024**3, minimum_free_bytes=60*1024**3,
               audit_records=500000, audit_bytes=128*1024**2, evidence_records=50000)
@@ -56,10 +58,13 @@ def write_new(path, value):
     with path.open('xb') as stream: stream.write(canonical(value)+b'\n')
 
 
-def proposal(start, end, excluded_windows, evidence_runs, output_root, run_cap=10):
+def proposal(start, end, excluded_windows, evidence_runs, output_root, run_cap=2):
+    from tools.ms94_b06_engineering_key import ENGINEERING_KEY_SHA256
     value = seal(dict(artifact_type='b06-engineering-standing-proposal/1', **LABEL,
         image=IMAGE, observer_source=OBSERVER_SOURCE, scope='J1-retained-reference-oracle-only',
-        run_cap=run_cap, not_before_utc=start, deadline_utc=end, limits=LIMITS,
+        run_cap=run_cap, attempt_modes=["strict", "diagnostic-unmatched-return"],
+        engineering_key_sha256=ENGINEERING_KEY_SHA256,
+        not_before_utc=start, deadline_utc=end, limits=LIMITS,
         excluded_windows=excluded_windows, evidence_runs=evidence_runs, output_root=str(Path(output_root).resolve()),
         model_calls=0, approved=False, no_degradation=True, no_automatic_retries=True))
     validate(value)
@@ -69,11 +74,14 @@ def proposal(start, end, excluded_windows, evidence_runs, output_root, run_cap=1
 def validate(value):
     verify(value)
     require(value.get('run_class')=='engineering' and value.get('qualification_credit') is False and value.get('measurement_credit') is False, 'labels')
-    require(value.get('image') == IMAGE and value.get('observer_source') == OBSERVER_SOURCE, 'fixed-runtime')
+    require(value.get('image') == IMAGE and value.get('observer_source') == value.get('implementation_commit', OBSERVER_SOURCE), 'fixed-runtime')
     require(value.get('scope') == 'J1-retained-reference-oracle-only', 'scope')
-    require(type(value.get('run_cap')) is int and 1 <= value['run_cap'] <= 10, 'run-cap')
+    require(type(value.get('run_cap')) is int and value['run_cap'] == 2, 'run-cap')
     require(value.get('limits') == LIMITS and value.get('model_calls') == 0 and
             value.get('no_degradation') is True and value.get('no_automatic_retries') is True, 'limits')
+    from tools.ms94_b06_engineering_key import ENGINEERING_KEY_SHA256
+    require(value.get('engineering_key_sha256') == ENGINEERING_KEY_SHA256, 'key-fingerprint')
+    require(value.get('attempt_modes') == ['strict', 'diagnostic-unmatched-return'], 'attempt-sequence')
     root=Path(value['output_root'])
     require(root.is_absolute() and root.name=='b06-engineering', 'output-root')
     begin, end = utc(value['not_before_utc']), utc(value['deadline_utc'])
@@ -94,6 +102,7 @@ def approve_check(approval, expected_file_sha256, path):
             approval.get('approved') is True and approval.get('approved_by') == 'Howard' and
             isinstance(approval.get('approval_reference'), str) and approval['approval_reference'], 'approval-required')
     utc(approval['approved_at_utc'])
+    validate_instrumented(approval)
 
 
 def guard(approval, moment=None, starting=False):
@@ -143,8 +152,10 @@ class Ledger:
         run = self.session/'runs'/('journey-'+uuid.uuid4().hex)
         run.mkdir(parents=True, exist_ok=False)
         write_new(run/'engineering.json', seal(dict(**LABEL, artifact_type='b06-engineering-run/1',
-            run_number=number, source_commit=source_commit, runtime_source_commit=OBSERVER_SOURCE,
+            run_number=number, source_commit=source_commit, runtime_source_commit=self.approval['observer_source'],
             image=IMAGE, approval_sha256=self.approval['content_sha256'], owner=run.name,
+            mode=self.approval['attempt_modes'][number-1],
+            engineering_key_sha256=self.approval['engineering_key_sha256'],
             started_utc=now().isoformat(), model_calls=0)))
         return run
 
@@ -192,3 +203,31 @@ def append_log(path, record, terminal, context):
              (detail.get('location') or {}).get('method', detail.get('method')), detail.get('depth')]
     with Path(path).open('a', encoding='utf-8') as stream:
         stream.write('| '+' | '.join(map(safe,cells))+' | engineering | false | false |\n')
+
+
+def validate_instrumented(value):
+    """Exact future request binding, still blocked unconditionally at all entrypoints."""
+    require(re.fullmatch('[0-9a-f]{40}',value.get('implementation_commit','')) is not None,'implementation-commit')
+    for name in ('native_template_sha256','observer_source_sha256'):
+        require(re.fullmatch('[0-9a-f]{64}',value.get(name,'')) is not None,name)
+    classes=value.get('observer_class_files_sha256',{})
+    require(bool(classes) and all(name.endswith('.class') and re.fullmatch('[0-9a-f]{64}',digest)
+            for name,digest in classes.items()),'compiled-observer-bindings')
+    require(value.get('observer_configuration') == dict(mode_sequence=['strict','diagnostic-unmatched-return'],
+        format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=256), 'observer-configuration')
+    require((utc(value['not_before_utc'])-utc(value['full_plan_delivered_at_utc'])).total_seconds() >= 4*3600,
+            'four-hour-plan-review')
+
+
+def instrumented_proposal(start,end,excluded_windows,evidence_runs,output_root,*,
+                          implementation_commit,native_template_sha256,observer_source_sha256,
+                          observer_class_files_sha256,full_plan_delivered_at_utc):
+    value=proposal(start,end,excluded_windows,evidence_runs,output_root)
+    body={k:v for k,v in value.items() if k!='content_sha256'}
+    body.update(implementation_commit=implementation_commit,observer_source=implementation_commit,
+        native_template_sha256=native_template_sha256,
+        observer_source_sha256=observer_source_sha256,observer_class_files_sha256=observer_class_files_sha256,
+        full_plan_delivered_at_utc=full_plan_delivered_at_utc,
+        observer_configuration=dict(mode_sequence=['strict','diagnostic-unmatched-return'],
+            format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=256))
+    result=seal(body);validate(result);validate_instrumented(result);return result

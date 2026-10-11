@@ -1,4 +1,4 @@
-# B06 observer alternatives â€” host measurements and 2c split
+# B06 observer alternatives — host measurements and 2c split
 
 **2026-10-11: Part 5 measured offline.** Howard's October 10 decision withdrew
 host reproduction as the prerequisite for the memory work. This independent
@@ -53,8 +53,8 @@ runtime image was never modified.
 
 | Runtime | spinInnerClass | Customized-code emitter | ClassDefiner | Total watched calls | Removed vs installed JDK | Median wall time |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Installed JDK baseline | 25 | 82 | 133 | 240 | â€” | 97.35 ms |
-| Linked control, JLI plug-in disabled | 25 | 152 | 211 | 388 | âˆ’61.67% (more calls) | 168.07 ms |
+| Installed JDK baseline | 25 | 82 | 133 | 240 | — | 97.35 ms |
+| Linked control, JLI plug-in disabled | 25 | 152 | 211 | 388 | −61.67% (more calls) | 168.07 ms |
 | Trained JLI image | 25 | 61 | 110 | 196 | 18.33% | 114.56 ms |
 | Installed JDK + dynamic CDS | 25 | 61 | 85 | 171 | 28.75% | 97.17 ms |
 
@@ -141,7 +141,7 @@ not a causal explanation of the missing entry or native OOM.
 | JLI pre-generation | 49.48% fewer watched calls vs matched linked control; 18.33% vs installed JDK | New runtime digest; native workload-specific effectiveness; provenance for pre-generated classes |
 | Dynamic CDS | 28.75% fewer watched calls; outer factory calls remain | Archive identity/eligibility, capture misses and catalogue/admission contract |
 | Three JDK dump facilities | 132 files / 139,358 bytes, +83.80% median process wall time | Loader completeness and authenticated per-call provenance/identity remain absent |
-| 2c selective plumbing exclusion | 10.01â€“10.04% bootstrap-input candidates; 0 entries proven image independent | Explicit proofs and evidence-scope/replay amendments before any exclusion |
+| 2c selective plumbing exclusion | 10.01–10.04% bootstrap-input candidates; 0 entries proven image independent | Explicit proofs and evidence-scope/replay amendments before any exclusion |
 
 The lower-risk finding is that pre-generation can reduce real watched work on a
 matched public workload while preserving the observer. A dump-based replacement

@@ -48,7 +48,7 @@ def project(native,host,target=37000):
     # input witness allowance per entry, with a heap dump and fixed index reserve.
     output=native['raw_bytes']/n+host['diagnostic_bytes']/h+2048
     fixed=1536*1024**2+12*1024**2+1024*1024**2
-    pending=max(native['observed_max_pending_entries']/n,host['last_sample']['pending']/h)
+    pending=max(native['observed_max_pending_entries']/n,host.get('maximum_pending_entries',host['last_sample']['pending'])/h)
     rates=dict(ordinary_records=ordinary,metadata_records=records,metadata_bytes=metadata,output_bytes=output,pending_entries=pending)
     attempts=[]
     for number in (1,2):

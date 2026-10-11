@@ -1,6 +1,7 @@
 """Validate every new host input witness and preserve the unchanged r6 decision."""
 from collections import Counter
 import json
+import csv
 from pathlib import Path
 from tools.b06_host_probe.bounded_report import summarize
 from tools.b06_host_probe.alternatives_partition import classify
@@ -29,6 +30,7 @@ def witness_counts(path):
 def report(folder):
     folder=Path(folder);result=summarize(folder);witnesses=witness_counts(folder/'observer.stdout')
     if witnesses['validated_generation_entries']!=result['generation_entries']:raise ValueError('witness-count-mismatch')
+    with (folder/'heap.csv').open() as stream:result['maximum_pending_entries']=max(int(row['pending']) for row in csv.DictReader(stream))
     manifest=json.loads((folder/'manifest.json').read_text())
     expected=dict(threads=3,iterations_per_thread=1400,distinct_stack_fixture_classes=3000,stack_fixture_depth=100,
         observer_heap_mib=192,suppression_eligible_return_interval=200,

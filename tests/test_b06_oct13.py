@@ -175,6 +175,8 @@ class ProjectionTests(unittest.TestCase):
         self.assertEqual(r['rates_per_generation']['ordinary_records'],3)
         self.assertEqual(r['rates_per_generation']['metadata_records'],25)
         self.assertEqual(r['rates_per_generation']['metadata_bytes'],2000)
+        host['maximum_pending_entries']=5
+        self.assertEqual(project(native,host)['rates_per_generation']['pending_entries'],.05)
         self.assertFalse(r['attempts'][0]['projected_reaches_target'])
         self.assertTrue(r['attempts'][1]['projected_reaches_target'])
         self.assertFalse(r['statistical_upper_confidence_bound'])

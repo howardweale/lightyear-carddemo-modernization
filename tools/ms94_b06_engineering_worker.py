@@ -23,6 +23,11 @@ def main():
     require((run.parent.parent.parent/'active.lock').read_text()==approval['content_sha256'],'worker-lease')
     require(not (run/'worker-started.json').exists(),'worker-restart')
     guard(approval,starting=True,attempt_number=record['run_number'])
+    from tools.ms94_b06_engineering_key import read_public
+    from tools.ms94_b06_engineering_run import verify_prepared_run
+    public=read_public(a.authority,approval['engineering_key_sha256'])
+    verify_prepared_run(Path(a.assets),run,approval,public)
+    guard(approval,starting=True,attempt_number=record['run_number'])
     from tools.ms94_b06_engineering_key import DedicatedEngineeringSigner
     from tools.ms94_b06_engineering_native import execute
     signer=EngineeringSigner(DedicatedEngineeringSigner(a.authority, approval['engineering_key_sha256']))

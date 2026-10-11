@@ -105,6 +105,45 @@ class Oct13GateTests(unittest.TestCase):
                            {'automatic_second_attempt':True},{'run_cap':3}):
                 with self.subTest(change=change),self.assertRaises(ValueError):gate.validate_request(reseal(value,**change))
 
+    def test_application_boundary_binds_reserved_attempt_before_docker(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from tools.ms94_b06_observed_runner import ObservedRunner
+        class BeforeCreate(Exception):pass
+        for number in (1,2):
+            with self.subTest(number=number),tempfile.TemporaryDirectory() as t:
+                root=Path(t);approval=request(root);runs=Path(approval['output_root'])/approval['content_sha256']/'runs'
+                for i in range(1,number+1):(runs/('journey-'+str(i)*32)).mkdir(parents=True)
+                run=runs/('journey-'+str(number)*32);mode=approval['attempt_modes'][number-1]
+                e.write_new(run/'engineering.json',seal(dict(**e.LABEL,run_number=number,owner=run.name,
+                    approval_sha256=approval['content_sha256'],source_commit=approval['implementation_commit'],
+                    runtime_source_commit=approval['observer_source'],engineering_key_sha256=approval['engineering_key_sha256'],mode=mode)))
+                plan=seal(dict(**e.LABEL,engineering_approval_sha256=approval['content_sha256'],
+                    engineering_key_sha256=approval['engineering_key_sha256'],engineering_template_sha256=approval['native_template_sha256'],
+                    engineering_limits=e.attempt_limits(number),posting_observer=dict(native_diagnostics=d.configuration(mode),
+                    class_files_sha256=approval['observer_class_files_sha256']),local=dict(runner_image='fixture-image')))
+                source=run/'inputs/operations.java';source.parent.mkdir();source.write_bytes(b'fixture')
+                runner=SimpleNamespace(run=run,root=root,owner=run.name,plan=plan,approval=approval,
+                    label='fixture-label',network='fixture-network',remember=Mock())
+                payload=dict(lane='oracle',test='LightyearOperationsTest',output='/output/results',harness_sha256=e.sha(source))
+                # Altered caps, CPU, memory and mode all refuse before staging/create.
+                bads=[reseal(plan,engineering_limits={**plan['engineering_limits'],name:value})
+                      for name,value in (('audit_records',1500001),('application_cpus',5),('application_memory_mib',8193))]
+                bads.append(reseal(plan,engineering_limits=e.attempt_limits(3-number)))
+                wrong=copy.deepcopy(plan['posting_observer']);wrong['native_diagnostics']=d.configuration(approval['attempt_modes'][2-number])
+                bads.append(reseal(plan,posting_observer=wrong))
+                for bad in bads:
+                    runner.plan=bad
+                    with patch('tools.ms94_b06_observed_runner.docker') as docker,self.assertRaises(ValueError):
+                        ObservedRunner.worker(runner,'execute',payload,1800)
+                    docker.assert_not_called();self.assertFalse((run/'application-output').exists())
+                runner.plan=plan
+                with patch('tools.ms94_b06_observed_runner.docker',side_effect=BeforeCreate) as docker:
+                    with self.assertRaises(BeforeCreate):ObservedRunner.worker(runner,'execute',payload,1800)
+                args=docker.call_args.args
+                self.assertEqual(args[0],'create');self.assertEqual(args[args.index('--memory')+1],'8192m')
+                self.assertEqual(args[args.index('--cpus')+1],'4')
+
     def test_expanded_caps_only_diagnostic_and_exact_java_values(self):
         def plan(mode,limits):return dict(run_class='engineering',qualification_credit=False,measurement_credit=False,
             engineering_limits=limits,posting_observer={'native_diagnostics':d.configuration(mode)})
@@ -118,6 +157,108 @@ class Oct13GateTests(unittest.TestCase):
         from tools.ms94_b06_observer_audit import Audit
         a=Audit(diagnostic);self.assertEqual((a.max_events,a.max_bytes),(1500000,402653184))
         self.assertEqual(Audit().max_events,500000)
+
+class EngineeringEvidenceTests(unittest.TestCase):
+    def setUp(self):
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        from cryptography.hazmat.primitives import serialization
+        from lightyear_workflow.campaign_engine import Signer
+        from tools import ms94_b06_engineering_key as key
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
+        signer=Signer.__new__(Signer);signer.key=Ed25519PrivateKey.generate()
+        self.public=signer.public=signer.key.public_key().public_bytes(serialization.Encoding.PEM,serialization.PublicFormat.SubjectPublicKeyInfo)
+        self.signer=e.EngineeringSigner(signer)
+        pin=patch.object(key,'ENGINEERING_KEY_SHA256',hashlib.sha256(self.public).hexdigest());pin.start();self.addCleanup(pin.stop)
+        self.approval=request(self.root);self.assets=self.root/'assets'
+        self.ledger=e.Ledger(Path(self.approval['output_root']),self.approval,self.public)
+        self.guard=patch.object(e,'guard');self.guard.start();self.addCleanup(self.guard.stop)
+        self.run=self.ledger.reserve('a'*40)
+        self.base=seal(dict(posting_observer=dict(class_files_sha256=self.approval['observer_class_files_sha256']),
+            inputs_sha256={},declaration=dict(environment=dict(engines=dict(oracle=dict(image_digest='approved-oracle')))),
+            local=dict(runner_image='approved-carrier')))
+        from tools.ms94_b06_engineering_run import derived_plan
+        self.plan=derived_plan(self.base,self.run,self.approval);e.write_new(self.run/'plan.json',self.plan)
+        self.handoff()
+
+    def handoff(self):
+        from tools.ms94_b06_engineering_evidence import binding
+        value=self.signer.sign(dict(**binding(self.run,self.approval),artifact_type='b06-engineering-handoff/1',
+            assets_root=str(self.assets.resolve()),template_path='templates/j1/plan.json',
+            asset_index_sha256=self.approval['asset_index_sha256'],native_template_sha256=self.approval['native_template_sha256']))
+        (self.run/'supervisor-handoff.json').write_bytes(e.canonical(value)+b'\n')
+
+    def finish(self):
+        from tools.ms94_b06_engineering_evidence import binding
+        bound=binding(self.run,self.approval)
+        e.write_new(self.run/'cleanup.json',self.signer.sign(dict(**bound,complete=True,actual_absence_verified=True)))
+        e.write_new(self.run/'terminal.json',self.signer.sign(dict(**bound,cleanup_verified=True,outcome='refused',
+            cleanup_record='cleanup.json',cleanup_record_sha256=e.sha(self.run/'cleanup.json'))))
+        e.seal_artifacts(self.run,self.signer,self.approval)
+
+    def test_complete_plan_not_just_selected_fields_and_handoff(self):
+        from tools.ms94_b06_engineering_run import verify_prepared_run
+        with patch('tools.ms94_b06_engineering_run.template',return_value=self.base) as template:
+            self.assertEqual(verify_prepared_run(self.assets,self.run,self.approval,self.public),self.plan)
+            template.assert_called_once()
+            for field in ('oracle','carrier'):
+                changed=copy.deepcopy(self.plan)
+                if field=='oracle':changed['declaration']['environment']['engines']['oracle']['image_digest']='changed'
+                else:changed['local']['runner_image']='changed'
+                changed=reseal(changed);(self.run/'plan.json').write_bytes(e.canonical(changed))
+                with self.assertRaisesRegex(ValueError,'receipt-binding'):
+                    verify_prepared_run(self.assets,self.run,self.approval,self.public)
+                # Even a freshly signed handoff cannot make a different derived
+                # plan agree with the exact approved template.
+                self.handoff()
+                with self.assertRaisesRegex(ValueError,'complete-prepared-plan'):
+                    verify_prepared_run(self.assets,self.run,self.approval,self.public)
+                (self.run/'plan.json').write_bytes(e.canonical(self.plan));self.handoff()
+
+    def test_worker_rejects_changed_plan_before_private_signer_or_native(self):
+        from types import SimpleNamespace
+        from tools import ms94_b06_engineering_worker as w
+        args=SimpleNamespace(run=str(self.run),assets=str(self.assets),authority='test-only',approval=str(self.root/'request.json'),approved_sha256='f'*64)
+        e.write_new(args.approval,self.approval);(Path(self.approval['output_root'])/'active.lock').write_text(self.approval['content_sha256'])
+        changed=copy.deepcopy(self.plan);changed['local']['runner_image']='changed';(self.run/'plan.json').write_bytes(e.canonical(reseal(changed)))
+        with patch.object(e,'require_execution_ready'),patch('argparse.ArgumentParser.parse_args',return_value=args),patch.object(w,'approve_check'),patch.object(w,'guard'), \
+                patch('tools.ms94_b06_engineering_run.source_commit',return_value='a'*40), \
+                patch('tools.ms94_b06_engineering_key.read_public',return_value=self.public), \
+                patch('tools.ms94_b06_engineering_key.DedicatedEngineeringSigner') as signer, \
+                patch('tools.ms94_b06_engineering_native.execute') as native:
+            with self.assertRaisesRegex(ValueError,'receipt-binding'):w.main()
+            signer.assert_not_called();native.assert_not_called()
+
+    def test_authenticated_failed_attempt_consumed_and_tampering_blocks_next(self):
+        from tools.ms94_b06_engineering_evidence import verify_prior
+        self.finish();verify_prior(self.run,self.approval,self.public)
+        saved={p.name:p.read_bytes() for p in self.run.iterdir() if p.is_file()}
+        cases=[('terminal.json','cleanup_verified',False),('terminal.json','mode','diagnostic-unmatched-return'),
+               ('cleanup.json','actual_absence_verified',False),('artifacts.json','owner','journey-'+'0'*32),
+               ('engineering.json','run_number',2),('plan.json','extra','changed')]
+        for name,key,value in cases:
+            with self.subTest(name=name,key=key):
+                data=e.read_json(self.run/name);data[key]=value;(self.run/name).write_bytes(e.canonical(data))
+                with self.assertRaises(ValueError):self.ledger.reserve('a'*40)
+                self.assertEqual(len(list((self.ledger.session/'runs').glob('journey-*'))),1)
+                (self.run/name).write_bytes(saved[name])
+        extra=self.run/'unlisted';extra.write_bytes(b'new')
+        with self.assertRaisesRegex(ValueError,'artifact-inventory'):self.ledger.reserve('a'*40)
+        extra.unlink()
+        second=self.ledger.reserve('a'*40)
+        self.assertEqual(e.read_json(second/'engineering.json')['run_number'],2)
+        with self.assertRaisesRegex(ValueError,'run-cap-exhausted'):self.ledger.reserve('a'*40)
+
+    def test_forged_cleanup_even_with_resealed_artifact_inventory_refused(self):
+        self.finish()
+        cleanup=e.read_json(self.run/'cleanup.json');cleanup['actual_absence_verified']=False
+        (self.run/'cleanup.json').write_bytes(e.canonical(cleanup))
+        # An attacker can recompute hashes/self-seals, but cannot authenticate
+        # either changed cleanup or the aggregate with the approved public key.
+        art=e.read_json(self.run/'artifacts.json')
+        for row in art['artifacts']:
+            if row['path']=='cleanup.json':row.update(sha256=e.sha(self.run/'cleanup.json'),bytes=(self.run/'cleanup.json').stat().st_size)
+        (self.run/'artifacts.json').write_bytes(e.canonical(reseal(art)))
+        with self.assertRaisesRegex(ValueError,'receipt-signature'):self.ledger.reserve('a'*40)
 
 class GenerationInputTests(unittest.TestCase):
     def test_real_input_paths_classify_without_stack(self):

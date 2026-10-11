@@ -19,9 +19,28 @@ class EngineeringTests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name); self.evidence=self.root/'evidence'; self.evidence.mkdir()
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        from cryptography.hazmat.primitives import serialization
+        from lightyear_workflow.campaign_engine import Signer
+        from tools import ms94_b06_engineering_key as key
+        self.signer=Signer.__new__(Signer);self.signer.key=Ed25519PrivateKey.generate()
+        self.public=self.signer.public=self.signer.key.public_key().public_bytes(serialization.Encoding.PEM,serialization.PublicFormat.SubjectPublicKeyInfo)
+        pin=patch.object(key,'ENGINEERING_KEY_SHA256',e.hashlib.sha256(self.public).hexdigest());pin.start();self.addCleanup(pin.stop)
         self.a=e.proposal('2026-10-10T23:00:00Z','2026-10-11T23:00:00Z',
             [dict(start='2026-10-10T19:30:00Z',end='2026-10-10T22:30:00Z')], [str(self.evidence)], self.root/'b06-engineering')
         self.clock=patch.object(e,'now',return_value=datetime(2026,10,11,1,tzinfo=timezone.utc)); self.clock.start(); self.addCleanup(self.clock.stop)
+
+    def finish_fixture(self,run,approval):
+        from tools.ms94_b06_engineering_evidence import binding
+        e.write_new(run/'plan.json',seal({'fixture':'no native execution'}))
+        bound=binding(run,approval);signer=e.EngineeringSigner(self.signer)
+        e.write_new(run/'supervisor-handoff.json',signer.sign(dict(**bound,artifact_type='b06-engineering-handoff/1',
+            assets_root=str(self.root/'assets'),template_path='templates/j1/plan.json',asset_index_sha256=approval.get('asset_index_sha256'),
+            native_template_sha256=approval.get('native_template_sha256'))))
+        e.write_new(run/'cleanup.json',signer.sign(dict(**bound,complete=True,actual_absence_verified=True)))
+        e.write_new(run/'terminal.json',signer.sign(dict(**bound,cleanup_verified=True,outcome='refused',
+            cleanup_record='cleanup.json',cleanup_record_sha256=e.sha(run/'cleanup.json'))))
+        e.seal_artifacts(run,signer,approval)
 
     def test_review_hold_precedes_cli_parsing_signing_and_docker(self):
         from tools.ms94_b06_engineering_run import main as supervisor
@@ -142,15 +161,14 @@ class EngineeringTests(unittest.TestCase):
 
     def test_reservation_budgets_follow_consumed_failed_attempts(self):
         a=reseal(self.a,not_before_utc='2026-10-11T16:00:00Z',deadline_utc='2026-10-11T19:00:00Z')
-        ledger=e.Ledger(self.root/'b06-engineering',a)
+        ledger=e.Ledger(self.root/'b06-engineering',a,self.public)
         with ledger.lock():
             with patch.object(e,'now',return_value=datetime(2026,10,11,16,40,1,tzinfo=timezone.utc)):
                 with self.assertRaisesRegex(ValueError,'full-run-budget'):ledger.reserve('a'*40)
             self.assertFalse((ledger.session/'runs').exists())
             with patch.object(e,'now',return_value=datetime(2026,10,11,16,40,tzinfo=timezone.utc)):
                 first=ledger.reserve('a'*40)
-            e.write_new(first/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
-            e.write_new(first/'artifacts.json',dict(**e.LABEL))
+            self.finish_fixture(first,a)
             self.assertEqual(ledger.next_attempt_number(),2)
             with patch.object(e,'now',return_value=datetime(2026,10,11,17,50,1,tzinfo=timezone.utc)):
                 with self.assertRaisesRegex(ValueError,'full-run-budget'):ledger.reserve('a'*40)
@@ -158,8 +176,7 @@ class EngineeringTests(unittest.TestCase):
                 second=ledger.reserve('a'*40)
             record=json.loads((second/'engineering.json').read_text())
             self.assertEqual(record['run_number'],2);self.assertEqual(record['mode'],'diagnostic-unmatched-return')
-            e.write_new(second/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
-            e.write_new(second/'artifacts.json',dict(**e.LABEL))
+            self.finish_fixture(second,a)
             with self.assertRaisesRegex(ValueError,'run-cap-exhausted'):ledger.reserve('a'*40)
 
     def test_low_level_prepare_rechecks_budget_before_docker(self):
@@ -183,8 +200,8 @@ class EngineeringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'registry-unavailable'): e.guard(self.a)
 
     def test_consumed_failed_attempt_and_no_retry(self):
-        ledger=e.Ledger(self.root/'b06-engineering',self.a)
-        with ledger.lock():
+        ledger=e.Ledger(self.root/'b06-engineering',self.a,self.public)
+        with self.assertRaisesRegex(ValueError,'prior-run-unsealed'),ledger.lock():
             first=ledger.reserve('a'*40)
             with self.assertRaisesRegex(ValueError,'prior-run-unsealed'): ledger.reserve('b'*40)
         self.assertTrue((ledger.root/'active.lock').exists())
@@ -192,13 +209,12 @@ class EngineeringTests(unittest.TestCase):
             with ledger.lock(): self.fail('must not enter')
 
     def test_two_consumed_attempts_stop(self):
-        ledger=e.Ledger(self.root/'b06-engineering',self.a)
+        ledger=e.Ledger(self.root/'b06-engineering',self.a,self.public)
         with ledger.lock():
             for i in range(2):
                 run=ledger.reserve('a'*40)
                 self.assertEqual(json.loads((run/'engineering.json').read_text())['run_number'],i+1)
-                e.write_new(run/'terminal.json',dict(**e.LABEL,cleanup_verified=True,outcome='refused'))
-                e.write_new(run/'artifacts.json',dict(**e.LABEL))
+                self.finish_fixture(run,self.a)
             with self.assertRaisesRegex(ValueError,'run-cap-exhausted'): ledger.reserve('b'*40)
         self.assertFalse((ledger.root/'active.lock').exists())
 
@@ -248,9 +264,9 @@ class EngineeringTests(unittest.TestCase):
         plan=dict(declaration=dict(policy=dict(max_elapsed_seconds=3600),environment=dict(engines=dict(
             oracle=dict(image_digest='oracle-image',expected_version='version')))),local=dict(runner_image='carrier'))
         runner=n.OracleEngineeringRunner(self.root,run,plan,lambda *_:None,self.a)
-        runner.checkpoint=Mock();runner.assert_real_runtime=Mock();runner.rotate_passwords=Mock();runner.worker=Mock()
+        runner.signer=Mock(public=self.public);runner.checkpoint=Mock();runner.assert_real_runtime=Mock();runner.rotate_passwords=Mock();runner.worker=Mock()
         calls=[]
-        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'),patch.object(e,'require_execution_ready'),patch.object(e,'validate_run_binding',return_value={'run_number':1}):runner.prepare()
+        with patch.object(n,'docker',side_effect=lambda *args,**kw:calls.append(args)),patch.object(n,'inspect',return_value={}),             patch.object(n.InternalOnlyNetwork,'verify',return_value=True),patch.object(n,'oracle_baseline'),patch.object(e,'require_execution_ready'),patch.object(e,'validate_run_binding',return_value={'run_number':1}),patch('tools.ms94_b06_engineering_run.verify_prepared_run',return_value=plan):runner.prepare()
         self.assertEqual(set(runner.names),{'oracle'})
         self.assertFalse(any('postgresql' in str(c) or c[:2]==('volume','create') for c in calls))
         creates=[c for c in calls if c[0]=='create'];self.assertEqual(len(creates),2)
@@ -263,7 +279,7 @@ class EngineeringTests(unittest.TestCase):
         from tools import ms94_b06_engineering_native as n
         run=self.root/'run';run.mkdir();e.write_new(run/'plan.json',dict(declaration=dict(policy=dict(max_elapsed_seconds=3600))))
         signer=Mock(sign=lambda value:seal(value))
-        with patch.object(n.OracleEngineeringRunner,'prepare',side_effect=ValueError('failure')),             patch.object(n,'cleanup_owned',return_value=dict(complete=True)) as clean,patch.object(n,'absence',return_value=True):
+        with patch('tools.ms94_b06_engineering_evidence.binding',return_value={}),patch.object(n.OracleEngineeringRunner,'prepare',side_effect=ValueError('failure')),             patch.object(n,'cleanup_owned',return_value=dict(complete=True)) as clean,patch.object(n,'absence',return_value=True):
             with patch.object(e,'require_execution_ready'):
                 result=n.execute(self.root,run,self.a,signer)
         clean.assert_called_once();self.assertEqual(result['outcome'],'refused');self.assertTrue(result['cleanup_verified'])
@@ -278,7 +294,7 @@ class EngineeringTests(unittest.TestCase):
             signer.sign(dict(signature={},content_sha256='a'*64))
 
     def test_sealing_failure_retains_lease_even_with_terminal(self):
-        ledger=e.Ledger(self.root/'b06-engineering',self.a)
+        ledger=e.Ledger(self.root/'b06-engineering',self.a,self.public)
         with self.assertRaisesRegex(RuntimeError,'publication'):
             with ledger.lock():
                 run=ledger.reserve('a'*40)

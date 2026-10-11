@@ -132,8 +132,8 @@ def guard(approval, moment=None, starting=False, attempt_number=1):
 
 
 class Ledger:
-    def __init__(self, root, approval):
-        self.root = Path(root).resolve(); self.approval = approval
+    def __init__(self, root, approval, public=None):
+        self.root = Path(root).resolve(); self.approval = approval; self.public=public
         require(self.root.name == 'b06-engineering' and not any(p.is_symlink() for p in (self.root,*self.root.parents)), 'output-root')
         require(self.root==Path(approval['output_root']).resolve(), 'approval-output-root')
         self.session = self.root/approval['content_sha256']
@@ -149,8 +149,16 @@ class Ledger:
             # Retain the lease after incomplete cleanup or an interrupted run.
             runs = sorted((self.session/'runs').glob('journey-*'))
             import sys
-            if sys.exc_info()[0] is None and all((r/'artifacts.json').is_file() and (r/'terminal.json').is_file() and read_json(r/'terminal.json').get('cleanup_verified') is True for r in runs):
+            if sys.exc_info()[0] is None:
+                self.verify_prior_runs()
                 path.unlink()
+
+    def verify_prior_runs(self):
+        from tools.ms94_b06_engineering_evidence import verify_prior
+        numbers=[]
+        for run in sorted((self.session/'runs').glob('journey-*')):
+            numbers.append(verify_prior(run,self.approval,self.public)['run_number'])
+        require(sorted(numbers)==list(range(1,len(numbers)+1)),'prior-attempt-sequence')
 
     def next_attempt_number(self):
         number=len(list((self.session/'runs').glob('journey-*')))+1
@@ -163,8 +171,7 @@ class Ledger:
         require(re.fullmatch('[0-9a-f]{40}', source_commit) is not None, 'source-commit')
         runs = sorted((self.session/'runs').glob('journey-*'))
         require(len(runs) < self.approval['run_cap'], 'run-cap-exhausted')
-        for run in runs:
-            require((run/'artifacts.json').is_file() and (run/'terminal.json').is_file() and read_json(run/'terminal.json').get('cleanup_verified') is True, 'prior-run-unsealed')
+        self.verify_prior_runs()
         number = len(runs)+1
         run = self.session/'runs'/('journey-'+uuid.uuid4().hex)
         run.mkdir(parents=True, exist_ok=False)
@@ -184,14 +191,16 @@ class EngineeringSigner:
         return self.signer.sign({**body, **LABEL})
 
 
-def seal_artifacts(run, signer):
+def seal_artifacts(run, signer, approval=None):
     run = Path(run)
     entries = []
     for path in sorted(run.rglob('*')):
         require(not path.is_symlink(), 'artifact-link')
         if path.is_file():
             entries.append(dict(**LABEL, path=path.relative_to(run).as_posix(), sha256=sha(path), bytes=path.stat().st_size))
-    value = signer.sign(dict(**LABEL, artifact_type='b06-engineering-artifacts/1', artifacts=entries))
+    from tools.ms94_b06_engineering_evidence import binding
+    bound=binding(run,approval) if approval is not None else {}
+    value = signer.sign(dict(**LABEL, **bound, artifact_type='b06-engineering-artifacts/1', artifacts=entries))
     write_new(run/'artifacts.json', value)
     return value
 

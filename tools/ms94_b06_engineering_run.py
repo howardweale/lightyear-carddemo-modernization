@@ -59,9 +59,8 @@ def template(assets, source, approval):
     return value
 
 
-def prepare_run(assets, source, run, approval):
-    from tools.ms94_b06_admission import bound_file
-    base=template(assets,source,approval); plan=deepcopy(base); plan.pop('content_sha256')
+def derived_plan(base,run,approval):
+    plan=deepcopy(base);plan.pop('content_sha256')
     plan.update(LABEL); plan.update(artifact_type='b06-engineering-oracle-plan/1',
         qualification_only=False, qualification_credit=False, measurement_credit=False,
         engineering_approval_sha256=approval['content_sha256'], engineering_template_sha256=approval['native_template_sha256'])
@@ -75,14 +74,29 @@ def prepare_run(assets, source, run, approval):
     plan['engineering_key_sha256']=approval['engineering_key_sha256']
     from tools.ms94_b06_engineering import attempt_limits
     plan['engineering_limits']=attempt_limits(validate_run_binding(run,approval)['run_number']) if approval.get('attempt_limits') else dict(LIMITS)
+    prepared=seal(plan);validate_run_binding(run,approval,prepared);return prepared
+
+
+def verify_prepared_run(assets,run,approval,public):
+    from tools.ms94_b06_engineering_evidence import verify_handoff
+    from tools.ms94_b06_admission import bound_file
+    verify_handoff(run,assets,approval,public)
+    base=template(assets,Path(assets)/'templates/j1/plan.json',approval)
+    expected=derived_plan(base,run,approval)
+    require(read_json(Path(run)/'plan.json')==expected,'complete-prepared-plan')
+    for name,digest in base['inputs_sha256'].items():bound_file(Path(run)/'inputs',name,digest)
+    return expected
+
+
+def prepare_run(assets,source,run,approval):
+    from tools.ms94_b06_admission import bound_file
+    base=template(assets,source,approval);prepared=derived_plan(base,run,approval)
     # No reference to any old native output is copied.
     for name,digest in base['inputs_sha256'].items():
         require(Path(name).name==name,'input-name')
         src=bound_file(Path(source).parent/'inputs',name,digest)
         target=Path(run)/'inputs'/name; target.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(src,target)
-    prepared=seal(plan)
-    validate_run_binding(run,approval,prepared)
     write_new(Path(run)/'plan.json',prepared)
 
 
@@ -109,9 +123,12 @@ def main():
     from tools.ms94_b06_engineering_key import DedicatedEngineeringSigner
     from tools.ms94_b05_supervisor import wait_process, terminate
     require(shutil.disk_usage(output.parent).free>=LIMITS['minimum_free_bytes'], 'free-space')
-    ledger=Ledger(output,approval)
+    from tools.ms94_b06_engineering_key import read_public
+    public=read_public(args.authority,approval['engineering_key_sha256'])
+    ledger=Ledger(output,approval,public)
     guard(approval,starting=True,attempt_number=ledger.next_attempt_number())
     with ledger.lock():
+        ledger.verify_prior_runs()
         # All Docker calls are downstream of exact standing approval/calendar.
         signer=EngineeringSigner(DedicatedEngineeringSigner(args.authority, approval['engineering_key_sha256']))
         no_overlap()
@@ -119,6 +136,12 @@ def main():
         started=time.monotonic()
         run=ledger.reserve(commit); prepare_run(assets,args.template,run,approval)
         write_new(run/'approval.json',approval)
+        from tools.ms94_b06_engineering_evidence import binding
+        receipt_binding=binding(run,approval)
+        write_new(run/'supervisor-handoff.json',signer.sign(dict(**receipt_binding,
+            artifact_type='b06-engineering-handoff/1',assets_root=str(assets),
+            template_path='templates/j1/plan.json',asset_index_sha256=approval.get('asset_index_sha256'),
+            native_template_sha256=approval['native_template_sha256'])))
         command=[sys.executable,'-B','-m','tools.ms94_b06_engineering_worker',
             '--assets',str(assets),'--run',str(run),'--authority',args.authority,
             '--approval',args.approval,'--approved-sha256',args.approved_sha256]
@@ -151,15 +174,16 @@ def main():
             cleaned=cleanup_owned(runner)
             terminal=dict(outcome='supervisor-failure',error=dict(exception_type=type(exc).__name__),
                           cleanup_verified=bool(cleaned['complete']) and absence(run.name))
-            write_new(run/'supervisor-cleanup.json',signer.sign(dict(**LABEL,**cleaned)))
+            write_new(run/'supervisor-cleanup.json',signer.sign(dict(**LABEL,**cleaned,**receipt_binding,actual_absence_verified=terminal['cleanup_verified'])))
         context=refusal_context(run)
         write_new(run/'refusal-context.json',signer.sign(dict(**LABEL,context=context)))
-        terminal={**terminal,**LABEL,'elapsed_seconds':round(time.monotonic()-started,3),
+        cleanup_name='supervisor-cleanup.json' if (run/'supervisor-cleanup.json').exists() else 'cleanup.json'
+        terminal={**terminal,**LABEL,**receipt_binding,'cleanup_record':cleanup_name,'cleanup_record_sha256':sha(run/cleanup_name),'elapsed_seconds':round(time.monotonic()-started,3),
                   'finished_utc':now().isoformat(),'source_commit':commit,'image':IMAGE,'model_calls':0}
         require(terminal['elapsed_seconds']<=LIMITS['run_seconds']+LIMITS['cleanup_seconds'], 'cleanup-deadline')
         require(source_commit(repo)==commit, 'source-changed-during-run')
         write_new(run/'terminal.json',signer.sign(terminal))
-        seal_artifacts(run,signer)
+        seal_artifacts(run,signer,approval)
         require(time.monotonic()-started <= LIMITS['run_seconds']+LIMITS['cleanup_seconds'], 'finalization-deadline')
         append_log(repo/'docs/b06-engineering-runs.md',read_json(run/'engineering.json'),terminal,context)
         print(str(run))

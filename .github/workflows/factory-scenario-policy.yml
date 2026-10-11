@@ -20,6 +20,6 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install cryptography
-      - run: python -B -m unittest test_scenario_policy test_business_rules
+      - run: python -B -m unittest test_scenario_policy test_business_rules test_rule_evidence_strength
         env:
           PYTHONPATH: src:tests:.

@@ -50,7 +50,8 @@ def catalogue(rules, receipt, judge_key, *, adequacy_report=None, kill_report=No
         mutation = kills.get(rule["id"]) if (kill_report or {}).get("schema") == "lightyear-rule-mutations/2" else None
         strength, reason = assess(s["status"], s.get("output_diversity", {}), mutation)
         s.update(evidence_strength=strength, evidence_strength_reason=reason,
-                 display_status=display(s["status"], strength))
+                 display_status=display(s["status"], strength),
+                 evidence_display_status=display(s["status"], strength))
         s.update(scenario_adequacy=adequacy,scenario_reasons=scenario_reasons)
         if s['status']=='verified' and scenario_reasons:s['display_status']='verified (weak scenarios)'
         decision = None
@@ -75,7 +76,9 @@ def html(payload):
     if payload.get("test_authority_only"):
         payload = {**payload, "limitation": "TEST AUTHORITY ONLY: no production/customer decision. " + payload["limitation"]}
     for e in payload["entries"]:
-        shown={**e,'display_status':e['display_status']+'; scenario adequacy: '+json.dumps(e.get('scenario_adequacy'))}
+        # Scenario coverage is an additional dimension, not a replacement for
+        # the original signed rule-evidence strength.
+        shown={**e,'display_status':e['display_status']+'; rule evidence: '+e.get('evidence_display_status',e['display_status'])+'; scenario adequacy: '+json.dumps(e.get('scenario_adequacy'))}
         rows.append("<tr>" + "".join("<td>"+escape(str(shown[k]))+"</td>" for k in ("id", "statement", "display_status", "applicable_count", "disagree_count", "receipt_sha256")) + "</tr>")
     return '<!doctype html><html lang="en"><meta charset="utf-8"><title>Lightyear | Verified business rules</title><style>body{font:16px system-ui;margin:2em;color:#17334c}table{border-collapse:collapse}td,th{padding:.5em;border:1px solid #ccd;overflow-wrap:anywhere}th{text-align:left}</style><h1>Lightyear | Business rules</h1><p>'+escape(payload["limitation"])+"</p><table><thead><tr><th>Rule</th><th>Statement</th><th>Status</th><th>Applicable</th><th>Disagree</th><th>Receipt SHA-256</th></tr></thead><tbody>"+"".join(rows)+"</tbody></table><h2>Keep or fix</h2><pre>"+escape(json.dumps(payload["register"], indent=2))+"</pre></html>"
 

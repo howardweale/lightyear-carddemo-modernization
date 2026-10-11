@@ -55,6 +55,9 @@ class EvidenceTests(unittest.TestCase):
             self.assertEqual("passed",replay(assessed,self.rules,self.records,signer.public)["status"])
             self.assertEqual(0,catalogue(self.rules,assessed,signer.public)["verified_total"])
             self.assertIn("verified (weak evidence)",html(catalogue(self.rules,assessed,signer.public)))
+            rendered=html(catalogue(self.rules,assessed,signer.public))
+            self.assertIn("verified (weak scenarios)",rendered)
+            self.assertIn("rule evidence: verified (weak evidence)",rendered)
             bad=copy.deepcopy(assessed);bad["rules"][0]["evidence_strength"]="discriminating"
             with self.assertRaises(RuleError):replay(bad,self.rules,self.records,signer.public)
     def test_superseded_and_current_strength_receipts_replay(self):

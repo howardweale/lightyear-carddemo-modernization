@@ -16,7 +16,7 @@ The prospective lexical-overlap corrections are in
 labels 16/47 correctly. No signed historical evidence was rewritten. Repository
 search found no other literal 16/47 coverage claim in docs, catalogues or views.
 
-Systematic generation currently inventories **497 INTCALC and 568 POSTTRAN**
+Systematic generation currently inventories **531 INTCALC and 604 POSTTRAN**
 source-site mutants. These counts are generated, not claims of compiled mutants
 or kills. The remote Ubuntu24 campaign compiles every member, separates divergent
 kills, failure kills, survivors and compilation refusals, and preserves every
@@ -24,8 +24,7 @@ result. A survivor is unresolved unless a scenario kills it or a reviewed
 individual equivalence proof exists. No equivalence exclusions are currently
 asserted; the old eight hand-picked mutants do not form the new denominator.
 Mutants with altered FD layout may legitimately not compile or fail admission;
-those outcomes remain visible. Copied record-layout definitions are not mutated
-by this source-only first-order operator set, a coverage limitation.
+those outcomes remain visible. Receiving-field mutations also cover every numeric PIC site in the pinned included copybooks. Each operand is hash-bound; originals are preserved.
 
 Engineering-only I/O fault declarations select a specific operation, status,
 expected diagnostic and RC before compilation. Derived executables keep original

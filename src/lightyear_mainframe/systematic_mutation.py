@@ -7,7 +7,7 @@ OPERATORS=('relational','arithmetic','constant','rounded','receiving-scale','rec
 TOKEN=re.compile(r"'[^']*'|\"[^\"]*\"|[A-Z][A-Z0-9-]*|[0-9]+(?:\.[0-9]+)?|>=|<=|<>|[=><+*/-]|[^\s]",re.I)
 
 
-def generate(text,program):
+def _source_sites(text,program):
     raw=text.splitlines(); lines=[code(x) for x in raw]; rows=[]; active=False; statement=None
     def add(i,operator,new,end=None):
         end=i if end is None else end
@@ -75,3 +75,14 @@ def outcome(baseline,changed):
     if changed.get('returncode')!=baseline.get('returncode'):return 'killed-failure'
     if changed.get('outputs')!=baseline.get('outputs'):return 'killed-divergent'
     return 'survived'
+
+
+def generate(text,program):
+    """All pinned program sites plus every receiving PIC in included copybooks."""
+    from .zos_bindings import ROOT
+    rows=_source_sites(text,program)
+    for book in sorted(set(re.findall(r'^\s*COPY ([A-Z0-9]+)\.', '\n'.join(code(x) for x in text.splitlines()), re.M))):
+        path=ROOT/'spec/mainframe/copybooks'/f'{book}.cpy'
+        for row in _source_sites(path.read_text(),program+'-'+book):
+            row['source_path']=f'{book}.cpy';rows.append(row)
+    return rows

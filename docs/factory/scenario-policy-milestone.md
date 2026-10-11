@@ -17,3 +17,7 @@ The catalogue itself grants no release authority.
 
 No production signer was read or invoked. Test keys are ephemeral. These
 changes authorize no B06 work, model calls, customer data or promotion.
+
+## 2026-10-11 prospective review correction
+
+The prospective proposal is now schema scenario-threshold/2: 100% business outcomes; I/O outcomes covered by fault injection or individually accepted by Howard; at least90% kills over a systematic set of at least50, with listed equivalent exclusions; two values per compared field. The earlier combined-outcome proposal above is historical. Neither proposal is approved. See review311-317-milestone.md.

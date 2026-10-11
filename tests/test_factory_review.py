@@ -21,7 +21,10 @@ class FactoryReviewTests(unittest.TestCase):
    text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text();rows=generate(text,program)
    self.assertGreater(len(rows),50);self.assertEqual(len(rows),len({r['id'] for r in rows}))
    self.assertTrue({'constant','relational','rounded','negate-condition','skip-PERFORM','receiving-size'}<={r['operator'] for r in rows})
-   for row in rows:self.assertNotEqual(text,apply(text,row))
+   for row in rows:
+    operand=(ROOT/'spec/mainframe/copybooks'/row['source_path']).read_text() if row.get('source_path') else text
+    self.assertNotEqual(operand,apply(operand,row))
+   self.assertTrue(any(r.get('source_path') for r in rows))
   base=dict(status='executed',returncode=0,outputs={'a':'b'})
   self.assertEqual('killed-failure',outcome(base,{**base,'returncode':12}))
   self.assertEqual('killed-divergent',outcome(base,{**base,'outputs':{}}))

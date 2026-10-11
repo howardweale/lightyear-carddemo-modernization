@@ -280,9 +280,14 @@ def build(target, *, instrument=False, mutant=None, systematic=None, fault=None,
         fault_declaration=None
         if systematic:
             from .systematic_mutation import apply
-            changed=apply((folder/compile_source).read_text(),systematic)
-            compile_source=program+"-systematic.cbl"
-            (folder/compile_source).write_text(changed,encoding="ascii")
+            operand=folder/systematic.get('source_path',compile_source)
+            if operand.parent!=folder or operand.suffix not in ('.cpy','.cbl'):raise ValueError('mutant-operand-boundary')
+            changed=apply(operand.read_text(),systematic)
+            if systematic.get('source_path'):
+                operand.write_text(changed,encoding='ascii')
+            else:
+                compile_source=program+"-systematic.cbl"
+                (folder/compile_source).write_text(changed,encoding="ascii")
         if fault:
             from .io_faults import derive
             traced,inventory,fault_declaration=derive((folder/compile_source).read_text(),program,fault)

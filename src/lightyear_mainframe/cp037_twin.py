@@ -50,7 +50,7 @@ def derive(text,program):
             if file in specs and verb in ('READ','WRITE','REWRITE'):
                 logical,key,alt=specs[file];physical='LY-'+file+'-RECORD';keyname='LY-'+file+'-KEY'
                 end=i
-                for j in range(i+1,min(i+20,len(lines))):
+                for j in range(i+1,len(lines)):
                     if lines[j].strip().startswith('END-'+verb):end=j;break
                     if lines[j].strip().startswith(('IF ','MOVE ','PERFORM ','DISPLAY ')) and not any('INVALID KEY' in x for x in lines[i+1:j]):break
                 if verb in ('WRITE','REWRITE'):

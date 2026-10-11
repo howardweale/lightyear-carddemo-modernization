@@ -69,6 +69,7 @@ def check(output,job):
         retained_killing_scenarios=sorted({r['killed_by'] for r in results if r['killed_by']}),model_calls=0,
         limitation='Systematic pinned-source mutation; survivors and compiler refusals block adequacy. Public engineering, not z/OS equivalence.')
     print(json.dumps(summary,indent=2))
+    if not all(r.get('expectation_met') for r in faults):raise AssertionError('declared fault expectation mismatch; preserved actual outcomes')
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('output',type=Path);p.add_argument('job',choices=PROGRAMS);a=p.parse_args();check(a.output,a.job)

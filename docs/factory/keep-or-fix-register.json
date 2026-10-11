@@ -62,6 +62,62 @@
       ],
       "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
       "supporting_campaign": "docs/factory/systematic-review311-summary.json"
+    },
+    {
+      "classification": "legacy-behavior-kept-by-explicit-decision",
+      "decision_at": "2026-10-11T14:00:00-07:00",
+      "decision_by": "Howard",
+      "decision_reference": "docs/factory/howard-decisions-2026-10-11b.json",
+      "disposition": "keep",
+      "fix_authorized": false,
+      "id": "POSTTRAN-DUPLICATE-ID-NONATOMIC",
+      "observed_behavior": "Posting updates category then account before TRANFILE WRITE. A duplicate transaction key abends RC12 after both balances changed. Keep partial update, posted prefix and no added duplicate TRANFILE row; do not make posting atomic.",
+      "program": "CBTRN02C",
+      "source_lines": [
+        423,
+        440,
+        441,
+        442,
+        464,
+        545,
+        547,
+        548,
+        549,
+        551,
+        554,
+        562,
+        564,
+        566,
+        569,
+        571,
+        574,
+        576
+      ],
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    {
+      "classification": "legacy-behavior-kept-by-explicit-decision",
+      "decision_at": "2026-10-11T14:00:00-07:00",
+      "decision_by": "Howard",
+      "decision_reference": "docs/factory/howard-decisions-2026-10-11b.json",
+      "disposition": "keep",
+      "fix_authorized": false,
+      "id": "POSTTRAN-CYCLE-DEBIT-SIGN",
+      "observed_behavior": "Negative amounts are added to cycle debit. Over-limit checks cycle credit minus cycle debit plus amount, so negative debit raises the tested balance. Keep this sign convention; do not substitute net balance.",
+      "program": "CBTRN02C",
+      "source_lines": [
+        403,
+        404,
+        405,
+        406,
+        407,
+        545,
+        547,
+        548,
+        549,
+        550
+      ],
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
     }
   ],
   "schema": "factory-keep-or-fix-register/1"

@@ -5,6 +5,7 @@ on:
       - 'src/lightyear_mainframe/**'
       - 'src/lightyear_factory/scenario_policy.py'
       - 'tools/check_factory_review.py'
+      - 'tools/check_equivalence_followup.py'
       - 'docs/factory/decision-classification.json'
       - '.github/workflows/factory-systematic-review.yml'
   push:
@@ -14,11 +15,11 @@ permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: false
 jobs:
   engineering:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +29,8 @@ jobs:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -35,6 +38,8 @@ jobs:
         run: bash tools/legacy_twin/install-pinned.sh
       - name: Compile and measure systematic public cases
         run: python -B -m tools.check_factory_review work/factory-review-${{ matrix.job }} ${{ matrix.job }}
+      - name: Optimized compiler equivalence and 200-case targeted campaigns
+        run: python -B -m tools.check_equivalence_followup work/factory-review-${{ matrix.job }} ${{ matrix.job }}
       - name: Preserve every refusal and survivor
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,6 +55,8 @@ jobs:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'

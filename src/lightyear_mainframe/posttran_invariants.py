@@ -74,45 +74,64 @@ def rejection_inputs(images, scenario):
     return result
 
 
-def check(before,after,*,timestamp):
-    require_collation_independent(before)
-    daily=records(before,'DALYTRAN'); posted=records(after,'TRANFILE'); rejected=records(after,'DALYREJS')
+def chronological_context(before):
+    """Source-bound validation state before each record, in input batch order.
+
+    This interprets the kept sign and non-atomic posting decisions, not a model
+    opinion or an independent output oracle. A duplicate WRITE stops the batch
+    after category/account updates and before adding a transaction row.
+    """
     accounts={int(r['ACCT-ID']):dict(r) for r in records(before,'ACCTFILE')}
     xrefs={r['XREF-CARD-NUM']:int(r['XREF-ACCT-ID']) for r in records(before,'XREFFILE')}
     cats={(int(r['TRANCAT-ACCT-ID']),r['TRANCAT-TYPE-CD'],int(r['TRANCAT-CD'])):Decimal(r['TRAN-CAT-BAL']) for r in records(before,'TCATBALF')}
-    problems=[]
-    def require(ok,code):
-        if not ok: problems.append(code)
-    source_ids=Counter(r['DALYTRAN-ID'] for r in daily)
-    posted_ids=Counter(r['TRAN-ID'] for r in posted)
-    rejected_ids=Counter(r['DALYTRAN-ID'] for r in rejected)
-    require(len(posted)+len(rejected)==len(daily),'record-count-conservation')
-    require(source_ids==posted_ids+rejected_ids,'record-id-conservation')
-    require(all(v==1 for v in source_ids.values()),'ambiguous-duplicate-input-id')
-    require(all(v==1 for v in posted_ids.values()),'duplicate-posted-id')
-    pmap={r['TRAN-ID']:r for r in posted}; rmap={r['DALYTRAN-ID']:r for r in rejected}
-    for r in daily:
-        key=r['DALYTRAN-ID']; amount=Decimal(r['DALYTRAN-AMT'])
-        aid=xrefs.get(r['DALYTRAN-CARD-NUM']); a=accounts.get(aid)
-        reason=100 if aid is None else 101 if a is None else 0
+    existing={r['TRAN-ID'] for r in records(before,'TRANFILE')}; rows=[]
+    for ordinal,r in enumerate(records(before,'DALYTRAN'),1):
+        amount=Decimal(r['DALYTRAN-AMT']);aid=xrefs.get(r['DALYTRAN-CARD-NUM']);a=accounts.get(aid)
+        reason=100 if aid is None else 101 if a is None else 0;state=None
         if a is not None:
-            if Decimal(a['ACCT-CURR-CYC-CREDIT'])-Decimal(a['ACCT-CURR-CYC-DEBIT'])+amount>Decimal(a['ACCT-CREDIT-LIMIT']): reason=102
-            if a['ACCT-EXPIRAION-DATE']<r['DALYTRAN-ORIG-TS'][:10]: reason=103
-        if key in rmap:
-            rejected_row=rmap[key]
-            require(int(rejected_row['WS-VALIDATION-FAIL-REASON'])==reason and reason in (100,101,102,103),'rejection-condition:'+key)
-            require(all(rejected_row.get(k)==v for k,v in r.items()),'rejected-input-changed:'+key)
-        elif key in pmap:
-            require(reason==0,'invalid-record-posted:'+key)
-            transaction=pmap[key]
-            require(all(transaction.get(k.replace('DALYTRAN-','TRAN-'))==v for k,v in r.items() if k!='DALYTRAN-PROC-TS'),'posted-data-changed:'+key)
-            require(transaction['TRAN-PROC-TS']==timestamp,'processing-clock:'+key)
-            if a is None: continue
+            balance=Decimal(a['ACCT-CURR-CYC-CREDIT'])-Decimal(a['ACCT-CURR-CYC-DEBIT'])+amount
+            state=dict(account_id=aid,credit_limit=str(a['ACCT-CREDIT-LIMIT']),
+                cycle_credit=str(a['ACCT-CURR-CYC-CREDIT']),cycle_debit=str(a['ACCT-CURR-CYC-DEBIT']),
+                expiry_date=a['ACCT-EXPIRAION-DATE'],**{'WS-TEMP-BAL':str(balance)})
+            if balance>Decimal(a['ACCT-CREDIT-LIMIT']):reason=102
+            if a['ACCT-EXPIRAION-DATE']<r['DALYTRAN-ORIG-TS'][:10]:reason=103
+        row=dict(ordinal=ordinal,id=r['DALYTRAN-ID'],input=r,account_state_before=state,reason=reason,
+                 outcome='rejected' if reason else 'posted')
+        if not reason:
+            cat=(aid,r['DALYTRAN-TYPE-CD'],int(r['DALYTRAN-CAT-CD']))
+            cats[cat]=cats.get(cat,Decimal(0))+amount
             a['ACCT-CURR-BAL']=str(Decimal(a['ACCT-CURR-BAL'])+amount)
             field='ACCT-CURR-CYC-CREDIT' if amount>=0 else 'ACCT-CURR-CYC-DEBIT'
             a[field]=str(Decimal(a[field])+amount)
-            cat=(aid,r['DALYTRAN-TYPE-CD'],int(r['DALYTRAN-CAT-CD']))
-            cats[cat]=cats.get(cat,Decimal(0))+amount
+            if r['DALYTRAN-ID'] in existing:row['outcome']='duplicate-write-abend-after-balances'
+            else:existing.add(r['DALYTRAN-ID'])
+        rows.append(row)
+        if row['outcome']=='duplicate-write-abend-after-balances':break
+    return rows,accounts,cats
+
+
+def check(before,after,*,timestamp,returncode=None):
+    require_collation_independent(before)
+    daily=records(before,'DALYTRAN');posted=records(after,'TRANFILE');rejected=records(after,'DALYREJS')
+    expected,accounts,cats=chronological_context(before);problems=[]
+    def require(ok,code):
+        if not ok:problems.append(code)
+    abend=next((r for r in expected if r['outcome']=='duplicate-write-abend-after-balances'),None)
+    initial=records(before,'TRANFILE')
+    expected_posted=[r for r in expected if r['outcome']=='posted']
+    expected_rejected=[r for r in expected if r['outcome']=='rejected']
+    require(Counter(r['TRAN-ID'] for r in posted)==Counter(r['TRAN-ID'] for r in initial)+Counter(r['id'] for r in expected_posted),'posted-id-prefix')
+    require(Counter(r['DALYTRAN-ID'] for r in rejected)==Counter(r['id'] for r in expected_rejected),'rejected-id-prefix')
+    require(all(v==1 for v in Counter(r['TRAN-ID'] for r in posted).values()),'duplicate-posted-id')
+    if abend:require(returncode==12,'duplicate-write-requires-RC12')
+    pmap={r['TRAN-ID']:r for r in posted}
+    for row in expected_posted:
+        r=row['input'];transaction=pmap.get(row['id'],{})
+        require(all(transaction.get(k.replace('DALYTRAN-','TRAN-'))==v for k,v in r.items() if k!='DALYTRAN-PROC-TS'),'posted-data-changed:'+row['id'])
+        require(transaction.get('TRAN-PROC-TS')==timestamp,'processing-clock:'+row['id'])
+    for expected_row,actual in zip(expected_rejected,rejected):
+        require(int(actual['WS-VALIDATION-FAIL-REASON'])==expected_row['reason'],'rejection-condition:'+expected_row['id'])
+        require(all(actual.get(k)==v for k,v in expected_row['input'].items()),'rejected-input-changed:'+expected_row['id'])
     actual_accounts={int(r['ACCT-ID']):r for r in records(after,'ACCTFILE')}
     require(len(actual_accounts)==len(records(after,'ACCTFILE')),'duplicate-account-output')
     require(accounts.keys()==actual_accounts.keys(),'account-id-set')
@@ -123,11 +142,12 @@ def check(before,after,*,timestamp):
     actual_cats={(int(r['TRANCAT-ACCT-ID']),r['TRANCAT-TYPE-CD'],int(r['TRANCAT-CD'])):Decimal(r['TRAN-CAT-BAL']) for r in records(after,'TCATBALF')}
     require(len(actual_cats)==len(records(after,'TCATBALF')),'duplicate-category-output')
     require(cats==actual_cats,'category-conservation')
-    return dict(schema='posttran-independent-invariants/1',passed=not problems,failures=problems,
-                unresolved_register=runtime_register(rejected),
-                inputs=len(daily),posted=len(posted),rejected=len(rejected),oracle_class='executable-twin',
-                oracle_status='provisional',zos_confirmation=False,releasable=False,
-                repeatability='requires-separate-second-run',human_review='pending',java_second_opinion='unavailable')
+    return dict(schema='posttran-independent-invariants/2',passed=not problems,failures=problems,
+        depends_on_register=['POSTTRAN-DUPLICATE-ID-NONATOMIC','POSTTRAN-CYCLE-DEBIT-SIGN'],
+        duplicate_abend=abend,processed_prefix=len(expected),unprocessed_suffix=len(daily)-len(expected),
+        unresolved_register=runtime_register(rejected),inputs=len(daily),posted=len(posted),rejected=len(rejected),
+        oracle_class='executable-twin',oracle_status='provisional',zos_confirmation=False,releasable=False,
+        repeatability='requires-separate-second-run',human_review='pending',java_second_opinion='unavailable')
 
 
 def runtime_register(rejected):
@@ -150,10 +170,15 @@ def review_sheet(before,after):
     for r in sorted(daily,key=lambda r:r['DALYTRAN-ID']):
         if len(set(chosen.values()))>=10: break
         chosen.setdefault('sample-'+r['DALYTRAN-ID'],r['DALYTRAN-ID'])
+    contexts,_,_=chronological_context(before)
+    context_by_id={}
+    for row in contexts:context_by_id.setdefault(row['id'],row['account_state_before'])
     p={r['TRAN-ID']:r for r in posted}; rej={r['DALYTRAN-ID']:r for r in rejected}; inputs={r['DALYTRAN-ID']:r for r in daily}
     return {'schema':'posttran-human-review-sheet/1','review_class':'operator-review-not-independent-attestation',
             'signature':None,'reviewer':None,'status':'awaiting-human-review','records':[
                 {'id':key,'input':inputs[key],'twin_output':p.get(key,rej.get(key)),
+                 'account_state_before':context_by_id.get(key),
+                 'state_basis':'pinned-source batch-order interpretation; kept cycle-debit sign',
                  'source':'spec/mainframe/public-source/CBTRN02C.cbl:379-420,423-446,545-561',
                  'expected_result':'Reviewer must check rejection priority, amount conservation and identifiers against source.',
                  'reviewer_decision':None} for key in sorted(set(chosen.values()))]}

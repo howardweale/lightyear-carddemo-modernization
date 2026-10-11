@@ -1,0 +1,25 @@
+name: Factory scenario policy
+on:
+  pull_request:
+    paths: ['src/lightyear_factory/scenario_policy.py', 'src/lightyear_business_rules/**', 'tests/test_scenario_policy.py', '.github/workflows/factory-scenario-policy.yml']
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  scenario-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install cryptography
+      - run: python -B -m unittest test_scenario_policy test_business_rules test_rule_evidence_strength
+        env:
+          PYTHONPATH: src:tests:.

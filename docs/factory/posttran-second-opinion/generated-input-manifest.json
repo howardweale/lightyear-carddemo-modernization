@@ -1,0 +1,188 @@
+{
+  "generator_commit": "88dbf5542eba50922078b89609b899c59a997c74",
+  "ci_run": 38100613787,
+  "scenarios": {
+    "posttran-credit-above": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "5d68890915f70c6ede7e01f0b9436eb00ceeabf8c0447a5073b1bf9f510de939",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-credit-equal": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "6896e58f265f804a54820b1c379ca50f6cf26ed334d5fe624bf62ac687b3e971",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-duplicate-id": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "a8b6903107a200fb5e658ab6409659a79833f4f5b085f9bb35f351a827cc3057",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-empty": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-expiry-before": {
+      "input_sha256": {
+        "ACCTFILE": "d069801d58cfa61475e559418ad43c39418db1f7e6717a532ed5307e600eabe9",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-expiry-equal": {
+      "input_sha256": {
+        "ACCTFILE": "82fd74f2bd05ade4ab7805838138b3c4f0cfe53d3538a554495a0056a6619e46",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-missing-account": {
+      "input_sha256": {
+        "ACCTFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-missing-card": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "190813c90d32c4a9191bfb5a757e48952f5dbf0f76c46e72d8dff8e7fcb0334d",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-negative": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "def659c6323a7c2f3fec1fefca3eb18e44bbfe9797f7837ceeb84530c3c4889a",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-new-category": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-positive": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-solver-credit-false": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "5d68890915f70c6ede7e01f0b9436eb00ceeabf8c0447a5073b1bf9f510de939",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "decision-directed-finite-solver",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-solver-credit-true": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "27ee47f39cb794fff3662901ddc7c03ba16594072cdfd3766fbee3b3b4a5b401",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "decision-directed-finite-solver",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    },
+    "posttran-zero": {
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "85330e36be422bf23f39ec7e33529c1ee458ad91a22582b8cf2f6fb2494f391b",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "generator": "boundary-or-cross-record",
+      "seed": "public-scenario-engine-v1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+    }
+  }
+}

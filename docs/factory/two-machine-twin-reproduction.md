@@ -8,6 +8,15 @@ The [dedicated workflow](../../.github/workflows/factory-twin-reproducibility.ym
 
 ## Operator machine procedure
 
+Howard selected his Mac and will run the command himself. With Git and Docker
+already available, check out the exact reviewed SHA and run
+`bash tools/legacy_twin/run_reproduction.sh EXACT_COMMIT howard-mac`.
+The script refuses a different or modified tracked checkout, pins linux/amd64
+and the exact base image, creates a fresh output, and preserves logs. It installs
+packages only inside the disposable build image; it makes no host configuration
+changes. Return only `work/operator-twin-<commit-prefix>/build/reproduction.json`
+to the chat; keep logs and binaries local. The full equivalent commands follow.
+
 Run only on the separately approved operator host and outside any conflicting evidence window. Check out the exact PR head used by the completed GitHub receipt. Use a fresh output directory; the builder refuses existing paths. These are instructions, not evidence that this machine has run:
 
 ```sh

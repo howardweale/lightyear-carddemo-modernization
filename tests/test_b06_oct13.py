@@ -43,6 +43,26 @@ class Oct13GateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'implementation-commit'):
                     with gate.authorized(path,e.sha(path),gate.expected_go(value)):pass
 
+    def test_entire_asset_index_is_checked_before_template_use(self):
+        from tools.ms94_b06_engineering_run import template
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);assets=root/'assets';assets.mkdir();(assets/'templates').mkdir()
+            source=assets/'templates/plan.json';base=seal({'fixture':True});e.write_new(source,base)
+            helper=assets/'factory/idempiere/b06-observer/BoundedJdiMirrors.java';helper.parent.mkdir(parents=True);helper.write_text('public fixture')
+            inherited=assets/'runtime.jar';inherited.write_bytes(b'original')
+            index=seal(dict(implementation_commit='a'*40,native_template_sha256='b'*64,
+                observer_class_files_sha256={},mirror_adapter_source_sha256=e.sha(helper),
+                files_sha256={p.relative_to(assets).as_posix():e.sha(p) for p in (source,helper,inherited)}))
+            index_path=assets/'engineering-assets-index.json';e.write_new(index_path,index)
+            req=dict(artifact_type=gate.SCHEMA,asset_index_sha256=index['content_sha256'],asset_index_file_sha256=e.sha(index_path),
+                implementation_commit='a'*40,native_template_sha256='b'*64,observer_class_files_sha256={},mirror_adapter_source_sha256=e.sha(helper))
+            inherited.write_bytes(b'tampered')
+            with self.assertRaisesRegex(ValueError,'bound-file-changed'):
+                template(assets,source,req)
+            inherited.write_bytes(b'original');(assets/'unlisted.py').write_text('bad')
+            with self.assertRaisesRegex(ValueError,'asset-inventory'):
+                template(assets,source,req)
+
     def test_report_template_never_claims_native_outcome(self):
         from tools.ms94_b06_oct13_report import template
         with tempfile.TemporaryDirectory() as temp:

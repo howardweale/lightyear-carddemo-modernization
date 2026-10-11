@@ -41,6 +41,10 @@ def template(assets, source, approval):
                 index['observer_class_files_sha256']==approval['observer_class_files_sha256'] and
                 index['mirror_adapter_source_sha256']==approval['mirror_adapter_source_sha256'], 'oct13-asset-index')
         require(sha(assets/'factory/idempiere/b06-observer/BoundedJdiMirrors.java')==approval['mirror_adapter_source_sha256'], 'oct13-mirror-source')
+        # The exact request binds all inputs/runtime bytes, not only source and classes.
+        indexed=index['files_sha256']
+        require({p.relative_to(assets).as_posix() for p in assets.rglob('*') if p.is_file()}==set(indexed)|{'engineering-assets-index.json'}, 'oct13-asset-inventory')
+        for name,digest in indexed.items():bound_file(assets,name,digest)
     from tools.ms94_b06_engineering import validate_instrumented
     validate_instrumented(approval)
     require(value['content_sha256']==approval['native_template_sha256'] and value['journey']=='J1' and

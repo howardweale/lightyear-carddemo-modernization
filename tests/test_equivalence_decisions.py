@@ -96,6 +96,16 @@ class EquivalenceDecisionTests(unittest.TestCase):
   result=targeted_accounting(rows)
   self.assertEqual(200,result['targeted_cases']);self.assertEqual(198,result['targeted_valid_comparisons'])
   self.assertFalse(result['targeted_evidence_complete']);self.assertEqual([3,4],[r['index'] for r in result['targeted_evidence_gaps']])
+ def test_targeted_refusals_never_refute_a_mutant(self):
+  from tools.check_equivalence_followup import targeted_outcome
+  normal=dict(status='executed',returncode=0,outputs={'OUT':'same'},stdout_sha256='s',stderr_sha256='e')
+  refusal=dict(status='execution-refusal',error_type='TimeoutExpired')
+  self.assertEqual('mutant-execution-refusal',targeted_outcome(normal,refusal))
+  self.assertEqual('baseline-refusal',targeted_outcome(refusal,normal))
+  self.assertFalse(targeted_outcome(normal,refusal).startswith('killed-'))
+  self.assertEqual('survived',targeted_outcome(normal,normal))
+  self.assertEqual('killed-failure',targeted_outcome(normal,{**normal,'returncode':12}))
+  self.assertEqual('killed-divergent',targeted_outcome(normal,{**normal,'outputs':{'OUT':'changed'}}))
  def test_kept_sign_discriminator(self):
   _,_,images,_=case('posttran-cycle-debit-sign');rows,_,_=chronological_context(images);r=rows[0];s=r['account_state_before']
   self.assertEqual(102,r['reason']);self.assertEqual(Decimal('1101'),Decimal(s['WS-TEMP-BAL']))

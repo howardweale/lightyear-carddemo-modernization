@@ -45,6 +45,14 @@ def compiler_output(folder,program,mutant=None):
     return dict(sha256=sha(payload),files={name:sha(value.encode()) for name,value in files.items()},bytes=len(payload))
 
 
+def targeted_outcome(baseline, actual):
+    # Tool/runtime refusals are missing comparisons, not observed mutant kills.
+    # Only two completed executions can establish a return-code/output delta.
+    if baseline['status']!='executed':return 'baseline-refusal'
+    if actual['status']!='executed':return 'mutant-execution-refusal'
+    return outcome(baseline,actual)
+
+
 def targeted_accounting(measurements):
     gaps=[dict(index=r['index'],case=r['case'],baseline_status=r['baseline']['status'],mutant_status=r['actual']['status'])
           for r in measurements if r['baseline']['status']!='executed' or r['actual']['status']!='executed']
@@ -98,7 +106,7 @@ def check(campaign,job):
                     baseline_cases[key]=attempt(base,name,basefolder)
                 normal=baseline_cases[key];folder=output/'targets'/identifier/f'{index:03d}';folder.parent.mkdir(parents=True,exist_ok=True)
                 actual=attempt(changed,name,folder)
-                classification=outcome(normal,actual) if normal['status']=='executed' else 'baseline-refusal'
+                classification=targeted_outcome(normal,actual)
                 item=dict(index=index,case=name,fault=fault,baseline=normal,actual=actual,status=classification)
                 measurements.append(item)
                 if classification.startswith('killed-') and not row['refuted']:row.update(refuted=True,witness=item)

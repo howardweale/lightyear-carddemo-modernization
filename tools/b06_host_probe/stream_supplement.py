@@ -11,6 +11,7 @@ from pathlib import Path
 
 from lightyear_calibration.contracts import read_json, verify
 from lightyear_control_tower.decisions import verify_envelope
+from tools.ms94_b06_observer_format import audit_detail, normalize
 
 
 def scan(stream):
@@ -25,6 +26,8 @@ def scan(stream):
         if total>550000 or item['previous_sha256']!=previous or event['sequence']!=total:
             raise ValueError('supplement-event-chain')
         previous=item['content_sha256']; counts[event['kind']]+=1
+        # Seals, counts and stream hash above always use the original wire bytes.
+        event = normalize(audit_detail(event))
         if event['kind']=='observer-audit':
             last_audit={k:event[k] for k in ('sequence','audit_index','event_set_id','event_position','action')}
             if event['action']=='jdi-event':

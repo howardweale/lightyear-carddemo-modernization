@@ -7,6 +7,8 @@ LABEL = dict(run_class='engineering', qualification_credit=False, measurement_cr
 
 
 def refuse_engineering_key(public):
+    if not isinstance(public, bytes) or not public:
+        raise ValueError('evidence-public-key-required')
     if hashlib.sha256(public).hexdigest() == ENGINEERING_KEY_SHA256:
         raise ValueError("engineering-signing-key-not-admissible")
 

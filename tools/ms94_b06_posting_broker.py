@@ -4,7 +4,6 @@ No model transport. This is prospective equipment, not qualified evidence.
 Candidate containers have no mounts into the broker's private output directory.
 """
 from datetime import datetime, timezone
-import hashlib
 import json
 from pathlib import Path
 import queue
@@ -16,6 +15,7 @@ from lightyear_calibration.contracts import canonical, read_json, seal, verify
 from lightyear_calibration.journey_runtime import docker, inspect
 from tools.ms94_b06_admission import check, bound_file, sign_once
 from tools.ms94_b06_bytecode_policy import validate_jvm
+from tools.ms94_b06_observer_diagnostics import file_digest
 
 
 class PostingBroker:
@@ -170,9 +170,10 @@ class PostingBroker:
                     diagnostic_metadata=event['kind'] in ('breakpoint-lifecycle','watched-class-prepare','observer-heap-telemetry')
                     if diagnostic_metadata:
                         check(self.diagnostics is not None and self.ready.is_set(), 'observer-diagnostics-unannounced')
+                        audit.metadata(event)
                     if self.diagnostics and (event['kind']=='observer-audit' or diagnostic_metadata):
                         from tools.ms94_b06_engineering import LIMITS
-                        diagnostic_count+=1;diagnostic_bytes+=len(line)
+                        diagnostic_count+=1;diagnostic_bytes+=len(line.removesuffix(b'\n'))
                         check(diagnostic_count<=LIMITS['audit_records'] and diagnostic_bytes<=LIMITS['audit_bytes'],
                               'observer-diagnostic-bound')
                     if event['kind'] == 'observer-audit':
@@ -270,7 +271,7 @@ class PostingBroker:
                     'last_event_sha256':self.previous, 'frame_records':self.frame_census,
                     'host_jar_entries':self.host_jar_entries,
                     'v2_records':self.v2_records, 'runtime_files':self.runtime_files,
-                    'event_file_sha256':hashlib.sha256((self.private/'events.jsonl').read_bytes()).hexdigest(),
+                    'event_file_sha256':file_digest(self.private/'events.jsonl'),
                     'native_qualification':False, 'model_calls':0,
                     **self.diagnostic_result(),
                 }, self.signer)
@@ -313,7 +314,7 @@ class PostingBroker:
             'lane': self.lane, 'execution_sha256': execution['content_sha256'], 'target': self.target,
             'observer_class_files_sha256': self.spec['class_files_sha256'],
             'event_count': len(self.records), 'last_event_sha256': self.previous,
-            'event_file_sha256': hashlib.sha256((self.private / 'events.jsonl').read_bytes()).hexdigest(),
+            'event_file_sha256': file_digest(self.private/'events.jsonl'),
             'frame_records': self.frame_census,
             'host_jar_entries': self.host_jar_entries,
             'v2_records': self.v2_records, 'runtime_files': self.runtime_files,

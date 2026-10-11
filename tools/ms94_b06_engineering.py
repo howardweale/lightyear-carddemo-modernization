@@ -231,3 +231,32 @@ def instrumented_proposal(start,end,excluded_windows,evidence_runs,output_root,*
         observer_configuration=dict(mode_sequence=['strict','diagnostic-unmatched-return'],
             format='bounded-observer-v1',unmatched_return_cap=10,heap_guard_percent=85,pending_cap=256))
     result=seal(body);validate(result);validate_instrumented(result);return result
+
+
+def validate_run_binding(run, approval, plan=None):
+    """Refuse altered attempt order/mode before key loading or native execution."""
+    run=Path(run).resolve();validate(approval);validate_instrumented(approval)
+    require(run.parent==Path(approval['output_root']).resolve()/approval['content_sha256']/'runs',
+            'attempt-session-path')
+    require(re.fullmatch('journey-[0-9a-f]{32}',run.name) is not None,'attempt-owner')
+    record=read_json(run/'engineering.json');verify(record)
+    number=record.get('run_number')
+    require(type(number) is int and 1 <= number <= 2,'attempt-number')
+    require(len(list(run.parent.glob('journey-*')))==number,'attempt-current-sequence')
+    require(record.get('owner')==run.name and record.get('approval_sha256')==approval['content_sha256'] and
+            record.get('source_commit')==approval['implementation_commit'] and
+            record.get('runtime_source_commit')==approval['observer_source'] and
+            record.get('engineering_key_sha256')==approval['engineering_key_sha256'] and
+            record.get('mode')==approval['attempt_modes'][number-1] and
+            all(record.get(k)==v for k,v in LABEL.items()),'attempt-approval-binding')
+    if plan is not None:
+        verify(plan)
+        from tools.ms94_b06_observer_diagnostics import validate as validate_diagnostics
+        diagnostics=validate_diagnostics(plan)
+        require(diagnostics is not None and diagnostics['mode']==record['mode'] and
+                plan.get('engineering_approval_sha256')==approval['content_sha256'] and
+                plan.get('engineering_key_sha256')==approval['engineering_key_sha256'] and
+                plan.get('engineering_template_sha256')==approval['native_template_sha256'] and
+                plan.get('posting_observer',{}).get('class_files_sha256')==approval['observer_class_files_sha256'],
+                'attempt-plan-binding')
+    return record

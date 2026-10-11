@@ -86,6 +86,23 @@ class DiagnosticsTests(unittest.TestCase):
         self.assertEqual(sum(1 for _ in records),2000)
         with self.assertRaises(IndexError):_=records[0]
 
+    def test_stream_digest_never_reads_whole_event_file(self):
+        path=self.root/'stream.jsonl'
+        with path.open('wb') as stream:
+            for _ in range(20):stream.write(b'chunk'*65536)
+        expected=hashlib.sha256(b'chunk'*65536*20).hexdigest()
+        with patch.object(Path,'read_bytes',side_effect=AssertionError('whole-stream read forbidden')):
+            self.assertEqual(diagnostics.file_digest(path),expected)
+        from tools.ms94_b06_posting_broker import PostingBroker
+        import inspect
+        self.assertNotIn('read_bytes()',inspect.getsource(PostingBroker.finish))
+        self.assertNotIn('read_bytes()',inspect.getsource(PostingBroker._collect))
+
+    def test_admission_rejects_missing_or_malformed_public_key_explicitly(self):
+        for value in (None,'not-bytes',b'',False):
+            with self.subTest(value=value),self.assertRaisesRegex(ValueError,'public-key-required'):
+                refuse_engineering_key(value)
+
     def test_guard_histogram_bound_to_signed_stop(self):
         broker=SimpleNamespace(private=self.root,name='owned-observer',lane='oracle',
             runner=SimpleNamespace(plan=self.plan),generation_entries=12400,signer=Mock())
@@ -147,6 +164,28 @@ class DiagnosticsTests(unittest.TestCase):
         from tools.ms94_b06_j1_bridge import evaluate
         for call in (replay_entry,replay_clocks,evaluate):
             with self.assertRaisesRegex(ValueError,'signing-key-not-admissible'):call(self.root,public)
+
+    def test_attempt_mode_and_sequence_cannot_be_relabelled(self):
+        from datetime import datetime,timezone
+        approval=engineering.instrumented_proposal('2026-10-12T16:00:00Z','2026-10-12T19:00:00Z',[],
+            [str(self.root)],self.root/'b06-engineering',implementation_commit='a'*40,
+            native_template_sha256='b'*64,observer_source_sha256='c'*64,
+            observer_class_files_sha256={'PostingObserver.class':'d'*64},
+            full_plan_delivered_at_utc='2026-10-12T12:00:00Z')
+        ledger=engineering.Ledger(self.root/'b06-engineering',approval)
+        with patch.object(engineering,'now',return_value=datetime(2026,10,12,16,tzinfo=timezone.utc)):
+            run=ledger.reserve('a'*40)
+        record=engineering.validate_run_binding(run,approval)
+        self.assertEqual(record['mode'],'strict')
+        changed={k:v for k,v in record.items() if k!='content_sha256'}
+        changed['mode']='diagnostic-unmatched-return'
+        (run/'engineering.json').write_bytes(canonical(seal(changed)))
+        with self.assertRaisesRegex(ValueError,'attempt-approval-binding'):
+            engineering.validate_run_binding(run,approval)
+        (run/'engineering.json').write_bytes(canonical(record))
+        (run.parent/('journey-'+'b'*32)).mkdir()
+        with self.assertRaisesRegex(ValueError,'attempt-current-sequence'):
+            engineering.validate_run_binding(run,approval)
 
     def test_two_attempt_request_exact_fingerprint_and_review_lead(self):
         kwargs=dict(implementation_commit='a'*40,native_template_sha256='b'*64,observer_source_sha256='c'*64,

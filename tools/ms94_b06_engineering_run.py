@@ -56,7 +56,8 @@ def prepare_run(assets, source, run, approval):
     plan['docker_run_window'] = dict(not_before_utc=approval['not_before_utc'], deadline_utc=approval['deadline_utc'], run_class='engineering')
     plan['candidate_timeout_seconds']=LIMITS['candidate_seconds']
     from tools.ms94_b06_observer_diagnostics import configuration
-    mode=read_json(Path(run)/'engineering.json')['mode']
+    from tools.ms94_b06_engineering import validate_run_binding
+    mode=validate_run_binding(run,approval)['mode']
     plan['posting_observer'].pop('unmatched_return', None)
     plan['posting_observer']['native_diagnostics']=configuration(mode)
     plan['engineering_key_sha256']=approval['engineering_key_sha256']
@@ -67,7 +68,9 @@ def prepare_run(assets, source, run, approval):
         src=bound_file(Path(source).parent/'inputs',name,digest)
         target=Path(run)/'inputs'/name; target.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(src,target)
-    write_new(Path(run)/'plan.json',seal(plan))
+    prepared=seal(plan)
+    validate_run_binding(run,approval,prepared)
+    write_new(Path(run)/'plan.json',prepared)
 
 
 def main():

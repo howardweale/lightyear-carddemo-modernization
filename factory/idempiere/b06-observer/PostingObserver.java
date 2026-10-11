@@ -51,13 +51,14 @@ public final class PostingObserver {
     private static final String FORMAT="bounded-observer-v1";
     private long suppressedDispatch, suppressedResume, diagnosticRecords;
     private Map<String,Object> refusalContext;
+    private PendingSnapshot refusalPending;
     private int currentSetSize,currentSuspendPolicy;
     private void boundedMode() throws Exception {
         String directory=System.getProperty("b06.observer.state_dir");
         if(directory==null)throw new IllegalArgumentException("owned observer state directory required");
         Generation.definitions=new DefinitionIndex(java.nio.file.Path.of(directory).resolve("definitions.idx"));
         bounded=true;bindingV2=true;generation.v2=true;Generation.owner=this;
-        generation.pendingPool=new PendingPool();
+        generation.pendingPool=new PendingPool();refusalPending=new PendingSnapshot();
     }
     private void resourceStop(String reason) throws Exception {
         var usage=ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
@@ -164,11 +165,14 @@ public final class PostingObserver {
             if(arm!=null)d.put("arm",Map.of("request_id",requestId(arm.request()),
                 "method",Generation.methodName(arm.method()),"depth",arm.depth(),
                 "generation_id",arm.entry().get("generation_id")));
-            List<Object> pending=new ArrayList<>();
-            for(Map<String,Object> p:generation.pending.getOrDefault(t.uniqueID(),new ArrayDeque<>()))
-                pending.add(Map.of("generation_id",p.get("generation_id"),"method",p.get("entry_method"),"depth",p.get("entry_depth")));
-            if(pending.size()>256)throw new IllegalStateException("generation audit pending bound exceeded");
-            d.put("pending",pending);
+            Collection<Map<String,Object>> calls=generation.pending.getOrDefault(t.uniqueID(),new ArrayDeque<>());
+            if(bounded){refusalPending.capture(calls);d.put("pending",refusalPending);}
+            else {
+                List<Object> pending=new ArrayList<>();
+                for(Map<String,Object> p:calls)pending.add(Map.of("generation_id",p.get("generation_id"),"method",p.get("entry_method"),"depth",p.get("entry_depth")));
+                if(pending.size()>256)throw new IllegalStateException("generation audit pending bound exceeded");
+                d.put("pending",pending);
+            }
             if(event instanceof ExceptionEvent x) {
                 d.put("exception_class",x.exception().referenceType().name());
                 d.put("catch_location",x.catchLocation()==null?null:auditLocation(x.catchLocation()));
@@ -186,7 +190,7 @@ public final class PostingObserver {
         audit("jdi-event",d);
     }
     private void auditState(Event event) throws Exception {
-        if(bounded){suppressedDispatch++;return;}
+        if(bounded){suppressedDispatch++;refusalContext=null;return;}
         if(!(event instanceof LocatableEvent e))return;
         long thread=e.thread().uniqueID();
         Generation.ReturnArm arm=generation.exits.get(thread);
@@ -254,6 +258,28 @@ public final class PostingObserver {
         public Set<Map.Entry<String,Object>> entrySet(){throw new UnsupportedOperationException("streamed definition index is not an in-memory catalogue");}
     }
     /** Generation evidence only: factory names select VM breakpoints, never grant trust. */
+    /** Pre-dispatch witness stays exact if dispatch mutates/releases a pending slot. */
+    private static final class PendingSnapshot extends AbstractList<Object> {
+        private final PendingWitness[] entries=new PendingWitness[PENDING_CAP];private int count;
+        PendingSnapshot(){for(int i=0;i<entries.length;i++)entries[i]=new PendingWitness();}
+        void capture(Collection<Map<String,Object>> calls){
+            if(calls.size()>entries.length)throw new IllegalStateException("generation audit pending bound exceeded");
+            int previous=count;count=0;
+            for(Map<String,Object> call:calls){PendingWitness r=entries[count++];
+                r.id=((Number)call.get("generation_id")).longValue();r.depth=((Number)call.get("entry_depth")).intValue();
+                r.method=((String)call.get("entry_method")).intern();}
+            for(int i=count;i<previous;i++)entries[i].method=null;
+        }
+        @Override public int size(){return count;}
+        @Override public Object get(int index){Objects.checkIndex(index,count);return entries[index];}
+    }
+    private static final class PendingWitness extends AbstractMap<String,Object> {
+        long id;int depth;String method;
+        @Override public Object get(Object key){return switch(key.toString()){
+            case "generation_id"->id;case "depth"->depth;case "method"->method;default->null;};}
+        @Override public Set<Map.Entry<String,Object>> entrySet(){return Map.<String,Object>of(
+            "generation_id",id,"depth",depth,"method",method).entrySet();}
+    }
     /** Fixed retained storage: suppressed returns cannot add map nodes or boxed IDs. */
     private static final class PendingPool {
         private final PendingEntry[] entries=new PendingEntry[PENDING_CAP];

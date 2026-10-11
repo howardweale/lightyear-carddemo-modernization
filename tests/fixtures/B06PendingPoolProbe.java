@@ -18,12 +18,18 @@ public class B06PendingPoolProbe {
     if(identities.size()!=256)throw new AssertionError("active slot reused");
     try{retain.invoke(pool,snapshot);throw new AssertionError("capacity bypass");}
     catch(java.lang.reflect.InvocationTargetException expected){if(!(expected.getCause() instanceof IllegalStateException))throw expected;}
+    Class<?> snapshotClass=Class.forName("lightyear.observer.PostingObserver$PendingSnapshot");
+    var sc=snapshotClass.getDeclaredConstructor();sc.setAccessible(true);Object witness=sc.newInstance();
+    var capture=snapshotClass.getDeclaredMethod("capture",Collection.class);capture.setAccessible(true);capture.invoke(witness,entries);
     release.invoke(pool,first);
     try{release.invoke(pool,first);throw new AssertionError("double release");}
     catch(java.lang.reflect.InvocationTargetException expected){}
     Object reused=retain.invoke(pool,Map.of("kind","generation","thread_id",9L,"generation_id",9000L,
       "entry_depth",200,"entry_method","selected.other()V","entry_event_index",9999L));
     if(reused!=first || !snapshot.get("generation_id").equals(1000L))throw new AssertionError("snapshot or reuse changed");
+    Map<?,?> before=(Map<?,?>)((List<?>)witness).get(0);
+    if(!before.equals(Map.of("generation_id",1000L,"depth",103,"method","selected.method()V")))throw new AssertionError("pre-dispatch witness mutated");
+    capture.invoke(witness,List.of());if(!((List<?>)witness).isEmpty())throw new AssertionError("witness stale");
     Object foreign=ctor.newInstance();
     try{release.invoke(foreign,reused);throw new AssertionError("foreign release");}
     catch(java.lang.reflect.InvocationTargetException expected){}

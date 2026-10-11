@@ -70,3 +70,27 @@ concurrent prepare traffic, both-cache consistency, oversized-pin refusal,
 full-enumeration refusal without mutation, missing module-access refusal,
 unsupported implementation refusal, and a deliberately wrong bytecode pin.
 It does not run the native application, Docker, a database, or model calls.
+
+## October 11 addendum: preserved image bytes and unknown status
+
+Read-only verification of preserved manifest
+`2b4bf062bc205bb9081f54814fcbb756069ca0b6ff6bedbbec6d0d3e5e6cbe08`
+found that all seven public JDI class hashes for retained image
+`sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268`
+match the adapter pins. Each public class blob was independently hashed against
+both the manifest and the adapter. The hash-only record is
+[engineering-jdi-mirror-compatibility.json](calibration/idempiere-ms94/stage-b-06/preparation/engineering-jdi-mirror-compatibility.json).
+This supports expected byte admission, not a live runtime verification. No
+container was queried or launched; the constructor must check actual bytes again.
+
+The first integrated host experiment stopped on the mirror pin limit. A recreated
+JDI mirror has `isPrepared=false` with `status=0` until public `isPrepared()` asks
+the target for its status. Treating UNKNOWN as permanently unprepared retained
+mirrors unnecessarily. Before an over-cap prune, the adapter now snapshots
+unknown mirrors under the VM monitor, resolves them through the public read-only
+status API outside that monitor, then rechecks both caches before any removal.
+Known unprepared mirrors remain pinned; no status is fabricated. Telemetry counts
+these status queries. The strengthened fixture repeatedly recreates 1,300 mirrors
+through actual ClassObjectReference.reflectedType calls. Both focused host tests
+passed in 2.533 seconds. These tests establish adapter behavior, not the full
+native-volume memory criterion. The earlier stopped experiment remains preserved.

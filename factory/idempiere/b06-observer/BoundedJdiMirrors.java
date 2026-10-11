@@ -1,6 +1,7 @@
 package lightyear.observer;
 
 import com.sun.jdi.ReferenceType;
+import com.sun.jdi.ObjectCollectedException;
 import com.sun.jdi.VirtualMachine;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -29,9 +30,9 @@ public final class BoundedJdiMirrors {
         "ClassTypeImpl", "ff54285e8868622c148d0bced1ecca42983030da6c7a7a3b29ccdf8a42b669b7",
         "InterfaceTypeImpl", "ae52d68eac3adbc8dc479d2a02c2b5ca2b80280ba0b3b71cf1ec94aff56fec44");
     private final VirtualMachine vm;
-    private final Field byId, bySignature, allTypes, prepared;
+    private final Field byId, bySignature, allTypes, prepared, status;
     private final Set<ReferenceType> permanentPins = new HashSet<>();
-    private long evictions, sweeps;
+    private long evictions, sweeps, statusQueries;
     private int current, peak, retainedUnprepared;
 
     public BoundedJdiMirrors(VirtualMachine vm) throws Exception {
@@ -47,6 +48,7 @@ public final class BoundedJdiMirrors {
         bySignature = field(vm.getClass(), "typesBySignature");
         allTypes = field(vm.getClass(), "retrievedAllTypes");
         prepared = field(Class.forName("com.sun.tools.jdi.ReferenceTypeImpl"), "isPrepared");
+        status = field(Class.forName("com.sun.tools.jdi.ReferenceTypeImpl"), "status");
         synchronized (vm) { checkQueryMode(); }
     }
     private static void verifyClass(Class<?> type, String resource, String expected) throws Exception {
@@ -76,6 +78,25 @@ public final class BoundedJdiMirrors {
     /** Call only after handling the complete EventSet and before its resume. */
     @SuppressWarnings("unchecked")
     public Map<String,Object> prune(Collection<? extends ReferenceType> active) throws Exception {
+        // A newly recreated mirror has isPrepared=false/status=0 even when its
+        // target class was already prepared. Resolve UNKNOWN through public JDI;
+        // otherwise every recreated mirror becomes a permanent false pin.
+        List<ReferenceType> unknown = new ArrayList<>();
+        synchronized (vm) {
+            checkQueryMode();
+            Map<Long,ReferenceType> ids = (Map<Long,ReferenceType>) byId.get(vm);
+            if (ids != null && ids.size() > HIGH_WATER)
+                for (ReferenceType type : ids.values())
+                    if (!prepared.getBoolean(type) && status.getInt(type) == 0) unknown.add(type);
+        }
+        for (ReferenceType type : unknown) {
+            statusQueries++;
+            try { type.isPrepared(); }
+            catch (ObjectCollectedException collected) {
+                // The internal unload event owns its removal. Never invent
+                // prepared status or remove a potentially live mirror here.
+            }
+        }
         synchronized (vm) {
             checkQueryMode();
             Map<Long,ReferenceType> ids = (Map<Long,ReferenceType>) byId.get(vm);
@@ -122,7 +143,7 @@ public final class BoundedJdiMirrors {
     private Map<String,Object> telemetryLocked() {
         return Map.of("jdi_mirror_policy",POLICY,"jdi_mirror_count",current,
             "jdi_mirror_peak_before_prune",peak,"jdi_mirror_evictions",evictions,
-            "jdi_mirror_sweeps",sweeps,"jdi_mirror_unprepared",retainedUnprepared,
+            "jdi_mirror_sweeps",sweeps,"jdi_mirror_status_queries",statusQueries,"jdi_mirror_unprepared",retainedUnprepared,
             "jdi_mirror_pins",permanentPins.size(),"jdi_mirror_limit",HIGH_WATER);
     }
 }

@@ -55,6 +55,21 @@ public final class BoundedMirrorsProbe {
                     else if(event instanceof BreakpointEvent){
                         checkpoints++;
                         if(checkpoints==1){
+                            cache.prune(List.of());
+                            ReferenceType target=vm.classesByName("BoundedMirrorsTarget").get(0);
+                            ArrayReference objects=(ArrayReference)target.getValue(target.fieldByName("CLASSES"));
+                            int unknownCount=0;
+                            Field status=Class.forName("com.sun.tools.jdi.ReferenceTypeImpl").getDeclaredField("status");status.setAccessible(true);
+                            for(int repeat=0;repeat<2;repeat++){
+                                for(Value object:objects.getValues()){
+                                    ReferenceType mirror=((ClassObjectReference)object).reflectedType();
+                                    if(status.getInt(mirror)==0)unknownCount++;
+                                }
+                                cache.prune(List.of());
+                            }
+                            require(unknownCount>0,"fixture did not recreate unknown-status mirrors");
+                            require(((Number)cache.telemetry().get("jdi_mirror_status_queries")).longValue()>0,"unknown statuses not resolved");
+                            require(ids(vm).size()<=BoundedJdiMirrors.HIGH_WATER,"unknown mirrors caused false pins");
                             require(old.size()==1300,"concurrent prepare events missing: "+old.size());
                             require(((Number)cache.telemetry().get("jdi_mirror_evictions")).longValue()>0,"no eviction");
                             ReferenceType evicted=old.stream().filter(t->{try{return !ids(vm).containsValue(t);}catch(Exception e){throw new RuntimeException(e);}}).findFirst().orElseThrow();

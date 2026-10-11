@@ -3,6 +3,7 @@ import java.util.*;
 /** Host-only mirror lifecycle fixture; no application or database execution. */
 public final class BoundedMirrorsTarget {
     public static final class Payload { public int value(){return 7;} }
+    public static Class<?>[] CLASSES;
     private static final List<Class<?>> LIVE = Collections.synchronizedList(new ArrayList<>());
     private static final class Loader extends ClassLoader {
         Loader(){super(null);}
@@ -22,8 +23,9 @@ public final class BoundedMirrorsTarget {
             threads.add(thread);thread.start();
         }
         for(Thread thread:threads)thread.join();
+        CLASSES=LIVE.toArray(Class<?>[]::new);
         checkpoint(1);
-        LIVE.clear();
+        CLASSES=null;LIVE.clear();
         for(int i=0;i<8;i++){System.gc();Thread.sleep(20);}
         Class<?> fresh=new Loader().define(bytes);fresh.getDeclaredConstructor().newInstance();LIVE.add(fresh);
         checkpoint(2);

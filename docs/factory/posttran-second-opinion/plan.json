@@ -1,0 +1,128 @@
+{
+  "budget_basis": {
+    "content_sha256": "9bae91d3b555574e89317d3303cf3d5d2a6503d2ee4ceb466bea8f4cc218f9c8",
+    "intcalc": "Three successful public INTCALC three-way cases and one refusal establish harness scope only; their model usage is not recorded. No invented INTCALC call-cost average.",
+    "intcalc_receipt_sha256": "4b150f938164a5af01d799b7d9bb451d1baa562fc47c1eac1fcf5d6424aa7831",
+    "observed_usage": {
+      "cached_input_tokens": 2134528,
+      "calls": 10,
+      "input_tokens": 2484836,
+      "output_tokens": 89246,
+      "uncached_input_tokens": 350308
+    },
+    "path": "docs/calibration/idempiere-ms94/stage-b-05/cost-estimate.json"
+  },
+  "client": {
+    "sha256": "bc45017e8239dc150258f69309ced9df6bbcdf5b8e4f346decf780ac0999e226",
+    "version": "codex-cli 0.155.0-alpha.9.2"
+  },
+  "content_sha256": "77470c9d8607933358d76c3e0be4af455a7913a90eddad983b47b8d9a0f01f3d",
+  "execution_authorized": false,
+  "human_candidate_edits": false,
+  "independence": [
+    "no twin outputs",
+    "no invariant results to builder",
+    "no human review sheet",
+    "no twin-driven repair"
+  ],
+  "inputs": {
+    "docs/factory/posttran-second-opinion/public-contract.md": "41882ef9966b7baeb6b5ee3ecba7cc76ee26153e1cff4bbcce3068eeec5e255e",
+    "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+    "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+    "spec/mainframe/copybooks/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "spec/mainframe/copybooks/CVTRA06Y.cpy": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1",
+    "spec/mainframe/copybooks/POSTREJS.cpy": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd",
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/mainframe/public-source/POSTTRAN.jcl": "ecff62c691e6ce101de08690e72ec065bc98bd845744ddf914899097d37c9191",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYREJS.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYTRAN.bin": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+  },
+  "model": "gpt-6-astra",
+  "model_calls_made": 0,
+  "oracle_status": "provisional",
+  "phase1_gate": [
+    "compile Java21",
+    "structural contract",
+    "own-output conservation/rejection/repeatability invariants"
+  ],
+  "phase2_gate": "All phase1 disagreements human-adjudicated with source lines; all twin defects resolved; separate phase2 approval",
+  "phases": {
+    "1": {
+      "api_equivalent_hard_cap_usd": 25,
+      "attempts": 3,
+      "compilations": 3,
+      "estimate_usd": [
+        3.03,
+        16.92
+      ],
+      "hours": 2,
+      "input_tokens": 750000,
+      "model_calls": 3,
+      "output_tokens": 48000,
+      "per_call_input_tokens": 250000,
+      "per_call_output_tokens": 16000,
+      "worst_case_token_cap_usd": 22.35
+    },
+    "2": {
+      "api_equivalent_hard_cap_usd": 17,
+      "attempts": 2,
+      "compilations": 2,
+      "estimate_usd": [
+        2.02,
+        11.28
+      ],
+      "hours": 1,
+      "input_tokens": 500000,
+      "model_calls": 2,
+      "output_tokens": 32000,
+      "per_call_input_tokens": 250000,
+      "per_call_output_tokens": 16000,
+      "worst_case_token_cap_usd": 14.9
+    }
+  },
+  "pricing_checked_date": "2026-10-11",
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "prompts": {
+    "phase1-work-order.md": "847a4976cd30426df60f445f1a3d992783e59bfb86900c3dd5f9d4c10c7a61dd",
+    "phase2-work-order.md": "f576c66d12e5b825ce0d3ba0a3e5acc525eb949e5d413fa0fde96fefd1612b0e"
+  },
+  "publish": "All attempts, failures, missing usage, disagreements, adjudications and source hashes regardless of outcome",
+  "reasoning_effort": "high",
+  "run_class": "engineering",
+  "scenarios": {
+    "generated": [
+      "posttran-zero",
+      "posttran-positive",
+      "posttran-negative",
+      "posttran-credit-equal",
+      "posttran-credit-above",
+      "posttran-expiry-equal",
+      "posttran-expiry-before",
+      "posttran-missing-card",
+      "posttran-missing-account",
+      "posttran-empty",
+      "posttran-duplicate-id",
+      "posttran-new-category",
+      "posttran-solver-credit-false",
+      "posttran-solver-credit-true"
+    ],
+    "generator_commit": "88dbf55",
+    "public": [
+      "posttran-public",
+      "posttran-missing-card",
+      "posttran-missing-account",
+      "posttran-expired-account"
+    ],
+    "required_before_call": "Exact generated input manifest and hashes sealed; no subset selection"
+  },
+  "schema": "posttran-independent-preregistration/1",
+  "server_snapshot_limitation": "Exact requested model string; official page provides no dated snapshot. No immutable server identity claim.",
+  "service_tier": "standard",
+  "source_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "status": "awaiting-exact-budget-approval"
+}

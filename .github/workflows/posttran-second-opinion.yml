@@ -1,0 +1,22 @@
+name: POSTTRAN independent plan
+on:
+  pull_request:
+    paths: ['src/lightyear_factory/posttran_second_opinion.py', 'tests/test_posttran_second_opinion.py', 'docs/factory/posttran-second-opinion/**', '.github/workflows/posttran-second-opinion.yml']
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  no-call-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install cryptography
+      - run: python -B -m unittest test_posttran_second_opinion
+        env:
+          PYTHONPATH: src:tests:.

@@ -1,0 +1,421 @@
+{
+  "schema": "b06-alternatives-measurement/1",
+  "measured_at_utc": "2026-10-11T14:12:35.704182+00:00",
+  "host_os": "Windows",
+  "jdk": "Amazon Corretto 21.0.10+7",
+  "java_executable_sha256": "5e2eb864508c9147cc7c5f59537dc64b6fb5aaf120d4b6578eb7c083caa46409",
+  "fixture_source_sha256": "9800e05ad15385457dfba24385fb23a9f6a5800eebabccddb3c9dff9c3a7e140",
+  "counter_source_sha256": "bbfc40b249ef7a248a45e170ea074b88d907a8f61fd918d3950384bb1c792ea1",
+  "measured_source_hashes": {
+    "fixture": "28b68117e1d9f5b8e7b395eadbe3b2b607472fa7094ef2febfcbbce22f781fc0",
+    "counter": "906bf77d94b082e7267c7946903d5c96401448bdd33ad0f3de4dcb1f18481f43"
+  },
+  "published_lf_sources_recompile_identical_classes": true,
+  "classes": [
+    {
+      "name": "AlternativesCounter.class",
+      "sha256": "39f8596ef198eb98ef48cd707cd647cfb190448583c1fcf09e94620d3b790db3",
+      "bytes": 7778
+    },
+    {
+      "name": "AlternativesTarget$Bytes.class",
+      "sha256": "c0a7013d4740128f5db15c6e81c8fddf3e74e44784746d053acdb2bb34756f2c",
+      "bytes": 353
+    },
+    {
+      "name": "AlternativesTarget$Loader.class",
+      "sha256": "cbbe2d3a3f93a7cfdae90dca83950afbc6da1d5095d552b27c55b21cc69341cb",
+      "bytes": 501
+    },
+    {
+      "name": "AlternativesTarget.class",
+      "sha256": "201c07240617702ec6484b0e49c1a85b21d77adf04c5ba908414a296e4f88a84",
+      "bytes": 3384
+    }
+  ],
+  "fixture_jar_sha256": "68d92723de96bf908d16f193ece24226237dc9813849ddc5837754a1ebf2e2c1",
+  "iterations": 24,
+  "repetitions": 3,
+  "variants": [
+    {
+      "variant": "baseline",
+      "wall_seconds": [
+        0.09734510001726449,
+        0.09499059995869175,
+        0.09787200001301244
+      ],
+      "median_wall_seconds": 0.09734510001726449,
+      "median_change_vs_installed_baseline_percent": 0.0,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_total": 240,
+      "dump_repetitions": [
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "variant": "jli-control",
+      "wall_seconds": [
+        0.6534263999783434,
+        0.16807029995834455,
+        0.13887999998405576
+      ],
+      "median_wall_seconds": 0.16807029995834455,
+      "median_change_vs_installed_baseline_percent": 72.65409345569186,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 152,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 211
+      },
+      "watched_total": 388,
+      "dump_repetitions": []
+    },
+    {
+      "variant": "jli",
+      "wall_seconds": [
+        0.8474291999591514,
+        0.11391329998150468,
+        0.1145562999881804
+      ],
+      "median_wall_seconds": 0.1145562999881804,
+      "median_change_vs_installed_baseline_percent": 17.680602277735048,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 61,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 110
+      },
+      "watched_total": 196,
+      "dump_repetitions": [
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "variant": "cds",
+      "wall_seconds": [
+        0.09725350001826882,
+        0.09138719999464229,
+        0.09717429999727756
+      ],
+      "median_wall_seconds": 0.09717429999727756,
+      "median_change_vs_installed_baseline_percent": -0.17545826133686937,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 61,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 85
+      },
+      "watched_total": 171,
+      "dump_repetitions": [
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "files": 0,
+          "bytes": 0,
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "variant": "internals",
+      "wall_seconds": [
+        0.17817789997207,
+        0.15648659999715164,
+        0.1654592999839224
+      ],
+      "median_wall_seconds": 0.1654592999839224,
+      "median_change_vs_installed_baseline_percent": 69.97188348933601,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_total": 240,
+      "dump_repetitions": [
+        {
+          "files": 83,
+          "bytes": 123886,
+          "manifest_sha256": "4a735e85afc1d6dfafc9d372bd16a3d0136cef984d0bf34898e91e59135c364a"
+        },
+        {
+          "files": 83,
+          "bytes": 123886,
+          "manifest_sha256": "44d2b91ba0832b68a6a92abad18b20c81ece04fce6216fb127f74da30e259f10"
+        },
+        {
+          "files": 83,
+          "bytes": 123886,
+          "manifest_sha256": "1f29d7221c22b89fbf8e15dd49df1c3db9c58a978ef068454e109c39c75cae63"
+        }
+      ]
+    },
+    {
+      "variant": "lookup",
+      "wall_seconds": [
+        0.12076120002893731,
+        0.14088360004825518,
+        0.1106216000043787
+      ],
+      "median_wall_seconds": 0.12076120002893731,
+      "median_change_vs_installed_baseline_percent": 24.054729007952027,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_total": 240,
+      "dump_repetitions": [
+        {
+          "files": 24,
+          "bytes": 8472,
+          "manifest_sha256": "df7a811b7d8de733e4c5927943fe10bfcde052a56fdb5cb7cbc3aa2915b7e400"
+        },
+        {
+          "files": 24,
+          "bytes": 8472,
+          "manifest_sha256": "c38a587ed82b1ce679c3e642a1829718fc5edfa573e1c6d5901728dc2d196632"
+        },
+        {
+          "files": 24,
+          "bytes": 8472,
+          "manifest_sha256": "cca283add09d2d45056b391ee410c60469e51196134c4aae06388bf593284691"
+        }
+      ]
+    },
+    {
+      "variant": "proxy",
+      "wall_seconds": [
+        0.13407489995006472,
+        0.11556959996232763,
+        0.11414950003381819
+      ],
+      "median_wall_seconds": 0.11556959996232763,
+      "median_change_vs_installed_baseline_percent": 18.721538055670983,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_total": 240,
+      "dump_repetitions": [
+        {
+          "files": 25,
+          "bytes": 7000,
+          "manifest_sha256": "154e675f0d8885e4c37301d42c0c079167eb675311ffdd3448576cce0c98dacd"
+        },
+        {
+          "files": 25,
+          "bytes": 7000,
+          "manifest_sha256": "bd9130a860571fb77d94f8fa03d42fd625a5ba340cdea2888a25c4838e3072ba"
+        },
+        {
+          "files": 25,
+          "bytes": 7000,
+          "manifest_sha256": "7fa0d5d238411d2f0b874eaba50326ea522bccd7d2435e4bc0a9d985ac8e680e"
+        }
+      ]
+    },
+    {
+      "variant": "all-dumps",
+      "wall_seconds": [
+        0.16524410003330559,
+        0.17892430000938475,
+        0.18392739997943863
+      ],
+      "median_wall_seconds": 0.17892430000938475,
+      "median_change_vs_installed_baseline_percent": 83.80411543842672,
+      "watched_counts": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass": 25,
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes": 82,
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass": 133
+      },
+      "watched_total": 240,
+      "dump_repetitions": [
+        {
+          "files": 132,
+          "bytes": 139358,
+          "manifest_sha256": "7b38d5c6ea0d4c89ab6cc9c78f208d3febf8fbdcccf5aa1966645d625a011ea6"
+        },
+        {
+          "files": 132,
+          "bytes": 139358,
+          "manifest_sha256": "2aec9db459e010926fb7b1a4f1ba67d46d35e2018349bb2a9bd105d0733f09da"
+        },
+        {
+          "files": 132,
+          "bytes": 139358,
+          "manifest_sha256": "29878211398068347af1c154d8d5929e1a2adc1479923a9f8892e0dab1fb3e2e"
+        }
+      ]
+    }
+  ],
+  "training_seconds": 0.15850809996481985,
+  "training_trace_bytes": 30842,
+  "training_trace_sha256": "1bfcf8990dba18f30de741d1ab6c9b6dc37eb20622c43169df05699ae97079a9",
+  "jli_build_seconds": 1.1048123000073247,
+  "jli_image": {
+    "files": 101,
+    "bytes": 49878001,
+    "manifest_sha256": "697f7cb1c939260da19df096896f896e1a3f384434c7a9f51ba1eb9a63b41c54"
+  },
+  "jli_control_build_seconds": 0.814628400024958,
+  "jli_control_image": {
+    "files": 101,
+    "bytes": 49780608,
+    "manifest_sha256": "76e3c13d170844026cc182124346e467bcf366df5e225fa11aca15bf12137b87"
+  },
+  "cds_archive": {
+    "files": 1,
+    "bytes": 720896,
+    "manifest_sha256": "3d669b0e63a45c6666910035dbff7103de1b7cef26ae9ff587ea0a6ded4cd5fe"
+  },
+  "cds_archive_mapped_in_wall_and_counter": true,
+  "jli_removed_vs_installed_percent": 18.333333333333332,
+  "jli_removed_vs_matched_control_percent": 49.48453608247423,
+  "cds_removed_vs_installed_percent": 28.749999999999996,
+  "hidden_lookup_dump_bytes_match_all_24_inputs": true,
+  "historical": {
+    "r1": {
+      "schema": "b06-alternatives-2c/1",
+      "stream_sha256": "67d18166362f24456af99230063f24a51ea2cbdd011fac7f65c53d643a5b578f",
+      "events": 231090,
+      "generation_entries": 12394,
+      "counts": {
+        "bootstrap-only-captured-input-candidate": 1241,
+        "unresolved-no-class-input-witness": 7624,
+        "application-derived-input": 3523,
+        "unresolved-platform-loader-input": 6
+      },
+      "percentages": {
+        "bootstrap-only-captured-input-candidate": 10.012909472325319,
+        "unresolved-no-class-input-witness": 61.51363563014362,
+        "application-derived-input": 28.425044376311117,
+        "unresolved-platform-loader-input": 0.048410521219945137
+      },
+      "methods": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": {
+          "bootstrap-only-captured-input-candidate": 193,
+          "application-derived-input": 1747,
+          "unresolved-platform-loader-input": 2
+        },
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": {
+          "bootstrap-only-captured-input-candidate": 609,
+          "application-derived-input": 1767,
+          "unresolved-platform-loader-input": 3
+        },
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": {
+          "bootstrap-only-captured-input-candidate": 439,
+          "unresolved-no-class-input-witness": 13,
+          "application-derived-input": 9,
+          "unresolved-platform-loader-input": 1
+        },
+        "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": {
+          "unresolved-no-class-input-witness": 7611
+        }
+      },
+      "witnesses_sha256": "81764a6f877ad53c11d5f2a4cd2a60ea72cdbe4aba4999d7ed58cb0587be29b3",
+      "census_sha256": "0df712c9494eb6d7f3f56ac60af9685aa016a6d2f7ad3a1e3870896bde88ec96",
+      "failure_sha256": "15e1c9258bd6c78229cd397cd28fe6bf5a6dc25c42783e3db8b90fac39096790",
+      "signatures_verified": 2,
+      "public_key_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+      "image_independent_proven": 0,
+      "complete_observation": false,
+      "provenance_replayed": false,
+      "qualification_credit": false,
+      "measurement_credit": false,
+      "model_calls": 0
+    },
+    "r3": {
+      "schema": "b06-alternatives-2c/1",
+      "stream_sha256": "14f354d75cfcc91beaf8ebc09cc7068a828e48c936ec3309d4982a390d53ddfd",
+      "events": 231158,
+      "generation_entries": 12396,
+      "counts": {
+        "bootstrap-only-captured-input-candidate": 1244,
+        "unresolved-no-class-input-witness": 7624,
+        "application-derived-input": 3522,
+        "unresolved-platform-loader-input": 6
+      },
+      "percentages": {
+        "bootstrap-only-captured-input-candidate": 10.035495321071313,
+        "unresolved-no-class-input-witness": 61.50371087447564,
+        "application-derived-input": 28.41239109390126,
+        "unresolved-platform-loader-input": 0.0484027105517909
+      },
+      "methods": {
+        "java.lang.invoke.InnerClassLambdaMetafactory.spinInnerClass()Ljava/lang/Class;": {
+          "bootstrap-only-captured-input-candidate": 194,
+          "application-derived-input": 1747,
+          "unresolved-platform-loader-input": 2
+        },
+        "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(ZLjava/lang/Object;)Ljava/lang/Class;": {
+          "bootstrap-only-captured-input-candidate": 610,
+          "application-derived-input": 1766,
+          "unresolved-platform-loader-input": 3
+        },
+        "java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes()[B": {
+          "bootstrap-only-captured-input-candidate": 440,
+          "unresolved-no-class-input-witness": 13,
+          "application-derived-input": 9,
+          "unresolved-platform-loader-input": 1
+        },
+        "java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;": {
+          "unresolved-no-class-input-witness": 7611
+        }
+      },
+      "witnesses_sha256": "240f57b7a7705f98dd76b6fa2e75aea5b0177a7a106b55944fb604ec27afae08",
+      "census_sha256": "ed58b838da5ff5dae0d44f3b944261ac7bcf64b9c7f8e3ec0f93d8d9f124838e",
+      "failure_sha256": "8ddfc6eaa12c5dcdb72f7ce99f36c1ed0c8d4d6f64fe8abcb3b10950339b7cc8",
+      "signatures_verified": 2,
+      "public_key_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+      "image_independent_proven": 0,
+      "complete_observation": false,
+      "provenance_replayed": false,
+      "qualification_credit": false,
+      "measurement_credit": false,
+      "model_calls": 0
+    }
+  },
+  "model_calls": 0,
+  "native_runs": 0,
+  "qualification_credit": false,
+  "measurement_credit": false,
+  "review": "Operator review, not independent attestation"
+}

@@ -211,7 +211,17 @@ def network_once(endpoint, payload):
 def load_plan(path, approval):
     plan = json.loads(Path(path).read_bytes())
     verify_seal(plan)
-    if plan.get("schema") != SCHEMA or approval != "go POSTTRAN " + plan["content_sha256"]:
+    if plan.get("schema") != SCHEMA:
+        raise Refusal("exact-amended-plan-approval-required")
+    # Factory activation is operator configuration, never supplied by the packet.
+    # The HTTP worker remains standard-library-only and receives no trust keys.
+    if os.environ.get("LIGHTYEAR_FACTORY_AUTHORITY"):
+        from .tower_authority import configured_authority, proof_contract
+        try:
+            configured_authority().spend(plan, approval, proof_contract(approval), phase=1)
+        except (ValueError, KeyError, TypeError, AttributeError):
+            raise Refusal("signed-factory-spend-required") from None
+    elif approval != "go POSTTRAN " + plan["content_sha256"]:
         raise Refusal("exact-amended-plan-approval-required")
     transport = plan["dispatch"]["dedicated_transport"]
     if sha(Path(__file__).read_bytes()) != transport["sha256"]:
@@ -360,10 +370,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("operation", choices=("preflight", "attempt-1"))
     parser.add_argument("--plan", required=True)
-    parser.add_argument("--go", required=True, help="exact: go POSTTRAN <amended plan hash>")
+    approvals = parser.add_mutually_exclusive_group(required=True)
+    approvals.add_argument("--go", help="Historical mode only: go POSTTRAN <amended plan hash>")
+    approvals.add_argument("--approval-proof", type=Path, help="Signed Factory proof after activation")
     args = parser.parse_args()
     try:
-        plan = load_plan(args.plan, args.go)
+        plan = load_plan(args.plan, json.loads(args.approval_proof.read_bytes()) if args.approval_proof else args.go)
         result = (preflight if args.operation == "preflight" else attempt_one)(plan, plan["content_sha256"])
         print(json.dumps(result, sort_keys=True))
         return 0

@@ -358,6 +358,25 @@ async function review(item) {
     form.append(label);
     fields[name] = input;
   }
+  const factoryContract = i.evidence_view?.records?.factory;
+  const factoryInputs = {};
+  let dependencyAcknowledgment;
+  if (factoryContract) {
+    d.append(el("p", "Public development. This records operator intent; it does not dispatch a campaign, spend money or release customer evidence.", "boundary"));
+    for (const id of factoryContract.details.items || []) {
+      const label = el("label", id), outcome = el("select"), reason = el("textarea");
+      for (const value of ["", "accept", "reject", "investigate"]) {
+        const option = el("option", value || "Choose item decision"); option.value = value; outcome.append(option);
+      }
+      outcome.required = true; reason.required = true; reason.setAttribute("aria-label", "Reason for " + id);
+      label.append(outcome, reason); form.append(label); factoryInputs[id] = {outcome, reason};
+    }
+    if (factoryContract.kind === "legacy-behaviour-disposition") {
+      form.append(el("p", "Choosing fix invalidates these dependent arguments:"), json(factoryContract.details.dependent_arguments));
+      dependencyAcknowledgment = el("input"); dependencyAcknowledgment.type = "checkbox";
+      const label = el("label", "I reviewed every dependent argument listed above"); label.append(dependencyAcknowledgment); form.append(label);
+    }
+  }
   let slot;
   if (item.kind === "evidence-release") {
     d.append(
@@ -407,6 +426,8 @@ async function review(item) {
         item_id: i.id,
         bound: i.bound,
         outcome: choice.value,
+        ...(factoryContract ? {factory_items: Object.fromEntries(Object.entries(factoryInputs).map(([id, row]) => [id, {outcome: row.outcome.value, reason: row.reason.value}])),
+          acknowledged_dependencies: dependencyAcknowledgment?.checked ? factoryContract.details.dependent_arguments : null} : {}),
         request_id: crypto.randomUUID(),
         previous_decision_sha256: i.latest_decision?.content_sha256 || null,
       };

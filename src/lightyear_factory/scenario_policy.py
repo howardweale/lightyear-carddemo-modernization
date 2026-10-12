@@ -23,7 +23,7 @@ def fraction(value):
     return Fraction(n,d)
 
 
-def assess(adequacy,threshold,compared_fields):
+def assess(adequacy,threshold,compared_fields, *, historical_io=True):
     reasons=[]
     if not adequacy or not adequacy.get('instrumented'):return ['scenario-coverage-unavailable']
     try:
@@ -49,7 +49,7 @@ def assess(adequacy,threshold,compared_fields):
             if set(refused)&{d['mutant_id'] for d in dispositions}:raise ValueError('overlapping-mutant-exclusions')
             if mutants['excluded_equivalents']!=len(mutants['equivalent_dispositions']):raise ValueError('equivalent-inventory')
             accepted={tuple(x) for x in threshold.get('accepted_io_outcomes',[])}
-            accepted.update((a['id'],a['outcome']) for a in IO_ACCEPTANCES
+            accepted.update((a['id'],a['outcome']) for a in (IO_ACCEPTANCES if historical_io else ())
                 if a['program']==adequacy.get('program') and a['source_sha256']==adequacy.get('source_sha256'))
             for x in adequacy.get('uncovered',[]):
                 if not isinstance(x,dict):raise ValueError('outcome-shape')
@@ -80,7 +80,11 @@ def verified_assessment(verdict,report,judge_key):
     return report['scenario_adequacy']
 
 
-def release(verdict,report,judge_key,policy=None,operator_key=None):
+def release(verdict,report,judge_key,policy=None,operator_key=None, *, factory_authority=None):
+    from .tower_authority import configured_authority
+    factory_authority = configured_authority(factory_authority)
+    if factory_authority is not None:
+        return _factory_release(verdict, report, judge_key, policy, factory_authority)
     adequacy=verified_assessment(verdict,report,judge_key)
     reasons=assess(adequacy,PROPOSAL,report['compared_fields'])
     if (not policy or not operator_key or not verify_envelope(policy,operator_key)
@@ -94,3 +98,55 @@ def release(verdict,report,judge_key,policy=None,operator_key=None):
     if verdict.get('oracle_status')=='provisional' or verdict.get('run_class')=='engineering':reasons.append('provisional-or-engineering-evidence')
     return dict(releasable=not reasons,reasons=sorted(set(reasons)),scenario_adequacy=adequacy,
                 status='releasable' if not reasons else 'equivalent (not releasable: weak scenarios)' if verdict.get('verdict')=='equivalent' else 'not releasable')
+
+
+def _factory_release(verdict, report, judge_key, bundle, authority):
+    """Signed mode never imports the historical EOF constants or chat policy."""
+    from .tower_authority import proof_contract
+    from lightyear_control_tower.factory_policy import require
+    adequacy = verified_assessment(verdict, report, judge_key)
+    reasons = []
+    try:
+        require(isinstance(bundle,dict) and set(bundle) == {"threshold", "approval", "io", "equivalents", "claim_scope"})
+        threshold = dict(bundle["threshold"])
+        contract = proof_contract(bundle["approval"])
+        authority.verify(bundle["approval"], "scenario-threshold-approval", contract, ("approve",))
+        require(contract["details"]["policy_sha256"] == digest(threshold), "factory-threshold-binding")
+        require(contract["details"]["version"] == threshold["schema"], "factory-threshold-version")
+        # Conditional policy never becomes effective merely because a caller says so.
+        # A later exact policy approval must explicitly remove the condition.
+        if contract["details"]["effective_condition"] != "unconditional":
+            reasons.append("signed-threshold-condition-pending")
+        accepted = []
+        for proof in bundle["io"]:
+            c = proof_contract(proof)
+            authority.verify(proof, "io-exception-acceptance", c, ("accept",))
+            d = c["details"]
+            require(d["source_sha256"] == adequacy["source_sha256"], "factory-io-source")
+            accepted.append([d["outcome_id"], d["outcome"]])
+        threshold["accepted_io_outcomes"] = accepted
+        scope = bundle["claim_scope"]
+        require(scope in {"twin", "zos-facing"})
+        resolved = set()
+        for proof in bundle["equivalents"]:
+            c = proof_contract(proof)
+            # The signed packet binds the full scenario assessment, including
+            # exact source, mutant inventory and evidence. No packet substitution.
+            require(c["details"]["packet_sha256"] == digest(report), "factory-equivalence-packet")
+            for mutant in c["details"]["items"]:
+                authority.equivalence(proof, c, mutant, scope)
+                resolved.add(mutant)
+        for row in adequacy["systematic_mutation"]["equivalent_dispositions"]:
+            # Compiler proof requires an explicit proof digest in the signed
+            # assessment; a prose argument alone is never compiler proof.
+            compiler = row.get("resolution") == "compiler-proven" and row.get("compiler_proof_sha256")
+            if not compiler and row["mutant_id"] not in resolved:
+                reasons.append("signed-equivalence-review-required")
+        reasons += assess(adequacy, threshold, report["compared_fields"], historical_io=False)
+    except (KeyError, TypeError, ValueError):
+        reasons.append("signed-factory-threshold-evidence-required")
+    if verdict.get("verdict") != "equivalent": reasons.append("verdict-not-equivalent")
+    if verdict.get("oracle_status") == "provisional" or verdict.get("run_class") == "engineering":
+        reasons.append("provisional-or-engineering-evidence")
+    return dict(releasable=not reasons, reasons=sorted(set(reasons)), scenario_adequacy=adequacy,
+                status="releasable" if not reasons else "not releasable", authority="signed-factory-decisions")

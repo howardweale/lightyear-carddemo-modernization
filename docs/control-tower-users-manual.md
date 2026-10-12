@@ -1,9 +1,21 @@
 # Control Tower user manual
 
-Revision October 6, 2026. Operator review; not independent attestation.
-This manual describes the current scoped Decision Console and the CardDemo z/OS
-intake. It replaces the older normalization-only navigation instructions for
-this workflow. The legacy Discovery viewer remains a separate read-only view.
+Revision October 11, 2026. Operator review; not independent attestation.
+This manual describes the scoped Decision Console, the CardDemo z/OS intake and
+the Factory scope for public development evidence (sections 10–14). It replaces
+the older normalization-only navigation instructions for this workflow. The legacy
+Discovery viewer (`./live-control-tower.sh serve`, port 8765) remains a separate
+read-only view; it is not the Decision Console.
+
+> **Release status.** Sections 1–9 describe the Console as it exists today.
+> Sections 10–14 describe the Factory scope added by the October 11 work order.
+> Until that release is merged and its acceptance tests pass, Factory decisions
+> are still recorded as dated decision files from chat and are not Tower-signed.
+> This first delivery implements the scoped decision contracts and consumers.
+> Programs, Status and Unresolved arrive in the following two PRs. No live
+> Factory service is provisioned by this change. Signed-only consumption starts
+> only after Howard signs the backfill and an administrator installs its trust
+> setting. Historical evidence files remain unchanged.
 
 ## 1. Open the correct Tower
 
@@ -12,6 +24,7 @@ this workflow. The legacy Discovery viewer remains a separate read-only view.
 | Incoming Maintec files | `carddemo-zos` | Intake Console, normally `http://127.0.0.1:8767/` |
 | B06 | `ms94-b06` | Its separately installed Console, currently port 8766 |
 | Public Verify graph | Separately provisioned Verify scope | Its configured Console; no automatic activation |
+| Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port set at provisioning (proposed 8768). See section 10 |
 
 Signing in to B06 does not expose CardDemo or Verify requests. Selecting a graph
 or workload in Discovery does not switch the authority. Use a separate data root,
@@ -42,9 +55,13 @@ if (!(Test-Path -LiteralPath $Python) -or !(Test-Path -LiteralPath $TowerAuthori
 ```
 
 Open the printed loopback URL. Sign in using **Individual credential**. Confirm
-the scope and operator identity, then select **Work queue**. The available tabs
-are Campaigns, Work queue, Catalogue, Customer workspace, Decision history and
-Graph memory. CardDemo's **Customer workspace** is the read-only arrivals view.
+the scope and operator identity, then select **Work queue**. The tabs are
+Campaigns, Work queue, Catalogue, Customer workspace, Decision history, Graph
+memory and Business rules. In the CardDemo intake scope, Graph memory and Business
+rules are deliberately empty: that scope accepts only intake acceptance,
+normalization, difference disposition and evidence release. The Factory scope adds
+Programs, Status and Unresolved (section 10). CardDemo's **Customer workspace**
+is the read-only arrivals view.
 Never paste a private key, dataset, SYSOUT or record value into any login or note.
 
 ## 2. Prepare for the arriving folder
@@ -246,7 +263,133 @@ No model comparison or live model call is approved by a Tower graph decision.
 | No graph tools | Pending/rejected/expired approval, missing trust or hash mismatch means baseline tools only. Do not bypass the gate. |
 | Different/unknown dataset format | Request a corrected delivery; preserve the original. |
 | Equivalence changed after rule review | Preserve both outcomes and explain distinct run/rule bindings; never rewrite history. |
+| Programs page shows "pending" after you approved something | Check Decision history for the signed event. The page reads signed decisions and the latest receipts only; a decision given in chat does not count. |
+| Equivalence arguments marked "invalidated" | A keep-or-fix decision they depend on changed (section 12). Re-disposition them; the threshold check refuses until you do. |
+| Model-spend request refused at dispatch | The plan hash in the request must equal the hash you approved. Any amendment is a new request. |
+| Factory tab empty | You are in the CardDemo intake or B06 scope. Factory evidence lives only in the `factory` scope. |
+
+
+
+## 10. Factory scope: open it and find your way
+
+The Factory scope shows the public development evidence the factory produces for
+each converted program, and records the decisions that govern it. It uses only
+public CardDemo sources, public data and generated scenarios. It never shows
+Maintec arrivals or customer values; those stay in the CardDemo intake scope.
+
+```powershell
+& $Python -m lightyear_control_tower serve --root $FactoryRoot --authority $FactoryAuthority --port 8768
+```
+
+Use the Factory data root and authority provisioned for it, never the intake or
+B06 root. Sign in with your individual credential. The Factory tabs are:
+
+| Tab | What it is for |
+| --- | --- |
+| **Programs** | One page per converted program: is it releasable, and why (section 11) |
+| **Status** | Generated current status across programs, campaigns and pending decisions; replaces reading milestones |
+| **Unresolved** | Every open difference, unresolved twin limit, unexplained survivor and pending review, across programs |
+| **Work queue** | Factory decisions waiting on you (section 12) |
+| **Business rules** | Rules with evidence strength and scenario adequacy |
+| **Decision history** | Every signed Factory decision, including the October backfill |
+
+## 11. Programs: read a program's evidence
+
+Select **Programs**, then a program, for example POSTTRAN (CBTRN02C). The page
+header shows the source hash, the twin toolchain and the evidence commit. The
+banner states **Releasable** or **Not releasable yet** and counts criteria met,
+pending and failed. "Pending" means waiting on a run or a decision; "failed"
+means measured and not met.
+
+| Panel | What to check |
+| --- | --- |
+| **Releasability checklist** | Each threshold criterion with its measured value. Open "Policy as approved" to see the signed policy version the page applies. |
+| **Scenarios** | Business-logic and I/O-handling coverage, separately; outcomes added by fault injection; accepted exceptions; listed gaps with reasons |
+| **Mutation** | Raw kills (failure and divergent), argued equivalents grouped by class, survivors, compiler refusals; each class shows how it is resolved: compiler-proven, class proof or individual review |
+| **Answer key** | `oracle_class` (for example `executable-twin (provisional)`), z/OS confirmation, and the twin limits that apply to this program |
+| **Keep or fix** | Legacy behaviours the conversion must reproduce, with your decision and any equivalence arguments that depend on it |
+
+Raw figures are always shown beside figures after exclusions. A percentage is
+never shown without its denominator. Nothing on this page changes evidence;
+decisions are made only in **Work queue**.
+
+## 12. Factory decisions
+
+Factory decisions use the same signed journal as the rest of the Console. Codex
+and the factory act only on a signed decision bound to exact hashes, not on chat.
+
+| Decision | What you approve | Role |
+| --- | --- | --- |
+| `scenario-threshold-approval` | A threshold policy version (criteria, minimum set sizes, what may be excluded) | `qualification-approver` |
+| `io-exception-acceptance` | One I/O outcome left unobserved, bound to source hash, line and argument | `qualification-approver` |
+| `equivalence-review` | Accept or reject a review packet: per mutant, or a class proof | `qualification-approver` |
+| `legacy-behaviour-disposition` | Keep or fix a registered legacy behaviour (for example REWRITE-109) | `business-owner` |
+| `twin-human-review` | Accept, reject or investigate each record of a twin review sheet | `qualification-approver` |
+| `model-spend-approval` | One plan hash: calls, tokens, hours, dollar cap, transport, client | `campaign-authorizer` |
+| `engineering-run-approval` | One executable commit, request seal and window for an engineering run | `campaign-authorizer` |
+
+How to decide:
+
+1. Open the item in **Work queue**. Read the bound evidence and hashes; the card
+   lists exactly what the decision covers and what it does not.
+2. Choose the outcome, give a reason, an accountable owner and a review date
+   where asked, then click **Record decision** once.
+3. Confirm the signed event in **Decision history**. The Programs page updates
+   from the signed record.
+
+Points to watch:
+
+- **Model spend.** You approve a plan hash, not a description. If the plan is
+  amended, even only its labels, it comes back as a new request.
+- **Keep or fix.** Changing a behaviour from keep to fix invalidates every
+  equivalence argument that depends on it. The page lists them before you
+  confirm.
+- **Equivalence review.** An AI-assisted review is labelled as such. Accepting it
+  is an operator decision, not independent attestation.
+- **Engineering runs.** Approval names one commit and one window. A later commit
+  or a missed window needs a new request.
+
+## 13. October 2026 decisions made in chat
+
+Decisions given in chat between October 10 and the Factory release were recorded
+as dated decision files (`docs/factory/howard-decisions-*.json`). They are not
+Tower-signed. The release converts them into one backfill request in **Work
+queue**, listing each decision with its original date and bound hashes. Review
+and sign it once. After that, decisions given in chat are not acted on; ask for
+a Work queue item instead.
+
+## 14. What the Factory scope does not do
+
+- It does not run the factory, start campaigns, call models or run the twin.
+- It does not show customer data, Maintec arrivals or decoded values.
+- A Factory "releasable" result is about the public reference programs. It is not
+  z/OS confirmation and not a customer release; those remain separate evidence
+  and separate decisions.
 
 For complete contracts see [CardDemo Tower](mainframe/carddemo-zos-tower.md),
-[the intake runbook](mainframe/monday-runbook.md), and
-[Decision Console administration](control-tower-decision-console.md).
+[the intake runbook](mainframe/monday-runbook.md),
+[Decision Console administration](control-tower-decision-console.md) and
+[Factory scope administration](control-tower-factory-scope.md).
+
+
+## Factory administration and migration (delivery 1)
+
+See [Factory scope administration](control-tower-factory-scope.md). The seven
+Factory kinds are joined by `factory-decision-backfill` for the one-time dated
+record inventory. It requires qualification-approver, campaign-authorizer and
+business-owner together. Its signature records historical intent; it does not
+turn past conditional approval into a new run or model-spend authorization.
+
+The backfill contract is `docs/factory/tower-backfill-request-2026-10-12.json`.
+Each dated source document is included in full with its original date and byte
+hash. The unsigned POSTTRAN review is a separate `twin-human-review` request;
+its suggested outcomes and reasons remain unsigned until confirmed in the queue.
+MCP `propose_factory_decision` annotates a Factory request; it cannot approve.
+
+Consumers use `LIGHTYEAR_FACTORY_AUTHORITY` only after the signed backfill is
+installed. An invalid configured trust file is an error, never a fallback to
+chat. The public key and fresh journal head come from the operator, not the
+request. Refresh every proof to that head. Conditional threshold approval stays
+pending until an explicit effective policy approval; no conditional text is
+automatically treated as satisfied. Existing frozen plans remain historical and
+must be amended and approved before using changed verifier bytes.

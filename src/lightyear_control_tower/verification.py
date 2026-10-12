@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone, date
 from .decisions import ZERO, verify_envelope
-from .kinds import default_registry
+from .kinds import default_registry, scoped_registry
 
 
 class DecisionVerificationError(ValueError):
@@ -17,6 +17,9 @@ def check(condition, code):
 
 
 def subject(kind, bound):
+    from .kinds import factory_registry
+    if kind in factory_registry().names():
+        return (("contract", bound.get("contract")),)
     if kind == "normalization" and "rule" in bound:
         return (("rule", bound["rule"]),)
     keys = {
@@ -97,7 +100,7 @@ def verify_decision(
         )
         check(p.get("scope") == export.get("scope"), "scope-mismatch")
         check(p.get("bound") == bound, "bound-hash-mismatch")
-        policy = default_registry().get(kind)
+        policy = scoped_registry(p.get("scope")).get(kind)
         if p.get("scope") == "carddemo-zos":
             from .carddemo_policy import registry, HOWARD, agent_proposal, POLICY
 
@@ -157,6 +160,9 @@ def verify_decision(
                 or all(v == "accept" for v in decisions.values()),
                 "classification-overall-mismatch",
             )
+        if p.get("scope") == "factory":
+            from .factory_policy import verify_validation
+            verify_validation(p)
         later = [
             e
             for e in events[event["sequence"] :]

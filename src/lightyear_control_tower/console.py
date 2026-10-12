@@ -23,7 +23,7 @@ from .decisions import (
     ZERO,
 )
 from .identity import LocalIdentityProvider
-from .kinds import default_registry, ROLES, APPROVING_ROLES
+from .kinds import default_registry, scoped_registry, ROLES, APPROVING_ROLES
 from .requests import RequestInbox, identifier, read_json
 from .presentation import evidence_view, age
 from .proposals import proposal_actor
@@ -89,7 +89,7 @@ class ConsoleService(DecisionService):
         else:
             with ownership.open("xb") as f:
                 f.write(canonical(identity))
-        self.registry = registry or default_registry()
+        self.registry = registry or scoped_registry(self.scope)
         self.identity_provider = identity_provider or LocalIdentityProvider()
         super().__init__(
             Path(root),
@@ -107,6 +107,13 @@ class ConsoleService(DecisionService):
         self.finalizers = {}
         from lightyear_business_rules.tower import inspect as inspect_business_rule
         self.validators["business-rule-disposition"] = lambda item, payload, events, session: inspect_business_rule(self, item)
+        if self.scope == "factory":
+            from .factory_policy import FactoryInbox, validate_decision
+            self.inbox = FactoryInbox(self.root, self.scope, self.registry)
+            self.validators = {name: (lambda item, payload, events, session:
+                validate_decision(self.root, item, payload, events, session))
+                for name in self.registry.names()}
+
 
     def qualification_key(self):
         return qualification_key(

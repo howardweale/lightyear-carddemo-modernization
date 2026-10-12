@@ -36,7 +36,18 @@ def sign(sheet,decisions,reviewer,signer):
     return signer.sign(body(sheet,decisions,reviewer))
 
 
-def verify(sheet,signed,public_key):
+def verify(sheet,signed,public_key, *, factory_authority=None, contract=None):
+    from lightyear_factory.tower_authority import configured_authority, proof_contract
+    factory_authority = configured_authority(factory_authority)
+    if factory_authority is not None:
+        contract = contract or proof_contract(signed)
+        expected = packet(sheet)
+        if (contract['details']['sheet_sha256'] != expected['sheet_sha256']
+                or contract['details']['source_sha256'] != expected['source_sha256']
+                or contract['details']['items'] != [str(r['index']) for r in expected['decisions']]):
+            raise ValueError('review-evidence-binding')
+        decision = factory_authority.verify(signed, 'twin-human-review', contract, ('accept','reject','investigate'))
+        return dict(authenticated=True, all_accepted=all(r['outcome']=='accept' for r in decision['validation']['items'].values()), promotion_authorized=False)
     if not verify_envelope(signed,public_key):raise ValueError('review-signature')
     expected=body(sheet,signed,signed.get('reviewer'))
     if {k:v for k,v in signed.items() if k not in ('signature','content_sha256')}!=expected:raise ValueError('review-body')

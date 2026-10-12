@@ -272,3 +272,28 @@ APPROVING_ROLES = ROLES - {
     "auditor",
     "agent",
 }
+
+
+def factory_registry():
+    """Public-development vocabulary; deliberately absent from default/intake."""
+    specs = {
+        "scenario-threshold-approval": (("approve", "reject"), "qualification-approver"),
+        "io-exception-acceptance": (("accept", "reject"), "qualification-approver"),
+        "equivalence-review": (("accept", "reject", "investigate"), "qualification-approver"),
+        "legacy-behaviour-disposition": (("keep", "fix", "investigate"), "business-owner"),
+        "twin-human-review": (("accept", "reject", "investigate"), "qualification-approver"),
+        "model-spend-approval": (("approve", "reject"), "campaign-authorizer"),
+        "engineering-run-approval": (("approve", "reject"), "campaign-authorizer"),
+        "factory-decision-backfill": (("accept", "reject"), "qualification-approver"),
+    }
+    return KindRegistry(DecisionKind(name, outcomes, (role,), ("contract",),
+        consumer="factory:" + name) for name, (outcomes, role) in specs.items())
+
+
+def scoped_registry(scope):
+    if scope == "factory":
+        return factory_registry()
+    if scope == "carddemo-zos":
+        from .carddemo_policy import registry
+        return registry()
+    return default_registry()

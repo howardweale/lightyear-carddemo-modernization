@@ -79,6 +79,12 @@ class TowerTools:
     def prepare_classification(self, payload):
         return self.service.propose(self._session(), "classification-draft", payload)
 
+    def propose_factory_decision(self, payload):
+        item = self.service.item(self._session(), payload["item_id"])
+        if item.get("scope") != "factory":
+            raise ValueError("Factory proposal requires Factory scope")
+        return self.service.propose(self._session(), "annotation", payload)
+
     def annotate_request(self, payload):
         return self.service.propose(self._session(), "annotation", payload)
 
@@ -126,6 +132,12 @@ def create_server(service, credential):
     @server.tool(annotations=draft)
     def prepare_classification(payload: dict) -> dict:
         return tools.prepare_classification(payload)
+
+    scope = getattr(service, "scope", None) or tools.queue().get("session", {}).get("scope")
+    if scope == "factory":
+        @server.tool(annotations=draft)
+        def propose_factory_decision(payload: dict) -> dict:
+            return tools.propose_factory_decision(payload)
 
     @server.tool(annotations=draft)
     def annotate_request(payload: dict) -> dict:

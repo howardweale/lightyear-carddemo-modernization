@@ -19,7 +19,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools.ci_postgres_image import POSTGRES_IMAGE, ensure_image
+from tools.ci_postgres_image import ensure_image
 sys.path.insert(0, str(ROOT / 'src'))
 from lightyear_data.cloudbank_ms67_drills import CUSTOMER_MIGRATIONS_SQL, detailed_snapshot, snapshot_difference
 from lightyear_data.cloudbank_sql_recovery import SNAPSHOT_SQL
@@ -41,9 +41,9 @@ def main():
     assert jar.is_file()
     name = 'ms67-customer-startup-' + uuid.uuid4().hex[:12]
     try:
-        ensure_image()
+        postgres_image = ensure_image()
         command(['docker', 'run', '--pull=never', '-d', '--name', name, '-p', '127.0.0.1::5432',
-                 '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', POSTGRES_IMAGE])
+                 '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', postgres_image])
         port = json.loads(command(['docker', 'inspect', name]))[0]['NetworkSettings']['Ports']['5432/tcp'][0]['HostPort']
         deadline = time.monotonic() + 60
         while subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'postgres'], capture_output=True).returncode:

@@ -31,7 +31,8 @@ def check(root=ROOT):
     text=(Path(root)/"docs/control-tower-users-manual.md").read_text(encoding="utf-8")
     routes,tabs,kinds=vocabulary(root)
     expected=routes+[label for _,label in tabs]+kinds
-    missing=[value for value in expected if value not in text]
+    missing=[value for value in expected if not re.search(r"(?<![\w/-])"+re.escape(value)+r"(?![\w/-])",text)]
+    missing += ["tab:"+key for key,_ in tabs if "`"+key+"`" not in text]
     if missing:raise ValueError("Tower manual missing: "+", ".join(missing))
     return dict(routes=len(routes),tabs=len(tabs),kinds=len(kinds))
 

@@ -19,6 +19,10 @@ and signed acceptances. Keep-or-fix dependencies derive from those same records.
 Signed I/O exceptions apply only to the exact source, outcome and line. No raw
 record is replaced. Current provisional programs remain not releasable.
 
+A real signed-release fixture also verifies that host compiler proofs cannot
+exclude z/OS-facing claims without signed review, and that wrong-line I/O
+exceptions refuse consumption. Thirteen authority/scenario tests passed.
+
 The manual reconciles the supplied draft with actual navigation, isolated Factory
 authority, import/index trust, explicit post-backfill activation, historical
 versus signed policy, missing-age behavior and the distinction between imported

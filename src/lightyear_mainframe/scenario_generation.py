@@ -61,6 +61,11 @@ def manifest():
         add('POSTTRAN','solver-credit-'+str(truth).lower(),'decision-directed-finite-solver',
             'IF ACCT-CREDIT-LIMIT >= WS-TEMP-BAL '+str(truth),variant='solver-credit',amount=str(witness['witness']['amount']),
             solver={**witness,'witness':{'amount':str(witness['witness']['amount'])}})
+    for job in ('INTCALC','POSTTRAN'):
+        for ordinal in (0,1):
+            variants=('diversity',) if job=='INTCALC' else ('diversity','diversity-reject')
+            for variant in variants:
+                add(job,f'{variant}-{ordinal}','field-diversity','October12 below-two-values inventory',variant=variant,ordinal=ordinal,balance='10.01',rate='15.00')
     for spec in result:
         program='CBACT04C' if spec['job']=='INTCALC' else 'CBTRN02C'
         source=ROOT/f'spec/mainframe/public-source/{program}.cbl'
@@ -143,6 +148,24 @@ def case(identifier):
             else:setfield('DALYTRAN','DALYTRAN-CAT-CD','9999')
             images['DALYTRAN']+=second
 
+    if p.get('variant','').startswith('diversity'):
+        ordinal=p['ordinal']
+        def vary(dd,name,value):
+            layout=load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15',dd)['copybook'])
+            item=next(f for f in layout.fields if f.path.split('.')[-1]==name)
+            text=str(value).ljust(item.length) if not item.digits else (encode_zoned(D(value),item.digits,item.scale) if item.signed else str(value).zfill(item.length))
+            if len(text)!=item.length:raise ValueError('diversity-field-width')
+            raw=bytearray(images[dd])
+            for start in range(0,len(raw),layout.record_length+1):raw[start+item.offset:start+item.offset+item.length]=text.encode('ascii')
+            images[dd]=bytes(raw)
+        meta['candidate_timestamp']=f'2022-06-{12+ordinal:02d}-10.20.30.000000'
+        vary('ACCTFILE','ACCT-ACTIVE-STATUS',('Y','N')[ordinal])
+        if job=='INTCALC':meta['processing_date']=f'202206{12+ordinal:02d}10'
+        else:
+            vary('ACCTFILE','ACCT-GROUP-ID',('DIRECT','OTHER')[ordinal])
+            for field,values in [('DALYTRAN-CAT-CD',('0001','0002')),('DALYTRAN-MERCHANT-ID',('123456789','987654321')),('DALYTRAN-PROC-TS',('2022-06-01 01:02:03.000000','2022-06-02 04:05:06.000000')),('DALYTRAN-SOURCE',('STORE','WEB')),('DALYTRAN-TYPE-CD',('01','02'))]:
+                vary('DALYTRAN',field,values[ordinal])
+            if p['variant']=='diversity-reject':vary('DALYTRAN','DALYTRAN-CARD-NUM','9999999999999999')
     return job,meta,images,{**spec,'input_sha256':{dd:sha(raw) for dd,raw in images.items()}}
 
 

@@ -89,3 +89,5 @@ three acquisition attempts. Its application Maven tests passed before that
 infrastructure failure. The failed attempt remains preserved; it is not reported
 as green. The subsequent documentation/register integration requires fresh CI
 on its new exact head, so no redundant retry of the superseded head is needed.
+
+2026-10-12 correction: the [dedicated plan](posttran-second-opinion/dedicated-transport-plan-2026-10-11.json) `bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919` supersedes `bb91aad8...`; its token-count preflight is outside the reservation ledger and consumes zero attempts.

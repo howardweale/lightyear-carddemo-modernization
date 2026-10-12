@@ -20,6 +20,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -31,13 +32,13 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
         run: python -B -m unittest test_posttran_attempt1_phase1 -v
-      - name: Report consumed Phase1 attempt without retry
+      - name: Authorized compilation 2 with source-bound abend contract
         env:
           PYTHONPATH: src:.
-        run: python -B tools/check_posttran_attempt1_phase1.py --output work/posttran-attempt1-phase1
+        run: python -B tools/check_posttran_attempt1_phase1.py --authorized-rerun --output work/posttran-attempt1-phase1
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: posttran-attempt1-phase1
+          name: posttran-attempt1-phase1-compile2
           path: work/posttran-attempt1-phase1
           retention-days: 30

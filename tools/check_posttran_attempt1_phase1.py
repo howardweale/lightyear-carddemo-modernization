@@ -63,11 +63,28 @@ def limits():
     resource.setrlimit(resource.RLIMIT_CPU, (15, 15))
 
 
-def run(output):
+def authorize_rerun():
+    authorization = json.loads((ROOT / 'docs/factory/posttran-phase1-rerun-authorization-2026-10-12.json').read_text())
+    if os.environ.get('GITHUB_ACTIONS') != 'true' or os.environ.get('GITHUB_RUN_ATTEMPT') != '1' or os.environ.get('GITHUB_EVENT_NAME') != 'pull_request':
+        raise ValueError('authorized-first-CI-run-only')
+    parent = subprocess.check_output(['git', 'rev-parse', 'HEAD^'], cwd=ROOT, text=True).strip()
+    if parent != authorization['required_parent']:
+        raise ValueError('rerun-exact-parent-required')
+    for path, expected in authorization['bound_file_sha256'].items():
+        if sha((ROOT / path).read_bytes()) != expected:
+            raise ValueError('rerun-bound-file-changed:' + path)
+    if authorization['compile_ordinal'] != 2 or authorization['candidate_sha256'] != EXPECTED:
+        raise ValueError('rerun-authorization-invalid')
+    return authorization
+
+
+def run(output, authorized_rerun=False):
     # Attempt 1 was consumed on the original CI head. Publication/lint changes
     # must never silently compile or execute it again.
     frozen = ROOT / 'docs/factory/posttran-attempt1-phase1-2026-10-12.json'
-    if frozen.exists():
+    if authorized_rerun:
+        authorize_rerun()
+    if frozen.exists() and not authorized_rerun:
         raw = frozen.read_bytes()
         if sha(raw) != 'd77d29ccea6c933ad242ec7e88024b0a3a18d7eeaaadde6345a691b244b16321' or sha(CANDIDATE.read_bytes()) != EXPECTED:
             raise ValueError('consumed-attempt-binding-changed')
@@ -86,7 +103,9 @@ def run(output):
     started = time.monotonic()
     report = dict(schema='posttran-phase1-gate/1', attempt=1, candidate_sha256=EXPECTED,
                   head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-                  compile_attempts=1, model_calls=0, twin_comparisons=0, phase2_authorized=False,
+                  compile_attempts=1, compile_ordinal=2 if authorized_rerun else 1, generation_attempt=1,
+                  gate_revision='source-abcode-999' if authorized_rerun else 'historical-twin-process-12',
+                  model_calls=0, twin_comparisons=0, phase2_authorized=False,
                   unresolved_register_written=False, cases=[], passed=False)
     def save():
         report['elapsed_seconds'] = round(time.monotonic() - started, 3)
@@ -133,7 +152,8 @@ def run(output):
                     if not re.fullmatch(r'[0-9]{1,4}',code_text):raise ValueError('invalid-source-returncode')
                     code=int(code_text)
                     if child.returncode!=code%256:raise ValueError('process-source-returncode-disagree')
-                    invariant=check(images,after,timestamp=meta['candidate_timestamp'],returncode=code)
+                    invariant=check(images,after,timestamp=meta['candidate_timestamp'],returncode=code,
+                        returncode_contract='source-abcode' if authorized_rerun else 'twin-process')
                     attempt.update(source_returncode=code,outputs_sha256={dd:sha(raw) for dd,raw in after.items()},
                         invariant_passed=invariant['passed'],failures=invariant['failures'],structural_passed=True)
                 except (ValueError,OSError,subprocess.TimeoutExpired) as exc:
@@ -152,4 +172,5 @@ def run(output):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',type=Path,required=True)
-    args=parser.parse_args();result=run(args.output.resolve());print(json.dumps(result,indent=2));raise SystemExit(0 if result['passed'] else 1)
+    parser.add_argument('--authorized-rerun',action='store_true');
+    args=parser.parse_args();result=run(args.output.resolve(),authorized_rerun=args.authorized_rerun);print(json.dumps(result,indent=2));raise SystemExit(0 if result['passed'] else 1)

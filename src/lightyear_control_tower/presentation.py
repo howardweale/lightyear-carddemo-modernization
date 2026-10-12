@@ -165,7 +165,7 @@ FACTORY_FILES = {
     "posttran-human-review-sheet.json": ("records", "oracle_class", "oracle_status", "zos_confirmation"),
     "posttran-decisions-unsigned-2026-10-11.json": ("decisions", "sheet_sha256", "source_sha256", "reviewer"),
     "posttran-second-opinion/attempt-1-public-summary-2026-10-11.json": ("status", "phase1_validation_completed", "phase2_authorized", "usage", "plan_sha256", "finished_at"),
-    "current-status.json": ("conditional_threshold", "posttran_phase2_authorized", "b06_execution_authorized", "b06_window", "b06_request_due", "b07_freeze_ready", "decision_time"),
+    "current-status-before-tower.json": ("conditional_threshold", "posttran_phase2_authorized", "b06_execution_authorized", "b06_window", "b06_request_due", "b07_freeze_ready", "decision_time"),
     "generated-review311-classification.json": ("cases", "unresolved", "observed_head"),
     "tower-display-policy.json": ("schema", "business_logic_outcomes", "legacy_mutants_killed", "minimum_systematic_mutants", "distinct_values_per_output_field", "status"),
 }
@@ -180,5 +180,6 @@ FACTORY_FRESH_FIELDS = FACTORY_SUMMARY_FIELDS + ("campaign_head", "evidence_gap_
 for _program in ("INTCALC", "POSTTRAN"):
     FACTORY_FILES["tower-run-38198096890/"+_program+"/fresh.json"] = FACTORY_FRESH_FIELDS
     FACTORY_FILES["tower-run-38198096890/"+_program+"/summary.json"] = ("current_head", "disposition_counts", "resource_usage", "compiler_scope", "source_sha256", "population")
+    FACTORY_FILES["tower-run-38198096890/"+_program+"/results.json"] = ("id", "status", "class_covered", "refuted", "TCE", "argument", "mutant", "targeted_evidence_complete", "targeted_evidence_gaps")
     FACTORY_FILES["tower-run-38198096890/"+_program+"/threshold.json"] = ("twin", "zos-facing")
 FACTORY_THRESHOLD_FIELDS = ("business", "io", "below_two_values", "distinct_values_per_output_field", "compared_fields", "blocking_reasons", "mutation", "conditions_met", "current_head", "source_sha256", "accepted_uncovered_IO", "unaccepted_outcomes")

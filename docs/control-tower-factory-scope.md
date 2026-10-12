@@ -105,3 +105,26 @@ changed index. Eight-MiB bounds apply per file. The receipt import under
 `docs/factory/tower-run-38198096890/` is an exact copy of compact public artifacts;
 provenance lists archive and file hashes. These observations remain attributed to
 2dd787642e66176f78dbf749ec2659e82672cd3e. Historical records are not overwritten.
+
+
+## Status, unresolved evidence and manual maintenance
+
+The installed public snapshot also drives `/api/tower/status` and
+`/api/tower/unresolved`. The static status document uses the same model with
+`docs/factory/tower-status-input-index.json`, a pinned committed input inventory.
+It imports no live queue; zero pending installed items is not a review clearance.
+Do not confuse the imported evidence commit with the experiment head.
+
+Engineering consumption additionally refuses before the exact window start and
+at/after its end. This verifier does not launch or resume any process. Historical
+verification of a proof is separate from current execution permission.
+
+Run `python -B tools/check_tower_manual.py` when changing routes, tabs or kinds.
+The protected documentation check runs it and its negative tests. Regenerate
+Markdown status with `tools/build_factory_current_status.py` (`--check` in CI).
+Regenerate the Word manual with `tools/build_tower_manual_docx.py` using the
+bundled document Python runtime. It preserves the existing Calibri typography
+and header/footer, with explicit tables and active documentation links. Verify
+its pages after regeneration. The Windows bundled renderer lacked LibreOffice
+for this delivery; the document was opened read-only in Word, exported to PDF,
+and all page PNGs inspected with bundled Poppler. No desktop LibreOffice used.

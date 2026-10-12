@@ -156,7 +156,11 @@ class FactoryTests(unittest.TestCase):
         d=c["details"]
         args=dict(commit=d["executable_commit"],seal=d["request_seal"],window=d["window"],
                   observer_sha256=d["observer_sha256"],class_hashes=d["class_hashes"],caps=d["caps"])
+        from datetime import datetime
+        args["now"]=datetime.fromisoformat(d["window"]["start"])
         authority.engineering(p,c,**args)
+        with self.assertRaisesRegex(ValueError,"window-closed"):
+            authority.engineering(p,c,**{**args,"now":datetime.fromisoformat(d["window"]["end"])})
         with self.assertRaisesRegex(ValueError,"caps-binding"):
             authority.engineering(p,c,**{**args,"caps":{"seconds":61}})
 

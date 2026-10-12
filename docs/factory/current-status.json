@@ -1,116 +1,113 @@
 {
-  "schema": "factory-current-status/1",
-  "decision_time": "2026-10-11T14:00:00-07:00",
-  "inputs": [
+  "schema": "factory-status/1",
+  "available": true,
+  "last_evidence_commit": "b1a16a460dc8c67e59d613e19081348266ad5d06",
+  "index_sha256": "0f8c78c2711eabdb9003c11b6303dc22bf8b50045acab6635155a011a9141a5e",
+  "as_of": "2026-10-11T21:44:53-07:00",
+  "programs": [
     {
-      "path": "docs/factory/howard-decisions-2026-10-11b.json",
-      "lf_sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+      "program": "INTCALC",
+      "state": "not releasable",
+      "observed_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+      "failed": [
+        "Mutation rate (twin)",
+        "Mutation rate (zos-facing)",
+        "Output diversity",
+        "Targeted evidence"
+      ],
+      "pending": [
+        "I/O outcomes",
+        "Effective signed policy"
+      ],
+      "raw_kills": "308/421",
+      "sources": [
+        {
+          "path": "docs/factory/tower-run-38198096890/INTCALC/fresh.json",
+          "sha256": "e9ab40a870a4f3bf764e578b9517b3cf73b7ceb86131c233f3e1ecbdf3b2802f",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/INTCALC/summary.json",
+          "sha256": "7f3e510e37f14e4cc3765555709cd3ee35aea59712b28f7b0d1da3a0b37da452",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/INTCALC/threshold.json",
+          "sha256": "c9a8e041edde182a3b30db23de4ffac07ae7b83062baeac6cec86288495066ff",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/INTCALC/results.json",
+          "sha256": "992fa9c8dbb536f6524968e294cc7e23f314d92bd7541ab8622c1d4e548f0a21",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        }
+      ]
     },
     {
-      "path": "docs/factory/keep-or-fix-register.json",
-      "lf_sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
-    },
-    {
-      "path": "docs/factory/posttran-decisions-unsigned-2026-10-11.json",
-      "lf_sha256": "02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc"
-    },
-    {
-      "path": "docs/factory/posttran-second-opinion/dedicated-transport-plan-2026-10-11.json",
-      "lf_sha256": "380eeedac982d0a0334456366dc205e102e9dd08a46a18d0fe03d6cc370f046a"
-    },
-    {
-      "path": "docs/factory/b07-prefreeze-power-2026-10-11.json",
-      "lf_sha256": "fb0af41a345b7e40738b1368d2451a82b5e46379da27c223e80563aaf2c44f1c"
-    },
-    {
-      "path": "docs/factory/ci-times-316-320-2026-10-11.json",
-      "lf_sha256": "03aeed2a2a72b29b9fdc2997e6ffdac6832f16306ccb140039a34c139f10e3cf"
-    },
-    {
-      "path": "docs/factory/posttran-second-opinion/attempt-1-public-summary-2026-10-11.json",
-      "lf_sha256": "08cf36d5ad44dcc18ebfd7159008ad9db67825f5ecd063436d6fbc700682d83a"
+      "program": "POSTTRAN",
+      "state": "not releasable",
+      "observed_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+      "failed": [
+        "Output diversity",
+        "Targeted evidence"
+      ],
+      "pending": [
+        "I/O outcomes",
+        "Effective signed policy"
+      ],
+      "raw_kills": "360/483",
+      "sources": [
+        {
+          "path": "docs/factory/tower-run-38198096890/POSTTRAN/fresh.json",
+          "sha256": "bd7755d3f64a5944141a7d8fd27f6a0abaeb344359897e4fc5f236653fdc8e80",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/POSTTRAN/summary.json",
+          "sha256": "a67e11343081d628a32d24196fb546a80321594645192264da96213c0bf429e8",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/POSTTRAN/threshold.json",
+          "sha256": "9b405cade7c9d4cb3ec9476150724512e76a59615f96b376a6ca59bf9121d11c",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        },
+        {
+          "path": "docs/factory/tower-run-38198096890/POSTTRAN/results.json",
+          "sha256": "df8d09b683813febf4f0ab43a77c502fd8161ae3cf3315e045bf3fed6cb64fc7",
+          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+        }
+      ]
     }
   ],
-  "conditional_threshold": {
-    "approval": "conditional",
-    "effective": false,
-    "conditions": [
-      "B1 compiler/class evidence and targeted attempts complete",
-      "remaining individual reviews accepted",
-      "fresh current-head compiled campaign",
-      "register dependencies bound"
-    ],
-    "requirements": {
-      "business_coverage": 1.0,
-      "io": "fault-covered or individually accepted",
-      "kill_rate": 0.9,
-      "eligible_minimum": 50,
-      "output_distinct_values_minimum": 2
-    }
-  },
-  "unsigned_review_accepted": 10,
-  "signature_verified": false,
-  "posttran_plan_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
-  "model_execution_authorized": false,
-  "posttran_attempt_1": {
-    "agent_credential_reads": 0,
-    "agent_model_calls": 0,
-    "artifact_sha256": "d33c66bc97294354e93e245eddc9884f6245185c4556d792f0ada1e329f169ae",
-    "attempt": 1,
-    "compilations_verified": 0,
-    "content_sha256": "efe60ce23a701abaafd0c3b32b25b8947e1d1823baab8abaa60d285f15be4923",
-    "finished_at": "2026-10-11T23:12:20.953571+00:00",
-    "ledger_sha256": "1a070c8be895d6db3a6433c4c001993950bb95bc9ac2b7f45c1e8205c1b8c201",
-    "operator_invoked": true,
-    "phase1_validation_completed": false,
-    "phase2_authorized": false,
-    "plan_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
-    "preflight_sha256": "24fd354e9097966b36249eb7eb14c14fe2c9c9f25dbe10daf39d30da874c2111",
-    "request_sha256": "084007f9fa824acac06762cf2c50c10e37da4be50e2f6aad419cebe6055938b0",
-    "reserved_usd": 11.05,
-    "response_sha256": "1da6e3327cb9d67fca6391f05d47b29e45a386cd38064ef2a4566a39bd594833",
-    "schema": "posttran-operator-attempt-public-summary/1",
-    "started_at": "2026-10-11T23:07:44.801536+00:00",
-    "status": "generation-completed-validation-pending",
-    "usage": {
-      "input_tokens": 147242,
-      "input_tokens_details": {
-        "cache_write_tokens": 147239,
-        "cached_tokens": 0
+  "pending_decisions": [],
+  "decision_overlays": [],
+  "campaigns": {
+    "value": {
+      "B06": {
+        "state": "engineering hold; no execution authority from this view",
+        "window": [
+          "2026-10-13T09:00:00-07:00",
+          "2026-10-13T12:00:00-07:00"
+        ],
+        "request_due": "2026-10-12T17:00:00-07:00"
       },
-      "output_tokens": 17969,
-      "output_tokens_details": {
-        "reasoning_tokens": 8779
-      },
-      "total_tokens": 165211
-    }
+      "B07": {
+        "state": "planning; no model-spend authority from this view",
+        "freeze_ready": false
+      }
+    },
+    "sources": [
+      {
+        "path": "docs/factory/current-status-before-tower.json",
+        "sha256": "35f85ce4e2d0cf7bd9e0d7b3d90882c032e9d7cfbfa12a3b678093ddfe3461b4",
+        "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
+      }
+    ]
   },
-  "posttran_phase2_authorized": false,
-  "b06_execution_authorized": false,
-  "b06_window": [
-    "2026-10-13T09:00:00-07:00",
-    "2026-10-13T12:00:00-07:00"
-  ],
-  "b06_request_due": "2026-10-12T17:00:00-07:00",
-  "register_dispositions": [
-    {
-      "id": "REWRITE-109",
-      "disposition": "keep-by-default"
-    },
-    {
-      "id": "CBACT04C-FINAL-ACCOUNT-EOF-ELSE",
-      "disposition": "keep-by-default"
-    },
-    {
-      "id": "POSTTRAN-DUPLICATE-ID-NONATOMIC",
-      "disposition": "keep"
-    },
-    {
-      "id": "POSTTRAN-CYCLE-DEBIT-SIGN",
-      "disposition": "keep"
-    }
-  ],
-  "b07_freeze_ready": false,
-  "latest_ci_collection": "2026-10-11T21:04:46.316159+00:00",
-  "content_sha256": "67b8515528f580d4b76b62c1b3f0eb0716a6e7c06f92ca6ba6694e45a640871c"
+  "unresolved": 179,
+  "execution_authorized": false,
+  "release_authorized": false,
+  "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
+  "content_sha256": "0ae1d9fbd9f8dca1aa73d0f118700eb0f51087c7668d305c296f6de1ea8fb528"
 }

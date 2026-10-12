@@ -144,7 +144,8 @@ def write_request(root, contract, *, proposer="factory-engine"):
     else:
         atomic_new(destination, value)
     name = "factory-" + fingerprint
-    request = dict(schema="tower-request/1", scope=SCOPE, id=name, kind=value["kind"],
+    from datetime import datetime, timezone
+    request = dict(created_at_utc=datetime.now(timezone.utc).isoformat(), schema="tower-request/1", scope=SCOPE, id=name, kind=value["kind"],
         bound={"contract": fingerprint}, evidence={"contract": relative},
         summary=value["kind"] + ": " + value["program"] + "; operator review, not independent attestation",
         proposed_by=identifier(proposer), workload="factory:" + value["program"])
@@ -152,7 +153,10 @@ def write_request(root, contract, *, proposer="factory-engine"):
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / (name + ".json")
     if path.exists():
-        require(read_json(path) == request)
+        existing = read_json(path)
+        if "created_at_utc" in existing: request["created_at_utc"] = existing["created_at_utc"]
+        else: request.pop("created_at_utc")
+        require(existing == request)
     else:
         atomic_new(path, request)
     FactoryInbox(root, SCOPE, factory_registry()).item(name)

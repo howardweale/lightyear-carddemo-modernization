@@ -73,10 +73,9 @@ class DecisionAmendmentTests(unittest.TestCase):
                 target=root/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((ROOT/path).read_bytes())
             before,text=generate(root)
             self.assertEqual((ROOT/'docs/factory/current-status.md').read_text(encoding='utf-8'),text)
-            path=root/INPUTS[1];register=json.loads(path.read_bytes());register['defects'][0]['disposition']='fix'
+            path=root/'docs/factory/keep-or-fix-register.json';register=json.loads(path.read_bytes());register['defects'][0]['disposition']='fix'
             path.write_text(json.dumps(register),encoding='utf-8')
-            after,_=generate(root)
-            self.assertNotEqual(before['content_sha256'],after['content_sha256'])
+            with self.assertRaisesRegex(ValueError,"evidence-hash"):generate(root)
             path=root/INPUTS[0];changed=json.loads(path.read_bytes());changed['decided_by']='unbound reviewer'
             path.write_text(json.dumps(changed),encoding='utf-8')
             with self.assertRaisesRegex(ValueError,'status-input-seal'):generate(root)

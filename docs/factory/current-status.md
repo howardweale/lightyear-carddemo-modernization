@@ -1,33 +1,41 @@
 # Current factory status
 
-Generated from named decision files, the keep-or-fix register and the latest bound receipts below. This view is documentation, not an execution approval. Historical milestones remain historical.
+Operator review; not independent attestation. Historical receipts and signed overlays stay separate.
 
-Decision time: 2026-10-11T14:00:00-07:00.
+Evidence commit: `b1a16a460dc8c67e59d613e19081348266ad5d06`.
+Snapshot as of: 2026-10-11T21:44:53-07:00.
 
-- B06: October 13, 9 AM-noon PDT request; delivery due Monday October 12, 5 PM PDT. Exact executable commit and request seal need Howard's one-line go. Engineering execution remains held.
-- POSTTRAN: 10/10 unsigned operator acceptances received and bound to the historical sheet; Howard's signature remains outstanding.
-- POSTTRAN Phase 1 plan: `bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919`. Operator attempt 1 completed at 2026-10-11T23:12:20.953571+00:00: 147242 input and 17969 output tokens. Receipt and artifact hashes verified locally; compilation and Phase 1 validation remain pending. Phase 2 is unapproved; no further model call is authorized by this status view.
-- scenario-threshold/2: conditionally approved as amended, not effective until B1 completes, remaining equivalence arguments are accepted and the current-head compiled campaign satisfies the gate.
-- Equivalence sample: AI-assisted operator review accepted by Howard; not independent human attestation. The TWO-BYTES mutant remains unresolved for z/OS-facing claims.
-- B07: 72 analysis slots per arm, graph versus search, two runners, at most 14 calendar days. The power limitation requires review before freezing. Spending remains unapproved; B06 Part 6 and graph coverage precede trials.
+| Program | Raw kills | State |
+| --- | --- | --- |
+| INTCALC | 308/421 | not releasable |
+| POSTTRAN | 360/483 | not releasable |
 
-## Recorded legacy dispositions
+INTCALC experiment: `2dd787642e66176f78dbf749ec2659e82672cd3e`. Failed: Mutation rate (twin), Mutation rate (zos-facing), Output diversity, Targeted evidence. Pending: I/O outcomes, Effective signed policy.
+POSTTRAN experiment: `2dd787642e66176f78dbf749ec2659e82672cd3e`. Failed: Output diversity, Targeted evidence. Pending: I/O outcomes, Effective signed policy.
 
-- REWRITE-109: keep-by-default
-- CBACT04C-FINAL-ACCOUNT-EOF-ELSE: keep-by-default
-- POSTTRAN-DUPLICATE-ID-NONATOMIC: keep
-- POSTTRAN-CYCLE-DEBIT-SIGN: keep
+## Campaigns
 
-## Evidence inputs
+- B06: engineering hold; no execution authority from this view. Window: 2026-10-13T09:00:00-07:00 to 2026-10-13T12:00:00-07:00
+- B07: planning; no model-spend authority from this view.
 
-- [howard-decisions-2026-10-11b.json](howard-decisions-2026-10-11b.json): LF-normalized SHA-256 `74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4`
-- [keep-or-fix-register.json](keep-or-fix-register.json): LF-normalized SHA-256 `d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a`
-- [posttran-decisions-unsigned-2026-10-11.json](posttran-decisions-unsigned-2026-10-11.json): LF-normalized SHA-256 `02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc`
-- [dedicated-transport-plan-2026-10-11.json](posttran-second-opinion/dedicated-transport-plan-2026-10-11.json): LF-normalized SHA-256 `380eeedac982d0a0334456366dc205e102e9dd08a46a18d0fe03d6cc370f046a`
-- [b07-prefreeze-power-2026-10-11.json](b07-prefreeze-power-2026-10-11.json): LF-normalized SHA-256 `fb0af41a345b7e40738b1368d2451a82b5e46379da27c223e80563aaf2c44f1c`
-- [ci-times-316-320-2026-10-11.json](ci-times-316-320-2026-10-11.json): LF-normalized SHA-256 `03aeed2a2a72b29b9fdc2997e6ffdac6832f16306ccb140039a34c139f10e3cf`
-- [attempt-1-public-summary-2026-10-11.json](posttran-second-opinion/attempt-1-public-summary-2026-10-11.json): LF-normalized SHA-256 `08cf36d5ad44dcc18ebfd7159008ad9db67825f5ecd063436d6fbc700682d83a`
+## Decisions and unresolved evidence
 
-Generated view seal: `67b8515528f580d4b76b62c1b3f0eb0716a6e7c06f92ca6ba6694e45a640871c`.
+0 installed queue items pending; 179 unresolved rows. An offline documentation snapshot has no live queue installed; zero here does not imply all scientific reviews are complete.
 
-Regenerate with `python -B tools/build_factory_current_status.py`; CI uses `--check` to refuse stale output. Missing or changed source records require regeneration and review. No approval is inferred from a filename, unsigned acceptance or a green CI badge.
+No execution, model-spend, Phase 2 or release authority follows from this status. Historical decisions stay in their original files and require signed Factory migration.
+
+## Source hashes
+
+- `docs/factory/current-status-before-tower.json`: `35f85ce4e2d0cf7bd9e0d7b3d90882c032e9d7cfbfa12a3b678093ddfe3461b4`.
+- `docs/factory/tower-run-38198096890/INTCALC/fresh.json`: `e9ab40a870a4f3bf764e578b9517b3cf73b7ceb86131c233f3e1ecbdf3b2802f`.
+- `docs/factory/tower-run-38198096890/INTCALC/results.json`: `992fa9c8dbb536f6524968e294cc7e23f314d92bd7541ab8622c1d4e548f0a21`.
+- `docs/factory/tower-run-38198096890/INTCALC/summary.json`: `7f3e510e37f14e4cc3765555709cd3ee35aea59712b28f7b0d1da3a0b37da452`.
+- `docs/factory/tower-run-38198096890/INTCALC/threshold.json`: `c9a8e041edde182a3b30db23de4ffac07ae7b83062baeac6cec86288495066ff`.
+- `docs/factory/tower-run-38198096890/POSTTRAN/fresh.json`: `bd7755d3f64a5944141a7d8fd27f6a0abaeb344359897e4fc5f236653fdc8e80`.
+- `docs/factory/tower-run-38198096890/POSTTRAN/results.json`: `df8d09b683813febf4f0ab43a77c502fd8161ae3cf3315e045bf3fed6cb64fc7`.
+- `docs/factory/tower-run-38198096890/POSTTRAN/summary.json`: `a67e11343081d628a32d24196fb546a80321594645192264da96213c0bf429e8`.
+- `docs/factory/tower-run-38198096890/POSTTRAN/threshold.json`: `9b405cade7c9d4cb3ec9476150724512e76a59615f96b376a6ca59bf9121d11c`.
+
+View seal: `0ae1d9fbd9f8dca1aa73d0f118700eb0f51087c7668d305c296f6de1ea8fb528`.
+
+Generated by the same `factory_status.status` model as `/api/tower/status`. Regenerate with `python -B tools/build_factory_current_status.py`; CI uses `--check`. Operator-owned live installations supply their current signed overlays and pending queue. This committed snapshot has neither.

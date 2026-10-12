@@ -25,8 +25,19 @@ try{
    await page.getByRole("heading",{name:program,exact:true}).waitFor();
    assert.match(await page.locator("#content").innerText(),program==="INTCALC"?/308\/421/:/360\/483/);
    assert.match(await page.locator("#content").innerText(),/Not releasable/);
+   assert.match(await page.locator("#content").innerText(),/Operator class/);
+   assert.doesNotMatch(await page.locator("#content").innerText(),/undefined/);
    await page.screenshot({path:resolve(root,`work/browser-inspection/factory/${program}.png`),fullPage:true});
   }
+  await page.getByRole("button",{name:"Status",exact:true}).click();
+  await page.getByRole("heading",{name:"Factory status",exact:true}).waitFor();
+  assert.match(await page.locator("#content").innerText(),/308\/421/);
+  await page.screenshot({path:resolve(root,"work/browser-inspection/factory/status.png"),fullPage:true});
+  await page.getByRole("button",{name:"Unresolved",exact:true}).click();
+  await page.getByRole("heading",{name:"Unresolved evidence",exact:true}).waitFor();
+  await page.getByLabel("Program",{exact:true}).selectOption("POSTTRAN");
+  await page.waitForTimeout(200);
+  await page.screenshot({path:resolve(root,"work/browser-inspection/factory/unresolved.png"),fullPage:true});
   assert.deepEqual(pageErrors,[]);assert.deepEqual(external,[]);
   assert.equal(await page.evaluate(()=>Object.keys(localStorage).length),0);
   assert.equal(await page.locator('script:not([src]),style,[style]:not([style=""])').count(),0);

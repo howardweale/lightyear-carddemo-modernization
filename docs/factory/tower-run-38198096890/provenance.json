@@ -71,6 +71,14 @@
     {
       "path": "docs/factory/tower-run-38198096890/POSTTRAN/threshold.json",
       "sha256": "9b405cade7c9d4cb3ec9476150724512e76a59615f96b376a6ca59bf9121d11c"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/INTCALC/results.json",
+      "sha256": "992fa9c8dbb536f6524968e294cc7e23f314d92bd7541ab8622c1d4e548f0a21"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/POSTTRAN/results.json",
+      "sha256": "df8d09b683813febf4f0ab43a77c502fd8161ae3cf3315e045bf3fed6cb64fc7"
     }
   ],
   "claim": "Exact public compact CI artifact bytes; not a new experiment on this Tower commit; no release approval"

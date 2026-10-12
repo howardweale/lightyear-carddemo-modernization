@@ -57,7 +57,7 @@ async function load() {
   for (const tab of document.querySelectorAll(".factory-tab")) tab.hidden = scopeInfo.session.scope !== "factory";
   $("message").textContent = "";
   try {
-    await { campaigns, queue, catalogue, workspace, history, knowledge, businessRules, programs }[current]();
+    await { campaigns, queue, catalogue, workspace, history, knowledge, businessRules, programs, status, unresolved }[current]();
   } catch (e) {
     showError(e);
   }
@@ -661,12 +661,13 @@ async function programs() {
   const scenarios=evidenceCard("Scenarios",v.scenarios), sc=v.scenarios.value;
   scenarios.append(evidenceTable(["Evidence","Business logic","I/O handling"],[["Public data",sc.public_data?.coverage_by_class?.["business-logic"]?.fraction,sc.public_data?.coverage_by_class?.["io-handling"]?.fraction],["Including declared faults",sc.with_declared_faults?.coverage_by_class?.["business-logic"]?.fraction,sc.with_declared_faults?.coverage_by_class?.["io-handling"]?.fraction]]));
   scenarios.append(el("p",`${sc.fault_expectations_met}/${sc.fault_count} declared fault expectations met`),el("p",sc.exception_state));
-  const gaps=el("details");gaps.append(el("summary",`${sc.gaps.length} listed I/O gaps / historical exceptions`),json(sc.gaps));scenarios.append(gaps);grid.append(scenarios);
+  const gaps=el("details");gaps.append(el("summary",`${sc.gaps.length} listed I/O gaps / historical exceptions`),json({unaccepted:sc.gaps,signed_exceptions:sc.signed_exceptions}));scenarios.append(gaps);grid.append(scenarios);
   const mutation=evidenceCard("Mutation evidence",v.mutation),m=v.mutation.value;
   mutation.append(el("p",`Raw kills: ${m.raw_kill_fraction}`,"metric"),el("p",`Failure ${m.raw_counts["killed-failure"] || 0} · Divergent ${m.raw_counts["killed-divergent"] || 0}`));
   mutation.append(evidenceTable(["Claim scope","After exclusions","Unresolved"],Object.entries(m.scoped_assessments).map(([k,r])=>[k,r.mutation.kill_rate,r.mutation.unresolved_survivors.length])));
   mutation.append(el("p",m.warning,"boundary"),el("p",`${m.compiler_refusals.length} compiler refusals · ${m.generator_avoided} invalid mutants avoided`));
-  mutation.append(evidenceTable(["Equivalence disposition","Count"],[["Compiler-proven",m.classes.compiler_proven],["Class proof",m.classes.class_proof],["Individually argued",m.classes.individually_argued],["Refuted",m.classes.refuted],["Evidence gap (overlapping)",m.classes.evidence_gap]]));
+  mutation.append(evidenceTable(["Equivalence disposition","Count"],[["Compiler-proven",m.disposition_counts.compiler_proven],["Class proof",m.disposition_counts.class_proof],["Individually argued",m.disposition_counts.individually_argued],["Refuted",m.disposition_counts.refuted],["Evidence gap (overlapping)",m.disposition_counts.evidence_gap]]));
+  mutation.append(evidenceTable(["Operator class","Count","Recorded resolution","Signed acceptances"],m.classes.map(c=>[c.class_name,c.count,Object.entries(c.resolutions).map(([k,v])=>`${k}: ${v}`).join("; "),c.signed_acceptances])));
   const survivors=el("details");survivors.append(el("summary","Survivors, refusals and evidence gaps"),json({survivors:m.survivors,compiler_refusals:m.compiler_refusals,evidence_gaps:m.evidence_gap_ids,scoped:m.scoped_assessments}));mutation.append(survivors);grid.append(mutation);
   const answer=evidenceCard("Answer key and limits",v.answer_key),a=v.answer_key.value;
   answer.append(el("p",`${a.oracle_class} · ${a.oracle_status}`),el("p",`z/OS confirmed: ${a.zos_confirmation ? "yes" : "no"}`),el("p",`Human review: ${a.review_state}`));
@@ -675,4 +676,26 @@ async function programs() {
   const legacy=evidenceCard("Keep or fix",v.keep_or_fix);
   for(const row of v.keep_or_fix.value){legacy.append(el("h4",row.id),el("p",row.observed_behavior),el("p",`Historical disposition: ${row.disposition}`),el("p",`Source lines: ${row.source_lines.join(", ")}`),el("code",row.source_sha256,"hash"));const deps=el("details");deps.append(el("summary","Signed overlays and dependent arguments"),json(row.signed_overlay),json(row.dependent_arguments || "Not reported in this register version"));legacy.append(deps);}grid.append(legacy);
   const decisions=el("details");decisions.append(el("summary","Signed decision overlays"),json(v.decision_overlays));content.append(decisions);
+}
+
+
+async function status() {
+ const v=await api("status");content.replaceChildren(el("h2","Factory status"));
+ if(!v.available){content.append(el("p",v.reason || "Unavailable in this scope."));return;}
+ content.append(el("p",v.claim,"boundary"),el("p",`Evidence commit: ${v.last_evidence_commit}`,"hash"),el("p",`As of ${v.as_of}`));
+ for(const row of v.programs){const card=el("article",undefined,"card");card.append(el("h3",row.program),badge(row.state),el("p",`Raw kills: ${row.raw_kills}`),el("p",`Failed: ${row.failed.join(", ") || "none"}`),el("p",`Pending: ${row.pending.join(", ") || "none"}`),evidenceSources(row.sources));content.append(card);}
+ const campaign=evidenceCard("Campaigns",v.campaigns);for(const [name,row] of Object.entries(v.campaigns.value)){campaign.append(el("h4",name),el("p",row.state));if(row.window)campaign.append(el("p",row.window.join(" to ")));}content.append(campaign);
+ content.append(el("h3","Pending decisions"));
+ if(!v.pending_decisions.length)content.append(el("p","No pending requests installed. This does not mean scientific reviews are complete."));
+ for(const row of v.pending_decisions){const line=el("article");line.append(button(row.id,async()=>{const q=await api("queue");const item=q.items.find(x=>x.id===row.id);if(item)await review(item);else throw Error("Request no longer in queue");}),el("p",`${row.program} / ${row.kind} / age: ${row.age_seconds===null ? "not reported" : Math.floor(row.age_seconds/60)+" minutes"}`),el("code",row.source_sha256,"hash"));content.append(line);}
+ content.append(button(`${v.unresolved} unresolved rows`,async()=>{current="unresolved";await unresolved();}));
+}
+let unresolvedProgram="",unresolvedKind="";
+async function unresolved(){
+ const query=new URLSearchParams();if(unresolvedProgram)query.set("program",unresolvedProgram);if(unresolvedKind)query.set("kind",unresolvedKind);
+ const v=await api("unresolved?"+query);content.replaceChildren(el("h2","Unresolved evidence"));
+ if(!v.available){content.append(el("p",v.reason || "Unavailable in this scope."));return;}
+ function filter(label,values,selected,change){const l=el("label",label+" "),select=el("select");select.setAttribute("aria-label",label);for(const value of values){const option=el("option",value || "All");option.value=value;option.selected=value===selected;select.append(option);}select.addEventListener("change",async()=>{change(select.value);await unresolved();});l.append(select);return l;}
+ const filters=el("div",undefined,"program-picker");filters.append(filter("Program",["","INTCALC","POSTTRAN"],unresolvedProgram,value=>unresolvedProgram=value),filter("Kind",["","survivor","evidence-gap","twin-limit","pending-review","invalidated-argument","divergence","disagreement"],unresolvedKind,value=>unresolvedKind=value));content.append(filters,el("p",`${v.count} rows. Rows can overlap proof categories; this is not a new mutation denominator.`));
+ for(const row of v.rows){const card=el("article",undefined,"card");card.append(el("h3",`${row.program}: ${row.id}`),badge(row.kind),el("p",row.reason),el("p",(row.claim_scopes || []).join(", ")),el("code",row.source.sha256,"hash"));if(row.source.commit)card.append(evidenceSources([row.source]));content.append(card);}
 }

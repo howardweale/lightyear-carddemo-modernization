@@ -1,0 +1,77 @@
+{
+  "schema": "factory-public-ci-import/1",
+  "run_id": 38198096890,
+  "observed_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38198096890",
+  "archives": [
+    {
+      "id": 11726200857,
+      "name": "factory-review-records-POSTTRAN-1",
+      "zip_sha256": "196f90a03bf959741cbb48dc932e91a888e8286daf4c1bab0addc1ef44aae27e",
+      "bytes": 2123862
+    },
+    {
+      "id": 11726130123,
+      "name": "factory-review-records-POSTTRAN-2",
+      "zip_sha256": "8868d9a4fa2b736f83899da8d3ac7d043967821a6368b8c0032bd4b8dbbe5fa4",
+      "bytes": 2123669
+    },
+    {
+      "id": 11726077543,
+      "name": "factory-review-records-POSTTRAN-3",
+      "zip_sha256": "e14596811326771ec3272255aa66bc4a08f00b40449085a395cbef1789cc173f",
+      "bytes": 2129372
+    },
+    {
+      "id": 11725723427,
+      "name": "equivalence-aggregate",
+      "zip_sha256": "db0730cdb516290c58b13991e0d7cfb33f746541baf4c2c64fc6fef4cf71a1bb",
+      "bytes": 108574
+    },
+    {
+      "id": 11725625830,
+      "name": "factory-review-records-POSTTRAN-0",
+      "zip_sha256": "3d680aa4e6c519994866c0661c992862083ab88fdc70471b32bbb58467e1ad79",
+      "bytes": 2128128
+    },
+    {
+      "id": 11725177809,
+      "name": "factory-review-records-INTCALC-0",
+      "zip_sha256": "492608bd8c041a0ea81fd7206ca3923cb55539f18a61b4bc0f4a3d06d80dcff0",
+      "bytes": 1509719
+    },
+    {
+      "id": 11724924915,
+      "name": "factory-review-records-INTCALC-1",
+      "zip_sha256": "e3b51ca22958df061aaa6cdf051347dcb6b201b5107cf3bb452402f20f938211",
+      "bytes": 1510234
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/factory/tower-run-38198096890/INTCALC/fresh.json",
+      "sha256": "e9ab40a870a4f3bf764e578b9517b3cf73b7ceb86131c233f3e1ecbdf3b2802f"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/INTCALC/summary.json",
+      "sha256": "7f3e510e37f14e4cc3765555709cd3ee35aea59712b28f7b0d1da3a0b37da452"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/INTCALC/threshold.json",
+      "sha256": "c9a8e041edde182a3b30db23de4ffac07ae7b83062baeac6cec86288495066ff"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/POSTTRAN/fresh.json",
+      "sha256": "bd7755d3f64a5944141a7d8fd27f6a0abaeb344359897e4fc5f236653fdc8e80"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/POSTTRAN/summary.json",
+      "sha256": "a67e11343081d628a32d24196fb546a80321594645192264da96213c0bf429e8"
+    },
+    {
+      "path": "docs/factory/tower-run-38198096890/POSTTRAN/threshold.json",
+      "sha256": "9b405cade7c9d4cb3ec9476150724512e76a59615f96b376a6ca59bf9121d11c"
+    }
+  ],
+  "claim": "Exact public compact CI artifact bytes; not a new experiment on this Tower commit; no release approval"
+}

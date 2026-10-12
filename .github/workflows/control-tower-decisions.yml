@@ -90,6 +90,7 @@ jobs:
           npm test
           node paired.mjs
           node decision-console.mjs
+          node factory-console.mjs
           node b06.mjs
       - name: Retain browser screenshots and inspection results
         if: always()

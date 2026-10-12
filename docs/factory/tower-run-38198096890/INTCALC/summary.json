@@ -1,0 +1,2005 @@
+{
+  "acceptance_decision": "ea2173ae0ec047878dfff130c3d2663e4086a13cebc7d88f5b32137af1e739ce",
+  "campaign_manifest_sha256": [
+    "72c21be7adeb307eb23a931b729defedcee025be1c1ea68f69e2db5f95807051",
+    "e57fa71adde24daf711ad09622014304a51ab589bb063102ab9977b715bcd0c5"
+  ],
+  "class_census": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+  "compiler_scope": "pinned GnuCOBOL twin, never a z/OS compiler proof",
+  "content_sha256": "a93b112122f148c8827f00448e1550f6988982ad4b53c3e2e9ca2b6e567c5deb",
+  "counts": {
+    "equivalent (argued, individual review pending)": 30,
+    "equivalent (class-proof)": 81,
+    "equivalent (compiler-proven)": 2
+  },
+  "current_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+  "disposition_counts": {
+    "class_proof": 81,
+    "compiler_proven": 2,
+    "evidence_gap": 113,
+    "evidence_gap_ids": [
+      "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "CBACT04C-constant-192-48",
+      "CBACT04C-constant-192-49",
+      "CBACT04C-constant-235-81",
+      "CBACT04C-constant-235-82",
+      "CBACT04C-constant-240-89",
+      "CBACT04C-constant-240-90",
+      "CBACT04C-constant-253-96",
+      "CBACT04C-constant-253-97",
+      "CBACT04C-constant-258-104",
+      "CBACT04C-constant-258-105",
+      "CBACT04C-constant-271-111",
+      "CBACT04C-constant-271-112",
+      "CBACT04C-constant-276-119",
+      "CBACT04C-constant-276-120",
+      "CBACT04C-constant-290-126",
+      "CBACT04C-constant-290-127",
+      "CBACT04C-constant-295-134",
+      "CBACT04C-constant-295-135",
+      "CBACT04C-constant-308-141",
+      "CBACT04C-constant-308-142",
+      "CBACT04C-constant-313-149",
+      "CBACT04C-constant-313-150",
+      "CBACT04C-constant-333-166",
+      "CBACT04C-constant-333-167",
+      "CBACT04C-constant-360-188",
+      "CBACT04C-constant-360-189",
+      "CBACT04C-constant-381-200",
+      "CBACT04C-constant-381-201",
+      "CBACT04C-constant-403-212",
+      "CBACT04C-constant-403-213",
+      "CBACT04C-constant-425-224",
+      "CBACT04C-constant-425-225",
+      "CBACT04C-constant-449-240",
+      "CBACT04C-constant-449-241",
+      "CBACT04C-constant-504-278",
+      "CBACT04C-constant-504-279",
+      "CBACT04C-constant-523-285",
+      "CBACT04C-constant-523-286",
+      "CBACT04C-constant-528-293",
+      "CBACT04C-constant-528-294",
+      "CBACT04C-constant-542-300",
+      "CBACT04C-constant-542-301",
+      "CBACT04C-constant-547-308",
+      "CBACT04C-constant-547-309",
+      "CBACT04C-constant-560-315",
+      "CBACT04C-constant-560-316",
+      "CBACT04C-constant-565-323",
+      "CBACT04C-constant-565-324",
+      "CBACT04C-constant-578-330",
+      "CBACT04C-constant-578-331",
+      "CBACT04C-constant-583-338",
+      "CBACT04C-constant-583-339",
+      "CBACT04C-constant-596-345",
+      "CBACT04C-constant-596-346",
+      "CBACT04C-constant-601-353",
+      "CBACT04C-constant-601-354",
+      "CBACT04C-constant-638-382",
+      "CBACT04C-constant-639-384",
+      "CBACT04C-constant-639-385",
+      "CBACT04C-delete-ADD-192-50",
+      "CBACT04C-delete-MOVE-235-83",
+      "CBACT04C-delete-MOVE-240-91",
+      "CBACT04C-delete-MOVE-253-98",
+      "CBACT04C-delete-MOVE-258-106",
+      "CBACT04C-delete-MOVE-271-113",
+      "CBACT04C-delete-MOVE-276-121",
+      "CBACT04C-delete-MOVE-290-128",
+      "CBACT04C-delete-MOVE-295-136",
+      "CBACT04C-delete-MOVE-308-143",
+      "CBACT04C-delete-MOVE-313-151",
+      "CBACT04C-delete-MOVE-328-160",
+      "CBACT04C-delete-MOVE-358-187",
+      "CBACT04C-delete-MOVE-379-199",
+      "CBACT04C-delete-MOVE-401-211",
+      "CBACT04C-delete-MOVE-423-223",
+      "CBACT04C-delete-MOVE-447-239",
+      "CBACT04C-delete-MOVE-491-264",
+      "CBACT04C-delete-MOVE-492-265",
+      "CBACT04C-delete-MOVE-493-266",
+      "CBACT04C-delete-MOVE-494-267",
+      "CBACT04C-delete-MOVE-502-277",
+      "CBACT04C-delete-MOVE-523-287",
+      "CBACT04C-delete-MOVE-528-295",
+      "CBACT04C-delete-MOVE-542-302",
+      "CBACT04C-delete-MOVE-547-310",
+      "CBACT04C-delete-MOVE-560-317",
+      "CBACT04C-delete-MOVE-565-325",
+      "CBACT04C-delete-MOVE-578-332",
+      "CBACT04C-delete-MOVE-583-340",
+      "CBACT04C-delete-MOVE-596-347",
+      "CBACT04C-delete-MOVE-601-355",
+      "CBACT04C-delete-MOVE-630-373",
+      "CBACT04C-delete-MOVE-639-386",
+      "CBACT04C-delete-MOVE-644-389",
+      "CBACT04C-receiving-scale-133-20",
+      "CBACT04C-receiving-scale-139-24",
+      "CBACT04C-receiving-scale-164-26",
+      "CBACT04C-receiving-scale-169-30",
+      "CBACT04C-receiving-scale-172-32",
+      "CBACT04C-receiving-scale-173-34",
+      "CBACT04C-receiving-scale-72-6",
+      "CBACT04C-receiving-size-125-13",
+      "CBACT04C-receiving-size-133-19",
+      "CBACT04C-receiving-size-138-21",
+      "CBACT04C-receiving-size-139-23",
+      "CBACT04C-receiving-size-172-31",
+      "CBACT04C-receiving-size-177-35",
+      "CBACT04C-skip-PERFORM-216-74",
+      "CBACT04C-skip-PERFORM-220-75"
+    ],
+    "evidence_gap_overlaps_proof_categories": true,
+    "individually_argued": 30,
+    "refuted": 0
+  },
+  "expected_sites": 421,
+  "fresh_refusals": [],
+  "fresh_sites": 421,
+  "individually_reviewable": 30,
+  "job": "INTCALC",
+  "measurement_credit": false,
+  "model_calls": 0,
+  "oracle_class": "executable-twin",
+  "oracle_status": "provisional",
+  "phase": "B1-equivalence-followup",
+  "population": 113,
+  "qualification_credit": false,
+  "releasable": false,
+  "resource_usage": [
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 72154.44535714286,
+        "execution_seconds": 1857.851488322018,
+        "logical_run_bytes": 404064894,
+        "peak_stored_bytes": 51503532,
+        "peak_temporary_bytes": 246054,
+        "retained_compressed_bytes": 259826,
+        "runs": 5600,
+        "stored_bytes": 51927309,
+        "wall_seconds": 1900.480902258
+      },
+      "fresh_compiled_bytes": 500401318,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "cace1a9de5805e056bba8231a257b6824af052c63ef1ffb0d76755bbce5edfd0",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 52479.89237510955,
+          "execution_seconds": 461.8642243289992,
+          "logical_run_bytes": 299397786,
+          "peak_stored_bytes": 61220761,
+          "peak_temporary_bytes": 56275,
+          "retained_compressed_bytes": 2993661,
+          "runs": 5705,
+          "stored_bytes": 63264277,
+          "wall_seconds": 1554.41403478
+        },
+        "job": "INTCALC",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 500227940,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 1553.415630637,
+        "zos_confirmation": false
+      },
+      "job": "INTCALC",
+      "shard": 0,
+      "shards": 2,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 120331425,
+      "wall_seconds": 1904.683372282
+    },
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 72528.96,
+        "execution_seconds": 1129.3951982950002,
+        "logical_run_bytes": 464185344,
+        "peak_stored_bytes": 59264083,
+        "peak_temporary_bytes": 246045,
+        "retained_compressed_bytes": 298682,
+        "runs": 6400,
+        "stored_bytes": 59880891,
+        "wall_seconds": 1163.1256821830002
+      },
+      "fresh_compiled_bytes": 500402907,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "b002792a0b5285cd0c077d86ee435e87ea03c5c33264c243eb464a0cb695a296",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 52479.89237510955,
+          "execution_seconds": 326.3098153719993,
+          "logical_run_bytes": 299397786,
+          "peak_stored_bytes": 61222174,
+          "peak_temporary_bytes": 56275,
+          "retained_compressed_bytes": 2993042,
+          "runs": 5705,
+          "stored_bytes": 63265694,
+          "wall_seconds": 1106.953320473
+        },
+        "job": "INTCALC",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 500229528,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 1106.220324523,
+        "zos_confirmation": false
+      },
+      "job": "INTCALC",
+      "shard": 1,
+      "shards": 2,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 136792765,
+      "wall_seconds": 1165.1696036550002
+    }
+  ],
+  "retained_disposition_differences": [
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-72-6"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-125-13"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-133-19"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-133-20"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-138-21"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-139-23"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-139-24"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-164-26"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-169-30"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-172-31"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-172-32"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-scale-173-34"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-receiving-size-177-35"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-192-48"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-192-49"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-ADD-192-50"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-skip-PERFORM-216-74"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-skip-PERFORM-220-75"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-235-81"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-235-82"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-235-83"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-240-89"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-240-90"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-240-91"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-253-96"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-253-97"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-253-98"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-258-104"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-258-105"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-258-106"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-271-111"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-271-112"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-271-113"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-276-119"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-276-120"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-276-121"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-290-126"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-290-127"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-290-128"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-295-134"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-295-135"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-295-136"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-308-141"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-308-142"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-308-143"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-313-149"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-313-150"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-313-151"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-328-160"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-333-166"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-333-167"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-358-187"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-360-188"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-360-189"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-379-199"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-381-200"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-381-201"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-401-211"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-403-212"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-403-213"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-423-223"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-425-224"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-425-225"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-447-239"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-449-240"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-449-241"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-491-264"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-492-265"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-493-266"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-494-267"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-502-277"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-504-278"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-504-279"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-523-285"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-523-286"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-523-287"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-528-293"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-528-294"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-528-295"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-542-300"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-542-301"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-542-302"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-547-308"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-547-309"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-547-310"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-560-315"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-560-316"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-560-317"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-565-323"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-565-324"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-565-325"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-578-330"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-578-331"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-578-332"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-583-338"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-583-339"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-583-340"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-596-345"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-596-346"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-596-347"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-601-353"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-601-354"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-601-355"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-630-373"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-638-382"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-639-384"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-constant-639-385"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-639-386"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-delete-MOVE-644-389"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-CVACT03Y-receiving-size-6-1"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-CVACT03Y-receiving-scale-6-2"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-CVACT03Y-receiving-size-7-3"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "equivalent (argued, listed)",
+      "id": "CBACT04C-CVACT03Y-receiving-scale-7-4"
+    }
+  ],
+  "run_class": "engineering",
+  "schema": "factory-legacy-twin/1",
+  "target_cases": 6000,
+  "target_evidence_gap_ids": [
+    "CBACT04C-receiving-scale-164-26",
+    "CBACT04C-receiving-scale-173-34"
+  ],
+  "target_refutations": 0,
+  "target_valid_comparisons": 5604,
+  "threshold_by_scope": {
+    "twin": {
+      "accepted_uncovered_IO": [
+        {
+          "classification": "io-handling",
+          "id": "legacy:cobol-decision:CBACT04C:189:671",
+          "line": 189,
+          "outcome": "false",
+          "reason": "not-observed; no unreachability claim"
+        }
+      ],
+      "below_two_values": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "blocking_reasons": [
+        "output-fields-below-two-values",
+        "mutation-or-individual-review-conditions-unmet",
+        "required-targeted-experiment-evidence-incomplete"
+      ],
+      "business": {
+        "covered": 8,
+        "fraction": "8/8",
+        "total": 8
+      },
+      "claim_scope": "twin",
+      "compared_fields": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+        "TRANSACT:TRAN-RECORD.TRAN-AMT",
+        "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM",
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANSACT:TRAN-RECORD.TRAN-DESC",
+        "TRANSACT:TRAN-RECORD.TRAN-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "conditions_met": false,
+      "content_sha256": "b00d93301f756208345150a879de4f8e0d8c83de06cfd456ddc1a0d323649ca2",
+      "current_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+      "decision_date": "2026-10-11T14:00:00-07:00",
+      "distinct_values_per_output_field": {
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 1,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 3,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 58,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 51,
+        "TRANSACT:TRAN-RECORD.TRAN-AMT": 13,
+        "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM": 54,
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-DESC": 50,
+        "TRANSACT:TRAN-RECORD.TRAN-ID": 50,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD": 1
+      },
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "measurement_credit": false,
+      "mutation": {
+        "at_least_90_percent": false,
+        "claim_scope": "twin",
+        "compiler_refusals": [],
+        "eligible": 421,
+        "excluded_equivalents": [],
+        "kill_rate": "308/421",
+        "killed": 308,
+        "minimum_50_met": true,
+        "mutation_conditions_met": false,
+        "other_requirements": [
+          "fresh business/I-O coverage bindings",
+          "two values per compared output field",
+          "complete B1 review dispositions"
+        ],
+        "release_authorized": false,
+        "schema": "scenario-threshold-2-mutation-assessment/1",
+        "sites": 421,
+        "targeted_evidence_gap_ids": [
+          "CBACT04C-receiving-scale-164-26",
+          "CBACT04C-receiving-scale-173-34"
+        ],
+        "targeted_experiments_complete": false,
+        "unresolved_survivors": [
+          {
+            "id": "CBACT04C-receiving-scale-72-6",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-125-13",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-133-19",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-133-20",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-138-21",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-139-23",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-139-24",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-164-26",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-169-30",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-172-31",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-172-32",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-173-34",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-177-35",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-192-48",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-192-49",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-ADD-192-50",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-skip-PERFORM-216-74",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-skip-PERFORM-220-75",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-235-81",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-235-82",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-235-83",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-240-89",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-240-90",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-240-91",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-253-96",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-253-97",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-253-98",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-258-104",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-258-105",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-258-106",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-271-111",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-271-112",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-271-113",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-276-119",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-276-120",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-276-121",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-290-126",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-290-127",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-290-128",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-295-134",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-295-135",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-295-136",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-308-141",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-308-142",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-308-143",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-313-149",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-313-150",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-313-151",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-328-160",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-333-166",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-333-167",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-358-187",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-360-188",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-360-189",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-379-199",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-381-200",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-381-201",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-401-211",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-403-212",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-403-213",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-423-223",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-425-224",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-425-225",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-447-239",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-449-240",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-449-241",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-491-264",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-492-265",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-493-266",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-494-267",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-502-277",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-504-278",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-504-279",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-523-285",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-523-286",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-523-287",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-528-293",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-528-294",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-528-295",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-542-300",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-542-301",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-542-302",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-547-308",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-547-309",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-547-310",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-560-315",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-560-316",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-560-317",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-565-323",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-565-324",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-565-325",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-578-330",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-578-331",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-578-332",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-583-338",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-583-339",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-583-340",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-596-345",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-596-346",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-596-347",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-601-353",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-601-354",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-601-355",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-630-373",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-638-382",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-639-384",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-639-385",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-639-386",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-644-389",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          }
+        ],
+        "whole_threshold_effective": false
+      },
+      "program": "CBACT04C",
+      "qualification_credit": false,
+      "release_authorized": false,
+      "schema": "scenario-threshold/2-amended-assessment",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "approved-subject-to-B1-completion",
+      "unaccepted_outcomes": []
+    },
+    "zos-facing": {
+      "accepted_uncovered_IO": [
+        {
+          "classification": "io-handling",
+          "id": "legacy:cobol-decision:CBACT04C:189:671",
+          "line": 189,
+          "outcome": "false",
+          "reason": "not-observed; no unreachability claim"
+        }
+      ],
+      "below_two_values": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "blocking_reasons": [
+        "output-fields-below-two-values",
+        "mutation-or-individual-review-conditions-unmet",
+        "required-targeted-experiment-evidence-incomplete"
+      ],
+      "business": {
+        "covered": 8,
+        "fraction": "8/8",
+        "total": 8
+      },
+      "claim_scope": "zos-facing",
+      "compared_fields": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+        "TRANSACT:TRAN-RECORD.TRAN-AMT",
+        "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM",
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANSACT:TRAN-RECORD.TRAN-DESC",
+        "TRANSACT:TRAN-RECORD.TRAN-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "conditions_met": false,
+      "content_sha256": "3a4f6631b2263e988ce25b537c4f436aaaafa4e13a3f475f304841f1886a67de",
+      "current_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+      "decision_date": "2026-10-11T14:00:00-07:00",
+      "distinct_values_per_output_field": {
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 1,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 3,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 58,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 5,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 51,
+        "TRANSACT:TRAN-RECORD.TRAN-AMT": 13,
+        "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM": 54,
+        "TRANSACT:TRAN-RECORD.TRAN-CAT-CD": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-DESC": 50,
+        "TRANSACT:TRAN-RECORD.TRAN-ID": 50,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-PROC-TS": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-SOURCE": 1,
+        "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD": 1
+      },
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "measurement_credit": false,
+      "mutation": {
+        "at_least_90_percent": false,
+        "claim_scope": "zos-facing",
+        "compiler_refusals": [],
+        "eligible": 421,
+        "excluded_equivalents": [],
+        "kill_rate": "308/421",
+        "killed": 308,
+        "minimum_50_met": true,
+        "mutation_conditions_met": false,
+        "other_requirements": [
+          "fresh business/I-O coverage bindings",
+          "two values per compared output field",
+          "complete B1 review dispositions"
+        ],
+        "release_authorized": false,
+        "schema": "scenario-threshold-2-mutation-assessment/1",
+        "sites": 421,
+        "targeted_evidence_gap_ids": [
+          "CBACT04C-receiving-scale-164-26",
+          "CBACT04C-receiving-scale-173-34"
+        ],
+        "targeted_experiments_complete": false,
+        "unresolved_survivors": [
+          {
+            "id": "CBACT04C-receiving-scale-72-6",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-125-13",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-133-19",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-133-20",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-138-21",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-139-23",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-139-24",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-164-26",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-169-30",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-172-31",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-172-32",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-scale-173-34",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-receiving-size-177-35",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-192-48",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-192-49",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-ADD-192-50",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-skip-PERFORM-216-74",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-skip-PERFORM-220-75",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-235-81",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-235-82",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-235-83",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-240-89",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-240-90",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-240-91",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-253-96",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-253-97",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-253-98",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-258-104",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-258-105",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-258-106",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-271-111",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-271-112",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-271-113",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-276-119",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-276-120",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-276-121",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-290-126",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-290-127",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-290-128",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-295-134",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-295-135",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-295-136",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-308-141",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-308-142",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-308-143",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-313-149",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-313-150",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-313-151",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-328-160",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-333-166",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-333-167",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-358-187",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-360-188",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-360-189",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-379-199",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-381-200",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-381-201",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-401-211",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-403-212",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-403-213",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-423-223",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-425-224",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-425-225",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-447-239",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-449-240",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-449-241",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-491-264",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-492-265",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-493-266",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-494-267",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-502-277",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-504-278",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-504-279",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-523-285",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-523-286",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-523-287",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-528-293",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-528-294",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-528-295",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-542-300",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-542-301",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-542-302",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-547-308",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-547-309",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-547-310",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-560-315",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-560-316",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-560-317",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-565-323",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-565-324",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-565-325",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-578-330",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-578-331",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-578-332",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-583-338",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-583-339",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-583-340",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-596-345",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-596-346",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-596-347",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-601-353",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-601-354",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-601-355",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-630-373",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-638-382",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-639-384",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-constant-639-385",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-639-386",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-644-389",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          }
+        ],
+        "whole_threshold_effective": false
+      },
+      "program": "CBACT04C",
+      "qualification_credit": false,
+      "release_authorized": false,
+      "schema": "scenario-threshold/2-amended-assessment",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "approved-subject-to-B1-completion",
+      "unaccepted_outcomes": []
+    }
+  },
+  "twin_limits_path": "docs/factory/twin-limits.md",
+  "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+  "zos_confirmation": false
+}

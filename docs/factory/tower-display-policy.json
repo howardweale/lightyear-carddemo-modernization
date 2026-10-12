@@ -1,0 +1,1 @@
+{"schema":"scenario-threshold/2","business_logic_outcomes":"1/1","legacy_mutants_killed":"9/10","minimum_systematic_mutants":50,"distinct_values_per_output_field":2,"status":"proposed-not-approved"}

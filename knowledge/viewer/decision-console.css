@@ -241,3 +241,15 @@ main small {
   display: block;
   margin: 8px 0;
 }
+
+.program-picker { display:flex; gap:.75rem; margin:1rem 0; }
+.program-picker button[aria-pressed="true"] { background:#17334c; color:white; }
+.program-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:1.5rem 0; }
+.evidence-card { min-width:0; padding:1.25rem; }
+.evidence-card table { width:100%; border-collapse:collapse; margin:1rem 0; }
+.evidence-card th,.evidence-card td { padding:.55rem; border-bottom:1px solid #d9e1e8; text-align:left; overflow-wrap:anywhere; }
+.evidence-card pre { white-space:pre-wrap; overflow-wrap:anywhere; max-height:26rem; overflow:auto; }
+.evidence-sources { margin:.65rem 0; font-size:.8rem; }
+.evidence-sources code { display:block; overflow-wrap:anywhere; }
+.metric { font-size:1.6rem; font-weight:650; }
+@media(max-width:850px) { .program-grid { grid-template-columns:1fr; } }

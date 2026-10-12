@@ -53,9 +53,11 @@ function badge(text) {
 async function load() {
   if (!token) return;
   clearTimeout(timer);
+  const scopeInfo = await api("queue");
+  for (const tab of document.querySelectorAll(".factory-tab")) tab.hidden = scopeInfo.session.scope !== "factory";
   $("message").textContent = "";
   try {
-    await { campaigns, queue, catalogue, workspace, history, knowledge, businessRules }[current]();
+    await { campaigns, queue, catalogue, workspace, history, knowledge, businessRules, programs }[current]();
   } catch (e) {
     showError(e);
   }
@@ -527,6 +529,8 @@ async function businessRules() {
       content.append(el("p", `${rule.agree_count} agree; ${rule.disagree_count} disagree; ${rule.indeterminate_count} indeterminate`));
       content.append(el("pre", JSON.stringify(rule.source, null, 2)));
       if (rule.first_disagreement) content.append(el("pre", JSON.stringify(rule.first_disagreement, null, 2)));
+      content.append(el("p", `Evidence strength: ${rule.evidence_strength || "not assessed"} — ${rule.evidence_strength_reason || ""}`));
+      const assessment = el("details"); assessment.append(el("summary", "Scenario adequacy and assessment"), json(rule.scenario_adequacy || "not reported"), json(rule.scenario_reasons || [])); content.append(assessment);
       content.append(el("small", `Receipt: ${rule.receipt_sha256}`, "hash"));
     }
     content.append(el("p", "Keep-or-fix decisions are reviewed and signed in the decision queue."));
@@ -618,3 +622,57 @@ document.addEventListener("visibilitychange", () => {
   clearTimeout(timer);
   timer = setTimeout(load, document.hidden ? 30000 : 0);
 });
+
+
+let selectedProgram = "INTCALC";
+function evidenceSources(sources) {
+  const detail = el("details", undefined, "evidence-sources");
+  detail.append(el("summary", "Evidence sources and SHA-256"));
+  for (const source of sources || []) {
+    const line = el("p"), a = el("a", source.path);
+    a.href = "https://github.com/howardweale/lightyear-carddemo-modernization/blob/" + source.commit + "/" + source.path;
+    a.target = "_blank"; a.rel = "noopener noreferrer";
+    line.append(a, el("code", source.sha256, "hash")); detail.append(line);
+  }
+  return detail;
+}
+function evidenceCard(title, block) {
+  const card = el("article", undefined, "card evidence-card"); card.append(el("h3", title));
+  card.append(evidenceSources(block.sources)); return card;
+}
+function evidenceTable(headers, rows) {
+  const table = el("table"), head = el("thead"), tr = el("tr"), body = el("tbody");
+  for (const h of headers) tr.append(el("th", h)); head.append(tr); table.append(head, body);
+  for (const values of rows) {const row = el("tr"); for (const value of values) row.append(el("td", value === null || value === undefined ? "Not reported" : String(value))); body.append(row);}
+  return table;
+}
+async function programs() {
+  const v = await api("program?id=" + encodeURIComponent(selectedProgram));
+  content.replaceChildren(el("p", "FACTORY · PUBLIC DEVELOPMENT", "eyebrow"), el("h2", "Program evidence"));
+  const nav = el("div", undefined, "program-picker");
+  for (const name of ["INTCALC", "POSTTRAN"]) {const b=button(name,async()=>{selectedProgram=name;await programs();});b.setAttribute("aria-pressed",String(name===selectedProgram));nav.append(b);} content.append(nav);
+  if (!v.available) {content.append(el("p", v.reason || "Programs are unavailable in this scope."));return;}
+  content.append(el("h2",v.id),badge("Not releasable"),el("p",v.claim,"boundary"),el("p",`Experiment: ${v.observed_head} · Evidence import: ${v.evidence_commit}`,"hash"));
+  const waiting=button(`Waiting on you · ${v.waiting_on_you.count}`,async()=>{current="queue";await queue();}); content.append(waiting);
+  const grid=el("div",undefined,"program-grid");content.append(grid);
+  const checklist=el("article",undefined,"card evidence-card");checklist.append(el("h3","Releasability checklist"));
+  checklist.append(evidenceTable(["Criterion","Measured value","State"],v.checklist.map(r=>[r.criterion,r.value,r.state])));
+  for(const row of v.checklist){const detail=el("details");detail.append(el("summary",row.criterion+": "+row.state),el("p",row.reason),evidenceSources(row.sources));checklist.append(detail);}grid.append(checklist);
+  const scenarios=evidenceCard("Scenarios",v.scenarios), sc=v.scenarios.value;
+  scenarios.append(evidenceTable(["Evidence","Business logic","I/O handling"],[["Public data",sc.public_data?.coverage_by_class?.["business-logic"]?.fraction,sc.public_data?.coverage_by_class?.["io-handling"]?.fraction],["Including declared faults",sc.with_declared_faults?.coverage_by_class?.["business-logic"]?.fraction,sc.with_declared_faults?.coverage_by_class?.["io-handling"]?.fraction]]));
+  scenarios.append(el("p",`${sc.fault_expectations_met}/${sc.fault_count} declared fault expectations met`),el("p",sc.exception_state));
+  const gaps=el("details");gaps.append(el("summary",`${sc.gaps.length} listed I/O gaps / historical exceptions`),json(sc.gaps));scenarios.append(gaps);grid.append(scenarios);
+  const mutation=evidenceCard("Mutation evidence",v.mutation),m=v.mutation.value;
+  mutation.append(el("p",`Raw kills: ${m.raw_kill_fraction}`,"metric"),el("p",`Failure ${m.raw_counts["killed-failure"] || 0} · Divergent ${m.raw_counts["killed-divergent"] || 0}`));
+  mutation.append(evidenceTable(["Claim scope","After exclusions","Unresolved"],Object.entries(m.scoped_assessments).map(([k,r])=>[k,r.mutation.kill_rate,r.mutation.unresolved_survivors.length])));
+  mutation.append(el("p",m.warning,"boundary"),el("p",`${m.compiler_refusals.length} compiler refusals · ${m.generator_avoided} invalid mutants avoided`));
+  mutation.append(evidenceTable(["Equivalence disposition","Count"],[["Compiler-proven",m.classes.compiler_proven],["Class proof",m.classes.class_proof],["Individually argued",m.classes.individually_argued],["Refuted",m.classes.refuted],["Evidence gap (overlapping)",m.classes.evidence_gap]]));
+  const survivors=el("details");survivors.append(el("summary","Survivors, refusals and evidence gaps"),json({survivors:m.survivors,compiler_refusals:m.compiler_refusals,evidence_gaps:m.evidence_gap_ids,scoped:m.scoped_assessments}));mutation.append(survivors);grid.append(mutation);
+  const answer=evidenceCard("Answer key and limits",v.answer_key),a=v.answer_key.value;
+  answer.append(el("p",`${a.oracle_class} · ${a.oracle_status}`),el("p",`z/OS confirmed: ${a.zos_confirmation ? "yes" : "no"}`),el("p",`Human review: ${a.review_state}`));
+  if(a.second_opinion)answer.append(el("p",`Second opinion: ${a.second_opinion.status}`),el("p",`Phase 2 authorized: ${a.second_opinion.phase2_authorized ? "yes" : "no"}`));
+  const limits=el("details");limits.append(el("summary","Twin limits register"),el("pre",a.limits));answer.append(limits);grid.append(answer);
+  const legacy=evidenceCard("Keep or fix",v.keep_or_fix);
+  for(const row of v.keep_or_fix.value){legacy.append(el("h4",row.id),el("p",row.observed_behavior),el("p",`Historical disposition: ${row.disposition}`),el("p",`Source lines: ${row.source_lines.join(", ")}`),el("code",row.source_sha256,"hash"));const deps=el("details");deps.append(el("summary","Signed overlays and dependent arguments"),json(row.signed_overlay),json(row.dependent_arguments || "Not reported in this register version"));legacy.append(deps);}grid.append(legacy);
+  const decisions=el("details");decisions.append(el("summary","Signed decision overlays"),json(v.decision_overlays));content.append(decisions);
+}

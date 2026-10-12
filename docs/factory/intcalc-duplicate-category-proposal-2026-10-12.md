@@ -1,6 +1,6 @@
 # Proposed scoped decision: INTCALC duplicate-category
 
-**Status: pending Howard approval; not effective.** [Full source-bound proposal](intcalc-duplicate-category-proposal-2026-10-12.json).
+**Status: approved by Howard on October 12, 2026; pending fresh evidence, not yet effective.** [Approval record](intcalc-duplicate-category-approval-2026-10-12.json). The original proposal JSON remains byte-for-byte unchanged as the approved reference. [Full source-bound proposal](intcalc-duplicate-category-proposal-2026-10-12.json).
 
 Approve classifying only `intcalc-duplicate-category`, under the pinned twin indexed adapter and generator, as an **expected loader refusal outside the mutation-comparison domain**. The duplicate TCATBALF primary key is refused by `load-TCATBALF` with rc66 before CBACT04C starts. Keep this scenario as a loader negative test. Do not give it kill, equivalence, comparison or program-coverage credit, and do not remove mutant sites from adequacy denominators.
 
@@ -23,4 +23,4 @@ Content SHA-256: `0706ffff6b402568715f3f83174327b166791c6fee88d530016cde77c6f8d8
 | `tools/check_generated_scenarios.py` | `cb717fd8bfd02733ea5be7818211b671d7503a93492338f6b1f310a2b6221210` |
 | `spec/mainframe/public-source/CBACT04C.cbl` | `5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4` |
 
-Requested approval: **Approve the source-bound INTCALC duplicate-category loader-domain proposal above, conditional on fresh receipts, with historical evidence preserved.**
+Howard approved this exact scoped proposal in chat: “approval for reclassification”. All fresh-evidence conditions above remain. No historical evidence, classifier or threshold result has been rewritten.

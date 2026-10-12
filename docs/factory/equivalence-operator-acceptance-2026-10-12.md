@@ -76,8 +76,8 @@ Each decision is invalidated by a source hash or bound-line change. Full line te
 | `TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY` | 493 | `SPACES` | Unconditional literal assignment for each generated interest transaction. |
 | `TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP` | 494 | `SPACES` | Unconditional literal assignment for each generated interest transaction. |
 
-## Validation and pending approval
+## Validation and conditional approval
 
-`python -B tools/check_oct12_operator_review.py` validates attachment/packet/source/line hashes, unique IDs, historical references, pending evidence conditions, host-only scopes, register dependencies, constant bindings and the unapproved proposal. Seven offline regression tests passed. The checker deliberately refuses to treat an unverified receipt or amended pending flag as effective; later evidence reconciliation must verify the actual case/shard bytes first.
+`python -B tools/check_oct12_operator_review.py` validates attachment/packet/source/line hashes, unique IDs, historical references, pending evidence conditions, host-only scopes, register dependencies, constant bindings and the original proposal plus its conditional approval. Eight offline regression tests passed. The checker deliberately refuses to treat an unverified receipt or amended pending flag as effective; later evidence reconciliation must verify the actual case/shard bytes first.
 
-[Duplicate-category scoped proposal](intcalc-duplicate-category-proposal-2026-10-12.md) awaits Howard's separate approval. It does not implement or activate a classifier change.
+[Duplicate-category scoped proposal](intcalc-duplicate-category-proposal-2026-10-12.md) was separately approved by Howard on October 12 ([approval record](intcalc-duplicate-category-approval-2026-10-12.json)). Its fresh-evidence conditions remain unmet; no classifier change is activated.

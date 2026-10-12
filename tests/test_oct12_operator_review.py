@@ -1,7 +1,7 @@
 import copy
 import json
 import unittest
-from tools.check_oct12_operator_review import ROOT, DECISION, validate, seal
+from tools.check_oct12_operator_review import ROOT, DECISION, validate, seal, validate_domain_approval
 
 
 class OperatorReviewTests(unittest.TestCase):
@@ -48,6 +48,20 @@ class OperatorReviewTests(unittest.TestCase):
         self.d['new_acceptances'].append(self.d['existing_acceptance_references'][0])
         with self.assertRaisesRegex(ValueError, 'deduplication'):
             validate(decision=self.altered())
+
+
+    def test_domain_approval_cannot_waive_fresh_evidence_or_expand_scope(self):
+        folder = ROOT / 'docs/factory'
+        proposal_text = (folder / 'intcalc-duplicate-category-proposal-2026-10-12.json').read_text()
+        proposal = json.loads(proposal_text)
+        original = json.loads((folder / 'intcalc-duplicate-category-approval-2026-10-12.json').read_text())
+        validate_domain_approval(original, proposal, proposal_text)
+        for field, value, reason in [('effective', True, 'fresh-evidence-required'), ('new_zos_facing_acceptances', 1, 'approval-limits'), ('proposal_content_sha256', '0' * 64, 'approved-proposal-binding')]:
+            changed = copy.deepcopy(original)
+            changed[field] = value
+            changed['content_sha256'] = seal({k: v for k, v in changed.items() if k != 'content_sha256'})
+            with self.assertRaisesRegex(ValueError, reason):
+                validate_domain_approval(changed, proposal, proposal_text)
 
 
 if __name__ == '__main__':

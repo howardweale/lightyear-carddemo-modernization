@@ -23,6 +23,15 @@ def require(condition, reason):
         raise ValueError(reason)
 
 
+def validate_domain_approval(approval, proposal, proposal_text):
+    require(seal({k: v for k, v in approval.items() if k != 'content_sha256'}) == approval['content_sha256'], 'approval-seal')
+    require(approval['approved'] is True and approval['approved_by'] == 'Howard', 'approval-authority')
+    require(approval['proposal_content_sha256'] == proposal['content_sha256'] and approval['proposal_lf_sha256'] == digest(proposal_text.encode()), 'approved-proposal-binding')
+    require(approval['rule'] == proposal['proposed_rule'] and approval['conditions'] == proposal['required_before_effective'][1:] and approval['scope'] == proposal['scope'], 'approval-scope')
+    require(approval['effective'] is False and approval['fresh_evidence_receipt'] is None and approval['status'] == 'approved-pending-fresh-evidence', 'fresh-evidence-required')
+    require(approval['historical_raw_records_unchanged'] is True and approval['new_zos_facing_acceptances'] == 0 and approval['threshold_approved'] is False and approval['release_authorized'] is False and approval['merges_held_until'] == 'B06 cleanup sealed', 'approval-limits')
+
+
 def validate(root=ROOT, decision=None, register=None):
     def text(path):
         return (root / path).read_text(encoding='utf-8')
@@ -84,7 +93,9 @@ def validate(root=ROOT, decision=None, register=None):
     require(seal({k: v for k, v in proposal.items() if k != 'content_sha256'}) == proposal['content_sha256'], 'proposal-seal')
     for row in proposal['bound_sources']:
         require(digest(text(row['path']).encode()) == row['lf_sha256'], 'proposal-source-binding')
-    return dict(new_decisions=44, historical_references=3, pending_evidence_items=sorted(PENDING), host_only_items=sorted(HOST), constants=7, new_zos_acceptances=0, threshold_approved=False, proposal_approved=False)
+    approval = json.loads(text("docs/factory/intcalc-duplicate-category-approval-2026-10-12.json"))
+    validate_domain_approval(approval, proposal, text(decision["pending_domain_decision"]))
+    return dict(new_decisions=44, historical_references=3, pending_evidence_items=sorted(PENDING), host_only_items=sorted(HOST), constants=7, new_zos_acceptances=0, threshold_approved=False, domain_reclassification_approved=True, domain_reclassification_effective=False)
 
 
 if __name__ == '__main__':

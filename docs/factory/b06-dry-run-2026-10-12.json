@@ -33,5 +33,13 @@
     "No registered checkout at exact implementation commit was found; preparation checkout is a later documentation commit. No checkout changed.",
     "No listening service found on 8768; running Tower checkout/commit cannot be reported.",
     "Host free memory is an inventory observation, not proof of Docker VM allocation or combined resource readiness."
-  ]
+  ],
+  "historical_registry_verification": {
+    "observed_utc": "2026-10-12T19:20:52.389094+00:00",
+    "read_only": true,
+    "registry_file_sha256": "feae9a1a1e0e641dadae8d9a0f699df9236673011a8c2f49232cd36110103db8",
+    "registered_runs": 6,
+    "marker_hashes_verified": 24,
+    "scope": "Byte hashes only; no execution contents interpreted, no live resource or process absence claim."
+  }
 }

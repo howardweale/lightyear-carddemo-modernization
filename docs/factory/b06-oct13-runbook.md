@@ -4,6 +4,8 @@
 
 **Before launch:** an operator must supply a clean execution checkout at `62eafdaf29dce1d40603d38c3a394f150b98f686` and the existing dedicated authority directory. The preparation checkout is `4659d591` (documentation HEAD), so it cannot execute this request. No registered checkout at the execution commit was found. Do not reset the preparation checkout, provision keys, change memory settings or restart 8768. Resolve these prerequisites before the window; otherwise stop.
 
+[One-page printable runbook](b06-oct13-one-page-runbook.pdf) · [Deferred one-attempt command wrapper](b06-oct13-attempt.ps1). Neither wrapper nor activation commands have been executed. The six historical registry entries and all 24 marker byte hashes also matched; this is not a live-resource absence check.
+
 ## 9:00 — read-only preflight and first invocation
 
 In PowerShell, set `$ExecutionCheckout` and `$EngineeringAuthority` to the operator-confirmed existing paths. The authority argument is the directory containing its public/key records; no key contents are displayed.

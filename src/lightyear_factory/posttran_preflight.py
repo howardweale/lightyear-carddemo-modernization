@@ -14,7 +14,9 @@ def verify_approval(plan, receipt):
     if (receipt.get('plan_sha256') != plan['content_sha256']
             or receipt.get('approved_phase') != 1
             or receipt.get('approved_limits') != plan['phases']['1']
-            or receipt.get('human_answer') != 'Approve Phase 1 budget'):
+            or receipt.get('human_answer') != (('go POSTTRAN ' + plan['content_sha256'])
+                if plan.get('schema') == 'posttran-independent-preregistration/3'
+                else 'Approve Phase 1 budget')):
         raise ValueError('exact-phase1-budget-approval-required')
     # This records the human chat decision; it is not a signed Tower attestation.
     return {'phase1_budget_approved': True, 'phase2_authorized': False}

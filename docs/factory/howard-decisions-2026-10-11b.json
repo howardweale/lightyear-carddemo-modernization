@@ -1,0 +1,298 @@
+{
+  "schema": "howard-decisions/2",
+  "decided_by": "Howard",
+  "decided_at": "2026-10-11T14:00:00-07:00",
+  "authority": "User-supplied decision document; operator decision record, not a cryptographic signature or execution receipt",
+  "source_document_sha256": "e69b05871c9b8b967008a02a6da4f3a89814a4ec69f92ed8892cc95dd77c1d0b",
+  "source_document": "docs/factory/howard-decisions-2026-10-11b-source.md",
+  "unsigned_posttran_file_sha256": "02d506e550328e81fbe14e3dd508d0b688113c603933f7a330f182267dfb06dc",
+  "prior_evidence_bindings": {
+    "docs/factory/equivalence-review-sample-2026-10-11.json": "36c04e73ae5fc3ad1c185639bb34a7af8543c37f70b870849bdb8bd4ede78560",
+    "docs/factory/posttran-human-review-sheet.json": "e38a53a8db45a7264983f0186de355d8969bde2c3d65e616f98632412882b077",
+    "docs/factory/keep-or-fix-register.json": "18dacc3f2e6397866845446e465721eeccfaeea725594c163e4d93093e84ca4b",
+    "docs/factory/posttran-second-opinion/revised-plan.json": "e12356fb3550278bc6f0f49b9cd5fe2326241534f4d3f7415a03ef5d6f49ea35",
+    "docs/b06-engineering-two-attempt-request.md": "4823ea6b7ffed2cd1d932e6498d0afeb602b938e3b291e743dcd51352ea96966"
+  },
+  "decisions": {
+    "A1": {
+      "text": "Equivalence review sample (20 mutants)\n\nHoward accepts the 20-mutant review in Appendix 1 as an **AI-assisted operator\nreview**: Claude reviewed the arguments, Howard accepted the review. It is not\nindependent human attestation. Record it that way.\n\n**Result:** 20 of 20 arguments are correct within their stated scope.\n\n- **CBTRN02C-delete-MOVE-718-447 is host-scoped.** `TWO-BYTES-BINARY` has no\n  VALUE clause. GnuCOBOL zero-initialises it, but Enterprise COBOL does not\n  guarantee that. Classify it as `equivalent (host-compiler-scoped)`. It may be\n  excluded only for twin-scoped claims. For any z/OS-facing claim it counts as\n  unresolved.\n- **The sample is dominated by one idiom.** 17 of the 20 are mutations of the\n  `APPL-RESULT` status sentinel, and so is most of the population: about 83 of\n  the INTCALC and 98 of the POSTTRAN argued equivalents.\n\n**Decision.** Replace random sampling with two steps:\n\n1. **Class-level proof for `APPL-RESULT`.** In both programs, `APPL-RESULT` is\n   read only through its two 88-levels, `APPL-AOK` (0) and `APPL-EOF` (16). It\n   is never displayed, moved, passed, or moved to `RETURN-CODE`. Lines 133–135\n   and 142–144 were checked.\n   - Implement this as one mechanical check: a reference census over the\n     parsed program, failing on any new consumer.\n   - Use it to cover every argued equivalent whose only effect is on\n     `APPL-RESULT`, restricted to values other than 0 and 16, or to deletions\n     whose argument holds under the census.\n   - It is invalidated if the source hash changes.\n2. **Individual review of every remaining argued equivalent.** That is roughly 50\n   across both programs: receiving scale and size, skip-PERFORM, `TWO-BYTES`,\n   abend and status display, ROUNDED, and the rest. Prepare one packet in the\n   same format as the 20-mutant sample. Claude reviews it, and Howard accepts or\n   rejects it.",
+      "text_sha256": "88d98b49c0774d6aaec4b9f8281f5695836654349fee3da61c53dc452e8d326a"
+    },
+    "A2": {
+      "text": "scenario-threshold/2 — approved as amended, effective only when B1 completes\n\nReleasable requires all of the following:\n\n- **Business logic.** 100% of business-logic outcomes covered.\n- **I/O handling.** Every I/O-handling outcome covered by fault injection or\n  individually accepted by Howard. The two EOF edges accepted on October 11\n  stand.\n- **Mutant kill rate.** At least 90% of systematic mutants killed, over at\n  least 50 eligible mutants per program.\n  - **Eligible** means all sites, minus listed compiler refusals, minus\n    equivalents that are (a) compiler-proven (TCE), (b) covered by the\n    `APPL-RESULT` class proof, or (c) individually reviewed and accepted under\n    A1.\n  - Host-compiler-scoped equivalents are excluded only for twin-scoped claims.\n- **No unexplained survivors**, and every survivor that has an argument is\n  dispositioned.\n- **Output fields.** At least 2 distinct values for each compared output field.\n- **Measured on a fresh compiled campaign at the current head** (B1.4), not on\n  the `3283265d` campaign.\n- **Register dependencies.** Arguments that depend on a keep-or-fix entry carry\n  that dependency (B2) and are invalidated if the decision changes.",
+      "text_sha256": "9a4d87515dedb8d2218e582994e4c650a2d386601b4b5ad79f70b5ccc32dc2db"
+    },
+    "A3": {
+      "text": "POSTTRAN human review sheet\n\nHoward has reviewed the ten records and **accepts all ten**. The completed file\nis `posttran-decisions-unsigned.json`; Howard will sign it through the operator\nflow.\n\nThe reasons were recomputed from the public ACCTFILE, XREFFILE and DALYTRAN\ndata, processing all 300 records in batch order: 262 posted and 38 rejected,\nmatching the twin.\n\n**Improvement for future sheets:** include the account state each decision\ndepends on, read before the record is processed:\n\n- credit limit;\n- cycle credit and cycle debit;\n- expiry date;\n- the computed `WS-TEMP-BAL`.\n\nWithout these, a reviewer can't check an over-limit decision from the sheet\nalone.",
+      "text_sha256": "3784c981bfb5a379c0d4b8e865eb6951cff69a94d75d3119f13be7eb643be8c4"
+    },
+    "A4": {
+      "text": "POSTTRAN second opinion — revised plan approved, subject to two amendments\n\n- **Approved:** Phase 1 under plan `97b105a5…`:\n  - direct Responses API transport;\n  - three calls, attempts and compilations;\n  - 750,000 input and 192,000 output tokens;\n  - 64,000 maximum output tokens per call;\n  - two hours;\n  - a **$36** hard cap.\n- **Amendment 1, labels.** Phase 1 results are labelled\n  `independent model-built candidate`, not \"factory conversion\".\n- **Amendment 2, preflight.** Add a zero-generation transport check before\n  attempt 1: send the exact Phase 1 packet to the input-token counting\n  endpoint. Record it in the ledger.\n- **No other changes.** Publish the amended plan, its hash and a diff against\n  `97b105a5…`. Don't call any model until Howard replies\n  \"go POSTTRAN \\<amended hash\\>\".\n- **Phase 2 is not approved.** It waits for adjudication of the Phase 1\n  disagreements.",
+      "text_sha256": "033cdebe6cee85b5e4a6f72e42c99a55f15a0f3a233d38a23bc184ab84c183fb"
+    },
+    "A5": {
+      "text": "Keep-or-fix: two new legacy behaviours, both kept by default\n\nAdd both to `keep-or-fix-register.json`, with source hashes and lines.\n\n1. **Duplicate transaction ID: posting is not atomic.** `2000-POST-TRANSACTION`\n   runs in this order:\n   1. update category balance (2700);\n   2. update account (2800);\n   3. write TRANFILE (2900).\n\n   A duplicate `DALYTRAN-ID` fails the WRITE (duplicate key), and the program\n   abends with RC 12 *after* the balances were already updated.\n   - **Decision: keep.** The converted code reproduces the abend and the\n     partial update.\n   - Redefine the duplicate-ID invariant to expect exactly that: abend at the\n     duplicate, earlier records posted, the duplicate's account and category\n     balances incremented, and no TRANFILE row for it.\n   - This resolves the \"duplicate-ID invariant unresolved\" item.\n2. **Cycle-debit sign convention.** Negative amounts are added into\n   `ACCT-CURR-CYC-DEBIT`, so it goes negative. The over-limit test computes\n   `CYC-CREDIT − CYC-DEBIT + amount`, so refunds and payments *raise* the\n   balance tested against the limit.\n   - On the public batch, this gives 38 rejections; a net-balance reading\n     (`CYC-CREDIT + CYC-DEBIT + amount`) gives 23, and 19 records differ.\n   - **Decision: keep.** The converted code reproduces it.\n   - Add one generated scenario that discriminates the two readings, and a\n     regression test.\n\nChanging either behaviour needs a separate explicit decision.",
+      "text_sha256": "5b7d0297f9312dc0e0d3a450c7d13d9716e674f7cf32503912673773e612a946"
+    },
+    "A6": {
+      "text": "B06 two-attempt request — approved in principle; new window\n\n- **Approved:** the scope and sequence in\n  `docs/b06-engineering-two-attempt-request.md`:\n  - attempt 1 strict, attempt 2 diagnostic with the 10-return cap;\n  - Oracle-only J1;\n  - the per-attempt time limits;\n  - zero credit;\n  - the observer at 1,536 MiB, container 2,048 MiB.\n- **Window moved to Tuesday, October 13, 2026, 9:00 AM–noon PDT.** October 12 is\n  withdrawn.\n- **Execution needs one executable commit** (B3.1). Deliver the revised request\n  by **Monday October 12, 5:00 PM PDT**. Howard replies\n  \"go B06 \\<commit\\> \\<request seal\\>\". Nothing runs without that line.\n- **Attempt 2 caps.** Attempt 2's purpose is to see what follows the 12,400\n  point, so it should be able to reach about **37,000 generation entries**\n  (three times the cluster) within its 60 minutes.\n  - Size the ordinary-evidence and metadata caps from the B3.2 projection to\n    reach that point.\n  - Howard pre-approves up to **150,000 ordinary-evidence records**,\n    **1,500,000 metadata records** and **384 MiB of metadata** for attempt 2\n    only.\n  - Private output stays at most 8 GiB, and free space at least 60 GiB.\n  - Attempt 1 keeps the current caps.\n- **\"Cause identified\" for Part 6, pre-registered.** It means one of:\n  - (a) a lifecycle or class-prepare record at the sequence of the first\n    unmatched return that explains the missed entry breakpoint: request\n    disabled, class redefined or reloaded, or thread-filter mismatch; or\n  - (b) an application-phase marker that ties the about 12,400 point to one\n    operation and reproduces in both attempts.\n\n  Anything else counts as \"not identified\", and the firm stop rule applies.",
+      "text_sha256": "20ace9e4818b70cc2f51a06b6e96aaf9c577382844f3bf96f6142d979998c342"
+    },
+    "A7": {
+      "text": "Alternatives evidence (#319)\n\n- Approved: a **read-only export** of the retained application image `554a5203…`.\n  Use `docker image save` or an equivalent layer export to extract its JDK.\n  - No container is created or started.\n  - No network access.\n  - Outside any J1, B06 or evidence window.\n  - Record the command, the image digest and the hashes of the exported\n    layers.\n- Approved: prepare, but **don't submit**, a contingent native count-only\n  request, as described in B4.2.",
+      "text_sha256": "c2bec0061516628f94ef4552defb96106269ba9fc27a4f3cad76ea296eb3ce94"
+    },
+    "A8": {
+      "text": "B07\n\n- **Primary hypothesis:** two-sided superiority of graph (G) over plain search\n  (S) on final pass rate, pooled across J1–J3 and stratified by journey. The\n  test follows the slot-independence decision already in the plan. Report the\n  effect size and its interval.\n- **Non-inferiority margin: 15 percentage points**, for the secondary claim that\n  G is not worse than S. The ±15-point precision matches 72 analysed trials per\n  arm. Run the pre-freeze power simulation. If it shows the margin can't be\n  assessed at the planned size, report that to Howard before freezing.\n- **No sample-size reduction.** Keep 24 analysis slots per journey and arm, and\n  no drift arm.\n- **Calendar.** The 96-hour cap is replaced by a two-runner window of at most\n  **14 calendar days**, with both arms on both runners as planned.\n- **Spending is not approved yet.** Before any trial, bring Howard the exact\n  model-call, token and dollar budget for G+S.\n- **Sequencing.** B07 starts only after the B06 Part 6 decision, and after the\n  Part 1.5 graph-coverage proof has passed.",
+      "text_sha256": "4d21c0faa98cc46f97e8ccab63571a64ff6ef789f3ffff947ec293dafaafa9e8"
+    },
+    "A9": {
+      "text": "Multipass reproduction\n\nHoward replaces the Multipass requirement. The replacement is two clean twin\nbuilds from an `ubuntu:24.04` image pinned by digest, on two different machines:\nthe GitHub-hosted runner, plus Howard's Mac or a cloud VM. The build passes if\nthe compiled binary hashes match. Any difference goes in the twin limits\nregister.",
+      "text_sha256": "94833f17f119801f88f1543ed5c8b4f02798029e9f6d33bfbfb290e6aa545d2d"
+    },
+    "A10": {
+      "text": "ZD&T\n\n- **No purchase yet.** Codex drafts a design note only (B5.2).\n- Howard will ask IBM to confirm in writing that the licence covers internal\n  engineering calibration, and demos where Lightyear converts client code. IBM\n  excludes \"preproduction testing\".",
+      "text_sha256": "5e3dc1dd868ace93b712612e30cdd8cd05eae0c35d14ae6f1e0ddd9de9840b2e"
+    },
+    "A11": {
+      "text": "Priority of spec workstreams after Part B\n\nDo them in this order:\n\n1. **Generic scenario engine** (Workstream 1.2, B2.3). It is the product claim.\n2. **Dual-run prototype** (Workstream 5). It is the customer story. Use\n   CardDemo batch, with the twin standing in as \"legacy production\".\n3. **Production versus evidence mode** (Workstream 4).\n4. **Parallel candidates** (Workstream 3).\n\nFor each, write a one-page plan for Howard before starting.",
+      "text_sha256": "026fed78f45131a37084dfef5374756fb4e2cda2cf8e6d941215e68e0e0654e2"
+    }
+  },
+  "equivalence_review": {
+    "class": "AI-assisted operator review",
+    "argument_reviewer": "Claude",
+    "accepted_by": "Howard",
+    "independent_human_attestation": false,
+    "accepted_sample_count": 20,
+    "host_only_mutant": "CBTRN02C-delete-MOVE-718-447",
+    "zos_disposition": "unresolved",
+    "replacement_gate": "class-level proof plus individual review of every remainder",
+    "accepted_mutants": [
+      {
+        "id": "CBACT04C-constant-403-212",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-MOVE-601-355",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-ADD-192-50",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-MOVE-401-211",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-receiving-size-133-19",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-constant-523-286",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-MOVE-502-277",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-MOVE-290-128",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-constant-235-81",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBACT04C-delete-MOVE-240-91",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-583-332",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-delete-MOVE-718-447",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "host-compiler-scoped",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-638-377",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-515-283",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-255-87",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-515-282",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-delete-MOVE-455-246",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-680-414",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-588-339",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      },
+      {
+        "id": "CBTRN02C-constant-718-445",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "scope": "stated-argument-scope",
+        "accepted_by": "Howard",
+        "accepted_on": "2026-10-11",
+        "review_class": "AI-assisted operator review",
+        "independent_human_attestation": false
+      }
+    ]
+  },
+  "scenario_threshold_2": {
+    "approval": "conditional",
+    "effective": false,
+    "conditions": [
+      "B1 compiler/class evidence and targeted attempts complete",
+      "remaining individual reviews accepted",
+      "fresh current-head compiled campaign",
+      "register dependencies bound"
+    ],
+    "requirements": {
+      "business_coverage": 1.0,
+      "io": "fault-covered or individually accepted",
+      "kill_rate": 0.9,
+      "eligible_minimum": 50,
+      "output_distinct_values_minimum": 2
+    }
+  },
+  "posttran_review": {
+    "ten_accepted": true,
+    "signed": false,
+    "signature_required": true,
+    "sheet_sha256": "07e1a1401fe5fe8ad0f88d4cc89034d361678891637863f28f037d59fc9165f9",
+    "source_sha256": "6f27b0c39e2e44ad736caf36d2f9c8b7275451b41c9c3fbfe24d034577f4a064",
+    "acceptance_sha256": "a28664ab3c24755e0bfaa804448d3abe0200cc88f42aa7ecb222ad3d9eb9774c"
+  },
+  "execution": {
+    "posttran_phase1": "conditional; go POSTTRAN <amended hash> required",
+    "posttran_phase2": false,
+    "b06": "conditional; go B06 <commit> <request seal> required",
+    "b06_window": [
+      "2026-10-13T09:00:00-07:00",
+      "2026-10-13T12:00:00-07:00"
+    ],
+    "b06_request_due": "2026-10-12T17:00:00-07:00",
+    "b07_spending": false
+  },
+  "models_called": 0,
+  "native_runs_started": 0,
+  "prior_evidence_hash_mode": "UTF-8 LF-normalized text; historical files not modified",
+  "program_source_sha256": {
+    "CBACT04C": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "CBTRN02C": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+  },
+  "content_sha256": "ea2173ae0ec047878dfff130c3d2663e4086a13cebc7d88f5b32137af1e739ce"
+}

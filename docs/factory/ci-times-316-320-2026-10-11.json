@@ -1,0 +1,71 @@
+{
+  "schema": "pr-push-gate-latencies/1",
+  "checked_at": "2026-10-11T21:04:46.316159+00:00",
+  "queued_workflows": 0,
+  "active_workflows": 0,
+  "post_merge_latency": false,
+  "prs": [
+    {
+      "pr": 316,
+      "head": "599c3bca76bc5487a5eee981ff5da1fa6400eef3",
+      "green": true,
+      "push_at": "2026-10-11T06:06:01Z",
+      "push_time_source": "GitHub PushEvent",
+      "all_workflows_green_at": "2026-10-11T06:43:26Z",
+      "push_to_green_seconds": 2245.0,
+      "workflow_creation_to_green_seconds": 2240.0,
+      "successful_workflows": 15
+    },
+    {
+      "pr": 317,
+      "head": "9758a0cecc78351600fa157b8c4edc638cbfa5d9",
+      "green": true,
+      "push_at": "2026-10-11T06:43:59Z",
+      "push_time_source": "GitHub PushEvent",
+      "all_workflows_green_at": "2026-10-11T07:22:00Z",
+      "push_to_green_seconds": 2281.0,
+      "workflow_creation_to_green_seconds": 2277.0,
+      "successful_workflows": 19
+    },
+    {
+      "pr": 318,
+      "head": "6f8bf8c8ef71ade0b2e4baf6510a646472907e15",
+      "green": true,
+      "push_at": "2026-10-11T17:48:24Z",
+      "push_time_source": "GitHub PushEvent",
+      "all_workflows_green_at": "2026-10-11T18:27:34Z",
+      "push_to_green_seconds": 2350.0,
+      "workflow_creation_to_green_seconds": 2345.0,
+      "successful_workflows": 18
+    },
+    {
+      "pr": 319,
+      "head": "6bc19ac723cdb778379bb5095fd58619f5f089b3",
+      "green": true,
+      "push_at": null,
+      "push_time_source": "exact push event unavailable",
+      "all_workflows_green_at": "2026-10-11T19:21:41Z",
+      "push_to_green_seconds": null,
+      "workflow_creation_to_green_seconds": 2788.0,
+      "successful_workflows": 11
+    },
+    {
+      "pr": 320,
+      "head": "976dba34382d50facce2bc80fe4a1364c12d8584",
+      "green": true,
+      "push_at": "2026-10-11T19:22:36Z",
+      "push_time_source": "GitHub PushEvent",
+      "all_workflows_green_at": "2026-10-11T20:01:13Z",
+      "push_to_green_seconds": 2317.0,
+      "workflow_creation_to_green_seconds": 2312.0,
+      "successful_workflows": 13
+    }
+  ],
+  "limitations": [
+    "Push time from matching GitHub PushEvent, never author time",
+    "Workflow completion uses GitHub run updated_at after success",
+    "Final-head required-ci aggregate is included; post-merge main CI not measured",
+    "PR319 attempt1 Trivy download reset preserved; authorized attempt2 succeeded",
+    "One queue snapshot does not establish capacity improvement"
+  ]
+}

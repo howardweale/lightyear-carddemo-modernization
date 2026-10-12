@@ -1,0 +1,150 @@
+--- amended-plan-2026-10-11.json
++++ dedicated-transport-plan-2026-10-11.json
+@@ -1,5 +1,5 @@
+ {
+-  "amendment_authority": "Howard 2026-10-11 14:00 PDT A4; exact go still required",
++  "amendment_authority": "Howard 2026-10-11: dedicated local transport; operator alone runs preflight and attempt 1; agent makes no network calls or credential reads.",
+   "budget_basis": {
+     "historical_source_content_sha256": "9bae91d3b555574e89317d3303cf3d5d2a6503d2ee4ceb466bea8f4cc218f9c8",
+     "intcalc": "Three successful public INTCALC three-way cases and one refusal establish harness scope only; their model usage is not recorded. No invented INTCALC call-cost average.",
+@@ -34,49 +34,85 @@
+     "sha256": "4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01",
+     "version": "codex-cli 0.160.0"
+   },
+-  "content_sha256": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
++  "content_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
+   "dispatch": {
+-    "approval_verifier_sha256": "3154b498dfa100a461f4b076ff78c7699b4a9e412ed5e117cdb4a6879516b674",
++    "automatic_compilations": 0,
++    "automatic_further_attempts": 0,
+     "base_url": "https://api.openai.com",
+-    "broker": "src/lightyear_factory/posttran_broker.py",
+-    "broker_sha256": "b409fd68a07fe5268434c6184b753e5caa4d0be9272d08bcfb88c34d85d0e642",
++    "dedicated_transport": {
++      "base_url": "https://api.openai.com",
++      "connect_timeout_seconds": 30,
++      "credential_environment_variable": "LIGHTYEAR_POSTTRAN_OPENAI_KEY",
++      "credential_policy": "Only the isolated HTTP worker reads this dedicated variable at call time. No generic variable fallback, existing helper, key file or credential manager. No credential value is recorded.",
++      "failure_output": "Fixed error codes only; no server error bodies, exception text, headers or traceback. Raw or JSON-escaped credential echoes are refused before response persistence.",
++      "hashes": "SHA256 of canonical UTF-8 request bytes and raw received response bytes (including HTTP errors); response hash null when no response bytes received. Successful saved JSON has an additional artifact-byte hash.",
++      "implementation": "Python standard library only",
++      "max_request_bytes": 8388608,
++      "max_response_bytes": 33554432,
++      "path": "src/lightyear_factory/posttran_phase1_transport.py",
++      "proxy_environment_used": false,
++      "redirects": false,
++      "response_validation": "completed status and integer input/output usage mandatory; input <=250000 and output <=64000; actual input usage must equal preflight; default service tier only.",
++      "retries": 0,
++      "sha256": "41b0df0367194599a892f7596254d9eba94fb28ee9593e16ca0c9a9651e6243f",
++      "timeout_enforcement": "One child per request; subprocess timeout kills and waits for it. No retry or server cancellation request. A local timeout cannot prove remote cancellation; generation reservation remains consumed.",
++      "tls_verification": true,
++      "wall_timeouts_seconds": {
++        "/v1/responses": 1800,
++        "/v1/responses/input_tokens": 120
++      }
++    },
+     "endpoint": "/v1/responses",
++    "implemented_operations": [
++      "preflight",
++      "attempt-1"
++    ],
+     "includes_reasoning": true,
+     "input_count_endpoint": "/v1/responses/input_tokens",
+     "output_cap_parameter": "max_output_tokens",
++    "phase_clock": "Starts at attempt-1 reservation; this one generation is bounded to 1800 seconds, below the unchanged two-hour ceiling. Attempts 2/3 and compilation are not implemented or automatically invoked by this transport.",
+     "preflight_evidence": {
++      "attempts_consumed": 0,
+       "endpoint": "/v1/responses/input_tokens",
+       "exact_fields": [
+         "model",
+         "input",
+         "reasoning"
+       ],
+-      "failure_consumes_reserved_attempt": true,
++      "failure_consumes_reserved_attempt": false,
+       "generation": false,
+-      "ledger": "same fixed plan-bound reservation ledger",
++      "ledger": null,
++      "maximum_age_seconds": 3600,
++      "outside_reservation_ledger": true,
++      "receipt": "work/posttran-dedicated-phase1/<plan-sha256>/preflight.json",
+       "recorded": [
+-        "request digest",
+-        "each public packet file hash",
+-        "count and response digest",
+-        "failure type",
++        "request hash",
++        "response hash",
++        "public packet hashes",
++        "generation request hash",
++        "input token count",
++        "fixed failure code",
+         "timestamps"
+       ],
+-      "required_before_every_generation": true
++      "required_before_attempt_1": true,
++      "retry_policy": "One-shot receipt: interruption or failure requires review, never automatic retry.",
++      "starts_phase_clock": false
+     },
+     "protocol": "OpenAI Responses API",
+-    "reservation_ledger": "work/posttran-second-opinion/revised-phase1-ledger.json",
+-    "reservation_policy": "Fixed path under broker checkout; exclusive lock and durable atomic full-cost reservation before count/generation. Every failure consumes the attempt and full allowance; no refunds/retries or new ledger path. Preserve ledger for all phase1 attempts.",
+-    "transport": "explicit credential-owning transport must implement HTTP API; no model dispatch performed or credentials loaded",
+-    "transport_timeout_requirement": "Supplied HTTP transport must enforce per-request timeout within the remaining phase time; no live transport is installed or exercised by this change."
++    "reservation_ledger": "work/posttran-dedicated-phase1/phase1-ledger.json",
++    "reservation_policy": "Attempt 1 exclusively locks the fixed ledger and durably reserves $11.05, 250000 input and 64000 output tokens immediately before generation. Any existing ledger refuses another attempt. Generation failure/timeout consumes the reservation. Token preflight neither reads nor writes this ledger.",
++    "service_tier": "default",
++    "store": false,
++    "truncation": "disabled"
+   },
+   "execution_authorized": false,
+   "fresh_approval_scope": [
+-    "installed Codex0.160.0 artifact as byte-checked provenance only; not the dispatch client",
+-    "explicit supplied Responses API transport replaces CLI dispatch",
+-    "64000 maximum output tokens per call including reasoning",
+-    "Phase1 three calls/192000 output tokens/$36 cap; Phase2 remains separately blocked",
+-    "Dated Standard pricing with service_tier default and exact-input counting endpoint before generation; no API requests authorized by this proposal",
+-    "Persistent fixed-path phase1 reservations; attempts and full token-cost allowance consumed before pre-count, including failures"
++    "Dedicated standard-library transport bytes pinned by SHA256; only LIGHTYEAR_POSTTRAN_OPENAI_KEY at call time",
++    "Operator-owned preflight outside reservations and phase clock; failure consumes zero attempts",
++    "Operator-owned one-shot attempt 1 only after exact completed preflight no older than one hour",
++    "No retries; TLS verification; fixed 30-second connection and 120/1800-second count/generation wall limits",
++    "Unchanged public packet, work order, model, 64000 output limit, 3-attempt/750000-input/192000-output/2-hour/$36 ceilings",
++    "No automatic compilation, attempts 2/3, Phase 2, Docker or native work"
+   ],
+   "go_requirement": "go POSTTRAN <this content_sha256>",
+   "historical_pricing_checked_date": "2026-10-11",
+@@ -104,7 +140,7 @@
+     "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+   },
+-  "live_dispatch_status": "Blocked until Howard supplies go POSTTRAN <this exact hash>. Phase2 remains unapproved. No live request made.",
++  "live_dispatch_status": "No API request made. Operator must supply this amended plan's exact go in their own terminal. Prior plan approval is preserved and is not reused.",
+   "live_transport_verified": false,
+   "model": "gpt-6-astra",
+   "model_calls_made": 0,
+@@ -166,7 +202,7 @@
+   },
+   "pricing_checked_date": "2026-10-11",
+   "pricing_source": "https://developers.openai.com/api/docs/pricing",
+-  "pricing_status": "verified-current-pricing-bound-to-plan",
++  "pricing_status": "Inherited dated 2026-10-11 verified pricing; not rechecked during this no-network amendment",
+   "prompts": {
+     "phase1-work-order.md": "847a4976cd30426df60f445f1a3d992783e59bfb86900c3dd5f9d4c10c7a61dd",
+     "phase2-work-order.md": "f576c66d12e5b825ce0d3ba0a3e5acc525eb949e5d413fa0fde96fefd1612b0e"
+@@ -236,12 +272,11 @@
+     },
+     "required_before_call": "Recompute every sealed input hash in the isolated evaluation directory; no subset selection"
+   },
+-  "schema": "posttran-independent-preregistration/3",
++  "schema": "posttran-independent-preregistration/4",
+   "server_snapshot_limitation": "Exact requested model string; official page provides no dated snapshot. No immutable server identity claim.",
+   "service_tier": "default",
+   "source_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+-  "status": "approved-subject-to-amendments-awaiting-exact-go",
+-  "supersedes_plan_sha256": "97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e",
+-  "supersedes_unapproved_revision_sha256": "20d137ab2a44046b49d378a1fccddd01ec8381f3c19c8fcb3a74b0e70ba68e4b",
++  "status": "prepared-offline-awaiting-operator-exact-go",
++  "supersedes_plan_sha256": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+   "transport_contract_verified_offline": true
+ }

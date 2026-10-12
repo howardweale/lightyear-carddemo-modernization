@@ -1,0 +1,247 @@
+{
+  "amendment_authority": "Howard 2026-10-11 14:00 PDT A4; exact go still required",
+  "budget_basis": {
+    "historical_source_content_sha256": "9bae91d3b555574e89317d3303cf3d5d2a6503d2ee4ceb466bea8f4cc218f9c8",
+    "intcalc": "Three successful public INTCALC three-way cases and one refusal establish harness scope only; their model usage is not recorded. No invented INTCALC call-cost average.",
+    "intcalc_receipt_sha256": "4b150f938164a5af01d799b7d9bb451d1baa562fc47c1eac1fcf5d6424aa7831",
+    "observed_usage": {
+      "cached_input_tokens": 2134528,
+      "calls": 10,
+      "input_tokens": 2484836,
+      "output_tokens": 89246,
+      "uncached_input_tokens": 350308
+    },
+    "output_cap_proposal": {
+      "limitation": "Only aggregate prior public factory usage available, not a measured per-call reasoning/output tail. 64000 is a proposal with headroom, not a forecast. Prior 16000 cap and approval do not authorize this revision.",
+      "multiplier_to_observed_mean": 7.171,
+      "observed_aggregate_output": 89246,
+      "observed_calls": 10,
+      "observed_mean_output": 8924.6,
+      "per_call_tail_measured": false,
+      "proposed_cap": 64000,
+      "reasoning_separately_measured": false
+    },
+    "path": "docs/calibration/idempiere-ms94/stage-b-05/cost-estimate.json",
+    "reservation_rates_usd_per_million": {
+      "input": 25,
+      "output_including_reasoning": 75,
+      "source": "Conservative reservation rates above verified 2026-10-11 Standard input/cache-write/output rates; does not assume cache hits."
+    }
+  },
+  "client": {
+    "path": "C:\\Program Files\\Lightyear\\Codex\\0.160.0\\codex.exe",
+    "role": "verified installed artifact pin; CLI dispatch remains disabled because no verified CLI output cap",
+    "sha256": "4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01",
+    "version": "codex-cli 0.160.0"
+  },
+  "content_sha256": "bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5",
+  "dispatch": {
+    "approval_verifier_sha256": "3154b498dfa100a461f4b076ff78c7699b4a9e412ed5e117cdb4a6879516b674",
+    "base_url": "https://api.openai.com",
+    "broker": "src/lightyear_factory/posttran_broker.py",
+    "broker_sha256": "b409fd68a07fe5268434c6184b753e5caa4d0be9272d08bcfb88c34d85d0e642",
+    "endpoint": "/v1/responses",
+    "includes_reasoning": true,
+    "input_count_endpoint": "/v1/responses/input_tokens",
+    "output_cap_parameter": "max_output_tokens",
+    "preflight_evidence": {
+      "endpoint": "/v1/responses/input_tokens",
+      "exact_fields": [
+        "model",
+        "input",
+        "reasoning"
+      ],
+      "failure_consumes_reserved_attempt": true,
+      "generation": false,
+      "ledger": "same fixed plan-bound reservation ledger",
+      "recorded": [
+        "request digest",
+        "each public packet file hash",
+        "count and response digest",
+        "failure type",
+        "timestamps"
+      ],
+      "required_before_every_generation": true
+    },
+    "protocol": "OpenAI Responses API",
+    "reservation_ledger": "work/posttran-second-opinion/revised-phase1-ledger.json",
+    "reservation_policy": "Fixed path under broker checkout; exclusive lock and durable atomic full-cost reservation before count/generation. Every failure consumes the attempt and full allowance; no refunds/retries or new ledger path. Preserve ledger for all phase1 attempts.",
+    "transport": "explicit credential-owning transport must implement HTTP API; no model dispatch performed or credentials loaded",
+    "transport_timeout_requirement": "Supplied HTTP transport must enforce per-request timeout within the remaining phase time; no live transport is installed or exercised by this change."
+  },
+  "execution_authorized": false,
+  "fresh_approval_scope": [
+    "installed Codex0.160.0 artifact as byte-checked provenance only; not the dispatch client",
+    "explicit supplied Responses API transport replaces CLI dispatch",
+    "64000 maximum output tokens per call including reasoning",
+    "Phase1 three calls/192000 output tokens/$36 cap; Phase2 remains separately blocked",
+    "Dated Standard pricing with service_tier default and exact-input counting endpoint before generation; no API requests authorized by this proposal",
+    "Persistent fixed-path phase1 reservations; attempts and full token-cost allowance consumed before pre-count, including failures"
+  ],
+  "go_requirement": "go POSTTRAN <this content_sha256>",
+  "historical_pricing_checked_date": "2026-10-11",
+  "human_candidate_edits": false,
+  "independence": [
+    "no twin outputs",
+    "no invariant results to builder",
+    "no human review sheet",
+    "no twin-driven repair"
+  ],
+  "inputs": {
+    "docs/factory/posttran-second-opinion/public-contract.md": "41882ef9966b7baeb6b5ee3ecba7cc76ee26153e1cff4bbcce3068eeec5e255e",
+    "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+    "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+    "spec/mainframe/copybooks/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "spec/mainframe/copybooks/CVTRA06Y.cpy": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1",
+    "spec/mainframe/copybooks/POSTREJS.cpy": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd",
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/mainframe/public-source/POSTTRAN.jcl": "ecff62c691e6ce101de08690e72ec065bc98bd845744ddf914899097d37c9191",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYREJS.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYTRAN.bin": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+  },
+  "live_dispatch_status": "Blocked until Howard supplies go POSTTRAN <this exact hash>. Phase2 remains unapproved. No live request made.",
+  "live_transport_verified": false,
+  "model": "gpt-6-astra",
+  "model_calls_made": 0,
+  "official_contract": {
+    "checked_date": "2026-10-11",
+    "count_url": "https://developers.openai.com/api/reference/resources/responses/subresources/input_tokens/methods/count",
+    "input_long_context_threshold": 272000,
+    "model_context_tokens": 1050000,
+    "model_max_output_tokens": 128000,
+    "model_url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+    "pricing_url": "https://developers.openai.com/api/docs/pricing",
+    "response_url": "https://developers.openai.com/api/reference/resources/responses/methods/create",
+    "scope": "Global api.openai.com, service_tier default, text-only, no tools. Pre-count at most250000 input tokens excludes long-context pricing; max_output_tokens64000 includes reasoning. Rates are dated, not immutable server prices.",
+    "standard_usd_per_million": {
+      "cache_write": 12.5,
+      "cached_input": 1,
+      "input": 10,
+      "output": 50
+    }
+  },
+  "oracle_status": "provisional",
+  "phase1_gate": [
+    "compile Java21",
+    "structural contract",
+    "own-output conservation/rejection/repeatability invariants"
+  ],
+  "phase2_gate": "All phase1 disagreements human-adjudicated with source lines; all twin defects resolved; separate phase2 approval",
+  "phases": {
+    "1": {
+      "api_equivalent_hard_cap_usd": 36,
+      "attempts": 3,
+      "compilations": 3,
+      "estimate_basis": "Upper token caps at verified Standard cache-write12.50/input and output50 per million; no cache discount; conservative reservation remains33.15 below36.",
+      "estimate_usd": 18.975,
+      "hours": 2,
+      "input_tokens": 750000,
+      "model_calls": 3,
+      "output_tokens": 192000,
+      "per_call_input_tokens": 250000,
+      "per_call_output_tokens": 64000,
+      "per_call_worst_case_usd": 11.05,
+      "worst_case_token_cap_usd": 33.15
+    },
+    "2": {
+      "api_equivalent_hard_cap_usd": 24,
+      "attempts": 2,
+      "compilations": 2,
+      "estimate_basis": "Same dated Standard maximum token-cost calculation; separate adjudication/approval still required.",
+      "estimate_usd": 12.65,
+      "hours": 1,
+      "input_tokens": 500000,
+      "model_calls": 2,
+      "output_tokens": 128000,
+      "per_call_input_tokens": 250000,
+      "per_call_output_tokens": 64000,
+      "per_call_worst_case_usd": 11.05,
+      "worst_case_token_cap_usd": 22.1
+    }
+  },
+  "pricing_checked_date": "2026-10-11",
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "pricing_status": "verified-current-pricing-bound-to-plan",
+  "prompts": {
+    "phase1-work-order.md": "847a4976cd30426df60f445f1a3d992783e59bfb86900c3dd5f9d4c10c7a61dd",
+    "phase2-work-order.md": "f576c66d12e5b825ce0d3ba0a3e5acc525eb949e5d413fa0fde96fefd1612b0e"
+  },
+  "publish": "All attempts, failures, missing usage, disagreements, adjudications and source hashes regardless of outcome",
+  "reasoning_effort": "high",
+  "result_label": "independent model-built candidate",
+  "run_class": "engineering",
+  "scenarios": {
+    "generated": [
+      "posttran-zero",
+      "posttran-positive",
+      "posttran-negative",
+      "posttran-credit-equal",
+      "posttran-credit-above",
+      "posttran-expiry-equal",
+      "posttran-expiry-before",
+      "posttran-missing-card",
+      "posttran-missing-account",
+      "posttran-empty",
+      "posttran-duplicate-id",
+      "posttran-new-category",
+      "posttran-solver-credit-false",
+      "posttran-solver-credit-true"
+    ],
+    "generated_manifest_sha256": "3ed2e3becd08f4ab04160975994a9637b4b4f0215849a4c3d318d4f189c1691a",
+    "generator_commit": "88dbf5542eba50922078b89609b899c59a997c74",
+    "public": [
+      "posttran-public",
+      "posttran-missing-card",
+      "posttran-missing-account",
+      "posttran-expired-account"
+    ],
+    "public_input_hashes": {
+      "posttran-expired-account": {
+        "ACCTFILE": "f8c7028069f142bb47393f2d70c44950fb91d0ac10450fe0416d3c7078441492",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "posttran-missing-account": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "942e2a172840e615a0d4351df94322c3953e54b7fab51caf1fb38723b8f96be0"
+      },
+      "posttran-missing-card": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "466093ef4c07a443de460bf03a641c051fd671f3770e5d2a78966de1f8fa7b9e",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "posttran-public": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "1605206de7009cba771a921bf13f4dfcd1673fc13f1b844150355e9a95fa8da3",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      }
+    },
+    "required_before_call": "Recompute every sealed input hash in the isolated evaluation directory; no subset selection"
+  },
+  "schema": "posttran-independent-preregistration/3",
+  "server_snapshot_limitation": "Exact requested model string; official page provides no dated snapshot. No immutable server identity claim.",
+  "service_tier": "default",
+  "source_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "status": "approved-subject-to-amendments-awaiting-exact-go",
+  "supersedes_plan_sha256": "97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e",
+  "supersedes_unapproved_revision_sha256": "20d137ab2a44046b49d378a1fccddd01ec8381f3c19c8fcb3a74b0e70ba68e4b",
+  "transport_contract_verified_offline": true
+}

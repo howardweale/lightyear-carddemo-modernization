@@ -222,3 +222,8 @@ tests/mainframe/fixtures/intcalc-discriminating-v1/** -text
 tools/build_discriminating_intcalc.py -text
 
 docs/business-rules/evidence-strength-v2/** -text
+
+# Retain supplied October11 decisions and deterministic POSTTRAN broker bytes.
+docs/factory/howard-decisions-2026-10-11b-source.md -text
+docs/factory/posttran-decisions-unsigned-2026-10-11.json -text
+src/lightyear_factory/posttran_broker.py text eol=lf

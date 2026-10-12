@@ -15,7 +15,12 @@ from .posttran_second_opinion import require_inputs
 
 def request(plan,approval,executable,packet,*,attempt,spent_usd=0):
     verify_approval(plan,approval);check_client(plan,executable);require_inputs(plan['inputs'])
-    if plan.get('schema')!='posttran-independent-preregistration/2':raise ValueError('revised-plan-required')
+    if plan.get('schema') not in ('posttran-independent-preregistration/2','posttran-independent-preregistration/3'):raise ValueError('revised-plan-required')
+    if plan.get('schema')=='posttran-independent-preregistration/3':
+        from hashlib import sha256
+        if sha256(Path(__file__).read_bytes()).hexdigest()!=plan['dispatch']['broker_sha256']:raise ValueError('broker-hash-mismatch')
+        verifier=Path(__file__).with_name('posttran_preflight.py')
+        if sha256(verifier.read_text(encoding='utf-8').encode()).hexdigest()!=plan['dispatch']['approval_verifier_sha256']:raise ValueError('approval-verifier-hash-mismatch')
     limits=plan['phases']['1']
     if type(spent_usd) not in (int,float) or not math.isfinite(spent_usd) or spent_usd<0:raise ValueError('invalid-prior-spend')
     if type(attempt)!=int or not 1<=attempt<=limits['attempts']:raise ValueError('attempt-cap')
@@ -60,6 +65,32 @@ def reserve(plan,attempt):
         os.replace(temp,target)
     finally:lock.unlink(missing_ok=True)
 
+
+def record_preflight(plan, attempt, event):
+    """Durably record count request/result before generation; no payload or credentials."""
+    relative=Path(plan['dispatch']['reservation_ledger'])
+    if relative.is_absolute() or '..' in relative.parts:raise ValueError('invalid-ledger-path')
+    target=STATE_ROOT/relative
+    lock=target.with_suffix('.lock')
+    try:fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY)
+    except FileExistsError:raise ValueError('phase-reservation-busy-or-interrupted') from None
+    try:
+        os.close(fd)
+        state=json.loads(target.read_text(encoding='utf-8'))
+        if state['plan_sha256']!=plan['content_sha256']:raise ValueError('ledger-plan-mismatch')
+        if len(state['reservations'])!=attempt:raise ValueError('preflight-attempt-binding')
+        row=state['reservations'][attempt-1]
+        if row['attempt']!=attempt:raise ValueError('preflight-attempt-binding')
+        events=row.setdefault('preflight',[])
+        if (not events and event['status']!='requested') or (events and (len(events)!=1 or event['status']=='requested')):
+            raise ValueError('preflight-event-order')
+        events.append(dict(event,recorded_at=datetime.now(timezone.utc).isoformat(),generation=False))
+        temp=target.with_suffix('.pending')
+        with temp.open('x',encoding='utf-8') as out:
+            json.dump(state,out,sort_keys=True);out.flush();os.fsync(out.fileno())
+        os.replace(temp,target)
+    finally:lock.unlink(missing_ok=True)
+
 def dispatch(plan,approval,executable,packet,transport,*,attempt,spent_usd=0):
     payload=request(plan,approval,executable,packet,attempt=attempt,spent_usd=spent_usd)
     if plan.get('pricing_status')!='verified-current-pricing-bound-to-plan' or not plan.get('pricing_checked_date') or plan.get('transport_contract_verified_offline') is not True:
@@ -67,10 +98,20 @@ def dispatch(plan,approval,executable,packet,transport,*,attempt,spent_usd=0):
     if payload['service_tier']!='default':raise ValueError('unapproved-service-tier')
     reserve(plan,attempt)
     # Count the exact packet before any generation; do not infer tokens from bytes.
-    counted=transport('/v1/responses/input_tokens',{'model':payload['model'],'input':payload['input']})
-    tokens=counted.get('input_tokens') if isinstance(counted,dict) else None
-    if not isinstance(counted,dict) or counted.get('object')!='response.input_tokens' or type(tokens)!=int or tokens<0:raise ValueError('invalid-input-token-count')
-    if tokens>plan['phases']['1']['per_call_input_tokens']:raise ValueError('input-token-preflight-cap')
+    count_payload={key:payload[key] for key in ('model','input','reasoning')}
+    amended=plan.get('schema')=='posttran-independent-preregistration/3'
+    if amended:
+        from lightyear_control_tower.decisions import digest
+        record_preflight(plan,attempt,dict(status='requested',endpoint='/v1/responses/input_tokens',request_sha256=digest(count_payload),packet_sha256={k:__import__('hashlib').sha256(v).hexdigest() for k,v in packet.items()}))
+    try:
+        counted=transport('/v1/responses/input_tokens',count_payload)
+        tokens=counted.get('input_tokens') if isinstance(counted,dict) else None
+        if not isinstance(counted,dict) or counted.get('object')!='response.input_tokens' or type(tokens)!=int or tokens<0:raise ValueError('invalid-input-token-count')
+        if tokens>plan['phases']['1']['per_call_input_tokens']:raise ValueError('input-token-preflight-cap')
+    except Exception as error:
+        if amended:record_preflight(plan,attempt,dict(status='failed',error_type=type(error).__name__))
+        raise
+    if amended:record_preflight(plan,attempt,dict(status='completed',input_tokens=tokens,response_sha256=digest(counted)))
     # Transport owns credentials. This broker never reads them; tests use a fake.
     response=transport('/v1/responses',payload)
     if not isinstance(response,dict) or not isinstance(response.get('usage'),dict):raise ValueError('missing-billed-usage')

@@ -21,7 +21,12 @@ def elapsed(start,end):return (datetime.fromisoformat(end.replace('Z','+00:00'))
 def summarize(pr,runs,push_events):
     head=pr['head']['sha']; latest={}
     for r in runs:
-        if r['head_sha']!=head or r['event']!='pull_request' or not any(x['number']==pr['number'] for x in r.get('pull_requests',[])):continue
+        linked=any(x['number']==pr['number'] for x in r.get('pull_requests',[]))
+        # GitHub removes run->PR associations after merge. Only then permit the
+        # exact final SHA + source branch fallback; an explicit different PR
+        # association never passes this fallback.
+        merged_match=pr.get('merged') is True and not r.get('pull_requests') and r.get('head_branch')==pr['head']['ref']
+        if r['head_sha']!=head or r['event']!='pull_request' or not (linked or merged_match):continue
         path=r['path'].split('@')[0]
         if r['id']>latest.get(path,{}).get('id',-1):latest[path]=r
     green=bool(latest) and '.github/workflows/required-ci.yml' in latest and all(r['status']=='completed' and r['conclusion']=='success' for r in latest.values())

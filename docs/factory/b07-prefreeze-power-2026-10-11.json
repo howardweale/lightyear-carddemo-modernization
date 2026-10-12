@@ -1,0 +1,222 @@
+{
+  "schema": "b07-prefreeze-power/1",
+  "seed": 20261011,
+  "repetitions_per_scenario": 10000,
+  "allocation": "24 paired slots per journey,72 analyzed per arm; both arms on each of2 runners",
+  "primary": "pooled journey-stratified two-sided exact paired sign-randomization/McNemar; graph superiority requires positive difference",
+  "secondary": "G-S > -0.15; conservative one-sided95% lower bound from Bonferroni Clopper-Pearson discordances",
+  "effect_interval": "conservative two-sided95% paired difference interval; not a claim of marginal Newcombe equivalence",
+  "scenarios": [
+    {
+      "true_G_minus_S": -0.15,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.0,
+      "noninferiority_probability": 0.0055,
+      "monte_carlo_se": [
+        0.0,
+        0.0007395775821372629
+      ],
+      "mean_95_interval_width": 0.30785195984845565
+    },
+    {
+      "true_G_minus_S": 0,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.0132,
+      "noninferiority_probability": 0.5057,
+      "monte_carlo_se": [
+        0.0011413045167701738,
+        0.004999675089443313
+      ],
+      "mean_95_interval_width": 0.33713653627100243
+    },
+    {
+      "true_G_minus_S": 0.05,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.1003,
+      "noninferiority_probability": 0.8315,
+      "monte_carlo_se": [
+        0.003003995838878609,
+        0.0037430969797749027
+      ],
+      "mean_95_interval_width": 0.3342107841740145
+    },
+    {
+      "true_G_minus_S": 0.1,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.3864,
+      "noninferiority_probability": 0.9818,
+      "monte_carlo_se": [
+        0.004869240597875607,
+        0.0013367408125736265
+      ],
+      "mean_95_interval_width": 0.3248165675536749
+    },
+    {
+      "true_G_minus_S": 0.15,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.8104,
+      "noninferiority_probability": 0.9997,
+      "monte_carlo_se": [
+        0.003919844894890613,
+        0.00017317909804591517
+      ],
+      "mean_95_interval_width": 0.30732183790248746
+    },
+    {
+      "true_G_minus_S": 0.2,
+      "discordance_probability": 0.2,
+      "superiority_probability": 0.9983,
+      "noninferiority_probability": 1.0,
+      "monte_carlo_se": [
+        0.00041195994950966224,
+        0.0
+      ],
+      "mean_95_interval_width": 0.27807649904267917
+    },
+    {
+      "true_G_minus_S": -0.15,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.0,
+      "noninferiority_probability": 0.004,
+      "monte_carlo_se": [
+        0.0,
+        0.00063118935352238
+      ],
+      "mean_95_interval_width": 0.42679834600055094
+    },
+    {
+      "true_G_minus_S": 0,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.0157,
+      "noninferiority_probability": 0.269,
+      "monte_carlo_se": [
+        0.0012431214743539747,
+        0.004434399621143769
+      ],
+      "mean_95_interval_width": 0.4378254541161777
+    },
+    {
+      "true_G_minus_S": 0.05,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.0671,
+      "noninferiority_probability": 0.5241,
+      "monte_carlo_se": [
+        0.0025019510386896067,
+        0.004994188522673128
+      ],
+      "mean_95_interval_width": 0.436965402385802
+    },
+    {
+      "true_G_minus_S": 0.1,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.2046,
+      "noninferiority_probability": 0.7698,
+      "monte_carlo_se": [
+        0.004034090232010187,
+        0.004209607582661357
+      ],
+      "mean_95_interval_width": 0.4331858453626569
+    },
+    {
+      "true_G_minus_S": 0.15,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.453,
+      "noninferiority_probability": 0.9302,
+      "monte_carlo_se": [
+        0.004977860986407716,
+        0.002548096544481782
+      ],
+      "mean_95_interval_width": 0.4265273993707524
+    },
+    {
+      "true_G_minus_S": 0.2,
+      "discordance_probability": 0.4,
+      "superiority_probability": 0.7246,
+      "noninferiority_probability": 0.9863,
+      "monte_carlo_se": [
+        0.004467156142334852,
+        0.0011624246212120614
+      ],
+      "mean_95_interval_width": 0.417072736527138
+    },
+    {
+      "true_G_minus_S": -0.15,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.0001,
+      "noninferiority_probability": 0.006,
+      "monte_carlo_se": [
+        9.999499987499375e-05,
+        0.0007722693830523129
+      ],
+      "mean_95_interval_width": 0.49008189434011584
+    },
+    {
+      "true_G_minus_S": 0,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.0193,
+      "noninferiority_probability": 0.2144,
+      "monte_carlo_se": [
+        0.0013757728736968177,
+        0.004104054580533744
+      ],
+      "mean_95_interval_width": 0.49772849349808385
+    },
+    {
+      "true_G_minus_S": 0.05,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.0611,
+      "noninferiority_probability": 0.3967,
+      "monte_carlo_se": [
+        0.0023951365305552,
+        0.004892127451324219
+      ],
+      "mean_95_interval_width": 0.4969559144322336
+    },
+    {
+      "true_G_minus_S": 0.1,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.1623,
+      "noninferiority_probability": 0.6198,
+      "monte_carlo_se": [
+        0.003687257924257537,
+        0.004854358454008109
+      ],
+      "mean_95_interval_width": 0.49436514479139904
+    },
+    {
+      "true_G_minus_S": 0.15,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.3244,
+      "noninferiority_probability": 0.8068,
+      "monte_carlo_se": [
+        0.00468150232297283,
+        0.003948085105465687
+      ],
+      "mean_95_interval_width": 0.48994780304745056
+    },
+    {
+      "true_G_minus_S": 0.2,
+      "discordance_probability": 0.6,
+      "superiority_probability": 0.5555,
+      "noninferiority_probability": 0.9233,
+      "monte_carlo_se": [
+        0.004969102031554594,
+        0.0026611484362958782
+      ],
+      "mean_95_interval_width": 0.4840723553971262
+    }
+  ],
+  "adequacy_target_probability": 0.8,
+  "limitations": [
+    "No observed effect or discordance estimate; sensitivity grid only",
+    "Independent pairs assumed; within-pair outcomes dependent",
+    "No causal claim for historical B06 contrasts",
+    "No data-dependent sample-size reduction",
+    "This is an unsealed design proposal; statistical freeze and spending remain blocked"
+  ],
+  "freeze_ready": false,
+  "model_calls": 0,
+  "native_runs": 0,
+  "margin_not_assessable_at_80_percent_in_all_equal_performance_scenarios": true,
+  "content_sha256": "7d660770380185555c69d3d24c42ab259d4f7e34af0ba3b839c7c0066a2f24b1"
+}

@@ -36,3 +36,7 @@ records, then click **Download my unsigned decisions**. Send the downloaded
 `posttran-decisions-unsigned.json` back in this chat. It is a proposed operator
 review, not a signature or permission to run. Use the existing operator signing
 flow on your authority host only after reviewing the file; never send the key.
+
+## October 11, 14:00 PDT acceptance received
+
+Howard accepted all ten records in [the supplied unsigned decisions](posttran-decisions-unsigned-2026-10-11.json). Their sheet, source and acceptance hashes validate. These are AI-assisted operator decisions, not independent attestation. The original page and sheet remain unchanged. Howard will sign through the operator flow with reviewer name `Howard Weale`; no signature or promotion is claimed here. Future sheets include chronological account state before each record.

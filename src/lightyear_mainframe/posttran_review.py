@@ -57,6 +57,9 @@ def render(sheet):
         fields=sorted(set(r['input'])|set(r['twin_output']))
         table='<table><tr><th>Field</th><th>Public input</th><th>Twin output</th></tr>'+''.join(
             '<tr>'+''.join('<td>'+escape(str(x))+'</td>' for x in (f,r['input'].get(f,'—'),r['twin_output'].get(f,'—')))+'</tr>' for f in fields)+'</table>'
+        state=r.get('account_state_before')
+        if state is not None:
+            table+='<h3>Account state before this record</h3><pre>'+escape(json.dumps(state,indent=2,ensure_ascii=False))+'</pre>'
         rows.append(f'<section><h2>{i+1}. {escape(r["scenario"])} / {escape(r["id"])}</h2><p><b>Expected:</b> {escape(r["expected_result"])}</p>'+table+
             '<details><summary>'+escape(anchor)+'</summary><pre>'+escape('\n'.join(excerpts))+'</pre></details>'+
             f'<p><label>Decision <select id="decision-{i}"><option value="">Choose</option><option>accept</option><option>reject</option><option>investigate</option></select></label></p><label>Reason <textarea id="reason-{i}" rows="2"></textarea></label></section>')

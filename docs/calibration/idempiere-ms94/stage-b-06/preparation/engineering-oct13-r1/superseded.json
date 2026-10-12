@@ -1,0 +1,10 @@
+{
+  "approved": false,
+  "artifact_type": "b06-oct13-superseded-unapproved-request/1",
+  "full_plan_delivered_at_utc": "2026-10-11T21:58:38Z",
+  "implementation_commit": "ae53312d0a307345e1b15c1d4fda320fc22724a3",
+  "native_run_authorized": false,
+  "reason": "Pre-publication cross-review required reserved-attempt application limits, complete authenticated supervisor handoff and prior-attempt evidence authentication. The old request was never approved or executed.",
+  "replacement_preparation": "engineering-oct13-r2",
+  "request_sha256": "bd53f4ccc4baa48e473e596d484429b62a2f3d7586b8ef549e05ae7a80e11de0"
+}

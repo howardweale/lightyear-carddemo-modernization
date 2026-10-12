@@ -1,6 +1,19 @@
 # POSTTRAN independent conversion preregistration
 
-The current [revised proposal](revised-plan.json), `97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e`, requires fresh exact approval. No API requests, model calls, output compilations or candidates have occurred. It supersedes the unexecuted original plan and the [unapproved pricing-blocked revision](superseded-plan-20d137ab.json); their approval/status is not transferred.
+Current plan as of Howard's October 11 decision: [amended Phase 1 plan](amended-plan-2026-10-11.json),
+`bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5`.
+The [exact diff](amendment-2026-10-11.json) preserves the approved model, inputs and
+$36/three-attempt budget. Results are **independent model-built candidate**;
+exact-packet zero-generation token counting is durably logged before generation.
+Howard must send `go POSTTRAN bb91aad8d0533118ecf8270348ac509435fc22bec4dbf18611a6b696d89f3bd5`.
+Phase 2 remains unapproved. No API request, generation or compilation has occurred.
+
+## Historical proposals and implementation background
+
+The previous proposal and original budget discussion below remain as historical
+context. Their approval language does not authorize the amended plan.
+
+The previous [revised proposal](revised-plan.json), `97b105a5f9e1c26b378be927b7fc74e947a051a6ef0c49f03b5ac4ddcfa1d95e`, requires fresh exact approval. No API requests, model calls, output compilations or candidates have occurred. It supersedes the unexecuted original plan and the [unapproved pricing-blocked revision](superseded-plan-20d137ab.json); their approval/status is not transferred.
 
 The installed Codex 0.160.0 binary is byte-verified provenance only. Proposed dispatch uses an explicitly supplied Responses API transport, not that CLI. The broker verifies exact approval and packet bytes, counts the same input through `/v1/responses/input_tokens` before generation, refuses more than 250,000 input tokens, and sends `service_tier=default`, `max_output_tokens=64000`, `truncation=disabled`. The output cap includes reasoning. Missing, malformed, mismatched or over-cap usage and incomplete attempts fail closed. Tests use a fake transport; the live transport has not been exercised.
 

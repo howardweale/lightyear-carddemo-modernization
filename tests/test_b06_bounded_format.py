@@ -83,6 +83,12 @@ class BoundedHostTests(unittest.TestCase):
                 observed,events,_=host_capture(java,javac,source,Path(tmp)/str(diagnostic),bounded=True,diagnostic=diagnostic)
                 self.assertEqual(events[0]['kind'],'ready')
                 self.assertEqual(events[0]['observer_format'],FORMAT)
+                self.assertEqual(events[0]['class_input_witness_policy'],'generation-inputs-v1')
+                self.assertEqual(events[0]['metadata_record_cap'],500000)
+                from tools.ms94_b06_generation_inputs import validate as validate_inputs
+                entries=[e for e in events if e['kind']=='generation-entry']
+                self.assertTrue(entries)
+                for e in entries:validate_inputs(e['record'])
                 audit=Audit()
                 for event in events:
                     if event['kind']=='observer-audit':audit.event(event)

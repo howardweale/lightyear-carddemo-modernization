@@ -9,7 +9,13 @@ MAX_BYTES = 128 * 1024 * 1024
 
 
 class Audit:
-    def __init__(self):
+    def __init__(self, engineering_plan=None):
+        self.max_events,self.max_bytes=MAX_EVENTS,MAX_BYTES
+        if engineering_plan is not None:
+            from tools.ms94_b06_observer_diagnostics import validate
+            check(validate(engineering_plan) is not None,"observer-audit-engineering-plan")
+            self.max_events=engineering_plan["engineering_limits"]["audit_records"]
+            self.max_bytes=engineering_plan["engineering_limits"]["audit_bytes"]
         self.policy = None
         self.diagnostic_count = 0
         self.count = self.bytes = self.set_id = 0
@@ -27,7 +33,7 @@ class Audit:
               'observer-diagnostic-metadata')
         self.diagnostic_count += 1
         self.bytes += len(java_json(wire).encode('utf-8'))
-        check(self.diagnostic_count <= MAX_EVENTS and self.bytes <= MAX_BYTES, 'observer-audit-bound')
+        check(self.diagnostic_count <= self.max_events and self.bytes <= self.max_bytes, 'observer-audit-bound')
 
     def event(self, event):
         from tools.ms94_b06_observer_format import diagnostic_wire
@@ -50,7 +56,7 @@ class Audit:
             self.bytes += len(java_json(wire).encode('utf-8'))
         else:
             self.bytes += len(canonical(body))
-        check(self.diagnostic_count <= MAX_EVENTS and self.bytes <= MAX_BYTES, 'observer-audit-bound')
+        check(self.diagnostic_count <= self.max_events and self.bytes <= self.max_bytes, 'observer-audit-bound')
         check(event['audit_index'] == self.count, 'observer-audit-index')
         from tools.ms94_b06_observer_format import audit_detail
         action, detail = event['action'], audit_detail(event)['detail']

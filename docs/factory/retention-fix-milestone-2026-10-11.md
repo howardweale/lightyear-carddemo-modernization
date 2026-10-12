@@ -35,3 +35,5 @@ The additive correction in [PR318's milestone](review311-317-milestone.md) and [
 No native B06 execution, model calls, Phase 2 approval, threshold activation or release authorization follows from this engineering CI change. Howard's commit-specific merge approval remains required for the new code head after green CI.
 
 Offline validation: 30 focused tests across retention, campaign provenance, equivalence decisions and CI selection passed (16 equivalence tests plus 14 retention/provenance/CI tests). Source syntax and whitespace checks run before publication. New-head compiled measurements remain pending CI.
+
+The initial retention head `86d20034de09a644d0ff02d1951130eabf01a879` correctly failed historical-packet hash reproduction after the additive summary correction. The exact pre-correction summary is now archived byte-for-byte, with an explicit pinned hash and body-equality check; the historical sample remains unchanged. The subsequent head runs fresh CI; neither head is resumed into another.

@@ -8,6 +8,9 @@ on:
       - '.github/workflows/posttran-attempt1-phase1.yml'
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   phase1:
     runs-on: ubuntu-24.04
@@ -28,7 +31,7 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
         run: python -B -m unittest test_posttran_attempt1_phase1 -v
-      - name: Compile once and run Phase1 only
+      - name: Report consumed Phase1 attempt without retry
         env:
           PYTHONPATH: src:.
         run: python -B tools/check_posttran_attempt1_phase1.py --output work/posttran-attempt1-phase1

@@ -64,6 +64,20 @@ def limits():
 
 
 def run(output):
+    # Attempt 1 was consumed on the original CI head. Publication/lint changes
+    # must never silently compile or execute it again.
+    frozen = ROOT / 'docs/factory/posttran-attempt1-phase1-2026-10-12.json'
+    if frozen.exists():
+        raw = frozen.read_bytes()
+        if sha(raw) != 'd77d29ccea6c933ad242ec7e88024b0a3a18d7eeaaadde6345a691b244b16321' or sha(CANDIDATE.read_bytes()) != EXPECTED:
+            raise ValueError('consumed-attempt-binding-changed')
+        record = json.loads(raw)
+        if record['head'] != 'f9eeccaa19ed137f8250baa8594831e8dc7dbd90' or record['candidate_sha256'] != EXPECTED:
+            raise ValueError('consumed-attempt-head-mismatch')
+        output.mkdir(parents=True, exist_ok=False)
+        (output/'report.json').write_bytes(raw)
+        print('Attempt 1 already consumed in run 38295068434; historical result only, no compile or execution on this head.')
+        return record
     if os.name != 'posix':
         raise ValueError('CI Linux required; no local candidate execution')
     if sha(CANDIDATE.read_bytes()) != EXPECTED:

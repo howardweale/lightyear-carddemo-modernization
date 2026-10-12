@@ -10,7 +10,10 @@ Tower head. The former status documents are archived unchanged.
 
 Unresolved combines scope-labelled survivors/gaps, historical divergences, twin
 limits, pending reviews and signed dependency invalidations. Filtering is closed
-by program and kind. Row counts are not mutation denominators. Class groups now
+by program and kind. Expected-failure agreements are excluded; provisional
+invariant-only cases are pending reviews and adapter refusals are evidence gaps,
+not falsely reported divergences. The ten unsigned twin source-line reviews
+remain pending until exact signed review overlays arrive. Row counts are not mutation denominators. Class groups now
 come from the exact compact result records, with separate historical resolutions
 and signed acceptances. Keep-or-fix dependencies derive from those same records.
 Signed I/O exceptions apply only to the exact source, outcome and line. No raw

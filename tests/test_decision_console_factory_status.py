@@ -45,3 +45,13 @@ class FactoryStatusTests(FactoryViewsTests):
         for scope in ("ms94-b06","carddemo-zos"):
             api=object.__new__(ConsoleAPI);api.service=Mock(scope=scope)
             for route in ("status","unresolved"):self.assertFalse(api.read(route,"fixture",{})["available"])
+
+    def test_agreement_and_missing_comparison_are_not_divergences(self):
+        rows=unresolved(self.evidence)["rows"]
+        cases=self.evidence.read("generated-review311-classification.json")["cases"]
+        by_id={r["id"]:r for r in rows}
+        for case in cases:
+            if case["classification"]=="expected-failure-agreement":self.assertNotIn(case["id"],by_id)
+            if case["classification"]=="provisional-invariants-only":self.assertEqual("pending-review",by_id[case["id"]]["kind"])
+        sheet=self.evidence.read("posttran-human-review-sheet.json")
+        for record in sheet["records"]:self.assertEqual("pending-review",by_id[record["id"]]["kind"])

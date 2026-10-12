@@ -105,9 +105,9 @@
       }
     ]
   },
-  "unresolved": 179,
+  "unresolved": 186,
   "execution_authorized": false,
   "release_authorized": false,
   "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
-  "content_sha256": "0ae1d9fbd9f8dca1aa73d0f118700eb0f51087c7668d305c296f6de1ea8fb528"
+  "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
 }

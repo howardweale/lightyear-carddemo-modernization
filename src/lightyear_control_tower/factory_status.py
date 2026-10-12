@@ -24,8 +24,16 @@ def unresolved(evidence, *, overlays=(), pending=(), program=None, kind=None):
                 rows.append(dict(id="twin-limit-"+str(number),program=name,kind="twin-limit",reason=line.strip("| "),line=number,source=evidence.sources["twin-limits.md"]))
     cases=evidence.read("generated-review311-classification.json")
     for row in cases.get("cases",[]):
-        if row.get("classification") not in {"byte-agreement", "equivalent"}:
-            rows.append(dict(id=row["id"],program=row["job"],kind="divergence",reason="Historical generated comparison: "+row["classification"],source=evidence.sources["generated-review311-classification.json"]))
+        classification=row.get("classification")
+        if classification in {"byte-agreement", "equivalent", "expected-failure-agreement"}: continue
+        category="divergence" if row.get("disagreeing_fields") else "pending-review" if classification=="provisional-invariants-only" else "evidence-gap"
+        rows.append(dict(id=row["id"],program=row["job"],kind=category,reason="Historical generated comparison: "+str(classification),source=evidence.sources["generated-review311-classification.json"]))
+    review=evidence.read("posttran-human-review-sheet.json")
+    unsigned=evidence.read("posttran-decisions-unsigned-2026-10-11.json")
+    signed=any(x["kind"]=="twin-human-review" and x["outcome"]=="accept" and x["details"]["sheet_sha256"]==unsigned["sheet_sha256"] for x in overlays)
+    if not signed:
+        for row in review["records"]:
+            rows.append(dict(id=row["id"],program="POSTTRAN",kind="pending-review",reason="Public twin source-line review is unsigned; expected result: "+row["expected_result"],source=evidence.sources["posttran-human-review-sheet.json"]))
     for item in pending:
         rows.append(dict(id=item["id"],program=item["program"],kind="invalidated-argument" if item["kind"]=="invalidated-or-stale-review" else "pending-review",reason=item["kind"],source=dict(sha256=item["source_sha256"],path="Work queue request")))
     for item in overlays:

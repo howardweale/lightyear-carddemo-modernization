@@ -28,3 +28,7 @@ The [keep-or-fix register](keep-or-fix-register.json) records REWRITE-109 at CBT
 Reproduce the artifacts with `PYTHONPATH=src;. python -B tools/build_factory_decision_review.py` from this checkout. All 18 focused tests passed. The local repository lint command could not run because its environment lacks PyYAML; final-head CI remains required before merge. Focused tests verify the complete pool, repeatable selection, preserved raw evidence, compiler exclusions, source-bound EOF exceptions, and absence of threshold approval. No models, Docker or native B06 runs are involved.
 
 **scenario-threshold/2 remains proposed and unapproved.** Review of the sample precedes Howard’s separate threshold decision. This work grants no release, qualification or measurement credit and does not authorize a merge.
+
+## Addendum — 2026-10-11 retention correction
+
+The [dated correction to the PR318 review milestone](review311-317-milestone.md#correction--howard-retention-follow-up-2026-10-11) supersedes nine POSTTRAN execution refusals formerly counted as kills. The completed fresh compiled phase of failed run 38190468540 confirms 360/483 POSTTRAN kills and 308/421 INTCALC kills; neither is a completed new-head threshold assessment. The summary JSON has an additive correction; raw records remain unchanged. See [retention and margin milestone](retention-fix-milestone-2026-10-11.md).

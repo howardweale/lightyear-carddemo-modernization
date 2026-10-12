@@ -8,6 +8,7 @@ from .legacy_twin import ROOT, verify_build, write_json
 
 PREFIXES=('spec/mainframe','src/lightyear_mainframe','src/lightyear_factory/scenario_policy.py',
           'tools/legacy_twin','tools/check_factory_review.py','tools/check_equivalence_followup.py',
+          'tools/aggregate_equivalence_shards.py','tools/check_retention_margin.py','tools/measure_campaign_resources.py','.github/workflows/factory-systematic-review.yml',
           'docs/factory','tests/mainframe/fixtures')
 RECORDS=('review-summary.json','mutation-results.json','mutation-inventory.json',
          'generation-inventory.json','fault-results.json','systematic-scenario-selection.json')
@@ -66,7 +67,12 @@ def finish(campaign,job):
         builds[path.relative_to(campaign).as_posix()]=hashlib.sha256(path.read_bytes()).hexdigest()
     if 'baseline/build-receipt.json' not in builds:raise ValueError('campaign-baseline-build-missing')
     records={name:hashlib.sha256((campaign/name).read_bytes()).hexdigest() for name in RECORDS}
-    value=sealed(dict(schema='factory-campaign-manifest/1',job=job,binding=binding,
+    retention={}
+    if (campaign/'execution-retention/manifest.json').exists():
+        from .target_retention import verify_retention
+        retained=verify_retention(campaign/'execution-retention',binding['head'])
+        retention=dict(manifest_sha256=retained['content_sha256'],resource_sha256=hashlib.sha256((campaign/'resource-usage.json').read_bytes()).hexdigest())
+    value=sealed(dict(retention=retention,schema='factory-campaign-manifest/1',job=job,binding=binding,
         campaign_start_sha256=start['content_sha256'],build_receipts=builds,records=records,baseline_outputs=baseline_outputs(campaign),
         completed_at=datetime.now(timezone.utc).isoformat(),run_class='engineering',model_calls=0))
     write_json(campaign/'campaign-manifest.json',value)
@@ -88,5 +94,10 @@ def validate(campaign,job):
         if not path.is_relative_to(campaign) or hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
             raise ValueError('campaign-retained-artifact-mismatch:'+name)
     if manifest.get('baseline_outputs')!=baseline_outputs(campaign):raise ValueError('campaign-baseline-output-inventory-mismatch')
+    if manifest.get('retention'):
+        from .target_retention import verify_retention
+        retained=verify_retention(campaign/'execution-retention',manifest['binding']['head'])
+        if retained['content_sha256']!=manifest['retention']['manifest_sha256'] or hashlib.sha256((campaign/'resource-usage.json').read_bytes()).hexdigest()!=manifest['retention']['resource_sha256']:
+            raise ValueError('campaign-retention-mismatch')
     for name in manifest['build_receipts']:verify_build((campaign/name).parent)
     return manifest

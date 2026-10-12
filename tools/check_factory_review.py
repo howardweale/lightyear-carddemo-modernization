@@ -1,5 +1,5 @@
 """Bounded public engineering review campaign, without containers or model calls."""
-import argparse,json,subprocess
+import argparse,json,subprocess,time
 from collections import Counter
 from pathlib import Path
 from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,build,run,new_output,write_json,receipt,execute,FLAGS
@@ -10,6 +10,7 @@ from lightyear_mainframe.scenario_coverage import observe
 from lightyear_mainframe.mutant_equivalence import argument
 from lightyear_mainframe.scenario_coverage import code
 from lightyear_mainframe.campaign_provenance import begin,finish
+from lightyear_mainframe.target_retention import Retention,size,BUDGET
 
 
 def attempt(target,case,folder):
@@ -138,7 +139,7 @@ procedure division.
 
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
-    provenance=begin(output,job)
+    provenance=begin(output,job);started=time.monotonic();retention=Retention(output/'execution-retention')
     build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);storage=measure_storage_semantics(output);runtime=measure_runtime_contract(output);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
     from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
@@ -173,6 +174,7 @@ def check(output,job):
     generation=generation_inventory(text,program);write_json(output/'generation-inventory.json',generation)
     mutants=generation['candidates'];write_json(output/'mutation-inventory.json',mutants);results=[]
     for mutant in mutants:
+        if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
         folder=output/'mutants'/mutant['id'];folder.mkdir(parents=True)
         record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[])
         try:build(folder/'build',systematic=mutant,jobs=[job])
@@ -182,7 +184,10 @@ def check(output,job):
                 baseline=baselines[case]
                 if baseline['status']!='executed':
                     record['evidence_gaps'].append(dict(case=case,status='baseline-evidence-gap',baseline=baseline));continue
-                changed=attempt(folder/'build',case,folder/case);classification=outcome(baseline,changed)
+                with retention.case(folder/'build',case,attempt) as (temporary,changed):
+                    classification=outcome(baseline,changed)
+                    reasons=['witness'] if classification.startswith('killed-') else ['sample'] if case==cases[0] or case==cases[-1] else []
+                    if reasons:retention.retain(temporary,changed,reasons)
                 if classification.endswith('evidence-gap'):
                     record['evidence_gaps'].append(dict(case=case,status=classification,actual=changed,baseline=baseline));continue
                 if classification.startswith('killed-'):
@@ -195,8 +200,9 @@ def check(output,job):
                     attempt_row=dict(fault=fault['id'],case=case)
                     try:
                         build(challenge/'build',systematic=mutant,fault=fault['id'],jobs=[job])
-                        changed=attempt(challenge/'build',case,challenge/'run')
-                        classification=outcome(fault_row['actual'],changed)
+                        with retention.case(challenge/'build',case,attempt) as (temporary,changed):
+                            classification=outcome(fault_row['actual'],changed)
+                            if classification.startswith('killed-'):retention.retain(temporary,changed,['witness'])
                         attempt_row.update(status=classification,actual=changed)
                         if classification.endswith('evidence-gap'):
                             record['evidence_gaps'].append(dict(case='fault:'+fault['id']+':'+case,status=classification,actual=changed,baseline=fault_row['actual']))
@@ -231,6 +237,10 @@ def check(output,job):
         evidence_gap_ids=[r['id'] for r in results if r['evidence_gaps']],campaign_start_sha256=provenance['content_sha256'],campaign_head=provenance['binding']['head'],
         retained_killing_scenarios=sorted({r['killed_by'] for r in results if r['killed_by']}),model_calls=0,
         limitation='Systematic pinned-source mutation; unexplained survivors block adequacy; listed compiler refusals are excluded from eligible denominators. Public engineering, not z/OS equivalence.')
+    retention.seal(provenance['binding']['head'])
+    receipt(output/'resource-usage.json',job=job,phase='fresh-compiled',wall_seconds=time.monotonic()-started,
+        stored_bytes=size(output),budget_bytes=BUDGET,execution=retention.metrics())
+    if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
     finish(output,job)
     print(json.dumps(summary,indent=2))
     if not all(r.get('expectation_met') for r in faults):raise AssertionError('declared fault expectation mismatch; preserved actual outcomes')

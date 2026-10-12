@@ -1,34 +1,53 @@
 # B06 - Tuesday October 13, 9 AM-noon PDT
 
-**Evening verdict October12: NOT READY.** The exact execution checkout gap is closed. VM capacity is measured; the remaining readiness gaps below are unresolved. No native execution, model call, private-key read, image pull, container start, machine change or merge was performed.
+Readiness assessed using Howard's supplied `codex-b06-readiness-gaps-2026-10-12.md` (SHA-256 `48afcfc5107f83c3882432018b589fc0498405dbcc81478964e83dee7b367367`). The new instruction resolves the earlier uncertainty about VM thresholds and the Tower dependency. [Final readiness receipt](b06-readiness-instruction-2026-10-12.json); [preliminary evidence](b06-readiness-evening-2026-10-12.json) and [original dry run](b06-dry-run-2026-10-12.json) remain unchanged.
 
-[Evening evidence receipt](b06-readiness-evening-2026-10-12.json). The [original dry-run receipt](b06-dry-run-2026-10-12.json) remains unchanged. This is a readiness inventory, not a native pass or independent attestation.
+| Prerequisite | Ready? | Evidence | Action needed (by whom) |
+| --- | --- | --- | --- |
+| Execution worktree | Yes | Separate detached clean HEAD 62eafdaf29dce1d40603d38c3a394f150b98f686. | Codex: keep pinned; recheck at 8:30. |
+| Line endings and hashes | Yes | 873 tracked files match the asset index; observer/helper are LF by attributes and match bound hashes; 14 compiled classes verified in existing assets. | None; no autocrlf change or compilation. |
+| Offline preflight from worktree | Yes | All 111,311 files and seals passed from exact checkout in 118.797s. | Codex: repeat read-only command at 8:30. |
+| Engineering authority | Yes | Existing public fingerprint matches 4ce00cfa...367be9f0; engineering read_public accepts; qualification replay_entry/replay_clocks reject it. | Use existing path below; no key creation or pre-window signing. |
+| 8768 Tower | Yes - not required | Exact engineering path uses local supervisor/worker, local cancellation, signed ledger handoff and cleanup; no Tower service or decision polling. | Leave 8768 stopped. |
+| Docker memory and CPUs | Yes | 31.04 GiB / 24 CPUs exceeds 28 GiB / 11; 24 GiB container caps leave 7.04 GiB nominal VM margin. No .wslconfig exists. | No Docker/WSL change or restart needed. |
+| Host free memory | Morning step | 12.17 GiB free of 63.39 GiB; process inventory below. This is not a free-VM measurement. | Howard at 8:00: close unnecessary apps normally; recheck host memory. |
+| Python | Yes | Runbook native-venv runs Python 3.12.10; satisfies repository >=3.11. Request has no separate exact Python-version pin. | Use the exact interpreter path below. |
+| Request and assets | Yes | Request file 663fa537...344fc9, seal107c2073...7900f35, template/index and full asset inventory verified unchanged. | Repeat morning preflight; no asset edits. |
+| Output root | Yes | Absent/fresh; parent exists with Howard FullControl; no active.lock, request session or prior attempts; 611.59 GiB free. Ledger.lock creates it during launch. | Do not pre-create it tonight; guarded entry point creates it. |
+| No overlap | Yes - registered checks | Six bound windows closed; all related B06/J1 monitors paused; no matching native worker process; excluded windows end Oct10. Live Docker overlap was not queried tonight. | Codex: mandatory launch no_overlap/image/lease checks still apply; refuse if changed. |
+| Go line | Yes | Howard supplied exact go for62eafdaf /107c2073 in this chat. No attempts consumed. | 8:45 go/no-go; separate review before attempt2. |
 
-| Prerequisite | Status | Evidence / required action |
-| --- | --- | --- |
-| Exact execution checkout | PASS | New separate clean checkout at 62eafdaf29dce1d40603d38c3a394f150b98f686. Existing B06 checkout/data unchanged. |
-| Request, assets and seals | PASS | 111311 files and 14 observer-class bindings passed from the exact checkout; 118.797 seconds. |
-| Free disk >=60 GiB | PASS | 610.08 GiB free on C: at 2026-10-12T23:24:57.8786698+00:00. Recheck before launch. |
-| Docker VM resources | CAPACITY VERIFIED | 31.04 GiB and 24 CPUs reported by one read-only docker info. Four documented container limits total 24 GiB / 11 CPUs; nominal VM margin 7.04 GiB. Allocation is not free-memory or availability proof. |
-| Host / combined memory | UNRESOLVED | 63.39 GiB total / 13.78 GiB free. No current VM usage/reservation or combined host headroom established; no settings changed. |
-| Three pinned images | EARLIER CHECK PASSED | All three were present in the authorized October12 image listing. No new listing, pull or container start tonight; presence must be revalidated by the approved launch preflight. |
-| Tower on 8768 | UNRESOLVED | No listener found. A running checkout/commit cannot be identified. No service start, restart or provisioning is authorized tonight. |
-| Dedicated engineering authority | OPERATOR CONFIRMATION | Existing authority directory remains operator-supplied. Request binds public fingerprint 4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0. No private keys read, no new identity or signature. |
-| Historical cleanup / overlap | WINDOW RECHECK | Earlier six registry entries / 24 marker hashes passed. No current owned-resource absence or lease check was performed tonight. Existing launch gate must verify this in the authorized window. |
-| Attached readiness instruction | MISSING | No new attachment/path was supplied or located. Requested its filename/path; do not infer its additional prerequisites. |
+## Why the Tower can remain stopped
 
-**Current 9:40 assessment:** Readiness by October13 09:40 PDT is not established. Tower absence cannot be resolved under the current no-service-change authority. Missing instruction, authority confirmation and combined memory readiness require operator resolution; no promised time or improvised substitute. If unresolved at 09:40, do not start attempt1. No alternate service, checkout, key, resource setting or launch sequence is substituted.
+At the exact pinned commit, [oct13_run.main](../../tools/ms94_b06_oct13_run.py) validates the exact go and delegates directly to [engineering_run.main](../../tools/ms94_b06_engineering_run.py), not the Tower controller. `OracleEngineeringRunner.check_cancel` in [engineering_native](../../tools/ms94_b06_engineering_native.py) checks the local cancellation file, calendar and limits; it does not poll Tower pause decisions. The supervisor imports `verify_envelope` as a local cryptographic function, not an HTTP service. Attempt 2 is a separate invocation admitted by `Ledger.verify_prior_runs`; [engineering_evidence.verify_prior](../../tools/ms94_b06_engineering_evidence.py) authenticates terminal, handoff, artifact and complete/actual-absence cleanup records. Cleanup is executed and signed by the local supervisor/worker, with Howard reviewing between attempts. No running 8768 Tower is required for pause/decision, handoff or cleanup on this engineering path. No Tower startup command is needed or authorized tonight.
 
-The sole new checkout is `C:/Users/howar/.codex/worktrees/b06-oct13-pinned-readiness/lightyear-carddemo-modernization`, clean at `62eafdaf29dce1d40603d38c3a394f150b98f686`. Leave it pinned and clean. Do not create a replacement.
+## Host memory and morning actions
 
-[Updated one-page printable runbook](b06-oct13-one-page-runbook.pdf) - [deferred one-attempt command wrapper](b06-oct13-attempt.ps1). Commands below are for the authorized window only after all prerequisites resolve; none were executed tonight.
+Host free memory was **12.17 GiB** at `2026-10-12T23:54:44.0227518+00:00`. Docker reported **31.04 GiB / 24 CPUs** in the single authorized call; it meets the instruction's **28 GiB / 11 CPU** minimum. The four container limits total 24 GiB; nominal VM overhead margin is 7.04 GiB. No `.wslconfig` exists, so no explicit `memory=` or `processors=` override was found. **No WSL or Docker setting change/restart is needed under the supplied criterion.**
 
-## 9:00 — read-only preflight and first invocation
+Largest process groups by working set: chrome 10.09 GiB, OneDrive 9.29 GiB, ChatGPT 3.21 GiB, claude 1.20 GiB. These working sets can share pages and are not additive physical-memory totals. Windows Memory Compression is 11.66 GiB; it is an OS component, not an app to close. Howard should save work and normally close unnecessary browser tabs/apps, and quit OneDrive only after checking sync completion. Do not stop Windows services, Memory Compression, WSL or Docker. No processes were closed.
 
-Use the verified execution checkout below. Set `$EngineeringAuthority` only to the operator-confirmed existing directory; do not guess or provision it. The authority argument is the directory containing its public/key records; no key contents are displayed.
+## Morning checklist
+
+- **8:00, Howard:** save work; close unnecessary apps; check host free memory. Do not change the pinned checkout or asset copy.
+- **8:30, Codex:** run only the read-only preflight block below from the exact execution checkout. Recheck clean HEAD, hashes/seals, output/lease and registered windows. Do not invoke the native entry point before 9:00. Today's read-only `docker info` allowance is consumed; do not repeat it without authorization.
+- **8:45, Howard and Codex:** go/no-go on fresh preflight and available window. Live image/overlap checks remain enforced by the exact entry point after 9:00; any failure refuses launch.
+- **9:00:** separate attempt-1 invocation in strict mode; **latest start 9:40**. No automatic retry.
+- **Between attempts:** show the evidence and authenticated cleanup listed below; Howard reviews before a separate invocation.
+- **Attempt 2:** diagnostic unmatched-return cap 10, **latest start 10:50**; no third attempt.
+- **By noon:** cleanup and evidence sealed. Only after authenticated cleanup is verified may the merge hold be lifted.
+
+No known unresolved prerequisite requires a later window. If fresh checks or review cannot finish before 9:40, do not compress or skip them: refuse attempt 1 and propose a new window. Readiness is not a promise that the native target will complete.
+
+[One-page printable runbook](b06-oct13-one-page-runbook.pdf) - [deferred one-attempt wrapper](b06-oct13-attempt.ps1). No native commands were executed tonight. One new worktree, one read-only docker info, zero private-key reads/signatures/model calls/pulls/containers/settings changes/merges.
+
+## 8:30 - read-only preflight from the exact worktree
+
+Use the two verified existing paths below. The 8:30 block performs only offline hashes/seals and machine inventory; it does not invoke the attempt or open a private key.
 
 ```powershell
 $ExecutionCheckout = 'C:/Users/howar/.codex/worktrees/b06-oct13-pinned-readiness/lightyear-carddemo-modernization'
+$EngineeringAuthority = 'C:/Users/howar/.codex/worktrees/b06-engineering-bindings/lightyear-carddemo-modernization/work/b06-engineering-authority'
 $Python = 'C:/Users/howar/OneDrive/Documents/ChatGPT/lightyear-carddemo-modernization/work/idempiere-runtime-evidence/work/native-venv/Scripts/python.exe'
 $Preparation = 'C:/Users/howar/.codex/worktrees/b06-engineering-bindings/lightyear-carddemo-modernization'
 $Request = "$Preparation/work/b06-oct13-proposal-r3/request.json"
@@ -41,6 +60,13 @@ $env:PYTHONUTF8='1'; $env:PYTHONPATH='src;.'
 if ($LASTEXITCODE -ne 0) { throw 'Preflight refused' }
 Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'" | Select-Object FreeSpace
 Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory
+```
+
+## 9:00 - invoke attempt 1 only after go/no-go
+
+Keep the verified variables and working directory above. This is the first command that can consume an attempt, open the private signing key and start native resources; it is deferred until the approved window.
+
+```powershell
 $Output = (Get-Content -Raw -LiteralPath $Request | ConvertFrom-Json).output_root
 & $Python -B -m tools.ms94_b06_oct13_run --go $Go --request $Request --request-file-sha256 $RequestHash --assets $Assets --template "$Assets/templates/j1/plan.json" --output $Output --authority $EngineeringAuthority
 ```
@@ -54,3 +80,6 @@ Show signed terminal/owner/consumed attempt/mode, request/plan/source/artifact h
 ## Part 6 — report after cleanup
 
 Fill [the bound JSON template](b06-oct13-part6-template.json): both attempt outcomes/consumption, generation entries, first unmatched sequence/count, ordinary/metadata counts and bytes, output/peak heap, guard/dump hashes, lifecycle/phase evidence, input-witness counts, signed terminal/archive hashes and verified cleanup. Cite criterion (a) an exact lifecycle/class-prepare explanation at the first unmatched return, or (b) the same operation near generation 12,400 in both attempts. Otherwise state **cause not identified**, stop repair, and let Howard choose an alternative. No qualification or measurement credit.
+
+
+**READY** - only the listed morning steps and fresh guarded launch checks remain.

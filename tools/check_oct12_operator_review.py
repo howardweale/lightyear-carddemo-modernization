@@ -79,7 +79,7 @@ def validate(root=ROOT, decision=None, register=None):
         require(r['effective_for_individual_review'] == (r['item'] not in PENDING), 'conditional-acceptance')
         if r['item'] in PENDING:
             e = r['required_evidence']
-            require(e['head'] == '4cc7c1acda70249554938253004187ab8700dba4' and e['run_id'] == 38296048295 and e['pr'] == 328 and e['mutant_id'] == r['id'], 'rerun-binding')
+            require(e['head'] == 'd1b1b98b7082c168f6d585a4d996433070f7df18' and e['run_id'] == 38304456716 and e['pr'] == 328 and e['mutant_id'] == r['id'], 'rerun-binding')
             require(e['required_case_indices'] == list(range(200)) and e['valid_comparisons'] == e['scheduled_comparisons'] == 200 and e['baseline_and_mutant_executed_each_case'] is True and e['refusals_allowed'] == e['refutations_allowed'] == 0 and e['requires_verified_complete_shard_aggregate'] is True and e['satisfaction_receipt'] is None, 'pending-receipt-required')
     constants = decision['constant_field_acceptances']
     require(len(constants) == 7 and {r['source_line'] for r in constants} == {482, 483, 484, 491, 492, 493, 494}, 'constant-population')

@@ -516,8 +516,8 @@
       "depends_on_register": [],
       "required_evidence": {
         "pr": 328,
-        "head": "4cc7c1acda70249554938253004187ab8700dba4",
-        "run_id": 38296048295,
+        "head": "d1b1b98b7082c168f6d585a4d996433070f7df18",
+        "run_id": 38304456716,
         "mutant_id": "CBACT04C-receiving-scale-164-26",
         "required_case_indices": [
           0,
@@ -729,7 +729,15 @@
         "requires_verified_complete_shard_aggregate": true,
         "satisfaction_receipt": null,
         "current_status": "pending; old 2/200 results do not satisfy this condition",
-        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding."
+        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding.",
+        "superseded_bindings": [
+          {
+            "head": "4cc7c1acda70249554938253004187ab8700dba4",
+            "run_id": 38296048295,
+            "reason": "Preserved and cancelled after Howard requested fix and rerun328/330/331; no comparison credit transferred."
+          }
+        ],
+        "binding_authority": "Howard explicit fix and rerun 328,330,331 request on October12; same three 200/200 conditions retained."
       }
     },
     {
@@ -811,8 +819,8 @@
       "depends_on_register": [],
       "required_evidence": {
         "pr": 328,
-        "head": "4cc7c1acda70249554938253004187ab8700dba4",
-        "run_id": 38296048295,
+        "head": "d1b1b98b7082c168f6d585a4d996433070f7df18",
+        "run_id": 38304456716,
         "mutant_id": "CBACT04C-receiving-scale-173-34",
         "required_case_indices": [
           0,
@@ -1024,7 +1032,15 @@
         "requires_verified_complete_shard_aggregate": true,
         "satisfaction_receipt": null,
         "current_status": "pending; old 2/200 results do not satisfy this condition",
-        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding."
+        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding.",
+        "superseded_bindings": [
+          {
+            "head": "4cc7c1acda70249554938253004187ab8700dba4",
+            "run_id": 38296048295,
+            "reason": "Preserved and cancelled after Howard requested fix and rerun328/330/331; no comparison credit transferred."
+          }
+        ],
+        "binding_authority": "Howard explicit fix and rerun 328,330,331 request on October12; same three 200/200 conditions retained."
       }
     },
     {
@@ -1494,8 +1510,8 @@
       "depends_on_register": [],
       "required_evidence": {
         "pr": 328,
-        "head": "4cc7c1acda70249554938253004187ab8700dba4",
-        "run_id": 38296048295,
+        "head": "d1b1b98b7082c168f6d585a4d996433070f7df18",
+        "run_id": 38304456716,
         "mutant_id": "CBTRN02C-receiving-scale-173-20",
         "required_case_indices": [
           0,
@@ -1707,7 +1723,15 @@
         "requires_verified_complete_shard_aggregate": true,
         "satisfaction_receipt": null,
         "current_status": "pending; old 2/200 results do not satisfy this condition",
-        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding."
+        "head_change_policy": "No cross-head reuse; changed rerun head requires a new explicit evidence binding.",
+        "superseded_bindings": [
+          {
+            "head": "4cc7c1acda70249554938253004187ab8700dba4",
+            "run_id": 38296048295,
+            "reason": "Preserved and cancelled after Howard requested fix and rerun328/330/331; no comparison credit transferred."
+          }
+        ],
+        "binding_authority": "Howard explicit fix and rerun 328,330,331 request on October12; same three 200/200 conditions retained."
       }
     },
     {
@@ -2061,5 +2085,5 @@
   },
   "pending_domain_decision": "docs/factory/intcalc-duplicate-category-proposal-2026-10-12.json",
   "integration_note": "Additive operator record only. Existing threshold calculations and sealed Tower backfill remain unchanged. Consumers must validate bindings and pending evidence receipts, deduplicate historical IDs, and exclude this entire supplement from new z/OS-facing acceptances.",
-  "content_sha256": "098c773c7b5eb6b50dd15107a8c7565942354a1007c0ea1b9ddd2d886be8f50c"
+  "content_sha256": "822af989952301a165f468c38183871d644b2e0e1f8321ba1cb8a4daea13bfd9"
 }

@@ -1,0 +1,138 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "limits": {
+        "application_cpus": 4,
+        "application_memory_mib": 8192,
+        "audit_bytes": 134217728,
+        "audit_records": 500000,
+        "candidate_seconds": 1800,
+        "carrier_cpus": 4,
+        "carrier_memory_mib": 8192,
+        "class_cache_entries": 256,
+        "class_index_slots": 262144,
+        "cleanup_seconds": 600,
+        "database_cpus": 2,
+        "database_memory_mib": 6144,
+        "evidence_records": 50000,
+        "heap_guard_percent": 85,
+        "minimum_free_bytes": 64424509440,
+        "observer_cpus": 1,
+        "observer_heap_mib": 1536,
+        "observer_memory_mib": 2048,
+        "output_bytes": 8589934592,
+        "pending_cap": 512,
+        "run_seconds": 3600,
+        "soft_ref_lru_ms_per_mb": 0,
+        "telemetry_events": 1000,
+        "unmatched_return_cap": 10
+      },
+      "mode": "strict",
+      "projected_first_resource": 18787,
+      "projected_reaches_target": false,
+      "projected_stopping_points": {
+        "metadata_bytes": 26406,
+        "metadata_records": 18787,
+        "ordinary_records": 18826,
+        "output_bytes": 78038,
+        "pending_entries": 86355
+      }
+    },
+    {
+      "attempt": 2,
+      "limits": {
+        "application_cpus": 4,
+        "application_memory_mib": 8192,
+        "audit_bytes": 402653184,
+        "audit_records": 1500000,
+        "candidate_seconds": 1800,
+        "carrier_cpus": 4,
+        "carrier_memory_mib": 8192,
+        "class_cache_entries": 256,
+        "class_index_slots": 262144,
+        "cleanup_seconds": 600,
+        "database_cpus": 2,
+        "database_memory_mib": 6144,
+        "evidence_records": 150000,
+        "heap_guard_percent": 85,
+        "minimum_free_bytes": 64424509440,
+        "observer_cpus": 1,
+        "observer_heap_mib": 1536,
+        "observer_memory_mib": 2048,
+        "output_bytes": 8589934592,
+        "pending_cap": 512,
+        "run_seconds": 3600,
+        "soft_ref_lru_ms_per_mb": 0,
+        "telemetry_events": 1000,
+        "unmatched_return_cap": 10
+      },
+      "mode": "diagnostic-unmatched-return",
+      "projected_first_resource": 56363,
+      "projected_reaches_target": true,
+      "projected_stopping_points": {
+        "metadata_bytes": 79219,
+        "metadata_records": 56363,
+        "ordinary_records": 56480,
+        "output_bytes": 78038,
+        "pending_entries": 86355
+      }
+    }
+  ],
+  "fixed_output_reserve_bytes": 2696937472,
+  "host_allowance": "Actual final changed-observer r6 host result; old native audit rows retained in full.",
+  "host_baseline_sha256": "8f693321471b0ba88107d7000a6b6205770890c1f53294eedb4a969b74f16e7d",
+  "host_generation_entries": 40985,
+  "host_source_sha256": "6420e836dcf69eb433cfab6beafaeca237ae1f3e0dcf48a05a4b16cb92246bac",
+  "limitations": [
+    "Linear count/byte projections are scenario estimates, not worst-case bounds.",
+    "All old native audit rows are retained in the compression estimate; new audit coalescing savings are not assumed.",
+    "All host metadata is added as an allowance; this double-counts shared work.",
+    "Native time to 37000, future payload tails, retention and first anomaly are not predicted.",
+    "Strict mode or diagnostic cap10 can stop before any projected resource limit.",
+    "Non-stream baseline/capture/log overhead is unmeasured; 1GiB is a scenario reserve, not a proven bound.",
+    "No cap is automatically extended; output8GiB and free60GiB guards remain authoritative."
+  ],
+  "measurement_credit": false,
+  "model_calls": 0,
+  "native_payload_tail_bound_proven": false,
+  "native_prefix": {
+    "all_old_audit_rows_compressed_bytes": 39919595,
+    "census_sha256": "ed58b838da5ff5dae0d44f3b944261ac7bcf64b9c7f8e3ec0f93d8d9f124838e",
+    "counts": {
+      "diagnostic-unmatched-return": 5,
+      "frame-definition": 2,
+      "generation-entry": 12396,
+      "generation-return": 12389,
+      "observer-audit": 206365,
+      "ready": 1
+    },
+    "failure_sha256": "8ddfc6eaa12c5dcdb72f7ce99f36c1ed0c8d4d6f64fe8abcb3b10950339b7cc8",
+    "generation_entries": 12396,
+    "observed_max_pending_entries": 10,
+    "raw_bytes": 887596090,
+    "rows": 231158,
+    "signatures_verified": 2,
+    "stream_sha256": "14f354d75cfcc91beaf8ebc09cc7068a828e48c936ec3309d4982a390d53ddfd"
+  },
+  "native_run_authorized": false,
+  "previous_baseline_projection_sha256": "d50e5b48b8d98dd8bbcd0665757da3414378a1433ddc8e00a1b823f533a49be9",
+  "projected_target": {
+    "metadata_bytes": 188062608.5159856,
+    "metadata_records": 984687.8121518184,
+    "ordinary_records": 98264.63340246431,
+    "output_bytes": 5490949548.973553,
+    "pending_entries": 219.3729413199951
+  },
+  "qualification_credit": false,
+  "rates_per_generation": {
+    "metadata_bytes": 5082.773203134746,
+    "metadata_records": 26.613184112211307,
+    "ordinary_records": 2.6558009027693057,
+    "output_bytes": 75513.83991820413,
+    "pending_entries": 0.005928998414053922
+  },
+  "schema": "b06-oct13-cap-projection/1",
+  "statistical_upper_confidence_bound": false,
+  "target_generation_entries": 37000
+}

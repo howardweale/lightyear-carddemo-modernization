@@ -1,0 +1,10 @@
+{
+  "approved": false,
+  "artifact_type": "b06-oct13-superseded-undelivered-plan/1",
+  "delivered": false,
+  "implementation_commit": "e1327a6f5f3f511390e9dd7627b1631fd757dedc",
+  "native_run_authorized": false,
+  "reason": "Windows CI fixture signed an unresolved TEMP path; production supervisor already uses resolved assets. Test-only correction receives a fresh implementation and successor asset binding.",
+  "request_sealed": false,
+  "technical_plan_sha256": "486e81774c205f86021d2ca04578c9f00e40b77ac7130b77dab170560907c6aa"
+}

@@ -11,7 +11,8 @@ def main():
     p=argparse.ArgumentParser()
     for name in ('assets','run','authority','approval','approved-sha256'): p.add_argument('--'+name,required=True)
     a=p.parse_args(); run=Path(a.run).resolve()
-    approval=read_json(Path(a.approval)); approve_check(approval,a.approved_sha256,a.approval); guard(approval)
+    approval=read_json(Path(a.approval)); approve_check(approval,a.approved_sha256,a.approval)
+    require_execution_ready(approval); guard(approval)
     from tools.ms94_b06_engineering_run import source_commit
     require(source_commit(Path(__file__).resolve().parents[1]) == approval['implementation_commit'],
             'worker-implementation-commit')
@@ -21,6 +22,11 @@ def main():
             run.parent.parent.parent.name=='b06-engineering','worker-run-binding')
     require((run.parent.parent.parent/'active.lock').read_text()==approval['content_sha256'],'worker-lease')
     require(not (run/'worker-started.json').exists(),'worker-restart')
+    guard(approval,starting=True,attempt_number=record['run_number'])
+    from tools.ms94_b06_engineering_key import read_public
+    from tools.ms94_b06_engineering_run import verify_prepared_run
+    public=read_public(a.authority,approval['engineering_key_sha256'])
+    verify_prepared_run(Path(a.assets),run,approval,public)
     guard(approval,starting=True,attempt_number=record['run_number'])
     from tools.ms94_b06_engineering_key import DedicatedEngineeringSigner
     from tools.ms94_b06_engineering_native import execute

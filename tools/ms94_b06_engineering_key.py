@@ -38,6 +38,15 @@ def check_identity(public, expected):
         raise ValueError('engineering-key-fingerprint-mismatch')
 
 
+
+def read_public(directory, expected):
+    directory=Path(directory).absolute()
+    if directory.name!='b06-engineering-authority' or any(p.is_symlink() for p in (directory,*directory.parents)):
+        raise ValueError('engineering-key-directory')
+    public=(directory/PUBLIC_NAME).read_bytes();check_identity(public,expected)
+    return public
+
+
 class DedicatedEngineeringSigner(Signer):
     def __init__(self, directory, expected):
         directory = Path(directory).absolute()

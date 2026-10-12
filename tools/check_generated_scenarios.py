@@ -137,7 +137,7 @@ def check(output):
         programs[job]=dict(public_only=baseline,public_plus_generated=combined)
     unresolved=[dict(scenario=r['id'],reason='real-disagreement',details=r['reconciliation']) for r in rows if r['reconciliation']['status']=='real-disagreement']
     unresolved += [dict(scenario=r['id'],reason='POSTTRAN invariant failure/refusal') for r in rows if r['job']=='POSTTRAN' and (not r['invariants'] or not r['invariants']['passed'])]
-    return receipt(output/'generated-summary.json',phase='generated-scenario-campaign',programs=programs,
+    return receipt(output/'generated-summary.json',phase='generated-scenario-campaign',generator_class='curated-finite-witness',programs=programs,
                    cases=rows,mutants=mutants,unresolved=unresolved,model_calls=0,
                    rounded_removal='not applicable: pinned CBACT04C has no ROUNDED; addition tested',
                    scope='finite public engineering experiment; no universal reachability proof')

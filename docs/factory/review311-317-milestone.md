@@ -1,5 +1,13 @@
 # Factory review follow-up for PRs #311–317 — 2026-10-11
 
+## Correction — Howard retention follow-up, 2026-10-11
+
+The historical POSTTRAN total of **369 kills** below includes **nine execution refusals incorrectly classified as kills**. It is superseded as an adequacy claim. The completed fresh compiled phase of failed run [38190468540](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38190468540), exact head `a091471d69bdf61c1f72b1d22fe3bc870ace1ece`, confirms **360 kills / 483 current sites** (185 failure, 175 divergent), nine evidence gaps, 111 listed arguments and three survivors, with zero compiler refusals. The overall run remains failed; POSTTRAN targeted work never started. Raw historical receipts and mutant records remain unchanged.
+
+INTCALC used the same classifier path. Its fresh phase confirms **308 kills / 421 current sites**, with no previously claimed kill lost, but 113 final evidence-gap dispositions (167 mutant records have at least one incomplete comparison, including mutants killed by another completed comparison). These gaps remain explicit blockers; they are not new equivalents. This audit compares each historical killed ID against the fresh execution-backed result. The shared `systematic_mutation.outcome` is called by both programs' ordinary/fault campaigns and by targeted classification. The affected public summary is corrected additively in `systematic-review311-summary.json`; detail records and signed seals are preserved as historical.
+
+Final new-head retention/shard results will be reported separately for twin and z/OS-facing claims. No result from this failed head is resumed into a new head or promoted to whole-threshold approval.
+
 ## Howard decision update — 2026-10-11
 
 The [dated decision milestone](howard-decisions-2026-10-11-milestone.md) supersedes the compiler-refusal blocker and unaccepted-EOF conclusions below: listed compiler refusals are excluded, and Howard accepted the two source-bound EOF false edges. REWRITE-109 and the unreachable final-account update are legacy defects to preserve by default. Raw campaign records remain historical. The [20-mutant independent review](equivalence-review-sample-2026-10-11.md) is pending; scenario-threshold/2 is not approved.

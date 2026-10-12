@@ -6,7 +6,7 @@ from hashlib import sha256
 from lightyear_mainframe.legacy_twin import ROOT
 from lightyear_mainframe.systematic_mutation import candidates,generation_inventory,_display_lengths,_invalid_literal_references
 from lightyear_factory.scenario_policy import PROPOSAL,IO_ACCEPTANCES,assess
-from tools.build_factory_decision_review import build,select,render
+from tools.build_factory_decision_review import build,select,render,historical_input_bytes
 
 
 class FactoryDecisionsTests(unittest.TestCase):
@@ -87,10 +87,23 @@ class FactoryDecisionsTests(unittest.TestCase):
             self.assertEqual(expected,[r['id'] for r in select(list(reversed(pool)),group['program'])])
             self.assertNotEqual(expected,[r['id'] for r in select(pool,group['program'],seed='another-seed')])
         for name,expected in packet['input_lf_sha256'].items():
-            self.assertEqual(expected,sha256((ROOT/'docs/factory'/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest())
+            self.assertEqual(expected,sha256(historical_input_bytes(ROOT/'docs/factory',name)).hexdigest())
         self.assertEqual('308/308',report['programs']['INTCALC']['conditional_eligible_kill_fraction'])
         self.assertEqual('369/369',report['programs']['POSTTRAN']['conditional_eligible_kill_fraction'])
         self.assertTrue(all(r['disposition']=='keep-by-default' and not r['fix_authorized'] for r in register['defects']))
         self.assertEqual('Howard',register['decision_by'])
         self.assertEqual('2026-10-11',register['decision_date'])
         with self.assertRaisesRegex(ValueError,'duplicate-mutant'):select([{'id':'x'}]*10,'P')
+
+    def test_correction_preserves_exact_archive_and_refuses_unrelated_changes(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            directory=Path(d)
+            for name in ('systematic-review311-summary.json','systematic-review311-summary-before-correction-2026-10-11.json'):
+                (directory/name).write_bytes((ROOT/'docs/factory'/name).read_bytes())
+            historical_input_bytes(directory,'systematic-review311-summary.json')
+            path=directory/'systematic-review311-summary.json';body=json.loads(path.read_text());body['programs']['POSTTRAN']['kill_rate']='999/999';path.write_text(json.dumps(body))
+            with self.assertRaisesRegex(ValueError,'body-changed'):historical_input_bytes(directory,path.name)
+            path.write_bytes((ROOT/'docs/factory'/path.name).read_bytes())
+            (directory/'systematic-review311-summary-before-correction-2026-10-11.json').write_bytes(b'{}')
+            with self.assertRaisesRegex(ValueError,'archive-changed'):historical_input_bytes(directory,path.name)

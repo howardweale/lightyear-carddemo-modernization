@@ -42,6 +42,8 @@ class FactoryReviewTests(unittest.TestCase):
   self.assertEqual('killed-failure',outcome(base,{**base,'returncode':12}))
   self.assertEqual('killed-divergent',outcome(base,{**base,'outputs':{}}))
   self.assertEqual('survived',outcome(base,base))
+  self.assertEqual('mutant-evidence-gap',outcome(base,{'status':'execution-refusal','error_type':'TimeoutExpired'}))
+  self.assertEqual('baseline-evidence-gap',outcome({'status':'execution-refusal'},base))
   self.assertEqual('killed-divergent',outcome({**base,'stderr_sha256':'a'},{**base,'stderr_sha256':'b'}))
  def test_faults_declared_and_no_source_mutation(self):
   for program in ('CBACT04C','CBTRN02C'):

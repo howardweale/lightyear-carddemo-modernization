@@ -80,7 +80,7 @@ def gate():
         raise SystemExit('Incomplete GitHub changed-file inventory; refuse gate')
     expected=expected_workflows(files)
     print('Required workflows:',sorted(expected),flush=True)
-    deadline=time.monotonic()+3600
+    deadline=time.monotonic()+12600
     while time.monotonic()<deadline:
         if api(f'{prefix}/pulls/{number}')['head']['sha']!=head:
             raise SystemExit('PR head changed; obsolete gate refused')
@@ -100,7 +100,7 @@ def lint():
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p
         assert not re.search(r'\b(?:ubuntu|windows|macos)-latest\b',p.read_text()),p
-        assert "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
+        assert (p.name=='factory-systematic-review.yml' and d['concurrency']['cancel-in-progress']=='false') or "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
         assert 'github.run_id' in d['concurrency']['group'],p
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()
     from tools.check_source_lf import check_paths

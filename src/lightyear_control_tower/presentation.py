@@ -150,3 +150,35 @@ def age(item, days, *, now=None):
         "waiting_seconds": max(0, (current - start).total_seconds()),
         "overdue": current >= due,
     }
+
+
+# Closed Factory adapter table. Files and projected fields are reviewed code,
+# never query-string paths or a caller-controlled JSON pointer.
+FACTORY_FILES = {
+    "systematic-intcalc-review311.json": ("summary", "mutants"),
+    "systematic-posttran-review311.json": ("summary", "mutants"),
+    "systematic-review311-summary.json": ("programs", "dated_corrections", "schema"),
+    "gnucobol-twin-result.json": ("oracle_class", "zos_confirmation", "run_class"),
+    "twin-limits.md": None,
+    "keep-or-fix-register.json": ("defects", "default_conversion_policy"),
+    "io-gap-arguments.json": ("arguments", "gaps", "schema"),
+    "posttran-human-review-sheet.json": ("records", "oracle_class", "oracle_status", "zos_confirmation"),
+    "posttran-decisions-unsigned-2026-10-11.json": ("decisions", "sheet_sha256", "source_sha256", "reviewer"),
+    "posttran-second-opinion/attempt-1-public-summary-2026-10-11.json": ("status", "phase1_validation_completed", "phase2_authorized", "usage", "plan_sha256", "finished_at"),
+    "current-status.json": ("conditional_threshold", "posttran_phase2_authorized", "b06_execution_authorized", "b06_window", "b06_request_due", "b07_freeze_ready", "decision_time"),
+    "generated-review311-classification.json": ("cases", "unresolved", "observed_head"),
+    "tower-display-policy.json": ("schema", "business_logic_outcomes", "legacy_mutants_killed", "minimum_systematic_mutants", "distinct_values_per_output_field", "status"),
+}
+FACTORY_SUMMARY_FIELDS = ("job", "source_sha256", "observed_head", "run_url", "before_faults", "after_faults",
+    "mutant_count", "mutation_counts", "kill_rate", "eligible_kill_rate", "not_compiled", "unresolved_survivors",
+    "post_campaign_adjusted_kill_rate", "remaining_unexplained_survivors", "fault_count", "fault_expectations_met")
+FACTORY_MUTANT_FIELDS = ("id", "status", "operator", "line", "end_line", "source_sha256", "disposition", "argument", "killed_by")
+FACTORY_REGISTER_FIELDS = ("id", "program", "source_sha256", "source_lines", "observed_behavior", "disposition", "classification", "dependent_arguments")
+BUSINESS_RULE_EVIDENCE_FIELDS = ("evidence_strength", "evidence_strength_reason", "scenario_adequacy", "scenario_reasons")
+
+FACTORY_FRESH_FIELDS = FACTORY_SUMMARY_FIELDS + ("campaign_head", "evidence_gap_ids", "generator_avoided_count", "oracle_class", "oracle_status", "zos_confirmation")
+for _program in ("INTCALC", "POSTTRAN"):
+    FACTORY_FILES["tower-run-38198096890/"+_program+"/fresh.json"] = FACTORY_FRESH_FIELDS
+    FACTORY_FILES["tower-run-38198096890/"+_program+"/summary.json"] = ("current_head", "disposition_counts", "resource_usage", "compiler_scope", "source_sha256", "population")
+    FACTORY_FILES["tower-run-38198096890/"+_program+"/threshold.json"] = ("twin", "zos-facing")
+FACTORY_THRESHOLD_FIELDS = ("business", "io", "below_two_values", "distinct_values_per_output_field", "compared_fields", "blocking_reasons", "mutation", "conditions_met", "current_head", "source_sha256", "accepted_uncovered_IO", "unaccepted_outcomes")

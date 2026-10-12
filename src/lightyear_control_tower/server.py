@@ -29,6 +29,8 @@ READ_ROUTES = frozenset(
         "arrivals",
         "knowledge",
         "business-rules",
+        "programs",
+        "program",
     }
 )
 WRITE_ROUTES = frozenset({"review", "decide", "propose", "logout"})
@@ -50,6 +52,11 @@ class ConsoleAPI:
         self.workspace = workspace.Workspace(service) if workspace else None
 
     def read(self, route, token, args):
+        if route in {"programs", "program"}:
+            self.service._read_access(token)
+            if self.service.scope != "factory": return {"available":False,"programs":[]}
+            from .factory_evidence import programs
+            return programs(self.service,token,args["id"] if route=="program" else None)
         if self.carddemo:
             if route == "knowledge":
                 self.service._read_access(token)

@@ -86,3 +86,22 @@ Phase 1 plan is deliberately not amended or dispatched by this delivery; it
 will refuse the new transport bytes until Howard approves an exact amended
 plan. The HTTP worker's TLS, dedicated credential, no-retry and cap rules are
 unchanged. No model or token-count call is made by this change.
+
+
+## Programs snapshot and public index trust
+
+Run `python -B tools/import_factory_tower_snapshot.py --repository <checkout>
+--commit <full-40-character-commit> --root <new-factory-data-root>`. The destination
+must be new. The importer reads only the closed `presentation.FACTORY_FILES` table
+from regular Git blobs, writes exact bytes and prints a `factory-evidence-trust/1`
+object. After independently checking its index hash, the administrator installs
+that PUBLIC trust object as `factory-evidence-trust.json` beside the authority
+file, outside the engine-writable root. This code does not install that trust.
+The request importer can then add unsigned decision requests to that same root.
+Do not point it at another scope or preserved B06 snapshot.
+
+The Programs API rejects altered bytes, extra adapters, unlisted paths and a
+changed index. Eight-MiB bounds apply per file. The receipt import under
+`docs/factory/tower-run-38198096890/` is an exact copy of compact public artifacts;
+provenance lists archive and file hashes. These observations remain attributed to
+2dd787642e66176f78dbf749ec2659e82672cd3e. Historical records are not overwritten.

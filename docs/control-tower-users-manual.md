@@ -12,7 +12,8 @@ read-only view; it is not the Decision Console.
 > Until that release is merged and its acceptance tests pass, Factory decisions
 > are still recorded as dated decision files from chat and are not Tower-signed.
 > This first delivery implements the scoped decision contracts and consumers.
-> Programs, Status and Unresolved arrive in the following two PRs. No live
+> Programs and Business rules are implemented in delivery 2; Status and
+> Unresolved follow in delivery 3. No live
 > Factory service is provisioned by this change. Signed-only consumption starts
 > only after Howard signs the backfill and an administrator installs its trust
 > setting. Historical evidence files remain unchanged.
@@ -393,3 +394,22 @@ request. Refresh every proof to that head. Conditional threshold approval stays
 pending until an explicit effective policy approval; no conditional text is
 automatically treated as satisfied. Existing frozen plans remain historical and
 must be amended and approved before using changed verifier bytes.
+
+
+### Programs evidence delivery
+
+The Programs tab uses `/api/tower/programs` and `/api/tower/program?id=INTCALC`
+(or POSTTRAN). An administrator imports a public Git snapshot and pins its index
+hash outside the engine root. Without that pin the tab reports unavailable.
+Experiment head and evidence-import commit are shown separately. The current
+compact receipts come from public CI run 38198096890 on 2dd7876, not a new run on
+the Tower code. Raw counts include denominators; twin and z/OS-facing assessments
+are separate. Evidence gaps overlap proof categories. Green CI is not a release.
+
+Expand Evidence sources and SHA-256 in any panel to inspect the exact committed
+artifact. Measurements, historical policy assessments and signed overlays remain
+separate. Not reported means absent in the installed evidence; pending means a
+review/decision is outstanding; failed means a measured criterion is unmet.
+Waiting on you opens the Work queue. No request is created by merely viewing a
+program. Business rules displays rule evidence strength plus scenario adequacy
+and reasons without hiding the original rule-evidence classification.

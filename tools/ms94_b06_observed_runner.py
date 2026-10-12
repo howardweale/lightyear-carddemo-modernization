@@ -16,6 +16,15 @@ class ObservedRunner(NativeRunner):
     def worker(self, command, payload, timeout):
         if command != 'execute':
             return super().worker(command, payload, timeout)
+        resource_args=['--memory','8g','--cpus','4']
+        if self.plan.get('run_class')=='engineering':
+            from tools.ms94_b06_engineering import validate_run_binding
+            # Recheck the consumed attempt, exact mode and complete approved
+            # limits before staging or any application Docker operation.
+            validate_run_binding(self.run,self.approval,self.plan)
+            limits=self.plan['engineering_limits']
+            resource_args=['--memory',str(limits['application_memory_mib'])+'m',
+                           '--cpus',str(limits['application_cpus'])]
         lane = payload['lane']
         require(lane in ('oracle', 'postgresql') and payload['test'] == 'LightyearOperationsTest', 'Unknown observed target')
         relative = Path(payload['output'].removeprefix('/output/'))
@@ -42,12 +51,6 @@ class ObservedRunner(NativeRunner):
         image = launch['image'] if built else self.plan['local']['runner_image']
         carrier = ['--entrypoint','/bin/sh'] if built else []
         tail = ['-c','exec sleep infinity'] if built else []
-        resource_args=['--memory','8g','--cpus','4']
-        if self.plan.get('run_class')=='engineering':
-            from tools.ms94_b06_engineering import LIMITS
-            require(self.plan.get('engineering_limits')==LIMITS,'Engineering application limits changed')
-            resource_args=['--memory',str(LIMITS['application_memory_mib'])+'m',
-                           '--cpus',str(LIMITS['application_cpus'])]
         self.remember('container', app)
         docker('create', '--name', app, '--label', self.label, '--network', self.network, *resource_args,
                '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--tmpfs', '/secrets:rw,noexec,nosuid,size=268435456',

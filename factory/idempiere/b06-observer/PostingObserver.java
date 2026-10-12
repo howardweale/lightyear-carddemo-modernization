@@ -108,6 +108,15 @@ public final class PostingObserver {
     private int auditPosition = -1;
     private static final long AUDIT_BYTES = 128L * 1024 * 1024;
     private static final long AUDIT_EVENTS = 500000;
+    private long diagnosticEventLimit=AUDIT_EVENTS,diagnosticByteLimit=AUDIT_BYTES;
+    private void configureDiagnosticLimits() {
+        long records=Long.parseLong(System.getProperty("b06.observer.audit_records",Long.toString(AUDIT_EVENTS)));
+        long bytes=Long.parseLong(System.getProperty("b06.observer.audit_bytes",Long.toString(AUDIT_BYTES)));
+        boolean base=records==AUDIT_EVENTS && bytes==AUDIT_BYTES;
+        boolean expanded=diagnosticUnmatchedReturn && records==1500000 && bytes==384L*1024*1024;
+        if(!base && !expanded)throw new IllegalArgumentException("exact per-attempt audit limits required");
+        diagnosticEventLimit=records;diagnosticByteLimit=bytes;
+    }
     private static Map<String,Object> auditLocation(Location l) {
         Method m=l.method();
         return Map.of("class",l.declaringType().name(),"method",m.name(),
@@ -509,6 +518,51 @@ public final class PostingObserver {
             q.setSuspendPolicy(EventRequest.SUSPEND_ALL);if(bounded())owner.enable(q,e.location(),thread);else q.enable();
             exits.put(thread,new ReturnArm(q,method,depth,calls.peek()));
         }
+        static Object inputValue(Value value) throws Exception {
+            // These are structural input identities, not additional executable
+            // definitions. Preserve original generation capture's remember calls
+            // without introducing catalogue/JDI bytecode work for each witness.
+            if(value instanceof ClassObjectReference c) {
+                ReferenceType t=c.reflectedType();
+                return Map.of("class_object_id",c.uniqueID(),"class",t.name(),"loader",loader(t),"signature",t.signature());
+            }
+            if(value instanceof ArrayReference a) {
+                if(a.length()>255)throw new IllegalStateException("generation input parameter bound");
+                List<Object> result=new ArrayList<>();for(Value item:a.getValues())result.add(inputValue(item));return result;
+            }
+            throw new IllegalStateException("generation input is not class identity");
+        }
+        static Object requiredField(ObjectReference object,String name) {
+            Field field=object.referenceType().fieldByName(name);
+            if(field==null)throw new IllegalStateException("missing generation input field: "+name);
+            return object.getValue(field);
+        }
+        static Map<String,Object> inputWitness(Map<String,Object> record,StackFrame top,String declaring) throws Exception {
+            Map<String,Object> witness=new LinkedHashMap<>();witness.put("policy","generation-inputs-v1");
+            if(declaring.equals(LOADER)) {
+                // At defineClass entry no resulting runtime class exists yet.
+                // Bind actual input bytes and defining loader; never infer class
+                // identity, package ownership or application independence.
+                witness.put("kind","classfile-bytes");
+                witness.put("sha256",record.get("definition_input_sha256"));
+                witness.put("bytes",((byte[])record.get("definition_input_base64")).length);
+                witness.put("defining_loader",record.get("defining_loader"));
+                witness.put("classification","unresolved-bytecode-input-only");
+            } else {
+                witness.put("kind","class-objects");Map<String,Object> inputs=new LinkedHashMap<>();
+                if(declaring.equals(FACTORY))inputs.put("receiver.targetClass",inputValue((Value)requiredField(top.thisObject(),"targetClass")));
+                else if(declaring.equals(DEFINER)) {
+                    ObjectReference lookup=(ObjectReference)requiredField(top.thisObject(),"lookup");
+                    inputs.put("receiver.lookup.lookupClass",inputValue((Value)requiredField(lookup,"lookupClass")));
+                } else if(declaring.equals(INVOKER)) {
+                    ObjectReference type=(ObjectReference)requiredField(top.thisObject(),"invokerType");
+                    inputs.put("receiver.invokerType.rtype",inputValue((Value)requiredField(type,"rtype")));
+                    inputs.put("receiver.invokerType.ptypes",inputValue((Value)requiredField(type,"ptypes")));
+                } else throw new IllegalStateException("unsupported generation input witness");
+                witness.put("inputs",inputs);
+            }
+            return witness;
+        }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
             if(bounded() && pending.values().stream().mapToInt(Deque::size).sum()>=PENDING_CAP)owner.resourceStop("pending-cap-512");
@@ -556,6 +610,7 @@ public final class PostingObserver {
             }
             Map<String,Object> retained=r;
             if(bounded()) {
+                r.put("class_input_witness",inputWitness(r,top,e.location().declaringType().name()));
                 r.put("entry_event_index",owner.observedEvents);
                 retained=pendingPool.retain(r);
             }
@@ -727,7 +782,7 @@ public final class PostingObserver {
         ByteArrayOutputStream buffer=new ByteArrayOutputStream(4096);
         Writer writer=new OutputStreamWriter(diagnosticLimit(buffer),StandardCharsets.UTF_8);writeJson(writer,wire,false);writer.flush();
         auditBytes+=buffer.size();diagnosticRecords++;
-        if(diagnosticRecords>AUDIT_EVENTS || auditBytes>AUDIT_BYTES)throw new IllegalStateException("observer structural audit bound exceeded");
+        if(diagnosticRecords>diagnosticEventLimit || auditBytes>diagnosticByteLimit)throw new IllegalStateException("observer structural audit bound exceeded");
         buffer.writeTo(System.out);System.out.write('\n');System.out.flush();return sequence;
     }
     private String emitDefinition(Map<String,Object> definition) throws Exception {
@@ -1059,6 +1114,7 @@ public final class PostingObserver {
             ready.put("native_diagnostics","native-diagnostics-v1");
             ready.put("observer_mode",diagnosticUnmatchedReturn?"diagnostic-unmatched-return":"strict");
             ready.put("unmatched_return_cap",10);ready.put("heap_guard_percent",85);ready.put("pending_cap",PENDING_CAP);
+            ready.put("metadata_record_cap",diagnosticEventLimit);ready.put("metadata_byte_cap",diagnosticByteLimit);ready.put("class_input_witness_policy","generation-inputs-v1");
         }
         if(diagnosticUnmatchedReturn)ready.put("unmatched_return_policy",UNMATCHED_POLICY);
         emit(ready,false);
@@ -1123,7 +1179,7 @@ public final class PostingObserver {
             boolean diagnostic=flags.remove("diagnostic-unmatched-return");
             boolean strict=flags.remove("strict");
             if(diagnostic==strict || !flags.equals(common))throw new IllegalArgumentException("exact bounded diagnostics arguments required");
-            observer.boundedMode();observer.nativeDiagnostics=true;observer.diagnosticUnmatchedReturn=diagnostic;
+            observer.boundedMode();observer.nativeDiagnostics=true;observer.diagnosticUnmatchedReturn=diagnostic;observer.configureDiagnosticLimits();
         } else {
             if (!(args.length==2 || (args.length==3 && args[2].equals("observer-binding-v2")) ||
                   (args.length==4 && args[2].equals("observer-binding-v2") && args[3].equals(UNMATCHED_POLICY))))

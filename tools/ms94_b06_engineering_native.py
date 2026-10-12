@@ -41,7 +41,7 @@ class OracleEngineeringRunner(ObservedRunner):
 
     def worker(self, command, payload, timeout):
         from tools.ms94_b06_engineering import require_execution_ready
-        require_execution_ready()
+        require_execution_ready(getattr(self,"approval",None))
         require(payload.get('lane') == 'oracle', 'oracle-only')
         return super().worker(command, payload, min(timeout, max(1, self.deadline-time.monotonic())))
 
@@ -53,8 +53,11 @@ class OracleEngineeringRunner(ObservedRunner):
 
     def prepare(self, case='operations', attempt=1):
         from tools.ms94_b06_engineering import require_execution_ready, validate_run_binding
-        require_execution_ready()
+        require_execution_ready(getattr(self,"approval",None))
         record=validate_run_binding(self.run,self.approval,self.plan)
+        guard(self.approval,starting=True,attempt_number=record['run_number'])
+        from tools.ms94_b06_engineering_run import verify_prepared_run
+        require(verify_prepared_run(self.root,self.run,self.approval,self.signer.public)==self.plan,'native-prepared-plan')
         guard(self.approval,starting=True,attempt_number=record['run_number'])
         require(case == 'operations' and attempt == 1, 'retained-reference-only')
         self.checkpoint('prepare-oracle')
@@ -121,7 +124,7 @@ def no_overlap():
 
 def execute(assets, run, approval, signer):
     from tools.ms94_b06_engineering import require_execution_ready
-    require_execution_ready()
+    require_execution_ready(approval)
     run=Path(run); plan=read_json(run/'plan.json')
     def emit(kind, body):
         with (run/'progress.jsonl').open('ab') as stream:
@@ -141,6 +144,7 @@ def execute(assets, run, approval, signer):
     finally:
         cleaned=cleanup_owned(runner)
         verified=bool(cleaned['complete']) and absence(run.name)
+        from tools.ms94_b06_engineering_evidence import binding
         write_new(run/'cleanup.json',signer.sign(dict(**LABEL,artifact_type='b06-engineering-cleanup/1',
-            **cleaned,actual_absence_verified=verified)))
+            **cleaned,**binding(run,approval),actual_absence_verified=verified)))
     return dict(outcome=outcome,error=error,cleanup_verified=verified,elapsed_seconds=round(time.monotonic()-started,3))

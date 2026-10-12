@@ -28,10 +28,22 @@ def select(population,program,seed=SEED,n=10):
     return sorted(population,key=rank)[:n]
 
 
+def historical_input_bytes(directory,name):
+    data=(directory/name).read_bytes().replace(b'\r\n',b'\n')
+    if name!='systematic-review311-summary.json':return data
+    current=json.loads(data)
+    if 'dated_corrections' not in current:return data
+    archived=(directory/'systematic-review311-summary-before-correction-2026-10-11.json').read_bytes().replace(b'\r\n',b'\n')
+    if sha256(archived).hexdigest()!='626a331da623b464d8ccb2e6d59c8534862aacb2f22b6908a5188b3cce8a4da7':raise ValueError('historical-summary-archive-changed')
+    if {k:v for k,v in current.items() if k!='dated_corrections'}!=json.loads(archived):
+        raise ValueError('historical-summary-body-changed')
+    return archived
+
+
 def build(root):
     directory=root/'docs/factory';inputs={}
     def read(name):
-        data=(directory/name).read_bytes();inputs[name]=sha256(data.replace(b'\r\n',b'\n')).hexdigest()
+        data=historical_input_bytes(directory,name);inputs[name]=sha256(data.replace(b'\r\n',b'\n')).hexdigest()
         return json.loads(data)
     historical=read('systematic-review311-summary.json')
     additional=read('post-campaign-equivalence-review311.json')['arguments']

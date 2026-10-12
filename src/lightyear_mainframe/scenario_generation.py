@@ -1,4 +1,4 @@
-"""Deterministic public generators, finite-domain witnesses and real COBOL mutants."""
+"""Curated-finite-witness cases and real COBOL mutants; not a generic engine."""
 from dataclasses import replace
 from decimal import Decimal as D
 import itertools
@@ -8,6 +8,7 @@ from .zos_bindings import load_bindings, dataset_binding
 from carddemo_oracle.records import Account, CategoryBalance, Disclosure, CardXref, encode_zoned
 
 SEED='public-scenario-engine-v1'
+GENERATOR_CLASS='curated-finite-witness'
 
 
 def boundaries(field):
@@ -37,8 +38,8 @@ def solve(domains,predicate):
 def manifest():
     result=[]
     def add(job,name,generator,gap,**parameters):
-        result.append(dict(id=job.lower()+'-'+name,job=job,generator=generator,target_gap=gap,
-                           seed=SEED,parameters=parameters,run_class='engineering',data_class='public-generated'))
+        result.append(dict(id=job.lower()+'-'+name,job=job,generator=GENERATOR_CLASS,witness_kind=generator,target_gap=gap,
+                           seed=SEED,generator_class=GENERATOR_CLASS,parameters=parameters,run_class='engineering',data_class='public-generated'))
     binding=dataset_binding(load_bindings(),'INTCALC','STEP15','TCATBALF')
     layout=load_copybook(ROOT/binding['copybook'])
     field=next(f for f in layout.fields if f.path.endswith('.TRAN-CAT-BAL'))
@@ -53,7 +54,7 @@ def manifest():
     for truth in (False,True):
         witness=solve({'rate':[D('-.01'),D(0),D('.01'),D('15')]},lambda x:(x['rate']!=0)==truth)
         add('INTCALC','solver-rate-'+str(truth).lower(),'decision-directed-finite-solver','CBACT04C:214 '+str(truth),rate=str(witness['witness']['rate']),balance='10.01',solver={**witness,'witness':{'rate':str(witness['witness']['rate'])}})
-    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','large-amount','cycle-debit','invalid-then-valid','new-then-existing','expiry-next-day','expiry-equal-dash'):
+    for name in ('zero','positive','negative','credit-equal','credit-above','expiry-equal','expiry-before','missing-card','missing-account','empty','duplicate-id','new-category','large-amount','cycle-debit','invalid-then-valid','new-then-existing','expiry-next-day','expiry-equal-dash','cycle-debit-sign'):
         add('POSTTRAN',name,'boundary-or-cross-record','CBTRN02C validation/posting/EOF',variant=name)
     for truth in (False,True):
         witness=solve({'amount':[D('999.99'),D('1000'),D('1000.01')]},lambda x:(D('1000')>=x['amount'])==truth)
@@ -64,7 +65,7 @@ def manifest():
         program='CBACT04C' if spec['job']=='INTCALC' else 'CBTRN02C'
         source=ROOT/f'spec/mainframe/public-source/{program}.cbl'
         spec['source_sha256']=sha(source.read_bytes())
-        if spec['generator']=='decision-directed-finite-solver':
+        if spec['witness_kind']=='decision-directed-finite-solver':
             condition='IF DIS-INT-RATE NOT = 0' if spec['job']=='INTCALC' else 'IF ACCT-CREDIT-LIMIT >= WS-TEMP-BAL'
             spec['condition']=condition
             spec['condition_line']=next(i for i,s in enumerate(source.read_text().splitlines(),1) if condition in s)
@@ -72,6 +73,9 @@ def manifest():
 
 
 def case(identifier):
+    if identifier.startswith('b1-target:'):
+        from .targeted_witness import case as targeted
+        return targeted(identifier)
     spec=next((s for s in manifest() if s['id']==identifier),None)
     if spec is None:raise ValueError('unknown-generated-scenario')
     job=spec['job']; p=spec['parameters']
@@ -122,6 +126,9 @@ def case(identifier):
         if variant=='cycle-debit':
             setfield('ACCTFILE','ACCT-CURR-CYC-CREDIT','1000');setfield('ACCTFILE','ACCT-CURR-CYC-DEBIT','100')
             setfield('DALYTRAN','DALYTRAN-AMT','100')
+        if variant=='cycle-debit-sign':
+            setfield('ACCTFILE','ACCT-CURR-CYC-CREDIT','900');setfield('ACCTFILE','ACCT-CURR-CYC-DEBIT','-200')
+            setfield('DALYTRAN','DALYTRAN-AMT','1')
         if variant=='expiry-next-day':
             setfield('ACCTFILE','ACCT-EXPIRAION-DATE','2022-06-10')
             setfield('DALYTRAN','DALYTRAN-ORIG-TS','2022-06-11 19:27:53.000000')

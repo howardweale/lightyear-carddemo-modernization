@@ -23,9 +23,9 @@ read-only view; it is not the Decision Console.
 | Work | Scope | Where to open it |
 | --- | --- | --- |
 | Incoming Maintec files | `carddemo-zos` | Intake Console, normally `http://127.0.0.1:8767/` |
-| B06 | `ms94-b06` | Its separately installed Console, currently port 8766 |
+| B06 | `ms94-b06` | Its separately installed Console, currently port 8768 |
 | Public Verify graph | Separately provisioned Verify scope | Its configured Console; no automatic activation |
-| Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port set at provisioning (proposed 8768). See section 10 |
+| Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port 8769. See section 10 |
 
 Signing in to B06 does not expose CardDemo or Verify requests. Selecting a graph
 or workload in Discovery does not switch the authority. Use a separate data root,
@@ -279,7 +279,7 @@ public CardDemo sources, public data and generated scenarios. It never shows
 Maintec arrivals or customer values; those stay in the CardDemo intake scope.
 
 ```powershell
-& $Python -m lightyear_control_tower serve --root $FactoryRoot --authority $FactoryAuthority --port 8768
+& $Python -m lightyear_control_tower serve --root $FactoryRoot --authority $FactoryAuthority --port 8769
 ```
 
 Use the Factory data root and authority provisioned for it, never the intake or

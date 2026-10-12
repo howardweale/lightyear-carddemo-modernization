@@ -1,6 +1,6 @@
 # Factory scope administration
 
-This delivery prepares software and unsigned requests only. Port 8768 is proposed;
+This delivery prepares software and unsigned requests only. Howard selected port 8769;
 no service, authority, identity or grant has been created on Howard's machine.
 Use a separate operator-owned root, authority directory and journal. Never reuse
 CardDemo intake or B06 directories. Factory disclosure is `public-development`.
@@ -13,7 +13,7 @@ commands for the administrator, not actions performed by the coding agent:
 ```powershell
 python -m lightyear_control_tower provision --authority <authority>/authority.json --scope factory --operator-id howard --operator-name Howard
 python -m lightyear_control_tower grant-roles --root <factory-root> --authority <authority>/authority.json --operator-id howard --roles operator qualification-approver campaign-authorizer business-owner --workloads factory:INTCALC factory:POSTTRAN factory:B06 factory:B07 factory:factory --reason "Factory public development review"
-python -m lightyear_control_tower serve --root <factory-root> --authority <authority>/authority.json --port 8768
+python -m lightyear_control_tower serve --root <factory-root> --authority <authority>/authority.json --port 8769
 ```
 
 Use `add-identity` for another person, with their own credential output outside

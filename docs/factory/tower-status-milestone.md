@@ -46,3 +46,8 @@ provisioning, real signing, native execution or model call is performed here.
 The unsigned backfill remains ready for Howard's later review; activation is an
 administrator action only after he signs. Nothing here lifts the B06 hold,
 approves POSTTRAN Phase 2 or grants threshold/release/measurement credit.
+
+October 12 port correction: Howard selected Factory port 8769. The Factory
+launch examples and both manual editions use 8769; the manual B06 row uses
+8768, matching the existing B06 instructions. This documentation correction
+does not provision or restart a service.

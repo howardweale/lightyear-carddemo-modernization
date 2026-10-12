@@ -21,6 +21,17 @@ def workspace_status(value):
 
 
 def evidence_view(root, item):
+    if item.get("scope") == "factory":
+        from .factory_policy import load_contract
+        contract = load_contract(root, item)
+        # Closed policy validation occurs before this explicit projection.
+        keys = ("schema", "kind", "program", "sources", "details")
+        return {"disclosure": "public-development", "records": {
+            "factory": {k: contract[k] for k in keys},
+            "source_artifact_sha256": item["bound"]["contract"],
+            "covers": contract["kind"],
+            "does_not_cover": "No execution, model calls, native runs, customer release or independent attestation",
+        }}
     output = {}
     allowed = {
         "leak_check": ("schema", "annotation", "eligible", "inventory_sha256", "portable"),

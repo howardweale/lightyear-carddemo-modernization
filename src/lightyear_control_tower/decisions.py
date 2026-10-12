@@ -118,7 +118,7 @@ class DecisionService:
         from .kinds import default_registry
         if not hasattr(self, 'registry'):
             self.registry = default_registry()
-        self.normalization_kind = self.registry.get('normalization')
+        self.normalization_kind = self.registry.get('normalization') if 'normalization' in self.registry.names() else None
         from cryptography.hazmat.primitives import serialization
         self.root = root.resolve()
         self.decision_only = decision_only
@@ -304,6 +304,8 @@ class DecisionService:
             return item
 
     def decide(self, token: str, payload: dict) -> dict:
+        if self.normalization_kind is None:
+            raise DecisionUnauthorized("Normalization is unavailable in this scope")
         session = self.authenticate(token, self.normalization_kind.roles[0])
         reason = text_field(payload.get("reason"), "Reason")
         owner = text_field(payload.get("owner"), "Named owner", 200)

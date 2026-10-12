@@ -7,7 +7,14 @@ from lightyear_control_tower.decisions import digest
 from .posttran_second_opinion import require_inputs, DIRECTORY
 
 
-def verify_approval(plan, receipt):
+def verify_approval(plan, receipt, *, factory_authority=None, contract=None):
+    # Migration is explicit and requires a verified signed backfill. Existing
+    # frozen plans retain their historical verifier until operator activation.
+    from lightyear_factory.tower_authority import configured_authority, proof_contract
+    factory_authority = configured_authority(factory_authority)
+    if factory_authority is not None:
+        contract = contract or proof_contract(receipt)
+        return factory_authority.spend(plan, receipt, contract, phase=1)
     body = {k: v for k, v in plan.items() if k != 'content_sha256'}
     if digest(body) != plan['content_sha256']:
         raise ValueError('plan-seal')

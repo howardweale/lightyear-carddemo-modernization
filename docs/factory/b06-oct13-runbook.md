@@ -1,16 +1,34 @@
-# B06 — Tuesday October 13, 9 AM–noon PDT
+# B06 - Tuesday October 13, 9 AM-noon PDT
 
-**Dry run October 12:** all 111,311 asset hashes, request/index/template seals and 14 observer-class bindings passed (103 seconds). Three pinned image digests were present in the single authorized Docker listing. C: had 616.65 GiB free (minimum 60); host memory 63.39 GiB total / 17.28 GiB free. Container/VM memory readiness is not established. No listener was found on 8768, so a running Tower checkout/commit is unavailable. No service was changed. [Read-only receipt](b06-dry-run-2026-10-12.json).
+**Evening verdict October12: NOT READY.** The exact execution checkout gap is closed. VM capacity is measured; the remaining readiness gaps below are unresolved. No native execution, model call, private-key read, image pull, container start, machine change or merge was performed.
 
-**Before launch:** an operator must supply a clean execution checkout at `62eafdaf29dce1d40603d38c3a394f150b98f686` and the existing dedicated authority directory. The preparation checkout is `4659d591` (documentation HEAD), so it cannot execute this request. No registered checkout at the execution commit was found. Do not reset the preparation checkout, provision keys, change memory settings or restart 8768. Resolve these prerequisites before the window; otherwise stop.
+[Evening evidence receipt](b06-readiness-evening-2026-10-12.json). The [original dry-run receipt](b06-dry-run-2026-10-12.json) remains unchanged. This is a readiness inventory, not a native pass or independent attestation.
 
-[One-page printable runbook](b06-oct13-one-page-runbook.pdf) · [Deferred one-attempt command wrapper](b06-oct13-attempt.ps1). Neither wrapper nor activation commands have been executed. The six historical registry entries and all 24 marker byte hashes also matched; this is not a live-resource absence check.
+| Prerequisite | Status | Evidence / required action |
+| --- | --- | --- |
+| Exact execution checkout | PASS | New separate clean checkout at 62eafdaf29dce1d40603d38c3a394f150b98f686. Existing B06 checkout/data unchanged. |
+| Request, assets and seals | PASS | 111311 files and 14 observer-class bindings passed from the exact checkout; 118.797 seconds. |
+| Free disk >=60 GiB | PASS | 610.08 GiB free on C: at 2026-10-12T23:24:57.8786698+00:00. Recheck before launch. |
+| Docker VM resources | CAPACITY VERIFIED | 31.04 GiB and 24 CPUs reported by one read-only docker info. Four documented container limits total 24 GiB / 11 CPUs; nominal VM margin 7.04 GiB. Allocation is not free-memory or availability proof. |
+| Host / combined memory | UNRESOLVED | 63.39 GiB total / 13.78 GiB free. No current VM usage/reservation or combined host headroom established; no settings changed. |
+| Three pinned images | EARLIER CHECK PASSED | All three were present in the authorized October12 image listing. No new listing, pull or container start tonight; presence must be revalidated by the approved launch preflight. |
+| Tower on 8768 | UNRESOLVED | No listener found. A running checkout/commit cannot be identified. No service start, restart or provisioning is authorized tonight. |
+| Dedicated engineering authority | OPERATOR CONFIRMATION | Existing authority directory remains operator-supplied. Request binds public fingerprint 4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0. No private keys read, no new identity or signature. |
+| Historical cleanup / overlap | WINDOW RECHECK | Earlier six registry entries / 24 marker hashes passed. No current owned-resource absence or lease check was performed tonight. Existing launch gate must verify this in the authorized window. |
+| Attached readiness instruction | MISSING | No new attachment/path was supplied or located. Requested its filename/path; do not infer its additional prerequisites. |
+
+**Current 9:40 assessment:** Readiness by October13 09:40 PDT is not established. Tower absence cannot be resolved under the current no-service-change authority. Missing instruction, authority confirmation and combined memory readiness require operator resolution; no promised time or improvised substitute. If unresolved at 09:40, do not start attempt1. No alternate service, checkout, key, resource setting or launch sequence is substituted.
+
+The sole new checkout is `C:/Users/howar/.codex/worktrees/b06-oct13-pinned-readiness/lightyear-carddemo-modernization`, clean at `62eafdaf29dce1d40603d38c3a394f150b98f686`. Leave it pinned and clean. Do not create a replacement.
+
+[Updated one-page printable runbook](b06-oct13-one-page-runbook.pdf) - [deferred one-attempt command wrapper](b06-oct13-attempt.ps1). Commands below are for the authorized window only after all prerequisites resolve; none were executed tonight.
 
 ## 9:00 — read-only preflight and first invocation
 
-In PowerShell, set `$ExecutionCheckout` and `$EngineeringAuthority` to the operator-confirmed existing paths. The authority argument is the directory containing its public/key records; no key contents are displayed.
+Use the verified execution checkout below. Set `$EngineeringAuthority` only to the operator-confirmed existing directory; do not guess or provision it. The authority argument is the directory containing its public/key records; no key contents are displayed.
 
 ```powershell
+$ExecutionCheckout = 'C:/Users/howar/.codex/worktrees/b06-oct13-pinned-readiness/lightyear-carddemo-modernization'
 $Python = 'C:/Users/howar/OneDrive/Documents/ChatGPT/lightyear-carddemo-modernization/work/idempiere-runtime-evidence/work/native-venv/Scripts/python.exe'
 $Preparation = 'C:/Users/howar/.codex/worktrees/b06-engineering-bindings/lightyear-carddemo-modernization'
 $Request = "$Preparation/work/b06-oct13-proposal-r3/request.json"

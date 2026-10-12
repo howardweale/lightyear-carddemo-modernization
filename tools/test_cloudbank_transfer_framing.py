@@ -67,6 +67,25 @@ def headers(port, path):
         connection.close()
 
 
+def build_fixture(work):
+    # Refresh Maven's negative cache. Retry acquisition only, never a compiler,
+    # test or application failure; retain each attempt's complete diagnostics.
+    for attempt in (1, 2):
+        result = subprocess.run(["mvn", "-U", "-B", "-q", "-DskipTests", "package"], cwd=work,
+                                capture_output=True, text=True, timeout=240)
+        (work / f"maven-{attempt}.stdout").write_text(result.stdout)
+        (work / f"maven-{attempt}.stderr").write_text(result.stderr)
+        if result.returncode == 0:
+            return result
+        diagnostic = result.stdout + result.stderr
+        print(f"Framing fixture Maven attempt {attempt} failed:\n{diagnostic}", flush=True)
+        resolution = any(token in diagnostic for token in (
+            "Non-resolvable parent POM", "Could not transfer artifact", "Could not resolve dependencies"))
+        if not resolution:
+            return result
+    return result
+
+
 def main():
     version = subprocess.check_output(["k6", "version"], text=True)
     assert version.startswith("k6 v2.2.0 "), version
@@ -74,8 +93,7 @@ def main():
         work = Path(directory)
         shutil.copytree(FIXTURE, work, dirs_exist_ok=True)
         shutil.copyfile(CONTROLLER, work / "src/main/java/com/example/transfer/TransferService.java")
-        build = subprocess.run(["mvn", "-B", "-q", "-DskipTests", "package"], cwd=work,
-                               capture_output=True, text=True, timeout=240)
+        build = build_fixture(work)
         if build.returncode:
             raise AssertionError("Framing fixture build failed:\n" + build.stdout[-6000:] + build.stderr[-2000:])
         with socket.socket() as listener:

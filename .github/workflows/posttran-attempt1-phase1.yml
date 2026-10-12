@@ -1,0 +1,40 @@
+name: POSTTRAN attempt1 Phase1 gate
+on:
+  pull_request:
+    paths:
+      - 'spec/mainframe/posttran-independent/attempt-1/**'
+      - 'tools/check_posttran_attempt1_phase1.py'
+      - 'tests/test_posttran_attempt1_phase1.py'
+      - '.github/workflows/posttran-attempt1-phase1.yml'
+permissions:
+  contents: read
+jobs:
+  phase1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Structural gate tests
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_posttran_attempt1_phase1 -v
+      - name: Compile once and run Phase1 only
+        env:
+          PYTHONPATH: src:.
+        run: python -B tools/check_posttran_attempt1_phase1.py --output work/posttran-attempt1-phase1
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: posttran-attempt1-phase1
+          path: work/posttran-attempt1-phase1
+          retention-days: 30

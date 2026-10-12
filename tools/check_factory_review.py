@@ -1,5 +1,5 @@
 """Bounded public engineering review campaign, without containers or model calls."""
-import argparse,json,subprocess
+import argparse,json,subprocess,time
 from collections import Counter
 from pathlib import Path
 from lightyear_mainframe.legacy_twin import ROOT,PROGRAMS,build,run,new_output,write_json,receipt,execute,FLAGS
@@ -9,6 +9,8 @@ from lightyear_mainframe.io_faults import declarations
 from lightyear_mainframe.scenario_coverage import observe
 from lightyear_mainframe.mutant_equivalence import argument
 from lightyear_mainframe.scenario_coverage import code
+from lightyear_mainframe.campaign_provenance import begin,finish
+from lightyear_mainframe.target_retention import Retention,size,BUDGET
 
 
 def attempt(target,case,folder):
@@ -137,6 +139,7 @@ procedure division.
 
 def check(output,job):
     output=new_output(output);program=PROGRAMS[job];text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text()
+    provenance=begin(output,job);started=time.monotonic();retention=Retention(output/'execution-retention')
     build(output/'baseline',instrument=True,jobs=[job]);compiler_layout=measure_binary_layout(output);storage=measure_storage_semantics(output);runtime=measure_runtime_contract(output);cases=[s['id'] for s in manifest() if s['job']==job]
     baselines={};streams=[]
     from lightyear_mainframe.legacy_twin import PUBLIC_SCENARIOS
@@ -171,16 +174,23 @@ def check(output,job):
     generation=generation_inventory(text,program);write_json(output/'generation-inventory.json',generation)
     mutants=generation['candidates'];write_json(output/'mutation-inventory.json',mutants);results=[]
     for mutant in mutants:
+        if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
         folder=output/'mutants'/mutant['id'];folder.mkdir(parents=True)
-        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None)
+        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[])
         try:build(folder/'build',systematic=mutant,jobs=[job])
         except (RuntimeError,ValueError) as e:record.update(status='not-compiled',detail=str(e))
         else:
             for case in cases:
                 baseline=baselines[case]
-                if baseline['status']!='executed':continue
-                changed=attempt(folder/'build',case,folder/case);classification=outcome(baseline,changed)
-                if classification!='survived':
+                if baseline['status']!='executed':
+                    record['evidence_gaps'].append(dict(case=case,status='baseline-evidence-gap',baseline=baseline));continue
+                with retention.case(folder/'build',case,attempt) as (temporary,changed):
+                    classification=outcome(baseline,changed)
+                    reasons=['witness'] if classification.startswith('killed-') else ['sample'] if case==cases[0] or case==cases[-1] else []
+                    if reasons:retention.retain(temporary,changed,reasons)
+                if classification.endswith('evidence-gap'):
+                    record['evidence_gaps'].append(dict(case=case,status=classification,actual=changed,baseline=baseline));continue
+                if classification.startswith('killed-'):
                     record.update(status=classification,killed_by=case,actual=changed,baseline=baseline);break
             if record['status']=='survived':
                 record['fault_challenges']=[]
@@ -190,10 +200,13 @@ def check(output,job):
                     attempt_row=dict(fault=fault['id'],case=case)
                     try:
                         build(challenge/'build',systematic=mutant,fault=fault['id'],jobs=[job])
-                        changed=attempt(challenge/'build',case,challenge/'run')
-                        classification=outcome(fault_row['actual'],changed)
+                        with retention.case(challenge/'build',case,attempt) as (temporary,changed):
+                            classification=outcome(fault_row['actual'],changed)
+                            if classification.startswith('killed-'):retention.retain(temporary,changed,['witness'])
                         attempt_row.update(status=classification,actual=changed)
-                        if classification!='survived':
+                        if classification.endswith('evidence-gap'):
+                            record['evidence_gaps'].append(dict(case='fault:'+fault['id']+':'+case,status=classification,actual=changed,baseline=fault_row['actual']))
+                        if classification.startswith('killed-'):
                             record.update(status=classification,killed_by='fault:'+fault['id']+':'+case,actual=changed,baseline=fault_row['actual'])
                     except (ValueError,RuntimeError) as e:
                         # An incompatible seam/compile is not a killed original
@@ -205,6 +218,7 @@ def check(output,job):
                 proof=argument(text,program,mutant,compiler_layout,storage,runtime)
                 if proof:record.update(status='equivalent (argued, listed)',disposition=proof)
                 else:record['disposition']='unresolved: no equivalence claim; requires additional scenario or reviewed proof'
+                if record['evidence_gaps']:record['status']='evidence-gap'
         results.append(record);write_json(output/'mutation-results.json',results)
     # Each demonstrated mutant kill keeps its exact scenario/fault witness;
     # a greedy coverage selector may not drop it merely for adding no branch.
@@ -212,16 +226,22 @@ def check(output,job):
     write_json(output/'systematic-scenario-selection.json',dict(
         policy='retain-every-demonstrated-systematic-kill-witness',selected=selected,
         mutant_witnesses={r['id']:r['killed_by'] for r in results if r['killed_by']},
-        unresolved=[r['id'] for r in results if r['status']=='survived']))
+        unresolved=[r['id'] for r in results if r['status'] in ('survived','evidence-gap')]))
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
     summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
         compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,compiler_runtime_contract=runtime,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
         eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']-counts['not-compiled']}",
         generator_avoided_count=generation['avoided_count'],not_compiled=[r['id'] for r in results if r['status']=='not-compiled'],
-        unresolved_survivors=[r['id'] for r in results if r['status']=='survived'],
+        unresolved_survivors=[r['id'] for r in results if r['status'] in ('survived','evidence-gap')],
+        evidence_gap_ids=[r['id'] for r in results if r['evidence_gaps']],campaign_start_sha256=provenance['content_sha256'],campaign_head=provenance['binding']['head'],
         retained_killing_scenarios=sorted({r['killed_by'] for r in results if r['killed_by']}),model_calls=0,
         limitation='Systematic pinned-source mutation; unexplained survivors block adequacy; listed compiler refusals are excluded from eligible denominators. Public engineering, not z/OS equivalence.')
+    retention.seal(provenance['binding']['head'])
+    receipt(output/'resource-usage.json',job=job,phase='fresh-compiled',wall_seconds=time.monotonic()-started,
+        stored_bytes=size(output),budget_bytes=BUDGET,execution=retention.metrics())
+    if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
+    finish(output,job)
     print(json.dumps(summary,indent=2))
     if not all(r.get('expectation_met') for r in faults):raise AssertionError('declared fault expectation mismatch; preserved actual outcomes')
 

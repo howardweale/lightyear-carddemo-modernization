@@ -5,6 +5,11 @@ on:
       - 'src/lightyear_mainframe/**'
       - 'src/lightyear_factory/scenario_policy.py'
       - 'tools/check_factory_review.py'
+      - 'tools/check_equivalence_followup.py'
+      - 'tools/aggregate_equivalence_shards.py'
+      - 'tools/check_retention_margin.py'
+      - 'tools/measure_campaign_resources.py'
+      - 'docs/factory/retention-projection-2026-10-11.json'
       - 'docs/factory/decision-classification.json'
       - '.github/workflows/factory-systematic-review.yml'
   push:
@@ -14,33 +19,102 @@ permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: false
 jobs:
   engineering:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
-        job: [INTCALC, POSTTRAN]
+        include:
+          - {job: INTCALC, shard: 0, shards: 2}
+          - {job: INTCALC, shard: 1, shards: 2}
+          - {job: POSTTRAN, shard: 0, shards: 4}
+          - {job: POSTTRAN, shard: 1, shards: 4}
+          - {job: POSTTRAN, shard: 2, shards: 4}
+          - {job: POSTTRAN, shard: 3, shards: 4}
     env:
       PYTHONPATH: src:.
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Install pinned public compiler
         run: bash tools/legacy_twin/install-pinned.sh
+      - name: Require measured twofold disk and projected wall margin
+        run: python -B -m tools.check_retention_margin ${{ matrix.job }} work/retention-preflight.json
       - name: Compile and measure systematic public cases
         run: python -B -m tools.check_factory_review work/factory-review-${{ matrix.job }} ${{ matrix.job }}
+      - name: Optimized compiler equivalence and 200-case targeted campaigns
+        run: python -B -m tools.check_equivalence_followup work/factory-review-${{ matrix.job }} ${{ matrix.job }} --shard ${{ matrix.shard }} --shards ${{ matrix.shards }}
+      - name: Measure separate phase disk use including manifests
+        if: always()
+        run: python -B -m tools.measure_campaign_resources work/factory-review-${{ matrix.job }} work/campaign-resources.json
+      - name: Preserve compact public review records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-review-records-${{ matrix.job }}-${{ matrix.shard }}
+          path: |
+            work/campaign-resources.json
+            work/retention-preflight.json
+            work/factory-review-${{ matrix.job }}/resource-usage.json
+            work/factory-review-${{ matrix.job }}/campaign-start.json
+            work/factory-review-${{ matrix.job }}/campaign-manifest.json
+            work/factory-review-${{ matrix.job }}/review-summary.json
+            work/factory-review-${{ matrix.job }}/mutation-results.json
+            work/factory-review-${{ matrix.job }}/mutation-inventory.json
+            work/factory-review-${{ matrix.job }}/systematic-scenario-selection.json
+            work/factory-review-${{ matrix.job }}/generation-inventory.json
+            work/factory-review-${{ matrix.job }}/fault-results.json
+            work/factory-review-${{ matrix.job }}/equivalence-followup/*.json
+          retention-days: 14
       - name: Preserve every refusal and survivor
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: factory-review-${{ matrix.job }}
+          name: factory-review-${{ matrix.job }}-${{ matrix.shard }}
           path: work/factory-review-${{ matrix.job }}
+          retention-days: 14
+      - name: Publish sealed targeted shard for complete-only aggregation
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: targeted-shard-${{ matrix.job }}-${{ matrix.shard }}
+          path: work/factory-review-${{ matrix.job }}/equivalence-followup
+          retention-days: 14
+  aggregate:
+    needs: engineering
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src:.
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: targeted-shard-*
+          path: work/shards
+      - name: Verify all fixed partitions before threshold assessment
+        run: |
+          python -B -m tools.aggregate_equivalence_shards work/shards INTCALC 2 work/aggregate/INTCALC
+          python -B -m tools.aggregate_equivalence_shards work/shards POSTTRAN 4 work/aggregate/POSTTRAN
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: equivalence-aggregate
+          path: work/aggregate
           retention-days: 14
   cp037:
     runs-on: ubuntu-24.04
@@ -50,6 +124,8 @@ jobs:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'

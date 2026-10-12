@@ -337,5 +337,54 @@
       ]
     }
   },
-  "schema": "factory-systematic-public-summary/1"
+  "schema": "factory-systematic-public-summary/1",
+  "dated_corrections": [
+    {
+      "date": "2026-10-11",
+      "reason": "execution refusals must not count as kills",
+      "raw_records_unchanged": true,
+      "fresh_run": 38190468540,
+      "fresh_run_conclusion": "failure",
+      "fresh_head": "a091471d69bdf61c1f72b1d22fe3bc870ace1ece",
+      "claims": "completed fresh compiled phases only; targeted POSTTRAN incomplete; no threshold approval",
+      "programs": {
+        "INTCALC": {
+          "shared_classifier": "lightyear_mainframe.systematic_mutation.outcome",
+          "corrected_raw_kill_rate": "308/421",
+          "current_site_count": 421,
+          "counts": {
+            "evidence-gap": 113,
+            "killed-divergent": 146,
+            "killed-failure": 162
+          },
+          "previous_kills_now_evidence_gaps": [],
+          "mutants_with_any_evidence_gap": 167
+        },
+        "POSTTRAN": {
+          "shared_classifier": "lightyear_mainframe.systematic_mutation.outcome",
+          "corrected_raw_kill_rate": "360/483",
+          "current_site_count": 483,
+          "counts": {
+            "equivalent (argued, listed)": 111,
+            "evidence-gap": 9,
+            "killed-divergent": 175,
+            "killed-failure": 185,
+            "survived": 3
+          },
+          "previous_kills_now_evidence_gaps": [
+            "CBTRN02C-receiving-scale-94-4",
+            "CBTRN02C-receiving-scale-96-6",
+            "CBTRN02C-relational-203-36",
+            "CBTRN02C-negate-condition-203-37",
+            "CBTRN02C-skip-PERFORM-204-38",
+            "CBTRN02C-constant-230-68",
+            "CBTRN02C-constant-230-69",
+            "CBTRN02C-delete-MOVE-354-173",
+            "CBTRN02C-skip-PERFORM-366-179"
+          ],
+          "mutants_with_any_evidence_gap": 9
+        }
+      }
+    }
+  ]
 }

@@ -459,7 +459,7 @@ def run(target, scenario, output, *, generated=None, timeout=120):
     invariants = None
     if job == "POSTTRAN" and not build_record.get("systematic_mutant"):
         from .posttran_invariants import check, review_sheet
-        invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'])
+        invariants = check(images, {dd: (output / "after" / dd).read_bytes() for dd in FILES[job]}, timestamp=meta['candidate_timestamp'],returncode=result.returncode)
         write_json(output / 'posttran-invariants.json', invariants)
         write_json(output / 'posttran-review-sheet.json', review_sheet(images, {dd: (output / 'after' / dd).read_bytes() for dd in FILES[job]}))
     adequacy=dict(schema='scenario-adequacy/1',instrumented=False,decision_outcomes=None,

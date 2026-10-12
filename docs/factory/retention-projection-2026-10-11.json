@@ -1,0 +1,109 @@
+{
+  "schema": "factory-retention-projection/1",
+  "date": "2026-10-11",
+  "source_run": 38190468540,
+  "source_head": "a091471d69bdf61c1f72b1d22fe3bc870ace1ece",
+  "guard_bytes": 8589934592,
+  "source_run_status": "failed; never resumed",
+  "jobs": {
+    "INTCALC": {
+      "shards": 2,
+      "max_targeted_mutants_per_shard": 16,
+      "observed": {
+        "job": "INTCALC",
+        "non_run_fresh_bytes": 441926390,
+        "fresh_runs": 6465,
+        "fresh_run_bytes": 288835809,
+        "max_fresh_run_bytes": 238074,
+        "target_runs": 6856,
+        "target_run_bytes": 389888578,
+        "max_target_run_bytes": 103399
+      },
+      "compression": {
+        "fresh": {
+          "raw": 730762199,
+          "gzip": 146737123,
+          "unique_gzip": 107400693,
+          "files": 324257
+        },
+        "targeted": {
+          "raw": 489913166,
+          "gzip": 54344148,
+          "unique_gzip": 36173068,
+          "files": 346937
+        }
+      },
+      "observed_fresh_seconds": 1313,
+      "projected_fresh_stored_bytes": 683544811,
+      "projected_fresh_peak_bytes": 683842404,
+      "projected_targeted_peak_bytes": 3463657444,
+      "projected_runner_peak_bytes": 4147202255,
+      "required_free_disk_bytes": 8294404510,
+      "projected_wall_seconds": 5238,
+      "job_limit_seconds": 10800,
+      "wall_headroom": 2.0618556701030926,
+      "fresh_guard_headroom": 12.5612780689745,
+      "targeted_guard_headroom": 2.480018515364477
+    },
+    "POSTTRAN": {
+      "shards": 4,
+      "max_targeted_mutants_per_shard": 5,
+      "observed": {
+        "job": "POSTTRAN",
+        "non_run_fresh_bytes": 516194406,
+        "fresh_runs": 5915,
+        "fresh_run_bytes": 36668352169,
+        "max_fresh_run_bytes": 1597610994,
+        "target_runs": 0,
+        "target_run_bytes": 0,
+        "max_target_run_bytes": 0
+      },
+      "compression": {
+        "fresh": {
+          "raw": 37184546575,
+          "gzip": 601643876,
+          "unique_gzip": 526126136,
+          "files": 309765
+        },
+        "targeted": {
+          "raw": 225932,
+          "gzip": 36821,
+          "unique_gzip": 36801,
+          "files": 26
+        }
+      },
+      "observed_fresh_seconds": 1945,
+      "projected_fresh_stored_bytes": 1176538270,
+      "projected_fresh_peak_bytes": 3173552013,
+      "projected_targeted_peak_bytes": 3463657444,
+      "projected_runner_peak_bytes": 4640195714,
+      "required_free_disk_bytes": 9280391428,
+      "projected_wall_seconds": 3721,
+      "job_limit_seconds": 10800,
+      "wall_headroom": 2.902445579145391,
+      "fresh_guard_headroom": 2.7067256363886796,
+      "targeted_guard_headroom": 2.480018515364477
+    }
+  },
+  "assumptions": [
+    "All archived bytes gzip level 1 and SHA-256 dedup measured by streaming; entire archived set upper-bounds selected retention.",
+    "Non-run compiled bytes remain uncompressed, plus all deduplicated compressed bytes and 128 MiB receipt allowance.",
+    "Target phase allowance: two simultaneous largest observed POSTTRAN run folders plus 256 MiB compressed CAS/receipts/TCE.",
+    "Wall estimate: 1.25 times observed fresh duration plus 1.5 times INTCALC targeted seconds per observed run times 400 paired runs per targeted mutant, plus 240 seconds overhead.",
+    "POSTTRAN had no targeted execution before old guard; timing transferred conservatively from completed INTCALC. Projection, not observed new-head success.",
+    "Actual runner free disk is unknown locally. Mandatory preflight measures it and refuses all compilation unless at least twice projected combined peak."
+  ],
+  "model_calls": 0,
+  "source_artifacts": {
+    "INTCALC": {
+      "id": 11723541796,
+      "zip_sha256": "f757df273e44b78552a2fa2f3a63a2e92e6e6612eeccadbee0b89e1bf7a1e4e2",
+      "campaign_manifest_sha256": "f012fac48b6ca0b2a0ec2132d65009bb7a414f8dc778d8d096f2b0f73155077c"
+    },
+    "POSTTRAN": {
+      "id": 11723000431,
+      "zip_sha256": "d73a36dc499ce0bb35a813c0facae2afcca1f3a67e2741fc7a4eda53662ce20c",
+      "campaign_manifest_sha256": "61a52e6fae2479b5a7dd7d6231f91f8d49f8abea1f440fe729da3ab526f3fe6e"
+    }
+  }
+}

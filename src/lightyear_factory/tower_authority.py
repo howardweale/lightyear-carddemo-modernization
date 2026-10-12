@@ -21,10 +21,14 @@ class FactoryAuthority(FactoryDecisions):
         return {"phase1_budget_approved": phase == 1, "phase2_authorized": phase == 2,
                 "authority": "signed-factory-decision"}
 
-    def engineering(self, proof, contract, *, commit, seal, window, observer_sha256, class_hashes, caps):
+    def engineering(self, proof, contract, *, commit, seal, window, observer_sha256, class_hashes, caps, now=None):
         details = contract["details"]
         require((details["executable_commit"], details["request_seal"], details["window"]) == (commit, seal, window), "factory-exact-engineering-window-required")
         require((details["observer_sha256"], details["class_hashes"], details["caps"]) == (observer_sha256, class_hashes, caps), "factory-engineering-caps-binding")
+        from datetime import datetime, timezone
+        at = now or datetime.now(timezone.utc)
+        start, end = (datetime.fromisoformat(window[k]) for k in ("start", "end"))
+        require(at.tzinfo is not None and start <= at < end, "factory-engineering-window-closed")
         return self.verify(proof, "engineering-run-approval", contract, ("approve",))
 
     def equivalence(self, proof, contract, mutant_id, claim_scope):

@@ -123,6 +123,7 @@ def _factory_release(verdict, report, judge_key, bundle, authority):
             authority.verify(proof, "io-exception-acceptance", c, ("accept",))
             d = c["details"]
             require(d["source_sha256"] == adequacy["source_sha256"], "factory-io-source")
+            require(any(x.get("id")==d["outcome_id"] and x.get("outcome")==d["outcome"] and x.get("line")==d["line"] for x in adequacy.get("uncovered",[])), "factory-io-line-outcome")
             accepted.append([d["outcome_id"], d["outcome"]])
         threshold["accepted_io_outcomes"] = accepted
         scope = bundle["claim_scope"]
@@ -139,7 +140,9 @@ def _factory_release(verdict, report, judge_key, bundle, authority):
         for row in adequacy["systematic_mutation"]["equivalent_dispositions"]:
             # Compiler proof requires an explicit proof digest in the signed
             # assessment; a prose argument alone is never compiler proof.
-            compiler = row.get("resolution") == "compiler-proven" and row.get("compiler_proof_sha256")
+            from lightyear_control_tower.requests import SHA
+            proof_hash = row.get("compiler_proof_sha256")
+            compiler = scope == "twin" and row.get("resolution") == "compiler-proven" and isinstance(proof_hash,str) and SHA.fullmatch(proof_hash)
             if not compiler and row["mutant_id"] not in resolved:
                 reasons.append("signed-equivalence-review-required")
         reasons += assess(adequacy, threshold, report["compared_fields"], historical_io=False)

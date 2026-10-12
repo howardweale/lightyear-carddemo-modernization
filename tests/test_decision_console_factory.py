@@ -156,9 +156,41 @@ class FactoryTests(unittest.TestCase):
         d=c["details"]
         args=dict(commit=d["executable_commit"],seal=d["request_seal"],window=d["window"],
                   observer_sha256=d["observer_sha256"],class_hashes=d["class_hashes"],caps=d["caps"])
+        from datetime import datetime
+        args["now"]=datetime.fromisoformat(d["window"]["start"])
         authority.engineering(p,c,**args)
+        with self.assertRaisesRegex(ValueError,"window-closed"):
+            authority.engineering(p,c,**{**args,"now":datetime.fromisoformat(d["window"]["end"])})
         with self.assertRaisesRegex(ValueError,"caps-binding"):
             authority.engineering(p,c,**{**args,"caps":{"seconds":61}})
+
+    def test_real_signed_release_keeps_compiler_scope_and_exact_io_line(self):
+        from lightyear_mainframe.zos_evidence import Signer,initialize_key
+        from lightyear_factory.scenario_policy import PROPOSAL,issue,release
+        from lightyear_factory.tower_authority import FactoryAuthority
+        from lightyear_control_tower.decisions import digest
+        b=self.contract("factory-decision-backfill");bp,_,_=self.decide(b)
+        c=self.contract("scenario-threshold-approval")
+        c["details"].update(policy_sha256=digest(PROPOSAL),version=PROPOSAL["schema"],effective_condition="unconditional")
+        cp,_,_=self.decide(c)
+        io=self.contract("io-exception-acceptance");ip,_,_=self.decide(io)
+        def current(proof):return self.service.proof(self.token,proof["decision_sha256"])
+        ip=current(ip);authority=FactoryAuthority(self.service.public_key,ip["journal"]["journal_head_sha256"],current(bp),b)
+        key=Path(self.temp.name)/"fixture-judge.pem";initialize_key(key);signer=Signer(key)
+        verdict=signer.sign(dict(verdict="equivalent"))
+        a=dict(instrumented=True,source_sha256=io["details"]["source_sha256"],decision_outcomes="4/4",legacy_mutants_killed="50/50",
+          coverage_by_class={"business-logic":{"fraction":"4/4"}},
+          systematic_mutation=dict(counts={"killed-divergent":45,"killed-failure":5,"survived":0,"not-compiled":0,"equivalent (argued, listed)":1},eligible_count=50,excluded_equivalents=1,
+          equivalent_dispositions=[dict(mutant_id="fixture-1",argument="Pinned host compiler proof",source_sha256="a"*64,resolution="compiler-proven",compiler_proof_sha256="b"*64)],unresolved_survivors=[],not_compiled=[]),
+          distinct_values_per_output_field={"amount":2},uncovered=[dict(classification="io-handling",id=io["details"]["outcome_id"],outcome=io["details"]["outcome"],line=io["details"]["line"])])
+        report=issue(verdict,a,["amount"],signer)
+        bundle=dict(threshold=PROPOSAL,approval=current(cp),io=[ip],equivalents=[],claim_scope="twin")
+        self.assertTrue(release(verdict,report,signer.public,bundle,factory_authority=authority)["releasable"])
+        bundle["claim_scope"]="zos-facing"
+        self.assertIn("signed-equivalence-review-required",release(verdict,report,signer.public,bundle,factory_authority=authority)["reasons"])
+        bundle["claim_scope"]="twin";a["uncovered"][0]["line"]+=1
+        report=issue(verdict,a,["amount"],signer)
+        self.assertFalse(release(verdict,report,signer.public,bundle,factory_authority=authority)["releasable"])
 
 
 if __name__ == "__main__":

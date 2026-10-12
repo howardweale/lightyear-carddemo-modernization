@@ -11,9 +11,9 @@ read-only view; it is not the Decision Console.
 > Sections 10–14 describe the Factory scope added by the October 11 work order.
 > Until that release is merged and its acceptance tests pass, Factory decisions
 > are still recorded as dated decision files from chat and are not Tower-signed.
-> This first delivery implements the scoped decision contracts and consumers.
-> Programs and Business rules are implemented in delivery 2; Status and
-> Unresolved follow in delivery 3. No live
+> The three deliveries implement scoped decisions, Programs, Business rules,
+> Status and Unresolved. They still require green final-head CI and exact-commit
+> approval before merging. No live
 > Factory service is provisioned by this change. Signed-only consumption starts
 > only after Howard signs the backfill and an administrator installs its trust
 > setting. Historical evidence files remain unchanged.
@@ -23,9 +23,9 @@ read-only view; it is not the Decision Console.
 | Work | Scope | Where to open it |
 | --- | --- | --- |
 | Incoming Maintec files | `carddemo-zos` | Intake Console, normally `http://127.0.0.1:8767/` |
-| B06 | `ms94-b06` | Its separately installed Console, currently port 8766 |
+| B06 | `ms94-b06` | Its separately installed Console, currently port 8768 |
 | Public Verify graph | Separately provisioned Verify scope | Its configured Console; no automatic activation |
-| Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port set at provisioning (proposed 8768). See section 10 |
+| Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port 8769. See section 10 |
 
 Signing in to B06 does not expose CardDemo or Verify requests. Selecting a graph
 or workload in Discovery does not switch the authority. Use a separate data root,
@@ -279,7 +279,7 @@ public CardDemo sources, public data and generated scenarios. It never shows
 Maintec arrivals or customer values; those stay in the CardDemo intake scope.
 
 ```powershell
-& $Python -m lightyear_control_tower serve --root $FactoryRoot --authority $FactoryAuthority --port 8768
+& $Python -m lightyear_control_tower serve --root $FactoryRoot --authority $FactoryAuthority --port 8769
 ```
 
 Use the Factory data root and authority provisioned for it, never the intake or
@@ -297,14 +297,15 @@ B06 root. Sign in with your individual credential. The Factory tabs are:
 ## 11. Programs: read a program's evidence
 
 Select **Programs**, then a program, for example POSTTRAN (CBTRN02C). The page
-header shows the source hash, the twin toolchain and the evidence commit. The
-banner states **Releasable** or **Not releasable yet** and counts criteria met,
-pending and failed. "Pending" means waiting on a run or a decision; "failed"
-means measured and not met.
+header distinguishes the experiment head from the imported evidence commit.
+Source hashes and compiler scope appear in evidence panels. The banner states
+**Not releasable** for the current provisional programs; the checklist lists
+each criterion as met, pending, failed or not reported. A pending decision is not
+a measured failure, and a passing rate is not release approval.
 
 | Panel | What to check |
 | --- | --- |
-| **Releasability checklist** | Each threshold criterion with its measured value. Open "Policy as approved" to see the signed policy version the page applies. |
+| **Releasability checklist** | Each threshold criterion with its measured value. Expand the source links to inspect the display policy and signed overlays. The historical CI policy is not an effective Factory approval. |
 | **Scenarios** | Business-logic and I/O-handling coverage, separately; outcomes added by fault injection; accepted exceptions; listed gaps with reasons |
 | **Mutation** | Raw kills (failure and divergent), argued equivalents grouped by class, survivors, compiler refusals; each class shows how it is resolved: compiler-proven, class proof or individual review |
 | **Answer key** | `oracle_class` (for example `executable-twin (provisional)`), z/OS confirmation, and the twin limits that apply to this program |
@@ -316,7 +317,7 @@ decisions are made only in **Work queue**.
 
 ## 12. Factory decisions
 
-Factory decisions use the same signed journal as the rest of the Console. Codex
+Factory decisions use the same signed-journal mechanism in their own isolated authority. Codex
 and the factory act only on a signed decision bound to exact hashes, not on chat.
 
 | Decision | What you approve | Role |
@@ -356,8 +357,8 @@ Decisions given in chat between October 10 and the Factory release were recorded
 as dated decision files (`docs/factory/howard-decisions-*.json`). They are not
 Tower-signed. The release converts them into one backfill request in **Work
 queue**, listing each decision with its original date and bound hashes. Review
-and sign it once. After that, decisions given in chat are not acted on; ask for
-a Work queue item instead.
+and sign it once. After signature and the administrator’s activation of signed-only consumption,
+unsigned files no longer authorize consumers; ask for a Work queue item instead.
 
 ## 14. What the Factory scope does not do
 
@@ -413,3 +414,117 @@ review/decision is outstanding; failed means a measured criterion is unmet.
 Waiting on you opens the Work queue. No request is created by merely viewing a
 program. Business rules displays rule evidence strength plus scenario adequacy
 and reasons without hiding the original rule-evidence classification.
+
+
+## Status and Unresolved (delivery 3)
+
+Status uses `/api/tower/status`, the same `factory_status.status` model as the
+committed `docs/factory/current-status.md`. The offline document is a pinned
+snapshot, not a live queue: zero installed pending requests does not mean all
+scientific reviews are complete. The live view adds verified decisions and queue
+ages. Old requests without timestamps show “not reported”; no age is invented.
+B06 hold and B07 planning are historical receipt states, not execution permission.
+
+Unresolved uses `/api/tower/unresolved?program=POSTTRAN&kind=evidence-gap`.
+Filters include survivors, evidence gaps, twin limits, pending reviews,
+invalidated arguments, disagreements and divergences. Only recorded evidence
+creates rows. Cross-scope repetitions are labelled; the row count is not a
+mutation adequacy denominator. Empty filters do not prove the absence of defects.
+Every row includes its source hash. Signed keep-to-fix changes append invalidation
+overlays while preserving raw arguments. Programs and these two routes are
+unavailable outside Factory. The original Console tabs remain present; views
+without an installed adapter say unavailable rather than showing another scope.
+
+Future pages are designs only: [dual-run monitor](factory/tower-dual-run-plan.md),
+[ZD&T calibration](factory/tower-zdt-plan.md) and [B07 campaigns](factory/tower-b07-plan.md).
+No dispatch, native run or new decision kind is enabled by those pages.
+
+## Closed API and vocabulary reference
+
+Routes require authentication except session establishment. Mutating routes use
+the existing CSRF/session controls; this list grants no role or execution power.
+A route can report unavailable in a scope. Factory-only routes are programs,
+program, status and unresolved; intake also leaves knowledge and business-rules
+unavailable. Session uses POST; reads use GET and the four write routes use POST.
+
+- `/api/tower/arrivals`
+- `/api/tower/business-rules`
+- `/api/tower/campaign`
+- `/api/tower/campaigns`
+- `/api/tower/catalogue`
+- `/api/tower/decide`
+- `/api/tower/events`
+- `/api/tower/export`
+- `/api/tower/history`
+- `/api/tower/item`
+- `/api/tower/knowledge`
+- `/api/tower/logout`
+- `/api/tower/program`
+- `/api/tower/programs`
+- `/api/tower/proof`
+- `/api/tower/propose`
+- `/api/tower/queue`
+- `/api/tower/review`
+- `/api/tower/rules`
+- `/api/tower/session`
+- `/api/tower/status`
+- `/api/tower/unresolved`
+- `/api/tower/validation`
+- `/api/tower/workspace`
+
+Navigation identifiers and labels:
+
+- `status`: Status
+- `unresolved`: Unresolved
+- `programs`: Programs
+- `campaigns`: Campaigns
+- `queue`: Work queue
+- `catalogue`: Catalogue
+- `workspace`: Customer workspace
+- `history`: Decision history
+- `knowledge`: Graph memory
+- `businessRules`: Business rules
+
+The eight Factory kinds are listed in section 12 and the migration section.
+The following is the complete registry vocabulary across installed scopes; it
+does not make default/B06 kinds available in Factory. Intake retains only
+intake-acceptance, normalization, difference-disposition and evidence-release.
+
+- `b06-pause`
+- `b06-qualification-group`
+- `business-rule-disposition`
+- `campaign-authorization`
+- `classification-acceptance`
+- `difference-disposition`
+- `embedding-provider-approval`
+- `engineering-run-approval`
+- `equivalence-review`
+- `evidence-release`
+- `factory-decision-backfill`
+- `freeze-approval`
+- `graph-annotation`
+- `graph-annotation-verified`
+- `graph-search-labels`
+- `intake-acceptance`
+- `io-exception-acceptance`
+- `legacy-behaviour-disposition`
+- `measurement-validity`
+- `model-routing-policy`
+- `model-spend-approval`
+- `normalization`
+- `partner-share`
+- `pilot-slice-approval`
+- `procedure-equivalence-policy`
+- `qualification-acceptance`
+- `reference-approval`
+- `requalification-request`
+- `resume`
+- `rule-approval`
+- `rule-retirement`
+- `rule-technical-review`
+- `scenario-threshold-approval`
+- `twin-human-review`
+- `verify-attempt-review`
+- `verify-budget-increase`
+- `verify-graph-projection`
+- `verify-normalization`

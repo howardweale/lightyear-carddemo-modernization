@@ -29,6 +29,8 @@ jobs:
         run: |
           python -B -m unittest test_ci_gate -v
           python -B tools/ci_gate.py lint
+          python -B tools/check_tower_manual.py
+          python -B -m unittest test_decision_console_manual -v
   required-ci:
     needs: documentation-and-lint
     if: always()

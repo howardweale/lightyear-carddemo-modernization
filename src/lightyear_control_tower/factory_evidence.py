@@ -17,12 +17,13 @@ def take(value, keys):
 
 
 class FactoryEvidence:
-    def __init__(self, root, expected_index_sha256):
+    def __init__(self, root, expected_index_sha256, *, index=None):
         require(isinstance(expected_index_sha256,str) and SHA.fullmatch(expected_index_sha256), "factory-index-trust-required")
         self.root = Path(root)
         path = confined(root, INDEX, internal=True)
-        require(sha256(read_bytes(path)).hexdigest() == expected_index_sha256, "factory-index-hash")
-        self.index = read_json(path)
+        raw = read_bytes(path) if index is None else canonical(index)
+        require(sha256(raw).hexdigest() == expected_index_sha256, "factory-index-hash")
+        self.index = read_json(path) if index is None else index
         require(set(self.index) == {"schema", "commit", "created_at", "sources"} and self.index["schema"] == "factory-evidence-index/1")
         require(len(self.index["commit"]) == 40 and all(c in "0123456789abcdef" for c in self.index["commit"]))
         self.sources = {}
@@ -40,7 +41,9 @@ class FactoryEvidence:
         path = confined(self.root, source["path"])
         raw = read_bytes(path)
         require(sha256(raw).hexdigest() == source["sha256"], "factory-evidence-hash")
-        return raw.decode("utf-8") if FACTORY_FILES[name] is None else take(read_json(path), FACTORY_FILES[name])
+        if FACTORY_FILES[name] is None: return raw.decode("utf-8")
+        value=read_json(path)
+        return [take(row, FACTORY_FILES[name]) for row in value] if isinstance(value,list) else take(value, FACTORY_FILES[name])
 
     def block(self, value, *names):
         return dict(value=value, sources=[self.sources[n] for n in names])
@@ -122,21 +125,35 @@ class FactoryEvidence:
             m=row["mutation"]
             require(m["killed"]==kills and m["sites"]==fresh["mutant_count"] and m["kill_rate"]==f"{kills}/{m['eligible']}", "factory-scope-denominator-binding")
             require(m["eligible"]==m["sites"]-len(m["excluded_equivalents"])-len(m["compiler_refusals"]), "factory-scope-exclusions")
+        records=self.read(prefix+"results.json")
+        for entry in entries:
+            entry["dependent_arguments"]=sorted({r["id"] for r in records if entry["id"] in r.get("argument",{}).get("depends_on_register",[])})
+        view["keep_or_fix"]["sources"].append(self.sources[prefix+"results.json"])
+        grouped=[]
+        for kind in sorted({r["mutant"]["operator"] for r in records}):
+            members=[r for r in records if r["mutant"]["operator"]==kind]
+            grouped.append(dict(class_name=kind,count=len(members),resolutions=dict(Counter(r["status"] for r in members)),
+                signed_acceptances=sum(any(x["kind"]=="equivalence-review" and x["outcome"]=="accept" and x["details"]["packet_sha256"]==self.sources[prefix+"results.json"]["sha256"] and r["id"] in x["details"]["items"] for x in overlays) for r in members),
+                scope="Compiler proof is pinned-host only; class/individual arguments need exact signed review"))
         view["observed_head"]=fresh["campaign_head"]
         view["mutation"]=self.block(dict(historical=False,raw_counts=counts,raw_kill_fraction=fresh["kill_rate"],
-            classes=followup["disposition_counts"],compiler_scope=followup["compiler_scope"],
+            classes=grouped,disposition_counts=followup["disposition_counts"],compiler_scope=followup["compiler_scope"],
             compiler_refusals=fresh["not_compiled"],generator_avoided=fresh["generator_avoided_count"],
             survivors=fresh["unresolved_survivors"],evidence_gap_ids=fresh["evidence_gap_ids"],
             scoped_assessments=scopes,resources=followup["resource_usage"],
-            warning="CI scope assessments retain the historical operator-policy basis. Signed Factory reviews are separate overlays; neither these rates nor green CI authorize release. Evidence-gap counts overlap proof categories."),prefix+"fresh.json",prefix+"summary.json",prefix+"threshold.json")
+            warning="CI scope assessments retain the historical operator-policy basis. Signed Factory reviews are separate overlays; neither these rates nor green CI authorize release. Evidence-gap counts overlap proof categories."),prefix+"fresh.json",prefix+"summary.json",prefix+"threshold.json",prefix+"results.json")
         view["scenarios"]=self.block(dict(public_data=fresh["before_faults"],with_declared_faults=fresh["after_faults"],
             fault_count=fresh["fault_count"],fault_expectations_met=fresh["fault_expectations_met"],
             gaps=scopes["twin"]["accepted_uncovered_IO"]+scopes["twin"]["unaccepted_outcomes"],
             exception_state="Historical acceptance; signed Factory exception overlay required"),prefix+"fresh.json",prefix+"threshold.json")
         current=scopes["twin"]
+        gaps=current["accepted_uncovered_IO"]+current["unaccepted_outcomes"]
+        signed_io=[g for g in gaps if any(x["kind"]=="io-exception-acceptance" and x["outcome"]=="accept" and x["details"]["source_sha256"]==current["source_sha256"] and x["details"]["outcome_id"]==g["id"] and x["details"]["outcome"]==g["outcome"] and x["details"]["line"]==g["line"] for x in overlays)]
+        remaining=[g for g in gaps if g not in signed_io]
+        view["scenarios"]["value"].update(signed_exceptions=signed_io,gaps=remaining,exception_state="Exact signed overlays only; other acceptances remain historical")
         checklist.clear()
         criterion("Business outcomes",current["business"]["fraction"],"met" if Fraction(current["business"]["fraction"])>=Fraction(policy["business_logic_outcomes"]) else "failed","Fresh measured business coverage")
-        criterion("I/O outcomes",current["io"]["fraction"],"pending" if current["accepted_uncovered_IO"] or current["unaccepted_outcomes"] else "met","Public and fault coverage; signed exact exceptions remain a separate gate")
+        criterion("I/O outcomes",current["io"]["fraction"],"pending" if remaining else "met","Public and fault coverage; signed exact exceptions remain a separate gate")
         for scope,row in scopes.items():
             rate=row["mutation"]["kill_rate"]
             criterion("Mutation rate ("+scope+")",rate,"met" if Fraction(rate)>=Fraction(policy["legacy_mutants_killed"]) else "failed","Measured fraction under the CI assessment exclusions, not an effective Factory threshold approval")
@@ -180,7 +197,7 @@ def decision_view(service, token):
                 pending.append(dict(id=item["id"],program=contract["program"],kind="invalidated-or-stale-review",source_sha256=item["bound"]["contract"]))
         else:
             pending.append(dict(id=item["id"],program=contract["program"],kind=item["kind"],
-                created_at=item.get("created_at_utc"),source_sha256=item["bound"]["contract"]))
+                created_at=item.get("created_at_utc"),source_sha256=item["bound"]["request"]))
     return overlays,pending
 
 

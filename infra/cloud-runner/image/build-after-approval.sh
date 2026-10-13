@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Phase 2 operator command ONLY, on an approved builder, after explicit spend approval.
 set -euo pipefail
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 : "${PHASE2_APPROVAL:?record the stand-up approval reference}"
 : "${BASE_IMAGE_PROJECT:?}"
 : "${BASE_IMAGE_NAME:?}"

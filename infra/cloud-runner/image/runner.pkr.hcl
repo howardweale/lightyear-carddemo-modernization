@@ -45,8 +45,11 @@ source "googlecompute" "runner" {
 
 build {
   sources = ["source.googlecompute.runner"]
+  provisioner "shell" {
+    inline = ["mkdir -p /tmp/lightyear-bundle"]
+  }
   provisioner "file" {
-    source      = var.bundle_path
+    source      = "${var.bundle_path}/"
     destination = "/tmp/lightyear-bundle"
   }
   provisioner "file" {

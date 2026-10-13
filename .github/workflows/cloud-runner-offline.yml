@@ -67,3 +67,18 @@ jobs:
           unzip -q "$RUNNER_TEMP/packer.zip" -d "$RUNNER_TEMP/lightyear-packer"
           "$RUNNER_TEMP/lightyear-packer/packer" fmt -check -recursive infra/cloud-runner/image
           "$RUNNER_TEMP/lightyear-packer/packer" validate -syntax-only infra/cloud-runner/image/runner.pkr.hcl
+          cd infra/cloud-runner/image
+          mkdir -p "$RUNNER_TEMP/cloud-image-fixture"
+          "$RUNNER_TEMP/lightyear-packer/packer" init .
+          "$RUNNER_TEMP/lightyear-packer/packer" validate \
+            -var='project_id=offline-test-project' \
+            -var='zone=us-west1-a' \
+            -var='base_image_name=offline-base-image' \
+            -var='base_image_project=offline-test-project' \
+            -var='base_image_id=123456789' \
+            -var='builder_service_account=builder@offline-test-project.iam.gserviceaccount.com' \
+            -var='builder_subnetwork=offline-builder-subnet' \
+            -var='image_name=offline-result-image' \
+            -var="bundle_path=$RUNNER_TEMP/cloud-image-fixture" \
+            -var='bundle_manifest_sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' \
+            -var='source_commit=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' .

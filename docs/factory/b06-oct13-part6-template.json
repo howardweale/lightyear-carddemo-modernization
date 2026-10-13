@@ -55,6 +55,7 @@
     "b": "An application-phase marker ties the approximately 12,400-generation point to one operation and reproduces in both attempts.",
     "otherwise": "Cause not identified: stop observer repair; Howard selects an alternative. No further repair attempt."
   },
+  "content_sha256": "c8cd95d677de22ffaedf52212e16d4fcb3164bd50fd5684404fcf745d390bbd7",
   "criterion_a": {
     "attempt": null,
     "explanation": null,
@@ -72,13 +73,12 @@
     "same_operation": null,
     "supported": false
   },
-  "implementation_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+  "implementation_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
   "measurement_credit": false,
   "model_calls": 0,
   "native_run_authorized": false,
   "next_action": "After two consumed attempts, stop observer repair. If neither preregistered criterion is supported, Howard selects an alternative.",
   "observer_source_sha256": "6420e836dcf69eb433cfab6beafaeca237ae1f3e0dcf48a05a4b16cb92246bac",
   "qualification_credit": false,
-  "request_sha256": "107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
-  "content_sha256": "e8652baa6f366e8ee462df83076f4d24fa2a94690bff7b88f0f61484d3c32ee8"
+  "request_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901"
 }

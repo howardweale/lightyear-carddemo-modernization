@@ -1,0 +1,51 @@
+name: Cloud runner admission plan
+# Phase 1: public request metadata only. Never put assets, code or secrets in inputs.
+on:
+  workflow_dispatch:
+    inputs:
+      metadata_bundle:
+        description: 'JSON containing request, go envelope and witness envelope; metadata only'
+        required: true
+        type: string
+permissions:
+  contents: read
+# There is deliberately NO id-token grant, cloud auth action, Terraform apply,
+# Packer build, VM create call, or operational signing command in Phase 1.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  plan:
+    environment: cloud-runner-admission
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install cryptography==50.0.1
+      - name: Validate against independently reviewed protected-environment policy
+        env:
+          PYTHONPATH: src:.
+          CLOUD_RUNNER_BUNDLE: ${{ inputs.metadata_bundle }}
+          CLOUD_RUNNER_POLICY: ${{ vars.CLOUD_RUNNER_POLICY_JSON }}
+          CLOUD_RUNNER_POLICY_SHA256: ${{ vars.CLOUD_RUNNER_POLICY_SHA256 }}
+        run: |
+          python -B tools/cloud_runner_dispatch_bundle.py --output work/cloud-runner-plan
+          python -B -m lightyear_cloud_runner \
+            --request work/cloud-runner-plan/request.json \
+            --go work/cloud-runner-plan/go.json \
+            --witness work/cloud-runner-plan/witness.json \
+            --policy work/cloud-runner-plan/policy.json \
+            --policy-sha256 "$CLOUD_RUNNER_POLICY_SHA256" \
+            --output work/cloud-runner-plan/admission.json
+      - name: Retain public admission plan
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cloud-runner-admission-${{ github.run_id }}
+          path: work/cloud-runner-plan/admission.json
+          if-no-files-found: error
+          retention-days: 30

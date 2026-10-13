@@ -1,0 +1,8 @@
+**/.terraform/
+**/terraform.tfstate*
+**/crash.log
+**/local*.tfvars
+**/*.auto.tfvars
+**/*.tfplan
+**/packer-manifest.json
+**/bundle/

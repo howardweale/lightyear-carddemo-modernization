@@ -1,0 +1,9 @@
+# Generic scenario engine — step 1, October 12
+
+Howard approved the plan and budgets and asked to start step 1 only. `generic_scenario_ir.translate` accepts hash-bound fixed-format program text, an explicit map of hash-bound copybooks, dataset/key bindings and a decision inventory. It never discovers files by program name. Synthetic tests cover signed/packed layouts, offsets, decimal domains, arithmetic precedence, assignments, Boolean conditions, branch guards, COPY source locations, hash tampering, alias refusal and bound keys.
+
+The typed expression/statement IR retains PIC, USAGE, location, receiving conversion obligations and a conservative may-dependency graph. It is not a reaching-definition proof. Unsupported COPY replacement, uncertain aliases/variable layouts, strings/collation, external calls, I/O, unknown names and implicit conversions produce individual located issues; they never become successful constraints. `translation_complete` applies only to the supported syntax census, not to solver semantics or program equivalence. Real program translation may remain incomplete.
+
+Z3 is pinned for future Linux CI to **4.15.3.0**, wheel SHA-256 `a9afd9ceb290482097474d43f08415bcc1874f433189d1449f6c1508e9c68384`, from the [release metadata](https://pypi.org/pypi/z3-solver/4.15.3.0/json). The lock records the approved 1,000 cases / 200 targets / 30 seconds per target / four hours / 8 GiB / zero-model budgets. No package was installed and no solver call was made. Other platforms require their own reviewed wheel hash rather than substituting this one.
+
+Steps 2–4, record construction, feedback loops, compiled campaigns and held-out CBTRN03C/CBSTM03A acceptance have not started. No hand-written held-out scenarios, candidate/native execution, release approval or threshold clearance is claimed. Seven focused tests pass. Merge remains held until B06 cleanup is sealed.

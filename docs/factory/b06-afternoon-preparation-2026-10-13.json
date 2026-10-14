@@ -1,0 +1,102 @@
+{
+  "assets": {
+    "artifact_type": "b06-engineering-assets/1",
+    "created_at_utc": "2026-10-13T16:11:03.746623+00:00",
+    "docker_calls": 0,
+    "engineering_hold": true,
+    "image": "sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268",
+    "implementation_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "mirror_adapter_source_sha256": "1f3de745c960e4e9451c382705ea848859df264e8e61c52d4640b93dcac5aa0b",
+    "model_calls": 0,
+    "native_launch": false,
+    "native_template_sha256": "bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+    "observer_source_sha256": "6420e836dcf69eb433cfab6beafaeca237ae1f3e0dcf48a05a4b16cb92246bac",
+    "request_template_validation": "r5-equivalent recovery only; replacement request not yet validated",
+    "retained_snapshot_sha256": "ba570784e544a252682737ff0396df59dd7b3fc5d5be63e94c0afc075a1ce555",
+    "retained_template_sha256": "54d08a53f748fa11a13df8f771b5f50f76e3383c32330346c2f15be854ba17e9",
+    "template_path": "templates/j1/plan.json",
+    "source_preparation_index_sha256": "94e57ee681bc70d12cbfce9e6ba03352ca647d2f7f0914129719e1b3fb6c4f77",
+    "preparation_seconds": 308.969,
+    "verification_seconds": 64.422,
+    "content_sha256": "c0f23e40cee12e35028bbacfe308bffc96a14668cb1f6d091eb57fc82eab24ca",
+    "bound_file_count": 111311,
+    "asset_index_file_sha256": "fa93e8f1b61279e38addc4c9a81f77549d9dafa7dd7fd47a1a7b0806f07eae57"
+  },
+  "authority": {
+    "artifact_type": "b06-replacement-public-authority/1",
+    "public_key_sha256": "6d4083d20e5d17e5d3be07dd660621f913cfd50da60c68a361fe628565f7aa7f",
+    "old_public_key_sha256": "4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0",
+    "old_authority_status": "lost and unrecoverable; recorded never used for any signature; not trusted if it reappears",
+    "operational_signatures_created": 0,
+    "private_key_read_back": false
+  },
+  "binding_conflict": {
+    "base_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "execution_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
+    "unchanged_required_template_seal": "bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+    "prospective_template_seal_with_authorized_source": "d9e10a3f95dac064e2464e847faaf9dfbd43c81cd59efdfb1ec278b82bfb56be",
+    "changed_template_fields": [
+      {
+        "path": "tools/ms94_b06_oct13_authorization.py",
+        "old_sha256": "3dffd253dd72c5619bf69f4711f75532aed3444fd1f2053288ec58ea91f4742b",
+        "new_sha256": "f860aa52e7482a8f5062c11a6474256db66ff4da529e8f1ec955d2f0a73ee1af"
+      },
+      {
+        "path": "tools/ms94_b06_engineering_key.py",
+        "old_sha256": "ec787f53e818685b86d33185665d64bd19d87fac0ba11eb740f41a2b6baebc7b",
+        "new_sha256": "d4b6a05d32d5fd43de0490de4197b21462d8407926cf079e8c49aeb528ce7cb8"
+      }
+    ],
+    "template_reseal_authorized": true,
+    "r4_generated": true,
+    "request_observer_source_commit_must_track_implementation_commit": true,
+    "four_hour_review_guard_unchanged": true,
+    "latest_delivery_for_2pm_pdt": "2026-10-13T17:00:00Z",
+    "latest_delivery_for_4pm_pdt": "2026-10-13T19:00:00Z"
+  },
+  "inventory": {
+    "checked_at_utc": "2026-10-13T16:11:44.6813307Z",
+    "free_host_memory_bytes": 6387294208,
+    "total_host_memory_bytes": 68065124352,
+    "free_disk_bytes": 674140061696,
+    "docker_image_ls_exit": 1,
+    "docker_ps_exit": 1
+  },
+  "verdict": "NOT READY",
+  "morning_window_cancelled": true,
+  "attempts_consumed_today": 0,
+  "operational_signatures_created": 0,
+  "native_runs": 0,
+  "merge_hold": true,
+  "full_offline_suite": {
+    "discovered": 538,
+    "passed": 491,
+    "skipped": 47,
+    "initial_guard_errors": 10,
+    "guard_errors_rerun_passed": 10
+  },
+  "request_r4_status": "delivered and verified",
+  "exact_go_line_issued": true,
+  "request_content_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901",
+  "request_file_sha256": "5fe273fcffe2c6c299cc3ff4fff1784ff56a5c0c3af7112fd27d844e4ef8b6c5",
+  "r4_final_verification": {
+    "request_content_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901",
+    "request_file_sha256": "5fe273fcffe2c6c299cc3ff4fff1784ff56a5c0c3af7112fd27d844e4ef8b6c5",
+    "execution_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
+    "template_seal": "d9e10a3f95dac064e2464e847faaf9dfbd43c81cd59efdfb1ec278b82bfb56be",
+    "template_validation_seconds": 58.015,
+    "all_111311_assets_verified": true,
+    "public_identity_passed": true,
+    "request_validation_passed": true,
+    "exact_clean_checkout_passed": true,
+    "no_signature_or_native_run": true
+  },
+  "new_go_received": false,
+  "final_asset_index_seal": "b5314039a6af11e89cfdd532ca669eb38f0b6eefeb8e935726b2b13176ca2329",
+  "template_binding_exception": {
+    "rule": "template seal must stay bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+    "authority": "Howard explicitly approved the two Python hash updates and request observer_source commit binding in this chat on October 13; only the authorized WINDOW, delivery-deadline and engineering-key-pin changes are represented",
+    "scope": "No observer/helper/class/witness/cap/image/experiment change",
+    "new_template_seal": "d9e10a3f95dac064e2464e847faaf9dfbd43c81cd59efdfb1ec278b82bfb56be"
+  }
+}

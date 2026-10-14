@@ -1,0 +1,700 @@
+{
+  "schema": "milestone-reconciliation/1",
+  "as_of": "2026-10-14",
+  "source_head": "731bb76a2c05241e2bb493031b81d9b76f1a4463",
+  "merge_hold": "lifted by user on 2026-10-14; historical runtime decisions unchanged",
+  "sources": [
+    {
+      "source": "docs/b06-bounded-native-evidence-milestone.md",
+      "sha256": "3228fc9373e848c42e343d43a3d70686658bec183f7c71f9affcc648b9cf78d7",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-r3-performance-repair-milestone.md",
+      "sha256": "e57dd76113d347aac0dee212ec0a9f9ea2b0b5643d42e837c6e7489d0af595dc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-r3-repair-milestone.md",
+      "sha256": "4c48f083599058e9b357aa59bed636cfb39aa2624cf43a2894c432ec4a066f1a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-v2-preparation-milestone.md",
+      "sha256": "dd28169cb7c265107955c3c01047b5be71849147fc5e006ddda5c70c842a00d6",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-v2-r2-preparation-milestone.md",
+      "sha256": "cade695849e815bf4d3d622515f47fcfc2b229dea5217d4fc05634942e0138fc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-dividends-milestone-2026-10-10.md",
+      "sha256": "8d66ba3323c3a5e8a1f7e1128da8cb0e3c64115b8bf4a67b878bd20e618c9915",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-engineering-approval-milestone.md",
+      "sha256": "9821195afb08a4c0695b496e12e0285c95b34c01d0fe13ba158d1b78ebcaac3d",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-engineering-milestone.md",
+      "sha256": "bc9f1bd556bb403dec20922bd3e0914f241b0b990c584616a8423d8ca40812b8",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-memory-measurement-milestone.md",
+      "sha256": "29ccf2f9c9de7163f2831d50c2d871db66f43649adb34f72033fad27b1c0c6a1",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-audit-milestone.md",
+      "sha256": "b8e10b291690cf6c4db03701b4c4e7ca7f18c04ae58c5e529bb317a27b3fc9a3",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-practice-window2-milestone.md",
+      "sha256": "35d6be0f27b3c18be52e614cec766bcdf7a22603cf3c211cbbbbaa8067de7da5",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-startup-repair-milestone.md",
+      "sha256": "b3aeaf246fd34cc08d1f0df8d8aadc3ec304debaa62517e3a27c1ade8235620a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-stress-milestone.md",
+      "sha256": "fb789b7ede8be0bfc8fce98ab842191facdcde32e835497c8ee37461705b5895",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-v2-milestone.md",
+      "sha256": "c7b5908b51d7968d06d5d42cbeb6724dc289ee9e503bfa1af1e2c83c07e111e0",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-oct09-integration-milestone.md",
+      "sha256": "e5e7881db902acf220ac6deb99f45f58840a8ca735305e6cc4cf469cdc2db3bc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-oct13-engineering-milestone.md",
+      "sha256": "3b686b5d8b38c7850df6eee4ee7e1db4fa66914244fab18bd087c3f53bb57a82",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-provenance-review-milestone.md",
+      "sha256": "0ac7a2fa0dde3d2497d483dcc46054b27670e1da28c54c82defc604134d1f0c3",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-retained-jdk-alternatives-milestone.md",
+      "sha256": "d3b5cad63dcb0c0f1f0b90eb9b41a0f84e8cf892906f5f993ca917b92fd16506",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-runtime-oct08-milestone.md",
+      "sha256": "7c4d24fc9a5c104db816b59c4865ad0cfdb1450f74cbc0dcd517abb462403a7f",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-tower-unicode-repair-milestone.md",
+      "sha256": "1e9332c82df1165616c34d600bd881173eb1954e8f7b14d2e02bba3e30a82396",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-r3-afternoon-milestone.md",
+      "sha256": "961cd3ddf52c418e87788e4a36fdcacc8aa62fb16475bf8de0bf2e64065d9b74",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-r3-terminal-milestone.md",
+      "sha256": "9715bafc9745ab06e8175424485e52a6402d64100ed4fd44210469eb3834d550",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-return-diagnostic-milestone.md",
+      "sha256": "97a9d14bc162bc2eb59f3e6cba1272e4fa7e08e48211cd2e21f8d21999559a3d",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/business-rules/evidence-strength-milestone.md",
+      "sha256": "7d91a1e5b9b630325d26d0f4089d3245285431cf58beb674d2dc06ed2bf10a79",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/business-rules/milestone-2026-10-10.md",
+      "sha256": "5555f6739570fca7ad5f3e6199b088293fed249f5aa3d557fb1c8da72242ad54",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r6.md",
+      "sha256": "81e772339b44ac68afd3f3990325d213e15dc88be76456e4869e29eefd1ffbf0",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r7.md",
+      "sha256": "8f95486d4d47293301b317439a379c393ff61522e401f51b05e88ab777613e8a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r8.md",
+      "sha256": "c1947cf463a8f994826a968d9dc6da3487e6d70401132215d34ac696ed83aff6",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/control-tower-decision-console-milestone.md",
+      "sha256": "af541e1bcc52769e3b40c67bc75a85d77fac1840e62addaf5f551cda259d927c",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/control-tower-review-v2-milestone.md",
+      "sha256": "a0a25da8ef70b763e9d45d92857fe437f35e1d03af28ce8c3f97492ad4c9a0c7",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-build-once-milestone.md",
+      "sha256": "77cba05e557735c1f0677c152228fe8a7a41a9f6cc83c89a1243acb957f64e78",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-completeness-milestone.md",
+      "sha256": "5e60bea36a3d15df08199e9c0732df1477bb0d147baf7cdde298869283ed10bb",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-content-identity-milestone.md",
+      "sha256": "cfee9a7e89b6b3603117692e36f00d542835bbdef3aa3c358f947a300f69f190",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/after309-ci-milestone.md",
+      "sha256": "6303ccc38184de68a6baec1bbeace0ec19fd247bbc6d8839ce87f5ab7fadb33e",
+      "milestones": [
+        100,
+        103
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/alternatives-twin-followup-milestone.md",
+      "sha256": "c6a6b3802a52d69bd75e94b5aebe64c15042fa020da61adf2ec7b5265550a47a",
+      "milestones": [
+        94,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/equivalence-b1-b2-milestone.md",
+      "sha256": "1b72e67a1143bfcfcd49480fc9fe42fbee8c94a87d8ff5c7c7b1cc700fc00548",
+      "milestones": [
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/generated-scenarios-milestone.md",
+      "sha256": "76d7a242bd1ef2aee939fb3ff7a6326625daa0d7390040c500dda4e972691dac",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/generic-scenario-step1-milestone.md",
+      "sha256": "da59952709be2e4d25b44d6313a9b9139aade0819f98761abdc4e9330bdb1f7d",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/gnucobol-twin-milestone.md",
+      "sha256": "239a85f5abde2b06115c7e21404819b5cc9d9675fe2c9096cd46b5fda770903e",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/graph-memory-milestone.md",
+      "sha256": "fd77764c0e46433c41f20b7dd43d0da8d6bb175deb18e2bcd0cfbfb5a85bd678",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/howard-decisions-2026-10-11-milestone.md",
+      "sha256": "40289b8bf05884b5609567a487a1e5ef8f14b6f84a0babdaa6573ac987ff02f3",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/howard-decisions-2026-10-11b-milestone.md",
+      "sha256": "c1220b3ba262dd786e4eb4643fcd6fd665aed47dcc737359c611c0bab792c670",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/indexed-key-hardening-milestone.md",
+      "sha256": "5f45dc2b5bd229d833c0ea6c860f8e2ee2ca074915d3f04fbc8a92f3c4ad7e84",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/posttran-dedicated-phase1-milestone.md",
+      "sha256": "87ee76a38fba3836310efbbc01d61bc9fb1e53ec15c5f5dd599eb082925543ad",
+      "milestones": [
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/posttran-review-milestone.md",
+      "sha256": "0ea40a402a4c80f761ea8f820482b6d3383db4783041346f9b60604f2a602941",
+      "milestones": [
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/retention-fix-milestone-2026-10-11.md",
+      "sha256": "ff4aa9e5d8ae5ea51af8e65de7cef2403aa545376d564f6ef86233807636e8f1",
+      "milestones": [
+        100,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/review-304-307-milestone.md",
+      "sha256": "58515dfc49eecb6f7fe79aab500620879a0322197e213dbe83112b0fc844bc9e",
+      "milestones": [
+        100,
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/review311-317-milestone.md",
+      "sha256": "2bf6cc0893196066263cea370bbdbbb3494468d7b4d005c931f2f143589778a0",
+      "milestones": [
+        100,
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/scenario-instrumentation-milestone.md",
+      "sha256": "a7d846744f6b8b1e4feb574d1f5208134ed242efa64f0ff8c52b5f96addee120",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/scenario-policy-milestone.md",
+      "sha256": "f0a64c6b0ddbb662bc191aa74550a1e93e0ac2d9712872a16e8e40536f6e7fe7",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/three-way-reconciliation-milestone.md",
+      "sha256": "94abd5cf89b8262911f54721273a3d01b9963be32b8abf4410f3377523e227e1",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-decisions-milestone.md",
+      "sha256": "85131ea0b6f892493aa81664bec19aeb9a18aabdd5be07e5fd6fc884c04dcbdb",
+      "milestones": [
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-programs-milestone.md",
+      "sha256": "5149bdf1bf9a7d6c1c4a44540c603fd4d115cc9cc23a25dcc4a653946723395b",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-status-milestone.md",
+      "sha256": "5d0ff6b496a62dd3df3c3df958f6fd3e1110d0940a16501e3fe0065b578e65cd",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/mainframe/carddemo-zos-tower-milestone.md",
+      "sha256": "8face9dc7b36ec2e169f06770a9e5e1bf1f099f2b9868bc5efce9a34a4caf2a5",
+      "milestones": [
+        95
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/mainframe/zos-intake-milestone.md",
+      "sha256": "ec14d983ce8359731559d2017cd75e8d5917e52071989eed7eab4988f53165cc",
+      "milestones": [
+        95
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-factory-foundations-milestone.md",
+      "sha256": "4a0a1843a9b8996bf508c8d7dec6303ef8304fa2f9d884669dc942a579fa8d2e",
+      "milestones": [
+        97,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-review-291-302-delivery-milestone.md",
+      "sha256": "4b02c0f22956d3c1b87513f0e5b90bcb6dae45dccabcd4d1dadc8ab5fab11626",
+      "milestones": [
+        94,
+        97,
+        99,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-rules-evidence-delivery-milestone.md",
+      "sha256": "757132f76ff338fd1f5479ceacb7baed45b1e8b9c7eab9344d374de0d004f19a",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/tsql-procedure-m0-milestone.md",
+      "sha256": "0d421d2b81d3f15c30c13d0b348bbbfcca07a0a968807540faa3f8586c2b708d",
+      "milestones": [
+        98
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/graph-context-milestone.md",
+      "sha256": "54d1c9c672ab8fb85a6b8fdf50eda7bca8c70f518623f06ae3e8ecea16b1b115",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/graph-stage2-walkthrough-milestone.md",
+      "sha256": "ed6fb8c974f6787fc9ddbfccf9cd208a05810698bcd16955c280e474dead5f4a",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/hardening-milestone.md",
+      "sha256": "ccc0537dc180c42c2fe188df386b71280e40d7055932f744e758bc7333180d49",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/milestone.md",
+      "sha256": "b695b3512fd29daaacd46e671521ebbb31502b3d2d5156f492afcc18bdc92046",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/smoke-milestone.md",
+      "sha256": "6ab3e7c5536866f6468d47ba01178c65976de083d8169df2684ad4800ecccb09",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    }
+  ],
+  "preserved_ms94_record": {
+    "bytes": 56215,
+    "sha256": "fda7ce9ccd99d501f65b4d669d11e83b22049f3d2c072edd2bad23c15a655876",
+    "location": "original_utf8 in this object; exact original UTF-8 bytes reconstructable",
+    "original_utf8": "**MS94 B05 final pass rate: 19/20 (95%); Wilson 95% interval: 76.4%-99.1%.**\n\n# MS94 B05 publication and B06 preparation\n\n## October 5: B06 offline finalization and Codex account proof\n\nThis increment is delivered in two separate PRs:\n[native integration and finalization #255](https://github.com/howardweale/lightyear-carddemo-modernization/pull/255)\nand [dedicated-account Codex proof #256](https://github.com/howardweale/lightyear-carddemo-modernization/pull/256).\nTheir implementation heads are `85d9dca713e22179f8b9c0573c400c7dba87f42b`\nand `52a065844c690c9bcf597f7ade74565a469bfa70`, respectively. Subsequent\ndocumentation commits do not change those tested implementations. Publication\nand merge authorize neither native qualification nor a measurement launch.\n\nThe qualification driver integrates declared native mutations and evidence-boundary\ncontrols, preserves original captures, and finalizes each slot through archive\nreplay and owned-resource cleanup checks. Native execution, finalization and\nsigning share the hard deadline. Unexpected results are recorded and announced\nbefore lengthy replay; attempted, unfinalized and unstarted slots remain distinct.\nThis is tested implementation, not a completed native qualification.\n\nThe J1 offline test connects authenticated synthetic observer streams to the\nB05-shaped closed `candidate-runtime-exception` payload, direct delivery into an\nactual signed zero-model inbox, and independent delivery replay. Support/outside\norigins send nothing and remain equipment-suspect. Posting attribution additionally\nrequires the same terminal exception object and thread as the support unwind,\nand derives closed document labels from native document/type rows rather than a\ncandidate trace. Wrong-document, wrong-origin, terminal-binding and cross-engine\nmutants fail closed. J1 business predicates are unchanged.\n\nThe dedicated-account probe **passed on October 5, 11:48:44\u201311:49:00 PDT**.\nCodex CLI 0.160.0 ran as the non-admin `lyb06builder` account. Its four child\nPowerShell reads bound the account SID and Codex parent PID/SID: the public\npositive control opened, the missing file returned `ObjectNotFound`, and both\nexisting tools/private targets returned native `ERROR_ACCESS_DENIED` (5).\nThe host sent only initialization and fixed `command/exec` requests, with no\nprompt, turn, login or model call. Codex exited 0; read-only checks confirmed the\naccount disabled, temporary executable-specific outbound firewall rule removed,\nand owned processes absent. Earlier failed attempts and the canceled UAC remain\npreserved. No security exclusions or execution-policy changes were used.\n\nThe signed public summary has content hash\n`1d4f3dd36728dde0dec2915817ef816b08c605012eecc121d814d4bb7091804c`.\nIt binds the local signed denial file\n`016ac7c3097c9d0ab28e9e69bf63a26c46e295ca3c23e02a967b2edd616130c3`\nand process file\n`3947c8fff0109bd4d3e78b906ec368549396ffaf6015bc74af3aa722b8152984`.\nThe real `admit_transport` check passed for those exact files and SID. Raw\nobservations, local paths, SID and private controls remain local. This does not\nadmit model networking or a complete measurement transport. Re-probe the final\nexecutable tree after any bound file, runtime, account or ACL change.\n\nValidation on the separate implementation branches: **108 offline B06 tests**\nfor #255 and **98 offline B06 tests** for #256 passed on Windows; nine milestone\ndocumentation checks passed. The PR checks retain the exact CI results for each\npublished head. This increment used **zero Docker commands, zero native pairs\nand zero model calls**. The earlier, separately approved offline compilation\nwindow is recorded in its own report; window 3's 367-second failure is now\nexplained there without rewriting its evidence.\n\n| Core-status item | Position after this increment |\n|---|---|\n| 1. Native adapters/references | Compiled preparation and offline integration; native qualification outstanding. |\n| 2. Posting origin and replay | Terminal binding, closed projection and delivery tested offline; synthetic fixtures confer no native credit. |\n| 3. Qualification plans | 55/41/39-slot assemblies bind all four revised source hashes; executable freeze remains blocked. |\n| 4. Builder boundary | Signed v2 Windows admission tested through Controller.launch; actual Codex process proof passed separately. Final-tree re-probe and measurement transport remain. |\n| 5. Complete preflight | Not run; requires qualified equipment and an admitted executable snapshot. |\n\nThe offline audit found seven differing Maven-cache copies of `NodeTestTask`\nand ten of `ExecutionListenerAdapter`; the other four FRAMEWORK classes had no\ndiffering Maven-cache copies. No resolved Tycho/Surefire/OSGi classpath was saved,\nand Howard confirmed none is available. **No loaded JUnit copy is claimed.**\nThat resolution and complete private per-slot input assembly still block the\nexecutable plans. A new Docker run requires explicit approval and scheduling\naround Maintec intake. The 135 pairs remain unrun; no slots have been replaced.\n\nThe [r5 integration report](../../calibration/idempiere-ms94/stage-b-06/preparation/execution-r5/README.md)\nlists the new assembly hashes, classpath alternatives, prospective duplicate-trace\nexpectation and remaining blockers. The separate [Codex proof PR](https://github.com/howardweale/lightyear-carddemo-modernization/pull/256)\ncontains the hash-only success and preserved-failure summaries. B05 evidence is\nfrozen, B04 remains VOID, and `work/ms94`, template-r1 and J1 predicates are\nunchanged. **Operator review; not independent attestation.**\n\n## October 4: B06 execution admission follow-up to PR243\n\nThis increment adds the execution-admission code in five separate PRs:\n[terminal-origin delivery #244](https://github.com/howardweale/lightyear-carddemo-modernization/pull/244),\n[native control hooks #245](https://github.com/howardweale/lightyear-carddemo-modernization/pull/245),\n[slot/snapshot assembly #246](https://github.com/howardweale/lightyear-carddemo-modernization/pull/246),\n[signed OS-denial admission #247](https://github.com/howardweale/lightyear-carddemo-modernization/pull/247),\nand [compiled lock-SQL binding #248](https://github.com/howardweale/lightyear-carddemo-modernization/pull/248).\nThe implementation sequence ends at `d81a61b11a3f25752482d8a18e74e0bdf85ce406`;\nthis milestone update changes documentation only.\n\nThe external JVM observer binds the terminal JUnit result to the observed\nthrowable. A candidate-origin runtime exception can reach a signed zero-model\ninbox through the frozen direct diagnostic category, with offline delivery\nreplay. J1's preflight explicitly requires that complete path. J1 integration\nimports its unchanged business predicates; the deliberate database failure hook\ntargets only a declared owned container and preserves its signed intent.\n\nSlot assembly binds private inputs, checkpoint/register and exact clock/runtime\nroles. New snapshot paths cannot overwrite prior attempts. The expected lock SQL\nmust be present in the pinned class bytes, with matching class, constant-pool and\nposting-method hashes; a different observed statement is an evidence failure.\nVersion-3 plans and signed authorizations bind the same journey-group window.\nStarting requires the full pair budget to fit; execution checks the deadline,\nand owned cleanup still runs after failure.\n\n**This is preparation, not completed qualification or an executable freeze.**\nWindows security blocked the compiled AppContainer probe before its child could\nstart. No protected read or successful OS denial was observed. Admission now\nrequires an actual signed, hash-bound denial record instead of a boolean; the\nfailed attempt remains preserved at content hash\n`9af9699d3f4d7c68c04b961867211e24f9fb8154a88594c414be00de29c8f438`.\nNo security protection was disabled to get a passing result.\n\nValidation: **85 offline B06 tests and nine milestone-documentation checks\npassed**. Host-only Java syntax compilation passed. There were **zero Docker\ncommands, zero native pairs and zero model calls**. These checks do not replace\ntarget-image compilation, native execution or outside attestation.\n\nThe [detailed preparation report](../../calibration/idempiere-ms94/stage-b-06/preparation/execution-admission-r3/README.md)\nand [core status](../../calibration/idempiere-ms94/stage-b-06/preparation/core-status.md)\nrecord the remaining work: actual private input/register assembly, pinned-image\nobserver/control compilation and class catalog, remaining legacy mutation and\nevidence-boundary integration, qualification finalization, and a successful OS\ndenial probe. Core items 1\u20133 have additional tested code but remain unqualified;\nitems 4\u20135 remain incomplete. Conversion refuses these gaps rather than issuing\nan executable plan with placeholders.\n\n| Assembly specification (blocked, not executable) | Pairs | Content SHA-256 |\n|---|---:|---|\n| J1 | 55 | `533cc94c457fb35189e939560866d8a8a178f27bbde30409e2bf74b18f035c91` |\n| J2 | 41 | `bf2bf4a827e4f502cb71cccf6a436b362d3f1af385fb8e4ecc295bcaba545189` |\n| J3 | 39 | `407b8652079ce44bc8792f6aad4701e54a1e7813c2b02dab87f7007a9300e009` |\n\nOctober 17 remains the requested go/no-go, **currently no-go**. A Docker\nqualification run means one journey's fixed group of serial fresh pairs in an\nexplicitly approved window. The proposed shared preparation window is October\n14, 09:00\u201311:00 PDT: observer compile 5\u201315 minutes, class/Java catalog 5\u201315\nminutes, distinct reference/control compilations 45\u201390 minutes. Proposed native\nwindows are October 18\u201319 for J1, October 20\u201321 for J2, and October 22\u201323 for J3;\nestimated serial Docker time is 22.5\u201345 hours across the 135 pairs. The exact\n[schedule proposal](../../calibration/idempiere-ms94/stage-b-06/preparation/execution-admission-r3/docker-schedule.json)\nhas hash `36cfc52f480c98b8b8b917397793ed3fd721031ce7d50e9084967cb0e90b1f8c`.\nEvery window is unapproved and subject to Maintec intake availability. Publication\nand merge approval authorize neither Docker execution nor measurement launch.\n\nB05 evidence remains frozen, B04 remains VOID, and `work/ms94`, template-r1 and\nJ1 predicate files are unchanged. Earlier failures remain preserved. Operator\nreview, not independent attestation.\n\n## October 4: B06 PR241 review fixes and qualification drafts\n\nThe [review report](../../calibration/idempiere-ms94/stage-b-06/preparation/admission-review-r2/README.md)\nrecords implementation commit `b858e0d05a28cac41ab7b1a759fbdc827b27e888`.\nMissing or malformed candidate traces and candidate timeouts now have typed\ncandidate results. Business rejection records bind the entry, clock and capture\nevidence and distinguish completed gate stages from stages never reached.\nClock samples and runtime container identities are checked against the plan.\n\nThe external posting collector and independent cause replay have synthetic\nOracle/PostgreSQL controls for prior-post, prior-lock, support-origin,\noutside-origin, wrong-document and genuine equipment faults. Synthetic fixtures\nare not native evidence and do not qualify diagnostic forwarding.\n\nValidation: **68 offline B06 tests passed**, plus host-only Java syntax compilation.\nThis increment made **zero model calls, zero Docker runs and zero native pairs**.\nThe [validation manifest](../../calibration/idempiere-ms94/stage-b-06/preparation/admission-review-r2/validation-manifest.json)\nhas content hash `59cba00d08683012c0c452bb15d0091e10e4a22125179b67db33e892fb055e9b`.\n\n| Review draft | Fresh pairs | Plan content SHA-256 |\n|---|---:|---|\n| J1 requalification | 55 | `2bffc06197d159cc74f772c4e1fa6cf3c4c86d0d3fe304cab2122a957e9266da` |\n| J2 procure-to-pay | 41 | `0e49063add148f0c15b7346235acc54732f988e155f991e81140c012f321923e` |\n| J3 materials | 39 | `9456b8448cfd08caba106efa5d925c63275c35ce91b89e73f8323768f4dd1e1d` |\n\nThe 135-pair planning estimate is **22.5\u201345 hours of serial Docker work**, excluding\ncompilation and offline replay; observer overhead remains unmeasured. These are\nnon-executable review drafts. Native hooks, target-image compilation, per-slot\ninput/catalog bindings and production replay/delivery integration remain pending.\nThe public-tool boundary rejects filesystem reads, but actual OS-level denial\nof builder access to `tools/` is **not yet confirmed** and remains an admission gate.\n\nAgainst core-status items 1\u20135: items 1\u20132 have tested preparation, item 3 has review\ndrafts rather than an executable freeze, and items 4\u20135 remain incomplete.\nPublication grants no qualification or measurement launch authority. Every Docker\nrun still needs explicit approval and must not overlap the October 5 CardDemo\nintake. B05, work/ms94, template-r1 and J1 implementation files are unchanged;\nB04 remains VOID. Operator review, not independent attestation.\n\n## October 4: B06 native admission preparation\n\nThe native adapter increment was merged through\n[PR #241](https://github.com/howardweale/lightyear-carddemo-modernization/pull/241)\nat `538c0829766ca3d0d0611a46f7a06bbbaba2eba5`, with all 25 CI checks passing.\nIts exact published head was `fb2341d20f85369c437e57c52b2e13852102bc9b`.\nThe [adapter report](../../calibration/idempiere-ms94/stage-b-06/preparation/native-adapters-r1/README.md)\nbinds full-entry and all-table reconciliation code, private J2/J3 reference\nhashes, typed failures, real-clock evidence and owned cleanup. J1 predicates\nremain unchanged. The private reference sources and expectations were not uploaded.\n\nThe separate [observer preparation report](../../calibration/idempiere-ms94/stage-b-06/preparation/posting-observer-r1/README.md)\ndocuments the external JDI collector, suspended native SQL readbacks, host-written\nevent chain and offline integrity replay. It also records the remaining causal\nattribution work: **collection is not qualification and does not authorize\ndiagnostic forwarding**. An early error cannot claim completed entry replay.\n\nValidation for the combined preparation: 50 B06 Python tests passed on Windows.\nThe J2/J3 reference compilation checks took 111.969 seconds; three preserved\nobserver compilation checks took 9.625 seconds. Each used the pinned image with\nno network or database execution, and each owned compiler container was verified\nabsent. The current observer source hash is\n`b55882fdd8c9b8d71d1bf927a9940982a4508dac41249069a805dfe036e88632`;\nits latest compilation record is\n`d4f2443391d156e2dd5010569600231ab996e77f529add0a6a5f214047e770bf`.\nOverall preparation wall time was not measured. These costs are not measurement\nor native qualification costs. Zero native pairs, JVM attachments and model calls\nwere performed by these increments.\n\nAgainst [core-status items 1-5](../../calibration/idempiere-ms94/stage-b-06/preparation/core-status.md):\nadapter/reference code is present but native acceptance and remaining scope/register\nadmission are pending; observer collection/replay is present but causal proof and\nnative controls are pending; exact qualification plans are not frozen; the full\nmeasurement executable and supervised preflight remain incomplete. The next plan\ncommit requires Howard's approval before native qualification. Docker work must\nnot overlap the October 5 CardDemo intake and requires explicit permission.\n\nB05 evidence, work/ms94 and template-r1 were not changed. B04 remains VOID.\nThis milestone records operator review, not independent attestation, and grants\nno B06 launch authority. Earlier milestone results and failures below are preserved.\n\n## Earlier publication and preparation record\n\n**Updated October 3, 2026. B05 is closed and frozen. B04 remains VOID.\nB06 preparation is implemented and tested in the scope below; native qualification\nand the full zero-model preflight have not passed. No B06 model calls are authorized.**\n\n## B05 publication completed\n\nThe [terminal audit and results](../../calibration/idempiere-ms94/stage-b-05/results/README.md)\nare on main through PR #234. The preregistration and executable/preflight evidence\nare now also on main: PR #236 merged the plan branch at\n`18a748d81b0c11953cffc91142d77743b0b15593`, and PR #237 merged the r2 branch at\n`2defbb7074d453b1dd3a8c5e544cae2fa08297e5`. Both original branch heads were\nverified as ancestors of public main. The r2 executable evidence and controller\nfiles retain their original bytes. PR #238 updated the results publication status\nand added the archive proposal at `51bf5f83c77d5a187deda9d6f6963dab18ac299f`.\nAll three PRs passed their checks. A read-only check still verifies the B05\nfrozen snapshot manifest.\n\nB05 first-try results remain 12/20 (60%; Wilson 95% 38.7%-78.1%); final results\nremain 19/20 (95%; Wilson 95% 76.4%-99.1%). Three pilots are excluded. The\ncohort-18 support-origin halt remains a failed verdict with an operator Category C\nclassification. No result is rewritten by this publication or the B06 work.\nB03 remains separate at 12/20 first try; B02 remains 2/10 (Wilson 5.7%-51.0%),\nwith all eleven failures and five Category B public-contract caveats preserved.\nB01 invalid-provenance costs remain separate. There is no pooling.\n\n## Archive upload approved and clearance pending\n\nThe [release plan and inventory](../../calibration/idempiere-ms94/stage-b-05/results/archive-publication-proposal.md)\ncover 31 original signed archives totaling 3,529,643,030 bytes (3.53 GB).\nThe proposed location is a GitHub release with one ZIP per attempt, plus the\nsigned receipts, manifest, trusted public key and offline replay instructions.\nHoward approved uploading after the proposal and findings were reported.\nThis is operator review, not independent attestation or a signed Tower decision.\n\nNo archives have been uploaded. A read-only scan found populated password fields\nin native captures; their public-demo provenance is not established. Disclosure\nreview, independent scanning and a public-only clean-room replay remain pending.\nThe upload approval is recorded, but it does not itself clear those findings.\nOriginal signed archives must not be silently redacted or re-signed.\n\n## B06 preparation delivered\n\nThe [preparation status](../../calibration/idempiere-ms94/stage-b-06/preparation/core-status.md)\nrecords the implemented scope and remaining admission work. The generic builder\ntemplate and closed diagnostic policy were signed and frozen before the materials\nwork order was written. J3 remains hash-only publicly; its work order and expected\nvalues are private. A preserved pre-execution draft was revised after read-only\nseed inspection, without candidate output or changes to the generic template.\n\nPreparation now includes the deterministic three-journey schedule, per-journey\nWilson analysis, real-clock period guard, controller core, J2 invoice/date checks,\nJ3 quantity/cost/valuation/accounting predicates, and a fail-closed cohort-18\nattribution predicate. Real Tower integration tests cover signed launch, repeated\ncause, equipment-suspect pause, continue, wrong-pause refusal and void without\nrewriting verdicts. Native posting provenance must still be implemented and\nqualified; a signed synthetic fixture is not native evidence.\n\nThere are six excluded pilots and 72 planned cohort slots, 24 per journey.\nEvery journey must reach at least 21/24 final passes for the cross-journey\nheadline; J3 always counts. Limits are 390 calls, 234 compilations and 96 hours\nincluding pauses; each trial has five calls, three compilations and 7,190 seconds\nincluding finalization. These are preparation constraints, not launch authority.\n\nValidation: 43 Windows preparation/Tower tests and nine milestone-documentation\nchecks passed. The real concurrent Windows status writer/reader is included.\nThis increment used zero model calls, Java compilations or native qualification\npairs. The full executable has not been frozen or preflighted for measurement.\n\nNext gates are native J2/J3 references and adapters, the trusted posting observer,\nfresh qualification and terminal audits for all three journeys, complete worker\nand replay integration, and the supervised three-journey zero-model preflight.\nPreregistration and a launch runbook follow those gates. No measurement can start\nwithout Howard's later commit-specific approval and verified Tower authorization.\n\n## Preserved historical milestone through October 1\n\nThe record below is retained verbatim as historical context. Its statements that\nB04 had not started describe the earlier preparation state, superseded by the\ncurrent VOID status above. Earlier failures, costs and caveats are unchanged.\n\n**95% Wilson interval: 38.7%\u00e2\u20ac\u201c78.1%; Stage B 03: 12/20 first-try passes (60%).**\n\n# MS94 Qualify the equipment, then measure the factory\n\n**Status: Stage A accepted and published; Stage B 03 complete and independently replayed; operator review accepted; equipment-06 A1 passed and independently replayed. A2 stopped on an unmet control expectation. Howard authorized A2 revision 1, subsequent A3, and gated B04; A2 revision 1 passed all 18 controls and independently replayed; The corrected A3 checkpoint preparation passed and independently replayed; paired A3 qualification stopped at its first archive on an invalid entry-admission signature; independent replay reproduced the failure. A3 revision 1 corrected signing but stopped on the perturbed retained reference with an accounting-period cache mismatch; independent replay reproduced both results. The explicit order-accounting-date sources passed all 28 fresh outcomes and independent replay; fresh paired A3 passed all fourteen intended outcomes and independent replay; B04 implementation is prepared as one new 23-slot snapshot for prospective publication; no B04 model call has occurred. Stage B 01/02 outcomes remain separate.**\n**Date: 01 October 2026 UTC (paired A3 passed; B04 prospective freeze; B03 unchanged).**\n\nOn September 30 Howard accepted the four next steps: revise the failed control,\nrun a fresh qualification, perform native A3 value-invariance, then launch B04\nonly after all prerequisites pass. [A2 revision 1](../../calibration/idempiere-ms94/equipment-06/stage-a2-r1/README.md)\nuses a missing rollback stimulus plus omitted wait, with 18 fresh pairs and no\nmodel calls. It preserves the failed wait-only control and all earlier costs.\nIt does not claim that omission of a wait alone was qualified. The judge,\nobserver, diagnostic exporter and public support remain unchanged. The original A3 stopped on its first retained-reference archive; subsequent campaigns and the newly passed dated A3 are recorded separately below. B04 has not started.\n\nMS94 first checks whether the judge and execution environment can reliably\naccept correct journeys and reject declared faults. Only then can a later\ncampaign measure generated code. These human-reviewed references are test\nequipment; none of their passes count as autonomous factory successes.\n\n## Stage B 04 preparation\n\nHoward signed acceptance of all four B03 review decisions. The new\n[equipment-06 A\u00e2\u20ac\u00b21 plan](../../calibration/idempiere-ms94/equipment-06/stage-a1/README.md)\ncompleted all 30 fresh, zero-model judge recheck pairs with the expected outcomes.\nAll 30 signed native archives independently replayed and actual owned Docker cleanup\nwas verified. The retained reference passed 10/10, giving a one-sided 95% upper\nfalse-rejection bound of 25.9% (26% rounded). Revised A\u00e2\u20ac\u00b22 diagnostic qualification passed; fresh dated-source A\u00e2\u20ac\u00b23 private-value invariance passed; B04 still requires its own prospective public freeze.\nNo B04 model execution has started.\n\n[A2 revision 1 passed](../../calibration/idempiere-ms94/equipment-06/stage-a2-r1/README.md)\nall 18 fresh controls. All 18 archives independently replayed with the unchanged\nfrozen gate and diagnostic verifier; all 162 owned Docker resources and six\noffline compilation containers were verified absent. Campaign elapsed time was\n6,566.890 seconds, with zero model calls. Independent terminal verification took\n411.485 seconds; offline preparation took 263.578 seconds and six\ncompilations. The stronger missing-stimulus-and-wait control passed 3/3; this does\nnot qualify the original wait-only fault. All costs and outcomes are separate\nfrom the preserved original A2 failure. The subsequent dated-source A3 result is reported below; B04 remains unstarted.\n\n[A\u00e2\u20ac\u00b22 stopped](../../calibration/idempiere-ms94/equipment-06/stage-a2/README.md)\non control 13: omitting the rollback observation wait produced a native `passed`\nverdict and no diagnostic instead of the declared contract violation. Both\nobservers nevertheless recorded rollback and lock-wait witnesses. The first 12\ncontrols met their expectations; five slots remain unstarted. A2 qualification\nfailed and the follow-up was paused at that time. Howard subsequently authorized the fresh revision; the later A3 result is reported below and B04 remains unstarted. All 13 signed archives\nindependently replayed with the unchanged gate and diagnostic verifier, and all\n117 owned Docker resources were verified absent. Campaign elapsed time was\n4,829.547 seconds, with zero model calls. Preparation and replay costs are reported\nseparately in the linked result. No frozen result was amended or reinterpreted.\n\n[A3 checkpoint preparation stopped](../../calibration/idempiere-ms94/equipment-06/stage-a3-checkpoint/README.md)\nbefore checkpoint admission: the new native catalog lineage fields did not match\nthe unchanged schema verifier's required MS84 checkpoint binding. Both native\ntransform audits and 60 constraint probes completed, but this does not qualify\nA3. Independent evidence replay reproduced the same exception, and actual Docker\ninventory confirmed all five owned resources absent. Preparation took 215.641\nseconds; verification took 8.859 seconds. There were zero candidate executions,\nJava compilations or model calls. The failure is preserved, the follow-up is\npaused, and B04 remains blocked. Any correction requires a fresh prospective\npreparation rather than changing this frozen run.\n\nHoward authorized correcting the checkpoint binding and running A3. The\n[fresh corrected preparation](../../calibration/idempiere-ms94/equipment-06/stage-a3-checkpoint-r1/README.md)\nadmitted a genuinely perturbed private checkpoint in 269.906 seconds. Independent\nreplay took 27.734 seconds and verified all five owned resources absent. Zero\ncandidate executions, Java compilations or model calls were used. The earlier\npreparation failure remains unchanged; its pause was superseded by Howard's\nexplicit resumption.\n\nThe [A3 native qualification plan](../../calibration/idempiere-ms94/equipment-06/stage-a3/README.md)\nnow declares 14 fresh pairs: the retained reference and all six revised faults,\neach against the original and derived checkpoint. It requires exact diagnostic\nbyte equality, full native entry admission, independent archive replay and actual\ncleanup, with zero model calls, an eight-hour cap and no replacements or restarts.\n[A3 stopped on its first archive](../../calibration/idempiere-ms94/equipment-06/stage-a3/README.md)\nafter the admitted-checkpoint retained reference passed natively. Its entry\nrecord was sealed before signing, causing the envelope verifier to reject the\nsignature. Unchanged frozen archive replay independently reproduced that\nfailure; this is an equipment evidence defect. Thirteen slots remain unstarted,\nand no perturbed qualification run or diagnostic pair comparison completed.\nCampaign elapsed time was 467.547 seconds with zero model calls. Independent\nterminal verification took 29.109 seconds and confirmed all nine owned\nDocker resources absent. All frozen sources and evidence remain unchanged.\nThis failure paused the follow-up at that time. The subsequently authorized fresh campaigns are reported below. The checkpoint\npreparation, A1, revised A2 and earlier failures retain their separate results\nand costs.\n\nHoward approved correcting the signing boundary and freezing a fresh campaign.\n[A3 revision 1](../../calibration/idempiere-ms94/equipment-06/stage-a3-r1/README.md)\nsigns the unsealed entry body, verifies the saved envelope before execution, and\nrepeats all fourteen original slots under a new public freeze. The 24 focused\nchecks passed; they are preparation evidence only. All 911 inherited files,\nincluding the failed original implementation and unchanged archive verifier,\nremain byte-identical. The earlier failure remains final; its pause is superseded\nonly for this newly authorized revision. A3 revision 1 stopped after two slots: the admitted retained reference passed,\nbut the perturbed retained reference failed the unchanged accounting-period\ncache predicate. Twelve fault slots remain unstarted. Both archives independently\nreplayed full entry, complete gates and diagnostics; all eighteen owned resources\nwere verified absent. Signing now verifies correctly. The retained pair's empty\ndiagnostics matched, but this does not qualify the failed business reference or\nany unrun fault pair. Campaign time was 1,053.453 seconds, independent terminal\nverification 119.719 seconds, with zero model calls. Read-only diagnosis found\nan October cache against September postings after crossing the UTC month boundary;\na wall-clock dependency is a hypothesis to investigate, not an established\nperturbation effect. The signed business-failure result remains unchanged.\nThat failure paused the follow-up; Howard subsequently authorized the new dated-source qualification below. B04 remains blocked.\n\nRead-only follow-up established the clock-dependent path in the pinned native\nsource: the reference omits order `DateAcct`, `MOrder` defaults it from the real\nJVM clock, and completion validates that date through `MPeriod`, updating the\ncurrent-period cache. Native captures show September 30 order accounting dates\nin the admitted run and October 1 in the perturbed run, while all matching\npostings remain September 26. The correction now explicitly dates the order\nin fresh reference/control copies and requires new qualification, declared below. The [signed clock diagnosis](../../calibration/idempiere-ms94/equipment-06/stage-a3-r1/clock-diagnosis.json)\nis read-only, with zero new native executions, compilations or models. It does\nnot reinterpret the failed result or establish a perturbation-only causal effect.\n\nHoward authorized continuing with the explicit order-accounting-date correction.\nThe [new dated-source qualification](../../calibration/idempiere-ms94/equipment-06/stage-dated-controls/README.md)\nadds one accounting-date assignment to new copies of the reference and all six\nfault controls. Ten reference runs and eighteen fault runs are prospectively\ndeclared on the admitted checkpoint. All seven sources compiled offline and 33\nfocused tests passed. Native qualification then passed 28/28 intended outcomes:\nten retained-reference passes, six contract violations and twelve execution\nfailures, including three empty-feedback support throws marked equipment-suspect.\nAll 28 archives independently replayed full entry, complete gates and diagnostics;\nall 252 campaign resources plus seven preparation containers were verified absent.\nCampaign elapsed time was 11,688.531 seconds, separate from 313.313 seconds and\nseven preparation compilations and 1,403.922 seconds independent replay.\nModel calls were zero. The new dated-reference 10/10 one-sided 95% upper\nfalse-rejection bound is 25.9%, reported separately from historical A1.\nQualification is bounded to actual October 1 UTC execution dates, with real-time\napplication clock and period-window policies unchanged. All 918 inherited\nsnapshot files and earlier outcomes remain unchanged. After fully verified\nsuccess, the fresh paired A3 below was performed. This source correction changes no\nbuilder prompt, public contract, support, judge, diagnostic exporter or clock.\n\nThe [fresh paired A3 with dated sources](../../calibration/idempiere-ms94/equipment-06/stage-a3-dated/README.md)\nis prospectively frozen for fourteen fresh Oracle/PostgreSQL pairs: each of the\nseven qualified dated sources runs admitted then perturbed. The unchanged native\nrunner requires full entry admission before every candidate, genuine SQL\nrestoration proofs, complete retained-reference business passes and equal actual\ncanonical diagnostic bytes, suspicion flags and dispositions across all seven\npairs. The eight-hour, zero-model campaign permits no restarts or replacements.\nAll 940 inherited files remain unchanged. The new campaign passed all 14\nintended outcomes: both complete retained-reference passes, four contract\nviolations and eight execution failures. All seven actual diagnostic byte,\nsuspicion and disposition comparisons matched. All fourteen archives independently\nreplayed full entry, complete gates and diagnostics, including original/derived\nmultisets and real per-cell restoration proofs for every perturbed slot.\nAll 126 owned resources plus seven earlier compilation containers were verified\nabsent before and after replay, and all 946 frozen files remained unchanged.\nCampaign elapsed was 5,998.484 seconds; independent replay took\n594.407 seconds. No new compilations or model calls were needed.\nQualification is bounded to actual October 1 UTC execution dates and the declared\nlimited perturbation. The original WAIT-ONLY scope remains unqualified. B04 may\nproceed to implementation and its own exact prospective public freeze, with\nno model generation before that freeze. Earlier failures and costs stay separate.\n\n## Stage B 03 terminal result\n\nPost-run [classification](../../calibration/idempiere-ms94/stage-b-03/CLASSIFICATION.md)\nis complete after Howard authorized analysis to resume: all eight cohort failures\nand pilot-01 are Category A nonempty-accounting assertions on reversal allocations.\nPilot-03 is Category C, a support-wrapper throw whose underlying evidence points\nto candidate inventory-posting sequence misuse; its measurement-validity\nadjudication was accepted by Howard. All thirteen passes are assessed as accepted with\nnotes about fixture-dependent selection. The completed [operator review\npacket](../../calibration/idempiere-ms94/stage-b-03/REVIEW.md) was accepted in all\nfour decisions with Howard Weale's typed signature. This is operator review,\nnot independent review; the B04 classification prerequisite is satisfied. The 12/20 headline and every signed result remain unchanged;\nno new model call or native execution was made.\n\nAll 20 fresh cohort trials and all three excluded pilots finished. Twelve cohort\ncandidates passed on their first native attempt; eight ended in execution failure\nwith no supported repair diagnostic. There were no repaired passes, invalids,\nunstarted slots, judge errors or insufficient-evidence outcomes. The signed report\nis nonvoid. The three qualification controls are not included in this rate.\n\n| Native class / disposition | Cohort | Pilots (excluded) |\n|---|---:|---:|\n| Passed | 12 | 1 |\n| Business failure | 0 | 0 |\n| Execution failure | 8 | 2 |\n| Judge error | 0 | 0 |\n| Insufficient evidence | 0 | 0 |\n| First-try / repaired passes | 12 / 0 | 1 / 0 |\n| Halted with no supported repair diagnostic | 8 | 2 |\n| Invalid / unstarted | 0 / 0 | 0 / 0 |\n\n| Consumption | Cohort | Pilots | Total |\n|---|---:|---:|---:|\n| Builder / analyst calls | 20 / 0 | 3 / 0 | 23 / 0 |\n| Compilations / native pairs | 22 / 20 | 3 / 3 | 25 / 23 |\n| Input tokens (includes cached input) | 6,883,993 | 1,167,069 | 8,051,062 |\n| Cached input tokens | 6,014,976 | 1,031,040 | 7,046,016 |\n| Output tokens | 251,914 | 39,915 | 291,829 |\n| Agent seconds | 8,829.203 | 1,379.172 | 10,208.375 |\n| Native seconds | 7,005.546 | 1,016.781 | 8,022.327 |\n\nCampaign elapsed time was 20,098.890 seconds (5h 34m 58.890s), including publication\noverhead. Independent replay then took 933.828 seconds,\nwith zero additional model calls or native executions. The unchanged frozen\n`tools.ms94_publication_b_v5` reproduced all 23 complete gates and trial provenance.\nAll signed cleanup records passed; actual Docker inventory confirmed all\n207 campaign-owned resources absent\n(161 containers,\n23 networks,\n23 volumes). The controller exited\nafter writing the signed terminal report; no campaign error or stopping record appeared.\nThe separate process/compilation cleanup record also confirms no remaining offline\ncompilation containers.\n\nThe frozen decision is **review the intermediate result before any further generation**.\nNo purchasing run, ablation, restart or replacement slot was launched. The single\nintervention was the approved public order-derived invoice-type retention rule and\nmatching acceptance predicate; no smoke tool, diagnostic widening or support change.\n\nThis is one baseline operations journey, not a claim about unfamiliar journeys or\nproduction qualification. Mechanical replay does not substitute for human review\nof the new candidates. The prior 2/10 Stage B 02 result has a different public\ncontract and five contract-gap rejections, so these samples are not pooled and no\ncontrolled causal improvement is claimed. Its 95% Wilson interval remains 5.7%\u00e2\u20ac\u201c51.0%,\nwith all eleven original failures preserved. Stage B 01 remains invalid-provenance\nand void, with its one call and 459.047 seconds kept separate.\n\nRequested model: `gpt-6-astra`, high reasoning, through the pinned signed-in CLI;\nprovider-resolved model and per-call billed dollars are not exposed. Generation\nis nonzero as reported above. No GCP or organization API was used; local compute\nand electricity were not metered. Full native archives remain local. Only signed\nresult/call/native/publication metadata, cleanup records and the readable summary\nare published here; no captures, candidate source or secrets are included.\n\nSigned report content SHA-256:\n`ba30e83bb2f29a5bc4e31927a245601e170848f3d533c8e57cf23eb803b49ec1`.\nIndependent terminal verification content SHA-256:\n`00f846bad1407fc970ee057eabee5633a870a4d923f6c754bd64c8455f5f0780`.\n\n[Stage B 03 signed report, usage summary and independent verification](../../calibration/idempiere-ms94/stage-b-03/README.md).\n\n## Stage B 02 result, as recorded\n\n**Stage B 02: 2/10 first-try passes (20%); 95% Wilson interval 5.7%\u00e2\u20ac\u201c51.0%. Passes and six execution failures human-accepted; five comparison rejections retain a public-contract caveat.**\n\nTen fresh operations cohort trials produced two first-try passes, eight failures\nand no repairs. Three preceding pilots all failed and are excluded from the rate.\nThe 95% Wilson interval spans 45.3 percentage points; this small, single-journey\nsample does not establish broad autonomous development performance.\n\n| Native result class / disposition | Cohort | Pilots (excluded) |\n|---|---:|---:|\n| Passed | 2 | 0 |\n| Business failure | 4 | 1 |\n| Execution failure | 4 | 2 |\n| Judge error | 0 | 0 |\n| Insufficient evidence | 0 | 0 |\n| First-try / repaired passes | 2 / 0 | 0 / 0 |\n| Halted with no supported repair diagnostic | 8 | 3 |\n| Invalid / unstarted | 0 / 0 | 0 / 0 |\n\nCohort-05 and cohort-06 are the two passes. All eleven failures exported empty\nclosed diagnostics, so no analyst repair was attempted. The frozen report is\nnon-void and retains exactly these outcomes. Mechanical replay is distinct from\nhuman judgment of whether the acceptance contract was appropriate.\n\n| Consumption | Cohort | Pilots | Total |\n|---|---:|---:|---:|\n| Builder / analyst calls | 10 / 0 | 3 / 0 | 13 / 0 |\n| Compilations / native pairs | 10 / 10 | 3 / 3 | 13 / 13 |\n| Input tokens (includes cached input) | 3,416,894 | 1,101,948 | 4,518,842 |\n| Cached input tokens | 3,011,072 | 975,872 | 3,986,944 |\n| Output tokens | 123,653 | 39,420 | 163,073 |\n| Agent seconds | 4,392.392 | 1,383.015 | 5,775.407 |\n| Native seconds | 3,784.517 | 1,090.109 | 4,874.626 |\n\nCampaign elapsed time was 11,738.985 seconds (3h 15m 39s), including publication\noverhead. Requested model: `gpt-6-astra`, high reasoning, through the pinned\nsigned-in CLI. No GCP resources or organization API were used. Generation was\nnonzero, as above. Per-call billed dollars and provider-internal retries are not\nexposed; local compute and electricity are not metered.\n\nThe unchanged `tools.ms94_publication_b_v4` replayed all 13 complete archived gates\noffline in another 497.699 seconds, with zero new model calls/native executions.\nThe initial sandbox replay could not create its temporary directories; its errors\nare preserved separately and were not candidate or judge outcomes. The subsequent\npermitted replay verified all thirteen. All signed cleanup records verified; the\nterminal Docker inventory found none of the campaign's 91 containers, 13 networks\nor 13 volumes, and no remaining compilation containers. The controller and launcher\nexited normally. Monitoring is stopped.\n\nSigned report content SHA-256:\n`9657ade08a907ace39b382907c82edca6152f631f16fbf7b5c5c6910a2f94673`.\nThe report remains under the frozen root at `work/ms94/stage-b-02/report.json`.\nThe development replay receipt is `work/ms94/stage-b-02-terminal-replay-02.json`.\nThis publication contains the result and a value-redacted classification index;\nit does not claim that the full Stage B native archives are publicly hosted.\n\n### Classification determines the next change\n\n[All eleven failure classifications](../../calibration/idempiere-ms94/stage-b-02/CLASSIFICATION.md)\nrecord stage, exception/field, cause, judge assessment and diagnostic usefulness.\nSix candidates crash on their own incorrect requirement that a posted credit/reversal\nallocation have accounting rows. The pinned application deliberately permits an\nempty facts list for that reversal allocation. These are candidate logic errors.\n\nFive candidates finish both lanes but replace the order-derived invoice type with\nan ARI API selection whose tied ordering differs between engines. The public\nshapes pass and monetary fields are absent from the unresolved difference set.\nThe comparator correctly detects the different type and propagated numbering,\nbut the public contract does not explicitly settle allowable invoice-type choices.\nThese five are flagged for possible contract/equipment defect, not asserted to be\nfive proven business-logic errors. No failed slot is relabelled passed.\n\n[Howard Weale accepted both passes and confirmed all six Category A execution failures](../../calibration/idempiere-ms94/stage-b-02/REVIEW.md)\non 29 September 2026. He approved adding deterministic invoice-type retention\n**for the next run**. That approval does not establish that it was already in the\nfrozen builder-visible contract or retroactively justify the five rejections.\nThe exact review statements and candidate hashes are preserved separately.\nAny confirmed wrong judge requires a separate measurement-validity adjudication\nand equipment requalification before another measurement. The original report\nand costs remain preserved even if its interpretation is later invalidated.\n\nThe approved [prospective contract rule](../../calibration/idempiere-ms94/stage-b-02/NEXT-CONTRACT.md)\nis the single next intervention: retain the original invoice type derived from\nthe order, with a matching structural acceptance rule. Integrate and requalify\nthat boundary before measuring. The provisional smoke-run tool and diagnostic\nwidening are deferred; neither is combined with this contract change.\nThe next measurement is **20 fresh cohort trials**, with separately declared pilots,\none fixed intervention and a publicly timestamped plan before generation. Existing\ntrials were not reused or pooled. The subsequently authorized Stage B 03 is recorded separately above.\n\n## Accepted Stage A result\n\nEquipment-04 ran 62 fresh Oracle/PostgreSQL database pairs with a frozen judge,\nobserver, references, support code, schedule and 15-hour limit. It completed\nwithout an unexpected failure or stopping-rule trigger.\n\n| Check | Verified result |\n|---|---:|\n| Operations reference | 10/10 passes |\n| Procure-to-pay reference | 10/10 passes |\n| Deliberate business mutations | 39/39 rejected for the intended reason |\n| Duplicate-trace support controls | 3/3 expected execution-failure rejections |\n| Unexpected failures / unstarted slots | 0 / 0 |\n| Full evidence publications | 62/62 independently replayed offline |\n| Native execution and in-run publication | 27,842.281 seconds (7h 44m) |\n| Additional terminal publication replay | 2,936.994 seconds (49m) |\n| Builder / analyst calls | 0 / 0 |\n| Cloud resources | None; local Docker only |\n\nThe mutation score is 100% for the 39 declared scored cases. Duplicate-trace\ncontrols are reported separately and do not inflate that denominator. Both\npositive references had zero measured false rejections in their ten repetitions.\nThis is a bounded observation, not proof of a zero population failure rate.\n\nAll 62 signed cleanup records verified. A final Docker inventory found no\ncampaign containers, networks or volumes. Howard Weale's signed support review,\nindependent purchasing review (non-author), and owned comparison-scope approval\nwere validated against the exact approved source hashes. The unchanged acceptance\nvalidator recorded Stage A acceptance. Earlier failed declarations remain intact.\n\n## What changed in the equipment\n\nThe public contracts state document shapes, required links, trace fields and\ntransaction boundaries. Operations uses one aggregate order-linked invoice line;\ntwo shipment-linked invoice lines are not silently accepted. Monetary answers\nremain private. Purchasing side effects are bounded by source-derived ownership,\norganization, accounting history and posting rules, rather than a table whitelist.\n\nThe versioned SDK supplies typed accessors, strict trace serialization, cleanup\nand explicit posting guards. Its guard does not prevent application-internal\ncosting or reposting; that is an explicit reviewed limit. Unknown judge exceptions\nremain inspectable `judge-error` results. Business failures, execution failures,\ninsufficient evidence and passes remain separate classes.\n\nEquipment-04 uses `native-transaction-observer-v4` and\n`idempiere-qualified-judge-v5-observer-ms94`. Oracle occasionally supplied an\nincomplete counter tuple before supplying a complete tuple for the same session\nand transaction while the target write lock was still held. Observer v4 can\nreplace that incomplete baseline with the complete one. It never imputes zero,\nreplaces a complete baseline, or accepts an intervening commit. The final witness\nstill requires one rollback, increased undo, unchanged commits and transaction\nend. The frozen source snapshot prevents development edits changing a running\ncampaign's implementation. See [the observer diagnosis](../../calibration/idempiere-ms94/OBSERVER-v4.md).\n\n## Preserved earlier declarations\n\n| Declaration | Outcome retained |\n|---|---|\n| Equipment-01 | First reference returned insufficient-evidence; 55 slots unstarted. Rollback and retry commit coalesced in the sampling interval. |\n| Equipment-02 | Three positive passes, then an operator-induced source-drift execution failure; 52 slots unstarted. Its fourth publication fails the unchanged implementation replay check. |\n| Equipment-03 | One positive pass, then insufficient-evidence; 60 slots unstarted. The observer retained an incomplete Oracle baseline despite a later admissible complete sample. |\n| Equipment-04 | New frozen declaration; all 62 fresh checks and publications passed, followed by source-review validation and acceptance. |\n\nPost-rollback observation windows, execution snapshots and the v4 observer were\nintroduced in new declarations. No prior failure was overwritten, resumed or\nrelabelled passed. A development reassessment of older captures is not new native\nqualification.\n\n## Declared limits\n\n- Lock-duration and duplicate-retry mutants are not scored. A native unique\n  business-key index prevents the proposed duplicate retry; prevention is not\n  counted as a judge rejection. Duplicate invoice-line cardinality is tested.\n- The rollback mutation models a leaked committed draft; it does not disable\n  the database's rollback implementation.\n- The timestamp mutation is a paired comparison rejection using distinct native\n  second offsets. The accepted timestamp exception remains narrowly scoped.\n- Operator signatures establish provenance, not independent third-party\n  attestation. Human review records preserve the operator's explicit statements.\n- No production qualification, unfamiliar-journey performance or autonomous\n  generation rate is established by Stage A.\n\n## Stage B execution and qualified bindings\n\nPR #223 merged Stage A at `fba89df525f2994998480172fa8aa2568da84a74`.\nIt retained the historical `tools.ms94_controller` prototype, which expects\n56 results and earlier components. That prototype is not the running entry point.\nThe later Stage B integration is on `codex/ms94-stage-b-measurement` (prepared in\ncommit `2ff87fe`), and is not part of that merged Stage A commit. Source integration\nand regression checks do not constitute a new human source review.\n\nThe running immutable snapshot uses `tools.ms94_measure_v4` and\n`tools.ms94_controller_v4`, validated against the real signed equipment-04:\n\n| Binding | Actual running component |\n|---|---|\n| Stage A admission | 62 results, accepted plan, both human reviews and published inventory |\n| Native gate | `tools.ms94_v4_gate` -> `lightyear_calibration.ms94_v4_judge` |\n| Judge version | `idempiere-qualified-judge-v5-observer-ms94` |\n| Observer | `qualification_observer_runtime_v4.Observer` and v4 capture verification |\n| Support | `qualification-ms94-v3/public/JourneySupport.java` |\n| Public shapes | `qualification-ms94-v3/public/operations-shapes.json` |\n\nAll 488 qualified implementation hashes match the accepted equipment. A residual\nunused import of the v3 `result` helper in the native adapter does not select the\njudge: its evaluation function is the qualified v5 gate. Tests assert the actual\nfunction/class identities, not just version labels. The running frozen code is\nnot edited by this documentation or the added regression tests.\n\nStage B 01 stopped as invalid-provenance because its strict event validator\nrejected a CLI deprecation warning. It remains void, with one builder call, one\ncompilation, no native attempts and twelve unstarted slots. Following explicit\nuser authorization to fix and restart, Stage B 02 was frozen separately with the\ncanonical `multi_agent` flag and narrowly defined diagnostic handling.\n\nStage B 02 plan fingerprint:\n`040824a01d74dae376fd9986b3abaa5ceacbac7c6ff0e3013c42ae12c831aca0`.\nSnapshot fingerprint:\n`d5119b86a622347f962949c23e6cec54be90d525861289b0f372037da7a36da3`.\n[The plan, declaration and manifest](../../calibration/idempiere-ms94/stage-b-02/README.md)\nwere publicly pushed in commit `4bc6f91` after pilots began. This is explicitly\nnot a pre-start external timestamp. No measured cohort trial had started at the\npublication audit. Pilots remain outside the measurement denominator.\n\nThe authorized workflow is three pilots followed by ten fresh baseline operations\ntrials, at most 65 calls, 39 compilations and 26 hours. Controller/provenance errors,\njudge-error or insufficient-evidence void the measurement; slots are never\nreplaced. Outcomes and costs remain separate for the two declarations. Stage B\nhas now completed that cohort; the recorded rate and adjudication limits are above.\n\nStage B 01's separate void outcome consumed 293,383 input tokens (249,600 cached),\n12,725 output tokens, 444.141 agent seconds and 459.047 total seconds. Its cost\nis not included in the Stage B 02 table, and its invalid outcome is not repaired\nby the later declaration.\n\n## Provenance of public inputs and support\n\n| Input or component | Earlier evidence that informed it |\n|---|---|\n| Public model/workflow API example | MS86 boundary journey, with assertions removed before use as builder input |\n| Typed Posted accessor and explicit posting guard | MS88/MS89 representation and reposting failures |\n| Public verified method signatures | MS89 inaccessible methods and wrong declaring-class repairs |\n| Plain decimal serialization and null token | MS89/MS90 comparison and trace-format failures |\n| Exact numeric comparison by column type; owned timestamp scope | MS90/MS91 rule registration and datatype inventory |\n| Aggregate order-linked invoice requirement | MS92 shipment-linked shapes rejected by the private judge; made explicit in MS93/MS94 |\n| Purchasing costing/history predicates | MS92 observed purchasing effects, investigated against pinned application source in MS93 |\n| JourneySupport cleanup, trace and posting plumbing | MS93 deterministic component and isolated reference checks |\n| v3 Oracle rollback observer | MS93 missing counter and immediate-retry sampling failures |\n| Post-rollback observation window | The first stopped MS94 positive control; approved in equipment-02, whose first three operations controls passed |\n| Typed errors, stricter support and purchasing ownership | MS94 technical pre-review, conditionally accepted for resolution by Howard Weale |\n| Separate execution-source snapshots | Equipment-02 slot four exposed per-attempt discovery of development files; regression now checks copy isolation and a closed module inventory |\n\nThese inputs make any future first-try result a result with inherited lessons,\nnot a claim that the builder was unfamiliar with the workflow.\n\n\n## Evidence and verification\n\n[Full captures, signed records and replay instructions](../../calibration/idempiere-ms94/README.md)\ninclude all 62 complete archives as GitHub release assets, their signed archive\nreceipts, the exact frozen replay source, human approvals and the terminal audit.\nThe unchanged verifier reproduced every complete gate, including the intended\nnegative verdicts. The focused deterministic regression suite passed 166 tests.\n\nFrozen plan: `77b075d0cafebe41dc33df02e43150a18a72e4601750ca3faa0211884960257e`.\nAcceptance: `0ad73e79fa94f7e74949e0733d655d814c9852c48fd9333643648d1b240480b4`.\nTerminal audit: `42c57d635c4336c0375c328918caaba9d25a94d13a2bf3b53b29d516e9923c44`.\n\n\n## Prospective retention-rule qualification and Stage B 03\n\nHoward approved the order-derived invoice-type rule as the single next\nintervention. Its [fresh additive qualification](../../calibration/idempiere-ms94/invoice-type-qualification-01/README.md)\ncompleted in 23 minutes 38.844 seconds with zero model calls: two positive passes\nand one expected negative rejection, all publications replayed and cleanup verified.\nAll 488 accepted equipment-04 implementation files remain unchanged. The new\nconstruction variants have no independent human source attestation; the inherited\nreference was reviewed and the prospective rule was user-approved.\n\n[Stage B 03](../../calibration/idempiere-ms94/stage-b-03/README.md) is separately\nfrozen for three excluded pilots and 20 fresh cohort trials, capped at 115 calls,\n69 compilations and 26 hours (five calls/three compiles per trial). Its plan is\n`f613b60c3515fa31d79f14929d7a2adb805641f4866fb5595d023d421ea7d41f`. Its declaration was published before generation, and the\none-shot launch record binds the confirmed public commit. No smoke tool or\nwider diagnostics were added. The original 2/10 interval and adjudication caveats\nabove remain unchanged; these qualification controls are not autonomous successes.\n\nStage B 03 launched once at 19:33:05 UTC on 29 September 2026, after remote\ncommit `026fdf804fe27953cf41c8f9552f66476bff3ec9` was confirmed.\nThe [launch and signed publication proof](../../calibration/idempiere-ms94/stage-b-03/README.md)\nrecord this ordering. The completed Stage B 03 result and verification are reported above.\n\n\n## B04 prospective freeze\n\n[Stage B 04](../../calibration/idempiere-ms94/stage-b-04/README.md) prepares one new 23-slot closed-runtime-diagnostic campaign after all qualification prerequisites passed. The snapshot retains all 946 paired-A3 inputs unchanged. Fifty focused DEV tests and 34 included frozen-root tests passed. The initial builder inputs match B03; pooled n=40 reporting is explicitly omitted because native assessment dates differ. No B04 model calls or native attempts have occurred. Exact public source, plans, declarations and allowlists must be verified before the one authorized launch.\n",
+    "display_encoding_repairs": [
+      {
+        "from": "\u00e2\u20ac\u201c",
+        "to": "\u2013"
+      },
+      {
+        "from": "\u00e2\u20ac\u00b2",
+        "to": "\u2032"
+      }
+    ]
+  },
+  "rendering": {
+    "word_source": "canonical Markdown",
+    "pdf_source": "rendered Word companion",
+    "page_counts": {
+      "MS-73": 2,
+      "MS-74": 1,
+      "MS-75": 2,
+      "MS-76": 2,
+      "MS-77": 2,
+      "MS-78": 1,
+      "MS-79": 1,
+      "MS-80": 1,
+      "MS-81": 1,
+      "MS-82": 1,
+      "MS-83": 2,
+      "MS-84": 2,
+      "MS-85": 3,
+      "MS-86": 3,
+      "MS-87": 3,
+      "MS-88": 4,
+      "MS-89": 6,
+      "MS-90": 5,
+      "MS-91": 4,
+      "MS-92": 2,
+      "MS-93": 3,
+      "MS-94": 17,
+      "MS-95": 1,
+      "MS-96": 1,
+      "MS-97": 1,
+      "MS-98": 1,
+      "MS-99": 1,
+      "MS-100": 1,
+      "MS-101": 1,
+      "MS-102": 1,
+      "MS-103": 1
+    },
+    "visual_review": "all rendered pages inspected; page breaks and CJK font rendering corrected",
+    "new_runtime_or_model_execution": false
+  },
+  "merge_closeout": {
+    "merge_order": [
+      332,
+      328,
+      333,
+      330,
+      331,
+      329,
+      334
+    ],
+    "integration": {
+      "headRefOid": "731bb76a2c05241e2bb493031b81d9b76f1a4463",
+      "mergeCommit": {
+        "oid": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71"
+      },
+      "mergedAt": "2026-10-14T19:33:08Z",
+      "number": 335,
+      "state": "MERGED",
+      "title": "Integrate October delivery queue and fix cloud-runner CI dependency",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/335"
+    },
+    "original_pull_requests": [
+      {
+        "headRefOid": "13bf81fdf77b70a915c0e68f88f0e8a95a73ba10",
+        "mergeCommit": {
+          "oid": "3e9c41939df90a53216f19dd253844b1a410c623"
+        },
+        "mergedAt": "2026-10-14T16:41:52Z",
+        "number": 332,
+        "state": "MERGED",
+        "title": "Prepare pinned GHCR PostgreSQL mirror and conservative CI path filters",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/332"
+      },
+      {
+        "headRefOid": "1f2b587216e055da687f62945c8aa588a17d44cb",
+        "mergeCommit": {
+          "oid": "fe43bfe50dc733d3b4059cabfe6527f0295bef51"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 328,
+        "state": "MERGED",
+        "title": "Repair targeted clock cases and prepare remaining equivalence review",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/328"
+      },
+      {
+        "headRefOid": "2f91d0c8d5289796b4bf2bdb90983d132b912565",
+        "mergeCommit": {
+          "oid": "86d1babb0cab49182a7718d5e9e83ddf693a8f63"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 333,
+        "state": "MERGED",
+        "title": "Record scoped October12 equivalence acceptance and loader-domain proposal",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/333"
+      },
+      {
+        "headRefOid": "1b1f31769eb85359ef4747258d214ac9bd6b48e9",
+        "mergeCommit": {
+          "oid": "aa8faa115984ef29a5b187fc03738a5cc9d266d7"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 330,
+        "state": "MERGED",
+        "title": "Compile and gate retained POSTTRAN attempt1 without twin comparison",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/330"
+      },
+      {
+        "headRefOid": "59f4788987a46f1403250710143a4bd647813efe",
+        "mergeCommit": {
+          "oid": "8dac06385fa9584707746b310b0291aef5132158"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 331,
+        "state": "MERGED",
+        "title": "Start generic scenario engine with typed source-bound IR",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/331"
+      },
+      {
+        "headRefOid": "10cc64d4762dd4197698279c349a14f4b7b9deff",
+        "mergeCommit": {
+          "oid": "c9df3fd46d4af40960b54f4ee4ddceb7b66bc3b8"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 329,
+        "state": "MERGED",
+        "title": "Prepare B06 afternoon replacement and deferred Factory activation",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/329"
+      },
+      {
+        "headRefOid": "f21081790bbc6dd32d59a6929e0546fc4ac4553d",
+        "mergeCommit": {
+          "oid": "5355d65573c102a81743e896561f16f3d3371927"
+        },
+        "mergedAt": "2026-10-14T19:33:10Z",
+        "number": 334,
+        "state": "MERGED",
+        "title": "Add cloud runner Phase 1 admission and GCP infrastructure",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/334"
+      }
+    ]
+  }
+}

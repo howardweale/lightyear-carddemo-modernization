@@ -6,119 +6,204 @@
       "path": "MS-73/MS-73.md",
       "title": "Run history and action activity",
       "customer_value": "Inspect retained run history and recorded operator actions.",
-      "status": "Engine integration delivered by MS74"
+      "status": "Engine integration delivered by MS74",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 74,
       "path": "MS-74/MS-74.md",
       "title": "Engine-to-history recording",
       "customer_value": "Find replay-verified terminal engine runs in the durable history.",
-      "status": "Implemented"
+      "status": "Implemented",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 75,
       "path": "MS-75/MS-75.md",
       "title": "Four-panel workspace",
       "customer_value": "Navigate work queues, individual runs, convergence and estate discovery.",
-      "status": "Implemented"
+      "status": "Implemented",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 76,
       "path": "MS-76/MS-76.md",
       "title": "Existing runtime gate qualification",
       "customer_value": "Test documented gate paths against witnessed faults and missing evidence.",
-      "status": "Implemented for declared scope"
+      "status": "Implemented for declared scope",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 77,
       "path": "MS-77/MS-77.md",
       "title": "Declarative batch invocation",
       "customer_value": "Review batch jobs, datasets and source/target capabilities before access.",
-      "status": "Partial; awaiting an authorised z/OS environment"
+      "status": "Partial; awaiting an authorised z/OS environment",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 78,
       "path": "MS-78/MS-78.md",
       "title": "Reliable local agent runs and cancellation",
       "customer_value": "Run, reconnect, recover and cancel project-bound verification through CLI and MCP.",
-      "status": "Implemented for retained CloudBank evidence"
+      "status": "Implemented for retained CloudBank evidence",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 79,
       "path": "MS-79/MS-79.md",
       "title": "Services and API journey packs",
       "customer_value": "Declare customer service journeys and compute their invocation footprint before runtime access.",
-      "status": "Implemented and contract-tested; customer execution unproven"
+      "status": "Implemented and contract-tested; customer execution unproven",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 80,
       "path": "MS-80/MS-80.md",
       "title": "Decidability calibration instrument",
       "customer_value": "Measure what an unfamiliar corpus lets the gate decide, cluster unknowns and review normalization blast radius.",
-      "status": "Implemented for documented adapters"
+      "status": "Implemented for documented adapters",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 81,
       "path": "MS-81/MS-81.md",
       "title": "Measured calibration and schema/session baselines",
       "customer_value": "Reproduce actual coverage gains and inventory missing catalog/session facts before customer demonstrations.",
-      "status": "Measured on pinned public SQL; customer context still required"
+      "status": "Measured on pinned public SQL; customer context still required",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 82,
       "path": "MS-82/MS-82.md",
       "title": "Binary, overlay and variable-record decoding",
       "customer_value": "Read IBM binary fields, REDEFINES and bounded variable tables without guessing byte layouts.",
-      "status": "Implemented and fixture-tested; native customer qualification unproven"
+      "status": "Implemented and fixture-tested; native customer qualification unproven",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 83,
       "path": "MS-83/MS-83.md",
       "title": "Native iDempiere context and migration measurement",
       "customer_value": "Measure static coverage with observed database facts and expose actual native migration differences; PR #214.",
-      "status": "Native measurement completed; findings followed up in MS84"
+      "status": "Native measurement completed; findings followed up in MS84",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 84,
       "path": "MS-84/MS-84.md",
       "title": "Native iDempiere reconciliation and historical replay",
       "customer_value": "Review matching starting data, explicit repairs and 1,125 historical pairs across 20 admitted release checkpoints; PR #215.",
-      "status": "Corrected native replay completed; broader qualification unclaimed"
+      "status": "Corrected native replay completed; broader qualification unclaimed",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 85,
       "path": "MS-85/MS-85.md",
       "title": "iDempiere schema alignment and native business journey",
       "customer_value": "Verify schema repairs and one real customer-to-payment scenario on Oracle and PostgreSQL, retaining every raw difference.",
-      "status": "Bounded native journey passed; full schema, application and platform qualification unclaimed"
+      "status": "Bounded native journey passed; full schema, application and platform qualification unclaimed",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 86,
       "path": "MS-86/MS-86.md",
       "title": "iDempiere boundary findings and operational journeys",
       "customer_value": "Find actual timestamp and locking differences while testing fractional tax, discounts, Unicode, partial shipments, credit reversal and bounded recovery.",
-      "status": "Native boundary differences retained; operational scope is explicit; broad qualification unclaimed"
+      "status": "Native boundary differences retained; operational scope is explicit; broad qualification unclaimed",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 87,
       "path": "MS-87/MS-87.md",
       "title": "Unattended native iDempiere journey replay",
       "customer_value": "Repeat pinned native journeys, reproduce known findings and stop for signed human decisions with complete cleanup.",
-      "status": "Two consecutive native replays accepted; timestamp decision remains open"
+      "status": "Two consecutive native replays accepted; timestamp decision remains open",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 88,
       "path": "MS-88/MS-88.md",
       "title": "Agent-built partial invoicing with native judgement",
       "customer_value": "Generate one bounded application journey, reject unintended effects and verify split invoicing, payment, stock and accounting on both engines.",
-      "status": "Bounded native partial-invoicing equivalence passed after explicitly approved repairs; broader qualification unclaimed"
+      "status": "Bounded native partial-invoicing equivalence passed after explicitly approved repairs; broader qualification unclaimed",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 89,
       "path": "MS-89/MS-89.md",
       "title": "Analyst-led repairs with an unchanged native judge",
       "customer_value": "Let agents repair permitted structural failures, retain every attempt and judge hash, measure complete campaign effort and own the timestamp contract.",
-      "status": "Bounded repair workflow and attempt audit; native campaign results retain explicit limits"
+      "status": "Bounded repair workflow and attempt audit; native campaign results retain explicit limits",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     },
     {
       "number": 90,
@@ -128,7 +213,8 @@
       "status": "Bounded partial-invoicing contract v2 passed on retained native evidence; no new native execution or broader qualification",
       "formats": [
         "md",
-        "docx"
+        "docx",
+        "pdf"
       ]
     },
     {
@@ -139,7 +225,8 @@
       "status": "First candidate passed bounded Oracle/PostgreSQL operations comparison; no controller changes, no repairs, no broader qualification",
       "formats": [
         "md",
-        "docx"
+        "docx",
+        "pdf"
       ]
     },
     {
@@ -150,7 +237,8 @@
       "status": "40 trials completed with zero verified successes; frozen failures preserved",
       "formats": [
         "md",
-        "docx"
+        "docx",
+        "pdf"
       ]
     },
     {
@@ -161,7 +249,8 @@
       "status": "Bounded reference and control checks passed; development gates remain before a new autonomous campaign",
       "formats": [
         "md",
-        "docx"
+        "docx",
+        "pdf"
       ]
     },
     {
@@ -169,9 +258,119 @@
       "path": "MS-94/MS-94.md",
       "title": "Qualify equipment, then measure the factory",
       "customer_value": "Separate judge and environment failures from a single-condition factory reliability measurement, with full replayable evidence.",
-      "status": "B05 results and evidence history published; B04 void; B06 preparation tested, native qualification pending",
+      "status": "B05 retained measurement published; later B06 engineering records reconciled; no new qualification or measurement claim",
       "formats": [
-        "md"
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 95,
+      "path": "MS-95/MS-95.md",
+      "title": "Mainframe delivery intake and replay",
+      "customer_value": "Receive a mainframe delivery, identify missing evidence and compare INTCALC records without exposing customer values.",
+      "status": "Public delivery rehearsal completed; customer z/OS equivalence not established",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 96,
+      "path": "MS-96/MS-96.md",
+      "title": "Isolated agent verification and operator walkthroughs",
+      "customer_value": "Let an agent submit candidates to a separate judge with durable budgets, closed diagnostics and replayable receipts.",
+      "status": "Isolated public-fixture acceptance and operator smoke results recorded; broader client and customer qualification pending",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 97,
+      "path": "MS-97/MS-97.md",
+      "title": "Approved graph context and routing controls",
+      "customer_value": "Give agents reviewed public context while retaining revocation, provenance and measurable routing requirements.",
+      "status": "Graph and routing controls implemented; live effectiveness and routing promotion unproven",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 98,
+      "path": "MS-98/MS-98.md",
+      "title": "Native T SQL procedure verification",
+      "customer_value": "Compare stored-procedure behavior on SQL Server and PostgreSQL with explicit mappings and independently replayable captures.",
+      "status": "Revision 9 public-corpus qualification passed; customer dependency closure and release remain separate",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 99,
+      "path": "MS-99/MS-99.md",
+      "title": "Executable business rules and reusable evidence contracts",
+      "customer_value": "Explain which business rules have meaningful evidence and reuse strict evidence checks across verification tools.",
+      "status": "Public rule evaluation and shared evidence contracts implemented; customer validation remains outstanding",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 100,
+      "path": "MS-100/MS-100.md",
+      "title": "Public COBOL execution and scenario calibration",
+      "customer_value": "Exercise original public COBOL, measure observed decisions and reveal the scenarios the factory still cannot justify.",
+      "status": "Public twin and scenario measurements delivered; generic engine is limited to typed translation step one",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 101,
+      "path": "MS-101/MS-101.md",
+      "title": "Scoped equivalence decisions and POSTTRAN candidate checks",
+      "customer_value": "Record exactly what an operator accepted and distinguish candidate invariant checks from equivalence evidence.",
+      "status": "Scoped decisions retained and POSTTRAN Phase 1 passed; conditional exclusions and Phase 2 remain gated",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 102,
+      "path": "MS-102/MS-102.md",
+      "title": "Control Tower review and factory status",
+      "customer_value": "Review program evidence, unresolved differences and scoped decisions in a single operator interface.",
+      "status": "Console and Factory views delivered; production authority and signed migration remain separate",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 103,
+      "path": "MS-103/MS-103.md",
+      "title": "Offline cloud runner foundation",
+      "customer_value": "Prepare a cloud execution boundary with explicit admission, identity, evidence retention and cleanup requirements.",
+      "status": "Phase 1 offline contracts and infrastructure definitions delivered; no cloud deployment or live controller",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
       ]
     }
   ]

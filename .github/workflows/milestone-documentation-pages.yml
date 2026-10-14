@@ -15,6 +15,8 @@ on:
       - "tests/test_cloudbank_publication.py"
       - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
+      - "tools/generate_supplemental_milestone_formats.py"
+      - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
   push:
@@ -32,6 +34,8 @@ on:
       - "tests/test_cloudbank_publication.py"
       - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
+      - "tools/generate_supplemental_milestone_formats.py"
+      - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
   workflow_dispatch:

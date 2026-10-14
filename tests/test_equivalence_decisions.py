@@ -45,15 +45,18 @@ class EquivalenceDecisionTests(unittest.TestCase):
      self.assertEqual('curated-finite-witness',case(name)[3]['generator_class'])
    with self.assertRaisesRegex(ValueError,'bound'):case(f'b1-target:{job}:numeric:200')
   self.assertTrue(all(r['generator_class']=='curated-finite-witness' for r in manifest()))
- def test_targeted_fields_include_fractional_clock_and_received_account_suffix(self):
+ def test_targeted_fields_include_admitted_clock_and_received_account_suffix(self):
   clocks=set();accounts=set();filler=set()
   for index in range(200):
-   _,meta,_,_=case(f'b1-target:INTCALC:timestamp:{index:03d}');clocks.add(meta['candidate_timestamp'][-6:-4])
+   _,meta,_,_=case(f'b1-target:INTCALC:timestamp:{index:03d}');clocks.add(meta['candidate_timestamp'])
+   self.assertTrue(meta['candidate_timestamp'].endswith('.000000'))
+   from lightyear_mainframe.legacy_twin import runtime_clock
+   runtime_clock('INTCALC',meta)
    _,_,images,_=case(f'b1-target:POSTTRAN:xref-suffix:{index:03d}')
    xr=records(images,'XREFFILE');ar=records(images,'ACCTFILE');tr=records(images,'DALYTRAN')
    self.assertEqual(1,len(xr));self.assertEqual(1,len(ar));self.assertEqual(tr[0]['DALYTRAN-CARD-NUM'],xr[0]['XREF-CARD-NUM'])
    self.assertEqual(xr[0]['XREF-ACCT-ID'],ar[0]['ACCT-ID']);accounts.add(ar[0]['ACCT-ID']);filler.add(images['XREFFILE'][36])
-  self.assertEqual(100,len(clocks));self.assertEqual(200,len(accounts));self.assertEqual(94,len(filler))
+  self.assertEqual(200,len(clocks));self.assertEqual(200,len(accounts));self.assertEqual(94,len(filler))
  def test_only_explicit_two_scope_amendments_extend_accepted_zos_scope(self):
   from lightyear_mainframe.equivalence_evidence import mutation_threshold_report
   accepted=json.loads((ROOT/'docs/factory/equivalence-decision-binding-2026-10-11.json').read_text())['accepted_mutants']

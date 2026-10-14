@@ -8,13 +8,34 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  changed-paths:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      cloudbank: ${{ steps.paths.outputs.cloudbank }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - id: paths
+        run: python -B tools/ci_changed_paths.py
+      - name: Test registry and path policy without Docker
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_ci_postgres_image test_ci_changed_paths -v
   cloudbank-sustained-load:
+    needs: changed-paths
+    if: needs.changed-paths.outputs.cloudbank == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -73,6 +94,8 @@ jobs:
           python tools/test_cloudbank_transfer_framing.py
 
   windows-gcloud-recovery:
+    needs: changed-paths
+    if: needs.changed-paths.outputs.cloudbank == 'true'
     runs-on: windows-2025
     timeout-minutes: 10
     steps:
@@ -124,10 +147,18 @@ jobs:
           exit $LASTEXITCODE
 
   cloudbank-sql-recovery:
+    needs: changed-paths
+    if: needs.changed-paths.outputs.cloudbank == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+      - name: Authenticate read-only package pulls
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GHCR_TOKEN: ${{ github.token }}
+          GHCR_USER: ${{ github.actor }}
+        run: printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -135,10 +166,8 @@ jobs:
         env:
           PYTHONPATH: src
           LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER: lightyear-sql-recovery-test
-          # Docker Official Image, byte-identical to Docker Hub's postgres:16-alpine.
-          POSTGRES_IMAGE: public.ecr.aws/docker/library/postgres:16-alpine@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
         run: |
-          python tools/ci_postgres_image.py
+          POSTGRES_IMAGE="$(python tools/ci_postgres_image.py)"
           docker run --pull=never --detach --name "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" \
             -e POSTGRES_HOST_AUTH_METHOD=trust "$POSTGRES_IMAGE"
           trap 'docker rm --force "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" >/dev/null' EXIT
@@ -164,6 +193,8 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_platform_qualification.py -v
 
   cloudbank-source-build:
+    needs: changed-paths
+    if: needs.changed-paths.outputs.cloudbank == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 

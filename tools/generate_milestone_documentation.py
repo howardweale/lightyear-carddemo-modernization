@@ -25,7 +25,7 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.26"
+GENERATOR_VERSION = "1.27"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -546,7 +546,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
 
 def source_sha256() -> str:
     digest = hashlib.sha256()
-    for path in (Path(__file__).resolve(), CATALOG_PATH, SUPPLEMENTAL_CATALOG, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
+    for path in (Path(__file__).resolve(), CATALOG_PATH, SUPPLEMENTAL_CATALOG, DOC_ROOT / "reconciliation-2026-10-14.json", DOC_ROOT / "reconciliation-2026-10-14.md", ROOT / "tools/generate_supplemental_milestone_formats.py", CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
         digest.update(path.relative_to(ROOT).as_posix().encode()); digest.update(b"\0")
         digest.update(path.read_bytes()); digest.update(b"\0")
     return digest.hexdigest()
@@ -565,12 +565,13 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
         "# LIGHTYEAR milestone documentation library", "",
         f"This library is the customer-readable body of record for MS #1 through MS #{EXPECTED_MILESTONES[-1]}. Every milestone is",
         "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.",
-        f"The same searchable index includes {len(load_supplemental())} later implementation records in Markdown.", "",
+        f"The same searchable index includes {len(load_supplemental())} later implementation records in Markdown, Word and PDF.", "",
         f"**[Open the searchable milestone index]({PAGES_INDEX})** to filter by milestone number, title,",
         "customer value, capability, release, or roadmap phase.", "",
         "The documents explain purpose, customer value, delivered capability, evidence posture, limitations, and",
         "the relationship to earlier work. They do not override the underlying schemas, receipts, ledgers, tests,",
-        "or policy decisions.", "", "## Milestone index", "",
+        "or policy decisions.", "",
+        "[October 14 reconciliation and preserved source map](reconciliation-2026-10-14.md)", "", "## Milestone index", "",
         "| Milestone | Title | Status | Formats |", "|---|---|---|---|",
     ]
     for model in models:
@@ -705,7 +706,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
       <div><label for="search">Search milestones</label><input id="search" type="search" placeholder="Try Oracle, stored procedures, CDC, customer pilot…" autocomplete="off"></div>
       <div><label for="phase">Roadmap phase</label><select id="phase"><option value="all">All phases</option><option value="foundation">Foundation (MS #1–10)</option><option value="trust-runtime">Trust and runtime (MS #11–20)</option><option value="pilot-preparation">Pilot preparation (MS #21–32)</option><option value="qualification">Qualification (MS #33–{EXPECTED_MILESTONES[-1]})</option><option value="implementation">Later implementation records</option></select></div>
     </section>
-    <div class="summary"><span id="result-count" aria-live="polite">{total} milestones</span><a href="{github_blob('docs/milestones/README.md')}">Open repository index</a></div>
+    <div class="summary"><span id="result-count" aria-live="polite">{total} milestones</span><span><a href="{github_blob('docs/milestones/reconciliation-2026-10-14.md')}">October 14 reconciliation</a> · <a href="{github_blob('docs/milestones/README.md')}">Open repository index</a></span></div>
     <section class="table-wrap" aria-label="Milestone results">
       <table><thead><tr><th>Milestone</th><th>Customer brief</th><th>Phase / release</th><th>Formats</th></tr></thead><tbody>
         {''.join(rows)}

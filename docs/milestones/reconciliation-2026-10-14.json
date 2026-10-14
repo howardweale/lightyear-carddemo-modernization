@@ -1,0 +1,588 @@
+{
+  "schema": "milestone-reconciliation/1",
+  "as_of": "2026-10-14",
+  "source_head": "731bb76a2c05241e2bb493031b81d9b76f1a4463",
+  "merge_hold": "lifted by user on 2026-10-14; historical runtime decisions unchanged",
+  "sources": [
+    {
+      "source": "docs/b06-bounded-native-evidence-milestone.md",
+      "sha256": "3228fc9373e848c42e343d43a3d70686658bec183f7c71f9affcc648b9cf78d7",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-r3-performance-repair-milestone.md",
+      "sha256": "e57dd76113d347aac0dee212ec0a9f9ea2b0b5643d42e837c6e7489d0af595dc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-r3-repair-milestone.md",
+      "sha256": "4c48f083599058e9b357aa59bed636cfb39aa2624cf43a2894c432ec4a066f1a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-v2-preparation-milestone.md",
+      "sha256": "dd28169cb7c265107955c3c01047b5be71849147fc5e006ddda5c70c842a00d6",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-census-v2-r2-preparation-milestone.md",
+      "sha256": "cade695849e815bf4d3d622515f47fcfc2b229dea5217d4fc05634942e0138fc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-dividends-milestone-2026-10-10.md",
+      "sha256": "8d66ba3323c3a5e8a1f7e1128da8cb0e3c64115b8bf4a67b878bd20e618c9915",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-engineering-approval-milestone.md",
+      "sha256": "9821195afb08a4c0695b496e12e0285c95b34c01d0fe13ba158d1b78ebcaac3d",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-engineering-milestone.md",
+      "sha256": "bc9f1bd556bb403dec20922bd3e0914f241b0b990c584616a8423d8ca40812b8",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-memory-measurement-milestone.md",
+      "sha256": "29ccf2f9c9de7163f2831d50c2d871db66f43649adb34f72033fad27b1c0c6a1",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-audit-milestone.md",
+      "sha256": "b8e10b291690cf6c4db03701b4c4e7ca7f18c04ae58c5e529bb317a27b3fc9a3",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-practice-window2-milestone.md",
+      "sha256": "35d6be0f27b3c18be52e614cec766bcdf7a22603cf3c211cbbbbaa8067de7da5",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-startup-repair-milestone.md",
+      "sha256": "b3aeaf246fd34cc08d1f0df8d8aadc3ec304debaa62517e3a27c1ade8235620a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-stress-milestone.md",
+      "sha256": "fb789b7ede8be0bfc8fce98ab842191facdcde32e835497c8ee37461705b5895",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-observer-v2-milestone.md",
+      "sha256": "c7b5908b51d7968d06d5d42cbeb6724dc289ee9e503bfa1af1e2c83c07e111e0",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-oct09-integration-milestone.md",
+      "sha256": "e5e7881db902acf220ac6deb99f45f58840a8ca735305e6cc4cf469cdc2db3bc",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-oct13-engineering-milestone.md",
+      "sha256": "3b686b5d8b38c7850df6eee4ee7e1db4fa66914244fab18bd087c3f53bb57a82",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-provenance-review-milestone.md",
+      "sha256": "0ac7a2fa0dde3d2497d483dcc46054b27670e1da28c54c82defc604134d1f0c3",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-retained-jdk-alternatives-milestone.md",
+      "sha256": "d3b5cad63dcb0c0f1f0b90eb9b41a0f84e8cf892906f5f993ca917b92fd16506",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-runtime-oct08-milestone.md",
+      "sha256": "7c4d24fc9a5c104db816b59c4865ad0cfdb1450f74cbc0dcd517abb462403a7f",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-tower-unicode-repair-milestone.md",
+      "sha256": "1e9332c82df1165616c34d600bd881173eb1954e8f7b14d2e02bba3e30a82396",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-r3-afternoon-milestone.md",
+      "sha256": "961cd3ddf52c418e87788e4a36fdcacc8aa62fb16475bf8de0bf2e64065d9b74",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-r3-terminal-milestone.md",
+      "sha256": "9715bafc9745ab06e8175424485e52a6402d64100ed4fd44210469eb3834d550",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/b06-unmatched-return-diagnostic-milestone.md",
+      "sha256": "97a9d14bc162bc2eb59f3e6cba1272e4fa7e08e48211cd2e21f8d21999559a3d",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/business-rules/evidence-strength-milestone.md",
+      "sha256": "7d91a1e5b9b630325d26d0f4089d3245285431cf58beb674d2dc06ed2bf10a79",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/business-rules/milestone-2026-10-10.md",
+      "sha256": "5555f6739570fca7ad5f3e6199b088293fed249f5aa3d557fb1c8da72242ad54",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r6.md",
+      "sha256": "81e772339b44ac68afd3f3990325d213e15dc88be76456e4869e29eefd1ffbf0",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r7.md",
+      "sha256": "8f95486d4d47293301b317439a379c393ff61522e401f51b05e88ab777613e8a",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/calibration/idempiere-ms94/stage-b-06/preparation/milestone-r8.md",
+      "sha256": "c1947cf463a8f994826a968d9dc6da3487e6d70401132215d34ac696ed83aff6",
+      "milestones": [
+        94
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/control-tower-decision-console-milestone.md",
+      "sha256": "af541e1bcc52769e3b40c67bc75a85d77fac1840e62addaf5f551cda259d927c",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/control-tower-review-v2-milestone.md",
+      "sha256": "a0a25da8ef70b763e9d45d92857fe437f35e1d03af28ce8c3f97492ad4c9a0c7",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-build-once-milestone.md",
+      "sha256": "77cba05e557735c1f0677c152228fe8a7a41a9f6cc83c89a1243acb957f64e78",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-completeness-milestone.md",
+      "sha256": "5e60bea36a3d15df08199e9c0732df1477bb0d147baf7cdde298869283ed10bb",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/evidence-content-identity-milestone.md",
+      "sha256": "cfee9a7e89b6b3603117692e36f00d542835bbdef3aa3c358f947a300f69f190",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/after309-ci-milestone.md",
+      "sha256": "6303ccc38184de68a6baec1bbeace0ec19fd247bbc6d8839ce87f5ab7fadb33e",
+      "milestones": [
+        100,
+        103
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/alternatives-twin-followup-milestone.md",
+      "sha256": "c6a6b3802a52d69bd75e94b5aebe64c15042fa020da61adf2ec7b5265550a47a",
+      "milestones": [
+        94,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/equivalence-b1-b2-milestone.md",
+      "sha256": "1b72e67a1143bfcfcd49480fc9fe42fbee8c94a87d8ff5c7c7b1cc700fc00548",
+      "milestones": [
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/generated-scenarios-milestone.md",
+      "sha256": "76d7a242bd1ef2aee939fb3ff7a6326625daa0d7390040c500dda4e972691dac",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/generic-scenario-step1-milestone.md",
+      "sha256": "da59952709be2e4d25b44d6313a9b9139aade0819f98761abdc4e9330bdb1f7d",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/gnucobol-twin-milestone.md",
+      "sha256": "239a85f5abde2b06115c7e21404819b5cc9d9675fe2c9096cd46b5fda770903e",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/graph-memory-milestone.md",
+      "sha256": "fd77764c0e46433c41f20b7dd43d0da8d6bb175deb18e2bcd0cfbfb5a85bd678",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/howard-decisions-2026-10-11-milestone.md",
+      "sha256": "40289b8bf05884b5609567a487a1e5ef8f14b6f84a0babdaa6573ac987ff02f3",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/howard-decisions-2026-10-11b-milestone.md",
+      "sha256": "c1220b3ba262dd786e4eb4643fcd6fd665aed47dcc737359c611c0bab792c670",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/indexed-key-hardening-milestone.md",
+      "sha256": "5f45dc2b5bd229d833c0ea6c860f8e2ee2ca074915d3f04fbc8a92f3c4ad7e84",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/posttran-dedicated-phase1-milestone.md",
+      "sha256": "87ee76a38fba3836310efbbc01d61bc9fb1e53ec15c5f5dd599eb082925543ad",
+      "milestones": [
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/posttran-review-milestone.md",
+      "sha256": "0ea40a402a4c80f761ea8f820482b6d3383db4783041346f9b60604f2a602941",
+      "milestones": [
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/retention-fix-milestone-2026-10-11.md",
+      "sha256": "ff4aa9e5d8ae5ea51af8e65de7cef2403aa545376d564f6ef86233807636e8f1",
+      "milestones": [
+        100,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/review-304-307-milestone.md",
+      "sha256": "58515dfc49eecb6f7fe79aab500620879a0322197e213dbe83112b0fc844bc9e",
+      "milestones": [
+        100,
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/review311-317-milestone.md",
+      "sha256": "2bf6cc0893196066263cea370bbdbbb3494468d7b4d005c931f2f143589778a0",
+      "milestones": [
+        100,
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/scenario-instrumentation-milestone.md",
+      "sha256": "a7d846744f6b8b1e4feb574d1f5208134ed242efa64f0ff8c52b5f96addee120",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/scenario-policy-milestone.md",
+      "sha256": "f0a64c6b0ddbb662bc191aa74550a1e93e0ac2d9712872a16e8e40536f6e7fe7",
+      "milestones": [
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/three-way-reconciliation-milestone.md",
+      "sha256": "94abd5cf89b8262911f54721273a3d01b9963be32b8abf4410f3377523e227e1",
+      "milestones": [
+        100,
+        101
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-decisions-milestone.md",
+      "sha256": "85131ea0b6f892493aa81664bec19aeb9a18aabdd5be07e5fd6fc884c04dcbdb",
+      "milestones": [
+        101,
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-programs-milestone.md",
+      "sha256": "5149bdf1bf9a7d6c1c4a44540c603fd4d115cc9cc23a25dcc4a653946723395b",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/factory/tower-status-milestone.md",
+      "sha256": "5d0ff6b496a62dd3df3c3df958f6fd3e1110d0940a16501e3fe0065b578e65cd",
+      "milestones": [
+        102
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/mainframe/carddemo-zos-tower-milestone.md",
+      "sha256": "8face9dc7b36ec2e169f06770a9e5e1bf1f099f2b9868bc5efce9a34a4caf2a5",
+      "milestones": [
+        95
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/mainframe/zos-intake-milestone.md",
+      "sha256": "ec14d983ce8359731559d2017cd75e8d5917e52071989eed7eab4988f53165cc",
+      "milestones": [
+        95
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-factory-foundations-milestone.md",
+      "sha256": "4a0a1843a9b8996bf508c8d7dec6303ef8304fa2f9d884669dc942a579fa8d2e",
+      "milestones": [
+        97,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-review-291-302-delivery-milestone.md",
+      "sha256": "4b02c0f22956d3c1b87513f0e5b90bcb6dae45dccabcd4d1dadc8ab5fab11626",
+      "milestones": [
+        94,
+        97,
+        99,
+        100
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/oct10-rules-evidence-delivery-milestone.md",
+      "sha256": "757132f76ff338fd1f5479ceacb7baed45b1e8b9c7eab9344d374de0d004f19a",
+      "milestones": [
+        99
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/tsql-procedure-m0-milestone.md",
+      "sha256": "0d421d2b81d3f15c30c13d0b348bbbfcca07a0a968807540faa3f8586c2b708d",
+      "milestones": [
+        98
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/graph-context-milestone.md",
+      "sha256": "54d1c9c672ab8fb85a6b8fdf50eda7bca8c70f518623f06ae3e8ecea16b1b115",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/graph-stage2-walkthrough-milestone.md",
+      "sha256": "ed6fb8c974f6787fc9ddbfccf9cd208a05810698bcd16955c280e474dead5f4a",
+      "milestones": [
+        97
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/hardening-milestone.md",
+      "sha256": "ccc0537dc180c42c2fe188df386b71280e40d7055932f744e758bc7333180d49",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/milestone.md",
+      "sha256": "b695b3512fd29daaacd46e671521ebbb31502b3d2d5156f492afcc18bdc92046",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    },
+    {
+      "source": "docs/verify/smoke-milestone.md",
+      "sha256": "6ab3e7c5536866f6468d47ba01178c65976de083d8169df2684ad4800ecccb09",
+      "milestones": [
+        96
+      ],
+      "disposition": "retained unchanged; discoverable through canonical milestone and reconciliation index"
+    }
+  ],
+  "preserved_ms94_record": {
+    "bytes": 56215,
+    "sha256": "fda7ce9ccd99d501f65b4d669d11e83b22049f3d2c072edd2bad23c15a655876",
+    "location": "unchanged suffix of docs/milestones/MS-94/MS-94.md"
+  },
+  "rendering": {
+    "word_source": "canonical Markdown",
+    "pdf_source": "rendered Word companion",
+    "page_counts": {
+      "MS-73": 2,
+      "MS-74": 1,
+      "MS-75": 2,
+      "MS-76": 2,
+      "MS-77": 2,
+      "MS-78": 1,
+      "MS-79": 1,
+      "MS-80": 1,
+      "MS-81": 1,
+      "MS-82": 1,
+      "MS-83": 2,
+      "MS-84": 2,
+      "MS-85": 3,
+      "MS-86": 3,
+      "MS-87": 3,
+      "MS-88": 4,
+      "MS-89": 6,
+      "MS-90": 5,
+      "MS-91": 4,
+      "MS-92": 2,
+      "MS-93": 3,
+      "MS-94": 17,
+      "MS-95": 1,
+      "MS-96": 1,
+      "MS-97": 1,
+      "MS-98": 1,
+      "MS-99": 1,
+      "MS-100": 1,
+      "MS-101": 1,
+      "MS-102": 1,
+      "MS-103": 1
+    },
+    "visual_review": "all rendered pages inspected; page breaks and CJK font rendering corrected",
+    "new_runtime_or_model_execution": false
+  }
+}

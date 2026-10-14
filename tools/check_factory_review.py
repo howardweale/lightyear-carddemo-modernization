@@ -176,7 +176,7 @@ def check(output,job):
     for mutant in mutants:
         if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
         folder=output/'mutants'/mutant['id'];folder.mkdir(parents=True)
-        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[])
+        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[],valid_domain_comparisons=[])
         try:build(folder/'build',systematic=mutant,jobs=[job])
         except (RuntimeError,ValueError) as e:record.update(status='not-compiled',detail=str(e))
         else:
@@ -186,6 +186,8 @@ def check(output,job):
                     record['evidence_gaps'].append(dict(case=case,status='baseline-evidence-gap',baseline=baseline));continue
                 with retention.case(folder/'build',case,attempt) as (temporary,changed):
                     classification=outcome(baseline,changed)
+                    if job=='INTCALC' and case!='intcalc-duplicate-category':
+                        record['valid_domain_comparisons'].append(dict(case=case,status=classification,baseline=baseline,actual=changed))
                     reasons=['witness'] if classification.startswith('killed-') else ['sample'] if case==cases[0] or case==cases[-1] else []
                     if reasons:retention.retain(temporary,changed,reasons)
                 if classification.endswith('evidence-gap'):

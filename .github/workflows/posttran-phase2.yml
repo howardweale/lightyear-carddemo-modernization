@@ -1,0 +1,110 @@
+name: POSTTRAN Phase2 preparation and authorized comparison
+on:
+  pull_request:
+    paths:
+      - 'tools/prepare_posttran_phase2.py'
+      - 'tools/run_posttran_phase2.py'
+      - 'tests/test_posttran_phase2.py'
+      - 'docs/factory/posttran-phase2-*.json'
+      - '.github/workflows/posttran-phase2.yml'
+permissions:
+  contents: read
+concurrency:
+  group: posttran-phase2-attempt-1
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: vars.POSTTRAN_PHASE2_APPROVED_HEAD != github.event.pull_request.head.sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Validate authorization boundaries without running applications
+        env:
+          PYTHONPATH: src:.:tests
+        run: python3 -B -m unittest test_posttran_phase2 test_intcalc_loader_domain test_release_crosscheck -v
+      - name: Build and retain the pinned compiler image only
+        run: |
+          mkdir -p work/image
+          docker build --platform linux/amd64 -f tools/legacy_twin/reproducible.Containerfile -t posttran-phase2-compiler .
+          docker image inspect posttran-phase2-compiler --format '{{.Id}}' > work/image/image-id.txt
+          docker save posttran-phase2-compiler -o work/image/compiler-image.tar
+      - name: Prepare exact plan; no candidate or twin application execution
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B tools/prepare_posttran_phase2.py work/plan --image-id "$(cat work/image/image-id.txt)" --archive work/image/compiler-image.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: posttran-phase2-compiler-image
+          path: work/image
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: posttran-phase2-plan
+          path: work/plan
+          retention-days: 14
+  reserve:
+    if: vars.POSTTRAN_PHASE2_APPROVED_HEAD == github.event.pull_request.head.sha && vars.POSTTRAN_PHASE2_APPROVED_PLAN != '' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      reservation: ${{ steps.reserve.outputs.reservation }}
+      preparation_run: ${{ steps.reserve.outputs.preparation_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: reserve
+        name: Verify exact human-approved plan and head; consume once atomically
+        env:
+          PYTHONPATH: src:.
+          GH_TOKEN: ${{ github.token }}
+          POSTTRAN_PHASE2_APPROVED_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_HEAD }}
+          POSTTRAN_PHASE2_APPROVED_PLAN: ${{ vars.POSTTRAN_PHASE2_APPROVED_PLAN }}
+        run: python3 -B -m tools.run_posttran_phase2 --reserve --output work/reservation
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.reserve.outputs.reservation }}
+          path: work/reservation
+          retention-days: 90
+  compare:
+    needs: reserve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: posttran-phase2-compiler-image
+          run-id: ${{ needs.reserve.outputs.preparation_run }}
+          github-token: ${{ github.token }}
+          path: work/image
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.reserve.outputs.reservation }}
+          path: work/reservation
+      - name: Compare unchanged attempt 1 once; preserve disagreements
+        env:
+          PYTHONPATH: src:.
+          POSTTRAN_PHASE2_APPROVED_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_HEAD }}
+          POSTTRAN_PHASE2_APPROVED_PLAN: ${{ vars.POSTTRAN_PHASE2_APPROVED_PLAN }}
+        run: python3 -B -m tools.run_posttran_phase2 --output work/results --archive work/image/compiler-image.tar --reservation work/reservation/reservation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: posttran-phase2-results
+          path: work/results
+          retention-days: 90

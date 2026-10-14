@@ -1,0 +1,1598 @@
+{
+  "acceptance_decision": "ea2173ae0ec047878dfff130c3d2663e4086a13cebc7d88f5b32137af1e739ce",
+  "campaign_manifest_sha256": [
+    "37e61b17c1b17f85c6871a9bf0b565bbc1709d7d323a03c8112ed48e93faf802",
+    "3e037320a2b4435e0dac94b691d05b555fd9487141da487cb2bd946bbce10795",
+    "e3195bb72b7c1db622a3445bf632ea30821b4d02a70f1bd9cff480cffc848026",
+    "88ee7e38278a0ff78ede27fc50e6c0a2f0e44af0b89dfb7b23068722a82e4762"
+  ],
+  "class_census": "8a4bdf50dd5176f07a9e32a13f31bac2480f3e6e7797151c910e5575304a84eb",
+  "compiler_scope": "pinned GnuCOBOL twin, never a z/OS compiler proof",
+  "content_sha256": "acb801d71d4305b3c33bfdc46dc339b95cb1041cc99a5fa6d0f4c0697cf64c87",
+  "counts": {
+    "equivalent (argued, individual review pending)": 17,
+    "equivalent (class-proof)": 96,
+    "equivalent (compiler-proven)": 1
+  },
+  "current_head": "1f2b587216e055da687f62945c8aa588a17d44cb",
+  "disposition_counts": {
+    "class_proof": 96,
+    "compiler_proven": 1,
+    "evidence_gap": 0,
+    "evidence_gap_ids": [],
+    "evidence_gap_overlaps_proof_categories": true,
+    "individually_argued": 17,
+    "refuted": 0
+  },
+  "expected_sites": 483,
+  "fresh_refusals": [],
+  "fresh_sites": 483,
+  "individually_reviewable": 17,
+  "job": "POSTTRAN",
+  "measurement_credit": false,
+  "model_calls": 0,
+  "oracle_class": "executable-twin",
+  "oracle_status": "provisional",
+  "phase": "B1-equivalence-followup",
+  "population": 114,
+  "qualification_credit": false,
+  "releasable": false,
+  "resource_usage": [
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 130025.726,
+        "execution_seconds": 676.4526352849875,
+        "logical_run_bytes": 260051452,
+        "peak_stored_bytes": 21787045,
+        "peak_temporary_bytes": 318966,
+        "retained_compressed_bytes": 197854,
+        "runs": 2000,
+        "stored_bytes": 21759603,
+        "wall_seconds": 715.0367124499999
+      },
+      "fresh_compiled_bytes": 839895044,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "e223e2a43dc8730992d1e6aa3b91547a6d68b3d323fdd83e089748bdbf58c481",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 4008507.731887799,
+          "execution_seconds": 1630.267951536995,
+          "logical_run_bytes": 23293438430,
+          "peak_stored_bytes": 1048817793,
+          "peak_temporary_bytes": 869272623,
+          "retained_compressed_bytes": 251253412,
+          "runs": 5811,
+          "stored_bytes": 317664781,
+          "wall_seconds": 2781.883671597
+        },
+        "job": "POSTTRAN",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 839698553,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 2780.923365765,
+        "zos_confirmation": false
+      },
+      "job": "POSTTRAN",
+      "shard": 0,
+      "shards": 4,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 51999561,
+      "wall_seconds": 740.0364554110001
+    },
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 147749.065,
+        "execution_seconds": 457.346492047996,
+        "logical_run_bytes": 236398504,
+        "peak_stored_bytes": 17492559,
+        "peak_temporary_bytes": 299689,
+        "retained_compressed_bytes": 163548,
+        "runs": 1600,
+        "stored_bytes": 17419401,
+        "wall_seconds": 492.996540697
+      },
+      "fresh_compiled_bytes": 835875895,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "ae92b8a53a51c3b3700bd8d2e5f025508e946ec8d95471cec31f4ba6e9220cb8",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 3945271.844432972,
+          "execution_seconds": 1450.4366333739931,
+          "logical_run_bytes": 22925974688,
+          "peak_stored_bytes": 1050376395,
+          "peak_temporary_bytes": 825862403,
+          "retained_compressed_bytes": 247233996,
+          "runs": 5811,
+          "stored_bytes": 313645619,
+          "wall_seconds": 2606.92496222
+        },
+        "job": "POSTTRAN",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 835679404,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 2605.945870354,
+        "zos_confirmation": false
+      },
+      "job": "POSTTRAN",
+      "shard": 1,
+      "shards": 4,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 42913654,
+      "wall_seconds": 517.619320276
+    },
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 148265.5,
+        "execution_seconds": 368.31426515100475,
+        "logical_run_bytes": 177918600,
+        "peak_stored_bytes": 13174963,
+        "peak_temporary_bytes": 299707,
+        "retained_compressed_bytes": 108774,
+        "runs": 1200,
+        "stored_bytes": 13048632,
+        "wall_seconds": 418.3011668559998
+      },
+      "fresh_compiled_bytes": 924963234,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "507dc2aba8ee4c9a54144086884fb51c0ed2ccec13d184b5684d80d48c0acbe3",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 5375005.733264498,
+          "execution_seconds": 1415.0210011060146,
+          "logical_run_bytes": 31234158316,
+          "peak_stored_bytes": 1408857586,
+          "peak_temporary_bytes": 1132801563,
+          "retained_compressed_bytes": 336321150,
+          "runs": 5811,
+          "stored_bytes": 402732895,
+          "wall_seconds": 2732.242929164
+        },
+        "job": "POSTTRAN",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 924766741,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 2731.492409041,
+        "zos_confirmation": false
+      },
+      "job": "POSTTRAN",
+      "shard": 2,
+      "shards": 4,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 33585154,
+      "wall_seconds": 460.26314811099974
+    },
+    {
+      "execution": {
+        "budget_bytes": 8589934592,
+        "bytes_per_run": 145811.3355,
+        "execution_seconds": 717.5962556370005,
+        "logical_run_bytes": 291622671,
+        "peak_stored_bytes": 21795885,
+        "peak_temporary_bytes": 315217,
+        "retained_compressed_bytes": 196073,
+        "runs": 2000,
+        "stored_bytes": 21764179,
+        "wall_seconds": 761.1263134219998
+      },
+      "fresh_compiled_bytes": 803392944,
+      "fresh_resource_usage": {
+        "budget_bytes": 8589934592,
+        "content_sha256": "09426c3dd79948732c2865f0e524a251da4c768444749a56c14ac2b2e507795e",
+        "execution": {
+          "budget_bytes": 8589934592,
+          "bytes_per_run": 3433696.6515229736,
+          "execution_seconds": 1576.8155645430065,
+          "logical_run_bytes": 19953211242,
+          "peak_stored_bytes": 896022635,
+          "peak_temporary_bytes": 708305403,
+          "retained_compressed_bytes": 214751245,
+          "runs": 5811,
+          "stored_bytes": 281162640,
+          "wall_seconds": 2962.97945799
+        },
+        "job": "POSTTRAN",
+        "measurement_credit": false,
+        "oracle_class": "executable-twin",
+        "oracle_status": "provisional",
+        "phase": "fresh-compiled",
+        "qualification_credit": false,
+        "releasable": false,
+        "run_class": "engineering",
+        "schema": "factory-legacy-twin/1",
+        "stored_bytes": 803196453,
+        "twin_limits_path": "docs/factory/twin-limits.md",
+        "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+        "wall_seconds": 2961.808891051,
+        "zos_confirmation": false
+      },
+      "job": "POSTTRAN",
+      "shard": 3,
+      "shards": 4,
+      "targeted_budget_bytes": 8589934592,
+      "targeted_bytes": 51794905,
+      "wall_seconds": 787.9596947629998
+    }
+  ],
+  "retained_disposition_differences": [
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-receiving-scale-94-4"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-receiving-scale-96-6"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-relational-203-36"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-negate-condition-203-37"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-skip-PERFORM-204-38"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-constant-230-68"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-constant-230-69"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-delete-MOVE-354-173"
+    },
+    {
+      "fresh": "evidence-gap",
+      "historical": "killed-failure",
+      "id": "CBTRN02C-skip-PERFORM-366-179"
+    }
+  ],
+  "run_class": "engineering",
+  "schema": "factory-legacy-twin/1",
+  "target_cases": 3400,
+  "target_evidence_gap_ids": [],
+  "target_refutations": 0,
+  "target_valid_comparisons": 3400,
+  "threshold_by_scope": {
+    "twin": {
+      "accepted_uncovered_IO": [
+        {
+          "classification": "io-handling",
+          "id": "legacy:cobol-decision:CBTRN02C:203:684",
+          "line": 203,
+          "outcome": "false",
+          "reason": "not-observed; no unreachability claim"
+        }
+      ],
+      "below_two_values": [],
+      "blocking_reasons": [
+        "mutation-or-individual-review-conditions-unmet"
+      ],
+      "business": {
+        "covered": 24,
+        "fraction": "24/24",
+        "total": 24
+      },
+      "claim_scope": "twin",
+      "compared_fields": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON",
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+        "TRANFILE:TRAN-RECORD.TRAN-AMT",
+        "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM",
+        "TRANFILE:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANFILE:TRAN-RECORD.TRAN-DESC",
+        "TRANFILE:TRAN-RECORD.TRAN-ID",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANFILE:TRAN-RECORD.TRAN-SOURCE",
+        "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "conditions_met": false,
+      "content_sha256": "1c1d64c71de1363409fe46bb2a1c06c84061a9f685288e6e1f80524252f8eb41",
+      "current_head": "1f2b587216e055da687f62945c8aa588a17d44cb",
+      "decision_date": "2026-10-11T14:00:00-07:00",
+      "distinct_values_per_output_field": {
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 2,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 106,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 56,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 54,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 53,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 3,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 50,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT": 43,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM": 18,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD": 2,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS": 2,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD": 2,
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON": 4,
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC": 4,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL": 106,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID": 50,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD": 3,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-AMT": 267,
+        "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM": 50,
+        "TRANFILE:TRAN-RECORD.TRAN-CAT-CD": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-DESC": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-ID": 263,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP": 262,
+        "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS": 2,
+        "TRANFILE:TRAN-RECORD.TRAN-PROC-TS": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-SOURCE": 4,
+        "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD": 3
+      },
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "measurement_credit": false,
+      "mutation": {
+        "at_least_90_percent": true,
+        "claim_scope": "twin",
+        "compiler_refusals": [],
+        "eligible": 384,
+        "excluded_equivalents": [
+          {
+            "basis": "compiler-proven",
+            "id": "CBTRN02C-receiving-size-142-13"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-237-71"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-237-72"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-237-73"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-242-79"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-242-80"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-242-81"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-255-86"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-255-87"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-255-88"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-260-94"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-260-95"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-260-96"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-274-101"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-274-102"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-274-103"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-279-109"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-279-110"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-279-111"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-292-116"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-292-117"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-292-118"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-297-124"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-297-125"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-297-126"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-310-131"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-310-132"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-310-133"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-315-139"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-315-140"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-315-141"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-328-146"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-328-147"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-328-148"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-333-154"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-333-155"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-333-156"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-348-165"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-354-171"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-354-172"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-450-235"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-450-236"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-450-237"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-455-244"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-455-245"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-455-246"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-482-260"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-484-261"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-484-262"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-513-281"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-515-282"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-515-283"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-531-295"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-533-296"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-533-297"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-563-315"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-563-316"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-563-317"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-569-324"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-569-325"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-569-326"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-583-331"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-583-332"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-583-333"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-588-339"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-588-340"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-588-341"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-601-346"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-601-347"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-601-348"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-606-354"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-606-355"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-606-356"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-620-361"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-620-362"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-620-363"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-625-369"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-625-370"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-625-371"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-638-376"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-638-377"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-638-378"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-643-384"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-643-385"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-643-386"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-656-391"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-656-392"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-656-393"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-661-399"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-661-400"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-661-401"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-675-406"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-675-407"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-675-408"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-680-414"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-680-415"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-680-416"
+          },
+          {
+            "basis": "individually-accepted",
+            "id": "CBTRN02C-constant-718-445"
+          },
+          {
+            "basis": "individually-accepted",
+            "id": "CBTRN02C-delete-MOVE-718-447"
+          }
+        ],
+        "kill_rate": "360/384",
+        "killed": 360,
+        "minimum_50_met": true,
+        "mutation_conditions_met": false,
+        "other_requirements": [
+          "fresh business/I-O coverage bindings",
+          "two values per compared output field",
+          "complete B1 review dispositions"
+        ],
+        "release_authorized": false,
+        "schema": "scenario-threshold-2-mutation-assessment/1",
+        "sites": 483,
+        "targeted_evidence_gap_ids": [],
+        "targeted_experiments_complete": true,
+        "unresolved_survivors": [
+          {
+            "id": "CBTRN02C-receiving-scale-94-4",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-96-6",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-134-7",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-142-14",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-147-15",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-148-17",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-148-18",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-173-20",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-187-28",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-relational-203-36",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-negate-condition-203-37",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-skip-PERFORM-204-38",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-209-47",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-constant-230-68",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-constant-230-69",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-354-173",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-skip-PERFORM-366-179",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-rounded-403-196",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-557-314",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-709-434",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-constant-717-443",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-constant-718-446",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-723-450",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+            "reason": "individual operator review required"
+          }
+        ],
+        "whole_threshold_effective": false
+      },
+      "program": "CBTRN02C",
+      "qualification_credit": false,
+      "release_authorized": false,
+      "schema": "scenario-threshold/2-amended-assessment",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "approved-subject-to-B1-completion",
+      "unaccepted_outcomes": []
+    },
+    "zos-facing": {
+      "accepted_uncovered_IO": [
+        {
+          "classification": "io-handling",
+          "id": "legacy:cobol-decision:CBTRN02C:203:684",
+          "line": 203,
+          "outcome": "false",
+          "reason": "not-observed; no unreachability claim"
+        }
+      ],
+      "below_two_values": [],
+      "blocking_reasons": [
+        "mutation-or-individual-review-conditions-unmet"
+      ],
+      "business": {
+        "covered": 24,
+        "fraction": "24/24",
+        "total": 24
+      },
+      "claim_scope": "zos-facing",
+      "compared_fields": [
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON",
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD",
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+        "TRANFILE:TRAN-RECORD.TRAN-AMT",
+        "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM",
+        "TRANFILE:TRAN-RECORD.TRAN-CAT-CD",
+        "TRANFILE:TRAN-RECORD.TRAN-DESC",
+        "TRANFILE:TRAN-RECORD.TRAN-ID",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS",
+        "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+        "TRANFILE:TRAN-RECORD.TRAN-SOURCE",
+        "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD"
+      ],
+      "conditions_met": false,
+      "content_sha256": "46eb95af76c38f228c5f2d4d33692d7a0e210b81fbbfb9b0fdcd3e56f1c8d1f5",
+      "current_head": "1f2b587216e055da687f62945c8aa588a17d44cb",
+      "decision_date": "2026-10-11T14:00:00-07:00",
+      "distinct_values_per_output_field": {
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 2,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 106,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 56,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 54,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 53,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 3,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 50,
+        "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 50,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT": 43,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM": 18,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD": 2,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP": 39,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS": 2,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE": 3,
+        "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD": 2,
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON": 4,
+        "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC": 4,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL": 106,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID": 50,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD": 3,
+        "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-AMT": 267,
+        "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM": 50,
+        "TRANFILE:TRAN-RECORD.TRAN-CAT-CD": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-DESC": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-ID": 263,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME": 261,
+        "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP": 262,
+        "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS": 2,
+        "TRANFILE:TRAN-RECORD.TRAN-PROC-TS": 3,
+        "TRANFILE:TRAN-RECORD.TRAN-SOURCE": 4,
+        "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD": 3
+      },
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "measurement_credit": false,
+      "mutation": {
+        "at_least_90_percent": true,
+        "claim_scope": "zos-facing",
+        "compiler_refusals": [],
+        "eligible": 390,
+        "excluded_equivalents": [
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-237-71"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-237-72"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-237-73"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-242-79"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-242-80"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-242-81"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-255-86"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-255-87"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-255-88"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-260-94"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-260-95"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-260-96"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-274-101"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-274-102"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-274-103"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-279-109"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-279-110"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-279-111"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-292-116"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-292-117"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-292-118"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-297-124"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-297-125"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-297-126"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-310-131"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-310-132"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-310-133"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-315-139"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-315-140"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-315-141"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-328-146"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-328-147"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-328-148"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-333-154"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-333-155"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-333-156"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-354-171"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-354-172"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-450-235"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-450-236"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-450-237"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-455-244"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-455-245"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-455-246"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-484-261"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-484-262"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-515-282"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-515-283"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-533-296"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-533-297"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-563-315"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-563-316"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-563-317"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-569-324"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-569-325"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-569-326"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-583-331"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-583-332"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-583-333"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-588-339"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-588-340"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-588-341"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-601-346"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-601-347"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-601-348"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-606-354"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-606-355"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-606-356"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-620-361"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-620-362"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-620-363"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-625-369"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-625-370"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-625-371"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-638-376"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-638-377"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-638-378"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-643-384"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-643-385"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-643-386"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-656-391"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-656-392"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-656-393"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-661-399"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-661-400"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-661-401"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-675-406"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-675-407"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-675-408"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-680-414"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-constant-680-415"
+          },
+          {
+            "basis": "APPL-RESULT-class-proof",
+            "id": "CBTRN02C-delete-MOVE-680-416"
+          },
+          {
+            "basis": "individually-accepted",
+            "id": "CBTRN02C-constant-718-445"
+          }
+        ],
+        "kill_rate": "360/390",
+        "killed": 360,
+        "minimum_50_met": true,
+        "mutation_conditions_met": false,
+        "other_requirements": [
+          "fresh business/I-O coverage bindings",
+          "two values per compared output field",
+          "complete B1 review dispositions"
+        ],
+        "release_authorized": false,
+        "schema": "scenario-threshold-2-mutation-assessment/1",
+        "sites": 483,
+        "targeted_evidence_gap_ids": [],
+        "targeted_experiments_complete": true,
+        "unresolved_survivors": [
+          {
+            "id": "CBTRN02C-receiving-scale-94-4",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-96-6",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-134-7",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-142-13",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-142-14",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-147-15",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-receiving-size-148-17",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-148-18",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-173-20",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-receiving-scale-187-28",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-relational-203-36",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-negate-condition-203-37",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-skip-PERFORM-204-38",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-209-47",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-constant-230-68",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-constant-230-69",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-348-165",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-354-173",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-skip-PERFORM-366-179",
+            "reason": "fresh-campaign-execution-evidence-gap"
+          },
+          {
+            "id": "CBTRN02C-rounded-403-196",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-482-260",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-513-281",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-531-295",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-557-314",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-709-434",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-constant-717-443",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-constant-718-446",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-718-447",
+            "reason": "host-compiler-scoped argument unresolved for z/OS"
+          },
+          {
+            "id": "CBTRN02C-delete-MOVE-723-450",
+            "reason": "individual operator review required"
+          },
+          {
+            "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+            "reason": "individual operator review required"
+          }
+        ],
+        "whole_threshold_effective": false
+      },
+      "program": "CBTRN02C",
+      "qualification_credit": false,
+      "release_authorized": false,
+      "schema": "scenario-threshold/2-amended-assessment",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "approved-subject-to-B1-completion",
+      "unaccepted_outcomes": []
+    }
+  },
+  "twin_limits_path": "docs/factory/twin-limits.md",
+  "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+  "zos_confirmation": false
+}

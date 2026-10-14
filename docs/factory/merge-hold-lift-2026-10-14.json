@@ -1,0 +1,11 @@
+{
+  "schema": "factory-human-chat-record/1",
+  "decided_by": "Howard",
+  "decided_on": "2026-10-14",
+  "source": "Direct user message in this chat",
+  "wording": "there is no B06 merge hold anymore. merge in the order you recommend. then do the document reconciliation after.",
+  "wording_sha256": "a10ab09342a7d3161fa4a40dd0fc42ab21017ec5f4e7de244ade8fc6bae173cf",
+  "merge_hold": false,
+  "scope": "Previously outstanding merge queue; no new PR approval inferred",
+  "signature": null
+}

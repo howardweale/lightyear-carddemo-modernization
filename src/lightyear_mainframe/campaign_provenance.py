@@ -8,7 +8,7 @@ from .legacy_twin import ROOT, verify_build, write_json
 
 PREFIXES=('spec/mainframe','src/lightyear_mainframe','src/lightyear_factory/scenario_policy.py',
           'tools/legacy_twin','tools/check_factory_review.py','tools/check_equivalence_followup.py',
-          'tools/aggregate_equivalence_shards.py','tools/check_retention_margin.py','tools/measure_campaign_resources.py','.github/workflows/factory-systematic-review.yml',
+          'tools/aggregate_equivalence_shards.py','tools/check_intcalc_loader_domain.py','tools/crosscheck_release_threshold.py','tools/check_retention_margin.py','tools/measure_campaign_resources.py','.github/workflows/factory-systematic-review.yml',
           'docs/factory','tests/mainframe/fixtures')
 RECORDS=('review-summary.json','mutation-results.json','mutation-inventory.json',
          'generation-inventory.json','fault-results.json','systematic-scenario-selection.json')

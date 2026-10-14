@@ -1,0 +1,42 @@
+{
+  "schema": "release-evidence-index/1",
+  "sources": [
+    {
+      "run_id": 38624637311,
+      "head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+      "artifact_id": 11926593646,
+      "artifact_zip_sha256": "3f292eadb1d8170b05caff52420939342cde1b8066b69939df4c480126685d15",
+      "files": {
+        "docs/factory/release-evidence-2026-10-14/main-INTCALC-summary.json": "fca4b187aa1e73b5076a45dc8e093b6e6372d78a0f8b11c90221367050fb167c",
+        "docs/factory/release-evidence-2026-10-14/main-INTCALC-threshold-2-by-scope.json": "e882ab0735102a9e87760e53024782bdded14f54a4bcc99a6df01daa0cfc7a71",
+        "docs/factory/release-evidence-2026-10-14/main-INTCALC-results.json": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+        "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-summary.json": "4ef5afde0ac19e6bc3a286175ea2d75cacd16ecaeaebc2301ac8d648d166ddcb",
+        "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-threshold-2-by-scope.json": "4e811d78624b684b1e5a69f347411eee6c860cb57ef984c0f2993240fc1da2f8",
+        "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-results.json": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003"
+      }
+    },
+    {
+      "run_id": 38312412871,
+      "head": "1f2b587216e055da687f62945c8aa588a17d44cb",
+      "artifact_id": 11778429337,
+      "artifact_zip_sha256": "9351ec1bd2323f045e84229086a6c1d78293ee71c3704787a9263130a2fc5552",
+      "files": {
+        "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-summary.json": "83c92633a8343bd87cbb2ec9dd314e479726415cead9f8a484ec3e64aa0acd4c",
+        "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-threshold-2-by-scope.json": "e3dd36ed1a9557d7df47e7c665e9a2a2673d023a6fdae1bdcde904ae5ffc9949",
+        "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-results.json": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+        "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-summary.json": "a178bb8a804b52d48d1512a64d1f6508e291c29eb396c122d3fb75e8eccdc1b0",
+        "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-threshold-2-by-scope.json": "ce27944181cd1d27ba5ac20b2592d6a711e07a4899914fc18fa551bdc219d31d",
+        "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-results.json": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003"
+      }
+    },
+    {
+      "run_id": 38624637311,
+      "head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+      "artifact_id": 11926811904,
+      "artifact_zip_sha256": "7703f6ee673f57c21821a0bbd44a7203a543f4d72afc6a082399430517a71944",
+      "files": {
+        "docs/factory/release-evidence-2026-10-14/main-INTCALC-mutation-results.json": "df4ff09df27754a70cdd39e728cec7eb6f77b28ad37f68edc48c9031a792078a"
+      }
+    }
+  ]
+}

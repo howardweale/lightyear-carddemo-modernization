@@ -1,0 +1,33 @@
+{
+  "run_id": 38600848981,
+  "job_id": 115979402188,
+  "head": "c36a5490c3082e19eed1d32fa316716eac34f864",
+  "job_log_sha256": "afd7df5f9b9737961a67dbe10cbcbec379d8452af7518771b32d71d0ec46103b",
+  "excerpts": [
+    "2026-10-14T16:51:40.2184051Z ##[endgroup]",
+    "2026-10-14T16:51:40.2614240Z Traceback (most recent call last):",
+    "2026-10-14T16:51:40.2643541Z   File \"/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/tools/check_posttran_attempt1_phase1.py\", line 176, in <module>",
+    "2026-10-14T16:51:40.2644529Z     args=parser.parse_args();result=run(args.output.resolve(),authorized_rerun=args.authorized_rerun);print(json.dumps(result,indent=2));raise SystemExit(0 if result['passed'] else 1)",
+    "2026-10-14T16:51:40.2645197Z                                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "2026-10-14T16:51:40.2646033Z   File \"/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/tools/check_posttran_attempt1_phase1.py\", line 86, in run",
+    "2026-10-14T16:51:40.2646571Z     authorize_rerun()",
+    "2026-10-14T16:51:40.2646754Z     ~~~~~~~~~~~~~~~^^",
+    "2026-10-14T16:51:40.2647301Z   File \"/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/tools/check_posttran_attempt1_phase1.py\", line 72, in authorize_rerun",
+    "2026-10-14T16:51:40.2665137Z ##[error]    raise ValueError('rerun-exact-parent-required')",
+    "2026-10-14T16:51:40.2698995Z ValueError: rerun-exact-parent-required",
+    "2026-10-14T16:51:40.2701351Z ##[error]Process completed with exit code 1.",
+    "2026-10-14T16:51:40.2764305Z ##[group]Run actions/upload-artifact@v7",
+    "2026-10-14T16:51:40.2764540Z with:",
+    "2026-10-14T16:51:40.2764734Z   name: posttran-attempt1-phase1-compile2",
+    "2026-10-14T16:51:40.2765125Z   path: work/posttran-attempt1-phase1",
+    "2026-10-14T16:51:40.2765345Z   retention-days: 30",
+    "2026-10-14T16:51:40.2765722Z   if-no-files-found: warn",
+    "2026-10-14T16:51:40.2765916Z   compression-level: 6",
+    "2026-10-14T16:51:40.2766096Z   overwrite: false",
+    "2026-10-14T16:51:40.2766272Z   include-hidden-files: false",
+    "2026-10-14T16:51:40.2766474Z   archive: true"
+  ],
+  "verdict": "refused before compilation by exact-parent authorization guard",
+  "candidate_compiled": false,
+  "candidate_executed": false
+}

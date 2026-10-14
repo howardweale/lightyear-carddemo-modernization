@@ -1,0 +1,44 @@
+{
+  "schema": "factory-scoped-domain-approval/1",
+  "decision_id": "INTCALC-DUPLICATE-CATEGORY-LOADER-DOMAIN",
+  "approved": true,
+  "approved_by": "Howard",
+  "approved_on": "2026-10-12",
+  "approval_evidence": {
+    "kind": "explicit-user-chat",
+    "text": "approval for reclassification"
+  },
+  "proposal_path": "docs/factory/intcalc-duplicate-category-proposal-2026-10-12.json",
+  "proposal_content_sha256": "0706ffff6b402568715f3f83174327b166791c6fee88d530016cde77c6f8d882",
+  "proposal_lf_sha256": "32fea63f3240c3b8040670e5d7528daa8ebfdc032e56792093a682f67d7fc7e5",
+  "scope": "Twin only; pinned indexed adapter and generator; no z/OS-facing acceptance",
+  "rule": {
+    "classification": "expected-loader-refusal",
+    "mutation_comparison_domain": false,
+    "keep_as_loader_negative_test": true,
+    "kill_credit": false,
+    "equivalence_credit": false,
+    "comparison_credit": false,
+    "coverage_credit": false,
+    "do_not_drop_mutants_from_denominator": true,
+    "valid_duplicate_program_inputs_affected": false,
+    "posttran_refusals_affected": false
+  },
+  "conditions": [
+    "Fresh exact-head receipts bind generator, loader, input bytes and duplicate primary keys; demonstrate rc66 from load-TCATBALF before any program start on both control and instrumented baseline.",
+    "Any different rc, refusal phase, missing receipt, bound source change or unexpected program execution remains an unresolved gap.",
+    "Keep raw receipts, original113/167 gap counts and prior reports unchanged; separately label recomputed dispositions from fresh valid-domain comparisons.",
+    "Re-evaluate every mutant against all remaining valid comparisons. Do not blanket-clear113 gaps or count refusal as kill/equivalence.",
+    "Targeted200/200 obligations for20/23/42, register dependencies, diversity and all other threshold gates remain."
+  ],
+  "effective": false,
+  "status": "approved-pending-fresh-evidence",
+  "fresh_evidence_receipt": null,
+  "historical_raw_records_unchanged": true,
+  "threshold_approved": false,
+  "release_authorized": false,
+  "new_zos_facing_acceptances": 0,
+  "merges_held_until": "B06 cleanup sealed",
+  "authority_note": "Records Howard explicit approval of the exact proposal; not a cryptographic signature or evidence that the fresh-receipt conditions have passed.",
+  "content_sha256": "ebfd9cd159be1afa3fbad7e122195088ed2f0892272f0576302357135a4bb745"
+}

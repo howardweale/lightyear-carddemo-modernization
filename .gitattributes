@@ -230,3 +230,6 @@ src/lightyear_factory/posttran_broker.py text eol=lf
 
 # Exact compact public CI receipt copies used by Factory evidence views.
 docs/factory/tower-run-38198096890/** -text -whitespace
+
+# Preserve the supplied October12 AI-assisted operator review exactly.
+docs/factory/equivalence-review-47-claude-2026-10-12.md -text -whitespace

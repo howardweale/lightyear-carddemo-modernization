@@ -1,0 +1,70 @@
+{
+  "schema": "factory-scoped-domain-decision-proposal/1",
+  "decision_id": "INTCALC-DUPLICATE-CATEGORY-LOADER-DOMAIN",
+  "prepared_on": "2026-10-12",
+  "status": "pending-Howard-approval",
+  "approved": false,
+  "effective": false,
+  "approved_by": null,
+  "scope": "Twin only; pinned indexed adapter and generator; no z/OS-facing acceptance",
+  "scenario_id": "intcalc-duplicate-category",
+  "program": "INTCALC",
+  "dataset": "TCATBALF",
+  "expected_phase": "Loader admission before CBACT04C execution",
+  "expected_return_code": 66,
+  "basis": "The generated scenario repeats a primary indexed TCATBALF key. The loader refuses the duplicate before program execution. This tests loader admission, not a valid mutation comparison.",
+  "bound_sources": [
+    {
+      "path": "src/lightyear_mainframe/scenario_generation.py",
+      "lf_sha256": "13755d905a9e5c02f52cc21f3d66e796ec18352174475f45e4595ff78fa70852"
+    },
+    {
+      "path": "src/lightyear_mainframe/legacy_twin.py",
+      "lf_sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea"
+    },
+    {
+      "path": "tools/check_generated_scenarios.py",
+      "lf_sha256": "cb717fd8bfd02733ea5be7818211b671d7503a93492338f6b1f310a2b6221210"
+    },
+    {
+      "path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "lf_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    }
+  ],
+  "historical_evidence": {
+    "head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+    "run_id": 38198096890,
+    "report_path": "docs/factory/evidence-gap-diagnosis-2026-10-12.md",
+    "report_lf_sha256": "414640fd38af764d1c251c881d430dfaec01268a2157a5f93aca5a902ea7159b",
+    "intcalc_final_gap_dispositions": 113,
+    "intcalc_records_with_any_gap": 167
+  },
+  "proposed_rule": {
+    "classification": "expected-loader-refusal",
+    "mutation_comparison_domain": false,
+    "keep_as_loader_negative_test": true,
+    "kill_credit": false,
+    "equivalence_credit": false,
+    "comparison_credit": false,
+    "coverage_credit": false,
+    "do_not_drop_mutants_from_denominator": true,
+    "valid_duplicate_program_inputs_affected": false,
+    "posttran_refusals_affected": false
+  },
+  "required_before_effective": [
+    "Howard explicitly approves this exact scoped proposal.",
+    "Fresh exact-head receipts bind generator, loader, input bytes and duplicate primary keys; demonstrate rc66 from load-TCATBALF before any program start on both control and instrumented baseline.",
+    "Any different rc, refusal phase, missing receipt, bound source change or unexpected program execution remains an unresolved gap.",
+    "Keep raw receipts, original113/167 gap counts and prior reports unchanged; separately label recomputed dispositions from fresh valid-domain comparisons.",
+    "Re-evaluate every mutant against all remaining valid comparisons. Do not blanket-clear113 gaps or count refusal as kill/equivalence.",
+    "Targeted200/200 obligations for20/23/42, register dependencies, diversity and all other threshold gates remain."
+  ],
+  "not_authorized": [
+    "Classifier implementation before approval",
+    "Historical record rewriting",
+    "Threshold or release approval",
+    "New z/OS-facing acceptance",
+    "Main merge before B06 cleanup sealed"
+  ],
+  "content_sha256": "0706ffff6b402568715f3f83174327b166791c6fee88d530016cde77c6f8d882"
+}

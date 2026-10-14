@@ -110,7 +110,10 @@ def chronological_context(before):
     return rows,accounts,cats
 
 
-def check(before,after,*,timestamp,returncode=None):
+def check(before,after,*,timestamp,returncode=None,returncode_contract="twin-process"):
+    contracts={"twin-process":12,"source-abcode":999}
+    if returncode_contract not in contracts:raise ValueError("unknown-returncode-contract")
+    expected_abend=contracts[returncode_contract]
     require_collation_independent(before)
     daily=records(before,'DALYTRAN');posted=records(after,'TRANFILE');rejected=records(after,'DALYREJS')
     expected,accounts,cats=chronological_context(before);problems=[]
@@ -123,7 +126,7 @@ def check(before,after,*,timestamp,returncode=None):
     require(Counter(r['TRAN-ID'] for r in posted)==Counter(r['TRAN-ID'] for r in initial)+Counter(r['id'] for r in expected_posted),'posted-id-prefix')
     require(Counter(r['DALYTRAN-ID'] for r in rejected)==Counter(r['id'] for r in expected_rejected),'rejected-id-prefix')
     require(all(v==1 for v in Counter(r['TRAN-ID'] for r in posted).values()),'duplicate-posted-id')
-    if abend:require(returncode==12,'duplicate-write-requires-RC12')
+    if abend:require(returncode==expected_abend,'duplicate-write-requires-'+('RC12' if returncode_contract=='twin-process' else 'ABCODE999'))
     pmap={r['TRAN-ID']:r for r in posted}
     for row in expected_posted:
         r=row['input'];transaction=pmap.get(row['id'],{})
@@ -144,7 +147,7 @@ def check(before,after,*,timestamp,returncode=None):
     require(cats==actual_cats,'category-conservation')
     return dict(schema='posttran-independent-invariants/2',passed=not problems,failures=problems,
         depends_on_register=['POSTTRAN-DUPLICATE-ID-NONATOMIC','POSTTRAN-CYCLE-DEBIT-SIGN'],
-        duplicate_abend=abend,observed_returncode=returncode,processed_prefix=len(expected),unprocessed_suffix=len(daily)-len(expected),
+        duplicate_abend=abend,observed_returncode=returncode,returncode_contract=returncode_contract,processed_prefix=len(expected),unprocessed_suffix=len(daily)-len(expected),
         unresolved_register=runtime_register(rejected),inputs=len(daily),posted=len(posted),rejected=len(rejected),
         oracle_class='executable-twin',oracle_status='provisional',zos_confirmation=False,releasable=False,
         repeatability='requires-separate-second-run',human_review='pending',java_second_opinion='unavailable')

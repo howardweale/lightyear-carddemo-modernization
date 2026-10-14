@@ -20,6 +20,21 @@ try {
     await page.locator("#login input").fill(config.credential); await page.locator("#login button").click();
     await page.getByRole("button",{name:"Graph memory",exact:true}).click();
     await page.getByRole("heading",{name:"Annotation health",exact:true}).waitFor();
+    // Force two queue responses to overlap. One atomic render must win.
+    await page.evaluate(async () => {
+      clearTimeout(timer);
+      const original = api; const pending = [];
+      api = async (...args) => {
+        const value = await original(...args);
+        if (args[0] === "queue") await new Promise(resolve => {
+          pending.push(resolve); if (pending.length === 2) pending.forEach(done => done());
+        });
+        return value;
+      };
+      try { await Promise.all([knowledge(), knowledge()]); }
+      finally { api = original; }
+    });
+    assert.equal(await page.getByRole("checkbox",{name:"Select "+config.request_id,exact:true}).count(),1);
     await page.getByRole("button",{name:"Review anchors and evidence"}).click();
     await page.locator("#drawer").getByText(/Use the approved rounding convention/).waitFor();
     assert.equal(await page.locator('#drawer a[href*="node="]').count(),1);

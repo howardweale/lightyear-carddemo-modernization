@@ -1,0 +1,12 @@
+{
+  "schema": "posttran-candidate-extraction/1",
+  "attempt": 1,
+  "raw_response_sha256": "d33c66bc97294354e93e245eddc9884f6245185c4556d792f0ada1e329f169ae",
+  "response_sha256": "1da6e3327cb9d67fca6391f05d47b29e45a386cd38064ef2a4566a39bd594833",
+  "plan_sha256": "bb53fd6de1afed29fc1064f986c6c2dadc5d709b93c9732c50a67077aaeb2919",
+  "candidate_sha256": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
+  "extraction": "sole java fenced block, UTF-8 bytes unchanged; no human edits",
+  "phase1_only": true,
+  "model_calls": 0,
+  "phase2_authorized": false
+}

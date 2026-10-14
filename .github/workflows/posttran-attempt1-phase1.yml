@@ -5,6 +5,11 @@ on:
       - 'spec/mainframe/posttran-independent/attempt-1/**'
       - 'tools/check_posttran_attempt1_phase1.py'
       - 'tests/test_posttran_attempt1_phase1.py'
+      - 'tools/check_posttran_phase1_retained.py'
+      - 'tests/test_posttran_phase1_retained.py'
+      - 'docs/factory/posttran*phase1*.json'
+      - 'src/lightyear_mainframe/posttran_invariants.py'
+      - 'spec/mainframe/public-source/CBTRN02C.cbl'
       - '.github/workflows/posttran-attempt1-phase1.yml'
 permissions:
   contents: read
@@ -24,21 +29,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '21'
-      - name: Structural gate tests
+      - name: Structural and retained evidence tests
         env:
           PYTHONPATH: src:.:tests
-        run: python -B -m unittest test_posttran_attempt1_phase1 -v
-      - name: Authorized compilation 2 with source-bound abend contract
+        run: python -B -m unittest test_posttran_attempt1_phase1 test_posttran_phase1_retained -v
+      - name: Verify retained compilation 2 evidence (no candidate execution)
         env:
           PYTHONPATH: src:.
-        run: python -B tools/check_posttran_attempt1_phase1.py --authorized-rerun --output work/posttran-attempt1-phase1
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: posttran-attempt1-phase1-compile2
-          path: work/posttran-attempt1-phase1
-          retention-days: 30
+        run: python -B tools/check_posttran_phase1_retained.py

@@ -100,8 +100,13 @@ def lint():
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p
         assert not re.search(r'\b(?:ubuntu|windows|macos)-latest\b',p.read_text()),p
-        assert (p.name=='factory-systematic-review.yml' and d['concurrency']['cancel-in-progress']=='false') or "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
-        assert 'github.run_id' in d['concurrency']['group'],p
+        if p.name=='posttran-phase2.yml':
+            # One reservation and comparison at a time; cancelling an admitted run
+            # would consume its only attempt without finishing the evidence.
+            assert d['concurrency']=={'group':'posttran-phase2-attempt-1','cancel-in-progress':'false'},p
+        else:
+            assert (p.name=='factory-systematic-review.yml' and d['concurrency']['cancel-in-progress']=='false') or "github.ref != 'refs/heads/main'" in d['concurrency']['cancel-in-progress'],p
+            assert 'github.run_id' in d['concurrency']['group'],p
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()
     from tools.check_source_lf import check_paths
     check_paths(Path.cwd(), files)

@@ -21,15 +21,21 @@ def authorize(plan, env, head):
     return plan
 
 
-def verify():
+def bound_plan():
     plan = json.loads(PLAN.read_bytes())
-    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
-    authorize(plan, os.environ, head)
+    if digest({k:v for k,v in plan.items() if k!='content_sha256'})!=plan.get('content_sha256'):raise ValueError('phase2-plan-seal')
     for path, expected in {**plan['bound_files'], **plan['candidate_files']}.items():
         p = (ROOT / path).resolve()
         if not p.is_relative_to(ROOT) or not p.is_file() or p.is_symlink() or sha(p.read_bytes()) != expected: raise ValueError('phase2-bound-file-changed:' + path)
     if sha(CANDIDATE.read_bytes()) != EXPECTED: raise ValueError('phase2-candidate-changed')
-    return plan, head
+    return plan
+
+
+def verify():
+    plan=bound_plan()
+    head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    authorize(plan,os.environ,head)
+    return plan,head
 
 
 def reserve(output):
@@ -192,9 +198,10 @@ def execute(output, archive, reservation):
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(); p.add_argument('--reserve', action='store_true'); p.add_argument('--output', type=Path, required=True)
+    p = argparse.ArgumentParser(); p.add_argument('--reserve', action='store_true'); p.add_argument('--check-plan',action='store_true'); p.add_argument('--output', type=Path)
     p.add_argument('--archive', type=Path); p.add_argument('--reservation', type=Path); p.add_argument('--twin-action', choices=['build', 'run']); p.add_argument('--scenario'); p.add_argument('--kind')
     a = p.parse_args()
-    if a.twin_action: twin_action(a.twin_action, a.output, a.scenario, a.kind)
+    if a.check_plan: print(json.dumps({'validated_plan_sha256':bound_plan()['content_sha256'],'execution_authorized':False}))
+    elif a.twin_action: twin_action(a.twin_action, a.output, a.scenario, a.kind)
     elif a.reserve: reserve(a.output)
     else: execute(a.output, a.archive, a.reservation)

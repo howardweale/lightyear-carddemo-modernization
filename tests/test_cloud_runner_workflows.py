@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import tempfile
+import tomllib
 import unittest
 
 import yaml
@@ -12,6 +13,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_full_ci_installs_workflow_parser_dependency_on_both_platforms(self):
+        project = tomllib.loads((ROOT / "pyproject.toml").read_text())
+        self.assertIn("PyYAML==6.0.3", project["project"]["optional-dependencies"]["test"])
+        workflow = yaml.load((ROOT / ".github/workflows/verify.yml").read_text(), Loader=yaml.BaseLoader)
+        installs = [step.get("run", "") for step in workflow["jobs"]["differential-verification"]["steps"]
+                    if 'pip install -e' in step.get("run", "")]
+        self.assertEqual(len(installs), 2)
+        self.assertTrue(all('.[control-tower,tsql,test]' in command for command in installs))
+
     def test_phase_one_has_no_cloud_launch_capability(self):
         text = (ROOT / ".github/workflows/cloud-runner-launch.yml").read_text()
         workflow = yaml.load(text, Loader=yaml.BaseLoader)

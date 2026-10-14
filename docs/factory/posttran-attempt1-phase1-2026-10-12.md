@@ -1,0 +1,11 @@
+# POSTTRAN attempt 1 — Phase 1 result, October 12
+
+**FAILED Phase 1; compilation passed.** Original CI [run 38295068434](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38295068434), head `f9eeccaa19ed137f8250baa8594831e8dc7dbd90`, candidate SHA-256 `1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186`. One Java 21 compilation, no candidate edits, no model calls, no twin execution/comparison. Gate wall time 18.618 seconds; compiler `javac 21.0.12.1`.
+
+All 18 scenarios (4 public + 14 preregistered generated) passed structural checks and reproduced the same output hashes, source return code and stdout in two separate restricted executions. **17/18 passed invariants.** `posttran-duplicate-id` reported source return code **999** (process status 231) in both runs; the pinned source-conservation invariant requires **12**, producing `duplicate-write-requires-RC12`. This is a retained disagreement, not an accepted behavior change or a Phase 2 clearance. No unresolved-register entry has been made; source-line adjudication belongs to the later review requested by Howard.
+
+The candidate was frozen at the original SHA. Subsequent documentation/workflow-policy commits report this consumed result and refuse any implicit recompile/re-execution. The original run remains failed. Workflow concurrency policy was added after the original publication; this does not change the observed scientific result. The gate continues to return failure when reporting the frozen result, rather than presenting a documentation rerun as success.
+
+[Exact report JSON](posttran-attempt1-phase1-2026-10-12.json), SHA-256 `d77d29ccea6c933ad242ec7e88024b0a3a18d7eeaaadde6345a691b244b16321`. Artifact `11767837010`, archive 470171 bytes, SHA-256 `f454ddc8ab5404a93df29d40029397045e4e568034e09bf53d914c0d49978ef6`; archive and logs retained locally. All class/input/output hashes remain in the exact report. Historical response/ledger stay local. The old generation was October 11; today's separately authorized gate consumed 18.618 seconds and did not relabel the elapsed interval since generation as a continuous two-hour experiment.
+
+Hold merge until B06 cleanup is sealed. Any new model attempt, candidate change, retry or Phase 2 comparison requires separate authorization.

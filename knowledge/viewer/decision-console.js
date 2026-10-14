@@ -247,13 +247,15 @@ async function queue() {
   render();
   content.append(filter, list);
 }
+let knowledgeRevision = 0;
 async function knowledge() {
-  const status = await api("knowledge");
+  const revision = ++knowledgeRevision;
+  const [status, q] = await Promise.all([api("knowledge"), api("queue")]);
+  if (revision !== knowledgeRevision || current !== "knowledge") return;
   content.replaceChildren(el("h2", "Graph memory"), el("p", "Operator review; not independent attestation. Outcomes show correlation, not causation."));
   if (status.available) {
     content.append(el("h3", "Annotation health"), json(status.health), el("h3", "Routing policy and run shares"), json(status.routing), el("h3", "Search indexes"), json(status.search));
   } else content.append(el("p", "No signed knowledge status configured in this scope."));
-  const q = await api("queue");
   const items = q.items.filter(i => ["graph-annotation", "graph-annotation-verified"].includes(i.kind));
   const selected = new Set();
   for (const item of items) {

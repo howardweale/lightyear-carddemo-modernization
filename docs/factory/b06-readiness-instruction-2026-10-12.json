@@ -1,0 +1,461 @@
+{
+  "schema": "b06-readiness-instruction/1",
+  "observed_utc": "2026-10-12T23:56:52.630600+00:00",
+  "verdict": "READY",
+  "meaning": "Prerequisites verified under supplied instruction; only listed morning steps and mandatory fresh launch guards remain. Not a native success or runtime guarantee.",
+  "instruction_sha256": "48afcfc5107f83c3882432018b589fc0498405dbcc81478964e83dee7b367367",
+  "supersedes_preliminary_commit": "08c892ffe424742549d2f1b3e8361e1163330293",
+  "execution": {
+    "observed_utc": "2026-10-12T23:54:08.038371+00:00",
+    "execution_checkout": "C:\\Users\\howar\\.codex\\worktrees\\b06-oct13-pinned-readiness\\lightyear-carddemo-modernization",
+    "commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "detached": true,
+    "clean": true,
+    "source_hashes": {
+      "factory/idempiere/b06-observer/PostingObserver.java": "6420e836dcf69eb433cfab6beafaeca237ae1f3e0dcf48a05a4b16cb92246bac",
+      "factory/idempiere/b06-observer/BoundedJdiMirrors.java": "1f3de745c960e4e9451c382705ea848859df264e8e61c52d4640b93dcac5aa0b"
+    },
+    "asset_index_tracked_intersection_count": 873,
+    "asset_vs_checkout_mismatches": [],
+    "authority_path": "C:\\Users\\howar\\.codex\\worktrees\\b06-engineering-bindings\\lightyear-carddemo-modernization\\work\\b06-engineering-authority",
+    "public_fingerprint": "4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0",
+    "engineering_public_admission": "passed",
+    "qualification_key_rejection": "engineering-signing-key-not-admissible",
+    "qualification_plan_rejection": "engineering-evidence-not-admissible",
+    "signatures_created": 0,
+    "private_keys_read": false,
+    "python": {
+      "executable": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\idempiere-runtime-evidence\\work\\native-venv\\Scripts\\python.exe",
+      "version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+      "repository_requires": ">=3.11",
+      "request_python_fields": {}
+    },
+    "output": {
+      "path": "C:\\Users\\howar\\.codex\\worktrees\\b06-engineering-bindings\\lightyear-carddemo-modernization\\work\\b06-engineering",
+      "exists": false,
+      "parent_exists": true,
+      "parent_writable_os_access": true,
+      "free_bytes": 656691720192,
+      "active_lock_exists": false,
+      "request_session_exists": false,
+      "request_journey_directories": []
+    },
+    "registered_evidence_windows": [
+      {
+        "path": "C:/Users/howar/.codex/worktrees/b06-captured-return-fix/lightyear-carddemo-modernization/work/b06-observer-unmatched-r3-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      },
+      {
+        "path": "C:/Users/howar/.codex/worktrees/b06-offline-repro/lightyear-carddemo-modernization/work/b06-observer-diagnostic-r1-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      },
+      {
+        "path": "C:/Users/howar/.codex/worktrees/b06-practice-r2-window2/lightyear-carddemo-modernization/work/b06-observer-practice-r2-window2-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      },
+      {
+        "path": "C:/Users/howar/.codex/worktrees/oct08-observer-publication/lightyear-carddemo-modernization/work/b06-census-v2-r2-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      },
+      {
+        "path": "C:/Users/howar/.codex/worktrees/oct08-observer-publication/lightyear-carddemo-modernization/work/b06-census-v2-r3-window2-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      },
+      {
+        "path": "C:/Users/howar/.codex/worktrees/oct08-observer-publication/lightyear-carddemo-modernization/work/b06-observer-practice-r1-launch",
+        "directory_exists": true,
+        "flags": {
+          "armed.json": true,
+          "exited.json": true,
+          "execution/started.json": true,
+          "execution/report.json": true
+        },
+        "closed_by_bound_markers": true
+      }
+    ],
+    "excluded_windows": [
+      {
+        "end": "2026-10-10T02:15:00Z",
+        "start": "2026-10-09T15:30:00Z"
+      },
+      {
+        "end": "2026-10-10T22:30:00Z",
+        "start": "2026-10-10T16:00:00Z"
+      }
+    ],
+    "go_line": "go B06 62eafdaf29dce1d40603d38c3a394f150b98f686 107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
+    "go_received_in_chat": true
+  },
+  "host_inventory": {
+    "active_b06_j1_processes": [],
+    "host_memory": {
+      "TotalVisibleMemorySize": 66469848,
+      "FreePhysicalMemory": 12761448
+    },
+    "process_groups": [
+      {
+        "name": "Memory Compression",
+        "count": 1,
+        "working_set_bytes": 12524388352.0
+      },
+      {
+        "name": "chrome",
+        "count": 77,
+        "working_set_bytes": 10832723968.0
+      },
+      {
+        "name": "OneDrive",
+        "count": 1,
+        "working_set_bytes": 9976254464.0
+      },
+      {
+        "name": "ChatGPT",
+        "count": 22,
+        "working_set_bytes": 3448692736.0
+      },
+      {
+        "name": "svchost",
+        "count": 99,
+        "working_set_bytes": 1794883584.0
+      },
+      {
+        "name": "claude",
+        "count": 12,
+        "working_set_bytes": 1290379264.0
+      },
+      {
+        "name": "vmmemWSL",
+        "count": 1,
+        "working_set_bytes": 634949632.0
+      },
+      {
+        "name": "Code",
+        "count": 11,
+        "working_set_bytes": 584523776.0
+      },
+      {
+        "name": "codex",
+        "count": 7,
+        "working_set_bytes": 561295360.0
+      },
+      {
+        "name": "WindowsTerminal",
+        "count": 1,
+        "working_set_bytes": 494419968.0
+      }
+    ],
+    "output_parent_access": [
+      {
+        "IdentityReference": {
+          "Value": "NT AUTHORITY\\SYSTEM"
+        },
+        "FileSystemRights": 2032127,
+        "AccessControlType": 0,
+        "IsInherited": true
+      },
+      {
+        "IdentityReference": {
+          "Value": "BUILTIN\\Administrators"
+        },
+        "FileSystemRights": 2032127,
+        "AccessControlType": 0,
+        "IsInherited": true
+      },
+      {
+        "IdentityReference": {
+          "Value": "PowderSnow\\howar"
+        },
+        "FileSystemRights": 2032127,
+        "AccessControlType": 0,
+        "IsInherited": true
+      }
+    ],
+    "wslconfig_exists": false,
+    "output_parent_owner": "POWDERSNOW\\howar",
+    "observed_utc": "2026-10-12T23:54:44.0227518+00:00",
+    "wsl_memory_processor_values": [],
+    "top_processes": [
+      {
+        "ProcessName": "Memory Compression",
+        "Id": 4824,
+        "WorkingSet64": 12524388352
+      },
+      {
+        "ProcessName": "OneDrive",
+        "Id": 3728,
+        "WorkingSet64": 9976242176
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 47848,
+        "WorkingSet64": 1394233344
+      },
+      {
+        "ProcessName": "chrome",
+        "Id": 25672,
+        "WorkingSet64": 1145823232
+      },
+      {
+        "ProcessName": "claude",
+        "Id": 5180,
+        "WorkingSet64": 681619456
+      },
+      {
+        "ProcessName": "chrome",
+        "Id": 46100,
+        "WorkingSet64": 668020736
+      },
+      {
+        "ProcessName": "vmmemWSL",
+        "Id": 6732,
+        "WorkingSet64": 634949632
+      },
+      {
+        "ProcessName": "chrome",
+        "Id": 47368,
+        "WorkingSet64": 569774080
+      },
+      {
+        "ProcessName": "chrome",
+        "Id": 28324,
+        "WorkingSet64": 505905152
+      },
+      {
+        "ProcessName": "WindowsTerminal",
+        "Id": 36256,
+        "WorkingSet64": 494419968
+      },
+      {
+        "ProcessName": "chrome",
+        "Id": 55844,
+        "WorkingSet64": 422363136
+      },
+      {
+        "ProcessName": "explorer",
+        "Id": 12532,
+        "WorkingSet64": 407719936
+      }
+    ]
+  },
+  "docker_info_inventory": {
+    "memory": {
+      "TotalVisibleMemorySize": 66469848,
+      "FreePhysicalMemory": 14451528
+    },
+    "docker_info": "33328074752|24|\"linux\"|\"Docker Desktop\"|\"29.8.0\"",
+    "docker_info_exit_code": 0,
+    "observed_utc": "2026-10-12T23:24:57.8786698+00:00",
+    "disk": {
+      "FreeSpace": 655069560832,
+      "Size": 2047181058048
+    },
+    "port8768_listeners": []
+  },
+  "offline_preflight": {
+    "started_utc": "2026-10-12T23:25:39.887316+00:00",
+    "finished_utc": "2026-10-12T23:27:38.690806+00:00",
+    "elapsed_seconds": 118.797,
+    "read_only": true,
+    "execution_checkout": "C:\\Users\\howar\\.codex\\worktrees\\b06-oct13-pinned-readiness\\lightyear-carddemo-modernization",
+    "implementation_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "clean": true,
+    "request_file_sha256": "663fa537b827dbdf71be14e27cce9a5f26155dea6c19671765e7fa7f5e344fc9",
+    "request_seal": "107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
+    "template_seal": "bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+    "asset_count": 111311,
+    "observer_classes": 14,
+    "result": "passed",
+    "private_keys_read": false,
+    "native_runs": 0,
+    "model_calls": 0,
+    "docker_commands": 0
+  },
+  "boundary_and_schedule_checks": {
+    "observed_utc": "2026-10-12T23:55:28.301048+00:00",
+    "instruction_path": "C:\\Users\\howar\\Downloads\\codex-b06-readiness-gaps-2026-10-12.md",
+    "instruction_sha256": "48afcfc5107f83c3882432018b589fc0498405dbcc81478964e83dee7b367367",
+    "public_only_qualification_checks": {
+      "replay_entry": "engineering-signing-key-not-admissible",
+      "replay_clocks": "engineering-signing-key-not-admissible"
+    },
+    "signing_operations": 0,
+    "private_keys_read": false,
+    "related_automations": [
+      {
+        "id": "b06-approved-runtime-resolution-window",
+        "status": "PAUSED",
+        "name": "B06 approved runtime-resolution window"
+      },
+      {
+        "id": "b06-artifact-extraction-approved-window",
+        "status": "PAUSED",
+        "name": "B06 exact archive-copy completion"
+      },
+      {
+        "id": "b06-build-once-practice-completion",
+        "status": "PAUSED",
+        "name": "B06 build-once practice completion"
+      },
+      {
+        "id": "b06-census-freeze-and-tower-preparation",
+        "status": "PAUSED",
+        "name": "B06 unmatched-return diagnostic r3 monitor"
+      },
+      {
+        "id": "b06-inventory-r1-completion-check",
+        "status": "PAUSED",
+        "name": "B06 inventory r1 \u00e2\u20ac\u201d completion check"
+      },
+      {
+        "id": "complete-approved-tower-pr-merges",
+        "status": "PAUSED",
+        "name": "Complete approved Tower PR merges"
+      },
+      {
+        "id": "j1-smoke-r10-10-minute-status",
+        "status": "PAUSED",
+        "name": "J1 smoke r10 \u2014 10-minute status"
+      },
+      {
+        "id": "merge-approved-october-11-prs",
+        "status": "PAUSED",
+        "name": "Verify PR322 retention campaign and report"
+      },
+      {
+        "id": "track-five-pr-push-to-green-latencies",
+        "status": "PAUSED",
+        "name": "Track five PR push-to-green latencies"
+      },
+      {
+        "id": "track-next-three-pr-ci-latencies",
+        "status": "PAUSED",
+        "name": "Track next three PR CI latencies"
+      }
+    ],
+    "planned_overlap_found": false,
+    "runtime_docker_overlap_not_queried_tonight": "Only one docker info was authorized; exact launch no_overlap gate remains mandatory in window."
+  },
+  "prerequisites": [
+    {
+      "prerequisite": "Execution worktree",
+      "ready": "Yes",
+      "evidence": "Separate detached clean HEAD 62eafdaf29dce1d40603d38c3a394f150b98f686.",
+      "action": "Codex: keep pinned; recheck at 8:30."
+    },
+    {
+      "prerequisite": "Line endings and hashes",
+      "ready": "Yes",
+      "evidence": "873 tracked files match the asset index; observer/helper are LF by attributes and match bound hashes; 14 compiled classes verified in existing assets.",
+      "action": "None; no autocrlf change or compilation."
+    },
+    {
+      "prerequisite": "Offline preflight from worktree",
+      "ready": "Yes",
+      "evidence": "All 111,311 files and seals passed from exact checkout in 118.797s.",
+      "action": "Codex: repeat read-only command at 8:30."
+    },
+    {
+      "prerequisite": "Engineering authority",
+      "ready": "Yes",
+      "evidence": "Existing public fingerprint matches 4ce00cfa...367be9f0; engineering read_public accepts; qualification replay_entry/replay_clocks reject it.",
+      "action": "Use existing path below; no key creation or pre-window signing."
+    },
+    {
+      "prerequisite": "8768 Tower",
+      "ready": "Yes - not required",
+      "evidence": "Exact engineering path uses local supervisor/worker, local cancellation, signed ledger handoff and cleanup; no Tower service or decision polling.",
+      "action": "Leave 8768 stopped."
+    },
+    {
+      "prerequisite": "Docker memory and CPUs",
+      "ready": "Yes",
+      "evidence": "31.04 GiB / 24 CPUs exceeds 28 GiB / 11; 24 GiB container caps leave 7.04 GiB nominal VM margin. No .wslconfig exists.",
+      "action": "No Docker/WSL change or restart needed."
+    },
+    {
+      "prerequisite": "Host free memory",
+      "ready": "Morning step",
+      "evidence": "12.17 GiB free of 63.39 GiB; process inventory below. This is not a free-VM measurement.",
+      "action": "Howard at 8:00: close unnecessary apps normally; recheck host memory."
+    },
+    {
+      "prerequisite": "Python",
+      "ready": "Yes",
+      "evidence": "Runbook native-venv runs Python 3.12.10; satisfies repository >=3.11. Request has no separate exact Python-version pin.",
+      "action": "Use the exact interpreter path below."
+    },
+    {
+      "prerequisite": "Request and assets",
+      "ready": "Yes",
+      "evidence": "Request file 663fa537...344fc9, seal107c2073...7900f35, template/index and full asset inventory verified unchanged.",
+      "action": "Repeat morning preflight; no asset edits."
+    },
+    {
+      "prerequisite": "Output root",
+      "ready": "Yes",
+      "evidence": "Absent/fresh; parent exists with Howard FullControl; no active.lock, request session or prior attempts; 611.59 GiB free. Ledger.lock creates it during launch.",
+      "action": "Do not pre-create it tonight; guarded entry point creates it."
+    },
+    {
+      "prerequisite": "No overlap",
+      "ready": "Yes - registered checks",
+      "evidence": "Six bound windows closed; all related B06/J1 monitors paused; no matching native worker process; excluded windows end Oct10. Live Docker overlap was not queried tonight.",
+      "action": "Codex: mandatory launch no_overlap/image/lease checks still apply; refuse if changed."
+    },
+    {
+      "prerequisite": "Go line",
+      "ready": "Yes",
+      "evidence": "Howard supplied exact go for62eafdaf /107c2073 in this chat. No attempts consumed.",
+      "action": "8:45 go/no-go; separate review before attempt2."
+    }
+  ],
+  "changes_needed_tonight": [],
+  "nine_forty_assessment": "No known unresolved prerequisite requires a later window. If fresh checks fail or review cannot complete before 09:40, refuse attempt1 and propose a new window; never compress checks.",
+  "constraints": {
+    "worktrees_created_total": 1,
+    "docker_info_invocations_total": 1,
+    "private_keys_read": false,
+    "signing_operations": 0,
+    "native_runs": 0,
+    "model_calls": 0,
+    "image_pulls": 0,
+    "containers_started": 0,
+    "machine_settings_changed": false,
+    "merges": 0
+  }
+}

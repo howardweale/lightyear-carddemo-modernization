@@ -1,0 +1,45 @@
+{
+  "started_utc": "2026-10-12T18:53:42.935492+00:00",
+  "read_only": true,
+  "request_file_sha256": "663fa537b827dbdf71be14e27cce9a5f26155dea6c19671765e7fa7f5e344fc9",
+  "request_seal": "107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
+  "expected_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+  "hash_and_seal_verification": "passed",
+  "asset_count": 111311,
+  "template_seal": "bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+  "checkout_commit": "4659d5910d26077ac15e1db76e0383a72d342189",
+  "exact_execution_checkout": false,
+  "elapsed_seconds": 103.09399999998277,
+  "finished_utc": "2026-10-12T18:55:26.028661+00:00",
+  "machine_inventory": {
+    "observed_utc": "2026-10-12T18:48:30.1592650Z",
+    "free_disk_bytes": 662122270720,
+    "memory_total_kib": 66469848,
+    "memory_free_kib": 18122116,
+    "port_8768_listeners": [],
+    "tower_checkout": null,
+    "tower_commit": null,
+    "docker_command": "docker image ls --digests",
+    "docker_invocations": 1,
+    "pinned_digests_present": [
+      "sha256:554a5203449ab2d4b19089b16df5fac4e9fde3334f6762de3760f2a9d48b6268",
+      "sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300",
+      "sha256:96c4bda58cd8a8dfda586b2d83a2eb2a3e9f28fda0f1915d3fd758c890dc02b7"
+    ],
+    "memory_readiness": "Host inventory only; container VM budget not verified. No readiness claim."
+  },
+  "launch_ready": false,
+  "blockers": [
+    "No registered checkout at exact implementation commit was found; preparation checkout is a later documentation commit. No checkout changed.",
+    "No listening service found on 8768; running Tower checkout/commit cannot be reported.",
+    "Host free memory is an inventory observation, not proof of Docker VM allocation or combined resource readiness."
+  ],
+  "historical_registry_verification": {
+    "observed_utc": "2026-10-12T19:20:52.389094+00:00",
+    "read_only": true,
+    "registry_file_sha256": "feae9a1a1e0e641dadae8d9a0f699df9236673011a8c2f49232cd36110103db8",
+    "registered_runs": 6,
+    "marker_hashes_verified": 24,
+    "scope": "Byte hashes only; no execution contents interpreted, no live resource or process absence claim."
+  }
+}

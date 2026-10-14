@@ -1,0 +1,25 @@
+{
+  "schema": "posttran-phase1-compile-authorization/1",
+  "authorized_by": "Howard",
+  "authorized_on": "2026-10-12",
+  "request": "fix and rerun 328, 330, 331",
+  "required_parent": "5b23bc281d7ab3987b423ae17bbc961eccdc9e9b",
+  "compile_ordinal": 2,
+  "generation_attempt": 1,
+  "candidate_sha256": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
+  "bound_file_sha256": {
+    "tools/check_posttran_attempt1_phase1.py": "a3392d26ac92a08e42aae6f4018ba63382c3714a41337cde56e231db899e4ad7",
+    "src/lightyear_mainframe/posttran_invariants.py": "a4c91fce30ae90cb796d5817c62d02a21304e2aa1639a2bd44ab285b48f14780",
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/mainframe/posttran-independent/attempt-1/PosttranCandidate.java": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186"
+  },
+  "source_abcode_line": 710,
+  "host_process_code": 12,
+  "source_abcode": 999,
+  "allowed_execution": "First pull_request workflow attempt, exact child of required parent, Linux CI only",
+  "historical_failure_run": 38295068434,
+  "model_calls": 0,
+  "twin_comparisons": 0,
+  "candidate_edited": false,
+  "phase2_authorized": false
+}

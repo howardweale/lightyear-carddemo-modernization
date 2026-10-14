@@ -1,0 +1,39 @@
+name: POSTTRAN attempt1 Phase1 gate
+on:
+  pull_request:
+    paths:
+      - 'spec/mainframe/posttran-independent/attempt-1/**'
+      - 'tools/check_posttran_attempt1_phase1.py'
+      - 'tests/test_posttran_attempt1_phase1.py'
+      - 'tools/check_posttran_phase1_retained.py'
+      - 'tests/test_posttran_phase1_retained.py'
+      - 'docs/factory/posttran*phase1*.json'
+      - 'src/lightyear_mainframe/posttran_invariants.py'
+      - 'spec/mainframe/public-source/CBTRN02C.cbl'
+      - '.github/workflows/posttran-attempt1-phase1.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  phase1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Structural and retained evidence tests
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_posttran_attempt1_phase1 test_posttran_phase1_retained -v
+      - name: Verify retained compilation 2 evidence (no candidate execution)
+        env:
+          PYTHONPATH: src:.
+        run: python -B tools/check_posttran_phase1_retained.py

@@ -1,0 +1,115 @@
+{
+  "schema": "b06-readiness-evening/1",
+  "checked_at_utc": "2026-10-12T23:28:22.252376+00:00",
+  "verdict": "NOT READY",
+  "execution_checkout": "C:\\Users\\howar\\.codex\\worktrees\\b06-oct13-pinned-readiness\\lightyear-carddemo-modernization",
+  "implementation_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+  "request_seal": "107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
+  "request_file_sha256": "663fa537b827dbdf71be14e27cce9a5f26155dea6c19671765e7fa7f5e344fc9",
+  "validation": {
+    "started_utc": "2026-10-12T23:25:39.887316+00:00",
+    "finished_utc": "2026-10-12T23:27:38.690806+00:00",
+    "elapsed_seconds": 118.797,
+    "read_only": true,
+    "execution_checkout": "C:\\Users\\howar\\.codex\\worktrees\\b06-oct13-pinned-readiness\\lightyear-carddemo-modernization",
+    "implementation_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "clean": true,
+    "request_file_sha256": "663fa537b827dbdf71be14e27cce9a5f26155dea6c19671765e7fa7f5e344fc9",
+    "request_seal": "107c20733d9bc7862461b6e13ba4c180cdf1dad160f51be410c5523587900f35",
+    "template_seal": "bd0ade82a34af685750eb871a56ff4869529bddceb54e1371d719a85e47218f8",
+    "asset_count": 111311,
+    "observer_classes": 14,
+    "result": "passed",
+    "private_keys_read": false,
+    "native_runs": 0,
+    "model_calls": 0,
+    "docker_commands": 0
+  },
+  "machine_inventory": {
+    "memory": {
+      "TotalVisibleMemorySize": 66469848,
+      "FreePhysicalMemory": 14451528
+    },
+    "docker_info": "33328074752|24|\"linux\"|\"Docker Desktop\"|\"29.8.0\"",
+    "docker_info_exit_code": 0,
+    "observed_utc": "2026-10-12T23:24:57.8786698+00:00",
+    "disk": {
+      "FreeSpace": 655069560832,
+      "Size": 2047181058048
+    },
+    "port8768_listeners": []
+  },
+  "documented_container_limits": {
+    "memory_gib": 24,
+    "cpus": 11,
+    "role_memory_gib": {
+      "application": 8,
+      "carrier": 8,
+      "database": 6,
+      "observer": 2
+    }
+  },
+  "prerequisites": [
+    {
+      "prerequisite": "Exact execution checkout",
+      "status": "PASS",
+      "evidence": "New separate clean checkout at 62eafdaf29dce1d40603d38c3a394f150b98f686. Existing B06 checkout/data unchanged."
+    },
+    {
+      "prerequisite": "Request, assets and seals",
+      "status": "PASS",
+      "evidence": "111311 files and 14 observer-class bindings passed from the exact checkout; 118.797 seconds."
+    },
+    {
+      "prerequisite": "Free disk >=60 GiB",
+      "status": "PASS",
+      "evidence": "610.08 GiB free on C: at 2026-10-12T23:24:57.8786698+00:00. Recheck before launch."
+    },
+    {
+      "prerequisite": "Docker VM resources",
+      "status": "CAPACITY VERIFIED",
+      "evidence": "31.04 GiB and 24 CPUs reported by one read-only docker info. Four documented container limits total 24 GiB / 11 CPUs; nominal VM margin 7.04 GiB. Allocation is not free-memory or availability proof."
+    },
+    {
+      "prerequisite": "Host / combined memory",
+      "status": "UNRESOLVED",
+      "evidence": "63.39 GiB total / 13.78 GiB free. No current VM usage/reservation or combined host headroom established; no settings changed."
+    },
+    {
+      "prerequisite": "Three pinned images",
+      "status": "EARLIER CHECK PASSED",
+      "evidence": "All three were present in the authorized October12 image listing. No new listing, pull or container start tonight; presence must be revalidated by the approved launch preflight."
+    },
+    {
+      "prerequisite": "Tower on 8768",
+      "status": "UNRESOLVED",
+      "evidence": "No listener found. A running checkout/commit cannot be identified. No service start, restart or provisioning is authorized tonight."
+    },
+    {
+      "prerequisite": "Dedicated engineering authority",
+      "status": "OPERATOR CONFIRMATION",
+      "evidence": "Existing authority directory remains operator-supplied. Request binds public fingerprint 4ce00cfa28c13f74c12e6569b6aae010fe7e7185849accad8340c2fc367be9f0. No private keys read, no new identity or signature."
+    },
+    {
+      "prerequisite": "Historical cleanup / overlap",
+      "status": "WINDOW RECHECK",
+      "evidence": "Earlier six registry entries / 24 marker hashes passed. No current owned-resource absence or lease check was performed tonight. Existing launch gate must verify this in the authorized window."
+    },
+    {
+      "prerequisite": "Attached readiness instruction",
+      "status": "MISSING",
+      "evidence": "No new attachment/path was supplied or located. Requested its filename/path; do not infer its additional prerequisites."
+    }
+  ],
+  "constraints": {
+    "native_runs": 0,
+    "model_calls": 0,
+    "private_keys_read": false,
+    "docker_info_invocations": 1,
+    "image_pulls": 0,
+    "containers_started": 0,
+    "machine_settings_changed": false,
+    "merges": 0
+  },
+  "deadline_assessment": "Readiness by October13 09:40 PDT is not established. Tower absence cannot be resolved under the current no-service-change authority. Missing instruction, authority confirmation and combined memory readiness require operator resolution; no promised time or improvised substitute. If unresolved at 09:40, do not start attempt1."
+}

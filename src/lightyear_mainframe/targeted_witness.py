@@ -82,7 +82,7 @@ def case(identifier):
                 images[dd]=images[dd][:size];field(dd,name,100000+index)
     elif kind=='timestamp':
         day=1+index%28;hour=index%24;minute=index%60
-        meta['candidate_timestamp']=f'2022-06-{day:02d}-{hour:02d}.{minute:02d}.00.{index%100:02d}0000'
+        meta['candidate_timestamp']=f'2022-06-{day:02d}-{hour:02d}.{minute:02d}.00.000000'
         if job=='INTCALC':meta['processing_date']=f'202206{day:02d}{hour:02d}'
         changes.append(dict(field='runtime-clock',value=meta['candidate_timestamp']))
         if job=='INTCALC':

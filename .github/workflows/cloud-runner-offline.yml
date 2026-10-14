@@ -1,0 +1,84 @@
+name: Cloud runner offline contracts
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_cloud_runner/**'
+      - 'tools/check_cloud_image_bundle.py'
+      - 'tools/cloud_runner_dispatch_bundle.py'
+      - 'tests/test_cloud_runner*.py'
+      - 'tests/test_cloud_image_bundle.py'
+      - 'infra/cloud-runner/**'
+      - '.github/workflows/cloud-runner*.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_cloud_runner/**'
+      - 'tools/check_cloud_image_bundle.py'
+      - 'tools/cloud_runner_dispatch_bundle.py'
+      - 'tests/test_cloud_runner*.py'
+      - 'tests/test_cloud_image_bundle.py'
+      - 'infra/cloud-runner/**'
+      - '.github/workflows/cloud-runner*.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install cryptography==50.0.1 PyYAML==6.0.3
+      - name: No-cloud contract and fixture tests
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_cloud_runner test_cloud_image_bundle test_cloud_runner_workflows -v
+      - run: bash -n infra/cloud-runner/image/install-offline.sh infra/cloud-runner/image/build-after-approval.sh
+  infrastructure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: '1.13.3'
+          terraform_wrapper: false
+      - name: Format, schema validation and mocked plans only
+        working-directory: infra/cloud-runner/gcp
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false -input=false -lockfile=readonly
+          terraform validate -no-color
+          terraform test -no-color
+      - name: Validate Packer definition (no image build)
+        run: |
+          curl --fail --silent --show-error --location --output "$RUNNER_TEMP/packer.zip" https://releases.hashicorp.com/packer/1.14.2/packer_1.14.2_linux_amd64.zip
+          echo "cfefdea4ac580eba7b254ef34d25b756d4961741004e3e701a1476594d13e64a  $RUNNER_TEMP/packer.zip" | sha256sum --check
+          mkdir "$RUNNER_TEMP/lightyear-packer"
+          unzip -q "$RUNNER_TEMP/packer.zip" -d "$RUNNER_TEMP/lightyear-packer"
+          "$RUNNER_TEMP/lightyear-packer/packer" fmt -check -recursive infra/cloud-runner/image
+          "$RUNNER_TEMP/lightyear-packer/packer" validate -syntax-only infra/cloud-runner/image/runner.pkr.hcl
+          cd infra/cloud-runner/image
+          mkdir -p "$RUNNER_TEMP/cloud-image-fixture"
+          "$RUNNER_TEMP/lightyear-packer/packer" init .
+          "$RUNNER_TEMP/lightyear-packer/packer" validate \
+            -var='project_id=offline-test-project' \
+            -var='zone=us-west1-a' \
+            -var='base_image_name=offline-base-image' \
+            -var='base_image_project=offline-test-project' \
+            -var='base_image_id=123456789' \
+            -var='builder_service_account=builder@offline-test-project.iam.gserviceaccount.com' \
+            -var='builder_subnetwork=offline-builder-subnet' \
+            -var='image_name=offline-result-image' \
+            -var="bundle_path=$RUNNER_TEMP/cloud-image-fixture" \
+            -var='bundle_manifest_sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' \
+            -var='source_commit=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' .

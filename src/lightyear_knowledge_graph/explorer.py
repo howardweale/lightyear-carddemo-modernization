@@ -1514,6 +1514,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                     return
                 self._json(self.server.chat_service.answer(payload))
                 return
+            # Consume a bounded JSON body before closing an unknown POST.
+            # Closing with unread bytes can reset the response on Windows.
+            if int(self.headers.get("Content-Length", "0")) > 0:
+                self._request_json()
             self._json({"error": f"Unknown API route: {parsed.path}"}, HTTPStatus.NOT_FOUND)
         except DecisionUnauthorized as exc:
             self._json({"error": str(exc)}, HTTPStatus.UNAUTHORIZED)

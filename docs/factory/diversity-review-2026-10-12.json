@@ -1,0 +1,140 @@
+{
+  "schema": "field-diversity-review/1",
+  "evidence_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
+  "run_id": 38198096890,
+  "rows": [
+    {
+      "program": "INTCALC",
+      "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:483 unconditionally assigns MOVE '05' for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:493 unconditionally assigns MOVE SPACES for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:491 unconditionally assigns MOVE 0 for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:492 unconditionally assigns MOVE SPACES for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:494 unconditionally assigns MOVE SPACES for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+      "classification": "needs-variation",
+      "reason": "Explicit runtime clock, derived from CURRENT-DATE; vary the admitted whole-second clock.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+      "classification": "needs-variation",
+      "reason": "Explicit runtime clock, derived from CURRENT-DATE; vary the admitted whole-second clock.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:484 unconditionally assigns MOVE 'System' for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "INTCALC",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD",
+      "classification": "constant-by-design",
+      "reason": "CBACT04C.cbl:482 unconditionally assigns MOVE '01' for each generated interest transaction.",
+      "decision": "Howard decision pending; no threshold exemption applied"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+      "classification": "needs-variation",
+      "reason": "Input field is carried into the account/posted/rejected record; the corpus supplied only one value. Vary the input while preserving record widths and valid keys.",
+      "decision": "New branch variants; fresh compiled observation required"
+    },
+    {
+      "program": "POSTTRAN",
+      "field": "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+      "classification": "needs-variation",
+      "reason": "Explicit runtime clock, derived from CURRENT-DATE; vary the admitted whole-second clock.",
+      "decision": "New branch variants; fresh compiled observation required"
+    }
+  ]
+}

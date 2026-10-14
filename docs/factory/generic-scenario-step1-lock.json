@@ -1,0 +1,28 @@
+{
+  "schema": "generic-scenario-step1-plan/1",
+  "authorization": "Howard October 12: step 1 only; typed parser, layout/data-flow translation and tests",
+  "solver": {
+    "distribution": "z3-solver",
+    "version": "4.15.3.0",
+    "platform": "GitHub Linux x86_64",
+    "wheel": "z3_solver-4.15.3.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "a9afd9ceb290482097474d43f08415bcc1874f433189d1449f6c1508e9c68384",
+    "source": "https://pypi.org/pypi/z3-solver/4.15.3.0/json",
+    "installed": false,
+    "solver_calls": 0,
+    "use_in_step1": false
+  },
+  "approved_future_budgets_per_program": {
+    "generated_cases": 1000,
+    "solver_targets": 200,
+    "solver_seconds_per_target": 30,
+    "wall_seconds": 14400,
+    "output_bytes": 8589934592,
+    "model_calls": 0
+  },
+  "implemented_stage": 1,
+  "future_stages_started": false,
+  "held_out_programs_used": false,
+  "native_authority": false,
+  "release_authority": false
+}

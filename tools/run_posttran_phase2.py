@@ -161,6 +161,15 @@ def execute(output, archive, reservation):
                 row['status'] = 'divergent' if differences else 'equivalent'
                 row['keep_or_fix_checks'] = dict(candidate=check(images, after, timestamp=scenario['timestamp'], returncode=code, returncode_contract='source-abcode'),
                     twin=check(images, expected, timestamp=scenario['timestamp'], returncode=receipt['returncode']))
+                if scenario['id']=='public:posttran-public':
+                    rejects={lane:len(data['DALYREJS'])//431 for lane,data in (('candidate',after),('twin',expected))}
+                    row['keep_or_fix_checks']['public_reject_count']=dict(expected=38,observed=rejects,passed=all(n==38 for n in rejects.values()))
+                    if not all(n==38 for n in rejects.values()):
+                        row['status']='indeterminate'
+                        report['unresolved'].append(dict(scenario=scenario['id'],input_sha256=scenario['input_sha256'],field='DALYREJS:record-count',legacy_value=rejects['twin'],candidate_value=rejects['candidate'],expected_keep_value=38,source_lines=[403],classification='keep-or-fix related',classification_author='Codex proposal',accepted=False))
+                if not all(row['keep_or_fix_checks'][lane]['passed'] for lane in ('candidate','twin')):
+                    row['status']='indeterminate'
+                    report['unresolved'].append(dict(scenario=scenario['id'],input_sha256=scenario['input_sha256'],field='keep-or-fix-invariants',legacy_value=row['keep_or_fix_checks']['twin'],candidate_value=row['keep_or_fix_checks']['candidate'],source_lines=[379,403,423,545,561,710],classification='keep-or-fix related',classification_author='Codex proposal',accepted=False))
                 for dd in differences:
                     details = field_disagreements(dd, expected[dd], after[dd]) if dd in expected else [dict(field='RETURN-CODE', legacy_value=receipt['returncode'], candidate_value=code, source_lines=[710])]
                     for detail in details:

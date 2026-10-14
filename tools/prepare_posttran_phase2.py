@@ -61,7 +61,7 @@ def prepare(output, image_id, archive):
             scope='Only attempt-1 POSTTRAN duplicate-WRITE abend; neither code substitutes for the other elsewhere.'),
         keep_or_fix=dict(duplicate_id='keep non-atomic balance posting before duplicate WRITE abend',
             cycle_debit_sign='keep source sign behaviour: public workload has 38 rejects, not 23'),
-        outcomes=dict(equivalent='All four complete output byte streams and scoped return-code contract agree.',
+        outcomes=dict(equivalent='All four complete output byte streams and scoped return-code contract agree, and the fixed keep-or-fix checks pass.',
             divergent='Both executions yield readable complete outputs but at least one byte or scoped return code differs.',
             indeterminate='A required input binding, execution receipt, output, or decoder is missing or invalid.'),
         retries=0, candidate_repair_authorized=False, qualification_credit=False, release_authorized=False)

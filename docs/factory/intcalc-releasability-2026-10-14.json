@@ -1,0 +1,2953 @@
+{
+  "blockers": [
+    "113 raw execution gaps require fresh, individually assessed loader-domain overlays.",
+    "Current raw mutation rate is 308/421, below 90%; new projected rates and independent cross-check await CI.",
+    "Effective threshold/2, constant-field and loader-domain decisions remain unsigned.",
+    "Items 20/23/42 have 200/200 evidence but need explicit current-head effectiveness bindings."
+  ],
+  "claim_scope": "twin",
+  "conditions": [
+    {
+      "condition": "B1 compiler/class evidence and targeted attempts complete",
+      "evidence": {
+        "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+        "path": "docs/factory/howard-decisions-2026-10-11b.json",
+        "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+      },
+      "state": "not yet established on the implementation head"
+    },
+    {
+      "condition": "remaining individual reviews accepted",
+      "evidence": {
+        "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+        "path": "docs/factory/howard-decisions-2026-10-11b.json",
+        "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+      },
+      "state": "not yet established on the implementation head"
+    },
+    {
+      "condition": "fresh current-head compiled campaign",
+      "evidence": {
+        "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+        "path": "docs/factory/howard-decisions-2026-10-11b.json",
+        "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+      },
+      "state": "not yet established on the implementation head"
+    },
+    {
+      "condition": "register dependencies bound",
+      "evidence": {
+        "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+        "path": "docs/factory/howard-decisions-2026-10-11b.json",
+        "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+      },
+      "state": "not yet established on the implementation head"
+    }
+  ],
+  "constants": [
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "01",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 482,
+      "source_line_sha256": "2c9b8cf53d02f929db06e9699deb73b7cbb78dd32e1f5a0218bb75008301d5ba",
+      "source_line_text": "           MOVE '01'                 TO TRAN-TYPE-CD                            ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "05",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 483,
+      "source_line_sha256": "6c3be5407b46e33ec66ac1e5072eaa59e1af7d2909063a15ac9492fba0dad0f7",
+      "source_line_text": "           MOVE '05'                 TO TRAN-CAT-CD                             ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "System",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 484,
+      "source_line_sha256": "be80d2c041d8978e7f4f8d791c0c64aa6be6a4461bdffdd861703f3b81f6554f",
+      "source_line_text": "           MOVE 'System'             TO TRAN-SOURCE                             ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": 0,
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 491,
+      "source_line_sha256": "cc4cd9451dea078d3c39cdb990660e0bbfad7a5e882a7562758cc8031e05d4af",
+      "source_line_text": "           MOVE 0                    TO TRAN-MERCHANT-ID                        ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "SPACES",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 492,
+      "source_line_sha256": "533c54b7a632d013b6c3a0ab94d63eab3dbd74259273090f7116e72c6def5ffa",
+      "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-NAME                      ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "SPACES",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 493,
+      "source_line_sha256": "6963381859563b6baa60a0976db45933f84962e77ee184eefe5b105f249de60b",
+      "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-CITY                      ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "accepted_by": "Howard",
+      "accepted_on": "2026-10-12",
+      "classification": "constant-by-design",
+      "comparison_required": true,
+      "constant_value": "SPACES",
+      "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+      "invalidate_on": "Any bound source hash or line change requires renewed review.",
+      "mutation_detection_required": true,
+      "new_zos_facing_acceptance": false,
+      "program": "INTCALC",
+      "reason": "Unconditional literal assignment for each generated interest transaction.",
+      "scope": "twin",
+      "source_line": 494,
+      "source_line_sha256": "f6e12f375676b47a4693422c6502feb3443113e6d960baf30b076a6961cfbcef",
+      "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-ZIP                       ",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    }
+  ],
+  "constants_source_sha256": "822af989952301a165f468c38183871d644b2e0e1f8321ba1cb8a4daea13bfd9",
+  "content_sha256": "d5d298c502a66483d85b4a4affbff6565a714d62e9e486f3e8417d31209a114c",
+  "effective": false,
+  "evidence_index": {
+    "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+    "path": "docs/factory/release-evidence-2026-10-14/index.json",
+    "sha256": "d934238ddcb72b60b56ea97af1b0172d7f13a1dfd18dfe7f9ab05a1446ea37b8"
+  },
+  "independent_crosscheck": {
+    "status": "implemented; fresh PR CI result pending"
+  },
+  "loader_domain": {
+    "effective": false,
+    "no_denominator_removal": true,
+    "status": "implementation prepared; fresh PR CI receipts pending"
+  },
+  "prepared_on": "2026-10-14",
+  "programs": {
+    "INTCALC": {
+      "business": {
+        "covered": 8,
+        "fraction": "8/8",
+        "total": 8
+      },
+      "incomplete_targets": [],
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "targets": [
+        {
+          "effective": false,
+          "id": "CBACT04C-receiving-scale-164-26",
+          "main": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "pr328": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "unchanged": true
+        },
+        {
+          "effective": false,
+          "id": "CBACT04C-receiving-scale-173-34",
+          "main": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "pr328": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "unchanged": true
+        }
+      ],
+      "threshold_by_scope": {
+        "twin": {
+          "accepted_uncovered_IO": [
+            {
+              "classification": "io-handling",
+              "id": "legacy:cobol-decision:CBACT04C:189:671",
+              "line": 189,
+              "outcome": "false",
+              "reason": "not-observed; no unreachability claim"
+            }
+          ],
+          "below_two_values": [
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "blocking_reasons": [
+            "output-fields-below-two-values",
+            "mutation-or-individual-review-conditions-unmet"
+          ],
+          "business": {
+            "covered": 8,
+            "fraction": "8/8",
+            "total": 8
+          },
+          "claim_scope": "twin",
+          "compared_fields": [
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+            "TRANSACT:TRAN-RECORD.TRAN-AMT",
+            "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM",
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANSACT:TRAN-RECORD.TRAN-DESC",
+            "TRANSACT:TRAN-RECORD.TRAN-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+            "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "conditions_met": false,
+          "content_sha256": "057f34c4facb15200e93c81e6d87a200602ce86e2a6a19ab3b3c668f0d372faa",
+          "current_head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+          "decision_date": "2026-10-11T14:00:00-07:00",
+          "distinct_values_per_output_field": {
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 3,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 58,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 51,
+            "TRANSACT:TRAN-RECORD.TRAN-AMT": 13,
+            "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM": 54,
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-DESC": 50,
+            "TRANSACT:TRAN-RECORD.TRAN-ID": 52,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS": 3,
+            "TRANSACT:TRAN-RECORD.TRAN-PROC-TS": 3,
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD": 1
+          },
+          "io": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          },
+          "measurement_credit": false,
+          "mutation": {
+            "at_least_90_percent": false,
+            "claim_scope": "twin",
+            "compiler_refusals": [],
+            "eligible": 421,
+            "excluded_equivalents": [],
+            "kill_rate": "308/421",
+            "killed": 308,
+            "minimum_50_met": true,
+            "mutation_conditions_met": false,
+            "other_requirements": [
+              "fresh business/I-O coverage bindings",
+              "two values per compared output field",
+              "complete B1 review dispositions"
+            ],
+            "release_authorized": false,
+            "schema": "scenario-threshold-2-mutation-assessment/1",
+            "sites": 421,
+            "targeted_evidence_gap_ids": [],
+            "targeted_experiments_complete": true,
+            "unresolved_survivors": [
+              {
+                "id": "CBACT04C-receiving-scale-72-6",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-125-13",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-133-19",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-133-20",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-138-21",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-139-23",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-139-24",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-164-26",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-169-30",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-172-31",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-172-32",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-173-34",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-177-35",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-192-48",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-192-49",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-ADD-192-50",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-skip-PERFORM-216-74",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-skip-PERFORM-220-75",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-235-81",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-235-82",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-235-83",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-240-89",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-240-90",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-240-91",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-253-96",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-253-97",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-253-98",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-258-104",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-258-105",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-258-106",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-271-111",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-271-112",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-271-113",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-276-119",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-276-120",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-276-121",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-290-126",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-290-127",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-290-128",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-295-134",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-295-135",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-295-136",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-308-141",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-308-142",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-308-143",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-313-149",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-313-150",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-313-151",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-328-160",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-333-166",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-333-167",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-358-187",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-360-188",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-360-189",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-379-199",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-381-200",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-381-201",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-401-211",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-403-212",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-403-213",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-423-223",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-425-224",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-425-225",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-447-239",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-449-240",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-449-241",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-491-264",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-492-265",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-493-266",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-494-267",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-502-277",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-504-278",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-504-279",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-523-285",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-523-286",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-523-287",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-528-293",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-528-294",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-528-295",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-542-300",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-542-301",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-542-302",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-547-308",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-547-309",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-547-310",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-560-315",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-560-316",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-560-317",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-565-323",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-565-324",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-565-325",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-578-330",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-578-331",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-578-332",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-583-338",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-583-339",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-583-340",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-596-345",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-596-346",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-596-347",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-601-353",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-601-354",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-601-355",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-630-373",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-638-382",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-639-384",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-639-385",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-639-386",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-644-389",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              }
+            ],
+            "whole_threshold_effective": false
+          },
+          "program": "CBACT04C",
+          "qualification_credit": false,
+          "release_authorized": false,
+          "schema": "scenario-threshold/2-amended-assessment",
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "status": "approved-subject-to-B1-completion",
+          "unaccepted_outcomes": []
+        },
+        "zos-facing": {
+          "accepted_uncovered_IO": [
+            {
+              "classification": "io-handling",
+              "id": "legacy:cobol-decision:CBACT04C:189:671",
+              "line": 189,
+              "outcome": "false",
+              "reason": "not-observed; no unreachability claim"
+            }
+          ],
+          "below_two_values": [
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "blocking_reasons": [
+            "output-fields-below-two-values",
+            "mutation-or-individual-review-conditions-unmet"
+          ],
+          "business": {
+            "covered": 8,
+            "fraction": "8/8",
+            "total": 8
+          },
+          "claim_scope": "zos-facing",
+          "compared_fields": [
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+            "TRANSACT:TRAN-RECORD.TRAN-AMT",
+            "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM",
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANSACT:TRAN-RECORD.TRAN-DESC",
+            "TRANSACT:TRAN-RECORD.TRAN-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+            "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "conditions_met": false,
+          "content_sha256": "d33b63491f810dee7a95793abe898598bbf3542ad332660e493d6dc571829aaf",
+          "current_head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+          "decision_date": "2026-10-11T14:00:00-07:00",
+          "distinct_values_per_output_field": {
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 3,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 58,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 5,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 51,
+            "TRANSACT:TRAN-RECORD.TRAN-AMT": 13,
+            "TRANSACT:TRAN-RECORD.TRAN-CARD-NUM": 54,
+            "TRANSACT:TRAN-RECORD.TRAN-CAT-CD": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-DESC": 50,
+            "TRANSACT:TRAN-RECORD.TRAN-ID": 52,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS": 3,
+            "TRANSACT:TRAN-RECORD.TRAN-PROC-TS": 3,
+            "TRANSACT:TRAN-RECORD.TRAN-SOURCE": 1,
+            "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD": 1
+          },
+          "io": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          },
+          "measurement_credit": false,
+          "mutation": {
+            "at_least_90_percent": false,
+            "claim_scope": "zos-facing",
+            "compiler_refusals": [],
+            "eligible": 421,
+            "excluded_equivalents": [],
+            "kill_rate": "308/421",
+            "killed": 308,
+            "minimum_50_met": true,
+            "mutation_conditions_met": false,
+            "other_requirements": [
+              "fresh business/I-O coverage bindings",
+              "two values per compared output field",
+              "complete B1 review dispositions"
+            ],
+            "release_authorized": false,
+            "schema": "scenario-threshold-2-mutation-assessment/1",
+            "sites": 421,
+            "targeted_evidence_gap_ids": [],
+            "targeted_experiments_complete": true,
+            "unresolved_survivors": [
+              {
+                "id": "CBACT04C-receiving-scale-72-6",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-125-13",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-133-19",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-133-20",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-138-21",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-139-23",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-139-24",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-164-26",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-169-30",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-172-31",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-172-32",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-scale-173-34",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-receiving-size-177-35",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-192-48",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-192-49",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-ADD-192-50",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-skip-PERFORM-216-74",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-skip-PERFORM-220-75",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-235-81",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-235-82",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-235-83",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-240-89",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-240-90",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-240-91",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-253-96",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-253-97",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-253-98",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-258-104",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-258-105",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-258-106",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-271-111",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-271-112",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-271-113",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-276-119",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-276-120",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-276-121",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-290-126",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-290-127",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-290-128",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-295-134",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-295-135",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-295-136",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-308-141",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-308-142",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-308-143",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-313-149",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-313-150",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-313-151",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-328-160",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-333-166",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-333-167",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-358-187",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-360-188",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-360-189",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-379-199",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-381-200",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-381-201",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-401-211",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-403-212",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-403-213",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-423-223",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-425-224",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-425-225",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-447-239",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-449-240",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-449-241",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-491-264",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-492-265",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-493-266",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-494-267",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-502-277",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-504-278",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-504-279",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-523-285",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-523-286",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-523-287",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-528-293",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-528-294",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-528-295",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-542-300",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-542-301",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-542-302",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-547-308",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-547-309",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-547-310",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-560-315",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-560-316",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-560-317",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-565-323",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-565-324",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-565-325",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-578-330",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-578-331",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-578-332",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-583-338",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-583-339",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-583-340",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-596-345",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-596-346",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-596-347",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-601-353",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-601-354",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-601-355",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-630-373",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-638-382",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-639-384",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-constant-639-385",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-639-386",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-delete-MOVE-644-389",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              }
+            ],
+            "whole_threshold_effective": false
+          },
+          "program": "CBACT04C",
+          "qualification_credit": false,
+          "release_authorized": false,
+          "schema": "scenario-threshold/2-amended-assessment",
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "status": "approved-subject-to-B1-completion",
+          "unaccepted_outcomes": []
+        }
+      },
+      "varying_fields": [
+        {
+          "before": 1,
+          "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+          "main": 2,
+          "pr328": 2
+        },
+        {
+          "before": 1,
+          "field": "TRANSACT:TRAN-RECORD.TRAN-ORIG-TS",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "TRANSACT:TRAN-RECORD.TRAN-PROC-TS",
+          "main": 3,
+          "pr328": 3
+        }
+      ]
+    },
+    "POSTTRAN": {
+      "business": {
+        "covered": 24,
+        "fraction": "24/24",
+        "total": 24
+      },
+      "incomplete_targets": [],
+      "io": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      },
+      "targets": [
+        {
+          "effective": false,
+          "id": "CBTRN02C-receiving-scale-173-20",
+          "main": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "pr328": {
+            "targeted_cases": 200,
+            "targeted_counts": {
+              "survived": 200
+            },
+            "targeted_evidence_complete": true,
+            "targeted_evidence_gaps": [],
+            "targeted_valid_comparisons": 200
+          },
+          "unchanged": true
+        }
+      ],
+      "threshold_by_scope": {
+        "twin": {
+          "accepted_uncovered_IO": [
+            {
+              "classification": "io-handling",
+              "id": "legacy:cobol-decision:CBTRN02C:203:684",
+              "line": 203,
+              "outcome": "false",
+              "reason": "not-observed; no unreachability claim"
+            }
+          ],
+          "below_two_values": [],
+          "blocking_reasons": [
+            "mutation-or-individual-review-conditions-unmet"
+          ],
+          "business": {
+            "covered": 24,
+            "fraction": "24/24",
+            "total": 24
+          },
+          "claim_scope": "twin",
+          "compared_fields": [
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON",
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+            "TRANFILE:TRAN-RECORD.TRAN-AMT",
+            "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM",
+            "TRANFILE:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANFILE:TRAN-RECORD.TRAN-DESC",
+            "TRANFILE:TRAN-RECORD.TRAN-ID",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS",
+            "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+            "TRANFILE:TRAN-RECORD.TRAN-SOURCE",
+            "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "conditions_met": false,
+          "content_sha256": "bb1f9f76d7fcfac66401b5af0dda4f1c46e070dcb55ae7c712b22a73e2369dce",
+          "current_head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+          "decision_date": "2026-10-11T14:00:00-07:00",
+          "distinct_values_per_output_field": {
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 106,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 56,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 54,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 53,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 3,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 50,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT": 43,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM": 18,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD": 2,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS": 2,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD": 2,
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON": 4,
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC": 4,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL": 106,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID": 50,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD": 3,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-AMT": 267,
+            "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM": 50,
+            "TRANFILE:TRAN-RECORD.TRAN-CAT-CD": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-DESC": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-ID": 263,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP": 262,
+            "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS": 2,
+            "TRANFILE:TRAN-RECORD.TRAN-PROC-TS": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-SOURCE": 4,
+            "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD": 3
+          },
+          "io": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          },
+          "measurement_credit": false,
+          "mutation": {
+            "at_least_90_percent": true,
+            "claim_scope": "twin",
+            "compiler_refusals": [],
+            "eligible": 384,
+            "excluded_equivalents": [
+              {
+                "basis": "compiler-proven",
+                "id": "CBTRN02C-receiving-size-142-13"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-237-71"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-237-72"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-237-73"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-242-79"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-242-80"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-242-81"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-255-86"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-255-87"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-255-88"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-260-94"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-260-95"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-260-96"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-274-101"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-274-102"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-274-103"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-279-109"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-279-110"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-279-111"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-292-116"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-292-117"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-292-118"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-297-124"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-297-125"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-297-126"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-310-131"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-310-132"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-310-133"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-315-139"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-315-140"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-315-141"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-328-146"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-328-147"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-328-148"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-333-154"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-333-155"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-333-156"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-348-165"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-354-171"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-354-172"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-450-235"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-450-236"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-450-237"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-455-244"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-455-245"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-455-246"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-482-260"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-484-261"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-484-262"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-513-281"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-515-282"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-515-283"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-531-295"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-533-296"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-533-297"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-563-315"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-563-316"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-563-317"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-569-324"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-569-325"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-569-326"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-583-331"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-583-332"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-583-333"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-588-339"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-588-340"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-588-341"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-601-346"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-601-347"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-601-348"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-606-354"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-606-355"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-606-356"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-620-361"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-620-362"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-620-363"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-625-369"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-625-370"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-625-371"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-638-376"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-638-377"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-638-378"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-643-384"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-643-385"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-643-386"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-656-391"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-656-392"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-656-393"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-661-399"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-661-400"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-661-401"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-675-406"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-675-407"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-675-408"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-680-414"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-680-415"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-680-416"
+              },
+              {
+                "basis": "individually-accepted",
+                "id": "CBTRN02C-constant-718-445"
+              },
+              {
+                "basis": "individually-accepted",
+                "id": "CBTRN02C-delete-MOVE-718-447"
+              }
+            ],
+            "kill_rate": "360/384",
+            "killed": 360,
+            "minimum_50_met": true,
+            "mutation_conditions_met": false,
+            "other_requirements": [
+              "fresh business/I-O coverage bindings",
+              "two values per compared output field",
+              "complete B1 review dispositions"
+            ],
+            "release_authorized": false,
+            "schema": "scenario-threshold-2-mutation-assessment/1",
+            "sites": 483,
+            "targeted_evidence_gap_ids": [],
+            "targeted_experiments_complete": true,
+            "unresolved_survivors": [
+              {
+                "id": "CBTRN02C-receiving-scale-94-4",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-96-6",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-134-7",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-142-14",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-147-15",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-148-17",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-148-18",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-173-20",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-187-28",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-relational-203-36",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-negate-condition-203-37",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-skip-PERFORM-204-38",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-209-47",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-constant-230-68",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-constant-230-69",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-354-173",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-skip-PERFORM-366-179",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-rounded-403-196",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-557-314",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-709-434",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-constant-717-443",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-constant-718-446",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-723-450",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+                "reason": "individual operator review required"
+              }
+            ],
+            "whole_threshold_effective": false
+          },
+          "program": "CBTRN02C",
+          "qualification_credit": false,
+          "release_authorized": false,
+          "schema": "scenario-threshold/2-amended-assessment",
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+          "status": "approved-subject-to-B1-completion",
+          "unaccepted_outcomes": []
+        },
+        "zos-facing": {
+          "accepted_uncovered_IO": [
+            {
+              "classification": "io-handling",
+              "id": "legacy:cobol-decision:CBTRN02C:203:684",
+              "line": 203,
+              "outcome": "false",
+              "reason": "not-observed; no unreachability claim"
+            }
+          ],
+          "below_two_values": [],
+          "blocking_reasons": [
+            "mutation-or-individual-review-conditions-unmet"
+          ],
+          "business": {
+            "covered": 24,
+            "fraction": "24/24",
+            "total": 24
+          },
+          "claim_scope": "zos-facing",
+          "compared_fields": [
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE",
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON",
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD",
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+            "TRANFILE:TRAN-RECORD.TRAN-AMT",
+            "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM",
+            "TRANFILE:TRAN-RECORD.TRAN-CAT-CD",
+            "TRANFILE:TRAN-RECORD.TRAN-DESC",
+            "TRANFILE:TRAN-RECORD.TRAN-ID",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME",
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+            "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS",
+            "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+            "TRANFILE:TRAN-RECORD.TRAN-SOURCE",
+            "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD"
+          ],
+          "conditions_met": false,
+          "content_sha256": "620330c57a5300a979810b6e4c72544206e618c8fa942e71aab8b81d343df535",
+          "current_head": "8650f58c5fdcd0916e22152b5bbbaa1182efdf71",
+          "decision_date": "2026-10-11T14:00:00-07:00",
+          "distinct_values_per_output_field": {
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ADDR-ZIP": 2,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CREDIT-LIMIT": 51,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-BAL": 106,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT": 56,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT": 54,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": 53,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID": 3,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-ID": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-OPEN-DATE": 50,
+            "ACCTFILE:ACCOUNT-RECORD.ACCT-REISSUE-DATE": 50,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT": 43,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM": 18,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD": 2,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP": 39,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS": 2,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE": 3,
+            "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD": 2,
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON": 4,
+            "DALYREJS:REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC": 4,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL": 106,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID": 50,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD": 3,
+            "TCATBALF:TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-AMT": 267,
+            "TRANFILE:TRAN-RECORD.TRAN-CARD-NUM": 50,
+            "TRANFILE:TRAN-RECORD.TRAN-CAT-CD": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-DESC": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-ID": 263,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-CITY": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-NAME": 261,
+            "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ZIP": 262,
+            "TRANFILE:TRAN-RECORD.TRAN-ORIG-TS": 2,
+            "TRANFILE:TRAN-RECORD.TRAN-PROC-TS": 3,
+            "TRANFILE:TRAN-RECORD.TRAN-SOURCE": 4,
+            "TRANFILE:TRAN-RECORD.TRAN-TYPE-CD": 3
+          },
+          "io": {
+            "covered": 85,
+            "fraction": "85/86",
+            "total": 86
+          },
+          "measurement_credit": false,
+          "mutation": {
+            "at_least_90_percent": true,
+            "claim_scope": "zos-facing",
+            "compiler_refusals": [],
+            "eligible": 390,
+            "excluded_equivalents": [
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-237-71"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-237-72"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-237-73"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-242-79"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-242-80"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-242-81"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-255-86"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-255-87"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-255-88"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-260-94"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-260-95"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-260-96"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-274-101"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-274-102"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-274-103"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-279-109"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-279-110"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-279-111"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-292-116"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-292-117"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-292-118"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-297-124"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-297-125"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-297-126"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-310-131"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-310-132"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-310-133"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-315-139"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-315-140"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-315-141"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-328-146"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-328-147"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-328-148"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-333-154"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-333-155"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-333-156"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-354-171"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-354-172"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-450-235"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-450-236"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-450-237"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-455-244"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-455-245"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-455-246"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-484-261"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-484-262"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-515-282"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-515-283"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-533-296"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-533-297"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-563-315"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-563-316"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-563-317"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-569-324"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-569-325"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-569-326"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-583-331"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-583-332"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-583-333"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-588-339"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-588-340"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-588-341"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-601-346"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-601-347"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-601-348"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-606-354"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-606-355"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-606-356"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-620-361"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-620-362"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-620-363"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-625-369"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-625-370"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-625-371"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-638-376"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-638-377"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-638-378"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-643-384"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-643-385"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-643-386"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-656-391"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-656-392"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-656-393"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-661-399"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-661-400"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-661-401"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-675-406"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-675-407"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-675-408"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-680-414"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-constant-680-415"
+              },
+              {
+                "basis": "APPL-RESULT-class-proof",
+                "id": "CBTRN02C-delete-MOVE-680-416"
+              },
+              {
+                "basis": "individually-accepted",
+                "id": "CBTRN02C-constant-718-445"
+              }
+            ],
+            "kill_rate": "360/390",
+            "killed": 360,
+            "minimum_50_met": true,
+            "mutation_conditions_met": false,
+            "other_requirements": [
+              "fresh business/I-O coverage bindings",
+              "two values per compared output field",
+              "complete B1 review dispositions"
+            ],
+            "release_authorized": false,
+            "schema": "scenario-threshold-2-mutation-assessment/1",
+            "sites": 483,
+            "targeted_evidence_gap_ids": [],
+            "targeted_experiments_complete": true,
+            "unresolved_survivors": [
+              {
+                "id": "CBTRN02C-receiving-scale-94-4",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-96-6",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-134-7",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-142-13",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-142-14",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-147-15",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-receiving-size-148-17",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-148-18",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-173-20",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-receiving-scale-187-28",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-relational-203-36",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-negate-condition-203-37",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-skip-PERFORM-204-38",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-209-47",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-constant-230-68",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-constant-230-69",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-348-165",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-354-173",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-skip-PERFORM-366-179",
+                "reason": "fresh-campaign-execution-evidence-gap"
+              },
+              {
+                "id": "CBTRN02C-rounded-403-196",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-482-260",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-513-281",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-531-295",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-557-314",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-709-434",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-constant-717-443",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-constant-718-446",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-718-447",
+                "reason": "host-compiler-scoped argument unresolved for z/OS"
+              },
+              {
+                "id": "CBTRN02C-delete-MOVE-723-450",
+                "reason": "individual operator review required"
+              },
+              {
+                "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+                "reason": "individual operator review required"
+              }
+            ],
+            "whole_threshold_effective": false
+          },
+          "program": "CBTRN02C",
+          "qualification_credit": false,
+          "release_authorized": false,
+          "schema": "scenario-threshold/2-amended-assessment",
+          "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+          "status": "approved-subject-to-B1-completion",
+          "unaccepted_outcomes": []
+        }
+      },
+      "varying_fields": [
+        {
+          "before": 1,
+          "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+          "main": 2,
+          "pr328": 2
+        },
+        {
+          "before": 1,
+          "field": "ACCTFILE:ACCOUNT-RECORD.ACCT-GROUP-ID",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD",
+          "main": 2,
+          "pr328": 2
+        },
+        {
+          "before": 1,
+          "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "DALYREJS:REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD",
+          "main": 2,
+          "pr328": 2
+        },
+        {
+          "before": 1,
+          "field": "TRANFILE:TRAN-RECORD.TRAN-MERCHANT-ID",
+          "main": 3,
+          "pr328": 3
+        },
+        {
+          "before": 1,
+          "field": "TRANFILE:TRAN-RECORD.TRAN-PROC-TS",
+          "main": 3,
+          "pr328": 3
+        }
+      ]
+    }
+  },
+  "raw_kill_rate": "308/421",
+  "raw_mutation_counts": {
+    "evidence-gap": 113,
+    "killed-divergent": 146,
+    "killed-failure": 162
+  },
+  "release_authorized": false,
+  "remaining_evidence_gaps": [
+    "CBACT04C-receiving-scale-72-6",
+    "CBACT04C-receiving-size-125-13",
+    "CBACT04C-receiving-size-133-19",
+    "CBACT04C-receiving-scale-133-20",
+    "CBACT04C-receiving-size-138-21",
+    "CBACT04C-receiving-size-139-23",
+    "CBACT04C-receiving-scale-139-24",
+    "CBACT04C-receiving-scale-164-26",
+    "CBACT04C-receiving-scale-169-30",
+    "CBACT04C-receiving-size-172-31",
+    "CBACT04C-receiving-scale-172-32",
+    "CBACT04C-receiving-scale-173-34",
+    "CBACT04C-receiving-size-177-35",
+    "CBACT04C-constant-192-48",
+    "CBACT04C-constant-192-49",
+    "CBACT04C-delete-ADD-192-50",
+    "CBACT04C-skip-PERFORM-216-74",
+    "CBACT04C-skip-PERFORM-220-75",
+    "CBACT04C-constant-235-81",
+    "CBACT04C-constant-235-82",
+    "CBACT04C-delete-MOVE-235-83",
+    "CBACT04C-constant-240-89",
+    "CBACT04C-constant-240-90",
+    "CBACT04C-delete-MOVE-240-91",
+    "CBACT04C-constant-253-96",
+    "CBACT04C-constant-253-97",
+    "CBACT04C-delete-MOVE-253-98",
+    "CBACT04C-constant-258-104",
+    "CBACT04C-constant-258-105",
+    "CBACT04C-delete-MOVE-258-106",
+    "CBACT04C-constant-271-111",
+    "CBACT04C-constant-271-112",
+    "CBACT04C-delete-MOVE-271-113",
+    "CBACT04C-constant-276-119",
+    "CBACT04C-constant-276-120",
+    "CBACT04C-delete-MOVE-276-121",
+    "CBACT04C-constant-290-126",
+    "CBACT04C-constant-290-127",
+    "CBACT04C-delete-MOVE-290-128",
+    "CBACT04C-constant-295-134",
+    "CBACT04C-constant-295-135",
+    "CBACT04C-delete-MOVE-295-136",
+    "CBACT04C-constant-308-141",
+    "CBACT04C-constant-308-142",
+    "CBACT04C-delete-MOVE-308-143",
+    "CBACT04C-constant-313-149",
+    "CBACT04C-constant-313-150",
+    "CBACT04C-delete-MOVE-313-151",
+    "CBACT04C-delete-MOVE-328-160",
+    "CBACT04C-constant-333-166",
+    "CBACT04C-constant-333-167",
+    "CBACT04C-delete-MOVE-358-187",
+    "CBACT04C-constant-360-188",
+    "CBACT04C-constant-360-189",
+    "CBACT04C-delete-MOVE-379-199",
+    "CBACT04C-constant-381-200",
+    "CBACT04C-constant-381-201",
+    "CBACT04C-delete-MOVE-401-211",
+    "CBACT04C-constant-403-212",
+    "CBACT04C-constant-403-213",
+    "CBACT04C-delete-MOVE-423-223",
+    "CBACT04C-constant-425-224",
+    "CBACT04C-constant-425-225",
+    "CBACT04C-delete-MOVE-447-239",
+    "CBACT04C-constant-449-240",
+    "CBACT04C-constant-449-241",
+    "CBACT04C-delete-MOVE-491-264",
+    "CBACT04C-delete-MOVE-492-265",
+    "CBACT04C-delete-MOVE-493-266",
+    "CBACT04C-delete-MOVE-494-267",
+    "CBACT04C-delete-MOVE-502-277",
+    "CBACT04C-constant-504-278",
+    "CBACT04C-constant-504-279",
+    "CBACT04C-constant-523-285",
+    "CBACT04C-constant-523-286",
+    "CBACT04C-delete-MOVE-523-287",
+    "CBACT04C-constant-528-293",
+    "CBACT04C-constant-528-294",
+    "CBACT04C-delete-MOVE-528-295",
+    "CBACT04C-constant-542-300",
+    "CBACT04C-constant-542-301",
+    "CBACT04C-delete-MOVE-542-302",
+    "CBACT04C-constant-547-308",
+    "CBACT04C-constant-547-309",
+    "CBACT04C-delete-MOVE-547-310",
+    "CBACT04C-constant-560-315",
+    "CBACT04C-constant-560-316",
+    "CBACT04C-delete-MOVE-560-317",
+    "CBACT04C-constant-565-323",
+    "CBACT04C-constant-565-324",
+    "CBACT04C-delete-MOVE-565-325",
+    "CBACT04C-constant-578-330",
+    "CBACT04C-constant-578-331",
+    "CBACT04C-delete-MOVE-578-332",
+    "CBACT04C-constant-583-338",
+    "CBACT04C-constant-583-339",
+    "CBACT04C-delete-MOVE-583-340",
+    "CBACT04C-constant-596-345",
+    "CBACT04C-constant-596-346",
+    "CBACT04C-delete-MOVE-596-347",
+    "CBACT04C-constant-601-353",
+    "CBACT04C-constant-601-354",
+    "CBACT04C-delete-MOVE-601-355",
+    "CBACT04C-delete-MOVE-630-373",
+    "CBACT04C-constant-638-382",
+    "CBACT04C-constant-639-384",
+    "CBACT04C-constant-639-385",
+    "CBACT04C-delete-MOVE-639-386",
+    "CBACT04C-delete-MOVE-644-389",
+    "CBACT04C-CVACT03Y-receiving-size-6-1",
+    "CBACT04C-CVACT03Y-receiving-scale-6-2",
+    "CBACT04C-CVACT03Y-receiving-size-7-3",
+    "CBACT04C-CVACT03Y-receiving-scale-7-4"
+  ],
+  "schema": "intcalc-releasability/1",
+  "verdict": "Not releasable",
+  "zos_confirmation": false
+}

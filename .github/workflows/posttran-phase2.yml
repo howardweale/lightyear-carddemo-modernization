@@ -25,7 +25,7 @@ jobs:
       - name: Validate authorization boundaries without running applications
         env:
           PYTHONPATH: src:.:tests
-        run: python3 -B -m unittest test_posttran_phase2 test_intcalc_loader_domain test_release_crosscheck -v
+        run: python3 -B -m unittest test_posttran_phase2 test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
       - name: Build and retain the pinned compiler image only
         run: |
           mkdir -p work/image

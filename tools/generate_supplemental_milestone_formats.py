@@ -65,7 +65,7 @@ def build_word(source):
     footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     footer.add_run(source.stem + '  |  ').font.size = Pt(9)
     field = OxmlElement('w:fldSimple'); field.set(qn('w:instr'), 'PAGE'); footer._p.append(field)
-    tokens = MarkdownIt('commonmark').enable('table').parse(source.read_text())
+    tokens = MarkdownIt('commonmark').enable('table').parse(source.read_text(encoding="utf-8"))
 
     def inline(p, children):
         bold = italic = False
@@ -189,7 +189,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--numbers',nargs='*',type=int)
     args=parser.parse_args()
-    records=json.loads((DOC_ROOT/'supplemental.json').read_text())['records']
+    records=json.loads((DOC_ROOT/'supplemental.json').read_text(encoding="utf-8"))['records']
     for record in records:
         if args.numbers and record['number'] not in args.numbers:continue
         print(build_word(DOC_ROOT/record['path']))

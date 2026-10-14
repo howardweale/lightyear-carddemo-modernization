@@ -148,11 +148,11 @@ console.log(JSON.stringify(result));'''
                 self.assertIsNotNone(comment)
                 self.assertEqual("Source SHA256: " + hashlib.sha256(source.read_bytes()).hexdigest(), comment.text)
                 body = archive.read("word/document.xml").decode("utf-8")
-                if "東京" in source.read_text():
+                if "東京" in source.read_text(encoding="utf-8"):
                     self.assertIn("東京", body)
 
     def test_reconciliation_preserves_every_standalone_milestone_note(self) -> None:
-        mapping = json.loads((DOC_ROOT / "reconciliation-2026-10-14.json").read_text())
+        mapping = json.loads((DOC_ROOT / "reconciliation-2026-10-14.json").read_text(encoding="utf-8"))
         historical = mapping["preserved_ms94_record"]
         retained = historical["original_utf8"].encode("utf-8")
         self.assertEqual(historical["bytes"], len(retained))
@@ -163,7 +163,7 @@ console.log(JSON.stringify(result));'''
                           {"from": "\u00e2\u20ac\u00b2", "to": "′"}])
         for repair in historical["display_encoding_repairs"]:
             displayed = displayed.replace(repair["from"], repair["to"])
-        self.assertTrue((DOC_ROOT / "MS-94/MS-94.md").read_text().endswith(displayed))
+        self.assertTrue((DOC_ROOT / "MS-94/MS-94.md").read_text(encoding="utf-8").endswith(displayed))
         paths = subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).splitlines()
         expected = {p for p in paths if p.endswith(".md") and "milestone" in p.lower()
                     and not p.startswith("docs/milestones/")}

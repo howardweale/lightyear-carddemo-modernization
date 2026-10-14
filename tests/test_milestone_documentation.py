@@ -154,8 +154,16 @@ console.log(JSON.stringify(result));'''
     def test_reconciliation_preserves_every_standalone_milestone_note(self) -> None:
         mapping = json.loads((DOC_ROOT / "reconciliation-2026-10-14.json").read_text())
         historical = mapping["preserved_ms94_record"]
-        retained = (DOC_ROOT / "MS-94/MS-94.md").read_bytes()[-historical["bytes"]:]
+        retained = historical["original_utf8"].encode("utf-8")
+        self.assertEqual(historical["bytes"], len(retained))
         self.assertEqual(historical["sha256"], hashlib.sha256(retained).hexdigest())
+        displayed = retained.decode("utf-8")
+        self.assertEqual(historical["display_encoding_repairs"],
+                         [{"from": "\u00e2\u20ac\u201c", "to": "–"},
+                          {"from": "\u00e2\u20ac\u00b2", "to": "′"}])
+        for repair in historical["display_encoding_repairs"]:
+            displayed = displayed.replace(repair["from"], repair["to"])
+        self.assertTrue((DOC_ROOT / "MS-94/MS-94.md").read_text().endswith(displayed))
         paths = subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).splitlines()
         expected = {p for p in paths if p.endswith(".md") and "milestone" in p.lower()
                     and not p.startswith("docs/milestones/")}

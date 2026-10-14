@@ -4,7 +4,7 @@ This reconciliation brings the published milestone library up to date with the O
 
 ## Canonical records
 
-MS94 now starts with a current status summary and preserves its earlier record beneath it. Nine new implementation records group the later work by capability. These numbers identify documentation groups; they do not declare every customer workload or future execution stage complete.
+MS94 now starts with a current status summary and preserves its earlier record beneath it, repairing only the encoding of dash and prime characters. The machine-readable source map retains the exact original UTF-8 text and its hash. Nine new implementation records group the later work by capability. These numbers identify documentation groups; they do not declare every customer workload or future execution stage complete.
 
 | Record | Capability |
 |---|---|
@@ -28,7 +28,19 @@ Run `python tools/generate_milestone_documentation.py build` after updating the 
 
 ## Merge closeout
 
-Integration merge receipt will be recorded here after protected CI and merge complete.
+The delivery queue was merged in dependency order on October 14, 2026. PR #332 landed first. The remaining six PR heads were combined in the order below and retained as ancestors of the integration merge; GitHub reports all seven original PRs as merged.
+
+| Order | Pull request | Delivery |
+|---|---|---|
+| 1 | [#332](https://github.com/howardweale/lightyear-carddemo-modernization/pull/332) | Prepare pinned GHCR PostgreSQL mirror and conservative CI path filters |
+| 2 | [#328](https://github.com/howardweale/lightyear-carddemo-modernization/pull/328) | Repair targeted clock cases and prepare remaining equivalence review |
+| 3 | [#333](https://github.com/howardweale/lightyear-carddemo-modernization/pull/333) | Record scoped October12 equivalence acceptance and loader-domain proposal |
+| 4 | [#330](https://github.com/howardweale/lightyear-carddemo-modernization/pull/330) | Compile and gate retained POSTTRAN attempt1 without twin comparison |
+| 5 | [#331](https://github.com/howardweale/lightyear-carddemo-modernization/pull/331) | Start generic scenario engine with typed source-bound IR |
+| 6 | [#329](https://github.com/howardweale/lightyear-carddemo-modernization/pull/329) | Prepare B06 afternoon replacement and deferred Factory activation |
+| 7 | [#334](https://github.com/howardweale/lightyear-carddemo-modernization/pull/334) | Add cloud runner Phase 1 admission and GCP infrastructure |
+
+[Integration PR #335](https://github.com/howardweale/lightyear-carddemo-modernization/pull/335) merged at `8650f58c5fdcd0916e22152b5bbbaa1182efdf71` after the protected checks passed on `731bb76a2c05241e2bb493031b81d9b76f1a4463`. The integration also supplies the pinned YAML test dependency and checks the retained POSTTRAN Phase 1 receipt without repeating that separately bounded compilation. This documentation reconciliation follows that integration merge.
 
 ## Preserved source records
 

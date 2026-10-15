@@ -144,6 +144,11 @@ class FactoryTests(unittest.TestCase):
         import subprocess
         head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=repository,text=True).strip()
         current=historical_contract(repository,head)
+        # The old request stays exact history; newer dated decisions extend the
+        # current inventory rather than rewriting or silently omitting history.
+        old_paths={s["path"] for s in b["sources"]}
+        current["sources"]=[s for s in current["sources"] if s["path"] in old_paths]
+        current["details"]["records"]=[r for r in current["details"]["records"] if r["path"] in old_paths]
         for source in current["sources"]: source["commit"]=b["sources"][0]["commit"]
         self.assertEqual(b,current)
 

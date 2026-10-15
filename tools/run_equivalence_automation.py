@@ -106,13 +106,13 @@ def execute_pipeline(job, output, head, search=True):
                 if validation['enabled']:
                     proof=prove(local,folder/'solver',validation,binary_truncate=numeric_profile['binary_truncate'])
                     recheck(folder/'solver')
-                    if proof['result']=='unsat':
+                    if proof['result']=='unsat' and proof['complete_written_state']:
                         result.update(status='equivalent',route='S3',basis='solver-proven (local)',
                                       evidence=[dict(path=f'mutants/{mid}/solver/solver.json',sha256=digest(proof))])
                         if mutant['operator']=='rounded':
                             matches.setdefault('receiving-pic-identity/1',{})[mid]=dict(mutant_sha256=digest(mutant),pair_sha256=digest(local),solver_sha256=proof['content_sha256'],validation_sha256=validation['content_sha256'])
                     elif proof['result']=='sat': result['counterexample']=proof['counterexample_scaled_integers']
-                    else: result['solver_unresolved']=proof['result']
+                    else: result['solver_unresolved']='numeric UNSAT without complete storage proof' if proof['result']=='unsat' else proof['result']
                 else: result['solver_disabled']='encoder/twin disagreement; exact statement/PIC shape disabled'
             except (ValueError,RuntimeError,subprocess.TimeoutExpired) as error:
                 result['solver_unresolved']=str(error)

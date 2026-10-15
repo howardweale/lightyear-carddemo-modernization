@@ -178,14 +178,14 @@ def receive(value, field, rounded, binary_truncate=True):
     return n, error
 
 
-def stored_bytes(n, field, byteorder='big'):
+def stored_bytes(n, field, byteorder='big', negative_zero=False):
     if field['usage'] == 'BINARY': return n.to_bytes(field['length'], byteorder, signed=field['signed'])
     digits = str(abs(n)).zfill(field['digits'])
     if field['usage'] == 'COMP-3':
-        sign = 'd' if n < 0 else 'c' if field['signed'] else 'f'
+        sign = 'd' if n < 0 or (negative_zero and field['signed']) else 'c' if field['signed'] else 'f'
         return bytes.fromhex((digits+sign).zfill(field['length']*2))
     if field['signed']:
-        table = '}JKLMNOPQR' if n < 0 else '{ABCDEFGHI'
+        table = '}JKLMNOPQR' if n < 0 or negative_zero else '{ABCDEFGHI'
         digits = table[int(digits[0])] + digits[1:] if field.get('sign')=='LEADING' else digits[:-1] + table[int(digits[-1])]
     return digits.encode('ascii')
 
@@ -273,14 +273,14 @@ def query(pair, binary_truncate=True):
     return solver, integers
 
 
-def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=10000):
+def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=10006):
     """Batch random PIC-domain inputs through actual COBOL and independent encoder.
 
     Both value and every receiving byte are checked. A disagreement disables
     this exact statement/PIC shape; it cannot be made harmless by a proof result.
     """
     require_ci()
-    if count < 10000: raise ValueError('encoder-validation-minimum')
+    if count < 10006: raise ValueError('encoder-validation-minimum')
     supported_precision(pair,binary_truncate)
     folder.mkdir(parents=True)
     rng = random.Random(digest(pair)); names = sorted(pair['fields']); target = pair['target']; field = pair['fields'][target]
@@ -289,13 +289,13 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
         values = {}
         for name in names:
             f = pair['fields'][name];lo,hi=input_bounds(f,binary_truncate)
-            n = (lo, hi, 0, 1, -1 if f['signed'] else hi)[i] if i < 5 else rng.randint(lo, hi)
+            n = (lo, hi, 0, 1, -1 if f['signed'] else hi, 0)[i] if i < 6 else rng.randint(lo, hi)
             values[name] = Fraction(n, 10**f['scale'])
         vectors.append(values)
     # Load exact numeric storage through REDEFINES. ACCEPT into a numeric PIC
     # could truncate the very out-of-PIC binary values this test must exercise.
-    input_bytes=('\n'.join(''.join(f'{b:03d}' for b in stored_bytes(int(v[n]*10**pair['fields'][n]['scale']),pair['fields'][n],byteorder))
-                           for v in vectors for n in names)+'\n').encode()
+    input_bytes=('\n'.join(''.join(f'{b:03d}' for b in stored_bytes(int(v[n]*10**pair['fields'][n]['scale']),pair['fields'][n],byteorder,negative_zero=i==5 and pair['fields'][n]['signed']))
+                           for i,v in enumerate(vectors) for n in names)+'\n').encode()
     (folder/'inputs.txt').write_bytes(input_bytes)
     reports = []
     for label in ('original', 'mutant'):
@@ -335,11 +335,11 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
         else:
             for i, (values, row) in enumerate(zip(vectors, observed)):
                 n, _ = expected(pair[label], values, target, field, binary_truncate)
-                want = b''.join(f'{b:03d}'.encode() for b in stored_bytes(n, field, byteorder)) + b'|'
+                want = b''.join(f'{b:03d}'.encode() for b in stored_bytes(n, field, byteorder,negative_zero=i==5 and field['signed'] and pair[label]['kind']=='noop')) + b'|'
                 if row != want and len(mismatches) < 10: mismatches.append(dict(index=i, expected=want.decode(), actual=row.decode(errors='replace')))
         reports.append(dict(side=label, tested=count, agreement=not mismatches, mismatches=mismatches,
                             source_sha256=digest(source.encode()), stdout_sha256=digest(run.stdout)))
-    report = sealed(dict(shape_sha256=digest(pair), input_sha256=digest(input_bytes), count=count,
+    report = sealed(dict(shape_sha256=digest(pair), input_sha256=digest(input_bytes), count=count,random_count=count-6,edge_count=6,negative_zero_edge=True,
                          reports=reports, enabled=all(r['agreement'] for r in reports),
                          binary_truncate=binary_truncate, byteorder=byteorder,input_initialization='exact-storage-byte-codes',
                          input_domains={n:input_bounds(f,binary_truncate) for n,f in pair['fields'].items()},
@@ -358,9 +358,15 @@ def prove(pair, folder, validation, binary_truncate=True):
     result = str(solver.check()); model = None
     if result == 'sat':
         model = {n: str(solver.model().eval(v, model_completion=True)) for n,v in integers.items()}
+    a,b=pair['original'],pair['mutant']
+    complete=(a['kind']==b['kind']=='condition' or
+              a['kind']==b['kind']=='assignment' and a['verb']==b['verb'] and a['expression']==b['expression'])
+    # Numeric equality alone cannot exclude a different signed-zero/storage
+    # representation. Permit the validated unchanged-expression conversion
+    # pair (e.g. ROUNDED), or a pure predicate; retain other UNSATs as unresolved.
     report = sealed(dict(result=result, version=VERSION, query_sha256=digest(smt.encode()),
                          pair_sha256=digest(pair), validation_sha256=validation['content_sha256'],
-                         complete_written_state=True, counterexample_scaled_integers=model,
+                         complete_written_state=complete,storage_proof_policy='pure predicate or same expression/converter with validated rounding; other numeric UNSAT is insufficient', counterexample_scaled_integers=model,
                          counterexample_is_kill=False, scope='local-twin', timeout_ms=30000))
     (folder/'solver.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
     return report

@@ -222,3 +222,10 @@ class CompleteRepeatTests(unittest.TestCase):
         self.assertTrue(compare(original,original)['identical_resolutions'])
         changed=sealed(dict(head='a'*40,program='P',rows=[dict(id='x',status='equivalent',route='S1')]))
         with self.assertRaisesRegex(ValueError,'non-reproducible'):compare(original,changed)
+
+class NegativeZeroTests(unittest.TestCase):
+    def test_signed_zero_storage_is_not_silently_collapsed(self):
+        _,ir=fixture('           CONTINUE.\n');field=ir['fields'][0]
+        self.assertNotEqual(stored_bytes(0,field),stored_bytes(0,field,negative_zero=True))
+        packed=dict(field,usage='COMP-3',length=3)
+        self.assertEqual(13,stored_bytes(0,packed,negative_zero=True)[-1]&15)

@@ -129,17 +129,24 @@ def triage(root, job, head):
         kind = words[0] if words else 'unknown'
         if kind.isdigit(): kind = 'DATA'
         names = sorted(set(re.findall(r'\b[A-Z][A-Z0-9-]*\b', ' '.join(words))) & fields.keys())
-        statements = [s for s in ir['statements'] if s['location']['path'].endswith(program + '.cbl') and s['location']['line'] <= m['line']]
-        statement = statements[-1] if statements else None
-        if statement and statement['location']['line'] < m['line'] - 5: statement = None
+        from .equivalence_solver import pair, supported_precision
+        candidate=None
+        try:candidate=pair(text,m,ir)
+        except ValueError:pass
+        statements = [s for s in ir['statements'] if s['location']['path'].endswith(program + '.cbl') and s['location']['line'] == m['line']]
+        statement = statements[0] if statements else None
         target = statement.get('target') if statement else None
+        if candidate:
+            original_statement=candidate['original']
+            kind='IF' if original_statement['kind']=='condition' else original_statement.get('verb',kind)
+            target=original_statement.get('target') if original_statement['kind']=='assignment' else None
+            names=sorted(set(candidate['fields']) & fields.keys())
         sliced = slice_to_outputs(ir, {target} if target else set(names), outputs)
         current = basis.get(mid, 'survivor')
         route = 'S1' if current == 'compiler' else 'S2' if current == 'class' else 'S4'
         if route=='S4':
-            from .equivalence_solver import pair, supported_precision
             try:
-                candidate=pair(text,m,ir);supported_precision(candidate,True);route='S3'
+                if candidate is not None:supported_precision(candidate,True);route='S3'
             except ValueError:pass
         # These are candidate allocations, never promises of a resolution.
         rows.append(dict(id=mid, mutant=m, current_basis=current, argued=mid in argued,

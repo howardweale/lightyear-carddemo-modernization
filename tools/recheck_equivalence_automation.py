@@ -41,7 +41,7 @@ def check(source,output):
         elif row['route']=='S3':
             local=pair(text,mutant,ir)
             proof=verify(json.loads((source/'mutants'/mid/'solver/solver.json').read_text()))
-            if proof['pair_sha256']!=digest(local):raise ValueError('solver-pair-binding')
+            if proof['pair_sha256']!=digest(local) or not proof['complete_written_state']:raise ValueError('solver-pair-or-storage-binding')
             validation=validate_pair(local,folder/'validation',**{k:chain['binary_profile'][k] for k in ('binary_truncate','byteorder')})
             if not validation['enabled']:raise ValueError('encoder-no-longer-valid')
             if recheck(source/'mutants'/mid/'solver')!='unsat':raise ValueError('solver-proof-not-reproduced')

@@ -57,6 +57,27 @@ class PostgresTests(unittest.TestCase):
         store=self.make(['05 K PIC X.'])
         self.assertEqual('indeterminate',reconcile(store,[])['round_trip']['verdict'])
 
+    def test_saved_metadata_cannot_replace_typed_business_fields(self):
+        store=self.make(['05 K PIC X.','05 VALUE-FIELD PIC X(2).'])
+        original='ABC'.encode('cp037');store.load_one(original,1)
+        from psycopg.types.json import Jsonb
+        metadata=store.rows()[0]['encoding_meta']
+        metadata['active']=[];metadata['filler']=[{'offset':0,'hex':original.hex()}]
+        self.connection.execute('UPDATE sample SET encoding_meta=%s, r_value_field=%s',(Jsonb(metadata),'ZZ'))
+        self.assertEqual('divergent',reconcile(store,[original])['round_trip']['verdict'])
+
+    def test_nonunique_alternate_browse_uses_primary_tie_breaker(self):
+        from lightyear_data.carddemo.schema import mapping
+        layout,m=fixture(['05 K PIC X.','05 GROUP-ID PIC X.'])
+        alternate={**m['definition'],'name':'ALT','kind':'AIX','key_offset':1,'unique':False,'relate':'R'}
+        m=mapping('sample',layout,'fixture.cpy',[m['definition'],alternate])
+        self.connection.execute(ddl(m));store=Store(self.connection,m,layout)
+        records=[s.encode('cp037') for s in ('1A','BA','AA','Z0')]
+        for i,r in enumerate(records,1):store.load_one(r,i)
+        self.assertEqual([3,2,1],store.browse('ebcdic_key_aix_1',prefix='A'.encode('cp037')))
+        self.assertEqual([1,2,3],store.browse('ebcdic_key_aix_1',prefix='A'.encode('cp037'),reverse=True))
+        self.assertEqual('equivalent',reconcile(store,records)['browse_order']['verdict'])
+
     def test_date_raw_text_and_invalid_date_quarantine(self):
         store=self.make(['05 K PIC X.','05 OPEN-DATE PIC X(10).'])
         records=[s.encode('cp037') for s in ('A2026-10-15','B2026-02-30')]

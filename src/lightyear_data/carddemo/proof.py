@@ -41,11 +41,15 @@ def reconcile(store, originals):
     roundtrip=[]; totals=defaultdict(Decimal)
     for row in rows:
         original=originals[row['source_ordinal']-1]
-        try: actual=store.bytes(row);equal=actual==original;reason=None
+        source_projection=project(store.layout,store.mapping,original)
+        try:
+            if row['encoding_meta'] != source_projection['metadata'] or row['source_sha256'] != source_projection['source_sha256']:
+                raise ValueError('source-bound representation metadata changed')
+            actual=store.bytes(row);equal=actual==original;reason=None
         except (ValueError,KeyError,UnicodeError) as error:actual=b'';equal=False;reason=str(error)
         roundtrip.append(dict(source_ordinal=row['source_ordinal'],equal=equal,reason=reason,
                               source_sha256=sha256(original).hexdigest(),reencoded_sha256=sha256(actual).hexdigest()))
-        values=project(store.layout,store.mapping,original)['values']
+        values=source_projection['values']
         for f in store.mapping['fields']:
             if f['digits'] and not f['filler'] and f['path'] in values:
                 totals[f['table']+'.'+f['column']]+=values[f['path']]

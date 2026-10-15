@@ -177,6 +177,12 @@ class FactoryTests(unittest.TestCase):
         b=self.contract("factory-decision-backfill");bp,_,_=self.decide(b)
         c=self.contract("scenario-threshold-approval")
         c["details"].update(policy_sha256=digest(PROPOSAL),version=PROPOSAL["schema"],effective_condition="unconditional")
+        from lightyear_control_tower.threshold_conditions import condition_hashes, DECISIONS, REPOSITORY
+        raw=(REPOSITORY/DECISIONS).read_bytes()
+        (self.root/DECISIONS).write_bytes(raw)
+        evidence=dict(path=DECISIONS,sha256=hashlib.sha256(raw).hexdigest(),commit="b"*40)
+        c["sources"].append(evidence)
+        c["details"]["conditions"]=[dict(condition_sha256=h,state="met",evidence=evidence) for h in sorted(condition_hashes())]
         cp,_,_=self.decide(c)
         io=self.contract("io-exception-acceptance");ip,_,_=self.decide(io)
         def current(proof):return self.service.proof(self.token,proof["decision_sha256"])

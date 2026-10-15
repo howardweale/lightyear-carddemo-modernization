@@ -4,8 +4,8 @@ from lightyear_control_tower.decisions import digest
 
 
 class FactoryAuthority(FactoryDecisions):
-    def __init__(self, public_key, trusted_head, backfill_proof, backfill_contract):
-        super().__init__(public_key, trusted_head)
+    def __init__(self, public_key, trusted_head, backfill_proof, backfill_contract, *, evidence_root=None):
+        super().__init__(public_key, trusted_head, evidence_root=evidence_root)
         self.verify(backfill_proof, "factory-decision-backfill", backfill_contract, ("accept",))
         self.signed_only = True
 

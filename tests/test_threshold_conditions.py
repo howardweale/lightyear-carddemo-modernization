@@ -13,6 +13,12 @@ class ThresholdConditionTests(unittest.TestCase):
     setUp = fixtures.FactoryTests.setUp
     contract = fixtures.FactoryTests.contract
     decide = fixtures.FactoryTests.decide
+    def test_policy_inventory_matches_preserved_decision(self):
+        from lightyear_control_tower.threshold_conditions import DECISIONS_SHA256, CONDITIONS
+        raw = (REPOSITORY/DECISIONS).read_bytes()
+        self.assertEqual(DECISIONS_SHA256, hashlib.sha256(raw).hexdigest())
+        self.assertEqual(list(CONDITIONS), json.loads(raw)["scenario_threshold_2"]["conditions"])
+
     def threshold(self):
         c = self.contract("scenario-threshold-approval")
         raw = (REPOSITORY / DECISIONS).read_bytes()

@@ -58,10 +58,11 @@ def configured_authority(explicit=None):
     if not location:
         return explicit
     config = read_json(Path(location))
-    require(set(config) == {"schema", "public_key", "trusted_head", "backfill_proof", "backfill_contract"})
+    fields = {"schema", "public_key", "trusted_head", "backfill_proof", "backfill_contract"}
+    require(set(config) in (fields, fields | {"evidence_root"}))
     require(config["schema"] == "factory-consumer-trust/1")
     authority = FactoryAuthority(read_bytes(Path(config["public_key"])), config["trusted_head"],
-                                 config["backfill_proof"], config["backfill_contract"])
+                                 config["backfill_proof"], config["backfill_contract"], evidence_root=config.get("evidence_root"))
     # A supplied context cannot override the deployment trust setting.
     if explicit is not None:
         require(explicit.public_key == authority.public_key and explicit.head == authority.head,

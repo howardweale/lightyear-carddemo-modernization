@@ -14,13 +14,18 @@ REPOSITORY = Path(__file__).resolve().parents[2]
 REFUSAL = "threshold-conditions-unmet"
 
 
+CONDITIONS = (
+    "B1 compiler/class evidence and targeted attempts complete",
+    "remaining individual reviews accepted",
+    "fresh current-head compiled campaign",
+    "register dependencies bound",
+)
+
+
 def condition_hashes():
-    # The inventory is policy-owned, never supplied by the request being checked.
-    raw = read_bytes(REPOSITORY / DECISIONS)
-    if sha256(raw).hexdigest() != DECISIONS_SHA256:
-        raise ValueError(REFUSAL)
-    return {sha256(text.encode("utf-8")).hexdigest()
-            for text in read_json(REPOSITORY / DECISIONS)["scenario_threshold_2"]["conditions"]}
+    # Policy-owned inventory also works in a source-only Tower installation.
+    # CI binds this exact transcription to the preserved dated decision file.
+    return {sha256(text.encode("utf-8")).hexdigest() for text in CONDITIONS}
 
 
 def validate_conditions(contract, root=None, *, check_evidence=True):

@@ -12,7 +12,7 @@ def identifier(job, local, model):
         if not name.startswith(('ACCT-', 'DALYTRAN-', 'TRANCAT-')):
             raise ValueError('counterexample-input-has-no-public-dataset-binding:'+name)
     raw=json.dumps(values,sort_keys=True,separators=(',',':')).encode()
-    return 'equivalence-cex:'+job+':'+base64.urlsafe_b64encode(raw).decode()
+    return 'b1-target:'+job+':equivalence-cex:'+base64.urlsafe_b64encode(raw).decode()
 
 
 def case(name):
@@ -20,8 +20,8 @@ def case(name):
     from .records import load_copybook
     from .zos_bindings import ROOT, load_bindings, dataset_binding
     from carddemo_oracle.records import encode_zoned
-    prefix,job,payload=name.split(':',2)
-    if prefix!='equivalence-cex' or job not in ('INTCALC','POSTTRAN') or len(payload)>4096: raise ValueError('counterexample-format')
+    prefix,job,kind,payload=name.split(':',3)
+    if prefix!='b1-target' or kind!='equivalence-cex' or job not in ('INTCALC','POSTTRAN') or len(payload)>4096: raise ValueError('counterexample-format')
     values=json.loads(base64.b64decode(payload,altchars=b'-_',validate=True))
     if not isinstance(values,dict) or len(values)>20:raise ValueError('counterexample-field-count')
     _,meta,images,_=generated('intcalc-two-accounts' if job=='INTCALC' else 'posttran-positive')

@@ -32,7 +32,7 @@ The local solver uses exact rational arithmetic over scaled integer PIC domains.
 
 Class matching starts with adjacent, unaliased literal dead stores and full-domain receiving-PIC identity. New patterns are designed using INTCALC/POSTTRAN and then measured separately on TRANREPT. A mismatch on the held-out set disables the class. An empty held-out match set does not demonstrate generality. The held-out source has compiler and local-statement measurements; it does not yet have a whole-application twin driver.
 
-Directed search prioritizes observed statements, branches and paragraphs. The observer must agree with its uninstrumented control before its coverage is used. Solver models use the existing public scenario generator only when every required input has a known dataset binding. An internal working-storage value is not fabricated into a customer input. Unmappable or non-killing SAT models remain unresolved.
+Directed search prioritizes observed statements, branches and paragraphs. The observer must agree with its uninstrumented control before its coverage is used. Solver models use the existing public scenario generator only when every required input has a known dataset binding. Counterexamples enter through the existing targeted-scenario extension (`b1-target:PROGRAM:equivalence-cex:PAYLOAD`), preserving the approved generator and loader source bytes. An internal working-storage value is not fabricated into a customer input. Unmappable or non-killing SAT models remain unresolved.
 
 ## Applying Howard's decisions
 

@@ -152,11 +152,18 @@ class CounterexampleScenarioTests(unittest.TestCase):
         _,ir=fixture('           CONTINUE.\n');a=statement('           MOVE A TO B',ir)
         with self.assertRaisesRegex(ValueError,'no-public-dataset-binding'):
             identifier('INTCALC',dict(original=a,mutant=a,fields=a['fields']),{'A':'123','B':'0'})
+    def test_counterexample_uses_extension_without_changing_approved_generator(self):
+        from lightyear_mainframe.scenario_generation import case as generated
+        from lightyear_mainframe.equivalence_scenarios import case,identifier
+        from lightyear_mainframe.loader_domain import source_binding
+        name=identifier('INTCALC',dict(original={},mutant={},fields={}),{})
+        self.assertEqual(case(name),generated(name))
+        self.assertTrue(source_binding())
     def test_nonfinite_and_unmapped_inputs_refused(self):
         import base64
         from lightyear_mainframe.equivalence_scenarios import case
         for values in ({'UNMAPPED':'1'}, {'ACCT-CURR-BAL':'NaN'}):
-            name='equivalence-cex:POSTTRAN:'+base64.urlsafe_b64encode(json.dumps(values).encode()).decode()
+            name='b1-target:POSTTRAN:equivalence-cex:'+base64.urlsafe_b64encode(json.dumps(values).encode()).decode()
             with self.assertRaises(ValueError):case(name)
 
 class ExecutionKillTests(unittest.TestCase):

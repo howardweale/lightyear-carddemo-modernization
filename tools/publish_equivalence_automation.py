@@ -27,7 +27,7 @@ def publish(inputs,output,run_id):
            '| Program | Route | Resolved | Of 47 individual reviews | Other survivors resolved | New kills |', '|---|---|---:|---:|---:|---:|']
     for s,_,_ in data:
         for route,c in s['routes'].items():lines.append(f"| {s['program']} | {route} | {c['resolved']} | {c['individual_resolved']} | {c['survivors_resolved']} | {c['kills']} |")
-    lines+=['','| Program | Argued resolved automatically | Unobservable | Unresolved | Estimated review minutes / 1,000 sites |','|---|---:|---:|---:|---:|']
+    lines+=['','| Program | Argued resolved automatically | Unobservable | Unresolved, including unobservable | Estimated review minutes / 1,000 sites |','|---|---:|---:|---:|---:|']
     for s,b,_ in data:
         ratio=f"{s['argued_resolved']}/{s['argued_total']} ({100*s['argued_resolved']/s['argued_total']:.1f}%)" if s['argued_total'] else 'Not applicable (held out)'
         lines.append(f"| {s['program']} | {ratio} | {s['unobservable']} | {s['unresolved']} | {5000*s['unresolved']/b['inventory_count']:.1f} |")
@@ -59,7 +59,7 @@ def publish(inputs,output,run_id):
     for summary,_,folder in data:
         dest=output/'equivalence-evidence-2026-10-15'/summary['program']
         for pattern in ('summary.json','resolutions.json','manifest.json','toolchain.json','encoder-validation.json','class-validation.json',
-                        'legacy-class-census.json','audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
+                        'legacy-class-census.json','remaining-review.json','directed-search.json','audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
                         'mutants/*/compiler-proof.json','mutants/*/pair.json','mutants/*/solver/query.smt2','mutants/*/solver/solver.json',
                         'mutants/*/solver/validation.json','mutants/*/oracle-gap.json','search/regression-scenarios.json','search/cases/*/kill.json'):
             for path in folder.glob(pattern):

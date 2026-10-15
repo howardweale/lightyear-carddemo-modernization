@@ -56,7 +56,7 @@ def search(job,baseline,resolutions,output,start):
                               original_run=f'search/cases/{index:04d}/original/run-receipt.json',
                               mutant_run=f'search/cases/{index:04d}/mutant/run-receipt.json'))
             write(folder/'kill.json',proof)
-            route='S3' if case.startswith('equivalence-cex:') else 'S4'
+            route='S3' if ':equivalence-cex:' in case else 'S4'
             pending[mid].update(status='killed',route=route,basis='executed-output-difference',
                                 evidence=[dict(path=f'search/cases/{index:04d}/kill.json',sha256=digest(proof))])
             killed.append(mid);regressions.append(dict(id=mid,scenario=case,proof=proof['content_sha256']))
@@ -105,5 +105,5 @@ def search(job,baseline,resolutions,output,start):
     write(target/'attempts.json',records);write(target/'coverage-selection.json',coverage_records)
     write(target/'regression-scenarios.json',regressions)
     return sealed(dict(status='complete',generated_cases=generated,budget=1000,kills=len(killed),
-                       counterexample_kills=sum(r['scenario'].startswith('equivalence-cex:') for r in regressions),
+                       counterexample_kills=sum(':equivalence-cex:' in r['scenario'] for r in regressions),
                        remaining=len(pending),exhaustion_resolves_nothing=True,model_calls=0))

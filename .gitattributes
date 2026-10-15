@@ -1,5 +1,8 @@
 * text=auto
 
+# Original public source and binary unload bytes are hash-bound by provenance.json.
+spec/modernization/carddemo-data/upstream/** -text -whitespace
+
 # Preserve the exact T-SQL implementation/corpus bytes bound by native run plans.
 src/lightyear_data/tsql_procedures/** -text
 data-modernization/tsql-procedures/corpus/** -text

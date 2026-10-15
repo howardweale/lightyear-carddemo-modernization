@@ -1,0 +1,35 @@
+name: CardDemo data component
+on:
+  pull_request:
+    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
+  push:
+    branches: [main]
+    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  generated-data-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify pinned sources and adversarial type rules
+        env:
+          PYTHONPATH: src:tests
+        run: python -B -m unittest test_carddemo_data_schema -v
+      - name: Generate mappings and PostgreSQL DDL
+        env:
+          PYTHONPATH: src
+        run: python -B -m lightyear_data.carddemo.plan --out work/carddemo-data
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-data-plan
+          path: work/carddemo-data
+          if-no-files-found: error

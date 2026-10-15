@@ -10,6 +10,8 @@ from .schema import pinned, copybook, mapping, idcams, dbd, ddl
 def build(root):
     root = Path(root); provenance = pinned(root)
     spec = json.loads((root/'slice.json').read_bytes()); source = root/'upstream'
+    if (spec.get('schema'),spec.get('codec'),spec.get('binary_byteorder'),spec.get('binary_truncation')) != ('carddemo-data-slice/1','cp037','big','std'):
+        raise ValueError('unsupported source encoding profile')
     def text(path):
         if path not in provenance['files']: raise ValueError('unbound source: '+path)
         return (source/path).read_bytes().decode('utf-8')

@@ -23,7 +23,7 @@ def encode_field(f, value, meta, codec='cp037'):
         scaled = abs(number) * (Decimal(10) ** f['scale'])
         if scaled != scaled.to_integral_value(): raise ValueError('numeric precision loss')
         integer = int(scaled)
-    if integer >= 10 ** f['digits']: raise ValueError('numeric overflow')
+    if f['usage'] != 'COMP-5' and integer >= 10 ** f['digits']: raise ValueError('numeric overflow')
     negative = number < 0 or (number == 0 and meta.get('negative_zero', False))
     if negative and not f['signed']: raise ValueError('negative unsigned field')
     if f['usage'] in ('BINARY', 'COMP-5'):

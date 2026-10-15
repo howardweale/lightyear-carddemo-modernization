@@ -184,3 +184,10 @@ class DominatingGuardTests(unittest.TestCase):
         self.assertEqual('sat',str(query(local)[0].check()))
         local['dominating_guards']=stable_guards(ir,line,fields)
         self.assertEqual('unsat',str(query(local)[0].check()))
+
+class PrecisionLimitsTests(unittest.TestCase):
+    def test_unbounded_intermediate_precision_is_refused(self):
+        from lightyear_mainframe.equivalence_solver import supported_precision
+        _,ir=fixture('           CONTINUE.\n');a=statement('           COMPUTE B = A * A * A * A * A * A * A * A',ir)
+        with self.assertRaisesRegex(ValueError,'precision'):
+            supported_precision(dict(original=a,mutant=a,fields=a['fields']),True)

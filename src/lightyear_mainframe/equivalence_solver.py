@@ -186,7 +186,7 @@ def stored_bytes(n, field, byteorder='big'):
         return bytes.fromhex((digits+sign).zfill(field['length']*2))
     if field['signed']:
         table = '}JKLMNOPQR' if n < 0 else '{ABCDEFGHI'
-        digits = digits[:-1] + table[int(digits[-1])]
+        digits = table[int(digits[0])] + digits[1:] if field.get('sign')=='LEADING' else digits[:-1] + table[int(digits[-1])]
     return digits.encode('ascii')
 
 
@@ -206,7 +206,35 @@ def expression_z3(expr, variables, z3):
     return {'+': lambda: args[0]+args[1], '-': lambda: args[0]-args[1], '*': lambda: args[0]*args[1]}[expr['value']]()
 
 
+def precision_bound(expr, fields):
+    def bounds(e):
+        if e['kind']=='reference':
+            f=fields[e['value']];return f['digits']-f['scale'],f['scale'],f['digits']
+        if e['kind']=='literal':
+            parts=e['value'].lstrip('+-').split('.');a=len(parts[0].lstrip('0'));b=len(parts[1]) if len(parts)>1 else 0
+            return a,b,max(1,a+b)
+        sizes=[bounds(x) for x in e['operands']]
+        if e['kind']=='unary':return sizes[0]
+        a=max(x[0] for x in sizes);b=max(x[1] for x in sizes)
+        if e['value']=='*':a=sum(x[0] for x in sizes);b=sum(x[1] for x in sizes)
+        elif e['value'] in ('+','-'):a+=1
+        return a,b,max(a+b,*(x[2] for x in sizes))
+    return bounds(expr)[2]
+
+
+def supported_precision(local, binary_truncate):
+    if not binary_truncate and any(f['usage']=='BINARY' for f in local['fields'].values()):
+        raise Unsupported('untruncated-binary-input-domain-not-validated')
+    for stmt in (local['original'],local['mutant']):
+        if 'expression' in stmt and precision_bound(stmt['expression'],local['fields'])>36:
+            raise Unsupported('intermediate-decimal-precision-exceeds-validated-bound')
+    for guard in local.get('dominating_guards',()):
+        if precision_bound(guard['expression'],local['fields'])>36:
+            raise Unsupported('guard-intermediate-precision')
+
+
 def query(pair, binary_truncate=True):
+    supported_precision(pair,binary_truncate)
     import z3
     # Every input is a scaled integer. No binary floating-point approximation.
     integers = {n: z3.Int(n) for n in sorted(pair['fields'])}
@@ -246,6 +274,7 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
     """
     require_ci()
     if count < 10000: raise ValueError('encoder-validation-minimum')
+    supported_precision(pair,binary_truncate)
     folder.mkdir(parents=True)
     rng = random.Random(digest(pair)); names = sorted(pair['fields']); target = pair['target']; field = pair['fields'][target]
     vectors = []
@@ -266,7 +295,8 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
         declarations = []
         for name in names:
             f = pair['fields'][name]
-            declarations.append(f"01 {name} PIC {f['picture']} {f['usage']}.")
+            sign=' SIGN LEADING' if f['usage']=='DISPLAY' and f['signed'] and f.get('sign')=='LEADING' else ''
+            declarations.append(f"01 {name} PIC {f['picture']} {f['usage']}{sign}.")
             if name == target: declarations.append(f"01 LY-RAW REDEFINES {name} PIC X({f['length']}).")
         # Statement has only names declared above. Remove fixed-format comments.
         from .scenario_coverage import code

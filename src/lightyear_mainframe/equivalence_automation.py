@@ -135,7 +135,12 @@ def triage(root, job, head):
         target = statement.get('target') if statement else None
         sliced = slice_to_outputs(ir, {target} if target else set(names), outputs)
         current = basis.get(mid, 'survivor')
-        route = 'S1' if current == 'compiler' else 'S2' if current == 'class' else 'S3' if m['operator'] == 'rounded' else 'S4'
+        route = 'S1' if current == 'compiler' else 'S2' if current == 'class' else 'S4'
+        if route=='S4':
+            from .equivalence_solver import pair, supported_precision
+            try:
+                candidate=pair(text,m,ir);supported_precision(candidate,True);route='S3'
+            except ValueError:pass
         # These are candidate allocations, never promises of a resolution.
         rows.append(dict(id=mid, mutant=m, current_basis=current, argued=mid in argued,
                          individual_review=mid in individuals, statement_kind=kind,

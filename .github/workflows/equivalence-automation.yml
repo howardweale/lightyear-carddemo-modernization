@@ -11,8 +11,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: equivalence-automation-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   validate:
     runs-on: ubuntu-24.04
@@ -50,7 +50,7 @@ jobs:
   measure:
     needs: validate
     runs-on: ubuntu-24.04
-    timeout-minutes: 240
+    timeout-minutes: 200
     strategy:
       fail-fast: false
       matrix:

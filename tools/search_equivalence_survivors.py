@@ -18,8 +18,20 @@ def search(job,baseline,resolutions,output,start):
     pending={r['id']:r for r in resolutions if r['status']=='unresolved'}
     if not pending:return dict(status='nothing-unresolved',generated_cases=0,kills=0)
     target=output/'search';target.mkdir();control=target/'control';observer=target/'observer'
-    build(control,jobs=[job]);build(observer,instrument=True,jobs=[job])
-    inventory=json.loads((observer/job/'coverage-inventory.json').read_text())
+    build(control,jobs=[job])
+    from lightyear_mainframe.scenario_coverage import instrument,VERBS
+    original=(ROOT/f'spec/mainframe/public-source/{PROGRAMS[job]}.cbl').read_text()
+    traced,inventory=instrument(original,PROGRAMS[job]);source_lines=original.splitlines();derived=[]
+    for line in traced.splitlines():
+        derived.append(line)
+        marker=re.fullmatch(r'      \*LY-ORIGINAL-LINE=(\d+)',line)
+        if marker:
+            number=int(marker[1]);words=code(source_lines[number-1]).split()
+            if words and words[0] in VERBS-{'DISPLAY','CONTINUE','EXIT'}:
+                derived.append("           DISPLAY 'LYC|M|"+str(number)+"|entered'")
+    probe=dict(id='equivalence-statement-observer',operator='observer',line=1,end_line=len(source_lines),
+               source_sha256=digest(original.encode()),original='\n'.join(source_lines),replacement='\n'.join(derived))
+    build(observer,systematic=probe,jobs=[job])
     triaged={r['id']:r for r in baseline['rows']};counts={mid:0 for mid in pending}
     built={};records=[];killed=[];regressions=[];generated=0
     def mutant_build(mid):
@@ -69,20 +81,25 @@ def search(job,baseline,resolutions,output,start):
         if not pending or generated>=1000:break
         budgets(start,output,0,generated+1)
         obs_folder=target/'observation';obs=attempt(observer,case,obs_folder)
-        covered=set()
-        if obs['status']=='executed':
+        covered=set();statements=set();branches=[]
+        check_folder=target/'observation-control';observed_control=attempt(control,case,check_folder)
+        observation_valid=outcome(observed_control,obs)=='survived'
+        if obs['status']=='executed' and observation_valid:
             transcript=(obs_folder/'logs/program.stdout').read_text()
             covered={int(n) for n in re.findall(r'LYC\|P\|(\d+)\|entered',transcript)}
+            statements={int(n) for n in re.findall(r'LYC\|M\|(\d+)\|entered',transcript)}
+            branches=re.findall(r'LYC\|D\|(\d+)\|(true|false)',transcript)
         # Coverage ranks proximity only; it is never treated as a kill or proof.
         paragraphs=sorted(p['line'] for p in inventory['paragraphs'])
         def priority(mid):
             line=triaged[mid]['mutant']['line']
             paragraph=max((p for p in paragraphs if p<=line),default=0)
-            return (paragraph not in covered,counts[mid],mid)
+            return (line not in statements,paragraph not in covered,counts[mid],mid)
         mid=min(pending,key=priority)
-        coverage_records.append(dict(case=case,paragraphs=sorted(covered),selected=mid,
-                                     evidence='observed paragraph entry; statement reach not inferred'))
+        coverage_records.append(dict(case=case,paragraphs=sorted(covered),statements=sorted(statements),branches=branches,selected=mid,
+                                     observer_control_agree=observation_valid,evidence='actual statement and branch probes, accepted only after unchanged control comparison'))
         if obs_folder.exists():shutil.rmtree(obs_folder)
+        if check_folder.exists():shutil.rmtree(check_folder)
         run_case(case,mid,generated)
         write(target/'progress.json',dict(generated_cases=generated,kills=len(killed),remaining=len(pending)))
     write(target/'attempts.json',records);write(target/'coverage-selection.json',coverage_records)

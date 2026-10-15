@@ -4,7 +4,7 @@ from .equivalence_automation import verify,digest,sealed,audit_disposition
 from .equivalence_classes import signed_member
 
 
-def apply_reviews(ledger, class_requests, audit_request, submissions, authority, matcher_sha256, disabled_classes=()):
+def apply_reviews(ledger, class_requests, audit_request, submissions, authority, matcher_sha256, held_out=None):
     """Submissions bind a contract digest to a proof verified with external trust.
 
     Audit rejection is a confirmed error. It retracts the whole route from this
@@ -13,6 +13,13 @@ def apply_reviews(ledger, class_requests, audit_request, submissions, authority,
     """
     verify(ledger)
     if authority is None or not authority.signed_only:raise ValueError('external-signed-authority-required')
+    disabled_classes=set()
+    if class_requests:
+        if held_out is None:raise ValueError('held-out-class-measurement-required')
+        verify(held_out)
+        if not held_out['held_out'] or held_out['head']!=ledger['head'] or held_out['matcher_sha256']!=matcher_sha256:
+            raise ValueError('held-out-class-binding')
+        disabled_classes.update(held_out['disabled_classes'])
     rows=copy.deepcopy(ledger['rows']); by_id={r['id']:r for r in rows};decisions=[]
     requests={digest(r['contract']):r for r in class_requests}
     for key,proof in submissions.items():

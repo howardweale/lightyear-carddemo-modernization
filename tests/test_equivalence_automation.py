@@ -104,3 +104,14 @@ class ReviewOverlayTests(unittest.TestCase):
         from lightyear_mainframe.equivalence_reviews import apply_reviews
         with self.assertRaisesRegex(ValueError,'authority'):
             apply_reviews(sealed(dict(rows=[])),[],{}, {}, None,'matcher')
+
+class OracleGapTests(unittest.TestCase):
+    def test_unobserved_counter_is_gap_and_group_read_refuses(self):
+        from lightyear_mainframe.equivalence_classes import unobservable_counter
+        from lightyear_mainframe.systematic_mutation import _source_sites
+        for extra,gap in [('',True),('           DISPLAY A\n',False)]:
+            text,ir=fixture('           ADD 1 TO A\n'+extra+'           STOP RUN.\n')
+            mutant=next(m for m in _source_sites(text,'TESTING') if m['operator']=='delete-ADD')
+            finding=unobservable_counter(ir,text,mutant)
+            self.assertEqual(gap,finding is not None)
+            if finding:self.assertFalse(finding['resolved'])

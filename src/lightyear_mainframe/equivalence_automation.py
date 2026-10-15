@@ -66,6 +66,7 @@ def slice_to_outputs(ir, starts, outputs):
         queue.extend((n, depth + 1) for n in sorted(graph.get(node, ())))
     return dict(reaches_output=True if distance is not None else False if ir['translation_complete'] and outputs else None,
                 reaches_control=bool(seen & controls) if ir['translation_complete'] or seen & controls else None,
+                reaches_money=True if any(re.search(r'(AMT|AMOUNT|BAL|CREDIT|DEBIT|INTEREST)',n) for n in seen & outputs) else False if ir['translation_complete'] else None,
                 output_distance=distance, may_reachable=sorted(seen),
                 complete=ir['translation_complete'], semantics=ir['flow_semantics'])
 

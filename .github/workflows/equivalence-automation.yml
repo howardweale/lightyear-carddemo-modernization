@@ -50,7 +50,7 @@ jobs:
   measure:
     needs: validate
     runs-on: ubuntu-24.04
-    timeout-minutes: 300
+    timeout-minutes: 240
     strategy:
       fail-fast: false
       matrix:
@@ -96,4 +96,28 @@ jobs:
         with:
           name: equivalence-evidence-${{ matrix.program }}
           path: work/equivalence
+          retention-days: 30
+  publish:
+    needs: measure
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: equivalence-evidence-*
+          path: work/inputs
+      - name: Render counts, denominators and unsigned review requests from complete evidence
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.publish_equivalence_automation work/inputs work/publication --run-id '${{ github.run_id }}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: equivalence-publication
+          path: work/publication
           retention-days: 30

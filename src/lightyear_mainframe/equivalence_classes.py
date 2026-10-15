@@ -66,3 +66,33 @@ def signed_member(authority, request, proof, mutant_id, match, matcher_sha256):
     if authority is None or not authority.signed_only: raise ValueError('signed-class-authority-required')
     decision = authority.equivalence(proof, contract, mutant_id, 'twin')
     return dict(class_id=cp['class_id'], decision_sha256=proof['decision_sha256'], match_sha256=digest(match))
+
+
+def unobservable_counter(ir, text, mutant):
+    """Closed token census for an isolated, unconsumed numeric self-counter.
+
+    This is an oracle-gap finding only. No equivalence exclusion follows from
+    it. Layout mutations, aliases and group consumers are deliberately refused.
+    """
+    if mutant.get('source_path') or mutant['operator'] not in ('constant','delete-ADD'):return None
+    try:p=pair(text,mutant,ir)
+    except ValueError:return None
+    a=p['original']
+    if a.get('verb')!='ADD':return None
+    target=p['target'];field=p['fields'][target]
+    if field['location']['path'].endswith('.cpy'):return None
+    if refs(a['expression'])!={target}:return None
+    from .source import tokenize
+    tokens=tokenize(text,'program.cbl');words=[t.text for t in tokens]
+    if words.count('PROGRAM-ID')!=1 or any(w in words for w in ('EXTERNAL','GLOBAL','POINTER')):return None
+    # A containing group is an implicit consumer of every member.
+    parents=field['path'].split('.')[:-1]
+    if any(words.count(parent)!=1 for parent in parents):return None
+    occurrences=[t for t in tokens if t.text==target]
+    if len(occurrences)!=2:return None
+    lines={t.line for t in occurrences}
+    if lines!={field['location']['line'],mutant['line']}:return None
+    return sealed(dict(classification='unobservable',target=target,mutant_sha256=digest(mutant),
+                       references=sorted(lines),parents=parents,source_sha256=digest(text.encode()),
+                       reason='Only declaration and self-ADD reference this field; no parent-group consumer. Missing observable distinguishes an oracle gap, never a proof.',
+                       resolved=False))

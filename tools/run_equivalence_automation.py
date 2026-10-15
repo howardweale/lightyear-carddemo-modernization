@@ -12,7 +12,7 @@ from lightyear_mainframe.equivalence_automation import (PROGRAMS, digest, sealed
                                                        historical_population, audit_samples, score)
 from lightyear_mainframe.equivalence_compiler import require_ci, toolchain, adversarial_rules, compile_object
 from lightyear_mainframe.equivalence_solver import pair, validate_pair, prove, recheck
-from lightyear_mainframe.equivalence_classes import dead_store, class_contract
+from lightyear_mainframe.equivalence_classes import dead_store, class_contract, unobservable_counter
 from lightyear_mainframe.legacy_twin import ROOT, write_json
 
 
@@ -60,15 +60,29 @@ def execute_pipeline(job, output, head, search=True):
     chain=toolchain(); write(output/'toolchain.json',chain)
     tests=adversarial_rules(output/'normalization-tests');write(output/'normalization-tests.json',tests)
     original=compile_object(ROOT,output/'compiler/original',PROGRAMS[job])
-    resolutions=[]; matches={}; validations=[]; solver_count=0
+    resolutions=[]; matches={}; validations=[]; class_validations=[]; solver_count=0
     matcher_hash=digest((ROOT/'src/lightyear_mainframe/equivalence_classes.py').read_bytes())
     for row in baseline['rows']:
         budgets(start,output,solver_count,0)
         mutant=row['mutant']; mid=row['id']; folder=output/'mutants'/mid; folder.mkdir(parents=True)
         result=dict(id=mid,program=job,head=head,mutant_sha256=digest(mutant),source_sha256=mutant['source_sha256'],
                     argued=row['argued'],individual_review=row['individual_review'],status='unresolved',route=None,evidence=[])
+        gap=unobservable_counter(ir,text,mutant)
+        if gap:
+            write(folder/'oracle-gap.json',gap)
+            result.update(status='unobservable',oracle_gap=gap)
+            resolutions.append(result)
+            continue
         match=dead_store(ir,text,mutant)
-        if match: matches.setdefault(match['class_id'],{})[mid]=match
+        if match:
+            from lightyear_mainframe.equivalence_solver import statement
+            local=pair(text,mutant,ir); following=text.splitlines()[match['overwrite_line']-1]
+            after=statement(following,ir)
+            class_pair=dict(original=after,mutant=after,fields={**local['fields'],**after['fields']},target=local['target'],
+                            original_source=local['original_source']+'\n'+following,mutant_source=local['mutant_source']+'\n'+following)
+            validation=validate_pair(class_pair,folder/'class-validation')
+            class_validations.append(dict(id=mid,class_id=match['class_id'],passed=validation['enabled'],validation_sha256=validation['content_sha256']))
+            if validation['enabled']:matches.setdefault(match['class_id'],{})[mid]=match
         try:
             obj=compile_object(ROOT,folder/'compiler',PROGRAMS[job],mutant)
             identity=sealed(dict(original=original,mutant=obj,toolchain_sha256=chain['content_sha256'],
@@ -87,6 +101,7 @@ def execute_pipeline(job, output, head, search=True):
                 solver_count+=1
                 validation=validate_pair(local,folder/'solver')
                 validations.append(dict(id=mid,**validation))
+                if mutant['operator']=='rounded':class_validations.append(dict(id=mid,class_id='receiving-pic-identity/1',passed=validation['enabled'],validation_sha256=validation['content_sha256']))
                 if validation['enabled']:
                     proof=prove(local,folder/'solver',validation)
                     recheck(folder/'solver')
@@ -116,6 +131,9 @@ def execute_pipeline(job, output, head, search=True):
                                digest((output/'class-packets'/filename).read_bytes()),matcher_hash)
         requests.append(request)
     write(output/'class-requests.json',requests)
+    write(output/'class-validation.json',sealed(dict(program=job,held_out=job=='TRANREPT',head=head,
+          matcher_sha256=matcher_hash,measurements=class_validations,
+          disabled_classes=sorted({v['class_id'] for v in class_validations if not v['passed']}))))
     search_report=dict(status='not-supported-for-held-out-harness' if job=='TRANREPT' else 'not-run',generated_cases=0,kills=0)
     if search and job!='TRANREPT':
         from tools.search_equivalence_survivors import search as directed_search
@@ -126,7 +144,7 @@ def execute_pipeline(job, output, head, search=True):
     write(output/'audit-request.json',audit)
     if audit.get('packet'): write(output/'audit-packet.json',audit['packet'])
     remaining=[dict(**r, output_slice=next(x['output_slice'] for x in baseline['rows'] if x['id']==r['id'])) for r in resolutions if r['status'] not in ('equivalent','killed')]
-    remaining.sort(key=lambda r:(r['output_slice']['reaches_control'] is not True,r['output_slice']['reaches_output'] is not True,r['output_slice']['output_distance'] if r['output_slice']['output_distance'] is not None else 10**9,r['id']))
+    remaining.sort(key=lambda r:(r['output_slice']['reaches_money'] is not True,r['output_slice']['reaches_control'] is not True,r['output_slice']['reaches_output'] is not True,r['output_slice']['output_distance'] if r['output_slice']['output_distance'] is not None else 10**9,r['id']))
     write(output/'remaining-review.json',sealed(dict(drafting='structured evidence only; no model',rows=remaining,
           assumed_minutes_per_packet=5,estimated_person_minutes=5*len(remaining),estimate_not_observation=True)))
     before=None;after=None

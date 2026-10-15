@@ -1,0 +1,58 @@
+{
+  "schema": "b06-part6-evidence-gap-report/1",
+  "prepared_on": "2026-10-15",
+  "status": "blocked-missing-signed-attempt-evidence",
+  "template_file_sha256": "0546d29954b847aa900cd7a0aa1c3d74afe6f534ed1e2469480ffecc04d98556",
+  "brief_sha256": "58ac2019cb63360a53fae1e33fa1fd9964303d115c319fc7a6bd05677bc4d6c0",
+  "reported_by_supplied_brief": {
+    "outcome": "cause not identified; observer repair stopped",
+    "attempt1": {
+      "outcome": "refused",
+      "first_unmatched_sequence": 26184,
+      "generation_entries": 1810
+    },
+    "attempt2": {
+      "outcome": "refused",
+      "reason": "unmatched-return-cap-10",
+      "sequence": 26240,
+      "generation_entries": 1836
+    },
+    "unmatched_location": "java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass",
+    "code_index": 155,
+    "depth": 30,
+    "skipped_tests": 27,
+    "limitations": [
+      "superseded first witness failure",
+      "fixed Windows fixture failures"
+    ]
+  },
+  "signed_evidence_verified": false,
+  "attempt_run_numbers": null,
+  "unmatched_returns": null,
+  "ordinary_records": null,
+  "metadata_records": null,
+  "heap": null,
+  "phase_records": null,
+  "input_witnesses": null,
+  "signed_cleanup": null,
+  "criteria_a_assessment": "not independently assessable without signed attempt evidence",
+  "criteria_b_assessment": "not independently assessable without signed attempt evidence",
+  "further_observer_work_planned": false,
+  "native_runs": 0,
+  "known_finding_from_brief": "Earlier roughly 12,400 generation entries shifted to 1,810\u20131,836; not a cause identification.",
+  "next_java_approach": "Outcome comparison first; targeted instrumentation only for unanswered gaps.",
+  "evidence_access": {
+    "requested_directory": "C:\\Users\\howar\\lightyear-b06\\oct13-pm",
+    "host_available": false,
+    "remote_directory_searched": false,
+    "reason": "This task exposes only the local Mac; no Windows MCP/remote host, SSH host configuration, or Windows-mounted volume is available.",
+    "local_access_checks": [
+      "Available tool inventory: no Windows or remote shell tool",
+      "/Users/lightyear/.ssh/config: absent",
+      "/Volumes: Macintosh HD only"
+    ],
+    "remote_folders_searched": [],
+    "remote_files_present": null,
+    "next_step": "Provide read-only access to the Windows directory or an existing copy of its signed receipts. Do not rerun either attempt."
+  }
+}

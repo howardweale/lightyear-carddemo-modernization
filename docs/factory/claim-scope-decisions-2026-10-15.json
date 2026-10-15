@@ -1,0 +1,2113 @@
+{
+  "schema": "claim-scope-decisions/1",
+  "reviewed_on": "2026-10-15",
+  "reviewer": "Codex; conservative scope transcription from dated records, not new operator approval",
+  "arguments": [
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "record_sha256": "e5d3224edc3d8e89b2b9b25fc6123dc912e488dd509f2c438dfe2579cf67e68e",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "record_sha256": "81731cdb0abf091551f78002a9463a1f2466b64377c766adb213a7911d980a70",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "record_sha256": "56ea9b77f94d94d09d95c06d68d6497501c9cd0e7236f7bcd10f5d2cd41604de",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "record_sha256": "2d8cc809ca4ad70bde814a1db23893763b37f3437dcb85d54eaae1fa24827db7",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-192-48",
+      "record_sha256": "7ef2d03ad93a676924816156952b6c7aa47aa0b61533fcc153952d450d64b238",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-192-49",
+      "record_sha256": "0906aa5b19d6910a9808fbbb94c2b2590aa7607c403a398284591d5a5bdae50f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-235-81",
+      "record_sha256": "e855944bb5aa73b5704b0adfc07028032f773f10ce293d2f26d80d03923f20d7",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-235-82",
+      "record_sha256": "77f76faa1634b7a199ae4060f5dba6ac054953a7f7b733af58c1a08169fd46bc",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-240-89",
+      "record_sha256": "2b436f6010068f0eded24e653f42e212042d4ca6332b44fe3174eb16a854c929",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-240-90",
+      "record_sha256": "32e791fface2e931cfbb3b3daa585c5396903c30086d90e0ae2277ab107a4cfd",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-253-96",
+      "record_sha256": "ce0ee82a0a662d474a70f64806d88b8bba293ca6cd39a07faf9b8d9a892c0a85",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-253-97",
+      "record_sha256": "9764d7dec5fa4d570edd084cf7739b5b5ec3e99546acd31bb22be110a16055bb",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-258-104",
+      "record_sha256": "e645f88ddfb66e7e28ab63a2574313ff1cb5b31b41b87041af63af9d2714e700",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-258-105",
+      "record_sha256": "24a47c29b2e61e5b87652389faa3271602d55d6eaf2ddf39062de8e8ed100111",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-271-111",
+      "record_sha256": "a480cdf5be0c6674491336a4e46d3053cb604ea277dd9c7d7edbe414ed6c180f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-271-112",
+      "record_sha256": "d85f11bb310205d8b6ae8bbbc638280e1295f790d7a3413b36aee137243b8030",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-276-119",
+      "record_sha256": "49d551452fc7842fa362772c90c0ef7fca1ccfd9db879f7b61488c73fd696ef9",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-276-120",
+      "record_sha256": "dbf1a6a1f32d19ac318f05e9c7cd5c4b292608a7f777b3ae22051ba929498e85",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-290-126",
+      "record_sha256": "8c08f47776847486c23c0e330c46224bb9288939c1557f9c870f7cdc247eb693",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-290-127",
+      "record_sha256": "dc8d3f511806714c40da62743770029af8fc6899c669cc52975722a5bf71673e",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-295-134",
+      "record_sha256": "343c4837f6be389bc4e82dfd841cb990488f9ebee4f7046173a0d9dd107e2a02",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-295-135",
+      "record_sha256": "a2fd17c77b1d6de34caf351b39e368c18bd8270f5bc626de70e92b47ccb58ef5",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-308-141",
+      "record_sha256": "7cb0fe2824477c19999ccd18124a4be76cd9d6c5134325bbabdbf788e96fe4a9",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-308-142",
+      "record_sha256": "c8a9a165a42afb64d5d29e823ee2c51d5645250ad9d4e5e228b3e20680664f67",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-313-149",
+      "record_sha256": "d413313964fc695e79abddaf9ae94b87fa5d8b9339f7cf76de5f5a2c0485e256",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-313-150",
+      "record_sha256": "929fa62a1303d13027179e48e4ed3c66c7e6276d8b3f1b15231f0ed4960fe0ee",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-333-166",
+      "record_sha256": "a388a5e5be372e186b4a5414595d1c264f8f2285b8fa11c629556b7682d3f462",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-333-167",
+      "record_sha256": "e16f766fd726dbaf0dbd92f1ecd22ecadebee7a26beaad8096df4f285b5364e2",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-360-188",
+      "record_sha256": "7e1959c3b0d06c8edb2c08c9cd53d384e947c9b9b79cb98158de1987086a2f09",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-360-189",
+      "record_sha256": "87d53373b2403ed9318a8820dca9e34c2f4f61f14b392bcee9df137b49f3379a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-381-200",
+      "record_sha256": "66857a7f001acd8b7a75b2c1bb83d6fd00e9edc2f51a6a1923016da89a863ed1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-381-201",
+      "record_sha256": "4ff418d9d8c9c1f16362f379f479c356436c8dc25e8749f55d2bee46af1a9b68",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-403-212",
+      "record_sha256": "bee72a5c7ea20a40a42ce91968674620fc74db092c972b28930e3888fccfd562",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-403-213",
+      "record_sha256": "9771dd0387dc3c681a0486135e08e4dd78a7252bdf3e1822af45c78b8e583c6a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-425-224",
+      "record_sha256": "24b4a0796380e7d2b71cd723b8d340fd692a3331cb0ec220aaededa1a700adff",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-425-225",
+      "record_sha256": "a22815cd05d9d0fe6810701f1ae54ec1e98ed466ac435869cdf24cb566927e74",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-449-240",
+      "record_sha256": "6ef1e6c71361f2d3bdd14a47c8676f27dcc7692812543f4d690cbeba3eccac73",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-449-241",
+      "record_sha256": "6f03070d542234bcfcc2d1db2a8370a2cafc5290bafa6b13b782381bb025ca61",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-504-278",
+      "record_sha256": "395d90bdee94e8d4ce6e8f5a656d68e5ecd146d70590004ae591e985071408c8",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-504-279",
+      "record_sha256": "4586afa7b29b09508cdcc1eafe1892cb5c4e79e65712c615967f4a2045e7fd38",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-523-285",
+      "record_sha256": "c96a3700532bf168c8e04922bd553bdf04db472ffac2a1759da0884ce491cd38",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-523-286",
+      "record_sha256": "10a3ca3c4b87a56b654dc44e8d62d81a12ab2874afe5aaf76551d3e1eb34582c",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-528-293",
+      "record_sha256": "709ba57e0da7ce8e0e4a4cad1ce0d115579127a7765f996f1f2ef5e961197326",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-528-294",
+      "record_sha256": "da3ec288f6092a7fc0726aa407a66818675cf073bd3f5b653a5ee089f489369b",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-542-300",
+      "record_sha256": "cf34afc75595b33d900e3778a7476560a5f5e756c55e70635e764e3eccf27121",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-542-301",
+      "record_sha256": "bd31796fa2ad53e0ef198a356a3c44412fb97ec3cdde0ed6fac28f005c0b8b13",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-547-308",
+      "record_sha256": "6754b7ba4305625c67a46b751abe3354295d13ee4d3f572b6e28ed6c22260dd3",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-547-309",
+      "record_sha256": "1409cdbde91a44a99eef4d07d52a5f63df52e952faa295ee7e01985db0302e04",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-560-315",
+      "record_sha256": "0e3a2bdb5a3dd664309709db3e56ca53b6f3f4ac06766faa42fbae81bf8b56e6",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-560-316",
+      "record_sha256": "14822ac02476610956d8158261e727dcc858281fc2244c7c08cf3bd968e97cd3",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-565-323",
+      "record_sha256": "b28d64690c96a394aeafe35bc3774ad3a83cc006eb17f2a5d41714c5eba5006b",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-565-324",
+      "record_sha256": "e1ddb4c360e55375631db3bf7e8182147306cf323ca6d50670ff6e6b7d951f8f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-578-330",
+      "record_sha256": "dd1547829482b8b634fed8b2cf8b45d9c5d97fdd1a0e3183017aaca0991a0c73",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-578-331",
+      "record_sha256": "952615aa9314f0a0404ccfc417de2e4c1fda744b5585104479848d94b2234518",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-583-338",
+      "record_sha256": "b991fad3f41a840f7b84d1b7ab2465e5a4b689e8995fa95afa424549e5d3c719",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-583-339",
+      "record_sha256": "29d8db4659aa3d5aa4a07459f88ce1cb02fa4756c738648dfd04d9c7de4a2f0f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-596-345",
+      "record_sha256": "2a4b4b1286228c78d11749d5cb89f3d16520a3e931a8282165a0ff5284856610",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-596-346",
+      "record_sha256": "285baae2ec92e2c36529a56c5cadbd056273e0d81c61b150871a43dbde22d645",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-601-353",
+      "record_sha256": "d45ec9c31ea39d2fe692ded5402b46b20e78c1674813ca81d2d98df6497034e3",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-601-354",
+      "record_sha256": "85e2eb19e05984d866ae27bc6d52c2ac6141f6db2e0982dcdead4f4e19ba28ff",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-638-382",
+      "record_sha256": "5b8408bdd7b1fa4fd21ddfc370e7d5e0da1151b5048145fde198322c5c130c97",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-639-384",
+      "record_sha256": "ae3523a2777baa47bece864939a687cc09ceaf7d176d1441ad8dd1b2a2c948df",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-constant-639-385",
+      "record_sha256": "ec6f4b500ca240a00187cab67ad27cef04c68341aa4bf2986f75d9d6dc4b46a4",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-ADD-192-50",
+      "record_sha256": "ea84e3b3cca620c3e1c09b8ca5d2d20164657e13da817442871f6cd4092cd786",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-235-83",
+      "record_sha256": "8ac710478d8cac957e5c1624eddc88d96827a29531e4ca08f61b877c3730a087",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-240-91",
+      "record_sha256": "3cb21f55ca9e24dc463157860d011a29055597f1972f554d8584c716ba87f082",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-253-98",
+      "record_sha256": "3c679fe63dec2f1bf3d5a86e17448aff649e78b42db2c239f8bcb2865b8ff54d",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-258-106",
+      "record_sha256": "75aa6949a9a981a2815583ed2fb1a2930e5154657feaba76d7799fe2496487e9",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-271-113",
+      "record_sha256": "52ddd814e6f9256e913d021d96cdd2493e2b4f54d2d85915332551b34b761b55",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-276-121",
+      "record_sha256": "3236fd095f34e45fc0a9077ee05e68c954c834fdce17bc389b243104e8964877",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-290-128",
+      "record_sha256": "c05e83fcbb5c4964ef7145620ad5c2fdc0d60e296109c2a1cd8c7d92889ed4c1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-295-136",
+      "record_sha256": "3ee5187134a853755f97578016770050c697054f7d9237bff7996bae7c82113e",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-308-143",
+      "record_sha256": "0154677f9e4d92005d41fc542d937e07f77782e36353922a13967071b3d71ca6",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-313-151",
+      "record_sha256": "505182024be22ce27940544cbfa1fb63cfec5cb4f54531a2292a61bc46835b8f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-328-160",
+      "record_sha256": "98e35a7f2ed2984bfbfaa4c8ea8cedcd1cc7bfc9f8f4a1ec5ee3ec3bf012c23c",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-358-187",
+      "record_sha256": "60ad5f3e8bde8dd590b50d3283db3abfe37038923671c7605f3a99258c5ba914",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-379-199",
+      "record_sha256": "5b40fd7429110b68fe2ac362c5e9254b080aa71da0a953fe9c8c7127507d1ce2",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-401-211",
+      "record_sha256": "6f8208e8d1f58d74790bcf32b0d033fe623f51b10fa8cb76bac7da8958d08e95",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-423-223",
+      "record_sha256": "4a383a4488c3fce149549056b504203b4662d995a8049c1d5af8971b6034029d",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-447-239",
+      "record_sha256": "80297b7d5ea1f882041b8aace0679fefcc7fb7407c38bcb32ab3144fdc441b5c",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-491-264",
+      "record_sha256": "82aba3fa86b36f82b90b96e5d1d4fbd396964419b63e1d186ea3c637ca432777",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-492-265",
+      "record_sha256": "4bad2c8cebc1f4cb0a412351f54ff32bff2c2b1e2af726934d64b831b66bdcc8",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-493-266",
+      "record_sha256": "4c29d2722c9c248037934ded6e218d21d49e4cc5608648e162eff0467a1159a6",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-494-267",
+      "record_sha256": "a67d4a8e2cba2882ddda475a6c0f3a019a7bcc1abcb8ad04c9702d619e53fb63",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-502-277",
+      "record_sha256": "b47f249688610f67864e1360ff797b8ab43a73f8b58b2c3958d99398eac87761",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-523-287",
+      "record_sha256": "6b25e0c3bbcfba9e2e88b48e31e3f8230311bc92ba59fc3704d96c17b06b556f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-528-295",
+      "record_sha256": "7e55265fd1aa19c21b3603d05f8ded6fe18491875ed057f0467f83207b69e060",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-542-302",
+      "record_sha256": "89925e783966ea6b7d366b1dea7fcc716cb6c03ba5c6abbbd95ac359b42e036f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-547-310",
+      "record_sha256": "8ca7878ac90368702fa2974cc553a57985fc0c839ff34f79022610a92312c8e1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-560-317",
+      "record_sha256": "a48e4b76c5c072813f719a78fd7cdbee90044ab588f5cd00a90aa5fbf7f73822",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-565-325",
+      "record_sha256": "b6e85cf9c60200175d010f3f5dc30a6512c4a6fc2f8ff225ed99a183dc10832d",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-578-332",
+      "record_sha256": "5955aa95c8061f50d3d5013386aeaac8ff2b6a264cda60fa2822a9574c4bf1bb",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-583-340",
+      "record_sha256": "c1de34b8b65f71d4ebf019919f48b58f5329d28dc9345a29bacecc21dad6aac6",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-596-347",
+      "record_sha256": "035c6fa8bfe4ef10e9f619f6874d6cbdae417cb75c0511518d2039f74a8eac54",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-601-355",
+      "record_sha256": "42821dcae8ddea0c66d47bbe252cf6289abe0bd41ceaab24b74c2aedfe370e68",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-630-373",
+      "record_sha256": "af5298a4be9de9ff7910b1243511aa1ba70fcfc7b6815867188df8168e9c9d88",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-639-386",
+      "record_sha256": "02c52ef25f5c3f378eef0ff1a9fd9010d389c12229c322c3455ce4c6922c8ee1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-644-389",
+      "record_sha256": "be00c36e8f7f4484dd2fa0545ad6d2877670f090ebf486db16b6ae269b5d39ae",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-133-20",
+      "record_sha256": "c9a1cd704b9bb28a52cdefce1f54e7a969dce3dadbae3dcb207366aaa2284123",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-139-24",
+      "record_sha256": "974c5b25e64454237fd09357080c01f01354354e50cce6ff58c262b83ab62a01",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-164-26",
+      "record_sha256": "7f30f1191b18cc269bdcff703b78ccd4e3fc99cc151bf0aec58125d3a4bf1878",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-169-30",
+      "record_sha256": "77919577c8bd7100f19479f3862e9adfc2a07c8c17c2fe80c9e3d7eefe6668e8",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-172-32",
+      "record_sha256": "455379b92d3650c280f38f75a21382cb9b143552f4b7d3ec7733ff411223eb19",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-173-34",
+      "record_sha256": "cbd44acf4f635ca30bbc0922ff4ef94f9029972383738af18ea7a520fbf7f78a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-scale-72-6",
+      "record_sha256": "62160c1677eb2468d6793c195db7f255d12cb5c4f30618e1b6b77e224fda5bcc",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-125-13",
+      "record_sha256": "184a1c8073ea2ac05b68452260ff884b99b8eeb72c58fdb11c10fb16e139a6cc",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-133-19",
+      "record_sha256": "73a73f64ce6bf50ec22319e04a58bd136d49c929fa6d48ab2cc2cd0ae62723b4",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-138-21",
+      "record_sha256": "ac6db47ea5c96fe28f7dacc785b4b509b89f51cf934eda891c694be20cd2dd69",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-139-23",
+      "record_sha256": "93551040da318dfe50f7eb0051a69ce77664777de62f75fc747f703427274061",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-172-31",
+      "record_sha256": "5831263a468d0f0192868f9ad2e1360a452a026c785f67567a7f942fdb0216e7",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-receiving-size-177-35",
+      "record_sha256": "4f47dbc67a07d2ca2bb47474e9b2e6ed4d1fb7a94590132a7d1fdd7ad8a4bc3e",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-216-74",
+      "record_sha256": "d812b7702c90532f1d872725cf720a1c1dead9828c47e752c96e7bad5d32a9ae",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-220-75",
+      "record_sha256": "c34011aadbb1876daa506118d3442569c431e90ed8a107e97c63bfffc55c46d1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+      "record_sha256": "90d8949aa40176eb6cafdd6b19e6ac2544a567e76bb25d113e971d4e9da61c64",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-237-71",
+      "record_sha256": "5c074a53ca33ab09ba7b1201aeaa1a07d03effdd6f88f49e6038b300975c8793",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-237-72",
+      "record_sha256": "8fc3f9db4da3452f7e17cb7811913edcabbfb5e45f1dfb7d2b85b2590ec066d6",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-242-79",
+      "record_sha256": "39c4eb525a9b70faa58f41db50ceda4a27e13c7d99c0c2e2b8162dfdcb6b1b9f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-242-80",
+      "record_sha256": "cd40678ec7c5a395a723a5417fd8925803fe726f0016d845330025c873a76a41",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-255-86",
+      "record_sha256": "bde17854bdb9109aabd1f3b9380d0f0ce6027db5faef604250d365c4495fb0d5",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-255-87",
+      "record_sha256": "81f14ff69eb4a670e386418a82e006c91f0c696bab49648e5452f9aba71a5df9",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-260-94",
+      "record_sha256": "cfa231f184eef915d35e22db6551c9ea857cad9c67ddfe777d8479799dcd3035",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-260-95",
+      "record_sha256": "e785a342f64fca3f5bb344c70d8ea62747fbda3ab7e89b67c9a94160d169a8fa",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-274-101",
+      "record_sha256": "8c6162761016e30fd1481d1f5ee8ba8a2a34d7f0ff245820a6257c6a2554a9be",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-274-102",
+      "record_sha256": "a5d9b53ee26beec603f09fe5ee119efe7887c86d03ce4bf1577776f36bfdf12a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-279-109",
+      "record_sha256": "1b753e3b68ccb4b192e6b704568c01fbfa4e27e9b6ee42f83780d2538023a119",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-279-110",
+      "record_sha256": "39945bda95f7cd4b23d5d1beafc96bf3c15f6d69fdc3571585c6a342e6623b25",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-292-116",
+      "record_sha256": "8683bb382aa65ff40eda5dfd8012bab7a7e3bcbc34132b79c3daa980152c425e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-292-117",
+      "record_sha256": "a4a8419efd5125f6c95334c56b0119c11bb1dd0fd7fdfe53f8175359a92f6f4d",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-297-124",
+      "record_sha256": "d41fd907f380b3bd6d2577e96800794de480e646d1fe708bb0d1cf566b0f8204",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-297-125",
+      "record_sha256": "8f3f7c1f414cf46a0100e84ee3f77eda8d8af6bdda5bbf906de2c545c6ce1173",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-310-131",
+      "record_sha256": "f0e101a3932157b6f69913b7d2ad005d14589d2c6204662d4214f940997170c6",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-310-132",
+      "record_sha256": "b8515d36aee9c0a38519e7bd2e0d17c9dc33a77c3ba6d49177ebbd3585d8efd9",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-315-139",
+      "record_sha256": "404135f975f487dfbb4cb2a67089b570a32ae82489c8ae941dc3ec90c0ca4f35",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-315-140",
+      "record_sha256": "c452c4441f528311559e402cf7dc675bf22657b1cd315f8d4a2bb7542f1917fc",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-328-146",
+      "record_sha256": "54e776e707db8bd6713c9dbe2a4e4e21745d7dff766e1f6e3795519cf1d50364",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-328-147",
+      "record_sha256": "73255f7baa71d24c9db4ae2e02443a44b37084af166d794bd01bf7c921be4483",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-333-154",
+      "record_sha256": "ce39e78bbc76b9139c80b397fcf45f2a49a76a40f529df957b07e84da90728dd",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-333-155",
+      "record_sha256": "167656ecc2a54a929aec50b5c22e9213d0ad97f34a5dfe8e75fca73d8395bc15",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-354-171",
+      "record_sha256": "152833ca37c85ce6c1efd640b4579b174762cd8e4f9d979de605ecab20b0c114",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-354-172",
+      "record_sha256": "50db72984adedc6837f930b007a5be5a90ac6bad7b0bee98d5715d75f8f67f48",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-450-235",
+      "record_sha256": "ef083ca56d663944d71ffd7aa30b4088f88cb46d04b0fd4a5fbb317787b6daac",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-450-236",
+      "record_sha256": "b9b5ed1f3079fa3c6393a68c61fcdaf6ed6530b9265275fb8f0c50a69d059f1b",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-455-244",
+      "record_sha256": "01cade5f4b8b9a78b8dccfb42581fe7fef4827081356ab56a5d8ca6632f6547a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-455-245",
+      "record_sha256": "cab8e9167bed4802f926527a078ff2d1c8e6674ad437d823fcab680180cf2cb8",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-484-261",
+      "record_sha256": "5bee66923747a6ce81d1251ccdce0225769a1cfda94593acd7a3c76738c2ced9",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-484-262",
+      "record_sha256": "12f7aebf41eb6db01b839dae2af154d21e5bb6e4a2833575265bc7714c892bab",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-515-282",
+      "record_sha256": "fa265415c744cb91b848b74a90c02f3b6bd493d59b62843f2c7ebe497797bf8a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-515-283",
+      "record_sha256": "2a58d42cf59053ee8294663be3ab995f6aaa0515a095cfcc8d852e95eb81f8ab",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-533-296",
+      "record_sha256": "aaafb348e1415c98278660af06700eb29ae35ad4b4797ff98a4e2f5377c71517",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-533-297",
+      "record_sha256": "0b2caac74d3968b197eb8b2a6e0503fc5729a7d99aedcfee5746c19d7feb0fb4",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-563-315",
+      "record_sha256": "8a939aadc472b7ff8901c95997c50c0b3b1ae7cd10d0587df9715e0087edbf98",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-563-316",
+      "record_sha256": "153878e8e0c5cabbdf497452e5aaeb259417e503b2c8583a550c505cee15b6e4",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-569-324",
+      "record_sha256": "6cbb5b6427ac8d7e62cc5aca6348de6811f33d85b99e8a96a69075bbac999e6f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-569-325",
+      "record_sha256": "d2a532f7c84714acecc7cec95e5b9e30fc708d440d92a692c4ba0fc1e678780f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-583-331",
+      "record_sha256": "9c58c2ccc79434859aeb6b8fc420c8f7668f1913a74aecdad89e247210a3d4f8",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-583-332",
+      "record_sha256": "1c78fd80436d09def9271998207becc7987b8c9a0dc756781df0e4491bf09144",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-588-339",
+      "record_sha256": "9ce8c9abe73ef575be6b73ce7f69ad1278b2be5bb0af0f6fad320f87a0e8ad2a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-588-340",
+      "record_sha256": "7fb6301628d43f175f96ef3636b94f508d384a6a6ba08068b98903bd70595e35",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-601-346",
+      "record_sha256": "b4cf6312f9c81a522c48541746f526b9abfa6046410578567f1b1f685fa12732",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-601-347",
+      "record_sha256": "9dfc21f4492d4cc8b3cecb27b05d7d6dc8a914380108469d36d37d95474e58a7",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-606-354",
+      "record_sha256": "1059cf3b9fd9bdba837aad2c4ba7633e491d6520d0d382850101cddacd714936",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-606-355",
+      "record_sha256": "361ce888fce123eb1207aac95275f472722f898b36c4e0706a84fdc715aa6703",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-620-361",
+      "record_sha256": "ecb63d974798018d631b82c63a1c9de73c84f414ab170f31e2893a89eaa8e843",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-620-362",
+      "record_sha256": "4a12cecde1d96c7686251a5601fc0229682aca2dbad4d7a8f88f22c6a102a743",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-625-369",
+      "record_sha256": "47337face6adc57f9ea122f58ea33b1c1e88aafe9718a9b9a953cc3d9a1c5fb3",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-625-370",
+      "record_sha256": "a2ba9c6acfb607ab3f754152c370ffdc77e169bcf8ae2433d4337491a2d8d0c2",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-638-376",
+      "record_sha256": "92353ec34d51cb3757d8281c94a0c12b2bd193a276befa39f968369e53b69d78",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-638-377",
+      "record_sha256": "435ab1b9499e1a8556ac91356b43424c2cd75811b5bae9076f189ef20769a503",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-643-384",
+      "record_sha256": "9bee652f129a1ec51bd5431f1b45c7dbb2d89311df024dff974c8501fd638155",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-643-385",
+      "record_sha256": "3db1fe283d18f18f8c7b316ea948837839cc3d1f41578e40e0df1e714b2513d0",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-656-391",
+      "record_sha256": "ddf50112b6e650eb54f5a980d9421a8f304a071808e0d1e6890da501a66c3c12",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-656-392",
+      "record_sha256": "090122509b2b394692224e4905425d2049b691fe38014db2990ae3531ffa3201",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-661-399",
+      "record_sha256": "87c6992a4e817e025905bee1065a6f2c2ffcce71b17a7a1ef7d10110eb2393d0",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-661-400",
+      "record_sha256": "a3181b7e8f2213cc9a0deb50837e5dc1538587a94c4cd94697ea052d9fd1554e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-675-406",
+      "record_sha256": "6cfd3d7054c4e8696e41d09c04320551fb7e983db0d1b912a3d9fbb73deece56",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-675-407",
+      "record_sha256": "8acc4bd4d12cbeb3b34beb7184eeedc059d938479dc971d22234a87e775a8168",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-680-414",
+      "record_sha256": "a77abb01590be0444a46cded13b6d15783a40d02d052f8ff659d46f7c8fa513f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-680-415",
+      "record_sha256": "5a6e157dc272c4625daf0afad226cd90a7ce9f396d1c3a0e8b8edc7522f3d69a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-717-443",
+      "record_sha256": "5df30eec42e509821e66a5b22b9dfac43e95f987d1c32f975b282863f85557b6",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-718-445",
+      "record_sha256": "9f3b4d71c76658c7a01bee92d0caffed47700b6dcac3ac1e06db91f58b1d99c1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-constant-718-446",
+      "record_sha256": "a1e8181b7d163d84c027720c101a409c7797821ca2f2cdb4bd7bcec74c8a0e7f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-209-47",
+      "record_sha256": "d6d4dbab2d5c217de98c17948cb3ad726f16af738f8b54d6e9aa70ad4d78ce7a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-237-73",
+      "record_sha256": "f3e3db61e4f0080fa757aa8b2a61878efc642e608597737d96ad45ea79163ead",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-242-81",
+      "record_sha256": "65806050ac3b8a2c586f48c6b7f3dd1d227a17699c1a64e011ed06a86c7a7a6c",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-255-88",
+      "record_sha256": "3a6b5ee019870a6b348cd8819b8fd12a06bc9a5cd3f1e95ee2891adaab4ff7be",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-260-96",
+      "record_sha256": "f1b08e5b6e187b737e15219ed9c97bb3fd4123da86cf05f9e598316ebd89455f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-274-103",
+      "record_sha256": "603ca9a79ac76ec3c66249c1a860e8c4a2ac892fbfbd35b03c459e1bf0021e7e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-279-111",
+      "record_sha256": "621965d3afba5f22da863003d5cd090bd18cf1a7c2d15d75279bb9b19a99ac89",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-292-118",
+      "record_sha256": "51ecffd75d3b457168b2d273aba10ee30adcc63dd9853471ff8266f5af00f05e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-297-126",
+      "record_sha256": "58243a188a9380ee5df9d4c92b715050a8742770505e8f5157a1ee495a4e72a6",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-310-133",
+      "record_sha256": "f86d7d90ebda7f7b0229fe1fa9753c779ea482282d35a83aabe0fa9217f35c6a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-315-141",
+      "record_sha256": "bf5409cb0e1176d02080a77c7c9272cf8825b64b453092ffac4100186ee33de1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-328-148",
+      "record_sha256": "1aec511014f1d972ee3aa99551339a4408665d887b57c3556bfdfbdc784df154",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-333-156",
+      "record_sha256": "d2918e19188d9d28772a15485efa9e17d7e3fea7ff5f2c15065b4a7a5c6e6a22",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-348-165",
+      "record_sha256": "c0031837dc2b04581d5972586b5f9600f947ba79ed38371f1865d14dc5192ec2",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-450-237",
+      "record_sha256": "f28a7a7b7a5768032f7b9bd7e02ff8c082f92e557cee821e2f4238ee7e35947a",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-455-246",
+      "record_sha256": "b3f1c059b847b4890452860176111bc58d96fdb280e3f80d5381ebe85a0c963e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-482-260",
+      "record_sha256": "6b3c3ff0d50482b04a0f8592b32276252e47c53a44fb6d9c7a40494e186c2fef",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-513-281",
+      "record_sha256": "912f626df238e02c0dd030f6f19492ba80b5b54dd802cc84eea49e85d5c33223",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-531-295",
+      "record_sha256": "ba5b13201e06f21175e6da78d401fe3c498535c802a9d99c9596a46e068c1d10",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-557-314",
+      "record_sha256": "a662616694b7f4e9e6477d789eeb937dd506668806d4844f28fb776b62014944",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-563-317",
+      "record_sha256": "26a6b46e3d719fcbf1a7a96deaa65a2e629c7ac1a5744c5fddb25b388d93690e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-569-326",
+      "record_sha256": "4c59f6a2caec2aca33d68b5ed8d291d0cea7c2306c2fc4aae82c29eb0f77bd79",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-583-333",
+      "record_sha256": "9edbce7e4511a376fb59f2b7ac7434d20cc6fe6139ced861e5efe5a9881c805f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-588-341",
+      "record_sha256": "73000230da34c9d6c2582dbc1f98e545a9e889f9ad89d5b6a9be75d127390dc2",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-601-348",
+      "record_sha256": "428a5fb3cc693e5a284251fceb6158be38b3ad34cbe806ba32c87abd83dc26ab",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-606-356",
+      "record_sha256": "e20f66353cc394c2fbef1ca74706d687a24783269e6183e74684fac2f49331ff",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-620-363",
+      "record_sha256": "239591325a2c8e22627552aaa59dcd61589d40e839128eca8092181d98da3116",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-625-371",
+      "record_sha256": "ac1e0f4221c3de618367f81980da0d0cfcd059521f5ff2c4ddfd61643178ec5c",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-638-378",
+      "record_sha256": "95230c75efd8e403a9359816ed9c8e1b8335d683248690732634cea9f9b9be39",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-643-386",
+      "record_sha256": "11eba3c526e5d563535189f462f0b4bc79122590c40948061531272d3ad14bc8",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-656-393",
+      "record_sha256": "d857f0c6a8eb32761c1c9fffeb75409e2a23f1e974f19ba3868e9de0ae4cab29",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-661-401",
+      "record_sha256": "390328251ae1bb6037c84c71f4ab82e675a6d6030ee92c434bbeb13424ed99b2",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-675-408",
+      "record_sha256": "f4acf7491b0611cac3468ebec3a80177a4cec0d784a8e73c4c247099d1b54310",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-680-416",
+      "record_sha256": "47f99cec8b78a0f28a591664d5cdbd1f62985ee03a05d5ab5679f1dd35827355",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-709-434",
+      "record_sha256": "07264e30d4277e3f6e7f8b2df14a04a4abe7fb569f53656102d3cdb6fca9f462",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-718-447",
+      "record_sha256": "0f28d2a95abf17ec2c2f12e8f6b7deaa996b56e5da0fe16cc4c5e0e6a16c5ec0",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-723-450",
+      "record_sha256": "43a30d777e24af9ec0478488ac9cf5eae911ea4733062997ad609dc66fdd5827",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-142-14",
+      "record_sha256": "64e9a52505a79127c39a52e3d488a54759d2c49539aac0726f3c4072188fa821",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-148-18",
+      "record_sha256": "0828976efbe6efd9cdc159ace4895970203646977082d03f64f6a4430cc3cd4b",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-173-20",
+      "record_sha256": "bfc5fd08da1c533c604d38862f716bfcb58c151d6e57fcd7fd151e37aa304115",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-187-28",
+      "record_sha256": "4c03ac2126e5606ccce7e22c28a34a8fea19c5b00280e12dd80bc6050074f295",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-size-134-7",
+      "record_sha256": "6829bfba7fce5723f446ae57ad4f4ac9e4f24342de7a0da8bdfa85db874963d1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-size-142-13",
+      "record_sha256": "69b10d3702d0766d969d5417a6e4bea2a42f2f57574fed4bbf2202d0a2bbe0e3",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-size-147-15",
+      "record_sha256": "911ef84f0284d9fe4cbae40886d1c45e80ba9bbe27369f33ac0b28b4f96e2f4d",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-receiving-size-148-17",
+      "record_sha256": "66130305d483f5579acd5a6e71117e98d1b4ab26a7e14c28e0d6fc70a581eebb",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    },
+    {
+      "id": "CBTRN02C-rounded-403-196",
+      "record_sha256": "8c45dc2f77f137dfe2843cf79ae36ec7bcfe4fac259cbba180a78820ad06eb9c",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "Conservative twin-only review; no new z/OS acceptance."
+    }
+  ],
+  "acceptances": [
+    {
+      "id": "CBACT04C-constant-403-212",
+      "record_sha256": "863c280204a35514ce084a0b5e560be19e5d9d97640663a43007347e15535476",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-601-355",
+      "record_sha256": "dcbc76fdc6f9895426af50e7e41320e674733b4d40bb4d9d550ceba02fd8df1b",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-ADD-192-50",
+      "record_sha256": "665e2d8dc852fe212f38af0bd7301e7dbafdbe8cb107130ef24411cd996df52f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-401-211",
+      "record_sha256": "e52f5065f0bb74a48d7e4c1e20c6d596c1a117fc951740b6ed1759fbc206a188",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-receiving-size-133-19",
+      "record_sha256": "873ca818c682d3cfd96cd5cbd57526bf791e0280fb2a7bfbb2ee10e5680790ef",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "twin-and-zos",
+      "basis": "A1 Appendix1 explicitly accepts S9(9)/S9(8) as four bytes on GnuCOBOL and z/OS with small values.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-constant-523-286",
+      "record_sha256": "d0703ebc5542e2c86ee64f2535e326297fee0ce6753e87c1756e2fec68f26c88",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-502-277",
+      "record_sha256": "05f7f3636f15995b1fb3970e2d6c132afd11de4c0e37bbf174d6ecd8b0b948e8",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-290-128",
+      "record_sha256": "f1eafeeaf32a91b812c62a1f88326ddaa5598453b515ff47934fb5bbd6b1dddf",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-constant-235-81",
+      "record_sha256": "ae9daa13602b5a7134a263245c1a946dcf0ca66045dbe56c2ef9d888ca174b96",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-240-91",
+      "record_sha256": "af26d0aa9e6f32993d55e96cb7497f0f26ff230774dbbd5fbee6a194d0e8f320",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-583-332",
+      "record_sha256": "38e5d9ae5cf3b98cb85f32be3a574ed69f0d321d90e57d8b0e0708fb30faa458",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-718-447",
+      "record_sha256": "69b430e57daed971aa87375a4603f85cf35b14cbda4e1393a26e00a08456614f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-638-377",
+      "record_sha256": "9838897cde812175cd71de1a331a7969b0c23b78757b046d92b86e1c9e0f5b67",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-515-283",
+      "record_sha256": "57a3210377fa16c765ad86de16f51f4d90fd310a0602300003fdd5d74ede4719",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-255-87",
+      "record_sha256": "b1f8138995c6fa840a0ffa65a2838af885a1dad4b341a5904808ff5eb4054dc6",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-515-282",
+      "record_sha256": "7c6fc7559e26e86e3177a795d642e69dc9617752bf8d3ed6484fc97f3aaa145f",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-455-246",
+      "record_sha256": "655f7aa5721b89ce540ecd5f62d19e812f7b16b0737996b42bbe202dae1adc08",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-680-414",
+      "record_sha256": "7303be586fdc3957cc0722a8cb0c829c4fb0e8353081820080f4e5d13c8cf90e",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-588-339",
+      "record_sha256": "3d89aa616d6f1ae435bc8117970c04bf342dbbb04cc24218207c0f2c5cde5bc4",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBTRN02C-constant-718-445",
+      "record_sha256": "c6a11a72a12b3ceff4c3b7b3195297524a0047b57f38efe5d8f7de8be3326990",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "twin-and-zos",
+      "basis": "A1 Appendix1 explicitly accepts the unsigned -1 byte overwrite argument as the same on z/OS.",
+      "decision_file": "equivalence-decision-binding-2026-10-11.json"
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "record_sha256": "2f3357d63596ec934d6526a645013a9644c742f48b5ee8aee9c8563949308dba",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "record_sha256": "ae42debdbe60618228107aa45252be44bb9af2d36f2c9f610db27d858cae1a59",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "record_sha256": "510961c57ef0ae2f9abf464b9d684d6a57b7a83e550ff0dbc4ff6f9178bbff9d",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "record_sha256": "6958118bc39ee3c9f38ab828fc3a0c790c5f78413dd7022eb1a467c9165c6230",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-constant-192-48",
+      "record_sha256": "4416f40533dd5fc0842aba64a07cfff436c8bae5654f3616b491cf67a637af26",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-constant-192-49",
+      "record_sha256": "424ecbe7b4f5492d6c5f8b98d77fdd245897a8af69807b1e22136ce0767d0eeb",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-constant-638-382",
+      "record_sha256": "5e5fe14f05130c116fb8ddd2677b6bcd870e37e1a52927ab3e95e771c28d3f75",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-constant-639-384",
+      "record_sha256": "d1cf0f891625294fdae252f534edad89da48b9dcc02e4e5683d61ebbdb544ffb",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-constant-639-385",
+      "record_sha256": "70509d11b49e3f41b673e99e012a8d63f48d6f644be214fa445093120b549b9c",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-491-264",
+      "record_sha256": "99883f9a3ac408a446290e748ed7b0346a02a0fdac3566883a8a7a64c7403ef9",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-492-265",
+      "record_sha256": "7f5349d853b87c6e345fb0bcafcc7fbcfec60485f76378719f3a11061a7bfa09",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-493-266",
+      "record_sha256": "8983b11beaecd8ca6407027ad7cbb16022eb184c7d7ba7efd5cdc78a474fcb47",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-494-267",
+      "record_sha256": "ba1518f67c60c97803c72f6108db2b5453e13e8dabb0a2de8051e110f4fcca72",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-630-373",
+      "record_sha256": "7b9026dd96f2179a3a9d16260e0eff1b48023a5b94efb8bf9bcb0b93e9632a5f",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-639-386",
+      "record_sha256": "b8c640d47d2da9c85ea5ce94e3ea7c388c11dadb4db8cc1b22ea7932775115f7",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-644-389",
+      "record_sha256": "f2aa4b8e069e8239b88934c59349c70e2933b12eacabbd62c4ceebe8275b4f6a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-133-20",
+      "record_sha256": "fe93bf7ea048e1e61c97dadac8e529dd2a72550ef78c9ad86071bab71b0ea311",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-139-24",
+      "record_sha256": "6e5d879beb6fa8878edb7028221e117e5a9bc80f50ccc82666d2556f98009730",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-164-26",
+      "record_sha256": "b5298d88b068a661b226fbc68e3d8b76d3b9e34cc04abe4a125c38cd41b901d0",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-169-30",
+      "record_sha256": "9c529ef6385ab7967c3be62cd95667776102da1ba26429c8835cab385e0fed27",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-172-32",
+      "record_sha256": "9e1f15794798535c751139e0110b3447f8805b5440200536a88c81da5b0163da",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-173-34",
+      "record_sha256": "94df94d594252d6191edd5003940502f9572e33b81bbd70bc74df61acf0e37ec",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-72-6",
+      "record_sha256": "8060d78298c167aa070b9276e0e5db4e288752516808f54bc341226342fd211b",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-size-125-13",
+      "record_sha256": "d1fcef1f6783195867030baf08581131f555c9acd95695d8c682eb9e6b3c494e",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-size-138-21",
+      "record_sha256": "2e403d39a31040661d6e883ed8bc3a343a9d146aa84e83ee3a76903134986ca4",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-size-139-23",
+      "record_sha256": "a13ce47493a3c9f5eefd388f0ff54380a92c2a873418f4fcf65b86c763d15c0a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-receiving-size-172-31",
+      "record_sha256": "25b21d243db9dc0de3c04a03d02c4463b7da606075fe7bbd47420c71a2f0769a",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-216-74",
+      "record_sha256": "3c11eea4a83ca19e6e237434fe3bbacd48995351ab4ceebc644adef846ec7c09",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-220-75",
+      "record_sha256": "11abb19c3dd093e2f1418c0e020c08aae98aecd380ad353a483d3e40e578f4cb",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+      "record_sha256": "8fa53dc27d757af22e4ebdc72623e9d3892a7c2fe4be2258f0ef15b4d539bd36",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-constant-717-443",
+      "record_sha256": "740cc8d0a649bec6fcd1e4d98faff1a29ed703e91f5381dd74ef2335c97385cd",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-constant-718-446",
+      "record_sha256": "ac26c73a112316657a6f9b6411fe0e742e3f936ec1eb9f63ad77b8ae7a85c8b8",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-209-47",
+      "record_sha256": "845031a05c8e07af4c0b6b95b07141cbc29966cad1df8045093927bad2af3c34",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-557-314",
+      "record_sha256": "ac15f28e2c6c142d5b6f6961bc22cf87cfd93b13deb252e414d77a5687fe577d",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-709-434",
+      "record_sha256": "3521d4866a6bb7ce0ce0a721b9d8034646c684cb33efc9f476e166e3cd0d1554",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-delete-MOVE-723-450",
+      "record_sha256": "e1a7c7f01c0cef9a516835b938801cc5ccda24262f89afcecdbefe09e42ce29d",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-142-14",
+      "record_sha256": "cb3d16db718cc918873cdb26de39de15465ad5dd00dc06b5fe1b2a367b396cf4",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-148-18",
+      "record_sha256": "2ffab26a2a5b2ede6652c20c1649541a40deee615b204a514b1d0db3ea4c7e44",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-173-20",
+      "record_sha256": "a2e7677dc10c6e5af7b7fcdcc307ed76329639853a0a6c1987c1cec1feba7b81",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-scale-187-28",
+      "record_sha256": "04e844078676afa04c8801e1592767e342fa3cf7e04bab9092108eca1f3d7242",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-size-134-7",
+      "record_sha256": "859ad816204c55cab11b4c9eb850add494edddd08604530a24a8362e1299d6df",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-size-147-15",
+      "record_sha256": "5449174be0179ff1ee9b839a1e8a881e4fd6e93e8adbdf37db263c95e29721d7",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-receiving-size-148-17",
+      "record_sha256": "7fa7124a596ca2b43516e2fa894f04aa9f8c0aa4fdd986e89374f0c2d798ceac",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    },
+    {
+      "id": "CBTRN02C-rounded-403-196",
+      "record_sha256": "1e28751d158b99d9a82683451c739fca08edc51eb0cf822f863aec9b28b53ff9",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "claim_scope": "host-compiler-scoped",
+      "basis": "No new z/OS-facing acceptance; twin only.",
+      "decision_file": "equivalence-operator-acceptance-2026-10-12.json"
+    }
+  ],
+  "originals_unchanged": true,
+  "release_authorized": false,
+  "content_sha256": "602d5a3932bc9db861244b579d2ffa55caf58e39c171c264bc434b37b9356acb"
+}

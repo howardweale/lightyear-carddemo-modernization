@@ -32,3 +32,10 @@ class GenericIRTests(unittest.TestCase):
     def test_precedence_and_decimal_types(self):
         d=translate(program('           COMPUTE B = ( A + 1 ) * 2.\n'),{})
         self.assertEqual('*',d['statements'][0]['expression']['value']);self.assertEqual('+',d['statements'][0]['expression']['operands'][0]['value'])
+
+class SignedLiteralIRTests(unittest.TestCase):
+    def test_lexer_signed_numeric_token_is_a_decimal_literal(self):
+        d=translate(program('           MOVE -1 TO B\n           IF A < -0.01\n             MOVE +1 TO B\n           END-IF.\n'),{})
+        self.assertEqual([],d['issues'])
+        self.assertEqual('-1',d['statements'][0]['expression']['value'])
+        self.assertEqual('-0.01',d['statements'][1]['expression']['operands'][1]['value'])

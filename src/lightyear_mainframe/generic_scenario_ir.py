@@ -56,7 +56,7 @@ class Expressions:
             expected = 'boolean' if token == 'NOT' else 'decimal'
             if child.type != expected: raise Unsupported('unary-type')
             left = Expression('unary', expected, token, (child,))
-        elif re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', token):
+        elif re.fullmatch(r'[+-]?[0-9]+(?:\.[0-9]+)?', token):
             left = Expression('literal', 'decimal', token)
         elif token.startswith(("'", '"')):
             left = Expression('literal', 'text', token[1:-1])

@@ -6,6 +6,8 @@ on:
       - 'src/lightyear_factory/scenario_policy.py'
       - 'tools/check_factory_review.py'
       - 'tools/check_equivalence_followup.py'
+      - 'tools/check_intcalc_loader_domain.py'
+      - 'tools/crosscheck_release_threshold.py'
       - 'tools/aggregate_equivalence_shards.py'
       - 'tools/check_retention_margin.py'
       - 'tools/measure_campaign_resources.py'
@@ -44,12 +46,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Validate fail-closed loader overlay
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_intcalc_loader_domain test_release_crosscheck -v
       - name: Install pinned public compiler
         run: bash tools/legacy_twin/install-pinned.sh
       - name: Require measured twofold disk and projected wall margin
         run: python -B -m tools.check_retention_margin ${{ matrix.job }} work/retention-preflight.json
       - name: Compile and measure systematic public cases
         run: python -B -m tools.check_factory_review work/factory-review-${{ matrix.job }} ${{ matrix.job }}
+      - name: Verify scoped duplicate-key loader receipts and assess every INTCALC gap
+        if: matrix.job == 'INTCALC'
+        run: python -B -m tools.check_intcalc_loader_domain work/factory-review-INTCALC
       - name: Optimized compiler equivalence and 200-case targeted campaigns
         run: python -B -m tools.check_equivalence_followup work/factory-review-${{ matrix.job }} ${{ matrix.job }} --shard ${{ matrix.shard }} --shards ${{ matrix.shards }}
       - name: Measure separate phase disk use including manifests
@@ -68,6 +77,8 @@ jobs:
             work/factory-review-${{ matrix.job }}/campaign-manifest.json
             work/factory-review-${{ matrix.job }}/review-summary.json
             work/factory-review-${{ matrix.job }}/mutation-results.json
+            work/factory-review-${{ matrix.job }}/loader-domain-overlay.json
+            work/factory-review-${{ matrix.job }}/loader-domain/**
             work/factory-review-${{ matrix.job }}/mutation-inventory.json
             work/factory-review-${{ matrix.job }}/systematic-scenario-selection.json
             work/factory-review-${{ matrix.job }}/generation-inventory.json

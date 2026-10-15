@@ -1,113 +1,22 @@
 {
-  "schema": "factory-status/1",
-  "available": true,
-  "last_evidence_commit": "b1a16a460dc8c67e59d613e19081348266ad5d06",
-  "index_sha256": "0f8c78c2711eabdb9003c11b6303dc22bf8b50045acab6635155a011a9141a5e",
-  "as_of": "2026-10-11T21:44:53-07:00",
-  "programs": [
-    {
-      "program": "INTCALC",
-      "state": "not releasable",
-      "observed_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
-      "failed": [
-        "Mutation rate (twin)",
-        "Mutation rate (zos-facing)",
-        "Output diversity",
-        "Targeted evidence"
-      ],
-      "pending": [
-        "I/O outcomes",
-        "Effective signed policy"
-      ],
-      "raw_kills": "308/421",
-      "sources": [
-        {
-          "path": "docs/factory/tower-run-38198096890/INTCALC/fresh.json",
-          "sha256": "e9ab40a870a4f3bf764e578b9517b3cf73b7ceb86131c233f3e1ecbdf3b2802f",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/INTCALC/summary.json",
-          "sha256": "7f3e510e37f14e4cc3765555709cd3ee35aea59712b28f7b0d1da3a0b37da452",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/INTCALC/threshold.json",
-          "sha256": "c9a8e041edde182a3b30db23de4ffac07ae7b83062baeac6cec86288495066ff",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/INTCALC/results.json",
-          "sha256": "992fa9c8dbb536f6524968e294cc7e23f314d92bd7541ab8622c1d4e548f0a21",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        }
-      ]
-    },
-    {
-      "program": "POSTTRAN",
-      "state": "not releasable",
-      "observed_head": "2dd787642e66176f78dbf749ec2659e82672cd3e",
-      "failed": [
-        "Output diversity",
-        "Targeted evidence"
-      ],
-      "pending": [
-        "I/O outcomes",
-        "Effective signed policy"
-      ],
-      "raw_kills": "360/483",
-      "sources": [
-        {
-          "path": "docs/factory/tower-run-38198096890/POSTTRAN/fresh.json",
-          "sha256": "bd7755d3f64a5944141a7d8fd27f6a0abaeb344359897e4fc5f236653fdc8e80",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/POSTTRAN/summary.json",
-          "sha256": "a67e11343081d628a32d24196fb546a80321594645192264da96213c0bf429e8",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/POSTTRAN/threshold.json",
-          "sha256": "9b405cade7c9d4cb3ec9476150724512e76a59615f96b376a6ca59bf9121d11c",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        },
-        {
-          "path": "docs/factory/tower-run-38198096890/POSTTRAN/results.json",
-          "sha256": "df8d09b683813febf4f0ab43a77c502fd8161ae3cf3315e045bf3fed6cb64fc7",
-          "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-        }
-      ]
-    }
-  ],
-  "pending_decisions": [],
-  "decision_overlays": [],
-  "campaigns": {
-    "value": {
-      "B06": {
-        "state": "engineering hold; no execution authority from this view",
-        "window": [
-          "2026-10-13T09:00:00-07:00",
-          "2026-10-13T12:00:00-07:00"
-        ],
-        "request_due": "2026-10-12T17:00:00-07:00"
-      },
-      "B07": {
-        "state": "planning; no model-spend authority from this view",
-        "freeze_ready": false
-      }
-    },
-    "sources": [
-      {
-        "path": "docs/factory/current-status-before-tower.json",
-        "sha256": "35f85ce4e2d0cf7bd9e0d7b3d90882c032e9d7cfbfa12a3b678093ddfe3461b4",
-        "commit": "b1a16a460dc8c67e59d613e19081348266ad5d06"
-      }
-    ]
+  "schema": "factory-current-review-status/1",
+  "as_of": "2026-10-14",
+  "release_evidence_sha256": "d5d298c502a66483d85b4a4affbff6565a714d62e9e486f3e8417d31209a114c",
+  "intcalc": "Not releasable",
+  "business": "8/8",
+  "io": "85/86",
+  "raw_mutation": "308/421",
+  "remaining_gaps": 113,
+  "loader_domain": {
+    "effective": false,
+    "no_denominator_removal": true,
+    "status": "implementation prepared; fresh PR CI receipts pending"
   },
-  "unresolved": 186,
-  "execution_authorized": false,
-  "release_authorized": false,
-  "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
-  "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
+  "posttran_phase2": "not run; explicit plan/head approval required",
+  "merge_hold": false,
+  "new_pr_merge_approval_required": true,
+  "b06_part6": "signed attempt evidence missing",
+  "effective_policy": false,
+  "factory_activated": false,
+  "release_authorized": false
 }

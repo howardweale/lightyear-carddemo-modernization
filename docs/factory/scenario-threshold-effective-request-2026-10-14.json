@@ -1,0 +1,18 @@
+{
+  "details": {
+    "compiler_refusals": "listed-excluded-not-blockers",
+    "effective_condition": "unconditional",
+    "policy_sha256": "2ba3dbbf0e041d0100c24dd415edcd353be49513d8cf2905f67714fef81c6437",
+    "version": "scenario-threshold/2"
+  },
+  "kind": "scenario-threshold-approval",
+  "program": "INTCALC",
+  "schema": "factory-contract/1",
+  "sources": [
+    {
+      "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+      "path": "docs/factory/howard-decisions-2026-10-11b.json",
+      "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+    }
+  ]
+}

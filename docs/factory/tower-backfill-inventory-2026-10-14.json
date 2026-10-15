@@ -1,0 +1,14 @@
+{
+  "complete_for_repository_decisions": true,
+  "historical_only": true,
+  "schema": "backfill-inventory/1",
+  "signature": null,
+  "signed_b06_attempt_receipts_available": false,
+  "source_files": [
+    "equivalence-operator-acceptance-2026-10-12.json",
+    "intcalc-duplicate-category-approval-2026-10-12.json",
+    "posttran-phase1-rerun-authorization-2026-10-12.json",
+    "b06-afternoon-preparation-2026-10-13.json",
+    "merge-hold-lift-2026-10-14.json"
+  ]
+}

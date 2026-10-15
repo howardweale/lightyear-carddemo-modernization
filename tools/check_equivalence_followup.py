@@ -150,6 +150,11 @@ def check(campaign,job,shard=0,shards=1):
         census=census,provenance_sha256=provenance['content_sha256'],usage=usage,
         retention_manifest_sha256=retained['content_sha256'],
         measurements={p.relative_to(output).as_posix():sha(p.read_bytes()) for p in (output/'targets').glob('*/results.json')} if (output/'targets').exists() else {})
+    if job=='INTCALC' and (campaign/'loader-domain-overlay.json').exists():
+        from lightyear_mainframe.loader_domain import project, verify_seal
+        overlay=verify_seal(json.loads((campaign/'loader-domain-overlay.json').read_bytes()))
+        project(list(fresh.values()),overlay)
+        payload['loader_domain_overlay']=overlay
     write_json(output/'shard.json',sealed(payload))
     if size(output)>BUDGET:raise RuntimeError('B1-targeted-output-budget-exhausted')
     if shards==1:finalize(output,job,head,results,fresh,current,{k:len(v) for k,v in values.items()},census,[payload])
@@ -166,6 +171,19 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
     complete={scope:amended_threshold_report(assessment,current['after_faults'],diversity,list(diversity),head)
               for scope,assessment in scoped.items()}
     write_json(output/'threshold-2-by-scope.json',complete)
+    if job=='INTCALC' and shard_records and all('loader_domain_overlay' in r for r in shard_records):
+        from lightyear_mainframe.loader_domain import project
+        projections=[project(r['fresh'],r['loader_domain_overlay']) for r in shard_records]
+        if [[(v['id'],v['status']) for v in rows] for rows in projections].count([(v['id'],v['status']) for v in projections[0]])!=len(projections):
+            raise ValueError('loader-domain-shard-projections-disagree')
+        from lightyear_mainframe.release_projection import supplemental_acceptances
+        supplemented,pending,supplement_sha=supplemental_acceptances(results,acceptance['accepted_mutants'],job,register)
+        projected={scope:mutation_threshold_report(projections[0],results,supplemented,scope,register) if scope=='twin' else scoped[scope] for scope in ('twin','zos-facing')}
+        from tools.crosscheck_release_threshold import check as crosscheck
+        independent={scope:crosscheck(projections[0] if scope=='twin' else list(fresh.values()),results,supplemented if scope=='twin' else acceptance['accepted_mutants'],scope,projected[scope]) for scope in ('twin','zos-facing')}
+        write_json(output/'loader-domain-review-projection.json',dict(schema='intcalc-loader-domain-review-projection/1',head=head,
+            raw_thresholds=scoped,projected_thresholds=projected,independent_crosscheck=independent,overlays=[r['loader_domain_overlay'] for r in shard_records],
+            effective=False,release_authorized=False,pending_effective_acceptances=pending,supplement_sha256=supplement_sha,limitation='Unsigned review projection only, conditional on explicit effectiveness signatures; no new z/OS-facing acceptance or active-policy change.'))
     accepted_ids={r['id'] for r in acceptance['accepted_mutants']}
     for row in results:row['operator_review']='accepted by Howard, AI-assisted stated scope' if row['id'] in accepted_ids else 'not individually accepted'
     write_json(output/'results.json',results)

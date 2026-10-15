@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import tempfile
 
 from lightyear_data.contracts import content_hash, seal
 
@@ -42,8 +43,29 @@ class RunStore:
             except OSError as exc:
                 self.close()
                 raise ValueError("Another headless engine owns this run") from exc
-            with closing(self.connect()) as db, db:
-                db.execute("CREATE TABLE IF NOT EXISTS events (sequence INTEGER PRIMARY KEY, envelope TEXT NOT NULL)")
+            try:
+                if self.path.exists():
+                    with closing(self.connect()) as db, db:
+                        db.execute("CREATE TABLE IF NOT EXISTS events (sequence INTEGER PRIMARY KEY, envelope TEXT NOT NULL)")
+                else:
+                    # A status reader must never observe the empty file that
+                    # sqlite3.connect creates before the schema is committed.
+                    # The writer lease covers initialization and publication.
+                    descriptor, name = tempfile.mkstemp(prefix=".events-", suffix=".sqlite3", dir=self.directory)
+                    os.close(descriptor)
+                    temporary = Path(name)
+                    try:
+                        with closing(sqlite3.connect(temporary)) as db, db:
+                            db.execute("PRAGMA synchronous=FULL")
+                            db.execute("CREATE TABLE events (sequence INTEGER PRIMARY KEY, envelope TEXT NOT NULL)")
+                        if self.path.exists() or self.path.is_symlink():
+                            raise ValueError("Execution journal appeared during initialization")
+                        os.replace(temporary, self.path)
+                    finally:
+                        temporary.unlink(missing_ok=True)
+            except BaseException:
+                self.close()
+                raise
 
     def close(self):
         if self.lock:

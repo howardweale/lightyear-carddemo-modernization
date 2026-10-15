@@ -65,4 +65,4 @@ def signed_member(authority, request, proof, mutant_id, match, matcher_sha256):
         raise ValueError('class-proof-binding')
     if authority is None or not authority.signed_only: raise ValueError('signed-class-authority-required')
     decision = authority.equivalence(proof, contract, mutant_id, 'twin')
-    return dict(class_id=cp['class_id'], decision_sha256=decision['content_sha256'], match_sha256=digest(match))
+    return dict(class_id=cp['class_id'], decision_sha256=proof['decision_sha256'], match_sha256=digest(match))

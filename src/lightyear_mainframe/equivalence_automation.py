@@ -90,10 +90,13 @@ def triage(root, job, head):
         basis = {}
     else:
         old, argued, individuals = historical_population(root, job)
-        publication = json.loads((root / 'docs/factory/equivalence-b1-b2-results-2026-10-12.json').read_text())
-        fresh = publication['programs'][job]['fresh']
-        # Include all fresh evidence gaps as survivors, not just the old three.
-        selected = set(argued) | set(fresh.get('evidence_gap_ids', [])) | {r['id'] for r in old if r['status'] == 'survived'}
+        retained_path = f'docs/factory/equivalence-baseline-2026-10-15/{job}.json'
+        retained = verify(json.loads((root / retained_path).read_text()))
+        fresh = retained['mutants']
+        if set(r['id'] for r in fresh) != set(inventory):
+            raise ValueError('baseline-inventory-mismatch')
+        # The sealed per-mutant rows take precedence over stale aggregate ID lists.
+        selected = set(argued) | {r['id'] for r in fresh if r['status'] in ('survived', 'evidence-gap')}
         from .equivalence_evidence import appl_result_census, class_covered
         census = appl_result_census(text, program)
         basis = {}
@@ -139,7 +142,8 @@ def triage(root, job, head):
                          'aliases, I/O and paragraph control may be untranslated; historical argument is not a proof',
                          status='unresolved'))
     files = ['docs/factory/equivalence-b1-b2-results-2026-10-12.json',
-             'docs/factory/equivalence-individual-review-2026-10-12.json'] if not held_out else []
+             'docs/factory/equivalence-individual-review-2026-10-12.json',
+             f'docs/factory/equivalence-baseline-2026-10-15/{job}.json'] if not held_out else []
     return sealed(dict(schema='equivalence-triage/1', head=head, program=job, held_out=held_out,
                        input_sha256={p: digest((root / p).read_bytes()) for p in files}, sources=ir['sources'],
                        ir_sha256=digest(ir), ir_issues=ir['issues'], inventory_count=len(inventory),

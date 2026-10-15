@@ -84,3 +84,23 @@ class AutomationTests(unittest.TestCase):
             with self.assertRaises(ValueError):require_ci()
         value=sealed({'x':1});value['x']=2
         with self.assertRaises(ValueError):verify(value)
+
+class ReviewOverlayTests(unittest.TestCase):
+    def test_confirmed_signed_error_retracts_entire_route_without_editing_parent(self):
+        from lightyear_mainframe.equivalence_reviews import apply_reviews
+        rows=[dict(id=str(i),program='P',route='S1',status='equivalent') for i in range(2)]
+        ledger=sealed(dict(head='a'*40,program='P',rows=rows))
+        packet=sealed(dict(head='a'*40,samples=audit_samples(rows,'seed'),resolutions=rows))
+        contract=dict(details=dict(packet_sha256=digest(packet)))
+        request=dict(contract=contract,packet=packet)
+        class Authority:
+            signed_only=True
+            def verify(self,*args):return dict(validation=dict(items={'0':dict(outcome='reject'),'1':dict(outcome='accept')}))
+        result=apply_reviews(ledger,[],request,{digest(contract):dict(decision_sha256='signed')},Authority(),'matcher')
+        self.assertTrue(all(r['status']=='unresolved' for r in result['rows']))
+        self.assertTrue(all(r['status']=='equivalent' for r in ledger['rows']))
+        self.assertEqual([['P','S1']],result['disabled_routes'])
+    def test_no_signature_context_means_no_review_overlay(self):
+        from lightyear_mainframe.equivalence_reviews import apply_reviews
+        with self.assertRaisesRegex(ValueError,'authority'):
+            apply_reviews(sealed(dict(rows=[])),[],{}, {}, None,'matcher')

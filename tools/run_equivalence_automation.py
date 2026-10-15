@@ -94,7 +94,7 @@ def execute_pipeline(job, output, head, search=True):
                         result.update(status='equivalent',route='S3',basis='solver-proven (local)',
                                       evidence=[dict(path=f'mutants/{mid}/solver/solver.json',sha256=digest(proof))])
                         if mutant['operator']=='rounded':
-                            matches.setdefault('receiving-pic-identity/1',{})[mid]=dict(pair_sha256=digest(local),solver_sha256=proof['content_sha256'],validation_sha256=validation['content_sha256'])
+                            matches.setdefault('receiving-pic-identity/1',{})[mid]=dict(mutant_sha256=digest(mutant),pair_sha256=digest(local),solver_sha256=proof['content_sha256'],validation_sha256=validation['content_sha256'])
                     elif proof['result']=='sat': result['counterexample']=proof['counterexample_scaled_integers']
                     else: result['solver_unresolved']=proof['result']
                 else: result['solver_disabled']='encoder/twin disagreement; exact statement/PIC shape disabled'
@@ -131,7 +131,7 @@ def execute_pipeline(job, output, head, search=True):
           assumed_minutes_per_packet=5,estimated_person_minutes=5*len(remaining),estimate_not_observation=True)))
     before=None;after=None
     if job!='TRANREPT':
-        old,_,_=historical_population(ROOT,job)
+        old=verify(json.loads((ROOT/f'docs/factory/equivalence-baseline-2026-10-15/{job}.json').read_text()))['mutants']
         inventory_ids={r['id'] for r in __import__('lightyear_mainframe.systematic_mutation',fromlist=['generate']).generate(text,PROGRAMS[job])}
         unresolved={r['id'] for r in baseline['rows']}
         kills=[r['id'] for r in old if r['id'] in inventory_ids and r['status'].startswith('killed-') and r['id'] not in unresolved]

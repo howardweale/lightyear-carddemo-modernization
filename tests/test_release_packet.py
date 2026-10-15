@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 import unittest
 from lightyear_control_tower.factory_policy import validate_contract
-from tools.build_release_packet import DECISIONS, DATE
+DATE = '2026-10-14'  # Immutable historical packet under test.
+DECISIONS = ['equivalence-operator-acceptance-2026-10-12.json', 'intcalc-duplicate-category-approval-2026-10-12.json',
+    'posttran-phase1-rerun-authorization-2026-10-12.json', 'b06-afternoon-preparation-2026-10-13.json', 'merge-hold-lift-2026-10-14.json']
 
 ROOT=Path(__file__).resolve().parents[1]
 

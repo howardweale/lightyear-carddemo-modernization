@@ -6,7 +6,7 @@
     "twin_process_code": 12
   },
   "bound_files": {
-    ".github/workflows/posttran-phase2.yml": "6007d84bf15177d438016af304df4f73dc352b19413478b33e37b85199cec00e",
+    ".github/workflows/posttran-phase2.yml": "8de9d485044a347e69434574322ba4a408d5415df8660e7f82073708bca4db9a",
     "docs/factory/keep-or-fix-register.json": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a",
     "docs/factory/twin-limits.md": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
     "spec/mainframe/arrival-kit.json": "0b4c22371ffe8fa9e557a8a6e47295000dbb43cfdc543d56128fb1ff434ffd5a",
@@ -907,5 +907,5 @@
       "twin": 12
     }
   },
-  "content_sha256": "5ee851a0e132747c2dcfac3ffa941fbed28315587cbae3b7083d2607f9443b5c"
+  "content_sha256": "24c7218e960727198d33cfd998148c5edb4e5ff369cc780cc54ce7b024b2e793"
 }

@@ -1,0 +1,102 @@
+{
+  "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo",
+  "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "files": {
+    "LICENSE": {
+      "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+      "bytes": 10142
+    },
+    "app/cpy/CVACT01Y.cpy": {
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+      "bytes": 1125
+    },
+    "app/cpy/CVACT02Y.cpy": {
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+      "bytes": 730
+    },
+    "app/cpy/CVACT03Y.cpy": {
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "bytes": 736
+    },
+    "app/cpy/CVCUS01Y.cpy": {
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+      "bytes": 1588
+    },
+    "app/cpy/CSUSR01Y.cpy": {
+      "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb",
+      "bytes": 1582
+    },
+    "app/jcl/ACCTFILE.jcl": {
+      "sha256": "febba716137a3f59302ef1136c60dccce4d07d32e1d118b15d48f99266dea9e7",
+      "bytes": 4880
+    },
+    "app/jcl/CARDFILE.jcl": {
+      "sha256": "0240faee5aec80d976ce0b15a85f101fa0f901b09b72d64545daa09858ddcc0c",
+      "bytes": 9947
+    },
+    "app/jcl/CUSTFILE.jcl": {
+      "sha256": "3f222d940612015b0c3b532253e34e8e60f02a670dd780a10b9db1f90e8deea7",
+      "bytes": 6401
+    },
+    "app/jcl/XREFFILE.jcl": {
+      "sha256": "ae0edd90056cccacd26412fad2cf3d95656c2a2810b66d8c316cbaac9e81248f",
+      "bytes": 8165
+    },
+    "app/jcl/DUSRSECJ.jcl": {
+      "sha256": "02b0b78847e722b133b23d8f6152471214ea65d4f4c08692a5f42425987ca3c4",
+      "bytes": 4060
+    },
+    "app/jcl/ESDSRRDS.jcl": {
+      "sha256": "9bec766029968057b831f539cc91b84e4e1d8ee22aa3de5ba6b509f8a698de77",
+      "bytes": 5067
+    },
+    "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS": {
+      "sha256": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+      "bytes": 15000
+    },
+    "app/data/EBCDIC/AWS.M2.CARDDEMO.CUSTDATA.PS": {
+      "sha256": "0435915cd35ea3077bad9d391fea1520bc7f30ec06d6e29fbe68290f3d6f27f3",
+      "bytes": 25000
+    },
+    "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS": {
+      "sha256": "b5d968b6865bd48fb45928ef6cacce9b6aacdaec7b51cfcc9819b9fafcaed3e5",
+      "bytes": 7500
+    },
+    "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDXREF.PS": {
+      "sha256": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+      "bytes": 2500
+    },
+    "app/data/EBCDIC/AWS.M2.CARDDEMO.USRSEC.PS": {
+      "sha256": "8608d4b8a03f7587c1493282f9337ab24fdf527d0aadbdb85dc3713dccdc6fc8",
+      "bytes": 800
+    },
+    "app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy": {
+      "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29",
+      "bytes": 2050
+    },
+    "app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy": {
+      "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077",
+      "bytes": 3887
+    },
+    "app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd": {
+      "sha256": "ff82e8b3c1ab201db212047fdb271889e809d90f4fc47c68202c17572d485796",
+      "bytes": 2168
+    },
+    "app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd": {
+      "sha256": "1d3b9ee54df4b19452b5efaa93bdf9554a05ee0b6f96d4f9d562a8a94d623969",
+      "bytes": 1676
+    },
+    "app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb": {
+      "sha256": "d88a628f8d2c9491e9c7a2867235400411c4e1826150af8334a07b1a033d0210",
+      "bytes": 1144
+    },
+    "app/app-authorization-ims-db2-mq/data/EBCDIC/AWS.M2.CARDDEMO.IMSDATA.DBPAUTP0.dat": {
+      "sha256": "cce00a6c86b3e02ee6d3c99723d5d5c080f9c1e1ae779591e98ba873849d3569",
+      "bytes": 51736
+    },
+    "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl": {
+      "sha256": "309468a5c4745f92c6dcf6ed28b396334b2f131ced78eb43eda962a63d2b174e",
+      "bytes": 14832
+    }
+  }
+}

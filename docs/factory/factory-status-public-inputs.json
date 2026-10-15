@@ -1,0 +1,8 @@
+{
+  "schema": "factory-status-public-inputs/1",
+  "activation": {
+    "path": "docs/factory/factory-local-activation-2026-10-14.json",
+    "sha256": "325634120cd02a13e0d14a7df4803d016721a13cbbd58965212d78a89170468d"
+  },
+  "authority": "Public activation receipt; installation-local history, not new execution or release authority"
+}

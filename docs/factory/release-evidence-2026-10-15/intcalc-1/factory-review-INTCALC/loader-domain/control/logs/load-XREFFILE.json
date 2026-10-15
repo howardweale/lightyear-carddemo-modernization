@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control-build/INTCALC/bin/XREFFILE",
+    "load",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/before/XREFFILE",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/files/XREFFILE"
+  ],
+  "returncode": 0
+}

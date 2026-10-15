@@ -1,0 +1,81 @@
+name: CardDemo data component
+on:
+  pull_request:
+    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
+  push:
+    branches: [main]
+    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
+permissions:
+  contents: read
+  packages: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  generated-data-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify pinned sources and adversarial type rules
+        env:
+          PYTHONPATH: src:tests
+        run: python -B -m unittest test_carddemo_data_schema -v
+      - name: Verify retained bounded review and implementation bindings
+        env:
+          PYTHONPATH: src:tests
+        run: python -B -m unittest test_carddemo_data_delivery -v
+      - name: Generate mappings and PostgreSQL DDL
+        env:
+          PYTHONPATH: src
+        run: python -B -m lightyear_data.carddemo.plan --out work/carddemo-data
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-data-plan
+          path: work/carddemo-data
+          if-no-files-found: error
+  postgres-data-proof:
+    needs: generated-data-plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install PostgreSQL driver
+        run: python -m pip install 'psycopg[binary]==3.2.10'
+      - name: Start digest-pinned PostgreSQL
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          image=$(python tools/ci_postgres_image.py)
+          docker run --pull=never --detach --name carddemo-data-pg -e POSTGRES_PASSWORD=ci-public-fixture -e POSTGRES_DB=carddemo -p 127.0.0.1:5432:5432 "$image"
+          for attempt in $(seq 1 30); do
+            if docker exec carddemo-data-pg pg_isready -U postgres -d carddemo; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Verify data corruption, quarantine, order and hierarchy against PostgreSQL
+        env:
+          PYTHONPATH: src:tests
+          CARDDEMO_DATA_TEST_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
+        run: python -B -m unittest test_carddemo_data_postgres -v
+      - name: Produce unsigned public-data receipt
+        env:
+          PYTHONPATH: src
+          CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
+        run: python -B -m lightyear_data.carddemo --schema carddemo_slice --out work/carddemo-data-proof
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-data-proof
+          path: work/carddemo-data-proof
+          if-no-files-found: error
+      - name: Remove disposable public-fixture database
+        if: always()
+        run: docker rm -f carddemo-data-pg || true

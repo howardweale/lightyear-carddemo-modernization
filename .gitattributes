@@ -236,3 +236,6 @@ docs/factory/equivalence-review-47-claude-2026-10-12.md -text -whitespace
 
 # Exact successful POSTTRAN compilation 2 report copied from its CI artifact.
 docs/factory/posttran-attempt1-phase1-compile2-2026-10-12.json -text
+
+# Preserve the exact October 15 public campaign receipts.
+docs/factory/release-evidence-2026-10-15/** -text -whitespace

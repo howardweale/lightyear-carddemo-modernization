@@ -80,6 +80,20 @@ jobs:
             --env PYTHONPATH=/source/src:/source:/source/work/solver \
             --env PYTHONDONTWRITEBYTECODE=1 --workdir /source equivalence-toolchain \
             python3 -B -m tools.run_equivalence_automation ${{ matrix.program }} /output/run
+      - name: Repeat the complete pipeline and compare every resolution
+        env:
+          EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/equivalence",dst=/output \
+            --env GITHUB_ACTIONS=true --env EQUIVALENCE_HEAD \
+            --env PYTHONPATH=/source/src:/source:/source/work/solver \
+            --env PYTHONDONTWRITEBYTECODE=1 --workdir /source equivalence-toolchain \
+            python3 -B -m tools.run_equivalence_automation ${{ matrix.program }} /output/repeat
+          PYTHONPATH=src:. python -B -m tools.compare_equivalence_runs \
+            work/equivalence/run/resolutions.json work/equivalence/repeat/resolutions.json \
+            work/equivalence/repeat-comparison.json
       - name: Independently rebuild and recheck every resolution on the same head
         env:
           EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}

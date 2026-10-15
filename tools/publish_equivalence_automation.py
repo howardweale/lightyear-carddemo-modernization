@@ -12,6 +12,8 @@ def publish(inputs,output,run_id):
         summary=verify(json.loads((folder/'summary.json').read_text()))
         baseline=verify(json.loads((folder/'triage.json').read_text()))
         recheck=json.loads((folder.parent/'recheck/recheck.json').read_text())
+        repeated=verify(json.loads((folder.parent/'repeat-comparison.json').read_text()))
+        if repeated['head']!=summary['head'] or not repeated['identical_resolutions']:raise ValueError('non-reproducible-report')
         if summary['head']!=baseline['head'] or recheck['head']!=summary['head'] or not recheck['identical_resolutions']:raise ValueError('incomplete-or-mixed-report')
         data.append((summary,baseline,folder))
     if len({s['head'] for s,_,_ in data})!=1:raise ValueError('mixed-heads')
@@ -37,7 +39,7 @@ def publish(inputs,output,run_id):
         lines.append(f"| {s['program']} | {ratio('before','raw')} | {ratio('after','raw')} | {ratio('before','adjusted')} | {ratio('after','adjusted')} |")
     lines+=['','Adjusted-before shows the new overlay with no new proof exclusions. Historical individually accepted exclusions and active release policy are not rewritten. Every unobservable or unresolved site remains in the denominator.', '',
             '## Validation and disabled routes','',
-            'Each enabled local statement/PIC encoder was checked on at least 10,000 deterministic random in-domain inputs per side, comparing every receiving byte against the actual pinned GnuCOBOL twin. Any disagreement disables that exact statement/PIC shape. Every emitted machine resolution was independently rebuilt, re-solved or replayed on the same source head.', '']
+            'Each enabled local statement/PIC encoder was checked on at least 10,000 deterministic random in-domain inputs per side, comparing every receiving byte against the actual pinned GnuCOBOL twin. Any disagreement disables that exact statement/PIC shape. Two complete pipeline runs produced identical classifications for every mutant, including unresolved and unobservable cases. Every emitted machine resolution was also independently rebuilt, re-solved or replayed on the same source head.', '']
     for s,_,folder in data:
         lines.append(f"- {s['program']}: {s['solver_targets']} solver targets; {s['generated_cases']} generated search/replay cases; {len(s['disabled_encoders'])} disabled encoder shapes.")
         for mid in s['disabled_encoders']:lines.append(f"  - `{mid}`: encoder/twin disagreement; unresolved unless another admissible route supplies independent evidence.")
@@ -57,7 +59,7 @@ def publish(inputs,output,run_id):
     for summary,_,folder in data:
         dest=output/'equivalence-evidence-2026-10-15'/summary['program']
         for pattern in ('summary.json','resolutions.json','manifest.json','toolchain.json','encoder-validation.json','class-validation.json',
-                        'audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
+                        'legacy-class-census.json','audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
                         'mutants/*/compiler-proof.json','mutants/*/pair.json','mutants/*/solver/query.smt2','mutants/*/solver/solver.json',
                         'mutants/*/solver/validation.json','mutants/*/oracle-gap.json','search/regression-scenarios.json','search/cases/*/kill.json'):
             for path in folder.glob(pattern):

@@ -15,7 +15,7 @@ Unobservable mutations are oracle gaps. They remain in the denominator. Unknown 
 
 The `Equivalence automation` workflow has independent INTCALC, POSTTRAN and held-out TRANREPT measurements. The exact source head is checked out. Z3 4.15.3.0 is installed using the approved wheel hash. The compiler, GCC, binutils and compiler configuration are captured from the existing snapshot-pinned image.
 
-Each INTCALC/POSTTRAN run shares one budget across the solver and directed-search stages: at most 200 local solver targets, 30 seconds per solver call, 1,000 generated program scenarios, 14,400 seconds of measurement wall time, 8 GiB of retained output and zero model calls. Encoder calibration inputs are statement-level validation vectors, recorded separately from generated whole-program scenarios. Rechecking is a separate validation pass on the same source head, within the overall CI timeout.
+Each INTCALC/POSTTRAN run shares one budget across the solver and directed-search stages: at most 200 local solver targets, 30 seconds per solver call, 1,000 generated program scenarios, 14,400 seconds of measurement wall time, 8 GiB of retained output and zero model calls. Encoder calibration inputs are statement-level validation vectors, recorded separately from generated whole-program scenarios. The workflow repeats the complete pipeline on the same head, compares every classification (including unresolved cases), then independently rechecks positive proofs. These are repeat executions of the same deterministic targets and scenarios, under the overall four-hour CI timeout; they do not authorize additional target or input domains.
 
 ```sh
 python3 -B -m tools.run_equivalence_automation INTCALC /output/run

@@ -214,3 +214,11 @@ class HeaderLocationTests(unittest.TestCase):
         output,_=normalize({'p.c':text})
         self.assertIn('#line 70 "original.c"',output['p.c'])
         self.assertEqual(text.count('\n'),output['p.c'].count('\n'))
+
+class CompleteRepeatTests(unittest.TestCase):
+    def test_repeat_includes_unresolved_classifications(self):
+        from tools.compare_equivalence_runs import compare
+        original=sealed(dict(head='a'*40,program='P',rows=[dict(id='x',status='unresolved',route=None)]))
+        self.assertTrue(compare(original,original)['identical_resolutions'])
+        changed=sealed(dict(head='a'*40,program='P',rows=[dict(id='x',status='equivalent',route='S1')]))
+        with self.assertRaisesRegex(ValueError,'non-reproducible'):compare(original,changed)

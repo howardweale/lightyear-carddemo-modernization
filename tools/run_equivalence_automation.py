@@ -121,8 +121,18 @@ def execute_pipeline(job, output, head, search=True):
           enabled=sum(v['enabled'] for v in validations),disabled=sum(not v['enabled'] for v in validations),
           minimum_inputs_per_statement=10000,model_calls=0)))
     # Every pre-existing class claim gets a fresh unsigned, source-bound request.
-    legacy={r['id']:dict(mutant_sha256=digest(r['mutant']),source_sha256=r['mutant']['source_sha256'],historical_basis='class',requires_argument_review=True)
-            for r in baseline['rows'] if r['current_basis']=='class'}
+    legacy={}
+    if job!='TRANREPT':
+        from lightyear_mainframe.equivalence_evidence import appl_result_census,register_dependencies
+        _,arguments,_=historical_population(ROOT,job)
+        census=appl_result_census(text,PROGRAMS[job]);write(output/'legacy-class-census.json',census)
+        for row in baseline['rows']:
+            if row['current_basis']!='class':continue
+            retained=arguments[row['id']];argument=retained.get('disposition',retained)
+            legacy[row['id']]=dict(mutant_sha256=digest(row['mutant']),source_sha256=row['mutant']['source_sha256'],
+                                   historical_basis='class',argument=argument,census_sha256=census['content_sha256'],
+                                   register_dependencies=register_dependencies(argument),requires_argument_review=True)
+
     if legacy: matches['legacy-APPL-RESULT/1']=legacy
     requests=[]
     for name, members in sorted(matches.items()):

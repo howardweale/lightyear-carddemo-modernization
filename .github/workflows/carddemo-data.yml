@@ -24,6 +24,10 @@ jobs:
         env:
           PYTHONPATH: src:tests
         run: python -B -m unittest test_carddemo_data_schema -v
+      - name: Verify retained bounded review and implementation bindings
+        env:
+          PYTHONPATH: src:tests
+        run: python -B -m unittest test_carddemo_data_delivery -v
       - name: Generate mappings and PostgreSQL DDL
         env:
           PYTHONPATH: src

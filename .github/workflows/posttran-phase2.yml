@@ -10,6 +10,7 @@ on:
       - '.github/workflows/posttran-phase2.yml'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: posttran-phase2-attempt-1
   cancel-in-progress: false
@@ -77,6 +78,7 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
+      actions: read
     outputs:
       reservation: ${{ steps.reserve.outputs.reservation }}
       preparation_run: ${{ steps.reserve.outputs.preparation_run }}

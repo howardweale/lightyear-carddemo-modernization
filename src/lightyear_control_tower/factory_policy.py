@@ -34,6 +34,8 @@ def validate_contract(value, root=None, *, check_evidence=True):
     require(isinstance(details, dict))
     if value["kind"] == "scenario-threshold-approval":
         require(set(details) in (expected, expected | {"conditions"}))
+    elif value["kind"] == "io-exception-acceptance":
+        require(set(details) in (expected, expected | {"basis"}))
     else:
         require(set(details) == expected)
     sources = value["sources"]
@@ -63,6 +65,8 @@ def validate_contract(value, root=None, *, check_evidence=True):
         text_field(details["effective_condition"], "Effective condition")
         require(details["compiler_refusals"] == "listed-excluded-not-blockers")
     if kind == "io-exception-acceptance":
+        if "basis" in details:
+            require(details["basis"] == "structurally-unreachable")
         require(type(details["line"]) is int and details["line"] > 0)
         text_field(details["outcome_id"], "Outcome ID", 300)
         text_field(details["outcome"], "Outcome", 100)

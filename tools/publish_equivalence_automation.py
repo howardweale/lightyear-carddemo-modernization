@@ -25,6 +25,9 @@ def publish(inputs,output,run_id):
            'The earlier October 12 INTCALC aggregate listed 167 gap IDs beside a count of 113. The complete per-mutant records confirm 113; the additional 54 IDs were killed. This report uses the sealed October 15 integration-run rows and preserves the historical publication unchanged.', '',
            f'Execution: [GitHub Actions run {run_id}](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/{run_id}), source commit `{head}`. Public CardDemo only; zero model calls. All results are twin-scoped.', '',
            '| Program | Route | Resolved | Of 47 individual reviews | Other survivors resolved | New kills |', '|---|---|---:|---:|---:|---:|']
+    argued=sum(s['argued_resolved'] for s,_,_ in data);total=sum(s['argued_total'] for s,_,_ in data)
+    individual=sum(c['individual_resolved'] for s,_,_ in data for c in s['routes'].values())
+    lines[8:8]=[f'This run resolves **{argued}/{total} ({100*argued/total:.1f}%)** of the argued equivalents automatically, including **{individual}/47 individual reviews**. The 95% target is not met. Unsigned class proposals are excluded.', '']
     for s,_,_ in data:
         for route,c in s['routes'].items():lines.append(f"| {s['program']} | {route} | {c['resolved']} | {c['individual_resolved']} | {c['survivors_resolved']} | {c['kills']} |")
     lines+=['','| Program | Argued resolved automatically | Unobservable | Unresolved, including unobservable | Estimated review minutes / 1,000 sites |','|---|---:|---:|---:|---:|']
@@ -58,12 +61,17 @@ def publish(inputs,output,run_id):
     # Durable small proof records; full binaries and transcripts stay in CI artifacts.
     for summary,_,folder in data:
         dest=output/'equivalence-evidence-2026-10-15'/summary['program']
+        positive={r['id'] for r in verify(json.loads((folder/'resolutions.json').read_text()))['rows'] if r['status'] in ('equivalent','killed')}
         for pattern in ('summary.json','resolutions.json','manifest.json','toolchain.json','encoder-validation.json','class-validation.json',
-                        'legacy-class-census.json','remaining-review.json','directed-search.json','audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
+                        'legacy-class-census.json','normalization-tests.json','remaining-review.json','directed-search.json','audit-request.json','audit-packet.json','class-requests.json','class-packets/*.json',
                         'mutants/*/compiler-proof.json','mutants/*/pair.json','mutants/*/solver/query.smt2','mutants/*/solver/solver.json',
                         'mutants/*/solver/validation.json','mutants/*/oracle-gap.json','search/regression-scenarios.json','search/cases/*/kill.json'):
             for path in folder.glob(pattern):
+                relative=path.relative_to(folder)
+                if relative.parts[0]=='mutants' and relative.parts[1] not in positive:continue
                 target=dest/path.relative_to(folder);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(path.read_bytes())
+        for name,source in (('recheck.json',folder.parent/'recheck/recheck.json'),('repeat-comparison.json',folder.parent/'repeat-comparison.json')):
+            (dest/name).write_bytes(source.read_bytes())
     return head
 
 if __name__=='__main__':

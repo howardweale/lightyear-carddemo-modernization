@@ -1,0 +1,402 @@
+{
+  "dominating_guards": [],
+  "fields": {
+    "ACCT-CURR-CYC-CREDIT": {
+      "digits": 12,
+      "domain": {
+        "maximum": "9999999999.99",
+        "minimum": "-9999999999.99",
+        "unit": "0.01"
+      },
+      "filler": false,
+      "length": 12,
+      "line": 71,
+      "location": {
+        "column": 16,
+        "inclusion": [],
+        "line": 13,
+        "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+      },
+      "offset": 78,
+      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+      "picture": "S9(10)V99",
+      "scale": 2,
+      "separate": false,
+      "sign": "TRAILING",
+      "signed": true,
+      "type": "decimal",
+      "usage": "DISPLAY"
+    },
+    "ACCT-CURR-CYC-DEBIT": {
+      "digits": 12,
+      "domain": {
+        "maximum": "9999999999.99",
+        "minimum": "-9999999999.99",
+        "unit": "0.01"
+      },
+      "filler": false,
+      "length": 12,
+      "line": 80,
+      "location": {
+        "column": 16,
+        "inclusion": [],
+        "line": 14,
+        "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+      },
+      "offset": 90,
+      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+      "picture": "S9(10)V99",
+      "scale": 2,
+      "separate": false,
+      "sign": "TRAILING",
+      "signed": true,
+      "type": "decimal",
+      "usage": "DISPLAY"
+    },
+    "DALYTRAN-AMT": {
+      "digits": 11,
+      "domain": {
+        "maximum": "999999999.99",
+        "minimum": "-999999999.99",
+        "unit": "0.01"
+      },
+      "filler": false,
+      "length": 11,
+      "line": 44,
+      "location": {
+        "column": 16,
+        "inclusion": [],
+        "line": 10,
+        "path": "spec/mainframe/copybooks/CVTRA06Y.cpy"
+      },
+      "offset": 132,
+      "path": "DALYTRAN-RECORD.DALYTRAN-AMT",
+      "picture": "S9(09)V99",
+      "scale": 2,
+      "separate": false,
+      "sign": "TRAILING",
+      "signed": true,
+      "type": "decimal",
+      "usage": "DISPLAY"
+    },
+    "WS-TEMP-BAL": {
+      "digits": 11,
+      "domain": {
+        "maximum": "999999999.99",
+        "minimum": "-999999999.99",
+        "unit": "0.01"
+      },
+      "filler": false,
+      "length": 11,
+      "line": 24,
+      "location": {
+        "column": 15,
+        "inclusion": [],
+        "line": 187,
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl"
+      },
+      "offset": 18,
+      "path": "WS-COUNTERS.WS-TEMP-BAL",
+      "picture": "S9(09)V99",
+      "scale": 2,
+      "separate": false,
+      "sign": "TRAILING",
+      "signed": true,
+      "type": "decimal",
+      "usage": "DISPLAY"
+    }
+  },
+  "local_scope": "PIC domains and only unchanged, fully translated lexical guards; complete receiving bytes plus size-error flag",
+  "mutant": {
+    "expression": {
+      "kind": "binary",
+      "operands": [
+        {
+          "kind": "binary",
+          "operands": [
+            {
+              "kind": "reference",
+              "operands": [],
+              "type": "decimal",
+              "value": "ACCT-CURR-CYC-CREDIT"
+            },
+            {
+              "kind": "reference",
+              "operands": [],
+              "type": "decimal",
+              "value": "ACCT-CURR-CYC-DEBIT"
+            }
+          ],
+          "type": "decimal",
+          "value": "-"
+        },
+        {
+          "kind": "reference",
+          "operands": [],
+          "type": "decimal",
+          "value": "DALYTRAN-AMT"
+        }
+      ],
+      "type": "decimal",
+      "value": "+"
+    },
+    "fields": {
+      "ACCT-CURR-CYC-CREDIT": {
+        "digits": 12,
+        "domain": {
+          "maximum": "9999999999.99",
+          "minimum": "-9999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 12,
+        "line": 71,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 13,
+          "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+        },
+        "offset": 78,
+        "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "picture": "S9(10)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "ACCT-CURR-CYC-DEBIT": {
+        "digits": 12,
+        "domain": {
+          "maximum": "9999999999.99",
+          "minimum": "-9999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 12,
+        "line": 80,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 14,
+          "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+        },
+        "offset": 90,
+        "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "picture": "S9(10)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "DALYTRAN-AMT": {
+        "digits": 11,
+        "domain": {
+          "maximum": "999999999.99",
+          "minimum": "-999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 11,
+        "line": 44,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 10,
+          "path": "spec/mainframe/copybooks/CVTRA06Y.cpy"
+        },
+        "offset": 132,
+        "path": "DALYTRAN-RECORD.DALYTRAN-AMT",
+        "picture": "S9(09)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "WS-TEMP-BAL": {
+        "digits": 11,
+        "domain": {
+          "maximum": "999999999.99",
+          "minimum": "-999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 11,
+        "line": 24,
+        "location": {
+          "column": 15,
+          "inclusion": [],
+          "line": 187,
+          "path": "spec/mainframe/public-source/CBTRN02C.cbl"
+        },
+        "offset": 18,
+        "path": "WS-COUNTERS.WS-TEMP-BAL",
+        "picture": "S9(09)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      }
+    },
+    "kind": "assignment",
+    "rounded": true,
+    "target": "WS-TEMP-BAL",
+    "verb": "COMPUTE"
+  },
+  "mutant_source": "       COMPUTE WS-TEMP-BAL ROUNDED = ACCT-CURR-CYC-CREDIT\n                                    - ACCT-CURR-CYC-DEBIT                       \n                                    + DALYTRAN-AMT                              \n                                                                                ",
+  "original": {
+    "expression": {
+      "kind": "binary",
+      "operands": [
+        {
+          "kind": "binary",
+          "operands": [
+            {
+              "kind": "reference",
+              "operands": [],
+              "type": "decimal",
+              "value": "ACCT-CURR-CYC-CREDIT"
+            },
+            {
+              "kind": "reference",
+              "operands": [],
+              "type": "decimal",
+              "value": "ACCT-CURR-CYC-DEBIT"
+            }
+          ],
+          "type": "decimal",
+          "value": "-"
+        },
+        {
+          "kind": "reference",
+          "operands": [],
+          "type": "decimal",
+          "value": "DALYTRAN-AMT"
+        }
+      ],
+      "type": "decimal",
+      "value": "+"
+    },
+    "fields": {
+      "ACCT-CURR-CYC-CREDIT": {
+        "digits": 12,
+        "domain": {
+          "maximum": "9999999999.99",
+          "minimum": "-9999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 12,
+        "line": 71,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 13,
+          "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+        },
+        "offset": 78,
+        "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+        "picture": "S9(10)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "ACCT-CURR-CYC-DEBIT": {
+        "digits": 12,
+        "domain": {
+          "maximum": "9999999999.99",
+          "minimum": "-9999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 12,
+        "line": 80,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 14,
+          "path": "spec/mainframe/copybooks/CVACT01Y.cpy"
+        },
+        "offset": 90,
+        "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+        "picture": "S9(10)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "DALYTRAN-AMT": {
+        "digits": 11,
+        "domain": {
+          "maximum": "999999999.99",
+          "minimum": "-999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 11,
+        "line": 44,
+        "location": {
+          "column": 16,
+          "inclusion": [],
+          "line": 10,
+          "path": "spec/mainframe/copybooks/CVTRA06Y.cpy"
+        },
+        "offset": 132,
+        "path": "DALYTRAN-RECORD.DALYTRAN-AMT",
+        "picture": "S9(09)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      },
+      "WS-TEMP-BAL": {
+        "digits": 11,
+        "domain": {
+          "maximum": "999999999.99",
+          "minimum": "-999999999.99",
+          "unit": "0.01"
+        },
+        "filler": false,
+        "length": 11,
+        "line": 24,
+        "location": {
+          "column": 15,
+          "inclusion": [],
+          "line": 187,
+          "path": "spec/mainframe/public-source/CBTRN02C.cbl"
+        },
+        "offset": 18,
+        "path": "WS-COUNTERS.WS-TEMP-BAL",
+        "picture": "S9(09)V99",
+        "scale": 2,
+        "separate": false,
+        "sign": "TRAILING",
+        "signed": true,
+        "type": "decimal",
+        "usage": "DISPLAY"
+      }
+    },
+    "kind": "assignment",
+    "rounded": false,
+    "target": "WS-TEMP-BAL",
+    "verb": "COMPUTE"
+  },
+  "original_source": "                COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      \n                                    - ACCT-CURR-CYC-DEBIT                       \n                                    + DALYTRAN-AMT                              \n                                                                                ",
+  "path_masking": false,
+  "target": "WS-TEMP-BAL"
+}

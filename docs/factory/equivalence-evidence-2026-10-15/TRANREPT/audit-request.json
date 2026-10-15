@@ -1,0 +1,87 @@
+{
+  "contract": {
+    "details": {
+      "claim_scope": "twin",
+      "class_proof_sha256": null,
+      "dependencies": [
+        "run:46b23af4f6c8ec0fc78704b5a70a9ddbe4338cf5006bc226f9a829d0a0b57222"
+      ],
+      "items": [
+        "CBTRN03C-constant-637-396",
+        "CBTRN03C-constant-637-397"
+      ],
+      "packet_sha256": "ccfd99390c310d292e7fcc59c0c1f5bf731edc12481a6cc2cab2d585aea4c021",
+      "reviewer_type": "human"
+    },
+    "kind": "equivalence-review",
+    "program": "factory",
+    "schema": "factory-contract/1",
+    "sources": [
+      {
+        "commit": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+        "path": "docs/factory/equivalence-evidence-2026-10-15/TRANREPT/audit-packet.json",
+        "sha256": "d71566427db0c4862f4b90cba2fd7cd3387aac91eab20e72509ea880c39d35f0"
+      }
+    ]
+  },
+  "packet": {
+    "content_sha256": "db0aec65ba7f6a28ae1291dbd34acac35cce23af7902b90cedbae96c1745b283",
+    "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+    "program": "TRANREPT",
+    "resolutions": [
+      {
+        "argued": false,
+        "basis": "compiler-proven (normalized)",
+        "evidence": [
+          {
+            "path": "mutants/CBTRN03C-constant-637-396/compiler-proof.json",
+            "sha256": "def448ebba42e58aca6ed61e2cf8f41d811433c1e8b7cc6e3eb2fe9b56420685"
+          }
+        ],
+        "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+        "id": "CBTRN03C-constant-637-396",
+        "individual_review": false,
+        "mutant_sha256": "9e7b05eeff4b86a596126a34ad74e891e2e312f8b8c35e9f12caf519d29f217d",
+        "program": "TRANREPT",
+        "route": "S1",
+        "source_sha256": "8691e625502b7efcfd7ba4ae61797132e7b68f3fd5fedcdcc7dd6488f6871eef",
+        "status": "equivalent"
+      },
+      {
+        "argued": false,
+        "basis": "compiler-proven (normalized)",
+        "evidence": [
+          {
+            "path": "mutants/CBTRN03C-constant-637-397/compiler-proof.json",
+            "sha256": "48bfb67068ef0074dea24a798197b98083691d58529bf1c2291889069d721c81"
+          }
+        ],
+        "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+        "id": "CBTRN03C-constant-637-397",
+        "individual_review": false,
+        "mutant_sha256": "55df1a435dfceb1c738fce82acc937cf7877617195bdf9a40ceb319ac55aaa9d",
+        "program": "TRANREPT",
+        "route": "S1",
+        "source_sha256": "8691e625502b7efcfd7ba4ae61797132e7b68f3fd5fedcdcc7dd6488f6871eef",
+        "status": "equivalent"
+      }
+    ],
+    "samples": [
+      {
+        "confirmed_errors": 0,
+        "items": [
+          "CBTRN03C-constant-637-396",
+          "CBTRN03C-constant-637-397"
+        ],
+        "observed_error_rate": null,
+        "population": 2,
+        "program": "TRANREPT",
+        "reviewed": 0,
+        "route": "S1",
+        "status": "unsigned-review-pending",
+        "upper_95": null
+      }
+    ]
+  },
+  "status": "unsigned"
+}

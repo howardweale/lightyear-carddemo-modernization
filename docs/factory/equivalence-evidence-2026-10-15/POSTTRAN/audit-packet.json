@@ -1,0 +1,109 @@
+{
+  "content_sha256": "08b1020bf378732f80ee9cc034c761f7fe34dbe04a0a0f4cbb015394f4b2b470",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "program": "POSTTRAN",
+  "resolutions": [
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBTRN02C-constant-718-445/compiler-proof.json",
+          "sha256": "dcc96f7efb0d5f96b80df972f20b2a44026a79cddea69a93d554b9cf4a0b6271"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBTRN02C-constant-718-445",
+      "individual_review": true,
+      "mutant_sha256": "4581936728fa266b9c06d7215acc081bec93cc29a659ecc3f3bda185525e775b",
+      "program": "POSTTRAN",
+      "route": "S1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBTRN02C-constant-718-446/compiler-proof.json",
+          "sha256": "bc4cabffecf03bd74d17124f40ec70af51a3a7bf82709d860d7fa1f843996825"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBTRN02C-constant-718-446",
+      "individual_review": true,
+      "mutant_sha256": "ecbb2aefb239386b12959ef9b042d8288aa6695b8a40cf257eb23886ea42e150",
+      "program": "POSTTRAN",
+      "route": "S1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBTRN02C-receiving-size-142-13/compiler-proof.json",
+          "sha256": "70db5b6605d1991fb0e08a1897a2b70fbc9a826b70c925d3316e3d6886059fa7"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBTRN02C-receiving-size-142-13",
+      "individual_review": false,
+      "mutant_sha256": "11395e2ada7b93fb65c81698cd46d7aab714173038447f178992555b700d38fa",
+      "program": "POSTTRAN",
+      "route": "S1",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "solver-proven (local)",
+      "evidence": [
+        {
+          "path": "mutants/CBTRN02C-rounded-403-196/solver/solver.json",
+          "sha256": "3750ac1dd71376b049eb856fccdacafa75644ae59702c8c93f29493dedde114b"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBTRN02C-rounded-403-196",
+      "individual_review": true,
+      "mutant_sha256": "a4721fb4824902655292ec36e6c2ca81840a76309d1236dbd6dc979ab6ec0e70",
+      "program": "POSTTRAN",
+      "route": "S3",
+      "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+      "status": "equivalent"
+    }
+  ],
+  "samples": [
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBTRN02C-constant-718-445",
+        "CBTRN02C-constant-718-446",
+        "CBTRN02C-receiving-size-142-13"
+      ],
+      "observed_error_rate": null,
+      "population": 3,
+      "program": "POSTTRAN",
+      "reviewed": 0,
+      "route": "S1",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    },
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBTRN02C-rounded-403-196"
+      ],
+      "observed_error_rate": null,
+      "population": 1,
+      "program": "POSTTRAN",
+      "reviewed": 0,
+      "route": "S3",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    }
+  ]
+}

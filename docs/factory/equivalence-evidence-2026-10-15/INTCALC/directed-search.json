@@ -1,0 +1,11 @@
+{
+  "budget": 1000,
+  "content_sha256": "fe146f09b73dbfe981f085d594396b4f3f69484cc0403dee1b260a4c286b4aab",
+  "counterexample_kills": 0,
+  "exhaustion_resolves_nothing": true,
+  "generated_cases": 1000,
+  "kills": 0,
+  "model_calls": 0,
+  "remaining": 106,
+  "status": "complete"
+}

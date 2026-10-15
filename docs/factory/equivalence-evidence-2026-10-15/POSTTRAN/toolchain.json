@@ -1,0 +1,72 @@
+{
+  "binaries": {
+    "as": "21aff249b692b5c31a44007491f922dcb49f41323e362c57d2ada3f52eddb7f0",
+    "cobc": "89281a0a1e55968d32b6b344c8925f65ca1197e2ece1366d13a97571a59d8ac9",
+    "gcc": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26",
+    "ld": "e9ceb054c12207970f2726dfc07e9a66b411602748628baf27399f02a9bbb31b",
+    "objcopy": "9276e918e3c26d3aa7ef9dd2232cd8ac692f03d3c1f270bfa5144a2b5492b713"
+  },
+  "binary_profile": {
+    "binary_truncate": false,
+    "byteorder": "big",
+    "settings": {
+      "binary-byteorder": "big-endian",
+      "binary-size": "2-4-8",
+      "binary-truncate": "no"
+    }
+  },
+  "compiler_driver_flags": [
+    "-c",
+    "-std=ibm",
+    "-fsign=EBCDIC",
+    "-O2",
+    "-Q",
+    "-Wl,--build-id=none"
+  ],
+  "configs": {
+    "/etc/gnucobol/acu-strict.conf": "01bf77de19b538cc082d929a02b306a07c1286615a9a0ee1aee3b040a8122378",
+    "/etc/gnucobol/acu.conf": "92447a47ec7b231a05167c5b2e0f0dccb47ec71e78cf1fb99250cff00fb75870",
+    "/etc/gnucobol/bs2000-strict.conf": "c366a189859716ad9d1b6259d0b7989c8d862f0b5255cf7a3e68ddb35616c187",
+    "/etc/gnucobol/bs2000.conf": "69a5052615d17da4c34059aefea25a2823fab940c89d13abd8146105b714a926",
+    "/etc/gnucobol/cobol2002.conf": "148ec5dda306404162d1daf8fb8847f329c28e94ab7d467c994d869cf28b5a47",
+    "/etc/gnucobol/cobol2014.conf": "1e868be63910c0287f45295b127fa992c5848207255e1e963a07cb705e08e17c",
+    "/etc/gnucobol/cobol85.conf": "5d3357f06c154c780eb88a04657316e55a23c9c99ce390579dc871a01039a1b0",
+    "/etc/gnucobol/default.conf": "f4fa1cbfb48ff7a40642cf0c0c3b813b5d3331f577b73170ed0df0ac06ee244c",
+    "/etc/gnucobol/ibm-strict.conf": "c94c92ec2ab66f7af5e93e9f0feb6af48179f43011500020156f2fede93ccad8",
+    "/etc/gnucobol/ibm.conf": "9220624ee67056073268e58bd16fdf819afd1e17f249c4603c06270717a3995c",
+    "/etc/gnucobol/mf-strict.conf": "e7b5d4cf1204fd80e9520ffe9e8c5fd3dc670f5400508f3164081465e7dcbd85",
+    "/etc/gnucobol/mf.conf": "71c1a63d4d3821a1b43f563c7801b187510e506f0de7209f86bdd4c468acf3ff",
+    "/etc/gnucobol/mvs-strict.conf": "9bf46c3cbc74e672b0b455adba4bbca34e09602932d568d0fe7d8b28b44749bb",
+    "/etc/gnucobol/mvs.conf": "9e83b7e75e2af00b4e154b39f66584b968250c1fd22147ff341f35ece051b6ce",
+    "/etc/gnucobol/realia-strict.conf": "d09eba7ab599e2213b9dcc8552a7458bd6e6a0e5247d70b8d2fa1ef68d5f1629",
+    "/etc/gnucobol/realia.conf": "30dd72751fdb35c6d305f0a274012d5fd21f5fe53b4f5937886e9d2dc17cc79c",
+    "/etc/gnucobol/rm-strict.conf": "1e21c232ce93759acae523c9a223f26425b439e3837936f216c98ed6f4b265de",
+    "/etc/gnucobol/rm.conf": "40576a422ae2e25fdd5e4d5647766119dfb3a06c207c684970083fb274c5b771",
+    "/etc/gnucobol/xopen.conf": "43fa093ee7ea8be8c5ca5f3ca172bf7e0ab0b9747b9612acbd46e72d8b2505af"
+  },
+  "content_sha256": "97d925c9e6d2c96c9f6626a56de1708d9260d8f294f06582d3e62651e35d9f15",
+  "gcc_invocation_record": "per-object verbose compiler log",
+  "host": {
+    "compiler": "cobc (GnuCOBOL) 3.1.2.0\nCopyright (C) 2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart\nBuilt     Apr 14 2024 07:59:15\nPackaged  Dec 23 2020 12:04:58 UTC\nC version \"13.2.0\"\n",
+    "machine": "x86_64",
+    "os": {
+      "BUG_REPORT_URL": "\"https://bugs.launchpad.net/ubuntu/\"",
+      "HOME_URL": "\"https://www.ubuntu.com/\"",
+      "ID": "ubuntu",
+      "ID_LIKE": "debian",
+      "LOGO": "ubuntu-logo",
+      "NAME": "\"Ubuntu\"",
+      "PRETTY_NAME": "\"Ubuntu 24.04.5 LTS\"",
+      "PRIVACY_POLICY_URL": "\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"",
+      "SUPPORT_URL": "\"https://help.ubuntu.com/\"",
+      "UBUNTU_CODENAME": "noble",
+      "VERSION": "\"24.04.5 LTS (Noble Numbat)\"",
+      "VERSION_CODENAME": "noble",
+      "VERSION_ID": "\"24.04\""
+    },
+    "package": "3.1.2-5.1ubuntu1",
+    "runtime": "cobcrun (GnuCOBOL) 3.1.2.0\nCopyright (C) 2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Roger While, Simon Sobisch, Brian Tiffin\nBuilt     Apr 14 2024 07:59:15\nPackaged  Dec 23 2020 12:04:58 UTC\n\nlibcob (GnuCOBOL) 3.1.2.0\nCopyright (C) 2020 Free Software Foundation, Inc.\nLicense LGPLv3+: GNU LGPL version 3 or later <http://gnu.org/licenses/lgpl.html>\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart\nBuilt     Apr 14 2024 07:59:15\nPackaged  Dec 23 2020 12:04:58 UTC\n"
+  },
+  "image_recipe": "tools/legacy_twin/reproducible.Containerfile",
+  "packages": "binutils=2.42-4ubuntu2.10\nbinutils-common:amd64=2.42-4ubuntu2.10\nbinutils-dev=\nbinutils-doc=\nbinutils-gold=\nbinutils-mingw-w64-i686=\nbinutils-mingw-w64-x86-64=\nbinutils-multiarch=\nbinutils-x86-64-linux-gnu=2.42-4ubuntu2.10\ngcc=4:13.2.0-7ubuntu1\ngcc-13=13.3.0-6ubuntu2~24.04.1\ngcc-13-base:amd64=13.3.0-6ubuntu2~24.04.1\ngcc-13-doc=\ngcc-13-locales=\ngcc-13-multilib=\ngcc-13-x86-64-linux-gnu=13.3.0-6ubuntu2~24.04.1\ngcc-14-base:amd64=14.2.0-4ubuntu2~24.04.1\ngcc-4.3=\ngcc-4.4=\ngcc-4.5=\ngcc-doc=\ngcc-multilib=\ngcc-x86-64-linux-gnu=4:13.2.0-7ubuntu1\ngnucobol3=3.1.2-5.1ubuntu1\nlibcob1=\nlibcob1-dev=\nlibcob4=\nlibcob4-dev:amd64=3.1.2-5.1ubuntu1\nlibcob4t64:amd64=3.1.2-5.1ubuntu1\nlibfaketime:amd64=0.9.10-2.1\n"
+}

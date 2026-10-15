@@ -1,0 +1,19 @@
+{
+  "checked": [
+    {
+      "id": "CBTRN03C-constant-637-396",
+      "route": "S1",
+      "status": "equivalent"
+    },
+    {
+      "id": "CBTRN03C-constant-637-397",
+      "route": "S1",
+      "status": "equivalent"
+    }
+  ],
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "identical_resolutions": true,
+  "manifest_sha256": "23fc01dcd2303f9a54444bcd50685d851188ee143d344906b3717253ab5b0516",
+  "model_calls": 0,
+  "program": "TRANREPT"
+}

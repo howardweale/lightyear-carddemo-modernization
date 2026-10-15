@@ -1,0 +1,29 @@
+{
+  "checked": [
+    {
+      "id": "CBTRN02C-constant-718-445",
+      "route": "S1",
+      "status": "equivalent"
+    },
+    {
+      "id": "CBTRN02C-constant-718-446",
+      "route": "S1",
+      "status": "equivalent"
+    },
+    {
+      "id": "CBTRN02C-receiving-size-142-13",
+      "route": "S1",
+      "status": "equivalent"
+    },
+    {
+      "id": "CBTRN02C-rounded-403-196",
+      "route": "S3",
+      "status": "equivalent"
+    }
+  ],
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "identical_resolutions": true,
+  "manifest_sha256": "03c7e2741a7d7de733cea751db0e4a618f9b4e60cd95fe5ab6e11e4f9fa31c13",
+  "model_calls": 0,
+  "program": "POSTTRAN"
+}

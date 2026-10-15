@@ -1,0 +1,9 @@
+{
+  "content_sha256": "359c5cf340ded8fd5d021c96f4aa33212f5d6ef0d5e35e4157226a0b5cddbbef",
+  "disabled_classes": [],
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "held_out": false,
+  "matcher_sha256": "0ba15b8cec35656269fb3f26c92ce7b3f2075c325e28089c953fab12133a3825",
+  "measurements": [],
+  "program": "INTCALC"
+}

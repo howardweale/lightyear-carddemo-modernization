@@ -1,0 +1,54 @@
+{
+  "content_sha256": "8a395dadc5f9d9c718d045f17410cc5a00a2f1ae2f3d3105960c8f16f324ef0a",
+  "identical": true,
+  "mutant": {
+    "compiler_invocation_sha256": "90857b80d6707ea347c9880388358f224fe359e5dd783f1de36687ff602b0d72",
+    "content_sha256": "c1906fa04ffa095147b86f5901696ab93be71373bec39e0cc3a96b3c12d255d3",
+    "generated_sha256": "681a303430c7b356a084379f0773b041b99038733ccdd01c2a6b2225f2475900",
+    "literal_ordering": "unchanged",
+    "name_mapping": {},
+    "normalization_version": 1,
+    "normalized_sha256": "5aef66008be7e6e0dfb30d171a98959e9f2ed0199ca74614a7032a84ec96998d",
+    "object": "comparison.o",
+    "object_sha256": "ce89c2726d81b45ffcd7d494e5dae598a6065a3ac6d68df24b2690d7e6b9a2fe",
+    "raw_object_sha256": "15059897a336b27c42e4fe6650d00fcb79e8c446b61638847ab8a946ae3b489f",
+    "rule_applications": {
+      "comments": true,
+      "generated_private_names": false,
+      "line_markers": false,
+      "timestamp": "pinned compiler clock"
+    },
+    "rules": [
+      "comments",
+      "line-markers",
+      "generated-private-names",
+      "timestamp"
+    ]
+  },
+  "original": {
+    "compiler_invocation_sha256": "90857b80d6707ea347c9880388358f224fe359e5dd783f1de36687ff602b0d72",
+    "content_sha256": "fd735598e8588e33e26070a2f4610c02cf9c2e086b08a6909d2f5a3aadf4f5f8",
+    "generated_sha256": "0aadbcb8291174c343fc086107fe66120b6b51d636a345229539d5811b5a9f6d",
+    "literal_ordering": "unchanged",
+    "name_mapping": {},
+    "normalization_version": 1,
+    "normalized_sha256": "e8e42e99574259cedb2a9264dfab6514eda0eb2a616ee89360a7f55ad713a385",
+    "object": "comparison.o",
+    "object_sha256": "ce89c2726d81b45ffcd7d494e5dae598a6065a3ac6d68df24b2690d7e6b9a2fe",
+    "raw_object_sha256": "cf1504c389ba187343991668496e3d64c3a1a0299a3fd3d82feb172b816d6348",
+    "rule_applications": {
+      "comments": true,
+      "generated_private_names": false,
+      "line_markers": false,
+      "timestamp": "pinned compiler clock"
+    },
+    "rules": [
+      "comments",
+      "line-markers",
+      "generated-private-names",
+      "timestamp"
+    ]
+  },
+  "rules_test_sha256": "ce634bd9b75e5fc3dcc0a18631d1c7a661cfa92dbe28171ed79ef453674104f4",
+  "toolchain_sha256": "97d925c9e6d2c96c9f6626a56de1708d9260d8f294f06582d3e62651e35d9f15"
+}

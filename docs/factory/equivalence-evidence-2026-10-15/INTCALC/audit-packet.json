@@ -1,0 +1,97 @@
+{
+  "content_sha256": "164c8b0235edab903a39d8b236c03dad2f33d06561eb82bae984cd910715206d",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "program": "INTCALC",
+  "resolutions": [
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-constant-639-384/compiler-proof.json",
+          "sha256": "3bee8dacf2ca898959c7a4af06b068e7098472bfa511362b608444a1ff9661f3"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-639-384",
+      "individual_review": true,
+      "mutant_sha256": "acff90bf996950ba9f203f9a529b04489652aff6d86fc1e12050403acb379d55",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-constant-639-385/compiler-proof.json",
+          "sha256": "c5cdc1e769107086a947c041f419550cccb74b356c93d023186e44b0324cc2e4"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-639-385",
+      "individual_review": true,
+      "mutant_sha256": "f729ee4bc6ac2d9409001f2620686576f79112637a5f6b909b2c90fe1b5fa9b3",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-receiving-size-133-19/compiler-proof.json",
+          "sha256": "cf4e548fa61406ebe4d40d8493e79ce3b82279def57bdf9f52c0c1a8776a33df"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-133-19",
+      "individual_review": false,
+      "mutant_sha256": "079e3fd03e0248bbea0c99e15e898305c452209c4dd78353d25fdf39e548bef1",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-receiving-size-177-35/compiler-proof.json",
+          "sha256": "31e745a005bdeedf32191f54dd03cf367178faf87118f920b80090eddde8b632"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-177-35",
+      "individual_review": false,
+      "mutant_sha256": "f20460800b0d9bd8505c35e11deb006b6c33f9d956488f583c436bed200aa8d6",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    }
+  ],
+  "samples": [
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBACT04C-constant-639-384",
+        "CBACT04C-constant-639-385",
+        "CBACT04C-receiving-size-133-19",
+        "CBACT04C-receiving-size-177-35"
+      ],
+      "observed_error_rate": null,
+      "population": 4,
+      "program": "INTCALC",
+      "reviewed": 0,
+      "route": "S1",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    }
+  ]
+}

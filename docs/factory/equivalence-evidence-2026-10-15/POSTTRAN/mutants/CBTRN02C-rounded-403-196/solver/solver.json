@@ -1,0 +1,14 @@
+{
+  "complete_written_state": true,
+  "content_sha256": "a91002c71c3c38024cd83a3b1bbec139a57c92bae9d549d209a2a24f2b70ce3e",
+  "counterexample_is_kill": false,
+  "counterexample_scaled_integers": null,
+  "pair_sha256": "70b5c41fd7fc3329298f748225ea6108363383ec35b8eda63ae1b3d894a45ada",
+  "query_sha256": "311c19a735e2346ff2282605ea125622ac191e5560f73658321510d717944af4",
+  "result": "unsat",
+  "scope": "local-twin",
+  "storage_proof_policy": "pure predicate or same expression/converter with validated rounding; other numeric UNSAT is insufficient",
+  "timeout_ms": 30000,
+  "validation_sha256": "721d73f3844e49c03df01375883f889ed624d2ce9687d3c127250567fba4aca7",
+  "version": "4.15.3.0"
+}

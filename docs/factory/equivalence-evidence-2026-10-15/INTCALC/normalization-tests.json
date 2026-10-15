@@ -1,0 +1,26 @@
+[
+  {
+    "mutant": "c3ad6031d02dfc2324b209c611371a91096c73ad280b36be08bb7e3791241a27",
+    "original": "b98fa29b33dd77c79740bbc04e635e7743d14ee5293cd2353f922dd3467f5cd4",
+    "passed": true,
+    "rule": "comments"
+  },
+  {
+    "mutant": "c3ad6031d02dfc2324b209c611371a91096c73ad280b36be08bb7e3791241a27",
+    "original": "b98fa29b33dd77c79740bbc04e635e7743d14ee5293cd2353f922dd3467f5cd4",
+    "passed": true,
+    "rule": "line-markers"
+  },
+  {
+    "mutant": "c3ad6031d02dfc2324b209c611371a91096c73ad280b36be08bb7e3791241a27",
+    "original": "b98fa29b33dd77c79740bbc04e635e7743d14ee5293cd2353f922dd3467f5cd4",
+    "passed": true,
+    "rule": "generated-private-names"
+  },
+  {
+    "mutant": "c3ad6031d02dfc2324b209c611371a91096c73ad280b36be08bb7e3791241a27",
+    "original": "b98fa29b33dd77c79740bbc04e635e7743d14ee5293cd2353f922dd3467f5cd4",
+    "passed": true,
+    "rule": "timestamp"
+  }
+]

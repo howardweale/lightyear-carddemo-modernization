@@ -1,0 +1,16 @@
+{
+  "command": [
+    "cobc",
+    "-x",
+    "-free",
+    "-std=ibm",
+    "-fsign=EBCDIC",
+    "-O2",
+    "-Q",
+    "-Wl,--build-id=none",
+    "DISCGRP.cob",
+    "-o",
+    "bin/DISCGRP"
+  ],
+  "returncode": 0
+}

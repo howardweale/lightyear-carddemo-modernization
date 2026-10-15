@@ -1,0 +1,455 @@
+{
+  "schema": "release-evidence-index/2",
+  "prepared_on": "2026-10-15",
+  "run_id": 38763552148,
+  "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+  "conclusion": "success",
+  "sources": [
+    {
+      "artifact_id": 11991164908,
+      "artifact_name": "aggregate",
+      "run_id": 38763552148,
+      "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "zip_sha256": "1029d637abfcf0f1a22dd332b724698f4402257937870cba85d61c1a9a3ee4e0",
+      "files": {
+        "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/loader-domain-review-projection.json": "021d302cb557e31515cab0927f6c26baa4aaf2c4af8046f868f44bebbac83fdf",
+        "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f",
+        "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/remaining-review-packet.json": "cb5c1067a6fab87c61cc7be8f35740fad632cf470dc7a99aa34ac1a513c51a50",
+        "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+        "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/threshold-2-by-scope.json": "157d51745a0a6a73eb403d4ec552293f5802214dd3b7722e07ece8191b110fac",
+        "docs/factory/release-evidence-2026-10-15/aggregate/POSTTRAN/remaining-review-packet.json": "a855a463dfb1b0428e43428549b5ea3eb596dc3483befc6f26c01a6da1a39bde",
+        "docs/factory/release-evidence-2026-10-15/aggregate/POSTTRAN/results.json": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003",
+        "docs/factory/release-evidence-2026-10-15/aggregate/POSTTRAN/summary.json": "c7764325a0019aeb8adcf026daa9955362e6ba0b424ecb3a96fb505dd37b0891",
+        "docs/factory/release-evidence-2026-10-15/aggregate/POSTTRAN/threshold-2-by-scope.json": "36dd2daa4a1a26f4999ba82f695a8436c867ed2a585a1bfdb169d15c9766e61b"
+      },
+      "archive_members": {
+        "INTCALC/loader-domain-review-projection.json": {
+          "sha256": "021d302cb557e31515cab0927f6c26baa4aaf2c4af8046f868f44bebbac83fdf",
+          "size": 651766
+        },
+        "INTCALC/summary.json": {
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f",
+          "size": 65974
+        },
+        "INTCALC/remaining-review-packet.json": {
+          "sha256": "cb5c1067a6fab87c61cc7be8f35740fad632cf470dc7a99aa34ac1a513c51a50",
+          "size": 121441
+        },
+        "INTCALC/results.json": {
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+          "size": 349926
+        },
+        "INTCALC/threshold-2-by-scope.json": {
+          "sha256": "157d51745a0a6a73eb403d4ec552293f5802214dd3b7722e07ece8191b110fac",
+          "size": 38523
+        },
+        "POSTTRAN/remaining-review-packet.json": {
+          "sha256": "a855a463dfb1b0428e43428549b5ea3eb596dc3483befc6f26c01a6da1a39bde",
+          "size": 72519
+        },
+        "POSTTRAN/results.json": {
+          "sha256": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003",
+          "size": 343066
+        },
+        "POSTTRAN/summary.json": {
+          "sha256": "c7764325a0019aeb8adcf026daa9955362e6ba0b424ecb3a96fb505dd37b0891",
+          "size": 55779
+        },
+        "POSTTRAN/threshold-2-by-scope.json": {
+          "sha256": "36dd2daa4a1a26f4999ba82f695a8436c867ed2a585a1bfdb169d15c9766e61b",
+          "size": 42677
+        }
+      },
+      "external_files": {}
+    },
+    {
+      "artifact_id": 11992057147,
+      "artifact_name": "intcalc-0",
+      "run_id": 38763552148,
+      "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "zip_sha256": "0e8f1e7649f3d8baf50ed2092bb37b8fd503e6abf58cc536862f9791e4768a33",
+      "files": {
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/campaign-manifest.json": "64b5d9db8f0f636972650752c846b6cf710c10be70754ef66e8b9034ebaee187",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/review-summary.json": "43fc48f2b3843152ec2b49a25b9a25e9a2d8eb4372e6e36d4f0479e3069bdaa3",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/mutation-receipt-summary.json": "b2d558d5561f194355f960bdc412bf299b0dd886a3c581e4da4066913b5d50aa",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain-overlay.json": "6879b48ffc6a3daca540b764459302db2b6f36d15663cb4f97dc9f76453132e2",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/engineering.json": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.json": "57e131427735b01ace5350d9ff9e5442e3d41c5f4a723c2157662599dcbd4566",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.json": "7de1e49285fa5606e3bff272597f7df9999b21cfe29ddf1b20e898429e528958",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stderr": "fa640020c761128bb7c01b2cdabda960e8d8583c797b36d32ed6070b612435a4",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.json": "95346be14a38c182793b1a9d6d20bb55dc9285673f74ae1f85ed65ccb936ac5c",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.json": "590b65335f80a7eaf7ae49242b72154049d7fd73f57f14fdf51db6a35d6742ef",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.json": "50e45e11c35e78d0b02a373b52b09e3a7cbf8c30cff731cda3925e96a3fc5438",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.json": "02614f879598f31ed3e98e6fbb9554c0e9c09533d9e2dd824c5867a50c7647db",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.json": "733af4816257bcb920796ca0d46a854608536b7faa6632400ff4870243e35dce",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.json": "24c860e5f0e84cceaf5bfc0f3d02f20e8d822d59432ec823ffdc700ee404de36",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.json": "5e3a0da283504aba558ad65dc907d11b543fb5298722d9d2c26bc41540abde82",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stderr": "83b538f70dad86b03e8979a3e601b9c8f36af1b84882d6c84db07d7710a11412",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/build-receipt.json": "596a6a7ca05014254b039b57d14edcd748f6cd0365b43bdb5514d059641d2756",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/loader-domain/control-build/engineering.json": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+        "docs/factory/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/mutation-inventory.json": "ae00a221b11e4241c8c263a14a2f51a177cab5614be0efc1e5ae1a3440f406c3"
+      },
+      "archive_members": {
+        "factory-review-INTCALC/campaign-manifest.json": {
+          "sha256": "64b5d9db8f0f636972650752c846b6cf710c10be70754ef66e8b9034ebaee187",
+          "size": 185628
+        },
+        "factory-review-INTCALC/review-summary.json": {
+          "sha256": "43fc48f2b3843152ec2b49a25b9a25e9a2d8eb4372e6e36d4f0479e3069bdaa3",
+          "size": 39669
+        },
+        "factory-review-INTCALC/mutation-results.json": {
+          "sha256": "ad4ab419496debd0a8d62beaf9ff7a265fd21832521277bbcd8462ae2b7bbfba",
+          "size": 86282783
+        },
+        "factory-review-INTCALC/loader-domain-overlay.json": {
+          "sha256": "6879b48ffc6a3daca540b764459302db2b6f36d15663cb4f97dc9f76453132e2",
+          "size": 259531
+        },
+        "factory-review-INTCALC/loader-domain/control/engineering.json": {
+          "sha256": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+          "size": 97
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.json": {
+          "sha256": "57e131427735b01ace5350d9ff9e5442e3d41c5f4a723c2157662599dcbd4566",
+          "size": 534
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.json": {
+          "sha256": "7de1e49285fa5606e3bff272597f7df9999b21cfe29ddf1b20e898429e528958",
+          "size": 535
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stderr": {
+          "sha256": "fa640020c761128bb7c01b2cdabda960e8d8583c797b36d32ed6070b612435a4",
+          "size": 414
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.json": {
+          "sha256": "95346be14a38c182793b1a9d6d20bb55dc9285673f74ae1f85ed65ccb936ac5c",
+          "size": 534
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.json": {
+          "sha256": "590b65335f80a7eaf7ae49242b72154049d7fd73f57f14fdf51db6a35d6742ef",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.json": {
+          "sha256": "50e45e11c35e78d0b02a373b52b09e3a7cbf8c30cff731cda3925e96a3fc5438",
+          "size": 209
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.json": {
+          "sha256": "02614f879598f31ed3e98e6fbb9554c0e9c09533d9e2dd824c5867a50c7647db",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.json": {
+          "sha256": "733af4816257bcb920796ca0d46a854608536b7faa6632400ff4870243e35dce",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.json": {
+          "sha256": "24c860e5f0e84cceaf5bfc0f3d02f20e8d822d59432ec823ffdc700ee404de36",
+          "size": 228
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.json": {
+          "sha256": "5e3a0da283504aba558ad65dc907d11b543fb5298722d9d2c26bc41540abde82",
+          "size": 258
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stderr": {
+          "sha256": "83b538f70dad86b03e8979a3e601b9c8f36af1b84882d6c84db07d7710a11412",
+          "size": 246
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/build-receipt.json": {
+          "sha256": "596a6a7ca05014254b039b57d14edcd748f6cd0365b43bdb5514d059641d2756",
+          "size": 8066
+        },
+        "factory-review-INTCALC/loader-domain/control-build/engineering.json": {
+          "sha256": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+          "size": 97
+        },
+        "factory-review-INTCALC/mutation-inventory.json": {
+          "sha256": "ae00a221b11e4241c8c263a14a2f51a177cab5614be0efc1e5ae1a3440f406c3",
+          "size": 153566
+        }
+      },
+      "external_files": {
+        "factory-review-INTCALC/mutation-results.json": {
+          "sha256": "ad4ab419496debd0a8d62beaf9ff7a265fd21832521277bbcd8462ae2b7bbfba",
+          "size": 86282783,
+          "local_staging_path": "work/release-evidence-2026-10-15/intcalc-0/factory-review-INTCALC/mutation-results.json",
+          "retention_status": "pending-store-location"
+        }
+      }
+    },
+    {
+      "artifact_id": 11991258893,
+      "artifact_name": "intcalc-1",
+      "run_id": 38763552148,
+      "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "zip_sha256": "d58bf1587b0601844b7fd673ffc840685306940f1f78f79c4a64df0436c6912e",
+      "files": {
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/campaign-manifest.json": "591eefc0f18f6e8a71e355127d5fe4a8bca3cd99cf95af31f274b9199e0791d7",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/review-summary.json": "0ef2879f95c5b8e8fddd7e6fbb4a61a8fb3244d4b8a6508f545446efdc9ef16d",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/mutation-receipt-summary.json": "3d58d8e60d24bc060354637d64f9e646fd267aeb10280f79cee046289415fb57",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain-overlay.json": "2fe0c1489024f11cbd1afb70a3e6e158695b2667453c32f785ad1dba12c4b831",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/engineering.json": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.json": "57e131427735b01ace5350d9ff9e5442e3d41c5f4a723c2157662599dcbd4566",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.json": "7de1e49285fa5606e3bff272597f7df9999b21cfe29ddf1b20e898429e528958",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stderr": "fa640020c761128bb7c01b2cdabda960e8d8583c797b36d32ed6070b612435a4",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.json": "95346be14a38c182793b1a9d6d20bb55dc9285673f74ae1f85ed65ccb936ac5c",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.json": "590b65335f80a7eaf7ae49242b72154049d7fd73f57f14fdf51db6a35d6742ef",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.json": "50e45e11c35e78d0b02a373b52b09e3a7cbf8c30cff731cda3925e96a3fc5438",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.json": "02614f879598f31ed3e98e6fbb9554c0e9c09533d9e2dd824c5867a50c7647db",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.json": "733af4816257bcb920796ca0d46a854608536b7faa6632400ff4870243e35dce",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.json": "24c860e5f0e84cceaf5bfc0f3d02f20e8d822d59432ec823ffdc700ee404de36",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stderr": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.json": "5e3a0da283504aba558ad65dc907d11b543fb5298722d9d2c26bc41540abde82",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stderr": "83b538f70dad86b03e8979a3e601b9c8f36af1b84882d6c84db07d7710a11412",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/build-receipt.json": "596a6a7ca05014254b039b57d14edcd748f6cd0365b43bdb5514d059641d2756",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/loader-domain/control-build/engineering.json": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+        "docs/factory/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/mutation-inventory.json": "ae00a221b11e4241c8c263a14a2f51a177cab5614be0efc1e5ae1a3440f406c3"
+      },
+      "archive_members": {
+        "factory-review-INTCALC/campaign-manifest.json": {
+          "sha256": "591eefc0f18f6e8a71e355127d5fe4a8bca3cd99cf95af31f274b9199e0791d7",
+          "size": 185628
+        },
+        "factory-review-INTCALC/review-summary.json": {
+          "sha256": "0ef2879f95c5b8e8fddd7e6fbb4a61a8fb3244d4b8a6508f545446efdc9ef16d",
+          "size": 39669
+        },
+        "factory-review-INTCALC/mutation-results.json": {
+          "sha256": "e67c6bb59a6bfc4935bd51e06eb7056d5813074ede668f38df15d21f0e102124",
+          "size": 86282820
+        },
+        "factory-review-INTCALC/loader-domain-overlay.json": {
+          "sha256": "2fe0c1489024f11cbd1afb70a3e6e158695b2667453c32f785ad1dba12c4b831",
+          "size": 259531
+        },
+        "factory-review-INTCALC/loader-domain/control/engineering.json": {
+          "sha256": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+          "size": 97
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.json": {
+          "sha256": "57e131427735b01ace5350d9ff9e5442e3d41c5f4a723c2157662599dcbd4566",
+          "size": 534
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-ACCTFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.json": {
+          "sha256": "7de1e49285fa5606e3bff272597f7df9999b21cfe29ddf1b20e898429e528958",
+          "size": 535
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stderr": {
+          "sha256": "fa640020c761128bb7c01b2cdabda960e8d8583c797b36d32ed6070b612435a4",
+          "size": 414
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-TCATBALF.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.json": {
+          "sha256": "95346be14a38c182793b1a9d6d20bb55dc9285673f74ae1f85ed65ccb936ac5c",
+          "size": 534
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control/logs/load-XREFFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.json": {
+          "sha256": "590b65335f80a7eaf7ae49242b72154049d7fd73f57f14fdf51db6a35d6742ef",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-ACCTFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.json": {
+          "sha256": "50e45e11c35e78d0b02a373b52b09e3a7cbf8c30cff731cda3925e96a3fc5438",
+          "size": 209
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-DISCGRP.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.json": {
+          "sha256": "02614f879598f31ed3e98e6fbb9554c0e9c09533d9e2dd824c5867a50c7647db",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-TCATBALF.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.json": {
+          "sha256": "733af4816257bcb920796ca0d46a854608536b7faa6632400ff4870243e35dce",
+          "size": 211
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-XREFFILE.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.json": {
+          "sha256": "24c860e5f0e84cceaf5bfc0f3d02f20e8d822d59432ec823ffdc700ee404de36",
+          "size": 228
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stderr": {
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "size": 123
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/compile-original.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.json": {
+          "sha256": "5e3a0da283504aba558ad65dc907d11b543fb5298722d9d2c26bc41540abde82",
+          "size": 258
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stderr": {
+          "sha256": "83b538f70dad86b03e8979a3e601b9c8f36af1b84882d6c84db07d7710a11412",
+          "size": 246
+        },
+        "factory-review-INTCALC/loader-domain/control-build/INTCALC/logs/link.stdout": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "factory-review-INTCALC/loader-domain/control-build/build-receipt.json": {
+          "sha256": "596a6a7ca05014254b039b57d14edcd748f6cd0365b43bdb5514d059641d2756",
+          "size": 8066
+        },
+        "factory-review-INTCALC/loader-domain/control-build/engineering.json": {
+          "sha256": "2ece6cb9a3e4908415dc28709b09bdaecf8a4f3d6267b02d46db656decb1a467",
+          "size": 97
+        },
+        "factory-review-INTCALC/mutation-inventory.json": {
+          "sha256": "ae00a221b11e4241c8c263a14a2f51a177cab5614be0efc1e5ae1a3440f406c3",
+          "size": 153566
+        }
+      },
+      "external_files": {
+        "factory-review-INTCALC/mutation-results.json": {
+          "sha256": "e67c6bb59a6bfc4935bd51e06eb7056d5813074ede668f38df15d21f0e102124",
+          "size": 86282820,
+          "local_staging_path": "work/release-evidence-2026-10-15/intcalc-1/factory-review-INTCALC/mutation-results.json",
+          "retention_status": "pending-store-location"
+        }
+      }
+    }
+  ],
+  "retention_complete": false
+}

@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control-build/INTCALC/bin/TCATBALF",
+    "load",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/before/TCATBALF",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/files/TCATBALF"
+  ],
+  "returncode": 66
+}

@@ -1,0 +1,1723 @@
+{
+  "after_faults": {
+    "coverage_by_class": {
+      "business-logic": {
+        "covered": 8,
+        "fraction": "8/8",
+        "total": 8
+      },
+      "io-handling": {
+        "covered": 85,
+        "fraction": "85/86",
+        "total": 86
+      }
+    },
+    "decision_outcomes": "93/94",
+    "decision_points": "47/47",
+    "distinct_values_per_output_field": {},
+    "entered_paragraph_lines": [
+      234,
+      252,
+      270,
+      289,
+      307,
+      325,
+      350,
+      372,
+      393,
+      415,
+      443,
+      462,
+      473,
+      518,
+      522,
+      541,
+      559,
+      577,
+      595,
+      613,
+      628,
+      635
+    ],
+    "file_statuses": [
+      {
+        "count": 53,
+        "field": "TCATBALF-STATUS",
+        "line": 236,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "TCATBALF-STATUS",
+        "line": 236,
+        "status": "35"
+      },
+      {
+        "count": 1,
+        "field": "TCATBALF-STATUS",
+        "line": 236,
+        "status": "37"
+      },
+      {
+        "count": 51,
+        "field": "XREFFILE-STATUS",
+        "line": 254,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 254,
+        "status": "35"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 254,
+        "status": "37"
+      },
+      {
+        "count": 49,
+        "field": "DISCGRP-STATUS",
+        "line": 272,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "DISCGRP-STATUS",
+        "line": 272,
+        "status": "35"
+      },
+      {
+        "count": 1,
+        "field": "DISCGRP-STATUS",
+        "line": 272,
+        "status": "37"
+      },
+      {
+        "count": 47,
+        "field": "ACCTFILE-STATUS",
+        "line": 291,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 291,
+        "status": "35"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 291,
+        "status": "37"
+      },
+      {
+        "count": 45,
+        "field": "TRANFILE-STATUS",
+        "line": 309,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "TRANFILE-STATUS",
+        "line": 309,
+        "status": "35"
+      },
+      {
+        "count": 1,
+        "field": "TRANFILE-STATUS",
+        "line": 309,
+        "status": "37"
+      },
+      {
+        "count": 166,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "00"
+      },
+      {
+        "count": 33,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "10"
+      },
+      {
+        "count": 1,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "30"
+      },
+      {
+        "count": 1,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "90"
+      },
+      {
+        "count": 110,
+        "field": "ACCTFILE-STATUS",
+        "line": 356,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 356,
+        "status": "23"
+      },
+      {
+        "count": 149,
+        "field": "ACCTFILE-STATUS",
+        "line": 373,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 373,
+        "status": "23"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 373,
+        "status": "30"
+      },
+      {
+        "count": 147,
+        "field": "XREFFILE-STATUS",
+        "line": 394,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 394,
+        "status": "23"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 394,
+        "status": "30"
+      },
+      {
+        "count": 52,
+        "field": "DISCGRP-STATUS",
+        "line": 416,
+        "status": "00"
+      },
+      {
+        "count": 108,
+        "field": "DISCGRP-STATUS",
+        "line": 416,
+        "status": "23"
+      },
+      {
+        "count": 1,
+        "field": "DISCGRP-STATUS",
+        "line": 416,
+        "status": "30"
+      },
+      {
+        "count": 105,
+        "field": "DISCGRP-STATUS",
+        "line": 444,
+        "status": "00"
+      },
+      {
+        "count": 2,
+        "field": "DISCGRP-STATUS",
+        "line": 444,
+        "status": "23"
+      },
+      {
+        "count": 1,
+        "field": "DISCGRP-STATUS",
+        "line": 444,
+        "status": "30"
+      },
+      {
+        "count": 151,
+        "field": "TRANFILE-STATUS",
+        "line": 500,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "TRANFILE-STATUS",
+        "line": 500,
+        "status": "30"
+      },
+      {
+        "count": 32,
+        "field": "TCATBALF-STATUS",
+        "line": 524,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "TCATBALF-STATUS",
+        "line": 524,
+        "status": "30"
+      },
+      {
+        "count": 31,
+        "field": "XREFFILE-STATUS",
+        "line": 543,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 543,
+        "status": "30"
+      },
+      {
+        "count": 30,
+        "field": "DISCGRP-STATUS",
+        "line": 561,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "DISCGRP-STATUS",
+        "line": 561,
+        "status": "30"
+      },
+      {
+        "count": 29,
+        "field": "ACCTFILE-STATUS",
+        "line": 579,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 579,
+        "status": "30"
+      },
+      {
+        "count": 28,
+        "field": "TRANFILE-STATUS",
+        "line": 597,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "TRANFILE-STATUS",
+        "line": 597,
+        "status": "30"
+      }
+    ],
+    "instrumented": true,
+    "legacy_mutants_killed": null,
+    "observed_outcomes": [
+      {
+        "line": 188,
+        "outcome": "false"
+      },
+      {
+        "line": 188,
+        "outcome": "true"
+      },
+      {
+        "line": 189,
+        "outcome": "true"
+      },
+      {
+        "line": 191,
+        "outcome": "false"
+      },
+      {
+        "line": 191,
+        "outcome": "true"
+      },
+      {
+        "line": 194,
+        "outcome": "false"
+      },
+      {
+        "line": 194,
+        "outcome": "true"
+      },
+      {
+        "line": 195,
+        "outcome": "false"
+      },
+      {
+        "line": 195,
+        "outcome": "true"
+      },
+      {
+        "line": 214,
+        "outcome": "false"
+      },
+      {
+        "line": 214,
+        "outcome": "true"
+      },
+      {
+        "line": 237,
+        "outcome": "false"
+      },
+      {
+        "line": 237,
+        "outcome": "true"
+      },
+      {
+        "line": 242,
+        "outcome": "false"
+      },
+      {
+        "line": 242,
+        "outcome": "true"
+      },
+      {
+        "line": 255,
+        "outcome": "false"
+      },
+      {
+        "line": 255,
+        "outcome": "true"
+      },
+      {
+        "line": 260,
+        "outcome": "false"
+      },
+      {
+        "line": 260,
+        "outcome": "true"
+      },
+      {
+        "line": 273,
+        "outcome": "false"
+      },
+      {
+        "line": 273,
+        "outcome": "true"
+      },
+      {
+        "line": 278,
+        "outcome": "false"
+      },
+      {
+        "line": 278,
+        "outcome": "true"
+      },
+      {
+        "line": 292,
+        "outcome": "false"
+      },
+      {
+        "line": 292,
+        "outcome": "true"
+      },
+      {
+        "line": 297,
+        "outcome": "false"
+      },
+      {
+        "line": 297,
+        "outcome": "true"
+      },
+      {
+        "line": 310,
+        "outcome": "false"
+      },
+      {
+        "line": 310,
+        "outcome": "true"
+      },
+      {
+        "line": 315,
+        "outcome": "false"
+      },
+      {
+        "line": 315,
+        "outcome": "true"
+      },
+      {
+        "line": 327,
+        "outcome": "false"
+      },
+      {
+        "line": 327,
+        "outcome": "true"
+      },
+      {
+        "line": 330,
+        "outcome": "false"
+      },
+      {
+        "line": 330,
+        "outcome": "true"
+      },
+      {
+        "line": 336,
+        "outcome": "false"
+      },
+      {
+        "line": 336,
+        "outcome": "true"
+      },
+      {
+        "line": 339,
+        "outcome": "false"
+      },
+      {
+        "line": 339,
+        "outcome": "true"
+      },
+      {
+        "line": 357,
+        "outcome": "false"
+      },
+      {
+        "line": 357,
+        "outcome": "true"
+      },
+      {
+        "line": 362,
+        "outcome": "false"
+      },
+      {
+        "line": 362,
+        "outcome": "true"
+      },
+      {
+        "line": 374,
+        "outcome": "false"
+      },
+      {
+        "line": 374,
+        "outcome": "true"
+      },
+      {
+        "line": 378,
+        "outcome": "false"
+      },
+      {
+        "line": 378,
+        "outcome": "true"
+      },
+      {
+        "line": 383,
+        "outcome": "false"
+      },
+      {
+        "line": 383,
+        "outcome": "true"
+      },
+      {
+        "line": 396,
+        "outcome": "false"
+      },
+      {
+        "line": 396,
+        "outcome": "true"
+      },
+      {
+        "line": 400,
+        "outcome": "false"
+      },
+      {
+        "line": 400,
+        "outcome": "true"
+      },
+      {
+        "line": 405,
+        "outcome": "false"
+      },
+      {
+        "line": 405,
+        "outcome": "true"
+      },
+      {
+        "line": 417,
+        "outcome": "false"
+      },
+      {
+        "line": 417,
+        "outcome": "true"
+      },
+      {
+        "line": 422,
+        "outcome": "false"
+      },
+      {
+        "line": 422,
+        "outcome": "true"
+      },
+      {
+        "line": 428,
+        "outcome": "false"
+      },
+      {
+        "line": 428,
+        "outcome": "true"
+      },
+      {
+        "line": 436,
+        "outcome": "false"
+      },
+      {
+        "line": 436,
+        "outcome": "true"
+      },
+      {
+        "line": 446,
+        "outcome": "false"
+      },
+      {
+        "line": 446,
+        "outcome": "true"
+      },
+      {
+        "line": 452,
+        "outcome": "false"
+      },
+      {
+        "line": 452,
+        "outcome": "true"
+      },
+      {
+        "line": 501,
+        "outcome": "false"
+      },
+      {
+        "line": 501,
+        "outcome": "true"
+      },
+      {
+        "line": 507,
+        "outcome": "false"
+      },
+      {
+        "line": 507,
+        "outcome": "true"
+      },
+      {
+        "line": 525,
+        "outcome": "false"
+      },
+      {
+        "line": 525,
+        "outcome": "true"
+      },
+      {
+        "line": 530,
+        "outcome": "false"
+      },
+      {
+        "line": 530,
+        "outcome": "true"
+      },
+      {
+        "line": 544,
+        "outcome": "false"
+      },
+      {
+        "line": 544,
+        "outcome": "true"
+      },
+      {
+        "line": 549,
+        "outcome": "false"
+      },
+      {
+        "line": 549,
+        "outcome": "true"
+      },
+      {
+        "line": 562,
+        "outcome": "false"
+      },
+      {
+        "line": 562,
+        "outcome": "true"
+      },
+      {
+        "line": 567,
+        "outcome": "false"
+      },
+      {
+        "line": 567,
+        "outcome": "true"
+      },
+      {
+        "line": 580,
+        "outcome": "false"
+      },
+      {
+        "line": 580,
+        "outcome": "true"
+      },
+      {
+        "line": 585,
+        "outcome": "false"
+      },
+      {
+        "line": 585,
+        "outcome": "true"
+      },
+      {
+        "line": 598,
+        "outcome": "false"
+      },
+      {
+        "line": 598,
+        "outcome": "true"
+      },
+      {
+        "line": 603,
+        "outcome": "false"
+      },
+      {
+        "line": 603,
+        "outcome": "true"
+      },
+      {
+        "line": 636,
+        "outcome": "false"
+      },
+      {
+        "line": 636,
+        "outcome": "true"
+      }
+    ],
+    "paragraphs": "22/22",
+    "program": "CBACT04C",
+    "releasable": false,
+    "schema": "scenario-adequacy/2",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "threshold_status": "not-approved",
+    "uncovered": [
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:189:671",
+        "line": 189,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      }
+    ]
+  },
+  "before_faults": {
+    "coverage_by_class": {
+      "business-logic": {
+        "covered": 8,
+        "fraction": "8/8",
+        "total": 8
+      },
+      "io-handling": {
+        "covered": 56,
+        "fraction": "56/86",
+        "total": 86
+      }
+    },
+    "decision_outcomes": "64/94",
+    "decision_points": "47/47",
+    "distinct_values_per_output_field": {},
+    "entered_paragraph_lines": [
+      234,
+      252,
+      270,
+      289,
+      307,
+      325,
+      350,
+      372,
+      393,
+      415,
+      443,
+      462,
+      473,
+      518,
+      522,
+      541,
+      559,
+      577,
+      595,
+      613,
+      628,
+      635
+    ],
+    "file_statuses": [
+      {
+        "count": 31,
+        "field": "TCATBALF-STATUS",
+        "line": 236,
+        "status": "00"
+      },
+      {
+        "count": 31,
+        "field": "XREFFILE-STATUS",
+        "line": 254,
+        "status": "00"
+      },
+      {
+        "count": 31,
+        "field": "DISCGRP-STATUS",
+        "line": 272,
+        "status": "00"
+      },
+      {
+        "count": 31,
+        "field": "ACCTFILE-STATUS",
+        "line": 291,
+        "status": "00"
+      },
+      {
+        "count": 31,
+        "field": "TRANFILE-STATUS",
+        "line": 309,
+        "status": "00"
+      },
+      {
+        "count": 149,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "TCATBALF-STATUS",
+        "line": 326,
+        "status": "10"
+      },
+      {
+        "count": 105,
+        "field": "ACCTFILE-STATUS",
+        "line": 356,
+        "status": "00"
+      },
+      {
+        "count": 134,
+        "field": "ACCTFILE-STATUS",
+        "line": 373,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "ACCTFILE-STATUS",
+        "line": 373,
+        "status": "23"
+      },
+      {
+        "count": 133,
+        "field": "XREFFILE-STATUS",
+        "line": 394,
+        "status": "00"
+      },
+      {
+        "count": 1,
+        "field": "XREFFILE-STATUS",
+        "line": 394,
+        "status": "23"
+      },
+      {
+        "count": 40,
+        "field": "DISCGRP-STATUS",
+        "line": 416,
+        "status": "00"
+      },
+      {
+        "count": 107,
+        "field": "DISCGRP-STATUS",
+        "line": 416,
+        "status": "23"
+      },
+      {
+        "count": 105,
+        "field": "DISCGRP-STATUS",
+        "line": 444,
+        "status": "00"
+      },
+      {
+        "count": 2,
+        "field": "DISCGRP-STATUS",
+        "line": 444,
+        "status": "23"
+      },
+      {
+        "count": 140,
+        "field": "TRANFILE-STATUS",
+        "line": 500,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "TCATBALF-STATUS",
+        "line": 524,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "XREFFILE-STATUS",
+        "line": 543,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "DISCGRP-STATUS",
+        "line": 561,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "ACCTFILE-STATUS",
+        "line": 579,
+        "status": "00"
+      },
+      {
+        "count": 27,
+        "field": "TRANFILE-STATUS",
+        "line": 597,
+        "status": "00"
+      }
+    ],
+    "instrumented": true,
+    "legacy_mutants_killed": null,
+    "observed_outcomes": [
+      {
+        "line": 188,
+        "outcome": "false"
+      },
+      {
+        "line": 188,
+        "outcome": "true"
+      },
+      {
+        "line": 189,
+        "outcome": "true"
+      },
+      {
+        "line": 191,
+        "outcome": "false"
+      },
+      {
+        "line": 191,
+        "outcome": "true"
+      },
+      {
+        "line": 194,
+        "outcome": "false"
+      },
+      {
+        "line": 194,
+        "outcome": "true"
+      },
+      {
+        "line": 195,
+        "outcome": "false"
+      },
+      {
+        "line": 195,
+        "outcome": "true"
+      },
+      {
+        "line": 214,
+        "outcome": "false"
+      },
+      {
+        "line": 214,
+        "outcome": "true"
+      },
+      {
+        "line": 237,
+        "outcome": "true"
+      },
+      {
+        "line": 242,
+        "outcome": "true"
+      },
+      {
+        "line": 255,
+        "outcome": "true"
+      },
+      {
+        "line": 260,
+        "outcome": "true"
+      },
+      {
+        "line": 273,
+        "outcome": "true"
+      },
+      {
+        "line": 278,
+        "outcome": "true"
+      },
+      {
+        "line": 292,
+        "outcome": "true"
+      },
+      {
+        "line": 297,
+        "outcome": "true"
+      },
+      {
+        "line": 310,
+        "outcome": "true"
+      },
+      {
+        "line": 315,
+        "outcome": "true"
+      },
+      {
+        "line": 327,
+        "outcome": "false"
+      },
+      {
+        "line": 327,
+        "outcome": "true"
+      },
+      {
+        "line": 330,
+        "outcome": "true"
+      },
+      {
+        "line": 336,
+        "outcome": "false"
+      },
+      {
+        "line": 336,
+        "outcome": "true"
+      },
+      {
+        "line": 339,
+        "outcome": "true"
+      },
+      {
+        "line": 357,
+        "outcome": "true"
+      },
+      {
+        "line": 362,
+        "outcome": "true"
+      },
+      {
+        "line": 374,
+        "outcome": "false"
+      },
+      {
+        "line": 374,
+        "outcome": "true"
+      },
+      {
+        "line": 378,
+        "outcome": "false"
+      },
+      {
+        "line": 378,
+        "outcome": "true"
+      },
+      {
+        "line": 383,
+        "outcome": "false"
+      },
+      {
+        "line": 383,
+        "outcome": "true"
+      },
+      {
+        "line": 396,
+        "outcome": "false"
+      },
+      {
+        "line": 396,
+        "outcome": "true"
+      },
+      {
+        "line": 400,
+        "outcome": "false"
+      },
+      {
+        "line": 400,
+        "outcome": "true"
+      },
+      {
+        "line": 405,
+        "outcome": "false"
+      },
+      {
+        "line": 405,
+        "outcome": "true"
+      },
+      {
+        "line": 417,
+        "outcome": "false"
+      },
+      {
+        "line": 417,
+        "outcome": "true"
+      },
+      {
+        "line": 422,
+        "outcome": "true"
+      },
+      {
+        "line": 428,
+        "outcome": "true"
+      },
+      {
+        "line": 436,
+        "outcome": "false"
+      },
+      {
+        "line": 436,
+        "outcome": "true"
+      },
+      {
+        "line": 446,
+        "outcome": "false"
+      },
+      {
+        "line": 446,
+        "outcome": "true"
+      },
+      {
+        "line": 452,
+        "outcome": "false"
+      },
+      {
+        "line": 452,
+        "outcome": "true"
+      },
+      {
+        "line": 501,
+        "outcome": "true"
+      },
+      {
+        "line": 507,
+        "outcome": "true"
+      },
+      {
+        "line": 525,
+        "outcome": "true"
+      },
+      {
+        "line": 530,
+        "outcome": "true"
+      },
+      {
+        "line": 544,
+        "outcome": "true"
+      },
+      {
+        "line": 549,
+        "outcome": "true"
+      },
+      {
+        "line": 562,
+        "outcome": "true"
+      },
+      {
+        "line": 567,
+        "outcome": "true"
+      },
+      {
+        "line": 580,
+        "outcome": "true"
+      },
+      {
+        "line": 585,
+        "outcome": "true"
+      },
+      {
+        "line": 598,
+        "outcome": "true"
+      },
+      {
+        "line": 603,
+        "outcome": "true"
+      },
+      {
+        "line": 636,
+        "outcome": "false"
+      }
+    ],
+    "paragraphs": "22/22",
+    "program": "CBACT04C",
+    "releasable": false,
+    "schema": "scenario-adequacy/2",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "threshold_status": "not-approved",
+    "uncovered": [
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:189:671",
+        "line": 189,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:237:777",
+        "line": 237,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:242:789",
+        "line": 242,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:255:815",
+        "line": 255,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:260:827",
+        "line": 260,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:273:854",
+        "line": 273,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:278:866",
+        "line": 278,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:292:892",
+        "line": 292,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:297:904",
+        "line": 297,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:310:930",
+        "line": 310,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:315:942",
+        "line": 315,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:330:972",
+        "line": 330,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:339:989",
+        "line": 339,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:357:1026",
+        "line": 357,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:362:1038",
+        "line": 362,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:422:1147",
+        "line": 422,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:428:1160",
+        "line": 428,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:501:1305",
+        "line": 501,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:507:1317",
+        "line": 507,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:525:1346",
+        "line": 525,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:530:1358",
+        "line": 530,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:544:1383",
+        "line": 544,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:549:1395",
+        "line": 549,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:562:1420",
+        "line": 562,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:567:1432",
+        "line": 567,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:580:1457",
+        "line": 580,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:585:1469",
+        "line": 585,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:598:1494",
+        "line": 598,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:603:1506",
+        "line": 603,
+        "outcome": "false",
+        "reason": "not-observed; no unreachability claim"
+      },
+      {
+        "classification": "io-handling",
+        "id": "legacy:cobol-decision:CBACT04C:636:1590",
+        "line": 636,
+        "outcome": "true",
+        "reason": "not-observed; no unreachability claim"
+      }
+    ]
+  },
+  "campaign_head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+  "campaign_start_sha256": "5934071a3e6222696b5341fb90d63b0c237504d3247a27d1d67864f71ecb40d1",
+  "compiler_binary_layout": {
+    "S9(3)": 2,
+    "S9(4)": 2,
+    "S9(8)": 4,
+    "S9(9)": 4
+  },
+  "compiler_runtime_contract": {
+    "library_sha256": "67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429",
+    "package": "3.1.2-5.1ubuntu1"
+  },
+  "compiler_storage_semantics": {
+    "initial_defaults": true,
+    "overlay_equalities": 512,
+    "overlay_maximum": 255,
+    "timing_lengths": [
+      4,
+      8
+    ],
+    "unsigned_lengths": [
+      2,
+      2
+    ]
+  },
+  "content_sha256": "011fe3dfc0e298d81db7ad5e139aa37ce3a387c211b72d6c2a530ab8f6da4312",
+  "eligible_kill_rate": "308/421",
+  "evidence_gap_ids": [
+    "CBACT04C-receiving-scale-72-6",
+    "CBACT04C-receiving-size-125-13",
+    "CBACT04C-receiving-scale-125-14",
+    "CBACT04C-receiving-size-133-19",
+    "CBACT04C-receiving-scale-133-20",
+    "CBACT04C-receiving-size-138-21",
+    "CBACT04C-receiving-size-139-23",
+    "CBACT04C-receiving-scale-139-24",
+    "CBACT04C-receiving-scale-164-26",
+    "CBACT04C-receiving-scale-169-30",
+    "CBACT04C-receiving-size-172-31",
+    "CBACT04C-receiving-scale-172-32",
+    "CBACT04C-receiving-scale-173-34",
+    "CBACT04C-receiving-size-177-35",
+    "CBACT04C-constant-192-48",
+    "CBACT04C-constant-192-49",
+    "CBACT04C-delete-ADD-192-50",
+    "CBACT04C-constant-214-70",
+    "CBACT04C-constant-214-71",
+    "CBACT04C-skip-PERFORM-216-74",
+    "CBACT04C-skip-PERFORM-220-75",
+    "CBACT04C-constant-235-81",
+    "CBACT04C-constant-235-82",
+    "CBACT04C-delete-MOVE-235-83",
+    "CBACT04C-constant-240-89",
+    "CBACT04C-constant-240-90",
+    "CBACT04C-delete-MOVE-240-91",
+    "CBACT04C-delete-MOVE-246-93",
+    "CBACT04C-skip-PERFORM-247-94",
+    "CBACT04C-skip-PERFORM-248-95",
+    "CBACT04C-constant-253-96",
+    "CBACT04C-constant-253-97",
+    "CBACT04C-delete-MOVE-253-98",
+    "CBACT04C-constant-258-104",
+    "CBACT04C-constant-258-105",
+    "CBACT04C-delete-MOVE-258-106",
+    "CBACT04C-delete-MOVE-264-108",
+    "CBACT04C-skip-PERFORM-265-109",
+    "CBACT04C-skip-PERFORM-266-110",
+    "CBACT04C-constant-271-111",
+    "CBACT04C-constant-271-112",
+    "CBACT04C-delete-MOVE-271-113",
+    "CBACT04C-constant-276-119",
+    "CBACT04C-constant-276-120",
+    "CBACT04C-delete-MOVE-276-121",
+    "CBACT04C-delete-MOVE-282-123",
+    "CBACT04C-skip-PERFORM-283-124",
+    "CBACT04C-skip-PERFORM-284-125",
+    "CBACT04C-constant-290-126",
+    "CBACT04C-constant-290-127",
+    "CBACT04C-delete-MOVE-290-128",
+    "CBACT04C-constant-295-134",
+    "CBACT04C-constant-295-135",
+    "CBACT04C-delete-MOVE-295-136",
+    "CBACT04C-delete-MOVE-301-138",
+    "CBACT04C-skip-PERFORM-302-139",
+    "CBACT04C-skip-PERFORM-303-140",
+    "CBACT04C-constant-308-141",
+    "CBACT04C-constant-308-142",
+    "CBACT04C-delete-MOVE-308-143",
+    "CBACT04C-constant-313-149",
+    "CBACT04C-constant-313-150",
+    "CBACT04C-delete-MOVE-313-151",
+    "CBACT04C-delete-MOVE-319-153",
+    "CBACT04C-skip-PERFORM-320-154",
+    "CBACT04C-skip-PERFORM-321-155",
+    "CBACT04C-delete-MOVE-328-160",
+    "CBACT04C-constant-333-166",
+    "CBACT04C-constant-333-167",
+    "CBACT04C-delete-MOVE-333-168",
+    "CBACT04C-delete-MOVE-343-172",
+    "CBACT04C-skip-PERFORM-344-173",
+    "CBACT04C-skip-PERFORM-345-174",
+    "CBACT04C-delete-MOVE-358-187",
+    "CBACT04C-constant-360-188",
+    "CBACT04C-constant-360-189",
+    "CBACT04C-delete-MOVE-360-190",
+    "CBACT04C-delete-MOVE-366-192",
+    "CBACT04C-skip-PERFORM-367-193",
+    "CBACT04C-skip-PERFORM-368-194",
+    "CBACT04C-delete-MOVE-379-199",
+    "CBACT04C-constant-381-200",
+    "CBACT04C-constant-381-201",
+    "CBACT04C-delete-MOVE-401-211",
+    "CBACT04C-constant-403-212",
+    "CBACT04C-constant-403-213",
+    "CBACT04C-relational-422-219",
+    "CBACT04C-delete-MOVE-423-223",
+    "CBACT04C-constant-425-224",
+    "CBACT04C-constant-425-225",
+    "CBACT04C-delete-MOVE-425-226",
+    "CBACT04C-delete-MOVE-432-228",
+    "CBACT04C-skip-PERFORM-433-229",
+    "CBACT04C-skip-PERFORM-434-230",
+    "CBACT04C-delete-MOVE-447-239",
+    "CBACT04C-constant-449-240",
+    "CBACT04C-constant-449-241",
+    "CBACT04C-delete-MOVE-491-264",
+    "CBACT04C-delete-MOVE-492-265",
+    "CBACT04C-delete-MOVE-493-266",
+    "CBACT04C-delete-MOVE-494-267",
+    "CBACT04C-delete-MOVE-502-277",
+    "CBACT04C-constant-504-278",
+    "CBACT04C-constant-504-279",
+    "CBACT04C-delete-MOVE-504-280",
+    "CBACT04C-delete-MOVE-511-282",
+    "CBACT04C-skip-PERFORM-512-283",
+    "CBACT04C-skip-PERFORM-513-284",
+    "CBACT04C-constant-523-285",
+    "CBACT04C-constant-523-286",
+    "CBACT04C-delete-MOVE-523-287",
+    "CBACT04C-constant-528-293",
+    "CBACT04C-constant-528-294",
+    "CBACT04C-delete-MOVE-528-295",
+    "CBACT04C-delete-MOVE-534-297",
+    "CBACT04C-skip-PERFORM-535-298",
+    "CBACT04C-skip-PERFORM-536-299",
+    "CBACT04C-constant-542-300",
+    "CBACT04C-constant-542-301",
+    "CBACT04C-delete-MOVE-542-302",
+    "CBACT04C-constant-547-308",
+    "CBACT04C-constant-547-309",
+    "CBACT04C-delete-MOVE-547-310",
+    "CBACT04C-delete-MOVE-553-312",
+    "CBACT04C-skip-PERFORM-554-313",
+    "CBACT04C-skip-PERFORM-555-314",
+    "CBACT04C-constant-560-315",
+    "CBACT04C-constant-560-316",
+    "CBACT04C-delete-MOVE-560-317",
+    "CBACT04C-constant-565-323",
+    "CBACT04C-constant-565-324",
+    "CBACT04C-delete-MOVE-565-325",
+    "CBACT04C-delete-MOVE-571-327",
+    "CBACT04C-skip-PERFORM-572-328",
+    "CBACT04C-skip-PERFORM-573-329",
+    "CBACT04C-constant-578-330",
+    "CBACT04C-constant-578-331",
+    "CBACT04C-delete-MOVE-578-332",
+    "CBACT04C-constant-583-338",
+    "CBACT04C-constant-583-339",
+    "CBACT04C-delete-MOVE-583-340",
+    "CBACT04C-delete-MOVE-589-342",
+    "CBACT04C-skip-PERFORM-590-343",
+    "CBACT04C-skip-PERFORM-591-344",
+    "CBACT04C-constant-596-345",
+    "CBACT04C-constant-596-346",
+    "CBACT04C-delete-MOVE-596-347",
+    "CBACT04C-constant-601-353",
+    "CBACT04C-constant-601-354",
+    "CBACT04C-delete-MOVE-601-355",
+    "CBACT04C-delete-MOVE-607-357",
+    "CBACT04C-skip-PERFORM-608-358",
+    "CBACT04C-skip-PERFORM-609-359",
+    "CBACT04C-delete-MOVE-630-373",
+    "CBACT04C-constant-638-380",
+    "CBACT04C-constant-638-382",
+    "CBACT04C-delete-MOVE-638-383",
+    "CBACT04C-constant-639-384",
+    "CBACT04C-constant-639-385",
+    "CBACT04C-delete-MOVE-639-386",
+    "CBACT04C-delete-MOVE-640-387",
+    "CBACT04C-delete-MOVE-641-388",
+    "CBACT04C-delete-MOVE-644-389",
+    "CBACT04C-CVACT03Y-receiving-size-6-1",
+    "CBACT04C-CVACT03Y-receiving-scale-6-2",
+    "CBACT04C-CVACT03Y-receiving-size-7-3",
+    "CBACT04C-CVACT03Y-receiving-scale-7-4"
+  ],
+  "excluded_equivalents": [],
+  "fault_count": 24,
+  "fault_expectations_met": 24,
+  "generator_avoided_count": 5,
+  "job": "INTCALC",
+  "kill_rate": "308/421",
+  "limitation": "Systematic pinned-source mutation; unexplained survivors block adequacy; listed compiler refusals are excluded from eligible denominators. Public engineering, not z/OS equivalence.",
+  "measurement_credit": false,
+  "model_calls": 0,
+  "mutant_count": 421,
+  "mutation_counts": {
+    "evidence-gap": 113,
+    "killed-divergent": 146,
+    "killed-failure": 162
+  },
+  "not_compiled": [],
+  "oracle_class": "executable-twin",
+  "oracle_status": "provisional",
+  "phase": "factory-review-engineering",
+  "qualification_credit": false,
+  "releasable": false,
+  "retained_killing_scenarios": [
+    "fault:236-missing:intcalc-two-accounts",
+    "fault:254-missing:intcalc-two-accounts",
+    "fault:272-missing:intcalc-two-accounts",
+    "fault:291-missing:intcalc-two-accounts",
+    "fault:309-missing:intcalc-two-accounts",
+    "fault:326-extended-read-error:intcalc-two-accounts",
+    "fault:326-read-error:intcalc-two-accounts",
+    "fault:356-rewrite-error:intcalc-two-accounts",
+    "fault:416-read-error:intcalc-two-accounts",
+    "fault:500-write-error:intcalc-two-accounts",
+    "fault:524-close-error:intcalc-two-accounts",
+    "fault:543-close-error:intcalc-two-accounts",
+    "fault:561-close-error:intcalc-two-accounts",
+    "fault:579-close-error:intcalc-two-accounts",
+    "fault:597-close-error:intcalc-two-accounts",
+    "intcalc-default-disclosure",
+    "intcalc-large-rate",
+    "intcalc-missing-account",
+    "intcalc-missing-disclosure",
+    "intcalc-missing-xref",
+    "intcalc-pic-0",
+    "intcalc-round-n0_39",
+    "intcalc-solver-rate-false",
+    "intcalc-three-accounts",
+    "intcalc-two-categories"
+  ],
+  "run_class": "engineering",
+  "schema": "factory-legacy-twin/1",
+  "twin_limits_path": "docs/factory/twin-limits.md",
+  "twin_limits_sha256": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+  "unresolved_survivors": [
+    "CBACT04C-receiving-scale-72-6",
+    "CBACT04C-receiving-size-125-13",
+    "CBACT04C-receiving-size-133-19",
+    "CBACT04C-receiving-scale-133-20",
+    "CBACT04C-receiving-size-138-21",
+    "CBACT04C-receiving-size-139-23",
+    "CBACT04C-receiving-scale-139-24",
+    "CBACT04C-receiving-scale-164-26",
+    "CBACT04C-receiving-scale-169-30",
+    "CBACT04C-receiving-size-172-31",
+    "CBACT04C-receiving-scale-172-32",
+    "CBACT04C-receiving-scale-173-34",
+    "CBACT04C-receiving-size-177-35",
+    "CBACT04C-constant-192-48",
+    "CBACT04C-constant-192-49",
+    "CBACT04C-delete-ADD-192-50",
+    "CBACT04C-skip-PERFORM-216-74",
+    "CBACT04C-skip-PERFORM-220-75",
+    "CBACT04C-constant-235-81",
+    "CBACT04C-constant-235-82",
+    "CBACT04C-delete-MOVE-235-83",
+    "CBACT04C-constant-240-89",
+    "CBACT04C-constant-240-90",
+    "CBACT04C-delete-MOVE-240-91",
+    "CBACT04C-constant-253-96",
+    "CBACT04C-constant-253-97",
+    "CBACT04C-delete-MOVE-253-98",
+    "CBACT04C-constant-258-104",
+    "CBACT04C-constant-258-105",
+    "CBACT04C-delete-MOVE-258-106",
+    "CBACT04C-constant-271-111",
+    "CBACT04C-constant-271-112",
+    "CBACT04C-delete-MOVE-271-113",
+    "CBACT04C-constant-276-119",
+    "CBACT04C-constant-276-120",
+    "CBACT04C-delete-MOVE-276-121",
+    "CBACT04C-constant-290-126",
+    "CBACT04C-constant-290-127",
+    "CBACT04C-delete-MOVE-290-128",
+    "CBACT04C-constant-295-134",
+    "CBACT04C-constant-295-135",
+    "CBACT04C-delete-MOVE-295-136",
+    "CBACT04C-constant-308-141",
+    "CBACT04C-constant-308-142",
+    "CBACT04C-delete-MOVE-308-143",
+    "CBACT04C-constant-313-149",
+    "CBACT04C-constant-313-150",
+    "CBACT04C-delete-MOVE-313-151",
+    "CBACT04C-delete-MOVE-328-160",
+    "CBACT04C-constant-333-166",
+    "CBACT04C-constant-333-167",
+    "CBACT04C-delete-MOVE-358-187",
+    "CBACT04C-constant-360-188",
+    "CBACT04C-constant-360-189",
+    "CBACT04C-delete-MOVE-379-199",
+    "CBACT04C-constant-381-200",
+    "CBACT04C-constant-381-201",
+    "CBACT04C-delete-MOVE-401-211",
+    "CBACT04C-constant-403-212",
+    "CBACT04C-constant-403-213",
+    "CBACT04C-delete-MOVE-423-223",
+    "CBACT04C-constant-425-224",
+    "CBACT04C-constant-425-225",
+    "CBACT04C-delete-MOVE-447-239",
+    "CBACT04C-constant-449-240",
+    "CBACT04C-constant-449-241",
+    "CBACT04C-delete-MOVE-491-264",
+    "CBACT04C-delete-MOVE-492-265",
+    "CBACT04C-delete-MOVE-493-266",
+    "CBACT04C-delete-MOVE-494-267",
+    "CBACT04C-delete-MOVE-502-277",
+    "CBACT04C-constant-504-278",
+    "CBACT04C-constant-504-279",
+    "CBACT04C-constant-523-285",
+    "CBACT04C-constant-523-286",
+    "CBACT04C-delete-MOVE-523-287",
+    "CBACT04C-constant-528-293",
+    "CBACT04C-constant-528-294",
+    "CBACT04C-delete-MOVE-528-295",
+    "CBACT04C-constant-542-300",
+    "CBACT04C-constant-542-301",
+    "CBACT04C-delete-MOVE-542-302",
+    "CBACT04C-constant-547-308",
+    "CBACT04C-constant-547-309",
+    "CBACT04C-delete-MOVE-547-310",
+    "CBACT04C-constant-560-315",
+    "CBACT04C-constant-560-316",
+    "CBACT04C-delete-MOVE-560-317",
+    "CBACT04C-constant-565-323",
+    "CBACT04C-constant-565-324",
+    "CBACT04C-delete-MOVE-565-325",
+    "CBACT04C-constant-578-330",
+    "CBACT04C-constant-578-331",
+    "CBACT04C-delete-MOVE-578-332",
+    "CBACT04C-constant-583-338",
+    "CBACT04C-constant-583-339",
+    "CBACT04C-delete-MOVE-583-340",
+    "CBACT04C-constant-596-345",
+    "CBACT04C-constant-596-346",
+    "CBACT04C-delete-MOVE-596-347",
+    "CBACT04C-constant-601-353",
+    "CBACT04C-constant-601-354",
+    "CBACT04C-delete-MOVE-601-355",
+    "CBACT04C-delete-MOVE-630-373",
+    "CBACT04C-constant-638-382",
+    "CBACT04C-constant-639-384",
+    "CBACT04C-constant-639-385",
+    "CBACT04C-delete-MOVE-639-386",
+    "CBACT04C-delete-MOVE-644-389",
+    "CBACT04C-CVACT03Y-receiving-size-6-1",
+    "CBACT04C-CVACT03Y-receiving-scale-6-2",
+    "CBACT04C-CVACT03Y-receiving-size-7-3",
+    "CBACT04C-CVACT03Y-receiving-scale-7-4"
+  ],
+  "zos_confirmation": false
+}

@@ -1,7 +1,7 @@
 {
   "schema": "factory-current-review-status/2",
   "as_of": "2026-10-15",
-  "release_evidence_sha256": "5ffe57a52e5fa262766bc3816383a78b57124ee0cfcddf2d3bd04b8c14342a63",
+  "release_evidence_sha256": "653f4b2f032044335771b01013ec131b43b3cf0ebb3bd70f98de7bb7df68c758",
   "intcalc": "Not releasable: Output diversity: source-assigned constants cannot meet threshold/2 as written; Howard must decide an explicit policy change before a signing-only release path can be claimed. Large original mutation receipts await the designated retention store; local staging and artifact hashes are recorded in the index. P1 must land with exact-head approval before generating the six final unsigned requests; no effective signatures have been applied.",
   "business": "8/8",
   "io": "85/86",

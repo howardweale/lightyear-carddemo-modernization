@@ -7,7 +7,7 @@
   "sources": [
     {
       "artifact_id": 11991164908,
-      "artifact_name": "aggregate",
+      "artifact_name": "equivalence-aggregate",
       "run_id": 38763552148,
       "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
       "zip_sha256": "1029d637abfcf0f1a22dd332b724698f4402257937870cba85d61c1a9a3ee4e0",
@@ -64,7 +64,7 @@
     },
     {
       "artifact_id": 11992057147,
-      "artifact_name": "intcalc-0",
+      "artifact_name": "factory-review-records-INTCALC-0",
       "run_id": 38763552148,
       "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
       "zip_sha256": "0e8f1e7649f3d8baf50ed2092bb37b8fd503e6abf58cc536862f9791e4768a33",
@@ -258,7 +258,7 @@
     },
     {
       "artifact_id": 11991258893,
-      "artifact_name": "intcalc-1",
+      "artifact_name": "factory-review-records-INTCALC-1",
       "run_id": 38763552148,
       "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
       "zip_sha256": "d58bf1587b0601844b7fd673ffc840685306940f1f78f79c4a64df0436c6912e",
@@ -451,5 +451,26 @@
       }
     }
   ],
-  "retention_complete": false
+  "retention_complete": false,
+  "crosscheck_sources": [
+    {
+      "artifact_id": 11986492210,
+      "artifact_name": "equivalence-aggregate",
+      "run_id": 38753431380,
+      "head": "3f1ddcfb340673b906cff77922bb217320f04eab",
+      "zip_sha256": "775a7ba11b0a667d25ce3a9d229816ac51e0f28112045b2b3c198be4d996a4e8",
+      "files": {
+        "docs/factory/release-evidence-2026-10-15/pr-head-aggregate/INTCALC/loader-domain-review-projection.json": "95ce53c1d2266dafe3d77f890004fdb0216ea372b00170ac920c5aace7f6c625",
+        "docs/factory/release-evidence-2026-10-15/pr-head-aggregate/INTCALC/results.json": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+        "docs/factory/release-evidence-2026-10-15/pr-head-aggregate/INTCALC/threshold-2-by-scope.json": "52ead47be6932fd6e8499eff7ac233b2dab40034866a6ad1c75d876a80f68306",
+        "docs/factory/release-evidence-2026-10-15/pr-head-aggregate/POSTTRAN/results.json": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003",
+        "docs/factory/release-evidence-2026-10-15/pr-head-aggregate/POSTTRAN/threshold-2-by-scope.json": "8b4ef4757b0c230547af57c243cd3e2890a8ed24fd4fc845153ebc1f2cc7acda"
+      }
+    }
+  ],
+  "pr_head_crosscheck": {
+    "projected_thresholds": true,
+    "raw_thresholds": true,
+    "independent_crosscheck": true
+  }
 }

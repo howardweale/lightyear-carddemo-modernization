@@ -32,7 +32,7 @@ def inputs(root=ROOT):
     public = json.loads((root/PUBLIC).read_bytes())
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
         str(release_path.relative_to(root)), index_path,
-        *[path for archive in index["sources"] for path in archive["files"]],
+        *[path for archive in index["sources"] + index.get("crosscheck_sources", []) for path in archive["files"]],
         *[row["path"] for row in historical["sources"]]]))
 
 
@@ -52,7 +52,7 @@ def load(root=ROOT):
     if sha256((root/index_path).read_bytes()).hexdigest() != release["evidence_index"]["sha256"]:
         raise ValueError("release-status-index-hash")
     index = read(index_path)
-    for archive in index["sources"]:
+    for archive in index["sources"] + index.get("crosscheck_sources", []):
         for filename, expected in archive["files"].items():
             if sha256((root/filename).read_bytes()).hexdigest() != expected:
                 raise ValueError("release-status-evidence-hash")

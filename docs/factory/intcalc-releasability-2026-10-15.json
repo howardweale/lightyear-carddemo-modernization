@@ -5,7 +5,7 @@
   "run_id": 38763552148,
   "evidence_index": {
     "path": "docs/factory/release-evidence-2026-10-15/index.json",
-    "sha256": "761e0950de14a2d56e0bc81240c0aa4642c7f028c97b28a835084ed4ec309a37"
+    "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
   },
   "verdict": "Not releasable: Output diversity: source-assigned constants cannot meet threshold/2 as written; Howard must decide an explicit policy change before a signing-only release path can be claimed. Large original mutation receipts await the designated retention store; local staging and artifact hashes are recorded in the index. P1 must land with exact-head approval before generating the six final unsigned requests; no effective signatures have been applied.",
   "claim_scope": "twin",
@@ -3070,7 +3070,7 @@
       "name": "Business outcomes",
       "measured": "8/8",
       "now": "met",
-      "after_signatures": "met"
+      "after_signatures": "unchanged measured coverage"
     },
     {
       "name": "I/O outcomes",
@@ -13204,11 +13204,16 @@
     "effective": false,
     "sites_removed": 0
   },
+  "pr_head_crosscheck": {
+    "projected_thresholds": true,
+    "raw_thresholds": true,
+    "independent_crosscheck": true
+  },
   "blockers": [
     "Output diversity: source-assigned constants cannot meet threshold/2 as written; Howard must decide an explicit policy change before a signing-only release path can be claimed.",
     "Large original mutation receipts await the designated retention store; local staging and artifact hashes are recorded in the index.",
     "P1 must land with exact-head approval before generating the six final unsigned requests; no effective signatures have been applied."
   ],
   "six_request_path": "stopped-policy-decision-required",
-  "content_sha256": "5ffe57a52e5fa262766bc3816383a78b57124ee0cfcddf2d3bd04b8c14342a63"
+  "content_sha256": "653f4b2f032044335771b01013ec131b43b3cf0ebb3bd70f98de7bb7df68c758"
 }

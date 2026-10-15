@@ -6,7 +6,7 @@ Green main campaign 38763552148 at `f343925026bee705ed3c16a734dc5bae4b24c588`. R
 
 | Criterion | Measured | State now | After signatures alone |
 | --- | --- | --- | --- |
-| Business outcomes | 8/8 | met | met |
+| Business outcomes | 8/8 | met | unchanged measured coverage |
 | I/O outcomes | 85/86 | exception pending | met only with the exact structurally unreachable edge accepted |
 | Twin mutant kill rate | 308/421 | below threshold | 308/308 |
 | Output diversity | ['TRANSACT:TRAN-RECORD.TRAN-CAT-CD', 'TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY', 'TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID', 'TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME', 'TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP', 'TRANSACT:TRAN-RECORD.TRAN-SOURCE', 'TRANSACT:TRAN-RECORD.TRAN-TYPE-CD'] | failed | still fails unchanged threshold/2 |

@@ -26,12 +26,22 @@ def build(root, date):
         for path, expected in archive["files"].items():
             if sha256((root / path).read_bytes()).hexdigest() != expected:
                 raise ValueError("release-evidence-hash:" + path)
+    for archive in index.get("crosscheck_sources", []):
+        for path, expected in archive["files"].items():
+            if sha256((root/path).read_bytes()).hexdigest() != expected:
+                raise ValueError("release-crosscheck-evidence-hash:" + path)
+    if not index.get("pr_head_crosscheck") or not all(index["pr_head_crosscheck"].values()):
+        raise ValueError("release-pr-head-crosscheck-disagrees")
     def read(name):
         path = folder / name
-        if str(path.relative_to(root)) not in {p for a in index["sources"] for p in a["files"]}:
+        if str(path.relative_to(root)) not in {p for a in index["sources"] + index.get("crosscheck_sources", []) for p in a["files"]}:
             raise ValueError("unindexed-release-evidence")
         return json.loads(path.read_bytes())
     projection = read("aggregate/INTCALC/loader-domain-review-projection.json")
+    previous = read("pr-head-aggregate/INTCALC/loader-domain-review-projection.json")
+    crosscheck = {k: projection[k] == previous[k] for k in ("projected_thresholds", "raw_thresholds", "independent_crosscheck")}
+    if not all(crosscheck.values()):
+        raise ValueError("release-pr-head-crosscheck-disagrees")
     if projection["head"] != index["head"] or not all(
             r["passed"] for r in projection["independent_crosscheck"].values()):
         raise ValueError("release-crosscheck-disagrees")
@@ -102,7 +112,7 @@ def build(root, date):
     verdict = "Not releasable: " + " ".join(blockers)
     measured = programs["INTCALC"]
     criteria = [
-        dict(name="Business outcomes", measured=measured["business"]["fraction"], now="met", after_signatures="met"),
+        dict(name="Business outcomes", measured=measured["business"]["fraction"], now="met" if measured["business"]["covered"] == measured["business"]["total"] else "failed", after_signatures="unchanged measured coverage"),
         dict(name="I/O outcomes", measured=measured["io"]["fraction"], now="exception pending", after_signatures="met only with the exact structurally unreachable edge accepted"),
         dict(name="Twin mutant kill rate", measured=rate, now="below threshold", after_signatures=groups["twin"]["projected"]["kill_rate"]),
         dict(name="Output diversity", measured=deficits, now="failed", after_signatures="still fails unchanged threshold/2"),
@@ -116,7 +126,7 @@ def build(root, date):
         remaining_evidence_gaps=[r["id"] for r in pending], raw_evidence_gap_ids=gap_ids,
         loader_domain=dict(assessment_counts=dict(Counter(r["assessment"] for r in assessments.values())),
                            assessments=list(assessments.values()), effective=False, sites_removed=0),
-        blockers=blockers, six_request_path="stopped-policy-decision-required")
+        pr_head_crosscheck=crosscheck, blockers=blockers, six_request_path="stopped-policy-decision-required")
     result["content_sha256"] = digest(result)
     lines = ["# INTCALC releasability — " + date, "", "Twin-scoped engineering evidence only. No z/OS confirmation and no customer release.", "",
              f"Green main campaign {index['run_id']} at `{index['head']}`. Raw records are preserved.", "",

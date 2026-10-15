@@ -58,6 +58,7 @@ def execute_pipeline(job, output, head, search=True):
     baseline=triage(ROOT,job,head); write(output/'triage.json',baseline)
     text,ir=load_ir(ROOT,PROGRAMS[job]); write(output/'typed-ir.json',ir)
     chain=toolchain(); write(output/'toolchain.json',chain)
+    numeric_profile={k:chain['binary_profile'][k] for k in ('binary_truncate','byteorder')}
     tests=adversarial_rules(output/'normalization-tests');write(output/'normalization-tests.json',tests)
     original=compile_object(ROOT,output/'compiler/original',PROGRAMS[job])
     resolutions=[]; matches={}; validations=[]; class_validations=[]; solver_count=0
@@ -80,7 +81,7 @@ def execute_pipeline(job, output, head, search=True):
             after=statement(following,ir)
             class_pair=dict(original=after,mutant=after,fields={**local['fields'],**after['fields']},target=local['target'],
                             original_source=local['original_source']+'\n'+following,mutant_source=local['mutant_source']+'\n'+following)
-            validation=validate_pair(class_pair,folder/'class-validation')
+            validation=validate_pair(class_pair,folder/'class-validation',**numeric_profile)
             class_validations.append(dict(id=mid,class_id=match['class_id'],passed=validation['enabled'],validation_sha256=validation['content_sha256']))
             if validation['enabled']:matches.setdefault(match['class_id'],{})[mid]=match
         try:
@@ -99,11 +100,11 @@ def execute_pipeline(job, output, head, search=True):
                 write(folder/'pair.json',local)
                 # No local probe may exceed the approved program wall/output caps.
                 solver_count+=1
-                validation=validate_pair(local,folder/'solver')
+                validation=validate_pair(local,folder/'solver',**numeric_profile)
                 validations.append(dict(id=mid,**validation))
                 if mutant['operator']=='rounded':class_validations.append(dict(id=mid,class_id='receiving-pic-identity/1',passed=validation['enabled'],validation_sha256=validation['content_sha256']))
                 if validation['enabled']:
-                    proof=prove(local,folder/'solver',validation)
+                    proof=prove(local,folder/'solver',validation,binary_truncate=numeric_profile['binary_truncate'])
                     recheck(folder/'solver')
                     if proof['result']=='unsat':
                         result.update(status='equivalent',route='S3',basis='solver-proven (local)',

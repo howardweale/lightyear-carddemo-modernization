@@ -125,3 +125,14 @@ class ContractSchemaTests(unittest.TestCase):
         rows=[dict(id='mutant',program='INTCALC',route='S1',status='equivalent')]
         audit=audit_request('INTCALC','a'*40,{},audit_samples(rows,'run'),rows)
         self.assertEqual('unsigned',audit['status'])
+
+class ToolchainProfileTests(unittest.TestCase):
+    def test_binary_profile_comes_from_included_config_and_fails_closed(self):
+        import tempfile
+        from lightyear_mainframe.equivalence_compiler import binary_profile
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'ibm.conf').write_text('include "base.conf"\nbinary-truncate: yes\n')
+            (root/'base.conf').write_text('binary-truncate: no\nbinary-byteorder: big-endian\nbinary-size: 2-4-8\n')
+            self.assertTrue(binary_profile(root)['binary_truncate'])
+            (root/'ibm.conf').write_text('binary-size: unknown\n')
+            with self.assertRaises(ValueError):binary_profile(root)

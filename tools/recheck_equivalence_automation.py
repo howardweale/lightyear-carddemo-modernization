@@ -23,7 +23,8 @@ def check(source,output):
     baseline=verify(json.loads((source/'triage.json').read_text()));triaged={r['id']:r for r in baseline['rows']}
     for path,sha in baseline['sources'].items():
         if digest((ROOT/path).read_text().encode())!=sha:raise ValueError('source-binding')
-    if toolchain()!=json.loads((source/'toolchain.json').read_text()):raise ValueError('toolchain-changed')
+    chain=toolchain()
+    if chain!=json.loads((source/'toolchain.json').read_text()):raise ValueError('toolchain-changed')
     original=compile_object(ROOT,output/'original',PROGRAMS[job]);text,ir=load_ir(ROOT,PROGRAMS[job]);checked=[]
     for row in ledger['rows']:
         if row['status'] not in ('equivalent','killed'):continue
@@ -41,7 +42,7 @@ def check(source,output):
             local=pair(text,mutant,ir)
             proof=verify(json.loads((source/'mutants'/mid/'solver/solver.json').read_text()))
             if proof['pair_sha256']!=digest(local):raise ValueError('solver-pair-binding')
-            validation=validate_pair(local,folder/'validation')
+            validation=validate_pair(local,folder/'validation',**{k:chain['binary_profile'][k] for k in ('binary_truncate','byteorder')})
             if not validation['enabled']:raise ValueError('encoder-no-longer-valid')
             if recheck(source/'mutants'/mid/'solver')!='unsat':raise ValueError('solver-proof-not-reproduced')
         else:raise ValueError('unsupported-resolution-route')

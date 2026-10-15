@@ -228,7 +228,7 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
                             *['accept '+name for name in names], body,
                             f'perform varying LY-J from 1 by 1 until LY-J > {field["length"]}',
                             'compute LY-BYTE = function ord(LY-RAW(LY-J:1)) - 1',
-                            'display LY-BYTE with no advancing', 'end-perform', 'display ""',
+                            'display LY-BYTE with no advancing', 'end-perform', 'display "|"',
                             'end-perform', 'stop run.'])+'\n'
         path = folder/(label+'.cob'); path.write_text(source)
         execute(['cobc','-x','-free','-std=ibm','-fsign=EBCDIC','-O2', path.name,'-o',label],folder,folder/(label+'-compile'))
@@ -241,7 +241,7 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
         else:
             for i, (values, row) in enumerate(zip(vectors, observed)):
                 n, _ = expected(pair[label], values, target, field, binary_truncate)
-                want = b''.join(f'{b:03d}'.encode() for b in stored_bytes(n, field, byteorder))
+                want = b''.join(f'{b:03d}'.encode() for b in stored_bytes(n, field, byteorder)) + b'|'
                 if row != want and len(mismatches) < 10: mismatches.append(dict(index=i, expected=want.decode(), actual=row.decode(errors='replace')))
         reports.append(dict(side=label, tested=count, agreement=not mismatches, mismatches=mismatches,
                             source_sha256=digest(source.encode()), stdout_sha256=digest(run.stdout)))

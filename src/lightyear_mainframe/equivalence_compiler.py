@@ -51,6 +51,25 @@ def normalize(files):
     return result, mapping
 
 
+def binary_profile(directory=Path('/etc/gnucobol')):
+    values={}; seen=set()
+    def read(name):
+        if name in seen:raise ValueError('recursive-compiler-config')
+        seen.add(name)
+        for line in (directory/name).read_text().splitlines():
+            line=line.split('#',1)[0].strip()
+            include=re.fullmatch(r'include\s*:?\s*"([^"/]+)"',line)
+            if include:read(include[1]);continue
+            setting=re.fullmatch(r'(binary-truncate|binary-byteorder|binary-size)\s*:\s*(\S+)',line)
+            if setting:values[setting[1]]=setting[2]
+        seen.remove(name)
+    read('ibm.conf')
+    if values.get('binary-truncate') not in ('yes','no') or values.get('binary-byteorder') not in ('big-endian','native') or values.get('binary-size')!='2-4-8':
+        raise ValueError('unmodeled-twin-binary-profile:'+str(values))
+    import sys
+    return dict(binary_truncate=values['binary-truncate']=='yes',byteorder='big' if values['binary-byteorder']=='big-endian' else sys.byteorder,settings=values)
+
+
 def toolchain():
     require_ci(); host = linux_platform()
     names = ('cobc', 'gcc', 'objcopy', 'as', 'ld')
@@ -58,7 +77,7 @@ def toolchain():
     packages = subprocess.check_output(['dpkg-query', '-W', '-f=${binary:Package}=${Version}\n',
                                         'gcc*', 'binutils*', 'libcob*', 'gnucobol3', 'libfaketime'], env=clean_env()).decode()
     configs = {str(p): digest(p.read_bytes()) for p in sorted(Path('/etc/gnucobol').glob('*.conf'))}
-    return sealed(dict(host=host, binaries=binaries, packages=packages, configs=configs,
+    return sealed(dict(host=host, binaries=binaries, packages=packages, configs=configs, binary_profile=binary_profile(),
                        gcc_flags=['-O2', '-fPIC', '-c'], image_recipe='tools/legacy_twin/reproducible.Containerfile'))
 
 

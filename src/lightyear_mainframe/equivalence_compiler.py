@@ -15,7 +15,7 @@ from .systematic_mutation import apply
 
 RULES = {
     'comments': 'Replace C comments by whitespace, preserving quoted tokens and token boundaries.',
-    'line-markers': 'Remove preprocessor line directives only; refuse location macro consumers.',
+    'line-markers': 'Remove line directives only in closed units without includes or macros; otherwise preserve them.',
     'generated-private-names': 'Bijectively rename only compiler-generated static b_/f_/a_/c_ identifiers, consistently across headers.',
     'timestamp': 'No textual rewrite: fixed libfaketime compiler clock and SOURCE_DATE_EPOCH.',
 }
@@ -29,13 +29,17 @@ def require_ci():
 
 def normalize(files):
     combined = '\n'.join(files.values())
+    if '\\\n' in combined or '\\\r\n' in combined:
+        raise ValueError('normalization-line-splicing-not-supported')
     # Location macros or inline assembly could make apparently cosmetic names
     # observable. Fail closed; do not attempt textual compensation.
     if re.search(r'\b(?:__LINE__|__FILE__|__func__|__FUNCTION__|asm|__asm__)\b|##', combined):
         raise ValueError('normalization-observable-metadata')
-    cleaned = {n: TOKEN.sub(lambda m: ' ' if m[0].startswith(('/*', '//')) else m[0], t) for n, t in files.items()}
-    cleaned = {n: '\n'.join(line for line in t.splitlines() if not re.match(r'^\s*#\s*(?:line\b|\d+\s+")', line)) + '\n'
-               for n, t in cleaned.items()}
+    cleaned = {n: TOKEN.sub(lambda m: ' '+('\n'*m[0].count('\n')) if m[0].startswith(('/*', '//')) else m[0], t) for n, t in files.items()}
+    closed=not any(re.search(r'^\s*#\s*(?:define|include)\b',t,re.M) for t in cleaned.values())
+    if closed:
+        cleaned = {n: '\n'.join(line for line in t.splitlines() if not re.match(r'^\s*#\s*(?:line\b|\d+\s+")', line)) + '\n'
+                   for n, t in cleaned.items()}
     # Only names with a static declaration are eligible, so externally visible
     # ABI names cannot change. References in strings are deliberately untouched.
     names = []
@@ -45,8 +49,8 @@ def normalize(files):
     mapping = {n: 'lyeq_private_' + str(i) for i, n in enumerate(names)}
     if 'lyeq_private_' in combined: raise ValueError('normalization-name-collision')
     # Identifier macros/stringification can observe spelling too.
-    if mapping and any(re.search(r'^\s*#\s*define\b', t, re.M) for t in cleaned.values()):
-        mapping = {}  # conservative: preserve names when macro expansion is present
+    if mapping and any(re.search(r'^\s*#\s*(?:define|include)\b', t, re.M) for t in cleaned.values()):
+        mapping = {}  # included headers can stringify names too; preserve them
     result = {n: TOKEN.sub(lambda m: mapping.get(m[0], m[0]), t) for n, t in cleaned.items()}
     return result, mapping
 
@@ -100,7 +104,9 @@ def compile_object(root, folder, program, mutant=None):
     result = sealed(dict(object_sha256=digest((folder / 'comparison.o').read_bytes()),
                          raw_object_sha256=digest((folder / 'program.o').read_bytes()),
                          generated_sha256=digest(generated), normalized_sha256=digest(normalized),
-                         name_mapping=mapping, rules=list(RULES), literal_ordering='unchanged',
+                         name_mapping=mapping, rules=list(RULES),
+                         rule_applications=dict(comments=True,line_markers=not any(re.search(r'^\s*#\s*(?:define|include)\b',v,re.M) for v in generated.values()),generated_private_names=bool(mapping),timestamp='pinned compiler clock'),
+                         literal_ordering='unchanged',
                          object='comparison.o', normalization_version=1))
     (folder / 'identity.json').write_text(__import__('json').dumps(result, indent=2, sort_keys=True)+'\n')
     return result

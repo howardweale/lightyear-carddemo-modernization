@@ -199,3 +199,18 @@ class BinaryDomainTests(unittest.TestCase):
         self.assertEqual((-2147483648,2147483647),input_bounds(f,False))
         self.assertEqual((-999999999,999999999),input_bounds(f,True))
         self.assertEqual((0,4294967295),input_bounds(dict(f,signed=False),False))
+
+class NormalizationBoundaryTests(unittest.TestCase):
+    def test_header_macros_cannot_observe_renamed_identifiers(self):
+        _,mapping=normalize({'p.c':'#include "header.h"\nstatic int b_12=1;\n'})
+        self.assertEqual({},mapping)
+    def test_c_comment_line_splicing_refused(self):
+        text='int f(void) {\n// comment '+chr(92)+'\nreturn 2;\nreturn 1;\n}'
+        with self.assertRaisesRegex(ValueError,'line-splicing'):normalize({'p.c':text})
+
+class HeaderLocationTests(unittest.TestCase):
+    def test_included_location_macros_keep_line_directives_and_comment_line_count(self):
+        text='#include "header.h"\n#line 70 "original.c"\n/* first\nsecond */\nint f(void){return LOCATION_MACRO;}\n'
+        output,_=normalize({'p.c':text})
+        self.assertIn('#line 70 "original.c"',output['p.c'])
+        self.assertEqual(text.count('\n'),output['p.c'].count('\n'))

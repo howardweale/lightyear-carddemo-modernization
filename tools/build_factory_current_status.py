@@ -1,5 +1,9 @@
 """Render current status from the newest verified release and activation records."""
 import argparse
+import sys
+from pathlib import Path
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import json
 from tools.release_status_records import ROOT, inputs, load, render
 

@@ -1,5 +1,9 @@
 """Render a new dated packet from verified release records; never rewrite history."""
 import argparse
+import sys
+from pathlib import Path
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tools.release_status_records import ROOT, load, render
 
 

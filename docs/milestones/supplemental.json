@@ -372,6 +372,42 @@
         "docx",
         "pdf"
       ]
+    },
+    {
+      "number": 104,
+      "path": "MS-104/MS-104.md",
+      "title": "INTCALC release evidence and POSTTRAN comparison preparation",
+      "customer_value": "Separate loader refusals from valid comparisons and bind the next release or execution decision to exact evidence.",
+      "status": "Evidence controls and review packet delivered; effective INTCALC approvals and POSTTRAN Phase 2 remain gated",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 105,
+      "path": "MS-105/MS-105.md",
+      "title": "Reproducible compiler builds and MCP recovery",
+      "customer_value": "Build the pinned compiler reliably and reconnect to a running workflow without exposing an unfinished journal.",
+      "status": "Compiler repair merged; Windows and Linux MCP recovery suites passed with 30 tests each",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 106,
+      "path": "MS-106/MS-106.md",
+      "title": "Signed Factory history and local authority",
+      "customer_value": "Import complete historical decisions into a signed local authority while preserving their original conditions.",
+      "status": "Seven records signed and local signed-only consumption activated; release and execution approvals remain separate",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     }
   ]
 }

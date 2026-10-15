@@ -31,14 +31,14 @@ class MilestoneDocumentationTests(unittest.TestCase):
         supplemental = manifest["supplemental_artifacts"]
         self.assertEqual([a["path"] for a in supplemental], [
             f"docs/milestones/MS-{number}/MS-{number}.{suffix}"
-            for number in range(73, 104) for suffix in ("md", "docx", "pdf")])
+            for number in range(73, 107) for suffix in ("md", "docx", "pdf")])
         for artifact in supplemental:
             data = (ROOT / artifact["path"]).read_bytes()
             self.assertEqual(len(data), artifact["bytes"])
             self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
-        self.assertEqual(manifest["supplemental_milestone_count"], 31)
-        self.assertEqual(manifest["searchable_milestone_count"], 101)
+        self.assertEqual(manifest["supplemental_milestone_count"], 34)
+        self.assertEqual(manifest["searchable_milestone_count"], 104)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
@@ -64,10 +64,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 203)
-        self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 101)
+        self.assertEqual(readme.count("https://github.com/"), 209)
+        self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 104)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 101)
+        self.assertEqual(page.count('class="milestone"'), 104)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -88,7 +88,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
             readme + page,
         )
         self.assertTrue(github_paths)
-        self.assertEqual(len(raw_paths), 202)
+        self.assertEqual(len(raw_paths), 208)
         for relative in set(github_paths + raw_paths):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
@@ -108,7 +108,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         parsed = Rows(); parsed.feed(page)
         later = [row for row in parsed.rows if row["dataset"]["phase"] == "implementation"]
-        self.assertEqual(31, len(later))
+        self.assertEqual(34, len(later))
         script = re.search(r"<script>(.*?)</script>", page, re.DOTALL).group(1)
         harness = r'''const vm = require('node:vm');
 const fs = require('node:fs');
@@ -127,6 +127,8 @@ search.value='decidability'; search.apply(); result.decidability=visible();
 search.value='cancellation'; search.apply(); result.cancellation=visible();
 search.value='PR #214'; search.apply(); result.pr214=visible();
 search.value='PR #215'; search.apply(); result.pr215=visible();
+search.value='MCP recovery'; search.apply(); result.recovery=visible();
+search.value='Signed Factory'; search.apply(); result.authority=visible();
 search.value=''; phase.value='implementation'; phase.apply(); result.later=visible();
 phase.value='foundation'; phase.apply(); result.foundation=visible();
 console.log(JSON.stringify(result));'''
@@ -134,13 +136,13 @@ console.log(JSON.stringify(result));'''
                                 capture_output=True, text=True, check=False)
         self.assertEqual(0, result.returncode, result.stderr)
         output = json.loads(result.stdout)
-        for key, number in [("initial",79),("decidability",80),("cancellation",78),("pr214",83),("pr215",84)]:
+        for key, number in [("initial",79),("decidability",80),("cancellation",78),("pr214",83),("pr215",84),("recovery",105),("authority",106)]:
             self.assertTrue(any(f"/MS-{number}/MS-{number}.md" in url for url in output[key]), (key, output))
-        self.assertEqual(31, len(output["later"]))
+        self.assertEqual(34, len(output["later"]))
         self.assertEqual(10, len(output["foundation"]))
 
     def test_word_companions_bind_their_canonical_markdown(self) -> None:
-        for number in range(73, 104):
+        for number in range(73, 107):
             source = DOC_ROOT / f"MS-{number}/MS-{number}.md"
             with zipfile.ZipFile(source.with_suffix(".docx")) as archive:
                 core = ElementTree.fromstring(archive.read("docProps/core.xml"))

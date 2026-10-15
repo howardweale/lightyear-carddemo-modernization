@@ -222,14 +222,21 @@ def precision_bound(expr, fields):
     return bounds(expr)[2]
 
 
+def input_bounds(field,binary_truncate):
+    if field['usage']=='BINARY' and not binary_truncate:
+        bits=field['length']*8
+        return (-2**(bits-1),2**(bits-1)-1) if field['signed'] else (0,2**bits-1)
+    hi=10**field['digits']-1
+    return (-hi if field['signed'] else 0),hi
+
+
 def supported_precision(local, binary_truncate):
-    if not binary_truncate and any(f['usage']=='BINARY' for f in local['fields'].values()):
-        raise Unsupported('untruncated-binary-input-domain-not-validated')
+    fields={n:dict(f,digits=max(len(str(abs(x))) for x in input_bounds(f,binary_truncate))) for n,f in local['fields'].items()}
     for stmt in (local['original'],local['mutant']):
-        if 'expression' in stmt and precision_bound(stmt['expression'],local['fields'])>36:
+        if 'expression' in stmt and precision_bound(stmt['expression'],fields)>36:
             raise Unsupported('intermediate-decimal-precision-exceeds-validated-bound')
     for guard in local.get('dominating_guards',()):
-        if precision_bound(guard['expression'],local['fields'])>36:
+        if precision_bound(guard['expression'],fields)>36:
             raise Unsupported('guard-intermediate-precision')
 
 
@@ -241,8 +248,8 @@ def query(pair, binary_truncate=True):
     values = {n: z3.ToReal(v)/10**pair['fields'][n]['scale'] for n, v in integers.items()}
     solver = z3.Solver(); solver.set(timeout=30000, random_seed=0)
     for name, field in pair['fields'].items():
-        hi = 10**field['digits']-1
-        solver.add(integers[name] >= (-hi if field['signed'] else 0), integers[name] <= hi)
+        lo,hi=input_bounds(field,binary_truncate)
+        solver.add(integers[name] >= lo, integers[name] <= hi)
     for guard in pair.get('dominating_guards',()):
         predicate=expression_z3(guard['expression'],values,z3)
         solver.add(predicate if guard['outcome'] else z3.Not(predicate))
@@ -281,30 +288,38 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
     for i in range(count):
         values = {}
         for name in names:
-            f = pair['fields'][name]; hi = 10**f['digits']-1; lo = -hi if f['signed'] else 0
+            f = pair['fields'][name];lo,hi=input_bounds(f,binary_truncate)
             n = (lo, hi, 0, 1, -1 if f['signed'] else hi)[i] if i < 5 else rng.randint(lo, hi)
             values[name] = Fraction(n, 10**f['scale'])
         vectors.append(values)
-    def decimal_string(v):
-        # Domain denominators are powers of ten; Decimal is exact at <=18 digits.
-        return str(Decimal(v.numerator)/Decimal(v.denominator))
-    input_bytes = ('\n'.join(decimal_string(v[n]) for v in vectors for n in names)+'\n').encode()
+    # Load exact numeric storage through REDEFINES. ACCEPT into a numeric PIC
+    # could truncate the very out-of-PIC binary values this test must exercise.
+    input_bytes=('\n'.join(''.join(f'{b:03d}' for b in stored_bytes(int(v[n]*10**pair['fields'][n]['scale']),pair['fields'][n],byteorder))
+                           for v in vectors for n in names)+'\n').encode()
     (folder/'inputs.txt').write_bytes(input_bytes)
     reports = []
     for label in ('original', 'mutant'):
         declarations = []
-        for name in names:
+        for ordinal,name in enumerate(names):
             f = pair['fields'][name]
             sign=' SIGN LEADING' if f['usage']=='DISPLAY' and f['signed'] and f.get('sign')=='LEADING' else ''
             declarations.append(f"01 {name} PIC {f['picture']} {f['usage']}{sign}.")
+            declarations.append(f"01 LY-IN-{ordinal} REDEFINES {name} PIC X({f['length']}).")
             if name == target: declarations.append(f"01 LY-RAW REDEFINES {name} PIC X({f['length']}).")
         # Statement has only names declared above. Remove fixed-format comments.
         from .scenario_coverage import code
         body = ' '.join(code(line).strip() for line in pair[label+'_source'].splitlines()).rstrip('.')
+        loads=[]
+        for ordinal,name in enumerate(names):
+            length=pair['fields'][name]['length']
+            loads += ['accept LY-INPUT',f'perform varying LY-J from 1 by 1 until LY-J > {length}',
+                      'compute LY-POS = (LY-J - 1) * 3 + 1',
+                      f'move function char(function numval(LY-INPUT(LY-POS:3)) + 1) to LY-IN-{ordinal}(LY-J:1)',
+                      'end-perform']
         source = '\n'.join(['identification division.', 'program-id. probe.', 'data division.', 'working-storage section.',
-                            *declarations, '01 LY-I binary-long.', '01 LY-J binary-long.', '01 LY-BYTE PIC 999.',
+                            *declarations, '01 LY-I binary-long.', '01 LY-J binary-long.', '01 LY-POS binary-long.', '01 LY-INPUT PIC X(120).', '01 LY-BYTE PIC 999.',
                             'procedure division.', f'perform {count} times',
-                            *['accept '+name for name in names], body,
+                            *loads, body,
                             f'perform varying LY-J from 1 by 1 until LY-J > {field["length"]}',
                             'compute LY-BYTE = function ord(LY-RAW(LY-J:1)) - 1',
                             'display LY-BYTE with no advancing', 'end-perform', 'display "|"',
@@ -326,7 +341,8 @@ def validate_pair(pair, folder, binary_truncate=True, byteorder='big', count=100
                             source_sha256=digest(source.encode()), stdout_sha256=digest(run.stdout)))
     report = sealed(dict(shape_sha256=digest(pair), input_sha256=digest(input_bytes), count=count,
                          reports=reports, enabled=all(r['agreement'] for r in reports),
-                         binary_truncate=binary_truncate, byteorder=byteorder,
+                         binary_truncate=binary_truncate, byteorder=byteorder,input_initialization='exact-storage-byte-codes',
+                         input_domains={n:input_bounds(f,binary_truncate) for n,f in pair['fields'].items()},
                          complete_written_state='all receiving storage bytes; solver also compares overflow condition'))
     (folder/'validation.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
     return report

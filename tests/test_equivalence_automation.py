@@ -191,3 +191,11 @@ class PrecisionLimitsTests(unittest.TestCase):
         _,ir=fixture('           CONTINUE.\n');a=statement('           COMPUTE B = A * A * A * A * A * A * A * A',ir)
         with self.assertRaisesRegex(ValueError,'precision'):
             supported_precision(dict(original=a,mutant=a,fields=a['fields']),True)
+
+class BinaryDomainTests(unittest.TestCase):
+    def test_untruncated_binary_domain_is_storage_width_not_pic_digits(self):
+        from lightyear_mainframe.equivalence_solver import input_bounds
+        f=dict(usage='BINARY',length=4,signed=True,digits=9)
+        self.assertEqual((-2147483648,2147483647),input_bounds(f,False))
+        self.assertEqual((-999999999,999999999),input_bounds(f,True))
+        self.assertEqual((0,4294967295),input_bounds(dict(f,signed=False),False))

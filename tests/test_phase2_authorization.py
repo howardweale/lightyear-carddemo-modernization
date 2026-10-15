@@ -4,6 +4,7 @@ from pathlib import Path
 import copy
 import hashlib
 import json
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -11,6 +12,76 @@ from unittest.mock import patch
 from tools.posttran_phase2_authorization import check_artifact_metadata, verify_signed, REQUEST, PROOF, PUBLIC_KEY, PLAN, RETURN_CODES
 from tools.run_posttran_phase2 import reserve
 from tests import test_decision_console_factory as fixtures
+
+
+class RetainedPlanInspectionTests(unittest.TestCase):
+    def fixture(self, root, *, bad_hash=False):
+        from tools.check_posttran_retained_plan import PLAN, ORIGINAL, REQUEST
+        from tools.prepare_posttran_phase2 import digest
+        root = Path(root)
+        raw = b"reviewed program\n"
+        (root / "program.txt").write_bytes(raw)
+        expected = hashlib.sha256(raw).hexdigest()
+        common = dict(candidate_files={"program.txt": expected}, twin={}, scenarios=[],
+                      scenario_count=0, compared_outputs=[], normalization_rules=[], preparation_run=123)
+        original = dict(common, bound_files={"program.txt": expected})
+        original["content_sha256"] = digest(original)
+        (root / ORIGINAL).parent.mkdir(parents=True)
+        (root / ORIGINAL).write_text(json.dumps(original))
+        plan = dict(common, bound_files={"program.txt": expected},
+                    original_plan_sha256=hashlib.sha256((root / ORIGINAL).read_bytes()).hexdigest())
+        if bad_hash:
+            plan["bound_files"]["other.txt"] = "0" * 64
+            (root / "other.txt").write_text("not the bound bytes")
+        plan["content_sha256"] = digest(plan)
+        (root / PLAN).write_text(json.dumps(plan))
+        subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+        subprocess.run(["git", "add", "."], cwd=root, check=True)
+        subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                        "-c", "commit.gpgsign=false", "commit", "-qm", "Retained plan"], cwd=root, check=True)
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+        request = dict(details=dict(executable_commit=revision, request_seal=plan["content_sha256"]),
+                       sources=[dict(path=PLAN, commit=revision,
+                                     sha256=hashlib.sha256((root / PLAN).read_bytes()).hexdigest())])
+        (root / REQUEST).write_text(json.dumps(request))
+        return plan, expected
+
+    def test_retained_inspection_reports_drift_but_execution_still_refuses(self):
+        from tools.check_posttran_retained_plan import inspect, PLAN
+        from tools.run_posttran_phase2 import bound_plan
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            _, expected = self.fixture(root)
+            report = inspect(root)
+            self.assertTrue(report["current_checkout_matches_plan"])
+            self.assertFalse(report["execution_authorized"])
+            (root / "program.txt").write_text("changed after review")
+            report = inspect(root)
+            self.assertEqual(["program.txt"], report["changed_bound_files"])
+            self.assertFalse(report["current_checkout_matches_plan"])
+            self.assertFalse(report["execution_authorized"])
+            with patch("tools.run_posttran_phase2.ROOT", root), \
+                    patch("tools.run_posttran_phase2.PLAN", root / PLAN), \
+                    patch("tools.run_posttran_phase2.CANDIDATE", root / "program.txt"), \
+                    patch("tools.run_posttran_phase2.EXPECTED", expected):
+                with self.assertRaisesRegex(ValueError, "phase2-bound-file-changed"):
+                    bound_plan()
+
+    def test_retained_content_and_request_tampering_are_refused(self):
+        from tools.check_posttran_retained_plan import inspect, PLAN, REQUEST
+        for change in ("plan", "source_hash", "revision", "snapshot_hash"):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                self.fixture(root, bad_hash=change == "snapshot_hash")
+                if change == "plan":
+                    (root / PLAN).write_text("{}")
+                elif change in ("source_hash", "revision"):
+                    request = json.loads((root / REQUEST).read_bytes())
+                    if change == "source_hash": request["sources"][0]["sha256"] = "0" * 64
+                    else: request["details"]["executable_commit"] = "HEAD"
+                    (root / REQUEST).write_text(json.dumps(request))
+                with self.assertRaisesRegex(ValueError, "phase2-retained-"):
+                    inspect(root)
 
 
 class Phase2AuthorizationTests(unittest.TestCase):

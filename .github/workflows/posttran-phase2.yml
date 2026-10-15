@@ -5,6 +5,7 @@ on:
       - 'tools/prepare_posttran_phase2.py'
       - 'tools/run_posttran_phase2.py'
       - 'tools/posttran_phase2_authorization.py'
+      - 'tools/check_posttran_retained_plan.py'
       - 'tests/test_posttran_phase2.py'
       - 'docs/factory/posttran-phase2-*.json'
       - '.github/workflows/posttran-phase2.yml'
@@ -44,11 +45,11 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
         run: python3 -B -m unittest test_posttran_phase2 test_phase2_authorization test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
-      - name: Validate already committed plan without execution
+      - name: Inspect retained plan at its recorded commit without execution
         if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') != ''
         env:
           PYTHONPATH: src:.
-        run: python3 -B -m tools.run_posttran_phase2 --check-plan
+        run: python3 -B -m tools.check_posttran_retained_plan
       - name: Build and retain the pinned compiler image only
         if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') == ''
         run: |

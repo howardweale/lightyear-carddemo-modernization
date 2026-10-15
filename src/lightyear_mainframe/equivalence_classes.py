@@ -49,7 +49,7 @@ def class_contract(job, head, class_id, matches, packet_path, packet_sha256, mat
     contract = dict(schema='factory-contract/1', kind='equivalence-review', program=job if job in ('INTCALC', 'POSTTRAN') else 'factory',
                     sources=[dict(path=packet_path, sha256=packet_sha256, commit=head)],
                     details=dict(packet_sha256=packet_sha256, items=sorted(matches), class_proof_sha256=proof['content_sha256'],
-                                 reviewer_type='human', claim_scope='twin', dependencies=[dict(class_id=class_id, matcher_sha256=matcher_sha256)]))
+                                 reviewer_type='human', claim_scope='twin', dependencies=[class_id, 'matcher:'+matcher_sha256]))
     validate_contract(contract)
     return dict(contract=contract, class_proof=proof, status='unsigned', resolves_members=False)
 

@@ -115,3 +115,13 @@ class OracleGapTests(unittest.TestCase):
             finding=unobservable_counter(ir,text,mutant)
             self.assertEqual(gap,finding is not None)
             if finding:self.assertFalse(finding['resolved'])
+
+class ContractSchemaTests(unittest.TestCase):
+    def test_class_and_audit_packets_satisfy_existing_factory_schema(self):
+        from lightyear_mainframe.equivalence_classes import class_contract
+        from tools.run_equivalence_automation import audit_request
+        c=class_contract('INTCALC','a'*40,'adjacent-dead-literal-store/1',{'mutant':dict(mutant_sha256='b'*64)},'docs/factory/packet.json','b'*64,'c'*64)
+        self.assertEqual('unsigned',c['status'])
+        rows=[dict(id='mutant',program='INTCALC',route='S1',status='equivalent')]
+        audit=audit_request('INTCALC','a'*40,{},audit_samples(rows,'run'),rows)
+        self.assertEqual('unsigned',audit['status'])

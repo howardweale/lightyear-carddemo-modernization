@@ -40,7 +40,7 @@ def audit_request(job, head, baseline, samples, resolutions):
     packet=sealed(dict(head=head, program=job, samples=samples, resolutions=[r for r in resolutions if r['id'] in ids]))
     contract=dict(schema='factory-contract/1',kind='equivalence-review',program=job if job in ('INTCALC','POSTTRAN') else 'factory',
                   sources=[dict(path=f'docs/factory/equivalence-evidence-2026-10-15/{job}/audit-packet.json',sha256=digest((json.dumps(packet,indent=2,sort_keys=True)+'\n').encode()),commit=head)],
-                  details=dict(packet_sha256=digest(packet),items=ids,class_proof_sha256=None,reviewer_type='human',claim_scope='twin',dependencies=[dict(run_sha256=digest(resolutions))]))
+                  details=dict(packet_sha256=digest(packet),items=ids,class_proof_sha256=None,reviewer_type='human',claim_scope='twin',dependencies=['run:'+digest(resolutions)]))
     from lightyear_control_tower.factory_policy import validate_contract
     validate_contract(contract)
     return dict(status='unsigned',contract=contract,packet=packet)

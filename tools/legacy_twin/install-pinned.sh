@@ -7,6 +7,10 @@ set -euo pipefail
 snapshot=https://snapshot.ubuntu.com/ubuntu/20240501T000000Z
 stage=$(mktemp -d)
 trap 'rm -rf -- "$stage"' EXIT
+# Only public, checksum-verified packages live here. APT downloads as _apt and
+# must be able to traverse this directory when resolving local .deb inputs.
+chmod 0755 "$stage"
+apt_options=(-o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30)
 packages=(gnucobol3 libcob4-dev libcob4t64 libfaketime)
 versions=(3.1.2-5.1ubuntu1 3.1.2-5.1ubuntu1 3.1.2-5.1ubuntu1 0.9.10-2.1)
 paths=(pool/universe/g/gnucobol3 pool/universe/g/gnucobol3 pool/universe/g/gnucobol3 pool/universe/f/faketime)
@@ -17,9 +21,11 @@ for i in "${!packages[@]}"; do
     curl -fL --retry 2 --max-time 90 "$snapshot/${paths[$i]}/$name" -o "$stage/$name"
   fi
   echo "${hashes[$i]}  $stage/$name" | sha256sum --check --strict
+  chmod 0644 "$stage/$name"
+  sudo -u _apt test -r "$stage/$name"
  done
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends "$stage/"*.deb
+sudo apt-get "${apt_options[@]}" -o APT::Update::Error-Mode=any update
+sudo apt-get "${apt_options[@]}" install -y --no-install-recommends "$stage/"*.deb
 for i in "${!packages[@]}"; do
   [[ $(dpkg-query -W -f='${Version}' "${packages[$i]}") == "${versions[$i]}" ]]
 done

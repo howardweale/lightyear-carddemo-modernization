@@ -78,6 +78,9 @@ def manifest():
 
 
 def case(identifier):
+    if identifier.startswith('equivalence-cex:'):
+        from .equivalence_scenarios import case as counterexample
+        return counterexample(identifier)
     if identifier.startswith('b1-target:'):
         from .targeted_witness import case as targeted
         return targeted(identifier)

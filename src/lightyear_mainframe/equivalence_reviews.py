@@ -54,10 +54,12 @@ def apply_reviews(ledger, class_requests, audit_request, submissions, authority,
         for mid,item in decision['validation']['items'].items():
             if item['outcome'] in ('accept','reject'):reviewed[mid]='correct' if item['outcome']=='accept' else 'incorrect'
     audit,disabled=audit_disposition(samples,reviewed)
+    disabled_names={route for _,route in disabled}
     for row in rows:
-        if (row['program'],row['route']) in disabled:
+        if row['route'] in disabled_names:
             row.update(status='unresolved',disabled_route=row['route'],route=None,reason='confirmed-audit-error-disables-route')
     return sealed(dict(schema='equivalence-review-overlay/1',head=ledger['head'],program=ledger['program'],
                        parent_sha256=ledger['content_sha256'],rows=rows,audit=audit,
-                       disabled_routes=[list(x) for x in sorted(disabled)],signed_decisions=sorted(set(decisions)),
+                       disabled_routes=[list(x) for x in sorted(disabled)],global_route_revocations=sorted(disabled_names),
+                       revocation_policy='These route IDs must remain disabled across programs until repaired and re-audited.',signed_decisions=sorted(set(decisions)),
                        release_authorized=False,model_calls=0))

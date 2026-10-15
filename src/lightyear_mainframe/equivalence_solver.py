@@ -42,6 +42,20 @@ def statement(text, ir):
     if not tokens: raise Unsupported('empty-statement')
     verb = tokens.pop(0)
     rounded = False
+    if verb == 'IF':
+        if tokens[-1:] == ['THEN']:tokens.pop()
+        expr=expression(tokens,types)
+        if expr.type!='boolean':raise Unsupported('condition-type')
+        from dataclasses import asdict
+        expr=asdict(expr);selected={n:fields.get(n) for n in refs(expr)}
+        if any(not f or f['type']!='decimal' or f['digits']>18 or f['separate'] or f['usage'] not in ('DISPLAY','COMP-3','BINARY') for f in selected.values()):raise Unsupported('condition-field')
+        if 'LY-RESULT' in fields:raise Unsupported('reserved-probe-name')
+        def check_condition(e):
+            if e['kind']=='binary' and e['value'] not in ('+','-','*','=','<>','<','>','<=','>=','AND','OR'):raise Unsupported('condition-expression-shape')
+            for child in e.get('operands',()):check_condition(child)
+        check_condition(expr)
+        flag=dict(path='LY-RESULT',picture='9',usage='DISPLAY',digits=1,scale=0,signed=False,separate=False,filler=False,length=1,type='decimal')
+        return dict(kind='condition',expression=expr,fields={**selected,'LY-RESULT':flag},target='LY-RESULT')
     if verb == 'CONTINUE' and not tokens: return dict(kind='noop', fields={})
     if any(t in tokens for t in ('ON', 'SIZE', 'ERROR', 'GIVING', 'REMAINDER')):
         raise Unsupported('size-error-or-multiple-written-state-not-encoded')
@@ -76,6 +90,28 @@ def statement(text, ir):
     return dict(kind='assignment', verb=verb, target=target, expression=expr, rounded=rounded, fields=selected)
 
 
+def stable_guards(ir, line, fields):
+    """Retain lexical guards only when every intervening statement is translated
+    and cannot change any guard operand. Calls, I/O and alias writes are barriers.
+    """
+    nodes=ir['statements']; current=next((s for s in nodes if s['location']['path'].endswith('.cbl') and s['location']['line']==line),None)
+    if current is None:return []
+    available=symbols(ir);result=[]
+    def supported(e):
+        return (e['kind']!='binary' or e['value'] in ('+','-','*','=','<>','<','>','<=','>=','AND','OR')) and all(supported(x) for x in e.get('operands',()))
+    for guard in current['guards']:
+        node=nodes[guard['statement']]; names=refs(node['expression']);start=node['location']['line'];path=node['location']['path']
+        if not supported(node['expression']):continue
+        if any(i['path']==path and start<=i['line']<=line for i in ir['issues']):continue
+        between=[s for s in nodes if s['location']['path']==path and start<s['location']['line']<line]
+        if any(s.get('target') in names or s['kind']=='termination' for s in between):continue
+        if any(not available.get(n) or available[n]['type']!='decimal' or available[n]['digits']>18 for n in names):continue
+        fields.update({n:available[n] for n in names})
+        result.append(dict(expression=node['expression'],outcome=guard['outcome'],location=node['location'],
+                           no_operand_writes_through_line=line))
+    return result
+
+
 def pair(text, mutant, ir):
     """Find full enclosing statement; a changed continuation is never isolated."""
     if mutant.get('source_path') or mutant['operator'].startswith('receiving-'):
@@ -104,9 +140,13 @@ def pair(text, mutant, ir):
     target = a.get('target') or b.get('target')
     if not target or a.get('target', target) != b.get('target', target): raise Unsupported('different-written-state')
     fields = {**a['fields'], **b['fields']}
-    return dict(original=a, mutant=b, fields=fields, target=target,
+    if a['kind']=='condition' and b['kind']=='condition':
+        original+='\n               MOVE 1 TO LY-RESULT\n           ELSE\n               MOVE 0 TO LY-RESULT\n           END-IF'
+        replacement+='\n               MOVE 1 TO LY-RESULT\n           ELSE\n               MOVE 0 TO LY-RESULT\n           END-IF'
+    guards=stable_guards(ir,start+1,fields)
+    return dict(original=a, mutant=b, fields=fields, target=target,dominating_guards=guards,
                 original_source=original, mutant_source=replacement,
-                local_scope='entire PIC domain; no inferred dominating guards; complete receiving bytes plus size-error flag',
+                local_scope='PIC domains and only unchanged, fully translated lexical guards; complete receiving bytes plus size-error flag',
                 path_masking=False)
 
 
@@ -118,7 +158,9 @@ def eval_expr(expr, values):
     if expr['kind'] == 'literal': return Fraction(expr['value'])
     if expr['kind'] == 'reference': return values[expr['value']]
     args = [eval_expr(x, values) for x in expr['operands']]
-    if expr['kind'] == 'unary': return -args[0] if expr['value'] == '-' else args[0]
+    if expr['kind'] == 'unary': return not args[0] if expr['value']=='NOT' else -args[0] if expr['value'] == '-' else args[0]
+    if expr['value'] in ('=','<>','<','>','<=','>=','AND','OR'):
+        return {'=':lambda:args[0]==args[1],'<>':lambda:args[0]!=args[1],'<':lambda:args[0]<args[1],'>':lambda:args[0]>args[1],'<=':lambda:args[0]<=args[1],'>=':lambda:args[0]>=args[1],'AND':lambda:args[0] and args[1],'OR':lambda:args[0] or args[1]}[expr['value']]()
     return {'+': lambda: args[0]+args[1], '-': lambda: args[0]-args[1], '*': lambda: args[0]*args[1]}[expr['value']]()
 
 
@@ -149,6 +191,7 @@ def stored_bytes(n, field, byteorder='big'):
 
 
 def expected(stmt, values, target, field, binary_truncate):
+    if stmt['kind']=='condition':return int(eval_expr(stmt['expression'],values)),False
     if stmt['kind'] == 'noop': return int(values[target]*10**field['scale']), False
     return receive(eval_expr(stmt['expression'], values), field, stmt['rounded'], binary_truncate)
 
@@ -157,7 +200,9 @@ def expression_z3(expr, variables, z3):
     if expr['kind'] == 'reference': return variables[expr['value']]
     if expr['kind'] == 'literal': return z3.RealVal(expr['value'])
     args = [expression_z3(x, variables, z3) for x in expr['operands']]
-    if expr['kind'] == 'unary': return -args[0] if expr['value'] == '-' else args[0]
+    if expr['kind'] == 'unary': return z3.Not(args[0]) if expr['value']=='NOT' else -args[0] if expr['value'] == '-' else args[0]
+    if expr['value'] in ('=','<>','<','>','<=','>=','AND','OR'):
+        return {'=':lambda:args[0]==args[1],'<>':lambda:args[0]!=args[1],'<':lambda:args[0]<args[1],'>':lambda:args[0]>args[1],'<=':lambda:args[0]<=args[1],'>=':lambda:args[0]>=args[1],'AND':lambda:z3.And(*args),'OR':lambda:z3.Or(*args)}[expr['value']]()
     return {'+': lambda: args[0]+args[1], '-': lambda: args[0]-args[1], '*': lambda: args[0]*args[1]}[expr['value']]()
 
 
@@ -170,8 +215,12 @@ def query(pair, binary_truncate=True):
     for name, field in pair['fields'].items():
         hi = 10**field['digits']-1
         solver.add(integers[name] >= (-hi if field['signed'] else 0), integers[name] <= hi)
+    for guard in pair.get('dominating_guards',()):
+        predicate=expression_z3(guard['expression'],values,z3)
+        solver.add(predicate if guard['outcome'] else z3.Not(predicate))
     field = pair['fields'][pair['target']]
     def state(stmt):
+        if stmt['kind']=='condition':return z3.If(expression_z3(stmt['expression'],values,z3),1,0),z3.BoolVal(False)
         if stmt['kind'] == 'noop': return integers[pair['target']], z3.BoolVal(False)
         value = expression_z3(stmt['expression'], values, z3)*10**field['scale']
         magnitude = z3.If(value < 0, -value, value)

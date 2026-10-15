@@ -23,7 +23,7 @@ def case(name):
     prefix,job,payload=name.split(':',2)
     if prefix!='equivalence-cex' or job not in ('INTCALC','POSTTRAN') or len(payload)>4096: raise ValueError('counterexample-format')
     values=json.loads(base64.b64decode(payload,altchars=b'-_',validate=True))
-    if not isinstance(values,dict) or not values or len(values)>20:raise ValueError('counterexample-field-count')
+    if not isinstance(values,dict) or len(values)>20:raise ValueError('counterexample-field-count')
     _,meta,images,_=generated('intcalc-two-accounts' if job=='INTCALC' else 'posttran-positive')
     images=dict(images);changes=[]
     for field,value in sorted(values.items()):

@@ -136,3 +136,51 @@ class ToolchainProfileTests(unittest.TestCase):
             self.assertTrue(binary_profile(root)['binary_truncate'])
             (root/'ibm.conf').write_text('binary-size: unknown\n')
             with self.assertRaises(ValueError):binary_profile(root)
+
+class ConditionEncoderTests(unittest.TestCase):
+    def test_pic_domain_proves_condition_and_refutes_near_miss(self):
+        _,ir=fixture('           CONTINUE.\n')
+        a=statement('           IF A < 1000',ir);b=statement('           IF A <= 1000',ir)
+        local=dict(original=a,mutant=b,fields={**a['fields'],**b['fields']},target='LY-RESULT')
+        self.assertEqual('unsat',str(query(local)[0].check()))
+        c=statement('           IF A > 0',ir);local['mutant']=c
+        self.assertEqual('sat',str(query(local)[0].check()))
+
+class CounterexampleScenarioTests(unittest.TestCase):
+    def test_solver_model_only_maps_known_public_fields(self):
+        from lightyear_mainframe.equivalence_scenarios import identifier
+        _,ir=fixture('           CONTINUE.\n');a=statement('           MOVE A TO B',ir)
+        with self.assertRaisesRegex(ValueError,'no-public-dataset-binding'):
+            identifier('INTCALC',dict(original=a,mutant=a,fields=a['fields']),{'A':'123','B':'0'})
+    def test_nonfinite_and_unmapped_inputs_refused(self):
+        import base64
+        from lightyear_mainframe.equivalence_scenarios import case
+        for values in ({'UNMAPPED':'1'}, {'ACCT-CURR-BAL':'NaN'}):
+            name='equivalence-cex:POSTTRAN:'+base64.urlsafe_b64encode(json.dumps(values).encode()).decode()
+            with self.assertRaises(ValueError):case(name)
+
+class ExecutionKillTests(unittest.TestCase):
+    def test_sat_and_execution_refusal_are_not_kills(self):
+        from lightyear_mainframe.systematic_mutation import outcome
+        a=dict(status='executed',returncode=0,outputs={'out':'a'},stdout_sha256='s',stderr_sha256='e')
+        self.assertFalse(outcome(a,dict(status='execution-refusal')).startswith('killed-'))
+        self.assertFalse(outcome(dict(status='execution-refusal'),a).startswith('killed-'))
+        self.assertEqual('survived',outcome(a,dict(a)))
+        self.assertEqual('killed-divergent',outcome(a,dict(a,outputs={'out':'b'})))
+
+class DominatingGuardTests(unittest.TestCase):
+    def test_mutated_or_unknown_guard_state_is_not_assumed(self):
+        from lightyear_mainframe.equivalence_solver import stable_guards
+        for between,expected in [('',1),('             MOVE -2 TO A\n',0),("             CALL 'X'\n",0)]:
+            text,ir=fixture('           IF A > 1\n'+between+'             IF A < 0\n               MOVE 1 TO B\n             END-IF\n           END-IF.\n')
+            inner=next(s for s in ir['statements'] if s['kind']=='condition' and s['guards'])
+            self.assertEqual(expected,len(stable_guards(ir,inner['location']['line'],{})))
+    def test_safe_dominating_guard_is_in_saved_query(self):
+        _,ir=fixture('           IF A > 1\n             IF A < 0\n               MOVE 1 TO B\n             END-IF\n           END-IF.\n')
+        from lightyear_mainframe.equivalence_solver import stable_guards
+        a=statement('           IF A < 0',ir);b=statement('           IF A < -1',ir)
+        fields={**a['fields'],**b['fields']};line=ir['statements'][1]['location']['line']
+        local=dict(original=a,mutant=b,target='LY-RESULT',fields=fields)
+        self.assertEqual('sat',str(query(local)[0].check()))
+        local['dominating_guards']=stable_guards(ir,line,fields)
+        self.assertEqual('unsat',str(query(local)[0].check()))

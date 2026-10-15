@@ -94,7 +94,11 @@ def triage(root, job, head):
         retained_path = f'docs/factory/equivalence-baseline-2026-10-15/{job}.json'
         retained = verify(json.loads((root / retained_path).read_text()))
         fresh = retained['mutants']
-        if set(r['id'] for r in fresh) != set(inventory):
+        from .systematic_mutation import outcome
+        for current in fresh:
+            if current['status'].startswith('killed-') and not outcome(current.get('baseline',{}),current.get('actual',{})).startswith('killed-'):
+                raise ValueError('baseline-kill-missing-two-executed-lanes:'+current['id'])
+        if len(fresh)!=len(inventory) or set(r['id'] for r in fresh) != set(inventory):
             raise ValueError('baseline-inventory-mismatch')
         # The sealed per-mutant rows take precedence over stale aggregate ID lists.
         selected = set(argued) | {r['id'] for r in fresh if r['status'] in ('survived', 'evidence-gap')}

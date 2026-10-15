@@ -144,7 +144,7 @@
   "choice_authority": "User chose preparation of this unsigned proposal in this chat; no signing or activation authorized.",
   "release_evidence": {
     "path": "docs/factory/intcalc-releasability-2026-10-15.json",
-    "sha256": "c77cb3801a105f575916fd2f5b5bfee6ded85dac1ac83a2098192d7d14706ddf",
+    "sha256": "bf86e8a4dd3f4b55087789f28023c94668337ffb08a778f680a8e4a109778a4b",
     "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
     "run_id": 38763552148
   },
@@ -166,5 +166,5 @@
   "signature": null,
   "release_authorized": false,
   "implementation_gate": "This is a policy proposal only. Explicit threshold/3 consumer support and a throwaway-authority signing test must pass before a final effective request is prepared. Threshold/2 is unchanged.",
-  "content_sha256": "b5b4e9d514f4405dc8820ac3feaa1d167bb0afeb02d850f603d706e6dbccf76a"
+  "content_sha256": "0573f3fc94bb9a39b670070ac7d4cbf45ec8cc6a869b98f6b2621c17f82497f9"
 }

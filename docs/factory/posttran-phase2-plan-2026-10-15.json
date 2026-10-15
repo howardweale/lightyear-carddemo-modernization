@@ -185,7 +185,7 @@
     "tools/legacy_twin/reproducible_build.py": "bf70d495ffb197aeedf5f1b691284f35e7286e639a323820b0da1f653969e9bf",
     "tools/legacy_twin/run_reproduction.sh": "2b197292d41cdf8e79295f19cffb514ea26495a59649479c3a54c30cc35e4d8e",
     "tools/prepare_posttran_phase2.py": "9397086ea39c4f371f3ff9f774000a56b31bf99d44d5e790b83720d98776b7a2",
-    "tools/run_posttran_phase2.py": "55cc43259c505c7d97e25ebb583c0e754b27eab615645613ee6d77c0e2e21fb0",
+    "tools/run_posttran_phase2.py": "84b3fcf8de99aaf744261610e38118ea23f6a15397f1690144e9cb28667e278e",
     "tools/posttran_phase2_authorization.py": "73664de2e1fa8fd72af8b461fa04e8820d2b7d966543f0fb5728c60af46eda4f",
     "docs/factory/factory-authority.public.pem": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61"
   },
@@ -907,5 +907,5 @@
       "twin": 12
     }
   },
-  "content_sha256": "2cbf6dea4612483b457980abd83c028be6adb45b4138d93e3d7ac33b6c0bf3a3"
+  "content_sha256": "99df4d9a05c01750f895c3ba9c3528ee36259aa59ed2d7cabb175a29a9d8635f"
 }

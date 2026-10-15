@@ -5,14 +5,14 @@
   "sources": [
     {
       "path": "docs/factory/posttran-phase2-plan-2026-10-15.json",
-      "sha256": "fe8b214e48f652a2020841c350db81888458985180a078fdbea47234bdaeaf6f",
-      "commit": "54520fd92fead809378e87d82c58eda9677e2ecb"
+      "sha256": "c8949051f368610f68e3d7c0984349b149adda49472bacb60582d7e0353771a3",
+      "commit": "88cd5abd4efb84bb16bc81b08c93efa8dcb3d0d0"
     }
   ],
   "details": {
-    "executable_commit": "54520fd92fead809378e87d82c58eda9677e2ecb",
-    "request_seal": "99df4d9a05c01750f895c3ba9c3528ee36259aa59ed2d7cabb175a29a9d8635f",
-    "observer_sha256": "cab888026814c010bd3dcd2126f652c6de0efe4227f1cbf4a4290e7d9f85512f",
+    "executable_commit": "88cd5abd4efb84bb16bc81b08c93efa8dcb3d0d0",
+    "request_seal": "5ee851a0e132747c2dcfac3ffa941fbed28315587cbae3b7083d2607f9443b5c",
+    "observer_sha256": "6007d84bf15177d438016af304df4f73dc352b19413478b33e37b85199cec00e",
     "class_hashes": {
       "Candidate": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
       "Provenance": "6b8d2da6e4bfb04bd9ac65ef3e1862f1851ab33aa668a5c1cda3d123565a502a",

@@ -13,6 +13,12 @@ class ThresholdConditionTests(unittest.TestCase):
     setUp = fixtures.FactoryTests.setUp
     contract = fixtures.FactoryTests.contract
     decide = fixtures.FactoryTests.decide
+    def test_malformed_proof_details_return_the_refusal_code(self):
+        from lightyear_control_tower.threshold_conditions import validate_conditions
+        for value in (None, [], {}, {"details": "invalid"}):
+            with self.assertRaisesRegex(ValueError, "threshold-conditions-unmet"):
+                validate_conditions(value)
+
     def test_policy_inventory_matches_preserved_decision(self):
         from lightyear_control_tower.threshold_conditions import DECISIONS_SHA256, CONDITIONS
         raw = (REPOSITORY/DECISIONS).read_bytes()

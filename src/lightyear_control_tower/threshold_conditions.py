@@ -29,6 +29,8 @@ def condition_hashes():
 
 
 def validate_conditions(contract, root=None, *, check_evidence=True):
+    if not isinstance(contract, dict) or not isinstance(contract.get("details"), dict):
+        raise ValueError(REFUSAL)
     details = contract["details"]
     rows = details.get("conditions")
     effective = details["effective_condition"] == "unconditional"

@@ -9,7 +9,7 @@ import urllib.request
 
 from tools.prepare_posttran_phase2 import ROOT, OUTPUTS, sha, digest, save
 from tools.check_posttran_attempt1_phase1 import CANDIDATE, EXPECTED, policy, limits, structural
-PLAN = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-14.json'
+PLAN = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-15.json'
 
 
 def authorize(plan, env, head):
@@ -23,6 +23,11 @@ def authorize(plan, env, head):
 
 def bound_plan():
     plan = json.loads(PLAN.read_bytes())
+    original_path = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-14.json'
+    original = json.loads(original_path.read_bytes())
+    if sha(original_path.read_bytes()) != plan['original_plan_sha256']: raise ValueError('phase2-original-plan-binding')
+    for name in ('candidate_files', 'twin', 'scenarios', 'scenario_count', 'compared_outputs', 'normalization_rules', 'preparation_run'):
+        if plan[name] != original[name]: raise ValueError('phase2-preparation-evidence-changed:' + name)
     if digest({k:v for k,v in plan.items() if k!='content_sha256'})!=plan.get('content_sha256'):raise ValueError('phase2-plan-seal')
     for path, expected in {**plan['bound_files'], **plan['candidate_files']}.items():
         p = (ROOT / path).resolve()
@@ -35,6 +40,8 @@ def verify():
     plan=bound_plan()
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     authorize(plan,os.environ,head)
+    from tools.posttran_phase2_authorization import verify_signed
+    verify_signed(ROOT, plan, head, os.environ)
     return plan,head
 
 
@@ -43,6 +50,9 @@ def reserve(output):
     name = 'posttran-phase2-consumed-' + plan['content_sha256']
     repository = os.environ['GITHUB_REPOSITORY']
     if repository != 'howardweale/lightyear-carddemo-modernization': raise ValueError('phase2-repository')
+    from tools.posttran_phase2_authorization import verify_image
+    image_preflight = verify_image(plan, repository)
+    # All proof and image failures occur above this first write operation.
     # Atomic, persistent repository ref consumes the attempt before any execution.
     # A timeout is an unknown reservation outcome: stop; never retry this request.
     url = f'https://api.github.com/repos/{repository}/git/refs'
@@ -53,6 +63,7 @@ def reserve(output):
         reserved = json.load(response)
     if reserved['object']['sha'] != head: raise ValueError('phase2-reservation-ref-binding')
     output.mkdir(parents=True, exist_ok=False)
+    save(output / 'image-preflight.json', image_preflight)
     save(output / 'reservation.json', dict(plan_sha256=plan['content_sha256'], head=head, run_id=os.environ['GITHUB_RUN_ID'], attempt=1, consumed_before_execution=True))
     with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
         stream.write(f"reservation={name}\npreparation_run={plan['preparation_run']}\n")

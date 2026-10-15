@@ -4,6 +4,7 @@ on:
     paths:
       - 'tools/prepare_posttran_phase2.py'
       - 'tools/run_posttran_phase2.py'
+      - 'tools/posttran_phase2_authorization.py'
       - 'tests/test_posttran_phase2.py'
       - 'docs/factory/posttran-phase2-*.json'
       - '.github/workflows/posttran-phase2.yml'
@@ -30,14 +31,17 @@ jobs:
             spec/mainframe
             tests/mainframe
             tests/test_posttran_phase2.py
+            tests/test_phase2_authorization.py
+            tests/test_decision_console_factory.py
             tests/test_intcalc_loader_domain.py
             tests/test_release_crosscheck.py
             tests/test_release_packet.py
           sparse-checkout-cone-mode: false
+      - run: python3 -m pip install 'cryptography>=46,<47'
       - name: Validate authorization boundaries without running applications
         env:
           PYTHONPATH: src:.:tests
-        run: python3 -B -m unittest test_posttran_phase2 test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
+        run: python3 -B -m unittest test_posttran_phase2 test_phase2_authorization test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
       - name: Validate already committed plan without execution
         if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') != ''
         env:
@@ -89,10 +93,13 @@ jobs:
             spec/mainframe
             tests/mainframe
             tests/test_posttran_phase2.py
+            tests/test_phase2_authorization.py
+            tests/test_decision_console_factory.py
             tests/test_intcalc_loader_domain.py
             tests/test_release_crosscheck.py
             tests/test_release_packet.py
           sparse-checkout-cone-mode: false
+      - run: python3 -m pip install 'cryptography>=46,<47'
       - id: reserve
         name: Verify exact human-approved plan and head; consume once atomically
         env:
@@ -100,6 +107,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           POSTTRAN_PHASE2_APPROVED_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_HEAD }}
           POSTTRAN_PHASE2_APPROVED_PLAN: ${{ vars.POSTTRAN_PHASE2_APPROVED_PLAN }}
+          POSTTRAN_PHASE2_APPROVED_JOURNAL_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_JOURNAL_HEAD }}
         run: python3 -B -m tools.run_posttran_phase2 --reserve --output work/reservation
       - uses: actions/upload-artifact@v4
         with:
@@ -123,6 +131,8 @@ jobs:
             spec/mainframe
             tests/mainframe
             tests/test_posttran_phase2.py
+            tests/test_phase2_authorization.py
+            tests/test_decision_console_factory.py
             tests/test_intcalc_loader_domain.py
             tests/test_release_crosscheck.py
             tests/test_release_packet.py
@@ -141,11 +151,13 @@ jobs:
         with:
           name: ${{ needs.reserve.outputs.reservation }}
           path: work/reservation
+      - run: python3 -m pip install 'cryptography>=46,<47'
       - name: Compare unchanged attempt 1 once; preserve disagreements
         env:
           PYTHONPATH: src:.
           POSTTRAN_PHASE2_APPROVED_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_HEAD }}
           POSTTRAN_PHASE2_APPROVED_PLAN: ${{ vars.POSTTRAN_PHASE2_APPROVED_PLAN }}
+          POSTTRAN_PHASE2_APPROVED_JOURNAL_HEAD: ${{ vars.POSTTRAN_PHASE2_APPROVED_JOURNAL_HEAD }}
         run: python3 -B -m tools.run_posttran_phase2 --output work/results --archive work/image/compiler-image.tar --reservation work/reservation/reservation.json
       - uses: actions/upload-artifact@v4
         if: always()

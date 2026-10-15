@@ -110,6 +110,8 @@ def _factory_release(verdict, report, judge_key, bundle, authority):
         require(isinstance(bundle,dict) and set(bundle) == {"threshold", "approval", "io", "equivalents", "claim_scope"})
         threshold = dict(bundle["threshold"])
         contract = proof_contract(bundle["approval"])
+        from lightyear_control_tower.threshold_conditions import validate_conditions
+        validate_conditions(contract, getattr(authority, "evidence_root", None))
         authority.verify(bundle["approval"], "scenario-threshold-approval", contract, ("approve",))
         require(contract["details"]["policy_sha256"] == digest(threshold), "factory-threshold-binding")
         require(contract["details"]["version"] == threshold["schema"], "factory-threshold-version")
@@ -146,7 +148,9 @@ def _factory_release(verdict, report, judge_key, bundle, authority):
             if not compiler and row["mutant_id"] not in resolved:
                 reasons.append("signed-equivalence-review-required")
         reasons += assess(adequacy, threshold, report["compared_fields"], historical_io=False)
-    except (KeyError, TypeError, ValueError):
+    except (KeyError, TypeError, ValueError) as error:
+        if str(error) == "threshold-conditions-unmet":
+            reasons.append("threshold-conditions-unmet")
         reasons.append("signed-factory-threshold-evidence-required")
     if verdict.get("verdict") != "equivalent": reasons.append("verdict-not-equivalent")
     if verdict.get("oracle_status") == "provisional" or verdict.get("run_class") == "engineering":

@@ -1,0 +1,170 @@
+{
+  "schema": "factory-threshold-policy-proposal/1",
+  "prepared_on": "2026-10-15",
+  "proposed_policy": {
+    "schema": "scenario-threshold/3",
+    "business_logic_outcomes": "1/1",
+    "legacy_mutants_killed": "9/10",
+    "minimum_systematic_mutants": 50,
+    "distinct_values_per_output_field": 2,
+    "status": "unsigned-proposal-not-effective",
+    "constant_field_policy": "Only explicitly listed source-assigned constants may have one observed value; comparison and mutation testing remain mandatory.",
+    "constant_exemptions": [
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-TYPE-CD",
+        "constant_value": "01",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 482,
+        "source_line_sha256": "2c9b8cf53d02f929db06e9699deb73b7cbb78dd32e1f5a0218bb75008301d5ba",
+        "source_line_text": "           MOVE '01'                 TO TRAN-TYPE-CD                            ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-482-258",
+            "status": "killed-divergent"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-CAT-CD",
+        "constant_value": "05",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 483,
+        "source_line_sha256": "6c3be5407b46e33ec66ac1e5072eaa59e1af7d2909063a15ac9492fba0dad0f7",
+        "source_line_text": "           MOVE '05'                 TO TRAN-CAT-CD                             ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-483-259",
+            "status": "killed-divergent"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-SOURCE",
+        "constant_value": "System",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 484,
+        "source_line_sha256": "be80d2c041d8978e7f4f8d791c0c64aa6be6a4461bdffdd861703f3b81f6554f",
+        "source_line_text": "           MOVE 'System'             TO TRAN-SOURCE                             ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-484-260",
+            "status": "killed-divergent"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ID",
+        "constant_value": 0,
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 491,
+        "source_line_sha256": "cc4cd9451dea078d3c39cdb990660e0bbfad7a5e882a7562758cc8031e05d4af",
+        "source_line_text": "           MOVE 0                    TO TRAN-MERCHANT-ID                        ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-constant-491-262",
+            "status": "killed-divergent"
+          },
+          {
+            "id": "CBACT04C-constant-491-263",
+            "status": "killed-divergent"
+          },
+          {
+            "id": "CBACT04C-delete-MOVE-491-264",
+            "status": "evidence-gap"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME",
+        "constant_value": "SPACES",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 492,
+        "source_line_sha256": "533c54b7a632d013b6c3a0ab94d63eab3dbd74259273090f7116e72c6def5ffa",
+        "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-NAME                      ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-492-265",
+            "status": "evidence-gap"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY",
+        "constant_value": "SPACES",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 493,
+        "source_line_sha256": "6963381859563b6baa60a0976db45933f84962e77ee184eefe5b105f249de60b",
+        "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-CITY                      ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-493-266",
+            "status": "evidence-gap"
+          }
+        ]
+      },
+      {
+        "field": "TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP",
+        "constant_value": "SPACES",
+        "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "source_line": 494,
+        "source_line_sha256": "f6e12f375676b47a4693422c6502feb3443113e6d960baf30b076a6961cfbcef",
+        "source_line_text": "           MOVE SPACES               TO TRAN-MERCHANT-ZIP                       ",
+        "compared": true,
+        "measured_values": 1,
+        "mutants": [
+          {
+            "id": "CBACT04C-delete-MOVE-494-267",
+            "status": "evidence-gap"
+          }
+        ]
+      }
+    ]
+  },
+  "requested_by": "Howard",
+  "choice": "Threshold/3 with explicit constant-field exemptions",
+  "choice_authority": "User chose preparation of this unsigned proposal in this chat; no signing or activation authorized.",
+  "release_evidence": {
+    "path": "docs/factory/intcalc-releasability-2026-10-15.json",
+    "sha256": "c77cb3801a105f575916fd2f5b5bfee6ded85dac1ac83a2098192d7d14706ddf",
+    "head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+    "run_id": 38763552148
+  },
+  "invalidation": [
+    "Any bound source or assignment-line hash changes",
+    "Field ceases to be compared",
+    "Bound mutation evidence changes or is missing",
+    "Additional variable assignments or consumers invalidate the source-constant classification"
+  ],
+  "unchanged_requirements": [
+    "All business outcomes covered",
+    "All I/O outcomes covered or exactly accepted",
+    "At least 90 percent kills over at least 50 eligible mutants",
+    "No unexplained survivors; every equivalence dispositioned",
+    "All nonexempt compared fields have at least two values",
+    "Fresh compiled campaign and register dependencies bound"
+  ],
+  "effective": false,
+  "signature": null,
+  "release_authorized": false,
+  "implementation_gate": "This is a policy proposal only. Explicit threshold/3 consumer support and a throwaway-authority signing test must pass before a final effective request is prepared. Threshold/2 is unchanged.",
+  "content_sha256": "b5b4e9d514f4405dc8820ac3feaa1d167bb0afeb02d850f603d706e6dbccf76a"
+}

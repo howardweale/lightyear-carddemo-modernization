@@ -10,7 +10,7 @@ import shutil
 import subprocess
 
 from .equivalence_automation import digest, sealed
-from .legacy_twin import execute, linux_platform, clean_env
+from .legacy_twin import execute, linux_platform, clean_env, FLAGS
 from .systematic_mutation import apply
 
 RULES = {
@@ -82,7 +82,7 @@ def toolchain():
                                         'gcc*', 'binutils*', 'libcob*', 'gnucobol3', 'libfaketime'], env=clean_env()).decode()
     configs = {str(p): digest(p.read_bytes()) for p in sorted(Path('/etc/gnucobol').glob('*.conf'))}
     return sealed(dict(host=host, binaries=binaries, packages=packages, configs=configs, binary_profile=binary_profile(),
-                       gcc_flags=['-O2', '-fPIC', '-c'], image_recipe='tools/legacy_twin/reproducible.Containerfile'))
+                       compiler_driver_flags=['-c',*FLAGS],gcc_invocation_record='per-object verbose compiler log', image_recipe='tools/legacy_twin/reproducible.Containerfile'))
 
 
 def compile_object(root, folder, program, mutant=None):
@@ -99,10 +99,13 @@ def compile_object(root, folder, program, mutant=None):
     for name, value in generated.items(): (folder / (name + '.original')).write_text(value)
     normalized, mapping = normalize(generated)
     for name, value in normalized.items(): (folder / name).write_text(value)
-    execute(['gcc', '-O2', '-fPIC', '-c', program + '.c', '-o', 'program.o'], folder, folder / 'gcc')
+    # Let the exact twin driver supply its configured GCC options (including
+    # aliasing, PIC and hardening flags), instead of approximating them.
+    execute(['cobc', '-v', '-c', *FLAGS, '-I', '.', program + '.c', '-o', 'program.o'], folder, folder / 'gcc')
     execute(['objcopy', '--strip-debug', 'program.o', 'comparison.o'], folder, folder / 'objcopy')
     result = sealed(dict(object_sha256=digest((folder / 'comparison.o').read_bytes()),
                          raw_object_sha256=digest((folder / 'program.o').read_bytes()),
+                         compiler_invocation_sha256=digest((folder/'gcc.stderr').read_bytes()),
                          generated_sha256=digest(generated), normalized_sha256=digest(normalized),
                          name_mapping=mapping, rules=list(RULES),
                          rule_applications=dict(comments=True,line_markers=not any(re.search(r'^\s*#\s*(?:define|include)\b',v,re.M) for v in generated.values()),generated_private_names=bool(mapping),timestamp='pinned compiler clock'),
@@ -123,7 +126,7 @@ def adversarial_rules(folder):
             code = f'/* generated at irrelevant time */\n#line 10 "same.c"\nstatic int b_{value}= {value};\nint answer(void) {{ return b_{value}; }}\n'
             clean, _ = normalize({'probe.c': code})
             (sub / 'probe.c').write_text(clean['probe.c'])
-            execute(['gcc', '-O2', '-c', 'probe.c', '-o', 'probe.o'], sub, sub / 'gcc')
+            execute(['cobc', '-v', '-c', *FLAGS, 'probe.c', '-o', 'probe.o'], sub, sub / 'gcc')
             execute(['objcopy', '--strip-debug', 'probe.o', 'comparison.o'], sub, sub / 'objcopy')
             hashes.append(digest((sub / 'comparison.o').read_bytes()))
         reports.append(dict(rule=rule, original=hashes[0], mutant=hashes[1], passed=hashes[0] != hashes[1]))

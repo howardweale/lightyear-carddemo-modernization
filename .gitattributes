@@ -1,7 +1,5 @@
 * text=auto
 
-# Original public source and binary unload bytes are hash-bound by provenance.json.
-spec/modernization/carddemo-data/upstream/** -text -whitespace
 
 # Preserve the exact T-SQL implementation/corpus bytes bound by native run plans.
 src/lightyear_data/tsql_procedures/** -text
@@ -239,3 +237,6 @@ docs/factory/equivalence-review-47-claude-2026-10-12.md -text -whitespace
 
 # Exact successful POSTTRAN compilation 2 report copied from its CI artifact.
 docs/factory/posttran-attempt1-phase1-compile2-2026-10-12.json -text
+
+# Keep this after extension rules: exact third-party bytes are provenance-bound.
+spec/modernization/carddemo-data/upstream/** -text -whitespace

@@ -5,13 +5,13 @@
   "sources": [
     {
       "path": "docs/factory/posttran-phase2-plan-2026-10-15.json",
-      "sha256": "a483bafe7f1ab662cb4cd04a940836853712b78f6a058ddf151484601751b2ea",
-      "commit": "bfc981c83a330e330dcfe4a9e6668e5a110c8a81"
+      "sha256": "fe8b214e48f652a2020841c350db81888458985180a078fdbea47234bdaeaf6f",
+      "commit": "54520fd92fead809378e87d82c58eda9677e2ecb"
     }
   ],
   "details": {
-    "executable_commit": "bfc981c83a330e330dcfe4a9e6668e5a110c8a81",
-    "request_seal": "2cbf6dea4612483b457980abd83c028be6adb45b4138d93e3d7ac33b6c0bf3a3",
+    "executable_commit": "54520fd92fead809378e87d82c58eda9677e2ecb",
+    "request_seal": "99df4d9a05c01750f895c3ba9c3528ee36259aa59ed2d7cabb175a29a9d8635f",
     "observer_sha256": "cab888026814c010bd3dcd2126f652c6de0efe4227f1cbf4a4290e7d9f85512f",
     "class_hashes": {
       "Candidate": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",

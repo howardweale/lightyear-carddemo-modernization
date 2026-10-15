@@ -34,7 +34,8 @@ def build(root, date):
         raise ValueError("release-pr-head-crosscheck-disagrees")
     def read(name):
         path = folder / name
-        if str(path.relative_to(root)) not in {p for a in index["sources"] + index.get("crosscheck_sources", []) for p in a["files"]}:
+        # The retained index uses Git's forward-slash paths on every platform.
+        if path.relative_to(root).as_posix() not in {p for a in index["sources"] + index.get("crosscheck_sources", []) for p in a["files"]}:
             raise ValueError("unindexed-release-evidence")
         return json.loads(path.read_bytes())
     projection = read("aggregate/INTCALC/loader-domain-review-projection.json")

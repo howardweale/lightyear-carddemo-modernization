@@ -9,7 +9,7 @@
   },
   "kind": "io-exception-acceptance",
   "program": "INTCALC",
-  "schema": "factory-contract/1",
+  "schema": "factory-contract-draft/1",
   "sources": [
     {
       "commit": "299317a868274765d95c193b7df403ffe1474c3f",

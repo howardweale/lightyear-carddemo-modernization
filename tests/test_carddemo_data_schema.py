@@ -81,5 +81,17 @@ class SchemaTests(unittest.TestCase):
             p['values']['R.N']=Decimal(value)
             with self.assertRaises(ValueError):reconstruct(m,p['values'],p['metadata'])
 
+    def test_comp5_preserves_values_outside_picture_but_inside_native_storage(self):
+        layout,m=fixture(['05 K PIC X.','05 N PIC S9(4) COMP-5.'])
+        raw=b'\xc1'+(32767).to_bytes(2,'big',signed=True)
+        p=project(layout,m,raw)
+        self.assertEqual(raw,reconstruct(m,p['values'],p['metadata']))
+        self.assertEqual('numeric(5,0)',m['fields'][1]['sql_type'])
+
+    def test_ambiguous_organization_refused(self):
+        for kind in ('','INDEXED NONINDEXED'):
+            text='//SYSIN DD *\n DEFINE CLUSTER (NAME(X) KEYS(1 0) RECORDSIZE(2 2) '+kind+')\n/*'
+            with self.assertRaisesRegex(ValueError,'organization'):idcams(text,'x.jcl')
+
 
 if __name__=='__main__':unittest.main()

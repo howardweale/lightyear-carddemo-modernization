@@ -61,7 +61,12 @@ def idcams(text, source):
         size = re.search(r'\bRECORDSIZE\((\d+)[,\s]+(\d+)\)', body)
         key = re.search(r'\bKEYS\((\d+)[,\s]+(\d+)\)', body)
         if not name or not size: raise ValueError('IDCAMS name and record size required')
-        kind = 'AIX' if match[1] == 'ALTERNATEINDEX' else ('ESDS' if re.search(r'\bNONINDEXED\b', body) else 'RRDS' if re.search(r'\bNUMBERED\b', body) else 'KSDS')
+        organizations = [word for word in ('INDEXED','NONINDEXED','NUMBERED','LINEAR') if re.search(r'\b'+word+r'\b', body)]
+        if match[1] == 'CLUSTER' and len(organizations) != 1:
+            raise ValueError('one explicit VSAM organization required')
+        kind = 'AIX' if match[1] == 'ALTERNATEINDEX' else {'INDEXED':'KSDS','NONINDEXED':'ESDS','NUMBERED':'RRDS','LINEAR':'unsupported'}[organizations[0]]
+        if kind == 'AIX' and len(re.findall(r'\b(?:NONUNIQUEKEY|UNIQUEKEY)\b', body)) != 1:
+            raise ValueError('explicit alternate-index uniqueness required')
         if kind in ('KSDS', 'AIX') and not key: raise ValueError('key declaration missing')
         if re.search(r'\b(?:SPANNED|LINEAR)\b', body): raise ValueError('unsupported VSAM organization')
         relate = re.search(r'\bRELATE\(([^)]+)\)', body)
@@ -101,7 +106,9 @@ def mapping(name, layout, source, definitions, line_shift=0):
             row['table'] = table; row['ordinal'] = int(repeated[1])
             children[table] = {'path': group, 'source': source, 'line': row['line']}
         row['column'] = identifier(re.sub(r'\[\d+\]', '', f.path))
-        row['sql_type'] = f'numeric({f.digits},{f.scale})' if f.digits else f'char({f.length})'
+        precision = len(str(2 ** (f.length*8-int(f.signed))-1)) if f.usage=='COMP-5' else f.digits
+        if precision > 1000: raise LayoutError('numeric precision exceeds PostgreSQL limit')
+        row['sql_type'] = f'numeric({precision},{f.scale})' if f.digits else f'char({f.length})'
         row['date'] = not f.digits and f.length == 10 and f.path.endswith('-DATE')
         if row['date']: row['sql_type'] = 'date'
         identity = (row['table'], row['column'], row['ordinal'])

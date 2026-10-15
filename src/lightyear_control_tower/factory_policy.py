@@ -112,12 +112,13 @@ def load_contract(root, item):
     for source in value["sources"]:
         require(sha256(read_bytes(confined(root, source["path"]))).hexdigest() == source["sha256"], "factory-source-hash")
     if value["kind"] == "factory-decision-backfill":
+        from .factory_history import original_date
         records = value["details"]["records"]
         require(len(records) == len(value["sources"]), "backfill-inventory")
         for row, source in zip(records, value["sources"]):
             require(set(row) == {"path", "original_date", "record"} and row["path"] == source["path"], "backfill-record-binding")
             original = read_json(confined(root, source["path"]))
-            require(row["record"] == original and row["original_date"] == original.get("decided_at", original.get("decided_on")), "backfill-original-record-required")
+            require(row["record"] == original and row["original_date"] == original_date(source["path"], original), "backfill-original-record-required")
     return value
 
 

@@ -7,6 +7,7 @@ from pathlib import Path
 from .requests import confined, read_bytes, MAX_BYTES
 from .factory_policy import require, write_request
 from .decisions import canonical
+from .factory_history import historical_path, original_date
 
 
 def committed(repository, commit, path):
@@ -21,14 +22,13 @@ def committed(repository, commit, path):
 
 def historical_contract(repository, commit):
     paths = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", commit, "docs/factory"], cwd=repository, text=True).splitlines()
-    paths = sorted(p for p in paths if Path(p).match("howard-decisions-*.json"))
+    paths = sorted(p for p in paths if historical_path(p))
     require(bool(paths), "backfill-no-historical-records")
     sources, records = [], []
     for path in paths:
         raw = committed(repository, commit, path)
         value = json.loads(raw)
-        date = value.get("decided_at", value.get("decided_on"))
-        require(isinstance(date, str) and date[:10] >= "2026-10-10", "backfill-original-date-required")
+        date = original_date(path, value)
         sources.append(dict(path=path, commit=commit, sha256=sha256(raw).hexdigest()))
         # The entire original document is retained, including every decision,
         # original date, condition and bound hash. No inferred authority mapping.

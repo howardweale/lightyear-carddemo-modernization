@@ -1,0 +1,1709 @@
+{
+  "content_sha256": "566e886fb6347cd1afa08aae6f1bd0c3f3f635e4ae9dd8c83b0ad5284bc1c660",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "program": "INTCALC",
+  "rows": [
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "individual_review": true,
+      "mutant_sha256": "3c1952dfbf4cfde9c4690346b035621ac5b44c97aa92befaba9231bde851e2b4",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "individual_review": true,
+      "mutant_sha256": "fe022ba2cc61b18dcb2fa91855f75342ea465cd822e13bcb2f5f317ad4a62c81",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "individual_review": true,
+      "mutant_sha256": "a7e011199c823891a9cb6ee58cc0b661e6a04f5b827243f2ca7a2ccfa5d409ce",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "individual_review": true,
+      "mutant_sha256": "cc45bb49d114d4228cf70c46d3ecf67d8b45b8771c2ada62c0ce2ffe0dc49a7c",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-192-48",
+      "individual_review": true,
+      "mutant_sha256": "e084f1945df537c8021663a3cf60e35425dabc71fb71e8add42db6fcfcab0fc4",
+      "oracle_gap": {
+        "classification": "unobservable",
+        "content_sha256": "6379c1f509be12b72425a1f6297dd769b66f370ded94159e24883d1e3d279a63",
+        "mutant_sha256": "e084f1945df537c8021663a3cf60e35425dabc71fb71e8add42db6fcfcab0fc4",
+        "parents": [
+          "WS-COUNTERS"
+        ],
+        "reason": "Only declaration and self-ADD reference this field; no parent-group consumer. Missing observable distinguishes an oracle gap, never a proof.",
+        "references": [
+          172,
+          192
+        ],
+        "resolved": false,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "target": "WS-RECORD-COUNT"
+      },
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unobservable"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-192-49",
+      "individual_review": true,
+      "mutant_sha256": "af24415027798b940491266c953ff765e1e5fdefa5f681b666263f71535048e6",
+      "oracle_gap": {
+        "classification": "unobservable",
+        "content_sha256": "72dcbf5f1c464bec1e41ae10837e26181d18538713b801b73a3a03ce9488df34",
+        "mutant_sha256": "af24415027798b940491266c953ff765e1e5fdefa5f681b666263f71535048e6",
+        "parents": [
+          "WS-COUNTERS"
+        ],
+        "reason": "Only declaration and self-ADD reference this field; no parent-group consumer. Missing observable distinguishes an oracle gap, never a proof.",
+        "references": [
+          172,
+          192
+        ],
+        "resolved": false,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "target": "WS-RECORD-COUNT"
+      },
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unobservable"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-235-81",
+      "individual_review": false,
+      "mutant_sha256": "c4dba0dd31685cbde669ad3d39084aa35af18afeb79940ea9960cfe0648b6656",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-235-82",
+      "individual_review": false,
+      "mutant_sha256": "d1f0af19dd4fe038e06c3da8cbc679d77ce029f37407ca0354e752e2504eb87a",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-240-89",
+      "individual_review": false,
+      "mutant_sha256": "c91bc029d5e237eb5a7baadfd4585fb5711661140e63110a2a7986f9bca82c81",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-240-90",
+      "individual_review": false,
+      "mutant_sha256": "eb7886fbc268a7c4aeedc3f0ac22b525307c45f14829ad7957a6a36506f4f3f9",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-253-96",
+      "individual_review": false,
+      "mutant_sha256": "61c563a0625440e38834ca1f3b7c7803daf2be9be1c6b7abe2d3c1a03a972507",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-253-97",
+      "individual_review": false,
+      "mutant_sha256": "52d2a22c83468bcd3223bd97126f76af548898615905704674d3c2f505a9ef0c",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-258-104",
+      "individual_review": false,
+      "mutant_sha256": "83a3235c0c901772795fed71589ba2d190c6225738ca0beaf0096a3f4db1cb16",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-258-105",
+      "individual_review": false,
+      "mutant_sha256": "2a12b07a5301aa4690082c9215d32100e3270cb9f2144e05b85f907db81316c6",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-271-111",
+      "individual_review": false,
+      "mutant_sha256": "d00329df79eb0482bd0b436f11259e2b362b606f7394e7cecf98df5786843f3a",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-271-112",
+      "individual_review": false,
+      "mutant_sha256": "44f54674f5a0a815d192fdb84c089bafb8c78cdb6ebc82689d586d4b56194593",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-276-119",
+      "individual_review": false,
+      "mutant_sha256": "870a33fd4988420cd6ecb284917dff2669da42862745a92ee51fa21f648674b3",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-276-120",
+      "individual_review": false,
+      "mutant_sha256": "feffec1d97d2d7ae7a526bfcb833a0d4f1c0b11930049b20be239d1db252e109",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-290-126",
+      "individual_review": false,
+      "mutant_sha256": "c6cf4814fb636efd34b2850cedbd7439c9ee42bb9dd3bbeea0b18336f2fe60fe",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-290-127",
+      "individual_review": false,
+      "mutant_sha256": "7d496dc1844396ee4cf9dcac888243879c8f00cb143f51c9fbfe0660a9e6b90b",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-295-134",
+      "individual_review": false,
+      "mutant_sha256": "312badb94063bc922b09b553c2e2c95a9dba7d64c07bbb4818e03aa041030def",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-295-135",
+      "individual_review": false,
+      "mutant_sha256": "d3cda94c655e351edf120d802142d6501ce8692167ecfd4c24bddbeef6e431ff",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-308-141",
+      "individual_review": false,
+      "mutant_sha256": "75067a25020734cf20bb9fa9378c36223fef3bc2085c85a6af8e50c497daf552",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-308-142",
+      "individual_review": false,
+      "mutant_sha256": "74a83b9e2f304387d57f05b0d4f184ffe59df36c4b280690c377e55bba941afd",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-313-149",
+      "individual_review": false,
+      "mutant_sha256": "e385f7effb1992798121ec9955774a5f11ebe1547fa1794c8b2685c13eaa3418",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-313-150",
+      "individual_review": false,
+      "mutant_sha256": "3723a6b4b106e40e206ac43b0d7fef4ff02573c67207919dd9f73e29a3445a4e",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-333-166",
+      "individual_review": false,
+      "mutant_sha256": "ab91023b73724e43e10bae47c9c216a278a7855b1d907a7a73cedbd643b1f587",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-333-167",
+      "individual_review": false,
+      "mutant_sha256": "c281c07fa9cae03312e2094bcc01fc49247a320adf7b6448ff66fb093a01a633",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-360-188",
+      "individual_review": false,
+      "mutant_sha256": "738c4edf295d57963e377d39e7375950efb18f01903e50ac23e09b52c213024f",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-360-189",
+      "individual_review": false,
+      "mutant_sha256": "f901a494bac995709ac9e343f60aa4d4d6dcba16addc5bf90201f272094e39e2",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-381-200",
+      "individual_review": false,
+      "mutant_sha256": "5943903e7429bc4af3672509973d00e11b1e0a971a8260ae69ed349572a3db79",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-381-201",
+      "individual_review": false,
+      "mutant_sha256": "bd478bd81e6c55a4c659d42ecdc1f9934a6667540475970e7787f9a203b9d439",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-403-212",
+      "individual_review": false,
+      "mutant_sha256": "193fdefdf2d565ed7c070b790832afcfd3dcab9ccae2a1f46250095d8736276e",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-403-213",
+      "individual_review": false,
+      "mutant_sha256": "96e3fd1ad1152683be986e7e14bded50d23d540dddfc47bc99231e33ee8d5940",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-425-224",
+      "individual_review": false,
+      "mutant_sha256": "c0bdebc24f2105cb47b1a87d44f1013b2c83e1d8644afeb591bdb2332bdeef10",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-425-225",
+      "individual_review": false,
+      "mutant_sha256": "38e3f65933a03ef42a4da8af52369a1e1ac37f966512c46db2a411bbe2631051",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-449-240",
+      "individual_review": false,
+      "mutant_sha256": "49d20a67e6707d1d4b5e19fa38446df8421d72fd01baf871511478359c6e98db",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-449-241",
+      "individual_review": false,
+      "mutant_sha256": "6d553149a79326d61139ced692e81c9d46d98bc8da03ff835556b502c67040e6",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-504-278",
+      "individual_review": false,
+      "mutant_sha256": "4e9fb2e832005b759f685fe5f577321caaf06474d3fc7709f1822aade214b59f",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-504-279",
+      "individual_review": false,
+      "mutant_sha256": "57a87203d8df0e6b2e62989d1dedc84b653f144cffa0ae56dbe8699002fc9a31",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-523-285",
+      "individual_review": false,
+      "mutant_sha256": "635cc1f17e60a9b59b13a174c106e62bf9a8e7e6e6df8e08448d1d1e74d8b9b8",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-523-286",
+      "individual_review": false,
+      "mutant_sha256": "ce37da48491caab9c7843de9a62ea11dc2f412d740095a0e15f45635818f5201",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-528-293",
+      "individual_review": false,
+      "mutant_sha256": "f1832fdf374c4baa0e3c9ac5c54f650a87c9fd9a8957af89d0698ceacfb03b5f",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-528-294",
+      "individual_review": false,
+      "mutant_sha256": "507f7c91704e76acfbb322238b471672febc3202e3b18b3a02a47f5c273949fa",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-542-300",
+      "individual_review": false,
+      "mutant_sha256": "41617e22ab7fe10f8ccb6de9978ea7947002895d30ff244a26ecd4d9ecb0edc4",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-542-301",
+      "individual_review": false,
+      "mutant_sha256": "1e90854c9c0c88b5598fb4114d9d2d2ec29809df1d3062ca84ecb2647c4f80bc",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-547-308",
+      "individual_review": false,
+      "mutant_sha256": "ff410e5a9ed9ff4a4ec811a5e0a89a04a635ea14522cf3f7fe18950d0abae73a",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-547-309",
+      "individual_review": false,
+      "mutant_sha256": "c83e0af3d062f307d1f09c9a7f04fbea0ab7167f2963e6b944f5b512a8514c1b",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-560-315",
+      "individual_review": false,
+      "mutant_sha256": "563787cc884b05b8aadc6d47183dd51cc28ab27a235d99382d71849e8b5144b2",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-560-316",
+      "individual_review": false,
+      "mutant_sha256": "c613e89dc6e04642e49c98bd995d9221e64c9dc3ef8b42dc5d702f40586fbd27",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-565-323",
+      "individual_review": false,
+      "mutant_sha256": "aa2253d4437ad1ce447b4c5cf06a4d40e0d6be7f34b90b6b46d1682f42d1993e",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-565-324",
+      "individual_review": false,
+      "mutant_sha256": "1cbdac57e8cafd8e474fc6e1de88c1ecb6edcf906c4eb2133052e268f7f2dad9",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-578-330",
+      "individual_review": false,
+      "mutant_sha256": "075041d055fda0d6c4ebc059d7a8dbc084240aa02f17713b738c5c52c8f9872e",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-578-331",
+      "individual_review": false,
+      "mutant_sha256": "1ac1ceb0062395f7e3ac7bebf86deade67dafcc52738518bfd1107b642deff32",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-583-338",
+      "individual_review": false,
+      "mutant_sha256": "879e4e9d9c157c91583da1852cb9c14d52288f3abc69ac741e381108d4a335eb",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-583-339",
+      "individual_review": false,
+      "mutant_sha256": "62a13807871358042ed3764b649e0db71eb0b73032b6fea68118df8b6f426435",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-596-345",
+      "individual_review": false,
+      "mutant_sha256": "65b055c167db097d9efc8e1ff2e280d5c75388f5b4ac109c4a7ef351f7d2d7e7",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-596-346",
+      "individual_review": false,
+      "mutant_sha256": "73c58085abe632ae3dadaa6622735ad2de64eb70b0ef0892536af4800e9a0d9c",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-601-353",
+      "individual_review": false,
+      "mutant_sha256": "84cf76100afcd413d0dc307a35b8d2ed093c8b2286a3b107fee5f7ced4b6aed6",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2147483648"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-601-354",
+      "individual_review": false,
+      "mutant_sha256": "7f9b8ba3caa6e4bc090d177f74484ab7719e070be397e468a739bc6ac2028669",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-638-382",
+      "individual_review": true,
+      "mutant_sha256": "b5b7c0f40cbf6bed9ff276d1acb9e1b6e8387d0a0ad2e50876e66effefe8f7a0",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "multiple-or-partial-target",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-constant-639-384/compiler-proof.json",
+          "sha256": "3bee8dacf2ca898959c7a4af06b068e7098472bfa511362b608444a1ff9661f3"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-639-384",
+      "individual_review": true,
+      "mutant_sha256": "acff90bf996950ba9f203f9a529b04489652aff6d86fc1e12050403acb379d55",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-constant-639-385/compiler-proof.json",
+          "sha256": "c5cdc1e769107086a947c041f419550cccb74b356c93d023186e44b0324cc2e4"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-constant-639-385",
+      "individual_review": true,
+      "mutant_sha256": "f729ee4bc6ac2d9409001f2620686576f79112637a5f6b909b2c90fe1b5fa9b3",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-ADD-192-50",
+      "individual_review": true,
+      "mutant_sha256": "4e98db505b9260a07fa3222aba4ee544b5677f7d4799300e243ee1620b2cbbf8",
+      "oracle_gap": {
+        "classification": "unobservable",
+        "content_sha256": "a7c61ba87c3942263b1fe9385e7fd2919645e08dcbd22c9349881be663fc2656",
+        "mutant_sha256": "4e98db505b9260a07fa3222aba4ee544b5677f7d4799300e243ee1620b2cbbf8",
+        "parents": [
+          "WS-COUNTERS"
+        ],
+        "reason": "Only declaration and self-ADD reference this field; no parent-group consumer. Missing observable distinguishes an oracle gap, never a proof.",
+        "references": [
+          172,
+          192
+        ],
+        "resolved": false,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+        "target": "WS-RECORD-COUNT"
+      },
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unobservable"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-7438862"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-235-83",
+      "individual_review": false,
+      "mutant_sha256": "3f2bc19c94b12282c155316b281b4519f2c52165248522fa24245be592889ea8",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-240-91",
+      "individual_review": false,
+      "mutant_sha256": "a08b795327a6128d7c8fe90bbdc321bdf56bc7fc0179ece0029ccd79a01692ad",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-5099118"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-253-98",
+      "individual_review": false,
+      "mutant_sha256": "3db680badb71733a8673fbc0c96cf17f30c75b07266de75f58be0330803f7e95",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-258-106",
+      "individual_review": false,
+      "mutant_sha256": "7a8a818c09b26df7d0038fe1453f571f90b300f9168274481242c691cdd81358",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-7438862"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-271-113",
+      "individual_review": false,
+      "mutant_sha256": "be714729b5882e233512ba77da8378eff8a5445f46b41966df83510667eca81c",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-276-121",
+      "individual_review": false,
+      "mutant_sha256": "58ba59ddefb66e8711dca29047074915c663411300bd3974bc8a4d7b26bb365d",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-525736602"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-290-128",
+      "individual_review": false,
+      "mutant_sha256": "eb397a35b08dcffb0dee2e40d274056607b41770422ad09cfdb73cb1e70a3801",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-295-136",
+      "individual_review": false,
+      "mutant_sha256": "ea408a390f26074e6aa5473a0c2ff11b6f01d82f0b8067a8741169cafb9e5894",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-5099118"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-308-143",
+      "individual_review": false,
+      "mutant_sha256": "2364800379331f9e9d3e8d42a1973d00d76efd9576e12d0e3a9cd4bf0d4753f4",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-313-151",
+      "individual_review": false,
+      "mutant_sha256": "183ba7034697a4a0af6ba4bfb417c686ad6fc9e3a701506bcf641779d67651e3",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "369098740"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-328-160",
+      "individual_review": false,
+      "mutant_sha256": "8a9deeb3812aabaf0d351ed882a0b9efc8a6b44888bd9e99fed64ef5f5ba919a",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1744830335"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-358-187",
+      "individual_review": false,
+      "mutant_sha256": "ff85effb7d7ecb312760e7e66ccc39e7cba0223b3aff137c2bb46b929245edd0",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1677721599"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-379-199",
+      "individual_review": false,
+      "mutant_sha256": "66e44d0af5c852c7c6842b085290de56b025f9bbf1f7a7dce0e80287295dbf26",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1976915284"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-401-211",
+      "individual_review": false,
+      "mutant_sha256": "6416539f987a6ec12e7f08beb84c4e94624e4ef3eb63d5f0cc2c87e904192ba8",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1096484302"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-423-223",
+      "individual_review": false,
+      "mutant_sha256": "c4d098916fa73c3e0e7b8210890ef8d475309a26cc0d60945b5024cb0aa0d3c6",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1744729599"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-447-239",
+      "individual_review": false,
+      "mutant_sha256": "be39c642a6789cfd5d5354cbb92df84a9a52f3e22053701789adab505d28b200",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "TRAN-MERCHANT-ID": "73737729"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-491-264",
+      "individual_review": true,
+      "mutant_sha256": "0c63c45aa03ab4e0428828a8274ea6c776863b2c8ab465c975f7e43c5be19701",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-492-265",
+      "individual_review": true,
+      "mutant_sha256": "2e0d8ca6703d08fc74c9a22c1be4f04b5b0924b36a76b4e109adc1a7963ac2a5",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "unbound-or-unsupported-expression:SPACES",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-493-266",
+      "individual_review": true,
+      "mutant_sha256": "50d05763c3bfe82c9202ce5edbef23662ccd770054ab638f737e6f8be4682434",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "unbound-or-unsupported-expression:SPACES",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-494-267",
+      "individual_review": true,
+      "mutant_sha256": "33434e9e4aa2b9146a9ebdc32f71195738992cfee92c68ac2c3a627f19c5e369",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "unbound-or-unsupported-expression:SPACES",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "1744830463"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-502-277",
+      "individual_review": false,
+      "mutant_sha256": "7638b5f00ffdaee49c59aefebcf5b8baeb6e2ddc5ccaf42a1d17b88a64111247",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-525736602"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-523-287",
+      "individual_review": false,
+      "mutant_sha256": "731d5e39e349ec77f76d83f8ff347fab5afa1195cdf047006d13d58201895c07",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-528-295",
+      "individual_review": false,
+      "mutant_sha256": "0b19c5912dd7e6f36c171deb77cc4f688f55d374dca2891781f47db9e3a530a6",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-5099118"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-542-302",
+      "individual_review": false,
+      "mutant_sha256": "4a52cb0d0c4fa6749de57b180ea597d387e960a812e1fba31be48a385207ff3f",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-547-310",
+      "individual_review": false,
+      "mutant_sha256": "fb1aafe686dd0b919a0f78611544cf3e342ad7517b930ec7f7ef6882b3168c4a",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-1870602250"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-560-317",
+      "individual_review": false,
+      "mutant_sha256": "484c63e3fa8292390751cba9d8e4ae1ec4e7c0eecef6e9ba552ea93742634f09",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-565-325",
+      "individual_review": false,
+      "mutant_sha256": "d97ac8e014e8aabd41d0a909762f719506b7835fa11d56bde5ac284b625e4818",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-7438862"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-578-332",
+      "individual_review": false,
+      "mutant_sha256": "875e26bf3b31170b4a248e554c97ce8a6e379211e0e98f46e40bc5a3d3c29d87",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-583-340",
+      "individual_review": false,
+      "mutant_sha256": "fa5aef2353759f9a92e43a633d542577a613225fc437933eac24a763d657c536",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-7438862"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-596-347",
+      "individual_review": false,
+      "mutant_sha256": "26b24215f30e1a1e6855dfd53930b18ddb63e29a49740877151031e6fcdf7ab8",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "APPL-RESULT": "-2132803616"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-601-355",
+      "individual_review": false,
+      "mutant_sha256": "9048ac39b97e8ca6332859d6c7e86caf77c0cfdd4ed39c420542c1c5e84b845c",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "TIMING": "1970667388"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-630-373",
+      "individual_review": true,
+      "mutant_sha256": "fb8031bb9209e3ece941702650637435fdfecbb3d599aaba64d70a482256f265",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "counterexample": {
+        "TWO-BYTES-BINARY": "1"
+      },
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-639-386",
+      "individual_review": true,
+      "mutant_sha256": "366aa266b3f227ad443aa9eab8e89664e3d34c216af32be24313edfa00db192f",
+      "program": "INTCALC",
+      "route": null,
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-delete-MOVE-644-389",
+      "individual_review": true,
+      "mutant_sha256": "142e47e0fe664ddb9ed15c26650b2d0497a464a25dea8e28c617de062e4a2031",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "unsupported-field:IO-STATUS-04",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-133-20",
+      "individual_review": true,
+      "mutant_sha256": "b1d059771916d26ce5ecf1b9f4f61a56ed29d4b88e7680856ad817a9eb328351",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-139-24",
+      "individual_review": true,
+      "mutant_sha256": "2750af17db5acaf4095a2130db9ed44fb0c70d22048426b5ae9015b91ad00129",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-164-26",
+      "individual_review": true,
+      "mutant_sha256": "293be09f1a7c38e7527df742a11121f01ccca2b8adc1a728902a4bd8a49496c3",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-169-30",
+      "individual_review": true,
+      "mutant_sha256": "2455244213c1ef6dee9569bf80199b1bd40ad746b738c0074006491eda2c5754",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-172-32",
+      "individual_review": true,
+      "mutant_sha256": "3c35506fbe1100324143ae5d6ec0c95bf3ea3e8503c387b0a02d0a20e8322a25",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-173-34",
+      "individual_review": true,
+      "mutant_sha256": "bdb795485ac0cd11896cbb14e7220a144412efb6c1f5293582c0817dcafaa782",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-scale-72-6",
+      "individual_review": true,
+      "mutant_sha256": "b6244cb870a0c0648c85b6b8f3533ff93452263de2e35eedec51f9890bb63c68",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-125-13",
+      "individual_review": true,
+      "mutant_sha256": "99f3b7c1026d2d6f7914876b47730917c6d9a8f21f6254a8f23476af17cb78a9",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-receiving-size-133-19/compiler-proof.json",
+          "sha256": "cf4e548fa61406ebe4d40d8493e79ce3b82279def57bdf9f52c0c1a8776a33df"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-133-19",
+      "individual_review": false,
+      "mutant_sha256": "079e3fd03e0248bbea0c99e15e898305c452209c4dd78353d25fdf39e548bef1",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-138-21",
+      "individual_review": true,
+      "mutant_sha256": "d7f345b304c048130f51e91b7ab62ce2b9d35c44999ec64caf33bb9766c5d9db",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-139-23",
+      "individual_review": true,
+      "mutant_sha256": "5acc66c0ad22620952b5daed373dc8ec01595b1d46f2864690ca5e892a38b136",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-172-31",
+      "individual_review": true,
+      "mutant_sha256": "ce9f7cd4217bf57cf1621ca823817b1b956903ea27b77aa7be9717565484e502",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "layout-mutation-requires-whole-program-proof",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "basis": "compiler-proven (normalized)",
+      "evidence": [
+        {
+          "path": "mutants/CBACT04C-receiving-size-177-35/compiler-proof.json",
+          "sha256": "31e745a005bdeedf32191f54dd03cf367178faf87118f920b80090eddde8b632"
+        }
+      ],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-receiving-size-177-35",
+      "individual_review": false,
+      "mutant_sha256": "f20460800b0d9bd8505c35e11deb006b6c33f9d956488f583c436bed200aa8d6",
+      "program": "INTCALC",
+      "route": "S1",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "equivalent"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-skip-PERFORM-216-74",
+      "individual_review": true,
+      "mutant_sha256": "1466f485378f8f271ea409d1e6debd044cc18c8161bd32ee0ea4142d8af980be",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "statement-shape:PERFORM",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    },
+    {
+      "argued": true,
+      "evidence": [],
+      "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "id": "CBACT04C-skip-PERFORM-220-75",
+      "individual_review": true,
+      "mutant_sha256": "ef2349aa9c323e01817f206723e6292891ac50924a38fa18c387e0b075a32d1a",
+      "program": "INTCALC",
+      "route": null,
+      "solver_unresolved": "statement-shape:PERFORM",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "status": "unresolved"
+    }
+  ]
+}

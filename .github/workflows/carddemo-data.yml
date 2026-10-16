@@ -1,7 +1,7 @@
 name: CardDemo data component
 on:
   pull_request:
-    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
+    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'tests/test_carddemo*', '.github/workflows/carddemo-data.yml']
   push:
     branches: [main]
     paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_data*', '.github/workflows/carddemo-data.yml']
@@ -23,7 +23,7 @@ jobs:
       - name: Verify pinned sources and adversarial type rules
         env:
           PYTHONPATH: src:tests
-        run: python -B -m unittest test_carddemo_data_schema test_carddemo_data_volume -v
+        run: python -B -m unittest test_carddemo_data_schema test_carddemo_data_volume test_carddemo_screens -v
       - name: Verify retained bounded review and implementation bindings
         env:
           PYTHONPATH: src:tests
@@ -32,6 +32,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -B -m lightyear_data.carddemo.plan --out work/carddemo-data
+      - name: Generate all pinned BMS models and static layout previews
+        env:
+          PYTHONPATH: src
+        run: python -B -m lightyear_data.carddemo.screens --out work/carddemo-data/screens
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -64,7 +68,7 @@ jobs:
         env:
           PYTHONPATH: src:tests
           CARDDEMO_DATA_TEST_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
-        run: python -B -m unittest test_carddemo_data_postgres -v
+        run: python -B -m unittest test_carddemo_data_postgres test_carddemo_access -v
       - name: Produce unsigned public-data receipt
         env:
           PYTHONPATH: src

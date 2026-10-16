@@ -108,9 +108,11 @@ def render(model, values=None):
     for f in model['fields']:
         value=str(values.get(f['name'],f['initial']))
         if len(value.encode('cp037'))>f['length']:raise ValueError('screen-output-too-long')
-        if f['color'] not in COLORS or f['highlight'] not in ('OFF','UNDERLINE','REVERSE','BLINK'):raise ValueError('screen-unsupported-style')
+        color=f['color']
+        if color=='DEFAULT':color=('NEUTRAL' if 'BRT' in f['attributes'] else 'BLUE') if f['protected'] else ('RED' if 'BRT' in f['attributes'] else 'GREEN')
+        if color not in COLORS or f['highlight'] not in ('OFF','UNDERLINE','REVERSE','BLINK'):raise ValueError('screen-unsupported-style')
         offset=f['data_offset'];row,col=divmod(offset,model['columns'])
-        style=f"left:{col}ch;top:{row*1.25}em;width:{f['length']}ch;color:{COLORS[f['color']]};"
+        style=f"left:{col}ch;top:{row*1.25}em;width:{f['length']}ch;color:{COLORS[color]};"
         if f['highlight']=='UNDERLINE':style+='text-decoration:underline;'
         if f['highlight']=='REVERSE':style+='background:#eee;color:#111;'
         if 'BRT' in f['attributes']:style+='font-weight:bold;'

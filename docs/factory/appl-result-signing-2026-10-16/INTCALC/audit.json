@@ -1,0 +1,4599 @@
+{
+  "audit_observed_error_rate": null,
+  "census": {
+    "condition_values": {
+      "APPL-AOK": 0,
+      "APPL-EOF": 16
+    },
+    "content_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+    "passed": true,
+    "program": "CBACT04C",
+    "raw_consumers": [],
+    "references": [
+      {
+        "kind": "declaration",
+        "line": 133,
+        "tokens": [
+          "01",
+          "APPL-RESULT",
+          "PIC",
+          "S9",
+          "(",
+          "9",
+          ")",
+          "COMP",
+          "."
+        ]
+      },
+      {
+        "kind": "condition-declaration",
+        "line": 134,
+        "tokens": [
+          "88",
+          "APPL-AOK",
+          "VALUE",
+          "0",
+          "."
+        ]
+      },
+      {
+        "kind": "condition-declaration",
+        "line": 135,
+        "tokens": [
+          "88",
+          "APPL-EOF",
+          "VALUE",
+          "16",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 235,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 238,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 240,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 242,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 253,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 256,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 258,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 260,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 271,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 274,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 276,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 278,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 290,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 293,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 295,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 297,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 308,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 311,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 313,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 315,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 328,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 331,
+        "tokens": [
+          "MOVE",
+          "16",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 333,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 336,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 339,
+        "tokens": [
+          "IF",
+          "APPL-EOF"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 358,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 360,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 362,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 379,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 381,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 383,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 401,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 403,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 405,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 423,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 425,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 428,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 447,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 449,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 452,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 502,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 504,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 507,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 523,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 526,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 528,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 530,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 542,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 545,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 547,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 549,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 560,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 563,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 565,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 567,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 578,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 581,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 583,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 585,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 596,
+        "tokens": [
+          "MOVE",
+          "8",
+          "TO",
+          "APPL-RESULT",
+          "."
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 599,
+        "tokens": [
+          "MOVE",
+          "0",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "literal-destination",
+        "line": 601,
+        "tokens": [
+          "MOVE",
+          "12",
+          "TO",
+          "APPL-RESULT"
+        ]
+      },
+      {
+        "kind": "condition-read",
+        "line": 603,
+        "tokens": [
+          "IF",
+          "APPL-AOK"
+        ]
+      }
+    ],
+    "schema": "appl-result-reference-census/1",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  "census_implementation_sha256": "f84f3d3d1ffe0c47a63db8f838ba36f61ce2db971c3895c29fc6cc11fe5dc073",
+  "claim_scope": "twin",
+  "class_id": "legacy-APPL-RESULT/1",
+  "class_proof_sha256": "3c8c26041aedf74454c4853c849d4d2c193dec60fe31ae5aa94893ef8b2bc41e",
+  "content_sha256": "0889d9846c9fe345ef8b9aebd7ca50a04e00f2f2496a0b6183e400249c41e968",
+  "evidence_commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+  "matcher_path": "src/lightyear_mainframe/equivalence_classes.py",
+  "matcher_sha256": "0ba15b8cec35656269fb3f26c92ce7b3f2075c325e28089c953fab12133a3825",
+  "measurement_head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "members": [
+    "CBACT04C-constant-235-81",
+    "CBACT04C-constant-235-82",
+    "CBACT04C-constant-240-89",
+    "CBACT04C-constant-240-90",
+    "CBACT04C-constant-253-96",
+    "CBACT04C-constant-253-97",
+    "CBACT04C-constant-258-104",
+    "CBACT04C-constant-258-105",
+    "CBACT04C-constant-271-111",
+    "CBACT04C-constant-271-112",
+    "CBACT04C-constant-276-119",
+    "CBACT04C-constant-276-120",
+    "CBACT04C-constant-290-126",
+    "CBACT04C-constant-290-127",
+    "CBACT04C-constant-295-134",
+    "CBACT04C-constant-295-135",
+    "CBACT04C-constant-308-141",
+    "CBACT04C-constant-308-142",
+    "CBACT04C-constant-313-149",
+    "CBACT04C-constant-313-150",
+    "CBACT04C-constant-333-166",
+    "CBACT04C-constant-333-167",
+    "CBACT04C-constant-360-188",
+    "CBACT04C-constant-360-189",
+    "CBACT04C-constant-381-200",
+    "CBACT04C-constant-381-201",
+    "CBACT04C-constant-403-212",
+    "CBACT04C-constant-403-213",
+    "CBACT04C-constant-425-224",
+    "CBACT04C-constant-425-225",
+    "CBACT04C-constant-449-240",
+    "CBACT04C-constant-449-241",
+    "CBACT04C-constant-504-278",
+    "CBACT04C-constant-504-279",
+    "CBACT04C-constant-523-285",
+    "CBACT04C-constant-523-286",
+    "CBACT04C-constant-528-293",
+    "CBACT04C-constant-528-294",
+    "CBACT04C-constant-542-300",
+    "CBACT04C-constant-542-301",
+    "CBACT04C-constant-547-308",
+    "CBACT04C-constant-547-309",
+    "CBACT04C-constant-560-315",
+    "CBACT04C-constant-560-316",
+    "CBACT04C-constant-565-323",
+    "CBACT04C-constant-565-324",
+    "CBACT04C-constant-578-330",
+    "CBACT04C-constant-578-331",
+    "CBACT04C-constant-583-338",
+    "CBACT04C-constant-583-339",
+    "CBACT04C-constant-596-345",
+    "CBACT04C-constant-596-346",
+    "CBACT04C-constant-601-353",
+    "CBACT04C-constant-601-354",
+    "CBACT04C-delete-MOVE-235-83",
+    "CBACT04C-delete-MOVE-240-91",
+    "CBACT04C-delete-MOVE-253-98",
+    "CBACT04C-delete-MOVE-258-106",
+    "CBACT04C-delete-MOVE-271-113",
+    "CBACT04C-delete-MOVE-276-121",
+    "CBACT04C-delete-MOVE-290-128",
+    "CBACT04C-delete-MOVE-295-136",
+    "CBACT04C-delete-MOVE-308-143",
+    "CBACT04C-delete-MOVE-313-151",
+    "CBACT04C-delete-MOVE-328-160",
+    "CBACT04C-delete-MOVE-358-187",
+    "CBACT04C-delete-MOVE-379-199",
+    "CBACT04C-delete-MOVE-401-211",
+    "CBACT04C-delete-MOVE-423-223",
+    "CBACT04C-delete-MOVE-447-239",
+    "CBACT04C-delete-MOVE-502-277",
+    "CBACT04C-delete-MOVE-523-287",
+    "CBACT04C-delete-MOVE-528-295",
+    "CBACT04C-delete-MOVE-542-302",
+    "CBACT04C-delete-MOVE-547-310",
+    "CBACT04C-delete-MOVE-560-317",
+    "CBACT04C-delete-MOVE-565-325",
+    "CBACT04C-delete-MOVE-578-332",
+    "CBACT04C-delete-MOVE-583-340",
+    "CBACT04C-delete-MOVE-596-347",
+    "CBACT04C-delete-MOVE-601-355"
+  ],
+  "program": "INTCALC",
+  "qualification_credit": false,
+  "release_authorized": false,
+  "review_statement": "Howard reports reviewing the APPL-RESULT audit sample; no cryptographic signature inferred.",
+  "sample": [
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-271-112",
+          "source_line": 271,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "44f54674f5a0a815d192fdb84c089bafb8c78cdb6ebc82689d586d4b56194593",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-271-112",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 272,
+          "text": "           OPEN INPUT DISCGRP-FILE                                              "
+        },
+        {
+          "line": 273,
+          "text": "           IF  DISCGRP-STATUS = '00'                                            "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 275,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 277,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 278,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-235-81",
+          "source_line": 235,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "c4dba0dd31685cbde669ad3d39084aa35af18afeb79940ea9960cfe0648b6656",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-235-81",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 7 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 236,
+          "text": "           OPEN INPUT TCATBAL-FILE                                              "
+        },
+        {
+          "line": 237,
+          "text": "           IF  TCATBALF-STATUS = '00'                                           "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 239,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 241,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 242,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-528-294",
+          "source_line": 528,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "507f7c91704e76acfbb322238b471672febc3202e3b18b3a02a47f5c273949fa",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-528-294",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 13 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-425-225",
+          "source_line": 425,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "38e3f65933a03ef42a4da8af52369a1e1ac37f966512c46db2a411bbe2631051",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-425-225",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 13 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-523-287",
+          "source_line": 523,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "731d5e39e349ec77f76d83f8ff347fab5afa1195cdf047006d13d58201895c07",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-523-287",
+      "original": "           MOVE 8 TO  APPL-RESULT.                                              ",
+      "replacement": "       CONTINUE.",
+      "source_context": [
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 524,
+          "text": "           CLOSE TCATBAL-FILE                                                   "
+        },
+        {
+          "line": 525,
+          "text": "           IF  TCATBALF-STATUS = '00'                                           "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 527,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 529,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 530,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-578-331",
+          "source_line": 578,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "1ac1ceb0062395f7e3ac7bebf86deade67dafcc52738518bfd1107b642deff32",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-578-331",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 579,
+          "text": "           CLOSE ACCOUNT-FILE                                                   "
+        },
+        {
+          "line": 580,
+          "text": "           IF  ACCTFILE-STATUS  = '00'                                          "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 582,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 584,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 585,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-596-347",
+          "source_line": 596,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "26b24215f30e1a1e6855dfd53930b18ddb63e29a49740877151031e6fcdf7ab8",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-596-347",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       CONTINUE.",
+      "source_context": [
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 597,
+          "text": "           CLOSE TRANSACT-FILE                                                  "
+        },
+        {
+          "line": 598,
+          "text": "           IF  TRANFILE-STATUS  = '00'                                          "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 600,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 602,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 603,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-547-310",
+          "source_line": 547,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "fb1aafe686dd0b919a0f78611544cf3e342ad7517b930ec7f7ef6882b3168c4a",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-547-310",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 543,
+          "text": "           CLOSE XREF-FILE                                                      "
+        },
+        {
+          "line": 544,
+          "text": "           IF  XREFFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 546,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-542-301",
+          "source_line": 542,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "1e90854c9c0c88b5598fb4114d9d2d2ec29809df1d3062ca84ecb2647c4f80bc",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-542-301",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 543,
+          "text": "           CLOSE XREF-FILE                                                      "
+        },
+        {
+          "line": 544,
+          "text": "           IF  XREFFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 546,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 548,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 549,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-290-127",
+          "source_line": 290,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "7d496dc1844396ee4cf9dcac888243879c8f00cb143f51c9fbfe0660a9e6b90b",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-290-127",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 291,
+          "text": "           OPEN I-O ACCOUNT-FILE                                                "
+        },
+        {
+          "line": 292,
+          "text": "           IF  ACCTFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 294,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 296,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 297,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-290-126",
+          "source_line": 290,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "c6cf4814fb636efd34b2850cedbd7439c9ee42bb9dd3bbeea0b18336f2fe60fe",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-290-126",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 7 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 291,
+          "text": "           OPEN I-O ACCOUNT-FILE                                                "
+        },
+        {
+          "line": 292,
+          "text": "           IF  ACCTFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 294,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 296,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 297,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Pinned whole-program control-flow invariant: each successful OPEN returns APPL-RESULT0; a failed OPEN terminates through the host CEE3ABD shim. Before each listed non-sentinel operation, the prior successful operation left0. A failed operation sets12 and terminates before another such operation; EOF16 exits the loop before another iteration. INTCALC tariff status23 is explicitly converted to0 before DEFAULT lookup; POSTTRAN validation rejects do not change APPL-RESULT and their reject WRITE returns0. Therefore this single deletion of a success assignment retains0 on its success branch. The unchanged failure branch still sets12 or16. This excludes OPEN/CLOSE/reject-WRITE initializers that first assign8, and assumes the recorded host CEE3ABD terminating shim, not an arbitrary replacement that returns.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-401-211",
+          "source_line": 401,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            182,
+            186,
+            188,
+            190,
+            191,
+            197,
+            203,
+            205,
+            213,
+            215,
+            220,
+            224,
+            328,
+            331,
+            333,
+            340,
+            423,
+            435,
+            438,
+            447,
+            632
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "6416539f987a6ec12e7f08beb84c4e94624e4ef3eb63d5f0cc2c87e904192ba8",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-401-211",
+      "original": "               MOVE 0 TO APPL-RESULT                                            ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 182,
+          "text": "           PERFORM 0000-TCATBALF-OPEN.                                          "
+        },
+        {
+          "line": 186,
+          "text": "           PERFORM 0400-TRANFILE-OPEN.                                          "
+        },
+        {
+          "line": 188,
+          "text": "           PERFORM UNTIL END-OF-FILE = 'Y'                                      "
+        },
+        {
+          "line": 190,
+          "text": "                   PERFORM 1000-TCATBALF-GET-NEXT                               "
+        },
+        {
+          "line": 191,
+          "text": "                   IF  END-OF-FILE = 'N'                                        "
+        },
+        {
+          "line": 197,
+          "text": "                       ELSE                                                     "
+        },
+        {
+          "line": 203,
+          "text": "                       PERFORM 1100-GET-ACCT-DATA                               "
+        },
+        {
+          "line": 205,
+          "text": "                       PERFORM 1110-GET-XREF-DATA                               "
+        },
+        {
+          "line": 213,
+          "text": "                     PERFORM 1200-GET-INTEREST-RATE                             "
+        },
+        {
+          "line": 215,
+          "text": "                       PERFORM 1300-COMPUTE-INTEREST                            "
+        },
+        {
+          "line": 220,
+          "text": "                    PERFORM 1050-UPDATE-ACCOUNT                                 "
+        },
+        {
+          "line": 224,
+          "text": "           PERFORM 9000-TCATBALF-CLOSE.                                         "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 340,
+          "text": "                   MOVE 'Y' TO END-OF-FILE                                      "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 435,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 438,
+          "text": "               PERFORM 1200-A-GET-DEFAULT-INT-RATE                              "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 632,
+          "text": "           CALL 'CEE3ABD' USING ABCODE, TIMING.                                 "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-290-128",
+          "source_line": 290,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "eb397a35b08dcffb0dee2e40d274056607b41770422ad09cfdb73cb1e70a3801",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-290-128",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       CONTINUE.",
+      "source_context": [
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 291,
+          "text": "           OPEN I-O ACCOUNT-FILE                                                "
+        },
+        {
+          "line": 292,
+          "text": "           IF  ACCTFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 294,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 296,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 297,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-542-302",
+          "source_line": 542,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "4a52cb0d0c4fa6749de57b180ea597d387e960a812e1fba31be48a385207ff3f",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-542-302",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       CONTINUE.",
+      "source_context": [
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 543,
+          "text": "           CLOSE XREF-FILE                                                      "
+        },
+        {
+          "line": 544,
+          "text": "           IF  XREFFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 546,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 548,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 549,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-565-323",
+          "source_line": 565,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "aa2253d4437ad1ce447b4c5cf06a4d40e0d6be7f34b90b6b46d1682f42d1993e",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-565-323",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-258-106",
+          "source_line": 258,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            253,
+            254,
+            255,
+            256,
+            257,
+            258
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "7a8a818c09b26df7d0038fe1453f571f90b300f9168274481242c691cdd81358",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-258-106",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 254,
+          "text": "           OPEN INPUT XREF-FILE                                                 "
+        },
+        {
+          "line": 255,
+          "text": "           IF  XREFFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 257,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-504-278",
+          "source_line": 504,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "4e9fb2e832005b759f685fe5f577321caaf06474d3fc7709f1822aade214b59f",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-504-278",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-583-340",
+          "source_line": 583,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            578,
+            579,
+            580,
+            581,
+            582,
+            583
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "fa5aef2353759f9a92e43a633d542577a613225fc437933eac24a763d657c536",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-583-340",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 579,
+          "text": "           CLOSE ACCOUNT-FILE                                                   "
+        },
+        {
+          "line": 580,
+          "text": "           IF  ACCTFILE-STATUS  = '00'                                          "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 582,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-360-189",
+          "source_line": 360,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "f901a494bac995709ac9e343f60aa4d4d6dcba16addc5bf90201f272094e39e2",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-360-189",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 13 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-313-149",
+          "source_line": 313,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "e385f7effb1992798121ec9955774a5f11ebe1547fa1794c8b2685c13eaa3418",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-313-149",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-253-97",
+          "source_line": 253,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "52d2a22c83468bcd3223bd97126f76af548898615905704674d3c2f505a9ef0c",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-253-97",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 254,
+          "text": "           OPEN INPUT XREF-FILE                                                 "
+        },
+        {
+          "line": 255,
+          "text": "           IF  XREFFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 257,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 259,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 260,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-360-188",
+          "source_line": 360,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "738c4edf295d57963e377d39e7375950efb18f01903e50ac23e09b52c213024f",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-360-188",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-528-295",
+          "source_line": 528,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            523,
+            524,
+            525,
+            526,
+            527,
+            528
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "0b19c5912dd7e6f36c171deb77cc4f688f55d374dca2891781f47db9e3a530a6",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-528-295",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 524,
+          "text": "           CLOSE TCATBAL-FILE                                                   "
+        },
+        {
+          "line": 525,
+          "text": "           IF  TCATBALF-STATUS = '00'                                           "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 527,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The immediately preceding operation block initializes APPL-RESULT to8, then assigns0 on success or12 on failure. Deleting only the failure assignment retains8 on that branch. Both8 and12 leave the only consumers (numeric0/16 condition names) false; neither is displayed, aliased or externally passed. Successful behavior and all following assignments remain unchanged.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-295-136",
+          "source_line": 295,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            290,
+            291,
+            292,
+            293,
+            294,
+            295
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "ea408a390f26074e6aa5473a0c2ff11b6f01d82f0b8067a8741169cafb9e5894",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-295-136",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 291,
+          "text": "           OPEN I-O ACCOUNT-FILE                                                "
+        },
+        {
+          "line": 292,
+          "text": "           IF  ACCTFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 294,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-547-308",
+          "source_line": 547,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "ff410e5a9ed9ff4a4ec811a5e0a89a04a635ea14522cf3f7fe18950d0abae73a",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-547-308",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-578-332",
+          "source_line": 578,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "875e26bf3b31170b4a248e554c97ce8a6e379211e0e98f46e40bc5a3d3c29d87",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-578-332",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       CONTINUE.",
+      "source_context": [
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 579,
+          "text": "           CLOSE ACCOUNT-FILE                                                   "
+        },
+        {
+          "line": 580,
+          "text": "           IF  ACCTFILE-STATUS  = '00'                                          "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 582,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 584,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 585,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Pinned whole-program control-flow invariant: each successful OPEN returns APPL-RESULT0; a failed OPEN terminates through the host CEE3ABD shim. Before each listed non-sentinel operation, the prior successful operation left0. A failed operation sets12 and terminates before another such operation; EOF16 exits the loop before another iteration. INTCALC tariff status23 is explicitly converted to0 before DEFAULT lookup; POSTTRAN validation rejects do not change APPL-RESULT and their reject WRITE returns0. Therefore this single deletion of a success assignment retains0 on its success branch. The unchanged failure branch still sets12 or16. This excludes OPEN/CLOSE/reject-WRITE initializers that first assign8, and assumes the recorded host CEE3ABD terminating shim, not an arbitrary replacement that returns.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-delete-MOVE-447-239",
+          "source_line": 447,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            182,
+            186,
+            188,
+            190,
+            191,
+            197,
+            203,
+            205,
+            213,
+            215,
+            220,
+            224,
+            328,
+            331,
+            333,
+            340,
+            423,
+            435,
+            438,
+            447,
+            632
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "be39c642a6789cfd5d5354cbb92df84a9a52f3e22053701789adab505d28b200",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-delete-MOVE-447-239",
+      "original": "               MOVE 0 TO APPL-RESULT                                            ",
+      "replacement": "       CONTINUE",
+      "source_context": [
+        {
+          "line": 182,
+          "text": "           PERFORM 0000-TCATBALF-OPEN.                                          "
+        },
+        {
+          "line": 186,
+          "text": "           PERFORM 0400-TRANFILE-OPEN.                                          "
+        },
+        {
+          "line": 188,
+          "text": "           PERFORM UNTIL END-OF-FILE = 'Y'                                      "
+        },
+        {
+          "line": 190,
+          "text": "                   PERFORM 1000-TCATBALF-GET-NEXT                               "
+        },
+        {
+          "line": 191,
+          "text": "                   IF  END-OF-FILE = 'N'                                        "
+        },
+        {
+          "line": 197,
+          "text": "                       ELSE                                                     "
+        },
+        {
+          "line": 203,
+          "text": "                       PERFORM 1100-GET-ACCT-DATA                               "
+        },
+        {
+          "line": 205,
+          "text": "                       PERFORM 1110-GET-XREF-DATA                               "
+        },
+        {
+          "line": 213,
+          "text": "                     PERFORM 1200-GET-INTEREST-RATE                             "
+        },
+        {
+          "line": 215,
+          "text": "                       PERFORM 1300-COMPUTE-INTEREST                            "
+        },
+        {
+          "line": 220,
+          "text": "                    PERFORM 1050-UPDATE-ACCOUNT                                 "
+        },
+        {
+          "line": 224,
+          "text": "           PERFORM 9000-TCATBALF-CLOSE.                                         "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 340,
+          "text": "                   MOVE 'Y' TO END-OF-FILE                                      "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 435,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 438,
+          "text": "               PERFORM 1200-A-GET-DEFAULT-INT-RATE                              "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 632,
+          "text": "           CALL 'CEE3ABD' USING ABCODE, TIMING.                                 "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "Only APPL-AOK (value0) and APPL-EOF (value16) consume APPL-RESULT; no raw display, alias or external parameter reads it. Substituting11 or13 for12 preserves both condition values as false, and every later assignment is unchanged. Thus the failure branch, displays and RC remain identical for all file statuses.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-240-89",
+          "source_line": 240,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            133,
+            134,
+            135,
+            235,
+            238,
+            240,
+            253,
+            256,
+            258,
+            271,
+            274,
+            276,
+            290,
+            293,
+            295,
+            308,
+            311,
+            313,
+            328,
+            331,
+            333,
+            358,
+            360,
+            379,
+            381,
+            401,
+            403,
+            423,
+            425,
+            447,
+            449,
+            502,
+            504,
+            523,
+            526,
+            528,
+            542,
+            545,
+            547,
+            560,
+            563,
+            565,
+            578,
+            581,
+            583,
+            596,
+            599,
+            601
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "c91bc029d5e237eb5a7baadfd4585fb5711661140e63110a2a7986f9bca82c81",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-240-89",
+      "original": "               MOVE 12 TO APPL-RESULT                                           ",
+      "replacement": "       MOVE 11 TO APPL-RESULT",
+      "source_context": [
+        {
+          "line": 133,
+          "text": "       01  APPL-RESULT             PIC S9(9)   COMP.                            "
+        },
+        {
+          "line": 134,
+          "text": "           88  APPL-AOK            VALUE 0.                                     "
+        },
+        {
+          "line": 135,
+          "text": "           88  APPL-EOF            VALUE 16.                                    "
+        },
+        {
+          "line": 235,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 238,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 240,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 253,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 256,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 258,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 271,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 274,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 276,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 290,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 293,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 295,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 328,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 331,
+          "text": "                   MOVE 16 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 333,
+          "text": "                   MOVE 12 TO APPL-RESULT                                       "
+        },
+        {
+          "line": 358,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 360,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 379,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 381,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 401,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 403,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 423,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 425,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 447,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 449,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 502,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 504,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 523,
+          "text": "           MOVE 8 TO  APPL-RESULT.                                              "
+        },
+        {
+          "line": 526,
+          "text": "               MOVE 0 TO  APPL-RESULT                                           "
+        },
+        {
+          "line": 528,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 542,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 545,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 547,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 560,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 563,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 565,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 578,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 581,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 583,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-308-141",
+          "source_line": 308,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "75067a25020734cf20bb9fa9378c36223fef3bc2085c85a6af8e50c497daf552",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-308-141",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 7 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 308,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 309,
+          "text": "           OPEN OUTPUT TRANSACT-FILE                                            "
+        },
+        {
+          "line": 310,
+          "text": "           IF  TRANFILE-STATUS = '00'                                           "
+        },
+        {
+          "line": 311,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 312,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 313,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 314,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 315,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    },
+    {
+      "binding": {
+        "argument": {
+          "approval": "listed-for-operator-review; not a release approval",
+          "argument": "The changed/deleted value8 sentinel has no consumer before a total FILE STATUS IF/ELSE overwrites APPL-RESULT with0 or12. The following APPL-AOK reads only that overwrite. The operation does not read this working-storage item. Therefore this initializer cannot affect program outputs/RC/displays on either operation outcome.",
+          "kind": "argued",
+          "mutant_id": "CBACT04C-constant-596-346",
+          "source_line": 596,
+          "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "supporting_source_lines": [
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603
+          ]
+        },
+        "census_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "historical_basis": "class",
+        "mutant_sha256": "73c58085abe632ae3dadaa6622735ad2de64eb70b0ef0892536af4800e9a0d9c",
+        "register_dependencies": [],
+        "requires_argument_review": true,
+        "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+      },
+      "id": "CBACT04C-constant-596-346",
+      "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+      "replacement": "       MOVE 9 TO APPL-RESULT.",
+      "source_context": [
+        {
+          "line": 596,
+          "text": "           MOVE 8 TO APPL-RESULT.                                               "
+        },
+        {
+          "line": 597,
+          "text": "           CLOSE TRANSACT-FILE                                                  "
+        },
+        {
+          "line": 598,
+          "text": "           IF  TRANFILE-STATUS  = '00'                                          "
+        },
+        {
+          "line": 599,
+          "text": "               MOVE 0 TO APPL-RESULT                                            "
+        },
+        {
+          "line": 600,
+          "text": "           ELSE                                                                 "
+        },
+        {
+          "line": 601,
+          "text": "               MOVE 12 TO APPL-RESULT                                           "
+        },
+        {
+          "line": 602,
+          "text": "           END-IF                                                               "
+        },
+        {
+          "line": 603,
+          "text": "           IF  APPL-AOK                                                         "
+        }
+      ]
+    }
+  ],
+  "sample_method": "lowest SHA256(class-proof-seal:member-id), without replacement",
+  "sample_size": 30,
+  "schema": "equivalence-class-audit/1",
+  "signature_status": "unsigned",
+  "source": {
+    "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+    "path": "spec/mainframe/public-source/CBACT04C.cbl",
+    "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  }
+}

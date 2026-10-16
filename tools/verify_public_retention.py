@@ -2,6 +2,9 @@
 import argparse
 import hashlib
 import json
+import re
+import subprocess
+from datetime import date
 from pathlib import Path
 import urllib.request
 
@@ -12,10 +15,13 @@ def verify(manifest, output, *, open_url=urllib.request.urlopen):
     value = json.loads(Path(manifest).read_bytes())
     if value.get('schema') != 'public-evidence-retention/1' or value.get('repository') != REPOSITORY or value.get('scope') != 'public CardDemo only':
         raise ValueError('public-retention-scope')
+    evidence_date = value['source_evidence_date']
+    if date.fromisoformat(evidence_date).isoformat() != evidence_date:
+        raise ValueError('public-retention-date')
     rows = []
     for asset in value['assets']:
         expected_url = f"https://github.com/{REPOSITORY}/releases/download/{asset['release']}/{asset['name']}"
-        if asset['url'] != expected_url or not asset['release'].startswith('evidence-2026-10-15-'):
+        if asset['url'] != expected_url or not re.fullmatch(r'evidence-'+re.escape(evidence_date)+r'-[a-z0-9][a-z0-9-]*', asset['release']):
             raise ValueError('public-retention-url')
         count = 0
         digest = hashlib.sha256()
@@ -33,7 +39,19 @@ def verify(manifest, output, *, open_url=urllib.request.urlopen):
     return receipt
 
 
+def verify_all(root, output):
+    root, output = Path(root), Path(output)
+    names = subprocess.check_output(['git', 'ls-files', 'docs/factory/evidence-retention-*.json'], cwd=root, text=True).splitlines()
+    if not names: raise ValueError('public-retention-no-committed-manifests')
+    output.mkdir(parents=True, exist_ok=True)
+    for name in names:
+        verify(root/name, output/(Path(name).stem+'-verification.json'))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('manifest'); parser.add_argument('output')
-    args = parser.parse_args(); verify(args.manifest, args.output)
+    parser.add_argument('--all', action='store_true')
+    args = parser.parse_args()
+    if args.all: verify_all(args.manifest, args.output)
+    else: verify(args.manifest, args.output)

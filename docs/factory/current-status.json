@@ -10230,14 +10230,20 @@
     "artifact_expires_at": "2026-10-30T14:46:00+00:00",
     "artifact_id": 12052649453,
     "effective": false,
-    "executable_commit": "e4c6845ee9dd5ebc4eb4b3001cc7cde6fc70414b",
+    "executable_commit": "65bd4cd549067dd3695f4197e495cc15c9473417",
     "expired": false,
-    "plan_sha256": "bcccc1d3b05922108cbb6017abfe124b2fa4779613af0f20a5b43fd99c317126",
+    "plan_sha256": "9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13",
     "preparation_run": 38917806865,
     "request_path": "docs/factory/posttran-phase2-authorization-request-2026-10-16.json",
     "schema": "posttran-phase2-readiness/1",
     "signed": false,
     "signing_deadline": "2026-10-29T14:46:00+00:00",
-    "warning": false
-  }
+    "warning": false,
+    "evaluated_at": "2026-10-16T20:24:45.328626+00:00",
+    "days_remaining": 12.765
+  },
+  "retention_manifests": [
+    "docs/factory/evidence-retention-2026-10-16-posttran.json",
+    "docs/factory/evidence-retention-2026-10-16.json"
+  ]
 }

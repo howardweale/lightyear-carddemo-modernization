@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HISTORY = "docs/factory/howard-decisions-2026-10-11b.json"
 INDEX = "docs/factory/tower-status-input-index.json"
 PUBLIC = "docs/factory/factory-status-public-inputs.json"
-PHASE2_PUBLIC_ROOT = "https://github.com/howardweale/lightyear-carddemo-modernization/blob/f7a137ae5635bed903600afff816d1393c9e420e/docs/factory/"
+PHASE2_PUBLIC_ROOT = ""
 
 
 def latest(root):
@@ -36,6 +36,8 @@ def inputs(root=ROOT):
         ('*-review-verdict-2026-10-16.json', 'posttran-phase2-readiness-2026-10-16.json',
          'b06-part6-reverification-2026-10-16.json', 'intcalc-signing-order-2026-10-16.json')
         for p in (root/'docs/factory').glob(pattern)]
+    additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
+    additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
@@ -82,10 +84,15 @@ def load(root=ROOT):
             if record['measurement_head']!=index['head']:raise ValueError('review-projection-evidence-head')
             projections[program]=record
     readiness_path=root/'docs/factory/posttran-phase2-readiness-2026-10-16.json'
+    from tools.check_posttran_handoff import check
+    phase2=check(root) if readiness_path.exists() else None
+    clock_path=root/'docs/factory/status-snapshot-clock.json'
+    clock=json.loads(clock_path.read_bytes())['evaluated_at'] if clock_path.exists() else datetime.now(timezone.utc).isoformat()
+    retention=[p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
     return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,
-                phase2=json.loads(readiness_path.read_bytes()) if readiness_path.exists() else None,
+                phase2=phase2, evaluated_at=clock, retention=retention,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
                 threshold3_implemented=(root/'src/lightyear_factory/threshold3.py').is_file())
@@ -132,11 +139,18 @@ def render(model):
             *[scope+': '+row['kill_rate']+' projected; '+str(len(row['unresolved_survivors']))+' unresolved.' for scope,row in review['projected_thresholds'].items()]]
     phase2=model.get('phase2')
     if phase2:
-        expiry=datetime.fromisoformat(phase2['artifact_expires_at'])
-        current['phase2']={**phase2,'warning':expiry-datetime.now(timezone.utc)<timedelta(days=5)}
-        text+=['',f"POSTTRAN compiler expiry: {phase2['artifact_expires_at']}. Signing deadline: {phase2['signing_deadline']}.",
-               'Warning: fewer than five days remain.' if current['phase2']['warning'] else 'At least five days remain at rendering time.',
-               '[Operator runbook]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.']
+        from tools.check_posttran_handoff import timing
+        current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(model['evaluated_at']))}
+        text+=['','| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |',
+               '|---|---|---|---|---:|',
+               f"| POSTTRAN | `{phase2['plan_sha256']}` | `{phase2['executable_commit']}` | {phase2['signing_deadline']} | {current['phase2']['days_remaining']} |",
+               'Evaluated at '+current['phase2']['evaluated_at']+'. Request: ['+Path(phase2['request_path']).name+']('+Path(phase2['request_path']).name+').',
+               'Warning: five days or fewer remain before signing deadline.' if current['phase2']['warning'] else 'More than five days remain before signing deadline at snapshot time.',
+               '[Operator runbook](posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.']
+    current['retention_manifests']=model.get('retention',[])
+    text+=['','## Durable public evidence','',
+           *['Current retention manifest: ['+Path(p).name+']('+Path(p).name+'); scheduled download/hash verification applies. Local deletion remains unauthorized.' for p in model.get('retention',[])],
+           'Dated October 14/15 retention statements remain historical; use these manifests for current storage status.']
     text+=['','## CardDemo data slice','','210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.',
            '','## B06 access','',
            'Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.' if model.get('b06',{} ) else 'Current Windows metadata verification is not available in this snapshot.',
@@ -144,5 +158,5 @@ def render(model):
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
-             f"[Measured verdict]({Path(model['release_path']).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}.md)", ""]
+             f"[Measured verdict]({Path(model['release_path']).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]
     return current, "\n".join(text)

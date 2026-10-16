@@ -1,9 +1,13 @@
 name: Public evidence retention
 on:
+  schedule:
+    - cron: '0 15 * * 1'
+  workflow_dispatch:
   pull_request:
     paths:
       - 'docs/factory/evidence-retention-*.json'
       - 'tools/verify_public_retention.py'
+      - 'tests/test_public_retention.py'
       - '.github/workflows/public-evidence-retention.yml'
 permissions:
   contents: read
@@ -18,10 +22,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Verify the three approved original receipts
-        run: python3 -B tools/verify_public_retention.py docs/factory/evidence-retention-2026-10-16.json retention-verification.json
+      - name: Verify future-date, missing and changed asset rejection
+        run: PYTHONPATH=src:.:tests python3 -B -m unittest test_public_retention -v
+      - name: Reverify every committed public evidence manifest
+        run: python3 -B tools/verify_public_retention.py --all . work/retention-verification
       - uses: actions/upload-artifact@v4
         with:
           name: public-retention-verification
-          path: retention-verification.json
+          path: work/retention-verification
           retention-days: 90

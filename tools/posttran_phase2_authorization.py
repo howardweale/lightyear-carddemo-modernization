@@ -10,10 +10,10 @@ import zipfile
 from lightyear_control_tower.factory_policy import FactoryDecisions, require
 from lightyear_factory.tower_authority import proof_contract
 
-REQUEST = "docs/factory/posttran-phase2-authorization-request-2026-10-15.json"
-PROOF = "docs/factory/posttran-phase2-authorization-proof-2026-10-15.json"
+REQUEST = "docs/factory/posttran-phase2-authorization-request-2026-10-16.json"
+PROOF = "docs/factory/posttran-phase2-authorization-proof-2026-10-16.json"
 PUBLIC_KEY = "docs/factory/factory-authority.public.pem"
-PLAN = "docs/factory/posttran-phase2-plan-2026-10-15.json"
+PLAN = "docs/factory/posttran-phase2-plan-2026-10-16.json"
 RETURN_CODES = dict(equal_allowed=[0, 4], equal_other="divergent",
                     exception=dict(scenario="generated:posttran-duplicate-id", candidate=999, twin=12))
 
@@ -21,6 +21,7 @@ RETURN_CODES = dict(equal_allowed=[0, 4], equal_other="divergent",
 def verify_signed(root, plan, head, env, *, now=None):
     root = Path(root)
     require((root/PROOF).is_file(), "phase2-signed-proof-missing")
+    require(bool(env.get("POSTTRAN_PHASE2_APPROVED_JOURNAL_HEAD")), "phase2-journal-head-required")
     proof = json.loads((root/PROOF).read_bytes())
     contract = proof_contract(proof)
     require(contract == json.loads((root/REQUEST).read_bytes()), "phase2-signed-request-binding")

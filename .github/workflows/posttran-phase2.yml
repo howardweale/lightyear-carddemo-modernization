@@ -7,6 +7,9 @@ on:
       - 'tools/posttran_phase2_authorization.py'
       - 'tools/check_posttran_retained_plan.py'
       - 'tests/test_posttran_phase2.py'
+      - 'tests/test_phase2_authorization.py'
+      - 'tests/test_phase2_rehearsal.py'
+      - 'tools/finalize_posttran_phase2.py'
       - 'docs/factory/posttran-phase2-*.json'
       - '.github/workflows/posttran-phase2.yml'
 permissions:
@@ -35,6 +38,7 @@ jobs:
             tests/mainframe
             tests/test_posttran_phase2.py
             tests/test_phase2_authorization.py
+            tests/test_phase2_rehearsal.py
             tests/test_decision_console_factory.py
             tests/test_intcalc_loader_domain.py
             tests/test_release_crosscheck.py
@@ -44,36 +48,41 @@ jobs:
       - name: Validate authorization boundaries without running applications
         env:
           PYTHONPATH: src:.:tests
-        run: python3 -B -m unittest test_posttran_phase2 test_phase2_authorization test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
+        run: python3 -B -m unittest test_posttran_phase2 test_phase2_authorization test_phase2_rehearsal test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
       - name: Inspect retained plan at its recorded commit without execution
         if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') != ''
         env:
           PYTHONPATH: src:.
         run: python3 -B -m tools.check_posttran_retained_plan
       - name: Build and retain the pinned compiler image only
-        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') == ''
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') == ''
         run: |
           mkdir -p work/image
           docker build --platform linux/amd64 -f tools/legacy_twin/reproducible.Containerfile -t posttran-phase2-compiler .
           docker image inspect posttran-phase2-compiler --format '{{.Id}}' > work/image/image-id.txt
           docker save posttran-phase2-compiler -o work/image/compiler-image.tar
       - name: Prepare exact plan; no candidate or twin application execution
-        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') == ''
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') == ''
         env:
           PYTHONPATH: src:.
         run: python3 -B tools/prepare_posttran_phase2.py work/plan --image-id "$(cat work/image/image-id.txt)" --archive work/image/compiler-image.tar
       - uses: actions/upload-artifact@v4
-        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') == ''
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') == ''
         with:
           name: posttran-phase2-compiler-image
           path: work/image
           retention-days: 14
       - uses: actions/upload-artifact@v4
-        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') == ''
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') == ''
         with:
           name: posttran-phase2-plan
           path: work/plan
           retention-days: 14
+      - name: Verify published refresh bindings without signing or execution
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') != ''
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -c "from tools.run_posttran_phase2 import bound_plan; bound_plan()"
   reserve:
     if: vars.POSTTRAN_PHASE2_APPROVED_HEAD == github.event.pull_request.head.sha && vars.POSTTRAN_PHASE2_APPROVED_PLAN != '' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04

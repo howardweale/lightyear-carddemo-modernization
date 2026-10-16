@@ -1,0 +1,40 @@
+{
+  "schema": "public-evidence-retention/1",
+  "prepared_on": "2026-10-16",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "source_evidence_date": "2026-10-15",
+  "scope": "public CardDemo only",
+  "store": "GitHub Release assets",
+  "historical_index_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452",
+  "assets": [
+    {
+      "release": "evidence-2026-10-15-intcalc",
+      "name": "factory-review-records-INTCALC-0-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-intcalc/factory-review-records-INTCALC-0-mutation-results.json",
+      "bytes": 86282783,
+      "sha256": "ad4ab419496debd0a8d62beaf9ff7a265fd21832521277bbcd8462ae2b7bbfba",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-INTCALC-0-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-INTCALC-0\\factory-review-INTCALC\\mutation-results.json"
+    },
+    {
+      "release": "evidence-2026-10-15-intcalc",
+      "name": "factory-review-records-INTCALC-1-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-intcalc/factory-review-records-INTCALC-1-mutation-results.json",
+      "bytes": 86282820,
+      "sha256": "e67c6bb59a6bfc4935bd51e06eb7056d5813074ede668f38df15d21f0e102124",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-INTCALC-1-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-INTCALC-1\\factory-review-INTCALC\\mutation-results.json"
+    },
+    {
+      "release": "evidence-2026-10-15-carddemo",
+      "name": "carddemo-data-receipt.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-carddemo/carddemo-data-receipt.json",
+      "bytes": 1230556,
+      "sha256": "a8927dc6458db80c067c2023e738a1d3c171e2545dcd0c4647f06d1f727508fd",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\carddemo-data-receipt.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38816713103\\carddemo-data-proof\\receipt.json"
+    }
+  ],
+  "upload_verification": "CI download-and-hash required",
+  "local_deletion_authorized": false
+}

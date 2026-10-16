@@ -40,7 +40,7 @@ def statements(text):
         fragment=line.rstrip()[:-1].rstrip() if continued else line.rstrip()
         body+=fragment.lstrip() if body else fragment
         if continued:continue
-        if body.strip()!='END':yield first,body
+        if body.strip()!='END' and not re.fullmatch(r"\s*TITLE\s+'(?:[^']|'')*'\s*",body):yield first,body
         body=''
     if body:raise ValueError('bms-incomplete-continuation')
 
@@ -65,8 +65,7 @@ def parse(raw,path):
             maps.append(current)
         else:
             if current is None:raise ValueError('bms-field-without-map')
-            if set(options)-{'ATTRB','COLOR','HILIGHT','LENGTH','POS','INITIAL','PICIN','PICOUT'}:raise ValueError('bms-unsupported-field-operand')
-            if 'PICIN' in options or 'PICOUT' in options:raise ValueError('bms-picture-formatting-not-implemented')
+            if set(options)-{'ATTRB','COLOR','HILIGHT','LENGTH','POS','INITIAL','PICIN','PICOUT','VALIDN','JUSTIFY'}:raise ValueError('bms-unsupported-field-operand')
             pos=options.get('POS','');pair=re.fullmatch(r'\((\d+),(\d+)\)',pos)
             offset=(int(pair[1])-1)*current['columns']+int(pair[2])-1 if pair else int(pos)
             length=int(options['LENGTH'])
@@ -80,7 +79,8 @@ def parse(raw,path):
             if label and (not length or any(f['name']==label for f in current['fields'])):raise ValueError('bms-field-name')
             current['fields'].append(dict(name=label,source_line=line,attribute_offset=offset,data_offset=offset+1,
                 length=length,attributes=attributes,protected='UNPROT' not in attributes,
-                hidden='DRK' in attributes,color=options.get('COLOR','NEUTRAL'),highlight=options.get('HILIGHT','OFF'),initial=initial))
+                hidden='DRK' in attributes,color=options.get('COLOR','NEUTRAL'),highlight=options.get('HILIGHT','OFF'),initial=initial,
+                input_picture=options.get('PICIN'),output_picture=options.get('PICOUT'),validation=options.get('VALIDN'),justify=options.get('JUSTIFY')))
     if not maps:raise ValueError('bms-empty-map')
     return dict(schema='carddemo-bms-model/1',source=path,source_sha256=sha256(raw).hexdigest(),maps=maps,
         semantics='POS identifies the attribute byte; data starts in the next cell. LENGTH excludes the attribute byte.',
@@ -93,6 +93,8 @@ def receive(model, values):
     result={}
     for name,value in values.items():
         if name not in fields or fields[name]['protected']:raise ValueError('screen-protected-or-unknown-field')
+        if fields[name].get('input_picture') or fields[name].get('validation') or fields[name].get('justify'):
+            raise ValueError('screen-input-formatting-not-implemented')
         if not isinstance(value,str):raise ValueError('screen-input-type')
         raw=value.encode('cp037')
         if len(raw)>fields[name]['length']:raise ValueError('screen-input-too-long')
@@ -106,6 +108,7 @@ COLORS={'BLUE':'#6daaff','RED':'#ff7373','GREEN':'#74e59a','YELLOW':'#ffe382','T
 def render(model, values=None):
     values=values or {};fields=[]
     for f in model['fields']:
+        if f.get('output_picture') and f['name'] in values:raise ValueError('screen-output-picture-not-implemented')
         value=str(values.get(f['name'],f['initial']))
         if len(value.encode('cp037'))>f['length']:raise ValueError('screen-output-too-long')
         color=f['color']

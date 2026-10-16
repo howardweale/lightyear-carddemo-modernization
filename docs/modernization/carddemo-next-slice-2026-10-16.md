@@ -12,11 +12,13 @@ DBD `DBPAUTP0` declares 100-byte PAUTSUM0 roots and 200-byte PAUTDTL1 children. 
 
 CI rebuilds the existing `readiness/ims-expiry` 40-case synthetic DL/I conformance model into a new artifact directory. It preserves the historical receipts. A passing replay proves that bounded model, not IMS runtime compatibility, the public unload parser, or a PostgreSQL DL/I adapter.
 
-## Remaining slice order
+## Bounded implementation of the next slice steps
 
-1. Source-bound BMS screen-model generation, with unsupported constructs refused.
-2. P3 VSAM repository and DL/I access semantics, independently tested.
-3. P4 screen rendering and field behavior from the model.
-4. P5 session proof with explicit oracle/claim scope; no CICS or z/OS equivalence without captured baseline evidence.
+1. The BMS generator binds all 21 maps to the same upstream commit. Models preserve source lines, attribute-byte positions, field lengths, color, protection, hidden fields, initial cursor, pictures, validation and justification operands. Unknown constructs refuse. Pictures/validation/justification are retained in the model; affected input processing or dynamic picture output refuses until implemented.
+2. P3 adapters add byte-record keyed read/write/rewrite/delete/browse and a two-level PostgreSQL DL/I root/child get/hold/insert/replace/delete interface. CI checks duplicate/not-found/EOF statuses, primary-key preservation, alternate order, hold consumption, orphan refusal and cascade deletion. Callers own transactions and must clear DL/I position at boundaries. No CICS locking, SSA parser, IMS checkpoint/restart or unload compatibility is claimed.
+3. P4 static HTML previews use the BMS field coordinates and input/hidden/protected attributes. A headless Chromium check fills the sign-on fields, verifies password masking and records a screenshot. BLINK is deliberately presented as underline. These previews are not deployed business screens.
+4. P5 begins with source-derived sign-on session cases: missing credentials, not-found, read failure, wrong password, uppercase conversion, user/admin routes, invalid AID and exit. Downstream program business actions explicitly return blocked. The CI cases are an operator-authored source model, not an independently captured CICS session oracle.
+
+Source semantics for attribute-byte positions and field lengths: [IBM DFHMDF documentation](https://www.ibm.com/docs/en/cics-ts/6.x?topic=macros-dfhmdf). A full faithful application session and z/OS-facing equivalence remain unverified; these bounded steps do not substitute for them.
 
 No release, signing, activation or merge authority is implied.

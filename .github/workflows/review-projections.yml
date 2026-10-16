@@ -8,6 +8,7 @@ on:
       - 'tools/render_oct16_status.py'
       - 'tools/release_status_records.py'
       - 'tools/build_release_packet.py'
+      - 'tools/build_duplicate_loader_capture.py'
       - 'docs/factory/**'
       - 'src/lightyear_mainframe/release_projection.py'
       - 'src/lightyear_control_tower/threshold*.py'
@@ -46,8 +47,17 @@ jobs:
         env:
           PYTHONPATH: src:.
         run: python3 -B -m tools.render_oct16_status work/review-projections
+      - name: Build public duplicate-key loader capture package without execution
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_duplicate_loader_capture work/zos-duplicate-loader
       - uses: actions/upload-artifact@v4
         with:
           name: retained-review-projections
           path: work/review-projections
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zos-duplicate-loader-capture-kit
+          path: work/zos-duplicate-loader
           retention-days: 90

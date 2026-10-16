@@ -1,0 +1,35 @@
+name: Retained evidence review projections
+on:
+  pull_request:
+    paths:
+      - 'tools/build_oct16_review_projections.py'
+      - 'src/lightyear_mainframe/release_projection.py'
+      - 'src/lightyear_control_tower/threshold*.py'
+      - 'src/lightyear_factory/threshold3.py'
+      - '.github/workflows/review-projections.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: review-projections-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  retained-projection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - run: python3 -m pip install 'cryptography>=46,<47'
+      - name: Verify original public receipts and produce unsigned projections
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_oct16_review_projections work/review-projections
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retained-review-projections
+          path: work/review-projections
+          retention-days: 90

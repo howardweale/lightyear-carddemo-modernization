@@ -52,7 +52,9 @@ class ThresholdConditionTests(unittest.TestCase):
             if mode == "missing": rows.pop()
             if mode == "empty": rows.clear()
             if mode == "duplicate": rows[-1] = copy.deepcopy(rows[0])
-            if mode == "legacy": del c["details"]["conditions"]
+            if mode == "legacy":
+                del c["details"]["conditions"]
+                del c["details"]["evidence_head"]
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, "threshold-conditions-unmet"):
                 write_request(self.root, c)
 

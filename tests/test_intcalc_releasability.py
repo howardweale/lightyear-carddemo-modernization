@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tools.build_intcalc_releasability import ROOT, build
 
@@ -27,3 +28,10 @@ class ReleasabilityTests(unittest.TestCase):
             receipt.write_text("{}")
             with self.assertRaisesRegex(ValueError, "release-evidence-hash"):
                 build(root, "2026-10-15")
+
+    def test_historical_assessment_does_not_depend_on_current_source_presence(self):
+        # Files added by later policy implementation must not rewrite a dated receipt.
+        with patch.object(Path, "is_file", side_effect=AssertionError("live source probe")):
+            value, _ = build(ROOT, "2026-10-15")
+        retained = json.loads((ROOT / "docs/factory/intcalc-releasability-2026-10-15.json").read_bytes())
+        self.assertEqual(retained, value)

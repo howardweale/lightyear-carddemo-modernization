@@ -1,4 +1,8 @@
-"""Publish a dated assessment from retained CI receipts; never grants authority."""
+"""Reproduce the historical release assessment from retained CI receipts.
+
+Current policy and implementation status belongs in the dated review projections,
+not in this historical report. Never grants authority.
+"""
 import argparse
 from collections import Counter, defaultdict
 from hashlib import sha256
@@ -109,9 +113,7 @@ def build(root, date):
         blockers.append("Loader gaps remain; deterministic fixes and a fresh CI campaign are required.")
     if not index.get("retention_complete"):
         blockers.append("Large original mutation receipts await the designated retention store; local staging and artifact hashes are recorded in the index.")
-    if not (root/'src/lightyear_control_tower/threshold_evidence.py').is_file():
-        blockers.append("Typed threshold-condition validation is not present in this checkout.")
-    blockers.append("No effective signed threshold policy has been applied; provisional engineering evidence does not become release evidence through signatures.")
+    blockers.append("P1 must land with exact-head approval before generating the six final unsigned requests; no effective signatures have been applied.")
     verdict = "Not releasable: " + " ".join(blockers)
     measured = programs["INTCALC"]
     criteria = [

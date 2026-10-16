@@ -31,7 +31,7 @@ jobs:
       - name: Byte alias, group MOVE and unsupported-gate tests
         env:
           PYTHONPATH: src:.:tests
-        run: python -B -m unittest test_equivalence_storage test_equivalence_dataflow test_records -v
+        run: python -B -m unittest test_equivalence_storage test_equivalence_dataflow test_mainframe_records test_mainframe_extended_records -v
       - name: Translate requested public program storage twice
         env:
           PYTHONPATH: src:.

@@ -1,0 +1,52 @@
+{
+  "schema": "public-evidence-retention/1",
+  "prepared_on": "2026-10-16",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "source_evidence_date": "2026-10-15",
+  "scope": "public CardDemo only",
+  "store": "GitHub Release assets",
+  "assets": [
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-0-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-0-mutation-results.json",
+      "bytes": 11873268,
+      "sha256": "91d688ea2e71f3711b632f30cf1373320d6ab5d0d8e290f27b67b2062d311f2a",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-0-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-0\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-1-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-1-mutation-results.json",
+      "bytes": 11873288,
+      "sha256": "b963be7ade04e50ee69a067ef71882786b42cdf2e2cb66026eb517fb9702e489",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-1-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-1\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-2-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-2-mutation-results.json",
+      "bytes": 11873369,
+      "sha256": "b70b0f4f8dc1f6b7a27e182c1d5a77db04214a2323be854cc3d85979de7da822",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-2-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-2\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-3-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-3-mutation-results.json",
+      "bytes": 11873287,
+      "sha256": "ca1ed0dec40a2b2b3a38dc5fddc5ec551778a318680f0390084f59f7c220c6cf",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-3-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-3\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    }
+  ],
+  "upload_verification": "CI download-and-hash required",
+  "local_deletion_authorized": false
+}

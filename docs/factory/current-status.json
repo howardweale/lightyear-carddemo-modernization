@@ -10238,6 +10238,12 @@
     "schema": "posttran-phase2-readiness/1",
     "signed": false,
     "signing_deadline": "2026-10-29T14:46:00+00:00",
-    "warning": false
-  }
+    "warning": false,
+    "evaluated_at": "2026-10-16T20:24:45.328626+00:00",
+    "days_remaining": 12.765
+  },
+  "retention_manifests": [
+    "docs/factory/evidence-retention-2026-10-16-posttran.json",
+    "docs/factory/evidence-retention-2026-10-16.json"
+  ]
 }

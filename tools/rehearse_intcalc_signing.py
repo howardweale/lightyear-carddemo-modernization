@@ -13,10 +13,11 @@ from tools.build_intcalc_signing_requests import build
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def verify_order(requests, proofs, authority):
+def verify_order(requests, proofs, authority, root):
     if len(requests) != len(proofs): raise ValueError('signing-order-incomplete')
     previous = -1
     for contract, proof in zip(requests, proofs):
+        validate_contract(contract, root)
         authority.verify(proof, contract['kind'], contract, ('accept', 'keep', 'approve'))
         event = next(e for e in proof['journal']['events'] if e['content_sha256'] == proof['decision_sha256'])
         if event['sequence'] <= previous: raise ValueError('signing-order')
@@ -42,12 +43,12 @@ class OrderedSigningTests(FactoryTests):
         # Refresh earlier proofs to the same trusted current journal.
         proofs=[self.service.proof(self.token,p['decision_sha256']) for p in proofs]
         authority=FactoryDecisions(self.service.public_key,proofs[-1]['journal']['journal_head_sha256'],evidence_root=self.root)
-        verify_order(contracts[:5],proofs,authority)
-        with self.assertRaises(ValueError): verify_order(contracts[:5],list(reversed(proofs)),authority)
+        verify_order(contracts[:5],proofs,authority,self.root)
+        with self.assertRaises(ValueError): verify_order(contracts[:5],list(reversed(proofs)),authority,self.root)
         with self.assertRaisesRegex(ValueError,'threshold-conditions-unmet'): self.decide(contracts[5])
         source=contracts[2]['sources'][0]
         (self.root/source['path']).write_bytes(b'changed after review')
-        with self.assertRaises(ValueError): verify_order(contracts[:5],proofs,authority)
+        with self.assertRaises(ValueError): verify_order(contracts[:5],proofs,authority,self.root)
 
 
 if __name__=='__main__':

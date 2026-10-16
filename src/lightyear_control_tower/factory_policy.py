@@ -240,6 +240,9 @@ class FactoryDecisions:
         decision = verify_decision(proof, self.public_key, kind, expected, scope=SCOPE,
             expected_head=self.head, outcomes=outcomes)
         require(decision["validation"]["contract"] == contract)
+        if self.evidence_root is not None:
+            for source in contract['sources']:
+                require(sha256(read_bytes(confined(self.evidence_root,source['path']))).hexdigest()==source['sha256'], 'factory-source-hash')
         if kind == 'scenario-threshold-approval':
             from .threshold_evidence import verify_reviews
             verify_reviews(contract, self.evidence_root, authority=self, journal=proof['journal'])

@@ -6,7 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
-The same searchable index includes 34 later implementation records in Markdown, Word and PDF.
+The same searchable index includes 36 later implementation records in Markdown, Word and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -14,6 +14,8 @@ customer value, capability, release, or roadmap phase.
 The documents explain purpose, customer value, delivered capability, evidence posture, limitations, and
 the relationship to earlier work. They do not override the underlying schemas, receipts, ledgers, tests,
 or policy decisions.
+
+[October 15 merge reconciliation](reconciliation-2026-10-15.md)
 
 [October 14 reconciliation and preserved source map](reconciliation-2026-10-14.md)
 
@@ -130,6 +132,8 @@ or policy decisions.
 | MS #104 | INTCALC release evidence and POSTTRAN comparison preparation | Evidence controls and review packet delivered; effective INTCALC approvals and POSTTRAN Phase 2 remain gated | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-104/MS-104.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-104/MS-104.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-104/MS-104.pdf) |
 | MS #105 | Reproducible compiler builds and MCP recovery | Compiler repair merged; Windows and Linux MCP recovery suites passed with 30 tests each | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-105/MS-105.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-105/MS-105.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-105/MS-105.pdf) |
 | MS #106 | Signed Factory history and local authority | Seven records signed and local signed-only consumption activated; release and execution approvals remain separate | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-106/MS-106.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-106/MS-106.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-106/MS-106.pdf) |
+| MS #107 | Release safeguards and evidence reconciliation | Safeguards and evidence merged; threshold/3 remains proposed and INTCALC release and POSTTRAN execution remain gated | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-107/MS-107.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-107/MS-107.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-107/MS-107.pdf) |
+| MS #108 | CardDemo PostgreSQL data migration proof | Bounded public data gates passed; overall migration remains indeterminate with IMS and application behavior still open | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-108/MS-108.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-108/MS-108.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-108/MS-108.pdf) |
 
 ## Build and verification
 

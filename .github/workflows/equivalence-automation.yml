@@ -5,8 +5,10 @@ on:
       - 'src/lightyear_mainframe/**'
       - 'tools/*equivalence*'
       - 'tests/test_equivalence_automation.py'
+      - 'tests/test_equivalence_projection.py'
       - '.github/workflows/equivalence-automation.yml'
       - 'docs/factory/equivalence-automation*'
+      - 'docs/factory/equivalence-scale-2026-10-16/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -31,7 +34,7 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
           PYTHONDONTWRITEBYTECODE: '1'
-        run: python -B -m unittest test_equivalence_automation test_generic_scenario_ir test_oct12_operator_review -v
+        run: python -B -m unittest test_equivalence_automation test_equivalence_projection test_generic_scenario_ir test_oct12_operator_review -v
       - name: Publish complete stage-zero baseline
         env:
           EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}

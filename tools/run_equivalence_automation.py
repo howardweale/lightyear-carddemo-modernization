@@ -179,7 +179,11 @@ def execute_pipeline(job, output, head, search=True):
                         disabled_encoders=[v['id'] for v in validations if not v['enabled']],
                         unsupported_limits=['No paragraph/path-to-output solver encoding','No ON SIZE ERROR handlers, division or alias encoder','No held-out executable application harness'],
                         release_authorized=False,qualification_credit=False,claim_scope='twin'))
-    write(output/'resolutions.json',sealed(dict(head=head,program=job,rows=resolutions)))
+    ledger=sealed(dict(head=head,program=job,rows=resolutions))
+    write(output/'resolutions.json',ledger)
+    from lightyear_mainframe.equivalence_projection import project
+    write(output/'signature-projection.json',project(ledger,
+        [r for r in requests if r['class_proof']['class_id']=='legacy-APPL-RESULT/1'],matcher_hash))
     write(output/'summary.json',summary)
     # A stable content manifest binds every proof, input, executable and log.
     manifest={p.relative_to(output).as_posix():digest(p.read_bytes()) for p in sorted(output.rglob('*')) if p.is_file()}

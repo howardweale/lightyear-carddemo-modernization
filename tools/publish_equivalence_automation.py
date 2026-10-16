@@ -18,6 +18,23 @@ def publish(inputs,output,run_id):
         data.append((summary,baseline,folder))
     if len({s['head'] for s,_,_ in data})!=1:raise ValueError('mixed-heads')
     head=data[0][0]['head'];output.mkdir(parents=True,exist_ok=True)
+    projections=[verify(json.loads((folder/'signature-projection.json').read_text())) for _,_,folder in data]
+    if any(p['measurement_head']!=head for p in projections):raise ValueError('projection-head-mismatch')
+    total=sum(p['denominator'] for p in projections)
+    now=sum(p['resolved_now'] for p in projections)
+    pending=sum(p['resolved_after_pending_signatures'] for p in projections)
+    stage=[f'After pending signatures: {pending}/{total} ({100*pending/total:.1f}%).',
+           f'Resolved now: {now}/{total} ({100*now/total:.1f}%).',
+           'Held out: TRANREPT/CBTRN03C is measured separately; zero class matches means no evidence of generality.', '',
+           f'Fresh E1 pipeline at `{head}`; repeated and independently rechecked. Run {run_id}.', '',
+           '| Program | Route | Resolved now | After pending signatures |', '|---|---|---:|---:|']
+    for p in projections:
+        for route, counts in p['routes'].items():
+            stage.append(f"| {p['program']} | {route} | {counts['resolved_now']} | {counts['resolved_after_pending_signatures']} |")
+    stage+=['','Reviewer person-minutes per 1,000 sites: not measured. Unsigned proposals have no effect on actual resolutions or historical denominators.',
+            'Waiting: the two APPL-RESULT class signatures. Data-domain and operator-policy proposals are not yet ready to sign. No z/OS-facing acceptance or release authority.']
+    (output/'equivalence-scale-E1.md').write_text('\n'.join(stage)+'\n')
+    write(output/'equivalence-scale-E1.json',sealed(dict(stage='E1',head=head,run_id=run_id,programs=projections)))
     write(output/'equivalence-triage-2026-10-15.json',sealed(dict(head=head,programs=[d for _,d,_ in data])))
     (output/'equivalence-triage-2026-10-15.md').write_text(markdown_triage([d for _,d,_ in data]))
     lines=['# Automated equivalence — 2026-10-15','',

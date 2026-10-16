@@ -23,7 +23,7 @@ jobs:
       - name: Verify pinned sources and adversarial type rules
         env:
           PYTHONPATH: src:tests
-        run: python -B -m unittest test_carddemo_data_schema -v
+        run: python -B -m unittest test_carddemo_data_schema test_carddemo_data_volume -v
       - name: Verify retained bounded review and implementation bindings
         env:
           PYTHONPATH: src:tests
@@ -41,7 +41,7 @@ jobs:
   postgres-data-proof:
     needs: generated-data-plan
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -76,6 +76,22 @@ jobs:
           name: carddemo-data-proof
           path: work/carddemo-data-proof
           if-no-files-found: error
+      - name: Browse 100000 generated records per file and raw EBCDIC boundary keys
+        env:
+          PYTHONPATH: src
+          CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
+        run: python -B -m lightyear_data.carddemo.volume --count 100000 --out work/carddemo-volume
+      - name: Replay the existing 40-case DL/I conformance model into new output
+        env:
+          PYTHONPATH: src
+        run: python -B -m lightyear_readiness.ims_qualification build --project-root . --output-root work/carddemo-volume/ims-replay
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-volume-and-ims
+          path: work/carddemo-volume
+          if-no-files-found: error
+          retention-days: 90
       - name: Remove disposable public-fixture database
         if: always()
         run: docker rm -f carddemo-data-pg || true

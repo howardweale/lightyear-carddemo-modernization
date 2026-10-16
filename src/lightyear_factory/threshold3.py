@@ -1,6 +1,7 @@
 """Seven exact source constants may waive diversity, never comparison or mutation."""
 from hashlib import sha256
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -11,6 +12,9 @@ BINDINGS = ('field','source_path','source_sha256','source_line','source_line_sha
 
 def exemptions(adequacy, threshold, compared_fields, root=None):
     from lightyear_control_tower.decisions import digest
+    from .scenario_policy import PROPOSAL
+    if any(threshold.get(k)!=PROPOSAL[k] for k in ('business_logic_outcomes','legacy_mutants_killed','minimum_systematic_mutants','distinct_values_per_output_field')):
+        raise ValueError('threshold3-only-constant-exemptions')
     root=Path(root or ROOT)
     record=json.loads((root/ACCEPTANCE).read_bytes())
     if record.get('content_sha256') != SEAL or digest({k:v for k,v in record.items() if k!='content_sha256'}) != SEAL:
@@ -39,7 +43,9 @@ def exemptions(adequacy, threshold, compared_fields, root=None):
         for mutant in mutants:
             if (mutant.get('line')!=row['source_line'] or mutant.get('source_sha256')!=row['source_sha256']
                 or mutant.get('status') not in ('killed-failure','killed-divergent','survived','equivalent (argued, listed)')
-                or mutant.get('valid_comparisons',0)<1 or mutant.get('evidence_complete') is not True
-                or not isinstance(mutant.get('record_sha256'),str) or len(mutant['record_sha256'])!=64):
+                or type(mutant.get('valid_comparisons')) is not int or mutant['valid_comparisons']<1
+                or mutant.get('evidence_complete') is not True
+                or not isinstance(mutant.get('record_sha256'),str)
+                or re.fullmatch('[0-9a-f]{64}',mutant['record_sha256']) is None):
                 raise ValueError('threshold3-mutation-required')
     return set(expected)

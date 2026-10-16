@@ -3,6 +3,12 @@ on:
   pull_request:
     paths:
       - 'tools/build_oct16_review_projections.py'
+      - 'tools/build_intcalc_signing_requests.py'
+      - 'tools/rehearse_intcalc_signing.py'
+      - 'tools/render_oct16_status.py'
+      - 'tools/release_status_records.py'
+      - 'tools/build_release_packet.py'
+      - 'docs/factory/**'
       - 'src/lightyear_mainframe/release_projection.py'
       - 'src/lightyear_control_tower/threshold*.py'
       - 'src/lightyear_factory/threshold3.py'
@@ -28,6 +34,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 -B -m tools.build_oct16_review_projections work/review-projections
+      - name: Prepare six unsigned requests in explicit signing order
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_intcalc_signing_requests work/review-projections
+      - name: Disposable ordered signing and refusal rehearsal
+        env:
+          PYTHONPATH: src:.:tests
+        run: python3 -B -m tools.rehearse_intcalc_signing
+      - name: Render dated status and decisions-only packet
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.render_oct16_status work/review-projections
       - uses: actions/upload-artifact@v4
         with:
           name: retained-review-projections

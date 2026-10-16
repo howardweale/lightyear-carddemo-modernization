@@ -3,10 +3,12 @@ on:
   pull_request:
     paths:
       - 'src/lightyear_mainframe/equivalence_storage.py'
+      - 'src/lightyear_mainframe/equivalence_dataflow.py'
       - 'src/lightyear_mainframe/source.py'
       - 'src/lightyear_mainframe/records.py'
       - 'tools/inspect_equivalence_storage.py'
       - 'tests/test_equivalence_storage.py'
+      - 'tests/test_equivalence_dataflow.py'
       - '.github/workflows/equivalence-storage.yml'
   workflow_dispatch:
 permissions:
@@ -25,7 +27,7 @@ jobs:
       - name: Byte alias, group MOVE and unsupported-gate tests
         env:
           PYTHONPATH: src:.:tests
-        run: python -B -m unittest test_equivalence_storage -v
+        run: python -B -m unittest test_equivalence_storage test_equivalence_dataflow -v
       - name: Translate requested public program storage twice
         env:
           PYTHONPATH: src:.

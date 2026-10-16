@@ -157,7 +157,7 @@ def storage_ir(program, copybooks):
     This is a storage acceptance report, not the whole-program E2 gate. File
     status effects, CFG, arithmetic and application interpretation are separate.
     """
-    bindings = {}; issues = []; areas = []; declarations = []; area = None
+    bindings = {}; issues = []; areas = []; declarations = []; area = None; section = None
 
     def expand(source, active=()):
         if source.path in active:
@@ -201,11 +201,21 @@ def storage_ir(program, copybooks):
         if token.text == 'FD' or pair[1:] == ['SECTION']:
             finish(); flush()
             area = ('FD:' + tokens[i+1].text if token.text == 'FD' else token.text)
+            section = area
         line = (token.path, token.line)
         is_level = (line != previous_line and re.fullmatch(r'[0-9]{2}', token.text)
                     and 1 <= int(token.text) <= 88)
         if is_level:
             finish()
+            if token.text in ('01', '77') and tokens[i+2:i+3] and tokens[i+2].text != 'REDEFINES':
+                if section and not section.startswith('FD:'):
+                    flush()
+                    area = section + ':' + tokens[i+1].text
+                elif declarations:
+                    # Multiple FD 01 descriptions share a record area implicitly;
+                    # concatenating them would invent incorrect byte offsets.
+                    issues.append(dict(reason='multiple-FD-record-alternatives-not-yet-translated',
+                                       **token.location()))
             if area is None:
                 issues.append(dict(reason='data-outside-storage-area', **token.location()))
             current.append(token)

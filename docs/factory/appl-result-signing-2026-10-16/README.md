@@ -26,9 +26,7 @@ Each sample shows the original mutation, replacement, argument and numbered
 source context. `audit.json` binds the exact source hash, matcher hash, census,
 all member IDs and deterministic sample selection. `class-request.json` preserves
 the original sealed class proof alongside the new importable contract. Signing
-accepts the full listed class, not just the sampled members. The newly packaged
-samples await Howard's review; conversational approval of an earlier sample is
-not represented as a signature on these contracts.
+accepts the full listed class, not just the sampled members. Howard reviewed these 30-member samples on October 16. That review is not a signature on either contract.
 
 | Program | Members | Sample | Expected contract SHA-256 / Tower queue suffix |
 |---|---:|---:|---|
@@ -60,12 +58,14 @@ contracts, whose hashes and evidence locations differ.
 
 ## Commands for Howard on Windows, after the preconditions hold
 
-Set the four variables to the reviewed final commit, its Windows checkout, the
+Use a separate clean checkout detached with `git checkout --detach 3d793dac626b2c16b983c027d84590b207a615be`. Main merge `b7c44d07e90b625616078a706bdb6f22972a202a` has the identical tree; the commands below deliberately pin the approved premerge head.
+
+Set the remaining three variables to its Windows checkout, the
 existing Windows Factory root, and the installed Python executable. Paths are
 operator-supplied because the public activation record intentionally omits them.
 
 ```powershell
-$ApprovedCommit = '<exact-final-green-commit-approved-and-on-main>'
+$ApprovedCommit = '3d793dac626b2c16b983c027d84590b207a615be'
 $Checkout = '<existing-Windows-checkout-at-that-commit>'
 $FactoryRoot = '<existing-Windows-Factory-root>'
 $Python = '<installed-Windows-Tower-Python>'
@@ -73,6 +73,8 @@ $ErrorActionPreference = 'Stop'
 if (-not (Test-Path -LiteralPath $FactoryRoot -PathType Container)) { throw 'Existing Factory root required; do not create one' }
 if ((git -C $Checkout rev-parse HEAD).Trim() -ne $ApprovedCommit) { throw 'Wrong checkout commit' }
 if (git -C $Checkout status --porcelain) { throw 'Use a clean reviewed checkout' }
+git -C $Checkout fetch origin
+if ($LASTEXITCODE -ne 0) { throw 'Fetch failed; stop' }
 git -C $Checkout merge-base --is-ancestor $ApprovedCommit origin/main
 if ($LASTEXITCODE -ne 0) { throw 'Approved commit is not verified on fetched main' }
 $Packet = Join-Path $Checkout 'docs\factory\appl-result-signing-2026-10-16'
@@ -93,3 +95,14 @@ through the existing authenticated UI. No command above signs anything or reads
 a private key. Export the signed decisions for separate verification and a new
 prospective resolution overlay. Unresolved and unobservable mutants stay in the
 denominator; no historical record is rewritten and no release is authorized.
+
+## October 16 review trace
+
+Howard reviewed the samples at `fea030a49bc0b753fab78a68a96e5637076cb85b`. The following exact SHA-256s were independently computed at both that reviewed commit and merge `b7c44d07e90b625616078a706bdb6f22972a202a`; equality preserves the review link and does not apply a signature.
+
+| Sample file | Reviewed SHA-256 | Merged SHA-256 |
+|---|---|---|
+| [INTCALC/review-before-signing.md](INTCALC/review-before-signing.md) | `7270a3764642d9de17fbaba3c1f790b3883bd3d935d3838aec68a1f50409ce86` | `7270a3764642d9de17fbaba3c1f790b3883bd3d935d3838aec68a1f50409ce86` |
+| [INTCALC/audit.json](INTCALC/audit.json) | `92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44` | `92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44` |
+| [POSTTRAN/review-before-signing.md](POSTTRAN/review-before-signing.md) | `6641210477d2228a7c1f1ed97b59d6ed03bdd9b6479cb6c8b8f99ad027f24e1a` | `6641210477d2228a7c1f1ed97b59d6ed03bdd9b6479cb6c8b8f99ad027f24e1a` |
+| [POSTTRAN/audit.json](POSTTRAN/audit.json) | `831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f` | `831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f` |

@@ -11,7 +11,7 @@ def build(commit=None, root=ROOT):
     model = load(root)
     value, _ = render(model)
     import json
-    date=value['as_of']
+    date=value['as_of']+'-handoff-refresh'
     lines = ['# Howard decision packet — '+date, '',
              'Decisions only. The measured status and failure inventories are in the current status and program verdicts.', '',
              '| Order | Decision | Consequence of signing |', '| --- | --- | --- |']
@@ -30,7 +30,12 @@ def build(commit=None, root=ROOT):
             '| Separate | [z/OS loader-domain proposal](intcalc-zos-loader-domain-proposal-2026-10-16.json) | Requires real loader capture and confirmation before any z/OS-facing overlay. |',
             '| Separate | [POSTTRAN execution request]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
     if model.get('phase2'):
-        lines+=['', 'POSTTRAN signing deadline: '+model['phase2']['signing_deadline']+'. Compiler expiry: '+model['phase2']['artifact_expires_at']+'.']
+        p=value['phase2']
+        lines+=['', '| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |', '|---|---|---|---|---:|',
+                f"| POSTTRAN | `{p['plan_sha256']}` | `{p['executable_commit']}` | {p['signing_deadline']} | {p['days_remaining']} |",
+                'Evaluated at '+p['evaluated_at']+'. '+('WARNING: five days or fewer remain.' if p['warning'] else 'More than five days remain.'),
+                'Compiler expiry: '+p['artifact_expires_at']+'. No signing or execution has been performed.']
+    lines += ['', 'Current public retention: '+', '.join('['+Path(p).name+']('+Path(p).name+')' for p in model.get('retention',[]))+'. Historical packets remain unchanged.']
     lines += ['', 'All new requests are unsigned. Exact-final-green-commit merge approval remains separate.', '']
     path = root/'docs/factory'/('howard-decision-packet-'+date+'.md')
     path.write_text('\n'.join(lines), encoding='utf-8', newline='\n')

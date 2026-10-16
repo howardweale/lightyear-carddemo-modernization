@@ -58,9 +58,18 @@ Business 24/24; I/O 85/86; diversity deficit 0 fields.
 twin: 360/370 projected; 10 unresolved.
 zos-facing: 360/390 projected; 30 unresolved.
 
-POSTTRAN compiler expiry: 2026-10-30T14:46:00+00:00. Signing deadline: 2026-10-29T14:46:00+00:00.
-At least five days remain at rendering time.
-[Operator runbook](https://github.com/howardweale/lightyear-carddemo-modernization/blob/f7a137ae5635bed903600afff816d1393c9e420e/docs/factory/posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.
+| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |
+|---|---|---|---|---:|
+| POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 12.765 |
+Evaluated at 2026-10-16T20:24:45.328626+00:00. Request: [posttran-phase2-authorization-request-2026-10-16.json](posttran-phase2-authorization-request-2026-10-16.json).
+More than five days remain before signing deadline at snapshot time.
+[Operator runbook](posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.
+
+## Durable public evidence
+
+Current retention manifest: [evidence-retention-2026-10-16-posttran.json](evidence-retention-2026-10-16-posttran.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
+Current retention manifest: [evidence-retention-2026-10-16.json](evidence-retention-2026-10-16.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
+Dated October 14/15 retention statements remain historical; use these manifests for current storage status.
 
 ## CardDemo data slice
 
@@ -80,4 +89,4 @@ Not releasable: exact threshold/3 comparison and mutation bindings, ordered effe
 
 This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.
 
-[Measured verdict](intcalc-releasability-2026-10-15.md) · [Decision packet](howard-decision-packet-2026-10-16.md)
+[Measured verdict](intcalc-releasability-2026-10-15.md) · [Decision packet](howard-decision-packet-2026-10-16-handoff-refresh.md)

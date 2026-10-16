@@ -11,7 +11,7 @@ Open `posttran-phase2-readiness-2026-10-16.json` beside the new unsigned
 `posttran-phase2-authorization-request-2026-10-16.json`. The readiness receipt
 must name the actual compiler artifact ID, preparation run, expiry, signing
 deadline and executable commit. Do not use an estimated expiry. The deadline is
-24 hours before the artifact expires; a warning appears below five days remaining.
+24 hours before the artifact expires; a warning appears at or below five days remaining before the signing deadline.
 If the receipt is absent or a deadline has passed, stop for fresh preparation.
 The October 14 and October 15 plans and requests are historical only.
 
@@ -21,7 +21,7 @@ The October 14 and October 15 plans and requests are historical only.
 2. Confirm the request's `details.executable_commit` contains the published plan,
    and `details.request_seal` equals that plan's `content_sha256`. Check candidate,
    provenance, compiler archive, workflow hash, one-run caps and UTC window.
-3. Have the administrator import that public snapshot and unsigned request into
+3. Howard, as the operator, will import that public snapshot and unsigned request into
    the **Factory** Tower on port **8769**. Use its existing isolated authority.
    Do not use the B06 Tower on 8768. Importing a request does not approve it.
 
@@ -30,11 +30,10 @@ The October 14 and October 15 plans and requests are historical only.
 4. In Factory Tower, sign in with your individual credential. Click **Work queue**,
    then the POSTTRAN `engineering-run-approval` item. Compare its hashes with
    step 2. Choose **approve**, enter your reason, and click **Record decision** once.
-5. Click **Decision history** and inspect the new signed event. Have the
-   administrator export its proof at the current trusted journal head. Prepare
+5. Click **Decision history** and inspect the new signed event. Howard will export its proof at the current trusted journal head. Prepare
    that proof as `posttran-phase2-authorization-proof-2026-10-16.json` in
    `docs/factory/`, alongside the exact request, in a local execution-branch
-   commit. Record its SHA before opening the execution PR. The execution PR may add only
+   commit. Record its SHA before opening the execution PR. Howard prepares the execution PR, which may add only
    those two files after the signed executable commit. A code, plan, public-key
    or other file change needs new preparation and approval.
 6. Review the final execution PR commit SHA. In GitHub, open the repository,
@@ -50,7 +49,7 @@ The October 14 and October 15 plans and requests are historical only.
    Set HEAD last. These variables are approvals, not the compiler preparation
    commit or the plan file's byte hash. Read all three back before proceeding.
 7. A variable change alone does not start a run. After reading back the variables,
-   have the administrator push that exact execution-branch commit. In GitHub,
+   Howard will push that exact execution-branch commit. In GitHub,
    click **Pull requests → New pull request**, select main as base and the
    execution branch as compare, verify the SHA, and click **Create pull request**.
    This first PR event starts the authorized path. Do not click **Re-run jobs**:
@@ -94,3 +93,72 @@ Publish its request and readiness receipt without changing executable bindings.
 The builder checks that the plan is committed and the artifact's run/head match.
 CI checks the complete fresh binding inventory again. If other follow-ups change
 bound code before launch, prepare a new dated plan; never execute across drift.
+
+## Howard's roles and exact Windows commands (execute later)
+
+Howard performs the repository fetch/checkout, public request import, individual UI review/signing, proof export, and final variable/readback steps. Codex prepares and checks public files only; it has no authority to sign or launch. These commands are documentation, not an executed handoff. Before signing, recheck the final reviewed executable ancestry: only request/proof may differ after the executable commit. If other follow-ups landed, finalize a new request for that reviewed commit first; do not use the draft below across drift.
+
+### Import step 3
+
+Use the request delivered by this reviewed follow-up and a separate clean Windows checkout. The repository source pins remain immutable even though the request file is a separate public handoff file. Existing private installation paths are deliberately operator-supplied.
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$Checkout = '<existing-clean-Windows-checkout>'
+$FactoryRoot = '<existing-Windows-Factory-root>'
+$Python = '<installed-Windows-Tower-Python>'
+$Request = '<absolute-path-to-reviewed-posttran-phase2-authorization-request-2026-10-16.json>'
+$ExecutableCommit = '65bd4cd549067dd3695f4197e495cc15c9473417'
+$ExpectedRequestFileHash = 'bc66b605325a11c306b6b58c1bec1e9be25a7fc85eb3844509a420b288729f5c'
+$ExpectedQueueHash = 'ab22d84fcebabc79472a27e35012e3e4ff6b3bd330cb5995b08b3a7bc034c49b'
+foreach ($Path in @($Checkout, $FactoryRoot, $Python, $Request)) { if (-not (Test-Path -LiteralPath $Path)) { throw "Missing: $Path" } }
+if ($FactoryRoot -match '(?i)b06') { throw 'Use Factory 8769, never B06' }
+if (git -C $Checkout status --porcelain) { throw 'Checkout must be clean' }
+git -C $Checkout fetch origin
+if ($LASTEXITCODE -ne 0) { throw 'Fetch failed' }
+git -C $Checkout checkout --detach $ExecutableCommit
+if ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }
+git -C $Checkout merge-base --is-ancestor $ExecutableCommit origin/main
+if ($LASTEXITCODE -ne 0) { throw 'Executable commit is not on fetched main' }
+if ((Get-FileHash -LiteralPath $Request -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ExpectedRequestFileHash) { throw 'Request bytes differ' }
+Set-Location -LiteralPath $Checkout
+$env:PYTHONPATH = 'src;.'
+$env:PYTHONUTF8 = '1'
+& $Python -B -m lightyear_control_tower.factory_import --repository $Checkout --root $FactoryRoot --contract $Request
+if ($LASTEXITCODE -ne 0) { throw 'Import refused' }
+# Compare factory-<ExpectedQueueHash> on http://localhost:8769 before any signature.
+```
+
+### Proof export step 5, only after Howard signs in the UI
+
+Use Howard's current authenticated Factory session token and the decision SHA shown in Decision history. The endpoint exports the existing public proof; it does not create a new decision. Never substitute an activation-time journal head.
+
+```powershell
+$Tower = 'http://localhost:8769'
+$DecisionSha = '<64-hex-signed-decision-SHA-from-Decision-history>'
+$ProofPath = '<absolute-new-path-to-posttran-phase2-authorization-proof-2026-10-16.json>'
+$PublicKey = '<existing-Factory-public-key.pem>'
+if ($DecisionSha -notmatch '^[0-9a-f]{64}$') { throw 'Decision SHA required' }
+if (Test-Path -LiteralPath $ProofPath) { throw 'Do not overwrite a preserved proof' }
+if (-not (Test-Path -LiteralPath $PublicKey)) { throw 'Public key missing' }
+$SecureToken = Read-Host 'Current Factory session token' -AsSecureString
+$Token = [Net.NetworkCredential]::new('', $SecureToken).Password
+try {
+  $Headers = @{ Authorization = "Bearer $Token" }
+  $Item = Invoke-RestMethod -Uri "$Tower/api/tower/item?id=factory-$ExpectedQueueHash" -Headers $Headers
+  if ($Item.bound.contract -ne $ExpectedQueueHash) { throw 'Queue contract differs' }
+  Invoke-WebRequest -Uri "$Tower/api/tower/proof?sha256=$DecisionSha" -Headers $Headers -OutFile $ProofPath
+} finally { $Token = $null; $Headers = $null }
+$Proof = Get-Content -LiteralPath $ProofPath -Raw | ConvertFrom-Json
+if ($Proof.decision_sha256 -ne $DecisionSha) { throw 'Wrong decision proof' }
+$JournalHead = Read-Host 'Current independently verified Factory journal head'
+if ($JournalHead -notmatch '^[0-9a-f]{64}$') { throw 'Trusted journal head required' }
+$BoundPath = $ProofPath + '.bound.json'
+if (Test-Path -LiteralPath $BoundPath) { throw 'Bound file already exists' }
+[IO.File]::WriteAllText($BoundPath, ($Item.bound | ConvertTo-Json -Compress), [Text.UTF8Encoding]::new($false))
+Get-FileHash -LiteralPath $ProofPath -Algorithm SHA256
+& $Python -B -m lightyear_control_tower verify-decision --record $ProofPath --trusted-public-key $PublicKey --kind engineering-run-approval --scope factory --bound $BoundPath --journal-head $JournalHead
+if ($LASTEXITCODE -ne 0) { throw 'Public proof verification refused' }
+```
+
+Stop if the proof, contract, public key or current journal head cannot be independently verified. No private-key command belongs in this runbook.

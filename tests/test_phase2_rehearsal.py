@@ -74,5 +74,5 @@ class RehearsalTests(Phase2SignedProofTests):
     def test_five_day_warning(self):
         from datetime import datetime, timezone
         at=datetime(2026,10,16,tzinfo=timezone.utc)
-        self.assertIsNone(expiry_status((at+timedelta(days=5)).isoformat(),at)['warning'])
-        self.assertIsNotNone(expiry_status((at+timedelta(days=5,seconds=-1)).isoformat(),at)['warning'])
+        self.assertIsNone(expiry_status((at+timedelta(days=6,seconds=1)).isoformat(),at)['warning'])
+        self.assertIsNotNone(expiry_status((at+timedelta(days=6)).isoformat(),at)['warning'])

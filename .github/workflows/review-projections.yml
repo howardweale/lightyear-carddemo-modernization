@@ -7,6 +7,8 @@ on:
       - 'tools/rehearse_intcalc_signing.py'
       - 'tools/render_oct16_status.py'
       - 'tools/release_status_records.py'
+      - 'tools/check_posttran_handoff.py'
+      - 'tests/test_posttran_handoff.py'
       - 'tools/build_release_packet.py'
       - 'tools/build_duplicate_loader_capture.py'
       - 'docs/factory/**'
@@ -30,14 +32,20 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - run: python3 -m pip install 'cryptography>=46,<47'
+      - name: Verify unsigned POSTTRAN handoff consistency
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python3 -B -m tools.check_posttran_handoff
+          python3 -B -m unittest test_posttran_handoff -v
       - name: Verify original public receipts and produce unsigned projections
         env:
           GH_TOKEN: ${{ github.token }}
-          PYTHONPATH: src:.
+          PYTHONPATH: src:.:tests
         run: python3 -B -m tools.build_oct16_review_projections work/review-projections
       - name: Prepare six unsigned requests in explicit signing order
         env:
-          PYTHONPATH: src:.
+          PYTHONPATH: src:.:tests
         run: python3 -B -m tools.build_intcalc_signing_requests work/review-projections
       - name: Disposable ordered signing and refusal rehearsal
         env:
@@ -45,11 +53,11 @@ jobs:
         run: python3 -B -m tools.rehearse_intcalc_signing
       - name: Render dated status and decisions-only packet
         env:
-          PYTHONPATH: src:.
+          PYTHONPATH: src:.:tests
         run: python3 -B -m tools.render_oct16_status work/review-projections
       - name: Build public duplicate-key loader capture package without execution
         env:
-          PYTHONPATH: src:.
+          PYTHONPATH: src:.:tests
         run: python3 -B -m tools.build_duplicate_loader_capture work/zos-duplicate-loader
       - name: Verify current status and stale-input refusal
         env:

@@ -1,0 +1,641 @@
+{
+  "schema": "b06-public-metadata-reverification/1",
+  "verified_at": "2026-10-16T14:49:37.601055+00:00",
+  "root_accessible": true,
+  "request_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901",
+  "report_files": {
+    "part6-final-report.json": "79291959db94f5f03ba9306530638329f097eff154bfc197d140cced4ee028bb",
+    "part6-final-report.md": "7afa8bcd5b36dde07b49bfe68d49fcc29752c378156a06b99b08f8477d5d7eec",
+    "diagnostic-attempt2-analysis.json": "e43215cfddac8f6785a990f729b4df6148fe3721e3e0424c6a7d2eefc34c55d6",
+    "part6-test-limitations.md": "7b54707dcabf2d752ccf0eb8764365d17438a447db5f21a6be2f140211984410"
+  },
+  "attempts": [
+    {
+      "owner": "journey-b39c679edb1b49ef94b98797969b6ea4",
+      "approval_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901",
+      "run_number": 2,
+      "mode": "diagnostic-unmatched-return",
+      "source_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
+      "engineering_key_sha256": "6d4083d20e5d17e5d3be07dd660621f913cfd50da60c68a361fe628565f7aa7f",
+      "engineering_record_sha256": "9b57043b3ebd95d56646ce1a71fb51c6eb8d95dc4892aa15f3970bff8cd7caff",
+      "plan_sha256": "6b2634d54b48377b047726506bf8a800e6f73dbbf0409d76ccf1c87e865df78d",
+      "terminal_outcome": "refused",
+      "signed_cleanup_verified": true,
+      "terminal_file_sha256": "70f145c4f9ea479a83c9905f2f7a6746681570a4977b46cc9529370278eb6445",
+      "cleanup_file_sha256": "f7d32a5a51c1cefc2306a97354c2a7753fc07b72bf2c864545630835883cb26c",
+      "inventory_file_sha256": "001bf46244be576bc606e661b1cfcac13cec09b9fe87248f7c1085f18aafa679",
+      "signed_inventory_members": 2833,
+      "elapsed_seconds": 1022.14,
+      "finished_utc": "2026-10-13T21:51:42.453595+00:00"
+    },
+    {
+      "owner": "journey-c408ac9686e34bef921b2774d3eaaf6e",
+      "approval_sha256": "7e5270c1457aafbe5872df08b4d5ae1f80caba9c6b48ccae379adc6cd9062901",
+      "run_number": 1,
+      "mode": "strict",
+      "source_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
+      "engineering_key_sha256": "6d4083d20e5d17e5d3be07dd660621f913cfd50da60c68a361fe628565f7aa7f",
+      "engineering_record_sha256": "bc82eb7359d87b97cc69f7f2ca1bd46f782eb993208130b0c82b5b7701997aab",
+      "plan_sha256": "421488329e3062f78d3ec6dc0741fe6fac48662df244b070682468a2ebe9f13b",
+      "terminal_outcome": "refused",
+      "signed_cleanup_verified": true,
+      "terminal_file_sha256": "2515a4d1691c08c5cad1d6b2514c4cd7aa1ff1c3460410922ef41bba21ba3568",
+      "cleanup_file_sha256": "60b10975f91e66a3cf3c1adf18ef8cbd685ee53da30e2c5e04460aae5e29e976",
+      "inventory_file_sha256": "3c3567a1a6d94b950a8246229463db2653bc0ce19213b464e9f40ea8fce4438b",
+      "signed_inventory_members": 2827,
+      "elapsed_seconds": 898.938,
+      "finished_utc": "2026-10-13T21:18:21.742810+00:00"
+    }
+  ],
+  "criterion_a": {
+    "assessment": "At the first unmatched return in each attempt there is no lifecycle/class-prepare evidence explaining a missed entry by disabled request, class redefinition/reload or thread-filter mismatch. Entry request 24 and return request 25 are recorded enabled with null thread filters; nearby method-exit request transitions concern different request identities/threads and do not satisfy criterion (a).",
+    "supported": false
+  },
+  "criterion_b": {
+    "assessment": "The active phase at every unmatched return is application-worker-started, not a specific application operation. Attempt 1 first stops at 1810 entries, attempt 2 first unmatched at 1614 and cap-stop at 1836; no operation near 12400 is reproduced in both attempts.",
+    "supported": false
+  },
+  "finding": {
+    "attempt1": 1810,
+    "attempt2_cap_stop": 1836,
+    "attempt2_first": 1614,
+    "earlier_approximate": 12400,
+    "finding": "The earlier approximately 12400-generation point did not reproduce. Attempt 1 recorded 1810 entries before its first unmatched return, a shift of approximately 10590 fewer. Attempt 2 first unmatched occurred at 1614, with 1836 at cap-stop. This is recorded as a finding, not a causal explanation.",
+    "projected_first_stop": 18826,
+    "projection_not_observed": true
+  },
+  "test_limitations": {
+    "answer": "All 27 were skipped in October 11 exact-head CI before the r3 delivery. The 78-focused-test milestone is aggregate only; no per-test roster was recovered, so identical local coverage cannot be certified.",
+    "audit_scope": "Read-only CI logs, published preparation summaries and source; no preserved captures read or altered; no tests executed",
+    "baseline_commit": "62eafdaf29dce1d40603d38c3a394f150b98f686",
+    "cleanup_attribution": "No evidence establishes a pass on October 11-12 for any of these 27 followed solely by loss in the October 13 07:19 cleanup. Older development summaries report some successful retained-evidence tests on earlier code; these are not exact-62eafdaf rerun evidence. Some host-integration paths still exist, so wholesale loss is not inferred.",
+    "current_implementation_commit": "ac9f533822576170ac2f1b6bf25f66ce22a25033",
+    "evidence": [
+      "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38179645991",
+      "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38179645953",
+      "https://github.com/howardweale/lightyear-carddemo-modernization/blob/4659d5910d26077ac15e1db76e0383a72d342189/docs/b06-oct13-engineering-milestone.md"
+    ],
+    "failure_scope": "No FAIL or ERROR result for these 27 was found in the two inspected 62eafdaf CI logs. This does not prove they never failed in older development.",
+    "known_limitations": [
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.4945410Z test_original_junit_and_fixture_definition_returns (test_b06_dynamic_target_proof.LocalDefinitionTests.test_original_junit_and_fixture_definition_returns) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:30.4795481Z test_original_junit_and_fixture_definition_returns (test_b06_dynamic_target_proof.LocalDefinitionTests.test_original_junit_and_fixture_definition_returns) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_original_junit_and_fixture_definition_returns (test_b06_dynamic_target_proof.LocalDefinitionTests.test_original_junit_and_fixture_definition_returns)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent; no synthetic replacement",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6273650Z test_all_framework_lambdas_and_public_role_lambdas (test_b06_generated_linkage.LocalJdiGeneratedTests.test_all_framework_lambdas_and_public_role_lambdas) ... skipped 'local external-JDI evidence absent; no synthetic replacement'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.6531353Z test_all_framework_lambdas_and_public_role_lambdas (test_b06_generated_linkage.LocalJdiGeneratedTests.test_all_framework_lambdas_and_public_role_lambdas) ... skipped 'local external-JDI evidence absent; no synthetic replacement'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_all_framework_lambdas_and_public_role_lambdas (test_b06_generated_linkage.LocalJdiGeneratedTests.test_all_framework_lambdas_and_public_role_lambdas)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6516177Z test_changed_or_missing_method_access_flags_fail (test_b06_host_pool_proposal.PoolProposalTests.test_changed_or_missing_method_access_flags_fail) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7650329Z test_changed_or_missing_method_access_flags_fail (test_b06_host_pool_proposal.PoolProposalTests.test_changed_or_missing_method_access_flags_fail) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_changed_or_missing_method_access_flags_fail (test_b06_host_pool_proposal.PoolProposalTests.test_changed_or_missing_method_access_flags_fail)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6518039Z test_method_changes_are_not_hidden_by_pool_comparison (test_b06_host_pool_proposal.PoolProposalTests.test_method_changes_are_not_hidden_by_pool_comparison) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7652012Z test_method_changes_are_not_hidden_by_pool_comparison (test_b06_host_pool_proposal.PoolProposalTests.test_method_changes_are_not_hidden_by_pool_comparison) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_method_changes_are_not_hidden_by_pool_comparison (test_b06_host_pool_proposal.PoolProposalTests.test_method_changes_are_not_hidden_by_pool_comparison)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6519616Z test_missing_count_or_changed_source_fail (test_b06_host_pool_proposal.PoolProposalTests.test_missing_count_or_changed_source_fail) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7654011Z test_missing_count_or_changed_source_fail (test_b06_host_pool_proposal.PoolProposalTests.test_missing_count_or_changed_source_fail) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_missing_count_or_changed_source_fail (test_b06_host_pool_proposal.PoolProposalTests.test_missing_count_or_changed_source_fail)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6520726Z test_prefix_corruption_is_never_normalized (test_b06_host_pool_proposal.PoolProposalTests.test_prefix_corruption_is_never_normalized) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7657562Z test_prefix_corruption_is_never_normalized (test_b06_host_pool_proposal.PoolProposalTests.test_prefix_corruption_is_never_normalized) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_prefix_corruption_is_never_normalized (test_b06_host_pool_proposal.PoolProposalTests.test_prefix_corruption_is_never_normalized)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6521807Z test_two_real_runtime_orders_canonicalize_equally (test_b06_host_pool_proposal.PoolProposalTests.test_two_real_runtime_orders_canonicalize_equally) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7660206Z test_two_real_runtime_orders_canonicalize_equally (test_b06_host_pool_proposal.PoolProposalTests.test_two_real_runtime_orders_canonicalize_equally) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_two_real_runtime_orders_canonicalize_equally (test_b06_host_pool_proposal.PoolProposalTests.test_two_real_runtime_orders_canonicalize_equally)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local host experiment not present; no native substitute",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.6522870Z test_wrong_error_target_and_unknown_tail_fail (test_b06_host_pool_proposal.PoolProposalTests.test_wrong_error_target_and_unknown_tail_fail) ... skipped 'local host experiment not present; no native substitute'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:31.7662934Z test_wrong_error_target_and_unknown_tail_fail (test_b06_host_pool_proposal.PoolProposalTests.test_wrong_error_target_and_unknown_tail_fail) ... skipped 'local host experiment not present; no native substitute'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_wrong_error_target_and_unknown_tail_fail (test_b06_host_pool_proposal.PoolProposalTests.test_wrong_error_target_and_unknown_tail_fail)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.7480236Z test_class_data_initializers_and_changed_object_fail_closed (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_class_data_initializers_and_changed_object_fail_closed) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:33.0841789Z test_class_data_initializers_and_changed_object_fail_closed (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_class_data_initializers_and_changed_object_fail_closed) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_class_data_initializers_and_changed_object_fail_closed (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_class_data_initializers_and_changed_object_fail_closed)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.7481383Z test_emitter_return_and_actual_definition_bytes_match (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_emitter_return_and_actual_definition_bytes_match) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:33.0844946Z test_emitter_return_and_actual_definition_bytes_match (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_emitter_return_and_actual_definition_bytes_match) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_emitter_return_and_actual_definition_bytes_match (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_emitter_return_and_actual_definition_bytes_match)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.7482465Z test_expression_match_does_not_claim_full_proof (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_expression_match_does_not_claim_full_proof) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:33.0848452Z test_expression_match_does_not_claim_full_proof (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_expression_match_does_not_claim_full_proof) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_expression_match_does_not_claim_full_proof (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_expression_match_does_not_claim_full_proof)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.7483427Z test_extra_logic_and_wrong_graph_fail (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_extra_logic_and_wrong_graph_fail) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:33.0850923Z test_extra_logic_and_wrong_graph_fail (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_extra_logic_and_wrong_graph_fail) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_extra_logic_and_wrong_graph_fail (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_extra_logic_and_wrong_graph_fail)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "local external-JDI evidence absent",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.7484386Z test_forged_emitter_array_loader_or_graph_fails (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_forged_emitter_array_loader_or_graph_fails) ... skipped 'local external-JDI evidence absent'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:33.0853397Z test_forged_emitter_array_loader_or_graph_fails (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_forged_emitter_array_loader_or_graph_fails) ... skipped 'local external-JDI evidence absent'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_forged_emitter_array_loader_or_graph_fails (test_b06_lambda_form_experiment.LocalLambdaFormTests.test_forged_emitter_array_loader_or_graph_fails)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "host-JVM",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "No host/native JVM execution authorized before new go",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:14.1058018Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:48.4365784Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_immediate_test_body_waits_for_complete_or_specific_error (test_b06_transient_agent.EquinoxAgentTests.test_immediate_test_body_waits_for_complete_or_specific_error)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "host-JVM",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "No host/native JVM execution authorized before new go",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:14.1058018Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:48.4365784Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_jvm_exit_writes_specific_error (test_b06_transient_agent.EquinoxAgentTests.test_jvm_exit_writes_specific_error)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "host-JVM",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "No host/native JVM execution authorized before new go",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:14.1058018Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:48.4365784Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_large_transient_set (test_b06_transient_agent.EquinoxAgentTests.test_large_transient_set)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "host-JVM",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "No host/native JVM execution authorized before new go",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:14.1058018Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:48.4365784Z setUpClass (test_b06_transient_agent.EquinoxAgentTests) ... skipped 'Host JDK and local Equinox jar required; no automatic download'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_real_folder_bundle_then_mutation_during_worker_capture (test_b06_transient_agent.EquinoxAgentTests.test_real_folder_bundle_then_mutation_during_worker_capture)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1062001Z test_actual_external_capture_and_both_method_handle_paths (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_actual_external_capture_and_both_method_handle_paths) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4533426Z test_actual_external_capture_and_both_method_handle_paths (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_actual_external_capture_and_both_method_handle_paths) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2679499Z test_actual_external_capture_and_both_method_handle_paths (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_actual_external_capture_and_both_method_handle_paths) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_actual_external_capture_and_both_method_handle_paths (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_actual_external_capture_and_both_method_handle_paths)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1063778Z test_captured_storage_field_does_not_admit_its_methods (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_captured_storage_field_does_not_admit_its_methods) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4535904Z test_captured_storage_field_does_not_admit_its_methods (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_captured_storage_field_does_not_admit_its_methods) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2682881Z test_captured_storage_field_does_not_admit_its_methods (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_captured_storage_field_does_not_admit_its_methods) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_captured_storage_field_does_not_admit_its_methods (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_captured_storage_field_does_not_admit_its_methods)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1065414Z test_definition_refresh_cannot_reuse_an_earlier_generated_proof (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_definition_refresh_cannot_reuse_an_earlier_generated_proof) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4538221Z test_definition_refresh_cannot_reuse_an_earlier_generated_proof (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_definition_refresh_cannot_reuse_an_earlier_generated_proof) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2686434Z test_definition_refresh_cannot_reuse_an_earlier_generated_proof (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_definition_refresh_cannot_reuse_an_earlier_generated_proof) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_definition_refresh_cannot_reuse_an_earlier_generated_proof (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_definition_refresh_cannot_reuse_an_earlier_generated_proof)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1067251Z test_extra_lambda_logic_even_with_recomputed_hash_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_extra_lambda_logic_even_with_recomputed_hash_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4540545Z test_extra_lambda_logic_even_with_recomputed_hash_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_extra_lambda_logic_even_with_recomputed_hash_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2689973Z test_extra_lambda_logic_even_with_recomputed_hash_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_extra_lambda_logic_even_with_recomputed_hash_fails) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_extra_lambda_logic_even_with_recomputed_hash_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_extra_lambda_logic_even_with_recomputed_hash_fails)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1068860Z test_missing_use_graph_and_opaque_target_fail (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_use_graph_and_opaque_target_fail) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4542685Z test_missing_use_graph_and_opaque_target_fail (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_use_graph_and_opaque_target_fail) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2692994Z test_missing_use_graph_and_opaque_target_fail (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_use_graph_and_opaque_target_fail) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_missing_use_graph_and_opaque_target_fail (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_use_graph_and_opaque_target_fail)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1070577Z test_missing_younger_target_is_not_replaced_by_deeper_candidate (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_younger_target_is_not_replaced_by_deeper_candidate) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4545512Z test_missing_younger_target_is_not_replaced_by_deeper_candidate (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_younger_target_is_not_replaced_by_deeper_candidate) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2696214Z test_missing_younger_target_is_not_replaced_by_deeper_candidate (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_younger_target_is_not_replaced_by_deeper_candidate) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_missing_younger_target_is_not_replaced_by_deeper_candidate (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_missing_younger_target_is_not_replaced_by_deeper_candidate)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1072406Z test_reviewed_pool_rule_is_used_by_native_ordinary_binding (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_reviewed_pool_rule_is_used_by_native_ordinary_binding) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4547226Z test_reviewed_pool_rule_is_used_by_native_ordinary_binding (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_reviewed_pool_rule_is_used_by_native_ordinary_binding) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2699559Z test_reviewed_pool_rule_is_used_by_native_ordinary_binding (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_reviewed_pool_rule_is_used_by_native_ordinary_binding) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_reviewed_pool_rule_is_used_by_native_ordinary_binding (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_reviewed_pool_rule_is_used_by_native_ordinary_binding)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1074265Z test_wrong_class_source_and_loader_do_not_bind (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_class_source_and_loader_do_not_bind) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4548773Z test_wrong_class_source_and_loader_do_not_bind (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_class_source_and_loader_do_not_bind) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2702883Z test_wrong_class_source_and_loader_do_not_bind (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_class_source_and_loader_do_not_bind) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_wrong_class_source_and_loader_do_not_bind (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_class_source_and_loader_do_not_bind)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1075807Z test_wrong_host_loader_or_returned_class_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_host_loader_or_returned_class_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4550230Z test_wrong_host_loader_or_returned_class_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_host_loader_or_returned_class_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2705761Z test_wrong_host_loader_or_returned_class_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_host_loader_or_returned_class_fails) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_wrong_host_loader_or_returned_class_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_host_loader_or_returned_class_fails)"
+      },
+      {
+        "at_62eafdaf": "skipped in October 11 CI",
+        "category": "retained-evidence",
+        "cleanup_only_cause": "not established; exact-head CI already skipped before cleanup",
+        "local_78_test_membership": "not established by available aggregate milestone",
+        "local_skip_reason": "actual host collector evidence explicitly selected",
+        "prior_skip_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:19.1077330Z test_wrong_or_mutated_field_layout_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_or_mutated_field_layout_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:57.4551643Z test_wrong_or_mutated_field_layout_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_or_mutated_field_layout_fails) ... skipped 'actual host collector evidence explicitly selected'",
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.2708577Z test_wrong_or_mutated_field_layout_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_or_mutated_field_layout_fails) ... skipped 'actual host collector evidence explicitly selected'"
+        ],
+        "status": "known limitation; not executed in current preparation",
+        "test": "test_wrong_or_mutated_field_layout_fails (test_ms94_b06_observer_v2.ActualCollectorAdversarialTests.test_wrong_or_mutated_field_layout_fails)"
+      }
+    ],
+    "local_suite_accounting": "538 current tests: 481 initially passed, 10 loopback-fixture errors subsequently passed in an isolated rerun, 47 skipped. Original errors are preserved; none of the 27 was executed in that suite.",
+    "native_credit": false,
+    "preserved_historical_failures": [
+      "First October 13 witness host-memory experiment failed its flat-heap criterion; separately named second experiment passed before r3.",
+      "Published preparation milestone records earlier Windows fixture failures and an external Trivy HTTP 403; later validation passed.",
+      "Older observer-v2 integration report preserves failed host replay attempts before final replay passed."
+    ],
+    "qualification_credit": false,
+    "recorded_at_utc": "2026-10-13T20:19:32.1900263Z",
+    "separate_prior_ci_passes": [
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:28.7049500Z test_actual_bounded_jdi_emission_and_ten_unmatched_cap (test_b06_bounded_format.BoundedHostTests.test_actual_bounded_jdi_emission_and_ten_unmatched_cap) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_actual_bounded_jdi_emission_and_ten_unmatched_cap (test_b06_bounded_format.BoundedHostTests.test_actual_bounded_jdi_emission_and_ten_unmatched_cap)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "No host/native JVM execution authorized before new go",
+        "prior_ci_evidence": [
+          "synthetic (ubuntu-24.04)\tUNKNOWN STEP\t2026-10-11T22:15:08.4503785Z test_actual_defined_bytes_and_duplicate_definition_error (test_b06_build_once_agent.BuildOnceAgentTests.test_actual_defined_bytes_and_duplicate_definition_error) ... ok",
+          "synthetic (windows-2025)\tUNKNOWN STEP\t2026-10-11T22:15:30.2341632Z test_actual_defined_bytes_and_duplicate_definition_error (test_b06_build_once_agent.BuildOnceAgentTests.test_actual_defined_bytes_and_duplicate_definition_error) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_actual_defined_bytes_and_duplicate_definition_error (test_b06_build_once_agent.BuildOnceAgentTests.test_actual_defined_bytes_and_duplicate_definition_error)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:32.5146664Z test_exact_production_java_guard_reproduces_captured_refusal (test_b06_captured_refusal.CapturedRefusalTests.test_exact_production_java_guard_reproduces_captured_refusal) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_exact_production_java_guard_reproduces_captured_refusal (test_b06_captured_refusal.CapturedRefusalTests.test_exact_production_java_guard_reproduces_captured_refusal)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:19.5549161Z test_real_java_encoder_matches_python_dictionary_and_decoder (test_b06_compact_wire.CompactWireTests.test_real_java_encoder_matches_python_dictionary_and_decoder) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_java_encoder_matches_python_dictionary_and_decoder (test_b06_compact_wire.CompactWireTests.test_real_java_encoder_matches_python_dictionary_and_decoder)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "pinned host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:14.8457410Z test_module_access_missing_refuses_before_collection (test_b06_jdi_mirrors.MirrorCacheTests.test_module_access_missing_refuses_before_collection) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_module_access_missing_refuses_before_collection (test_b06_jdi_mirrors.MirrorCacheTests.test_module_access_missing_refuses_before_collection)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "pinned host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:17.8783057Z test_real_host_lifecycle_identity_queries_and_fail_closed_bounds (test_b06_jdi_mirrors.MirrorCacheTests.test_real_host_lifecycle_identity_queries_and_fail_closed_bounds) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_host_lifecycle_identity_queries_and_fail_closed_bounds (test_b06_jdi_mirrors.MirrorCacheTests.test_real_host_lifecycle_identity_queries_and_fail_closed_bounds)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:23.1606725Z test_real_jdi_and_failure_context_before_refusal (test_b06_observer_audit.AuditHostTests.test_real_jdi_and_failure_context_before_refusal) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_jdi_and_failure_context_before_refusal (test_b06_observer_audit.AuditHostTests.test_real_jdi_and_failure_context_before_refusal)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:50.8166108Z test_exact_slices_bounded_packets_and_invalid_reads (test_b06_observer_bulk_reads.BulkReadTests.test_exact_slices_bounded_packets_and_invalid_reads) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_exact_slices_bounded_packets_and_invalid_reads (test_b06_observer_bulk_reads.BulkReadTests.test_exact_slices_bounded_packets_and_invalid_reads)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:53.9789573Z test_real_jdi_large_offset_definitions_and_hidden_bytes (test_b06_observer_bulk_reads.BulkReadTests.test_real_jdi_large_offset_definitions_and_hidden_bytes) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_jdi_large_offset_definitions_and_hidden_bytes (test_b06_observer_bulk_reads.BulkReadTests.test_real_jdi_large_offset_definitions_and_hidden_bytes)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:55.0430211Z test_real_agent_records_installed_bundle_without_waiting_for_resolution (test_b06_observer_host_r3.HostObserverTests.test_real_agent_records_installed_bundle_without_waiting_for_resolution) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_agent_records_installed_bundle_without_waiting_for_resolution (test_b06_observer_host_r3.HostObserverTests.test_real_agent_records_installed_bundle_without_waiting_for_resolution)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:05.5009449Z test_real_generation_events_direct_hidden_and_failed_definition_unwind (test_b06_observer_host_r3.HostObserverTests.test_real_generation_events_direct_hidden_and_failed_definition_unwind) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_generation_events_direct_hidden_and_failed_definition_unwind (test_b06_observer_host_r3.HostObserverTests.test_real_generation_events_direct_hidden_and_failed_definition_unwind)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:16:16.9505849Z test_v2_recursive_catch_real_jdi (test_b06_observer_host_r3.HostObserverTests.test_v2_recursive_catch_real_jdi) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_v2_recursive_catch_real_jdi (test_b06_observer_host_r3.HostObserverTests.test_v2_recursive_catch_real_jdi)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:47.3146359Z test_queued_start_resume_with_delayed_dispatch_and_concurrent_generation (test_b06_observer_startup.ObserverStartupTests.test_queued_start_resume_with_delayed_dispatch_and_concurrent_generation) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_queued_start_resume_with_delayed_dispatch_and_concurrent_generation (test_b06_observer_startup.ObserverStartupTests.test_queued_start_resume_with_delayed_dispatch_and_concurrent_generation)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK probe explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:49.0545522Z test_return_arm_rejects_missing_or_changed_activation (test_b06_observer_startup.ObserverStartupTests.test_return_arm_rejects_missing_or_changed_activation) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_return_arm_rejects_missing_or_changed_activation (test_b06_observer_startup.ObserverStartupTests.test_return_arm_rejects_missing_or_changed_activation)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "explicit host JDK",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:11.9574188Z test_actual_java_rejects_strict_or_mixed_expanded_quota (test_b06_oct13.JavaQuotaTests.test_actual_java_rejects_strict_or_mixed_expanded_quota) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_actual_java_rejects_strict_or_mixed_expanded_quota (test_b06_oct13.JavaQuotaTests.test_actual_java_rejects_strict_or_mixed_expanded_quota)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "explicit host JDK",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:13.6145884Z test_input_descriptor_does_not_materialize_definitions_or_extra_class_objects (test_b06_oct13.JavaQuotaTests.test_input_descriptor_does_not_materialize_definitions_or_extra_class_objects) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_input_descriptor_does_not_materialize_definitions_or_extra_class_objects (test_b06_oct13.JavaQuotaTests.test_input_descriptor_does_not_materialize_definitions_or_extra_class_objects)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:21.2465254Z test_fixed_retained_storage_preserves_activation_identity (test_b06_pending_pool.PendingPoolTests.test_fixed_retained_storage_preserves_activation_identity) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_fixed_retained_storage_preserves_activation_identity (test_b06_pending_pool.PendingPoolTests.test_fixed_retained_storage_preserves_activation_identity)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "explicit host JDK not configured",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:30.6865421Z test_production_serializer_at_85_percent_192_mib_heap (test_b06_transient_peak.TransientPeakTests.test_production_serializer_at_85_percent_192_mib_heap) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_production_serializer_at_85_percent_192_mib_heap (test_b06_transient_peak.TransientPeakTests.test_production_serializer_at_85_percent_192_mib_heap)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:34.2790774Z test_captured_operands_continue_without_creating_activation (test_b06_unmatched_return.DiagnosticHostTests.test_captured_operands_continue_without_creating_activation) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_captured_operands_continue_without_creating_activation (test_b06_unmatched_return.DiagnosticHostTests.test_captured_operands_continue_without_creating_activation)"
+      },
+      {
+        "category": "host-JVM",
+        "local_skip_reason": "host JDK explicitly enabled",
+        "prior_ci_evidence": [
+          "host-jdi\tUNKNOWN STEP\t2026-10-11T22:15:37.4746502Z test_real_host_jdi_collection_continues_after_missing_outer_entry (test_b06_unmatched_return.DiagnosticHostTests.test_real_host_jdi_collection_continues_after_missing_outer_entry) ... ok"
+        ],
+        "prior_pinned_ci_pass": true,
+        "test": "test_real_host_jdi_collection_continues_after_missing_outer_entry (test_b06_unmatched_return.DiagnosticHostTests.test_real_host_jdi_collection_continues_after_missing_outer_entry)"
+      }
+    ],
+    "user_stop_applied": "No test execution, capture generation, repair, B06 attempt or go. Record known limitations; do not spend launch-window time closing them."
+  },
+  "limitation": "Public-key verification of signed terminal, cleanup and inventory metadata plus four report files. Raw execution artifacts were not reread; their full inventory-byte verification remains the October 13 record. No fresh process or container absence check performed.",
+  "signing": false,
+  "native_execution": false,
+  "model_calls": 0,
+  "release_authorized": false
+}

@@ -1,0 +1,726 @@
+{
+  "condition_values": {
+    "APPL-AOK": 0,
+    "APPL-EOF": 16
+  },
+  "content_sha256": "8a4bdf50dd5176f07a9e32a13f31bac2480f3e6e7797151c910e5575304a84eb",
+  "passed": true,
+  "program": "CBTRN02C",
+  "raw_consumers": [],
+  "references": [
+    {
+      "kind": "declaration",
+      "line": 142,
+      "tokens": [
+        "01",
+        "APPL-RESULT",
+        "PIC",
+        "S9",
+        "(",
+        "9",
+        ")",
+        "COMP",
+        "."
+      ]
+    },
+    {
+      "kind": "condition-declaration",
+      "line": 143,
+      "tokens": [
+        "88",
+        "APPL-AOK",
+        "VALUE",
+        "0",
+        "."
+      ]
+    },
+    {
+      "kind": "condition-declaration",
+      "line": 144,
+      "tokens": [
+        "88",
+        "APPL-EOF",
+        "VALUE",
+        "16",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 237,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 240,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 242,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 244,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 255,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 258,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 260,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 262,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 274,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 277,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 279,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 281,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 292,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 295,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 297,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 299,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 310,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 313,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 315,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 317,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 328,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 331,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 333,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 335,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 348,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 352,
+      "tokens": [
+        "MOVE",
+        "16",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 354,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 357,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 360,
+      "tokens": [
+        "IF",
+        "APPL-EOF"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 450,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 453,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 455,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 457,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 482,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 484,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 486,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 513,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 515,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 517,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 531,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 533,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 535,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 563,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 567,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 569,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 571,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 583,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 586,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 588,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 590,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 601,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 604,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 606,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 608,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 620,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 623,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 625,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 627,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 638,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 641,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 643,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 645,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 656,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 659,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 661,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 663,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 675,
+      "tokens": [
+        "MOVE",
+        "8",
+        "TO",
+        "APPL-RESULT",
+        "."
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 678,
+      "tokens": [
+        "MOVE",
+        "0",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "literal-destination",
+      "line": 680,
+      "tokens": [
+        "MOVE",
+        "12",
+        "TO",
+        "APPL-RESULT"
+      ]
+    },
+    {
+      "kind": "condition-read",
+      "line": 682,
+      "tokens": [
+        "IF",
+        "APPL-AOK"
+      ]
+    }
+  ],
+  "schema": "appl-result-reference-census/1",
+  "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+}

@@ -1,4 +1,8 @@
-"""Publish a dated assessment from retained CI receipts; never grants authority."""
+"""Reproduce the historical release assessment from retained CI receipts.
+
+Current policy and implementation status belongs in the dated review projections,
+not in this historical report. Never grants authority.
+"""
 import argparse
 from collections import Counter, defaultdict
 from hashlib import sha256

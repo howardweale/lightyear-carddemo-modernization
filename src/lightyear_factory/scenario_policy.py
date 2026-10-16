@@ -27,7 +27,7 @@ def assess(adequacy,threshold,compared_fields, *, historical_io=True):
     reasons=[]
     if not adequacy or not adequacy.get('instrumented'):return ['scenario-coverage-unavailable']
     try:
-        if threshold.get('schema')=='scenario-threshold/2':
+        if threshold.get('schema') in ('scenario-threshold/2','scenario-threshold/3'):
             split=adequacy['coverage_by_class']
             if fraction(split['business-logic']['fraction'])<fraction(threshold['business_logic_outcomes']):reasons.append('business-outcomes-below-threshold')
             mutants=adequacy['systematic_mutation']
@@ -59,9 +59,13 @@ def assess(adequacy,threshold,compared_fields, *, historical_io=True):
         values=adequacy['distinct_values_per_output_field']; minimum=threshold['distinct_values_per_output_field']
         if type(minimum)!=int or minimum<2:raise ValueError('diversity-threshold')
         if not compared_fields or not set(compared_fields)<=set(values):reasons.append('compared-field-inventory-incomplete')
-        if any(type(values.get(f))!=int or values[f]<minimum for f in compared_fields):reasons.append('output-diversity-below-threshold')
+        exempt=set()
+        if threshold.get('schema')=='scenario-threshold/3':
+            from .threshold3 import exemptions
+            exempt=exemptions(adequacy,threshold,compared_fields)
+        if any(type(values.get(f))!=int or values[f]<minimum for f in compared_fields if f not in exempt):reasons.append('output-diversity-below-threshold')
         # Listed/unsolved branches are not proven unreachable and cannot shrink a denominator.
-        if threshold.get('schema')!='scenario-threshold/2' and adequacy.get('uncovered'):reasons.append('unresolved-decision-outcomes')
+        if threshold.get('schema') not in ('scenario-threshold/2','scenario-threshold/3') and adequacy.get('uncovered'):reasons.append('unresolved-decision-outcomes')
     except (KeyError,TypeError,ValueError,ZeroDivisionError):reasons.append('malformed-scenario-evidence')
     return sorted(set(reasons))
 

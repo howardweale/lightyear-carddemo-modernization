@@ -33,7 +33,9 @@ def validate_contract(value, root=None, *, check_evidence=True):
     expected = FIELDS[value["kind"]]
     require(isinstance(details, dict))
     if value["kind"] == "scenario-threshold-approval":
-        require(set(details) in (expected, expected | {"conditions"}))
+        require(set(details) in (expected, expected | {"conditions"}, expected | {"conditions", "evidence_head"}))
+        if 'evidence_head' in details:
+            require(isinstance(details['evidence_head'],str) and re.fullmatch('[0-9a-f]{40}',details['evidence_head']))
     elif value["kind"] == "io-exception-acceptance":
         require(set(details) in (expected, expected | {"basis"}))
     else:
@@ -180,6 +182,9 @@ def validate_decision(root, item, payload, events, session):
     kind, details = contract["kind"], contract["details"]
     result = dict(schema="factory-validation/1", contract=contract, disclosure=DISCLOSURE,
         operator_review=True, execution_authorized=False)
+    if kind == 'scenario-threshold-approval':
+        from .threshold_evidence import verify_reviews
+        verify_reviews(contract, root, events=events)
     if kind in {"equivalence-review", "twin-human-review"}:
         decisions = payload.get("factory_items")
         require(isinstance(decisions, dict) and set(decisions) == set(details["items"]), "factory-all-items-required")
@@ -235,6 +240,12 @@ class FactoryDecisions:
         decision = verify_decision(proof, self.public_key, kind, expected, scope=SCOPE,
             expected_head=self.head, outcomes=outcomes)
         require(decision["validation"]["contract"] == contract)
+        if self.evidence_root is not None:
+            for source in contract['sources']:
+                require(sha256(read_bytes(confined(self.evidence_root,source['path']))).hexdigest()==source['sha256'], 'factory-source-hash')
+        if kind == 'scenario-threshold-approval':
+            from .threshold_evidence import verify_reviews
+            verify_reviews(contract, self.evidence_root, authority=self, journal=proof['journal'])
         if kind == "equivalence-review":
             events = verify_journal(proof["journal"], self.public_key, scope=SCOPE, expected_head=self.head)
             for other in events:

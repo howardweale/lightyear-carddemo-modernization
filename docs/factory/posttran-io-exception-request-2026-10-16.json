@@ -1,0 +1,20 @@
+{
+  "details": {
+    "argument_sha256": "10b46bd0d42492a27d7048d365504e5fe9c8ccbb5d96787090174c1c3beeefe7",
+    "basis": "structurally-unreachable",
+    "line": 203,
+    "outcome": "false",
+    "outcome_id": "legacy:cobol-decision:CBTRN02C:203:684",
+    "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+  },
+  "kind": "io-exception-acceptance",
+  "program": "POSTTRAN",
+  "schema": "factory-contract/1",
+  "sources": [
+    {
+      "commit": "58f762491a070e0a6373fcce9c3e0b5e0dc9992a",
+      "path": "docs/factory/io-gap-arguments.json",
+      "sha256": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90"
+    }
+  ]
+}

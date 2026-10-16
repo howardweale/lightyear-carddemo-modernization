@@ -20,6 +20,6 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install cryptography
-      - run: python -B -m unittest test_scenario_policy test_threshold3 test_threshold_conditions test_factory_decisions test_business_rules test_rule_evidence_strength
+      - run: python -B -m unittest test_scenario_policy test_threshold3 test_threshold_conditions test_factory_decisions test_business_rules test_rule_evidence_strength test_decision_console_factory.FactoryTests.test_real_signed_release_keeps_compiler_scope_and_exact_io_line
         env:
           PYTHONPATH: src:tests:.

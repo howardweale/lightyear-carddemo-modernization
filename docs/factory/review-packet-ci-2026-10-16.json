@@ -1,0 +1,57 @@
+{
+  "schema": "factory-review-packet-import/1",
+  "run_id": 38922043789,
+  "artifact_id": 12055077023,
+  "archive_sha256": "2f8d5dceff1cd130ae691d4138ccb5cbfc31ad3b6a1200492d50c8e1eea124a4",
+  "sources": [
+    {
+      "path": "docs/factory/current-status-2026-10-16.md",
+      "sha256": "f23fe170e22cca3236a8008b6398ee5aeaa52bedb0f240f790bcf956f6fd277b",
+      "ci_import_sha256": "6f100e71154747ff4cd4c654ecca6ddb7bdd2d7a26549acd78f166bad9095e12",
+      "document_render_adjustment": "Regenerated status and packet: immutable cross-PR links, source-presence inputs, formatted loader counts; unsigned request bytes unchanged."
+    },
+    {
+      "path": "docs/factory/current-status-2026-10-16.json",
+      "sha256": "8cb1df6d7b6ad42989668acd18de758617e0de80c8f480f97e5a67fa28ccc062",
+      "ci_import_sha256": "f10fe77a8300c248e6a75890be35005672e124fb2a6aaf0ff0a9096ec70b403b",
+      "document_render_adjustment": "Regenerated status and packet: immutable cross-PR links, source-presence inputs, formatted loader counts; unsigned request bytes unchanged."
+    },
+    {
+      "path": "docs/factory/howard-decision-packet-2026-10-16.md",
+      "sha256": "03a5902c7f4c0888b146b6ae524f2e7522f5f9db80113902c86a51922aaa8123",
+      "ci_import_sha256": "655d2e4f99c84ef8fb8440c1a1e3869f5cd4f508fffc0f620cf764001815e34a",
+      "document_render_adjustment": "Regenerated status and packet: immutable cross-PR links, source-presence inputs, formatted loader counts; unsigned request bytes unchanged."
+    },
+    {
+      "path": "docs/factory/intcalc-01-loader-domain-request-2026-10-16.json",
+      "sha256": "d7ae2253b73711f694c73aa8e5d5a93adc59bb32d1eed9b42061d0462cad96b9"
+    },
+    {
+      "path": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-16.json",
+      "sha256": "e7097237ee4187ef3508181abd34c808183b564047ffd78a6575fb33ece4ea8b"
+    },
+    {
+      "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-16.json",
+      "sha256": "563714b591bdf0caf2846ce44fd372c0d9e030dd7b76401679e03b57a15b5c07"
+    },
+    {
+      "path": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-16.json",
+      "sha256": "336358178f50fc6b50ff4672f204658f2413e2f030539f52d4f5cd03128a59ad"
+    },
+    {
+      "path": "docs/factory/intcalc-05-line189-io-request-2026-10-16.json",
+      "sha256": "77b139c6f6cd40ddb06a490d2a600245b02c72fd382e724b785a5627277fce65"
+    },
+    {
+      "path": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-16.json",
+      "sha256": "bb3e46e8537347e435c547b5d7fd4bd48277c9faad6cd1cc248d2541c821f5b5"
+    },
+    {
+      "path": "docs/factory/intcalc-signing-order-2026-10-16.json",
+      "sha256": "c575be7969f188282ca9f237f3fa26631e427f2638f9602803147123d12620ee"
+    }
+  ],
+  "claim_scope": "unsigned preparation; five prerequisite signatures rehearsed with disposable CI authority; effective request correctly refused",
+  "original_archive_preserved": true,
+  "document_render_validation": "CI required on publication head; original CI signing rehearsal binds unchanged unsigned requests."
+}

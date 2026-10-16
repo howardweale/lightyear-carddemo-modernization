@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HISTORY = "docs/factory/howard-decisions-2026-10-11b.json"
 INDEX = "docs/factory/tower-status-input-index.json"
 PUBLIC = "docs/factory/factory-status-public-inputs.json"
+PHASE2_PUBLIC_ROOT = "https://github.com/howardweale/lightyear-carddemo-modernization/blob/f7a137ae5635bed903600afff816d1393c9e420e/docs/factory/"
 
 
 def latest(root):
@@ -31,13 +32,15 @@ def inputs(root=ROOT):
     index = json.loads((root/index_path).read_bytes())
     historical = json.loads((root/INDEX).read_bytes())
     public = json.loads((root/PUBLIC).read_bytes())
-    additional = [str(p.relative_to(root)) for pattern in
+    additional = [p.relative_to(root).as_posix() for pattern in
         ('*-review-verdict-2026-10-16.json', 'posttran-phase2-readiness-2026-10-16.json',
          'b06-part6-reverification-2026-10-16.json', 'intcalc-signing-order-2026-10-16.json')
         for p in (root/'docs/factory').glob(pattern)]
+    additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
+                              'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
         *additional,
-        str(release_path.relative_to(root)), index_path,
+        release_path.relative_to(root).as_posix(), index_path,
         *[path for archive in index["sources"] + index.get("crosscheck_sources", []) for path in archive["files"]],
         *[row["path"] for row in historical["sources"]]]))
 
@@ -80,7 +83,7 @@ def load(root=ROOT):
             projections[program]=record
     readiness_path=root/'docs/factory/posttran-phase2-readiness-2026-10-16.json'
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
-    return dict(release=release, release_path=str(path.relative_to(root)), activation=activation,
+    return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,
                 phase2=json.loads(readiness_path.read_bytes()) if readiness_path.exists() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
@@ -113,7 +116,7 @@ def render(model):
             "| Scope | Raw | Projected, pending decisions |", "| --- | --- | --- |"]
     for scope, row in current["rates"].items():
         text.append(f"| {scope} | {row['raw']} | {row['projected']} |")
-    text += ["", "Loader assessments: " + str(current["loader_domain"]["assessment_counts"]) + ".", "",
+    text += ["", "Loader assessments: " + "; ".join(f"{name}: {count}" for name, count in current["loader_domain"]["assessment_counts"].items()) + ".", "",
              "| Compared field | Distinct values |", "| --- | --- |"]
     for field, count in current["diversity"].items():
         text.append(f"| {field} | {count} |")
@@ -133,7 +136,7 @@ def render(model):
         current['phase2']={**phase2,'warning':expiry-datetime.now(timezone.utc)<timedelta(days=5)}
         text+=['',f"POSTTRAN compiler expiry: {phase2['artifact_expires_at']}. Signing deadline: {phase2['signing_deadline']}.",
                'Warning: fewer than five days remain.' if current['phase2']['warning'] else 'At least five days remain at rendering time.',
-               '[Operator runbook](posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.']
+               '[Operator runbook]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.']
     text+=['','## CardDemo data slice','','210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.',
            '','## B06 access','',
            'Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.' if model.get('b06',{} ) else 'Current Windows metadata verification is not available in this snapshot.',

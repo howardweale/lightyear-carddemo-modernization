@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from tools.release_status_records import ROOT, load, render
+from tools.release_status_records import ROOT, PHASE2_PUBLIC_ROOT, load, render
 
 
 def build(commit=None, root=ROOT):
@@ -28,7 +28,7 @@ def build(commit=None, root=ROOT):
     else: lines.append('| Pending | INTCALC ordered packet | Missing request inventory; nothing to sign. |')
     lines+=['| Separate | [POSTTRAN line 203](posttran-io-exception-request-2026-10-16.json) | Accept only the pinned structurally unreachable false edge. Nine campaign gaps remain. |',
             '| Separate | [z/OS loader-domain proposal](intcalc-zos-loader-domain-proposal-2026-10-16.json) | Requires real loader capture and confirmation before any z/OS-facing overlay. |',
-            '| Separate | [POSTTRAN execution request](posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
+            '| Separate | [POSTTRAN execution request]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
     if model.get('phase2'):
         lines+=['', 'POSTTRAN signing deadline: '+model['phase2']['signing_deadline']+'. Compiler expiry: '+model['phase2']['artifact_expires_at']+'.']
     lines += ['', 'All new requests are unsigned. Exact-final-green-commit merge approval remains separate.', '']

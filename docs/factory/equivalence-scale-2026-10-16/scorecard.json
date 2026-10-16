@@ -1,5 +1,5 @@
 {
-  "content_sha256": "494eb676d2e3cf7c478377094d04697d2087ea9b602d60f86174767c0a00948c",
+  "content_sha256": "f77922359adb30afd2f7b2629b80b109d0e0a4035f90947a9f0aea15a96fc0d9",
   "evidence_commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
   "held_out": {
     "CBSTM03A": "not measured",
@@ -10,7 +10,136 @@
     "program": "TRANREPT/CBTRN03C",
     "sites": 413
   },
-  "measurements": "preserved #341 baseline; fresh stage pipeline pending",
+  "measurements": {
+    "fresh_E1": {
+      "denominator": 227,
+      "head": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+      "programs": [
+        {
+          "argued_resolved": 4,
+          "argued_total": 113,
+          "generated_cases": 1000,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 113,
+          "program": "INTCALC",
+          "repeat_sha256": "a48b2fe34a9a2a86558234ce16fc29ea7f23986435310bb99225b8551552eb76",
+          "routes": {
+            "S1": {
+              "individual_resolved": 2,
+              "kills": 0,
+              "resolved": 4,
+              "survivors_resolved": 0
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "7dbb7d5165e171a64e2f324857d07e91a4b2c532ac4e82e3596b95ae69c31793"
+        },
+        {
+          "argued_resolved": 4,
+          "argued_total": 114,
+          "generated_cases": 1000,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 123,
+          "program": "POSTTRAN",
+          "repeat_sha256": "f4c060a6509a00d11f3a6536aa3e5ac5a2ac359867367aa35819a9b84a2bfed0",
+          "routes": {
+            "S1": {
+              "individual_resolved": 2,
+              "kills": 0,
+              "resolved": 3,
+              "survivors_resolved": 0
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 1,
+              "kills": 0,
+              "resolved": 1,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "ac257f3518e4cf4bdc1d63c9a4b9228f51b18c3fcc085e93ea99b8ddc3d7c60e"
+        },
+        {
+          "argued_resolved": 0,
+          "argued_total": 0,
+          "generated_cases": 0,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 413,
+          "program": "TRANREPT",
+          "repeat_sha256": "0f18267fb5be502197b49b54baa5099f37e6b1339b2ad2feaf73cb39e33757d1",
+          "routes": {
+            "S1": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 2,
+              "survivors_resolved": 2
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "c6ca0ccccf29d3049c6f3f11b099b7cd1e4c14df340e1e1fc2e660ef724b4c78"
+        }
+      ],
+      "resolved_after_pending_signatures": 185,
+      "resolved_now": 8,
+      "run_id": 38930496735
+    },
+    "person_minutes_per_1000_sites": {
+      "method": "Prospective active-review intervals times reviewer count, excluding CI wait; sum person-minutes / distinct reviewed sites * 1000.",
+      "status": "not measured",
+      "value": null
+    },
+    "preserved_341": {
+      "denominator": 227,
+      "evidence_commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "resolved_after_pending_signatures": 185,
+      "resolved_now": 8
+    }
+  },
   "model_calls": 0,
   "programs": [
     {

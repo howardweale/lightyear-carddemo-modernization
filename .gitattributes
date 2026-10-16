@@ -245,3 +245,4 @@ spec/modernization/carddemo-data/upstream/** -text -whitespace
 # Preserve Howard-approved B06 publication bytes exactly.
 docs/factory/b06-part6-recovery-review-2026-10-16.md -text
 docs/factory/b06-part6-reverification-2026-10-16.json -text
+spec/modernization/carddemo-screens/upstream/** -text -whitespace

@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   compile:
     runs-on: ubuntu-24.04
@@ -19,6 +22,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Test archive and source inventory
+        env:
+          PYTHONPATH: .:tests
+        run: python -B -m unittest test_cms_inventory -v
       - name: Install pinned GnuCOBOL 3.1.2
         run: bash tools/legacy_twin/install-pinned.sh
       - name: Compile byte-identical public CMS source

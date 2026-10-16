@@ -8,7 +8,7 @@ import hashlib
 import io
 import json
 import re
-import shutil
+import socket
 import subprocess
 import time
 import urllib.error
@@ -28,6 +28,7 @@ def main():
     parser.add_argument("--output", type=Path, default=Path("work/cms/f0"))
     parser.add_argument("--compile", action="store_true")
     parser.add_argument("--java", action="store_true")
+    parser.add_argument("--claims", type=Path)
     args = parser.parse_args()
     root = args.output.resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -42,13 +43,13 @@ def main():
                 raise ValueError("CMS download changed: " + name)
             dest.write_bytes(data)
         data = dest.read_bytes()
-        assert len(data) == pin["size_bytes"]
-        assert hashlib.sha256(data).hexdigest() == pin["sha256"]
+        if len(data) != pin["size_bytes"] or hashlib.sha256(data).hexdigest() != pin["sha256"]:
+            raise ValueError("Pinned download verification failed: " + name)
         packages[name] = dest
     if args.compile:
         compile_probe(root, packages)
     if args.java:
-        java_probe(root, packages)
+        java_probe(root, packages, args.claims)
 
 
 def compile_probe(root, packages):
@@ -89,7 +90,11 @@ def compile_probe(root, packages):
         save(root / "compile-results.json", {"compiler": version, "results": rows, "source_modified": False})
 
 
-def java_probe(root, packages):
+def java_probe(root, packages, claims_path=None):
+    # Refuse occupied ports; never send synthetic requests to another service.
+    for port in (18771, 18772):
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", port))
     with zipfile.ZipFile(packages["ipps-pricer-2027-0-v2-14-1-executable-jar.zip"]) as archive:
         jar = root / "ipps-pricer-application-2.14.1.jar"
         jar.write_bytes(archive.read(jar.name))
@@ -115,7 +120,7 @@ def java_probe(root, packages):
             result["paths"] = list(schema["paths"])
             # A supplied synthetic claim is explicit and reviewable. Missing input
             # produces an interface-only probe rather than an invented paid claim.
-            claims_path = root / "generated-claims.json"
+            claims_path = claims_path or root / "generated-claims.json"
             if claims_path.exists():
                 claims = json.loads(claims_path.read_text())
                 assert len(claims) == 5

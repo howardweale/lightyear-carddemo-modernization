@@ -242,3 +242,6 @@ docs/factory/posttran-attempt1-phase1-compile2-2026-10-12.json -text
 docs/factory/release-evidence-2026-10-15/** -text -whitespace
 # Keep this after extension rules: exact third-party bytes are provenance-bound.
 spec/modernization/carddemo-data/upstream/** -text -whitespace
+# Preserve Howard-approved B06 publication bytes exactly.
+docs/factory/b06-part6-recovery-review-2026-10-16.md -text
+docs/factory/b06-part6-reverification-2026-10-16.json -text

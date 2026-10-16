@@ -4,22 +4,35 @@ import sys
 from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from tools.release_status_records import ROOT, load, render
+from tools.release_status_records import ROOT, PHASE2_PUBLIC_ROOT, load, render
 
 
 def build(commit=None, root=ROOT):
     model = load(root)
-    value, status = render(model)
-    release = model['release']
-    lines = ['# Howard decision packet — '+release['prepared_on'], '',
-             status.split('\n', 2)[2],
-             '## Decisions and blockers', '', *['- '+s for s in release['blockers']], '',
-             '## Targeted comparisons', '', '| Program | Mutant | Valid comparisons / cases |', '| --- | --- | --- |']
-    for program, record in release['programs'].items():
-        for row in record['targets']:
-            lines.append(f"| {program} | {row['id']} | {row['targeted_valid_comparisons']}/{row['targeted_cases']} |")
-    lines += ['', 'No request in this packet is signed or effective. POSTTRAN execution requires its separate exact plan and signed authorization. See the newest POSTTRAN authorization record for readiness.', '']
-    path = root/'docs/factory'/('howard-decision-packet-'+release['prepared_on']+'.md')
+    value, _ = render(model)
+    import json
+    date=value['as_of']
+    lines = ['# Howard decision packet — '+date, '',
+             'Decisions only. The measured status and failure inventories are in the current status and program verdicts.', '',
+             '| Order | Decision | Consequence of signing |', '| --- | --- | --- |']
+    index=root/'docs/factory/intcalc-signing-order-2026-10-16.json'
+    consequences=['Accept only the pinned twin loader-domain exclusion; no kill credit.',
+        'Accept the exact APPL-RESULT class arguments, twin-scoped.',
+        'Accept the 30 individual and two compiler-proven items within twin scope.',
+        'Approve threshold/3 policy subject to its four typed conditions; not effective yet.',
+        'Accept the exact line 189 false-edge argument.',
+        'Make the policy effective only after all typed evidence is present. Currently refuses; signatures cannot establish non-provisional evidence.']
+    if index.exists():
+        for row,reason in zip(json.loads(index.read_bytes())['items'],consequences):
+            lines.append(f"| {row['order']} | [{Path(row['path']).stem}]({Path(row['path']).name}) | {reason} |")
+    else: lines.append('| Pending | INTCALC ordered packet | Missing request inventory; nothing to sign. |')
+    lines+=['| Separate | [POSTTRAN line 203](posttran-io-exception-request-2026-10-16.json) | Accept only the pinned structurally unreachable false edge. Nine campaign gaps remain. |',
+            '| Separate | [z/OS loader-domain proposal](intcalc-zos-loader-domain-proposal-2026-10-16.json) | Requires real loader capture and confirmation before any z/OS-facing overlay. |',
+            '| Separate | [POSTTRAN execution request]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
+    if model.get('phase2'):
+        lines+=['', 'POSTTRAN signing deadline: '+model['phase2']['signing_deadline']+'. Compiler expiry: '+model['phase2']['artifact_expires_at']+'.']
+    lines += ['', 'All new requests are unsigned. Exact-final-green-commit merge approval remains separate.', '']
+    path = root/'docs/factory'/('howard-decision-packet-'+date+'.md')
     path.write_text('\n'.join(lines), encoding='utf-8', newline='\n')
     return value
 

@@ -171,6 +171,11 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
     complete={scope:amended_threshold_report(assessment,current['after_faults'],diversity,list(diversity),head)
               for scope,assessment in scoped.items()}
     write_json(output/'threshold-2-by-scope.json',complete)
+    if job=='POSTTRAN':
+        from lightyear_mainframe.release_projection import review_projection
+        projection=review_projection(list(fresh.values()),results,acceptance['accepted_mutants'],job,register)
+        projection['head']=head
+        write_json(output/'operator-review-projection.json',projection)
     if job=='INTCALC' and shard_records and all('loader_domain_overlay' in r for r in shard_records):
         from lightyear_mainframe.loader_domain import project
         projections=[project(r['fresh'],r['loader_domain_overlay']) for r in shard_records]

@@ -78,7 +78,7 @@
     "src/lightyear_mainframe/posttran_review.py": "4645451a8b9cd89b932a595fa50392d4a670baac1192afb4143be3e502ef5d44",
     "src/lightyear_mainframe/public_corpus.py": "b79f46a496373582ae36e99699dca7f7ef341f7179ccf3783f97da1323372130",
     "src/lightyear_mainframe/records.py": "d873f4f11a14d0064b76a66dca3c57f165960e21ff2961e7a85d5275989bd204",
-    "src/lightyear_mainframe/release_projection.py": "64578aa3d57411200158286af63bf623130d360a7556a7f054b40a59d20ae3fb",
+    "src/lightyear_mainframe/release_projection.py": "3cd9f5369efc267dd89f5c303838fcfacf4db82845c9358187d66e8def39d8e0",
     "src/lightyear_mainframe/scenario_coverage.py": "b6d526d5fd4ff88441a1064618582f6b62de5ebda48eabbe6653ba974ba832e3",
     "src/lightyear_mainframe/scenario_generation.py": "13755d905a9e5c02f52cc21f3d66e796ec18352174475f45e4595ff78fa70852",
     "src/lightyear_mainframe/source.py": "5cc8826b7b99839eef1f120e0d4b8dac00b48afee7143fe23158907d78cd5ad0",
@@ -424,7 +424,7 @@
   },
   "comparison": "Exact output bytes, including filler, record order, signs and timestamps; decode differences only for diagnosis.",
   "compiler_image_artifact": "posttran-phase2-compiler-image",
-  "content_sha256": "bcccc1d3b05922108cbb6017abfe124b2fa4779613af0f20a5b43fd99c317126",
+  "content_sha256": "9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13",
   "execution_authorized": false,
   "generation_attempt": 1,
   "keep_or_fix": {

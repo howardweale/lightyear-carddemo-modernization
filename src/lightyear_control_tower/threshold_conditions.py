@@ -60,7 +60,10 @@ def validate_conditions(contract, root=None, *, check_evidence=True):
                 raw = read_bytes(confined(root or REPOSITORY, evidence["path"]))
                 if sha256(raw).hexdigest() != evidence["sha256"]:
                     raise ValueError(REFUSAL)
+                from .threshold_evidence import typed
+                typed(row['condition_sha256'], raw, contract, evidence)
         if seen != condition_hashes():
             raise ValueError(REFUSAL)
     except (KeyError, TypeError, OSError, ValueError) as error:
+        if str(error) == 'threshold-condition-evidence-type': raise
         raise ValueError(REFUSAL) from error

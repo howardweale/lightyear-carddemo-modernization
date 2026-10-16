@@ -9,12 +9,12 @@
       "CompilerImageArchive": "bac290dafdb7342822f51a4b40822c8a232cb3ae61b4de490c0127ac1c6484a2",
       "Provenance": "6b8d2da6e4bfb04bd9ac65ef3e1862f1851ab33aa668a5c1cda3d123565a502a"
     },
-    "executable_commit": "e4c6845ee9dd5ebc4eb4b3001cc7cde6fc70414b",
+    "executable_commit": "65bd4cd549067dd3695f4197e495cc15c9473417",
     "observer_sha256": "bab0459268754f5dc6508995ff4a53fd9a2797490749c242002abbd69718a712",
-    "request_seal": "bcccc1d3b05922108cbb6017abfe124b2fa4779613af0f20a5b43fd99c317126",
+    "request_seal": "9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13",
     "window": {
       "end": "2026-10-29T14:46:00+00:00",
-      "start": "2026-10-16T14:47:16.403462+00:00"
+      "start": "2026-10-16T20:11:15.249943+00:00"
     }
   },
   "kind": "engineering-run-approval",
@@ -22,9 +22,9 @@
   "schema": "factory-contract/1",
   "sources": [
     {
-      "commit": "e4c6845ee9dd5ebc4eb4b3001cc7cde6fc70414b",
+      "commit": "65bd4cd549067dd3695f4197e495cc15c9473417",
       "path": "docs/factory/posttran-phase2-plan-2026-10-16.json",
-      "sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+      "sha256": "bd4eda8ebab9209202653e4c96cb931830f9beb538cb3ed9d220fff784884881"
     }
   ]
 }

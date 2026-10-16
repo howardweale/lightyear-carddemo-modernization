@@ -1,0 +1,69 @@
+name: Retained evidence review projections
+on:
+  pull_request:
+    paths:
+      - 'tools/build_oct16_review_projections.py'
+      - 'tools/build_intcalc_signing_requests.py'
+      - 'tools/rehearse_intcalc_signing.py'
+      - 'tools/render_oct16_status.py'
+      - 'tools/release_status_records.py'
+      - 'tools/build_release_packet.py'
+      - 'tools/build_duplicate_loader_capture.py'
+      - 'docs/factory/**'
+      - 'src/lightyear_mainframe/release_projection.py'
+      - 'src/lightyear_control_tower/threshold*.py'
+      - 'src/lightyear_factory/threshold3.py'
+      - '.github/workflows/review-projections.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: review-projections-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  retained-projection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - run: python3 -m pip install 'cryptography>=46,<47'
+      - name: Verify original public receipts and produce unsigned projections
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_oct16_review_projections work/review-projections
+      - name: Prepare six unsigned requests in explicit signing order
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_intcalc_signing_requests work/review-projections
+      - name: Disposable ordered signing and refusal rehearsal
+        env:
+          PYTHONPATH: src:.:tests
+        run: python3 -B -m tools.rehearse_intcalc_signing
+      - name: Render dated status and decisions-only packet
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.render_oct16_status work/review-projections
+      - name: Build public duplicate-key loader capture package without execution
+        env:
+          PYTHONPATH: src:.
+        run: python3 -B -m tools.build_duplicate_loader_capture work/zos-duplicate-loader
+      - name: Verify current status and stale-input refusal
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python3 -B -m tools.build_factory_current_status --check
+          python3 -B -m unittest test_oct11_decision_amendments.DecisionAmendmentTests.test_source_bound_decisions_and_stale_status_refusal
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retained-review-projections
+          path: work/review-projections
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zos-duplicate-loader-capture-kit
+          path: work/zos-duplicate-loader
+          retention-days: 90

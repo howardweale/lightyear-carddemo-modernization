@@ -25,13 +25,19 @@ class View:
     source: dict
 
 
-def compile_area(name, declarations):
+# Local E2 resource budget, not an Enterprise COBOL language maximum.
+AREA_LIMITS = {'FD': 32760, 'WORKING-STORAGE': 16*1024*1024, 'LINKAGE': 16*1024*1024, 'LOCAL-STORAGE': 16*1024*1024}
+
+
+def compile_area(name, declarations, *, kind='WORKING-STORAGE'):
     """Compile a bound series of 01 declarations as views of one byte area.
 
     A synthetic containing group permits legal level-01 OCCURS/REDEFINES
     without weakening the existing record decoder's public contract. Unknown
     clauses and variable layouts remain explicitly unsupported.
     """
+    if kind not in AREA_LIMITS:
+        raise StorageError('unsupported-storage-kind:' + kind)
     if not declarations:
         raise StorageError('empty-storage-area')
     words = ['01', 'LY-AREA', '.']
@@ -59,7 +65,8 @@ def compile_area(name, declarations):
             values[1] = f'LY-FILLER-{serial}'
         locations[len(words)+1] = declaration[0].location()
         words.extend(values + ['.'])
-    layout = compile_copybook('\n'.join('       ' + word for word in words))
+    layout = compile_copybook('\n'.join('       ' + word for word in words),
+                              max_length=AREA_LIMITS[kind], storage_overlays=True)
     if layout.variable:
         raise StorageError('ODO-active-length-not-yet-interpreted')
     views = []
@@ -86,12 +93,13 @@ def compile_area(name, declarations):
             for siblings in alternatives(node):
                 for child in siblings:
                     emit(child, '' if node.name == 'LY-AREA' else path + '.', child_offset)
-                child_offset += max(child.width * child.occurs for child in siblings)
+                child_offset += (max(child.width * child.occurs for child in siblings) if node.name == 'LY-AREA'
+                                 else siblings[0].width * siblings[0].occurs)
 
     emit(layout.tree, '', 0)
     if len({v.path for v in views}) != len(views):
         raise StorageError('duplicate-qualified-storage-view')
-    return sealed(dict(schema='cobol-byte-area/1', name=name, length=layout.record_length,
+    return sealed(dict(schema='cobol-byte-area/1', name=name, kind=kind, length=layout.record_length,
         views=[asdict(v) for v in views], declarations=[
             dict(tokens=[t.text for t in d], location=d[0].location()) for d in declarations],
         initialization='explicitly-uninitialized-until-COBOL-values-applied',
@@ -108,7 +116,8 @@ class Memory:
         for area in areas:
             verify(area)
             name = area['name']; length = area['length']
-            if name in self.buffers or type(length) is not int or not 0 <= length <= 32760:
+            kind = area.get('kind', 'FD')  # Old records retain the conservative record limit.
+            if kind not in AREA_LIMITS or name in self.buffers or type(length) is not int or not 0 <= length <= AREA_LIMITS[kind]:
                 raise StorageError('invalid-or-duplicate-area')
             self.buffers[name] = bytearray(length)
             self.known[name] = bytearray(length)
@@ -179,7 +188,7 @@ def storage_ir(program, copybooks):
     def flush():
         if declarations:
             try:
-                areas.append(compile_area(area, declarations))
+                areas.append(compile_area(area, declarations, kind='FD' if section.startswith('FD:') else section))
             except (StorageError, LayoutError) as error:
                 issues.append(dict(reason=str(error), area=area, **declarations[0][0].location()))
             declarations.clear()

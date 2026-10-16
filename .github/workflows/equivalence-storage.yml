@@ -13,6 +13,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: equivalence-storage-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   storage:
     runs-on: ubuntu-24.04
@@ -21,13 +24,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Byte alias, group MOVE and unsupported-gate tests
         env:
           PYTHONPATH: src:.:tests
-        run: python -B -m unittest test_equivalence_storage test_equivalence_dataflow -v
+        run: python -B -m unittest test_equivalence_storage test_equivalence_dataflow test_records -v
       - name: Translate requested public program storage twice
         env:
           PYTHONPATH: src:.

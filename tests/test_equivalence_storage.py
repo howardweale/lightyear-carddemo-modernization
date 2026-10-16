@@ -56,4 +56,42 @@ class StorageTests(unittest.TestCase):
         self.assertFalse(result['whole_program_accepted'])
 
 
+class StorageBoundaryTests(unittest.TestCase):
+    def test_program_paths_match_git_case(self):
+        import subprocess
+        from pathlib import Path
+        from tools.inspect_equivalence_storage import PROGRAM_PATHS
+        tracked = set(subprocess.check_output(['git', 'ls-files'], cwd=Path(__file__).resolve().parents[1], text=True).splitlines())
+        self.assertTrue(set(PROGRAM_PATHS.values()) <= tracked)
+
+    def test_large_working_storage_and_linkage_are_not_fd_records(self):
+        from lightyear_mainframe.records import LayoutError
+        declarations = [tokenize('       01 A PIC X(40000).')]
+        for kind in ('WORKING-STORAGE', 'LINKAGE'):
+            a = compile_area('A', declarations, kind=kind)
+            self.assertEqual(40000, a['length'])
+            self.assertEqual(40000, len(Memory([a]).buffers['A']))
+        with self.assertRaises(LayoutError): compile_area('A', declarations, kind='FD')
+
+    def test_larger_01_overlay_advances_by_widest(self):
+        a = area(['01 A PIC X(2).', '01 B REDEFINES A PIC X(4).', '01 C PIC X.'])
+        self.assertEqual(5, a['length'])
+        self.assertEqual(4, Memory([a]).view('WS:C').offset)
+
+    def test_larger_subordinate_overlay_refuses(self):
+        from lightyear_mainframe.records import LayoutError
+        with self.assertRaisesRegex(LayoutError, 'larger-subordinate'):
+            area(['01 A.', '05 X PIC X(2).', '05 Y REDEFINES X PIC X(4).', '05 Z PIC X.'])
+
+    def test_smaller_subordinate_overlay_keeps_original_width(self):
+        a = area(['01 A.', '05 X PIC X(4).', '05 Y REDEFINES X PIC X(2).', '05 Z PIC X.'])
+        self.assertEqual(4, Memory([a]).view('WS:A.Z').offset)
+
+    def test_unsupported_is_diagnostic_data(self):
+        text = '       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 P USAGE POINTER.\n       PROCEDURE DIVISION.\n'
+        result = storage_ir(bound('unsupported.cbl', text), {})
+        self.assertFalse(result['storage_complete'])
+        self.assertIn('POINTER', result['unsupported'][0]['reason'])
+
+
 if __name__ == '__main__': unittest.main()

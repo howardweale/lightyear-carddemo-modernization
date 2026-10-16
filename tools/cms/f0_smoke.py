@@ -13,6 +13,8 @@ import re
 import subprocess
 import zipfile
 
+from tools.cms.f0_layout import layout
+
 PACKAGE = "files-fy-20215-software-release.zip"
 PIN = "83aeeb51bab7f8410756f57504590d741f8d4c02c3db74bf8cce6b98886bc7af"
 CLAIM = dict(providerCcn="B-21-PROVIDER-NO", coveredCharges="B-21-CHARGES-CLAIMED",
@@ -80,12 +82,16 @@ def output_fields(lines):
             stack.pop()
         stack.append((level, name))
         pic = re.search(r"\bPIC\s+([S9XV0-9()]+)", tail)
-        if pic and name not in ("FILLER", "PPS-FILLER") and stack[0][1] in ("PPS-DATA", "PPS-ADDITIONAL-VARIABLES"):
+        if pic and name not in ("FILLER", "PPS-FILLER") and stack[0][1] in ("PPS-DATA", "PPS-ADDITIONAL-VARIABLES", "PPHOLDAR-HOLD-AREA"):
             fields.append({"id": "/".join(n for _, n in stack),
                            "reference": " OF ".join(n for _, n in reversed(stack)),
-                           "numeric": "X" not in pic[1], "picture": pic[1]})
+                           "numeric": "X" not in pic[1] and name != "PPS-CALC-VERS", "picture": pic[1]})
     if len({f['id'] for f in fields}) != len(fields) or len(fields) < 50:
         raise ValueError("Incomplete or duplicate output layout")
+    for field in fields:
+        if field['id'] == 'PPS-DATA/PPS-CALC-VERS':
+            field['reference'] += '(1:5)'
+            field['interpretation'] = 'raw version identifier; no numeric coercion'
     return fields
 
 
@@ -98,7 +104,7 @@ def literal(value):
     return str(value)
 
 
-def make_driver(source, claims, hold_copy):
+def make_driver(source, claims, hold_copy, audit_sources):
     if len(claims) != 5:
         raise ValueError("Exactly five F0 cases required")
     lines = active(source)
@@ -112,6 +118,24 @@ def make_driver(source, claims, hold_copy):
         expanded.extend(active(hold_copy) if line == "COPY PPHOLDAR." else [line])
     linkage = expanded
     provider = section(lines, "01  PROV-NEW-HOLD.", "LINKAGE SECTION.")
+    bill_size, bill_layout = layout(lines, 'BILL-DATA-2021')
+    provider_size, provider_layout = layout(lines, 'PROV-NEW-HOLD')
+    if provider_size != 310:
+        raise ValueError('Provider layout width changed')
+    aliases = {'P-NEW-CCR': 'P-NEW-OPER-CSTCHG-RATIO',
+               'P-NEW-CMI-ADJ-CPD': 'P-NEW-FAC-SPEC-RATE',
+               'P-NEW-HOSP-HRR-ADJUSTMT': 'P-HOSP-HRR-ADJUSTMT',
+               'P-NEW-HOSP-READMISSION-REDU': 'P-HOSP-READMISSION-REDU',
+               'P-NEW-VAL-BASED-PURCH-PARTIPNT': 'P-VAL-BASED-PURCH-PARTIPNT',
+               'P-NEW-VAL-BASED-PURCH-ADJUST': 'P-VAL-BASED-PURCH-ADJUST'}
+    for name, raw in audit_sources.items():
+        size, other = layout(active(raw), 'PROV-NEW-HOLD')
+        if size != provider_size:
+            raise ValueError('Module provider layout width differs')
+        for field in PROVIDER.values():
+            target = aliases.get(field, field) if name == 'PPCAL215' else field
+            if other[target] != provider_layout[field]:
+                raise ValueError('Module provider input offset/type differs: ' + field)
     fields = output_fields(linkage)
     fields.append(dict(id="PRICER-OPT-VERS-SW/PPS-VERSIONS/PPDRV-VERSION",
                        reference="PPDRV-VERSION", numeric=False, picture="X(05)"))
@@ -126,12 +150,21 @@ def make_driver(source, claims, hold_copy):
                  "PPHOLDAR-HOLD-AREA PROV-NEW-HOLD", 'move "P" to PRICER-OPTION-SW']
         for group, mapping in [('claimData', CLAIM), ('providerData', PROVIDER)]:
             body += [f"move {literal(value)} to {mapping[key]}" for key, value in claim[group].items()]
-        body += ["move PROV-NEW-HOLD to PROV-RECORD-FROM-USER",
+        body += ["move PROV-NEW-HOLD to PROV-RECORD-FROM-USER"]
+        checks = []
+        for group, mapping, record_layout, record_name in [
+                ('claimData', CLAIM, bill_layout, 'BILL-DATA-2021'),
+                ('providerData', PROVIDER, provider_layout, 'PROV-RECORD-FROM-USER')]:
+            for key, value in claim[group].items():
+                item = record_layout[mapping[key]]
+                expected = encode_input(value, item)
+                checks += [f'if {record_name}({item["offset"]+1}:{item["size"]}) not = "{expected}"',
+                           'move 98 to return-code', 'goback', 'end-if']
+        body += checks + [f'display "CASE|{index}"', 'display "INPUT|45"',
                  'call "PPOPN215" using BILL-DATA-2021 PPS-DATA',
                  "PRICER-OPT-VERS-SW PPS-ADDITIONAL-VARIABLES",
                  "PPHOLDAR-HOLD-AREA PROV-RECORD-FROM-USER",
-                 "MSAX-TABLE-FROM-USER CBSA-TABLE-FROM-USER",
-                 f'display "CASE|{index}"']
+                 "MSAX-TABLE-FROM-USER CBSA-TABLE-FROM-USER"]
         for i, field in enumerate(fields):
             if field['numeric']:
                 body += ["move " + field['reference'] + " to F0-NUM",
@@ -140,6 +173,25 @@ def make_driver(source, claims, hold_copy):
                 body += [f'display "FIELD|{i}|" ' + field['reference']]
     body += ["move 0 to return-code", "goback."]
     return "\n".join(body) + "\n", fields
+
+
+def encode_input(value, item):
+    """Independent DISPLAY representation used to check the actual ABI bytes."""
+    pic, width = item['picture'], item['size']
+    if not pic or 'X' in pic:
+        text = literal(value)[1:-1] if isinstance(value, str) else str(value)
+        if len(text) > width:
+            raise ValueError('Input text overflow')
+        return text.ljust(width)
+    parts = pic.split('V')
+    scale = sum(int(n or 1) for n in re.findall(r'9(?:\((\d+)\))?', parts[1])) if len(parts) == 2 else 0
+    number = Decimal(str(value)) * (10 ** scale)
+    if not number.is_finite() or number < 0 or number != number.to_integral_value():
+        raise ValueError('Input precision or sign mismatch')
+    text = str(int(number))
+    if len(text) > width:
+        raise ValueError('Input numeric overflow')
+    return text.zfill(width)
 
 
 def normalize(value, numeric):
@@ -163,13 +215,15 @@ def main():
     with zipfile.ZipFile(root / PACKAGE) as archive:
         source = archive.read('PPOPN215')
         hold_copy = archive.read('PPHOLDAR')
+        audit_sources = {n: archive.read(n) for n in ('PPDRV215', 'PPCAL215')}
         tables = {name: archive.read(name) for name in ('MSAX045', 'CBSA212')}
     src = root / PACKAGE.removesuffix('.zip')
     claims = json.loads(args.claims.read_text())
-    driver, fields = make_driver(source, claims, hold_copy)
+    driver, fields = make_driver(source, claims, hold_copy, audit_sources)
     path = root / 'F0SMOKE.cob'
     path.write_text(driver, encoding='utf-8')
     record = dict(notice='public CMS software, independently tested', source_modified=False,
+                  module_layout_sha256={n: sha(v) for n,v in audit_sources.items()},
                   source_sha256=sha(source), hold_copy_sha256=sha(hold_copy), claims_sha256=sha(args.claims.read_bytes()),
                   driver_sha256=sha(path.read_bytes()), fields=fields, cases=[],
                   disclosure='Output bytes stay on runner; only canonical per-field SHA256 leaves runner. No comparison verdict published.')
@@ -192,7 +246,9 @@ def main():
             for line in run.stdout.decode('ascii').splitlines():
                 if line.startswith('CASE|'):
                     index = int(line.split('|')[1]); assert index == len(record['cases'])
-                    record['cases'].append({'index': index, 'fields': {}})
+                    record['cases'].append({'index': index, 'fields': {}, 'input_checks': 0})
+                elif line == 'INPUT|45':
+                    record['cases'][-1]['input_checks'] += 45
                 elif line.startswith('FIELD|'):
                     _, index, value = line.split('|', 2); field = fields[int(index)]
                     canonical = normalize(value, field['numeric'])
@@ -200,7 +256,7 @@ def main():
                     values[field['id']] = sha(canonical.encode())
                 else:
                     raise ValueError('Unexpected output; raw bytes withheld')
-            record['complete'] = run.returncode == 0 and len(record['cases']) == 5 and all(len(c['fields']) == len(fields) for c in record['cases'])
+            record['complete'] = run.returncode == 0 and len(record['cases']) == 5 and all(len(c['fields']) == len(fields) and c['input_checks'] == 45 for c in record['cases'])
         except (subprocess.TimeoutExpired, ValueError, InvalidOperation, AssertionError, UnicodeError, IndexError):
             record['complete'] = False
             record['failure'] = 'Runtime/format boundary; raw bytes withheld'

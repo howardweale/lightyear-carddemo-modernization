@@ -31,7 +31,7 @@ jobs:
       - name: Compile byte-identical public CMS source
         run: python -B tools/cms/f0_probe.py --pins docs/cms/downloads.json --compile
       - name: Five generated F0 calls (hashes only)
-        run: python -B tools/cms/f0_smoke.py
+        run: python -B -m tools.cms.f0_smoke
       - name: Retain feasibility diagnostics (no pricing comparisons)
         if: always()
         uses: actions/upload-artifact@v4

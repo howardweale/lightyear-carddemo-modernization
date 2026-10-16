@@ -1,7 +1,8 @@
 """Offline tests for the F0 record boundary; no CMS execution or downloads."""
 from decimal import InvalidOperation
 import unittest
-from tools.cms.f0_smoke import fixed_records, normalize, literal, output_fields
+from tools.cms.f0_smoke import fixed_records, normalize, literal, output_fields, encode_input
+from tools.cms.f0_layout import layout
 
 
 class SmokeBoundaryTests(unittest.TestCase):
@@ -31,6 +32,32 @@ class SmokeBoundaryTests(unittest.TestCase):
         self.assertEqual(literal("2021-09-15"), '"20210915"')
         with self.assertRaises(ValueError):
             literal('A". STOP RUN.')
+
+    def test_version_identifier_is_not_numeric_coercion(self):
+        lines = ["01 PPS-DATA."] + [f" 10 TEST-{i} PIC 9(2)." for i in range(50)]
+        lines += [" 10 PPS-CALC-VERS PIC 9(05)."]
+        field = output_fields(lines)[-1]
+        self.assertFalse(field['numeric'])
+        self.assertTrue(field['reference'].endswith('(1:5)'))
+        self.assertEqual(normalize('C21.5', field['numeric']), 'C21.5')
+
+    def test_display_encoding_checks_precision_and_width(self):
+        item = dict(size=4, picture='9(1)V9(3)')
+        self.assertEqual(encode_input(0.3, item), '0300')
+        for value in [0.0001, 10, -1]:
+            with self.assertRaises(ValueError):
+                encode_input(value, item)
+        self.assertEqual(encode_input('2020-10-01',dict(size=8,picture=None)), '20201001')
+        self.assertEqual(encode_input('010999',dict(size=6,picture=None)), '010999')
+
+    def test_redefines_overlap_without_shifting_next_field(self):
+        size, fields = layout(['01 PROVIDER.', ' 02 CODE PIC X(2).',
+                               ' 02 CODE-N REDEFINES CODE PIC 9(2).',
+                               ' 02 RATIO PIC 9V999.', '01 NEXT-RECORD.',
+                               ' 02 OTHER PIC X.'], 'PROVIDER')
+        self.assertEqual(size,6)
+        self.assertEqual(fields['CODE-N']['offset'],0)
+        self.assertEqual(fields['RATIO']['offset'],2)
 
     def test_duplicate_leaf_names_keep_group_identity(self):
         lines = ["01 PPS-DATA."] + [f" 10 TEST-{i} PIC 9(2)." for i in range(50)]

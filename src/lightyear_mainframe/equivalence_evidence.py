@@ -96,9 +96,11 @@ def validate_dependencies(argument, register):
     return True
 
 
-def mutation_threshold_report(fresh, followup, accepted, scope, register):
+def mutation_threshold_report(fresh, followup, accepted, scope, register, *, scope_decisions=None):
     """Amended threshold/2 exclusions; arguments alone never authorize exclusion."""
     if scope not in ('twin','zos-facing'):raise ValueError('claim-scope')
+    from .claim_scope import load_decisions, declared_scope, check_consistency
+    decisions = load_decisions() if scope_decisions is None else scope_decisions
     approvals={r['id']:r for r in accepted};reviews={r['id']:r for r in followup}
     killed=[];excluded=[];refused=[];unresolved=[]
     for current in fresh:
@@ -116,14 +118,17 @@ def mutation_threshold_report(fresh, followup, accepted, scope, register):
         if current['status']=='evidence-gap':
             unresolved.append(dict(id=identifier,reason='fresh-campaign-execution-evidence-gap'));continue
         a=row.get('argument',{});validate_dependencies(a,register)
-        host_only=(identifier=='CBTRN02C-delete-MOVE-718-447' or bool(a.get('compiler_storage_semantics') or a.get('compiler_runtime_contract'))
-            or 'not z/OS' in a.get('argument','') or 'not native z/OS' in a.get('argument','')
-            or 'host CEE3ABD terminating shim' in a.get('argument',''))
+        source = row.get('mutant', {}).get('source_sha256')
+        argument_scope = declared_scope(decisions['arguments'], identifier, a, source)
+        # Scope never comes from these words. A missing/conflicting declaration is
+        # refused for z/OS; unchanged twin claims retain their historical basis.
+        if scope == 'zos-facing': check_consistency(a, argument_scope)
         approval=approvals.get(identifier)
-        individual=bool(approval and approval['source_sha256']==row.get('mutant',{}).get('source_sha256')
-                        and not (scope=='zos-facing' and approval['scope']=='host-compiler-scoped'))
-        if individual and approval.get('explicit_zos_scope_basis') and identifier in ('CBACT04C-receiving-size-133-19','CBTRN02C-constant-718-445'):
-            host_only=False
+        acceptance_scope = declared_scope(decisions['acceptances'], identifier, approval, source) if approval else None
+        individual=bool(approval and approval['source_sha256']==source
+                        and (scope=='twin' or acceptance_scope=='twin-and-zos'))
+        host_only = argument_scope != 'twin-and-zos'
+        if individual and acceptance_scope == 'twin-and-zos': host_only = False
         basis='compiler-proven' if scope=='twin' and row.get('TCE',{}).get('identical') else 'APPL-RESULT-class-proof' if row.get('class_covered') else 'individually-accepted' if individual else None
         if basis and not(scope=='zos-facing' and host_only):excluded.append(dict(id=identifier,basis=basis))
         else:unresolved.append(dict(id=identifier,reason='host-compiler-scoped argument unresolved for z/OS' if host_only and scope=='zos-facing' else 'individual operator review required'))

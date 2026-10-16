@@ -1,0 +1,3 @@
+INDEX-STATUS=22
+libcob: warning: implicit CLOSE of index-file ('/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/files/TCATBALF')
+libcob: warning: implicit CLOSE of flat-file ('/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/before/TCATBALF')

@@ -1,0 +1,23 @@
+{
+  "schema": "carddemo-data-slice/1",
+  "codec": "cp037",
+  "binary_byteorder": "big",
+  "binary_truncation": "std",
+  "datasets": [
+    {"name": "acctdata", "copybook": "app/cpy/CVACT01Y.cpy", "idcams": "app/jcl/ACCTFILE.jcl", "data": "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS"},
+    {"name": "custdata", "copybook": "app/cpy/CVCUS01Y.cpy", "idcams": "app/jcl/CUSTFILE.jcl", "data": "app/data/EBCDIC/AWS.M2.CARDDEMO.CUSTDATA.PS"},
+    {"name": "carddata", "copybook": "app/cpy/CVACT02Y.cpy", "idcams": "app/jcl/CARDFILE.jcl", "data": "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS"},
+    {"name": "cardxref", "copybook": "app/cpy/CVACT03Y.cpy", "idcams": "app/jcl/XREFFILE.jcl", "data": "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDXREF.PS"},
+    {"name": "usrsec", "copybook": "app/cpy/CSUSR01Y.cpy", "idcams": "app/jcl/DUSRSECJ.jcl", "data": "app/data/EBCDIC/AWS.M2.CARDDEMO.USRSEC.PS"}
+  ],
+  "ims": {
+    "dbd": "app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd",
+    "psb": "app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb",
+    "segments": {
+      "PAUTSUM0": "app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+      "PAUTDTL1": "app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy"
+    },
+    "public_unload": "app/app-authorization-ims-db2-mq/data/EBCDIC/AWS.M2.CARDDEMO.IMSDATA.DBPAUTP0.dat",
+    "public_unload_profile": null
+  }
+}

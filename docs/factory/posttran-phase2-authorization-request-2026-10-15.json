@@ -1,0 +1,30 @@
+{
+  "schema": "factory-contract/1",
+  "kind": "engineering-run-approval",
+  "program": "POSTTRAN",
+  "sources": [
+    {
+      "path": "docs/factory/posttran-phase2-plan-2026-10-15.json",
+      "sha256": "c0b63bc2281ebc427b74cbaa552b0e531bcff08cd9525464f7009c83f1231795",
+      "commit": "c895ab6d8b0bca34a28520abe4dc01fc13e057a1"
+    }
+  ],
+  "details": {
+    "executable_commit": "c895ab6d8b0bca34a28520abe4dc01fc13e057a1",
+    "request_seal": "24c7218e960727198d33cfd998148c5edb4e5ff369cc780cc54ce7b024b2e793",
+    "observer_sha256": "8de9d485044a347e69434574322ba4a408d5415df8660e7f82073708bca4db9a",
+    "class_hashes": {
+      "Candidate": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
+      "Provenance": "6b8d2da6e4bfb04bd9ac65ef3e1862f1851ab33aa668a5c1cda3d123565a502a",
+      "CompilerImageArchive": "c370d2d6c65619daf9fcfed25a1564cf8b0e7a2e5f2ea0a96565eede7ff02b69"
+    },
+    "window": {
+      "start": "2026-10-15T00:00:00+00:00",
+      "end": "2026-10-28T14:49:11+00:00"
+    },
+    "caps": {
+      "attempts": 1,
+      "runs": 1
+    }
+  }
+}

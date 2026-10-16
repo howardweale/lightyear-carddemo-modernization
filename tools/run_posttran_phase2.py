@@ -9,7 +9,7 @@ import urllib.request
 
 from tools.prepare_posttran_phase2 import ROOT, OUTPUTS, sha, digest, save
 from tools.check_posttran_attempt1_phase1 import CANDIDATE, EXPECTED, policy, limits, structural
-PLAN = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-14.json'
+PLAN = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-15.json'
 
 
 def authorize(plan, env, head):
@@ -23,6 +23,11 @@ def authorize(plan, env, head):
 
 def bound_plan():
     plan = json.loads(PLAN.read_bytes())
+    original_path = ROOT / 'docs/factory/posttran-phase2-plan-2026-10-14.json'
+    original = json.loads(original_path.read_bytes())
+    if sha(original_path.read_bytes()) != plan['original_plan_sha256']: raise ValueError('phase2-original-plan-binding')
+    for name in ('candidate_files', 'twin', 'scenarios', 'scenario_count', 'compared_outputs', 'normalization_rules', 'preparation_run'):
+        if plan[name] != original[name]: raise ValueError('phase2-preparation-evidence-changed:' + name)
     if digest({k:v for k,v in plan.items() if k!='content_sha256'})!=plan.get('content_sha256'):raise ValueError('phase2-plan-seal')
     for path, expected in {**plan['bound_files'], **plan['candidate_files']}.items():
         p = (ROOT / path).resolve()
@@ -35,6 +40,8 @@ def verify():
     plan=bound_plan()
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     authorize(plan,os.environ,head)
+    from tools.posttran_phase2_authorization import verify_signed
+    verify_signed(ROOT, plan, head, os.environ)
     return plan,head
 
 
@@ -43,6 +50,9 @@ def reserve(output):
     name = 'posttran-phase2-consumed-' + plan['content_sha256']
     repository = os.environ['GITHUB_REPOSITORY']
     if repository != 'howardweale/lightyear-carddemo-modernization': raise ValueError('phase2-repository')
+    from tools.posttran_phase2_authorization import verify_image
+    image_preflight = verify_image(plan, repository)
+    # All proof and image failures occur above this first write operation.
     # Atomic, persistent repository ref consumes the attempt before any execution.
     # A timeout is an unknown reservation outcome: stop; never retry this request.
     url = f'https://api.github.com/repos/{repository}/git/refs'
@@ -53,6 +63,7 @@ def reserve(output):
         reserved = json.load(response)
     if reserved['object']['sha'] != head: raise ValueError('phase2-reservation-ref-binding')
     output.mkdir(parents=True, exist_ok=False)
+    save(output / 'image-preflight.json', image_preflight)
     save(output / 'reservation.json', dict(plan_sha256=plan['content_sha256'], head=head, run_id=os.environ['GITHUB_RUN_ID'], attempt=1, consumed_before_execution=True))
     with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
         stream.write(f"reservation={name}\npreparation_run={plan['preparation_run']}\n")
@@ -61,6 +72,12 @@ def reserve(output):
 def returncodes_agree(candidate, twin, scenario):
     if candidate == twin and candidate in (0, 4): return True
     return scenario == 'generated:posttran-duplicate-id' and candidate == 999 and twin == 12
+
+
+def comparison_status(outputs_agree, candidate, twin, scenario, *, invariants_passed=True):
+    if not outputs_agree or not returncodes_agree(candidate, twin, scenario):
+        return 'divergent'
+    return 'equivalent' if invariants_passed else 'indeterminate'
 
 
 def twin_action(action, work, name=None, kind=None):
@@ -164,17 +181,17 @@ def execute(output, archive, reservation):
                     candidate_outputs={dd: sha(raw) for dd, raw in after.items()}, twin_outputs={dd: sha(raw) for dd, raw in expected.items()})
                 differences = [dd for dd in OUTPUTS if after[dd] != expected[dd]]
                 if not returncodes_agree(code, receipt['returncode'], scenario['id']): differences.append('RETURN-CODE')
-                row['status'] = 'divergent' if differences else 'equivalent'
+                row['status'] = comparison_status(not differences, code, receipt['returncode'], scenario['id'])
                 row['keep_or_fix_checks'] = dict(candidate=check(images, after, timestamp=scenario['timestamp'], returncode=code, returncode_contract='source-abcode'),
                     twin=check(images, expected, timestamp=scenario['timestamp'], returncode=receipt['returncode']))
                 if scenario['id']=='public:posttran-public':
                     rejects={lane:len(data['DALYREJS'])//431 for lane,data in (('candidate',after),('twin',expected))}
                     row['keep_or_fix_checks']['public_reject_count']=dict(expected=38,observed=rejects,passed=all(n==38 for n in rejects.values()))
                     if not all(n==38 for n in rejects.values()):
-                        row['status']='indeterminate'
+                        row['status']=comparison_status(not differences, code, receipt['returncode'], scenario['id'], invariants_passed=False)
                         report['unresolved'].append(dict(scenario=scenario['id'],input_sha256=scenario['input_sha256'],field='DALYREJS:record-count',legacy_value=rejects['twin'],candidate_value=rejects['candidate'],expected_keep_value=38,source_lines=[403],classification='keep-or-fix related',classification_author='Codex proposal',accepted=False))
                 if not all(row['keep_or_fix_checks'][lane]['passed'] for lane in ('candidate','twin')):
-                    row['status']='indeterminate'
+                    row['status']=comparison_status(not differences, code, receipt['returncode'], scenario['id'], invariants_passed=False)
                     report['unresolved'].append(dict(scenario=scenario['id'],input_sha256=scenario['input_sha256'],field='keep-or-fix-invariants',legacy_value=row['keep_or_fix_checks']['twin'],candidate_value=row['keep_or_fix_checks']['candidate'],source_lines=[379,403,423,545,561,710],classification='keep-or-fix related',classification_author='Codex proposal',accepted=False))
                 for dd in differences:
                     details = field_disagreements(dd, expected[dd], after[dd]) if dd in expected else [dict(field='RETURN-CODE', legacy_value=receipt['returncode'], candidate_value=code, source_lines=[710])]

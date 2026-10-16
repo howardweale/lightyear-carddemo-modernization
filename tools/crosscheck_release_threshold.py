@@ -4,7 +4,9 @@ import json
 from pathlib import Path
 
 
-def recompute(fresh, reviews, accepted, scope):
+def recompute(fresh, reviews, accepted, scope, *, scope_decisions=None):
+    from lightyear_mainframe.claim_scope import load_decisions, digest, check_consistency
+    decisions = load_decisions() if scope_decisions is None else scope_decisions
     by_id = {r['id']: r for r in reviews}; approvals = {r['id']: r for r in accepted}
     if len({r['id'] for r in fresh}) != len(fresh): raise ValueError('duplicate-mutant-site')
     kills, exclusions, refusals, unresolved = set(), set(), set(), set()
@@ -16,11 +18,18 @@ def recompute(fresh, reviews, accepted, scope):
             continue
         if status == 'not-compiled': refusals.add(key); continue
         if status == 'evidence-gap': unresolved.add(key); continue
-        argument = review.get('argument', {}); text = argument.get('argument', '')
-        host = key == 'CBTRN02C-delete-MOVE-718-447' or bool(argument.get('compiler_storage_semantics') or argument.get('compiler_runtime_contract')) or any(s in text for s in ('not z/OS', 'not native z/OS', 'host CEE3ABD terminating shim'))
+        argument = review.get('argument', {})
+        source = review.get('mutant', {}).get('source_sha256')
+        # Independently join the dated records; do not call the engine's scope
+        # selection or denominator implementation.
+        args = [r for r in decisions['arguments'] if r['id']==key and r['record_sha256']==digest(argument) and r['source_sha256']==source]
+        argument_scope = args[0]['claim_scope'] if len(args)==1 else None
+        if scope == 'zos-facing': check_consistency(argument, argument_scope)
         approval = approvals.get(key)
-        individual = bool(approval and approval['source_sha256'] == review.get('mutant', {}).get('source_sha256') and not (scope == 'zos-facing' and approval['scope'] == 'host-compiler-scoped'))
-        if individual and approval.get('explicit_zos_scope_basis') and key in ('CBACT04C-receiving-size-133-19', 'CBTRN02C-constant-718-445'): host = False
+        approvals_scoped = [r for r in decisions['acceptances'] if approval and r['id']==key and r['record_sha256']==digest(approval) and r['source_sha256']==source]
+        acceptance_scope = approvals_scoped[0]['claim_scope'] if len(approvals_scoped)==1 else None
+        individual = bool(approval and approval['source_sha256']==source and (scope=='twin' or acceptance_scope=='twin-and-zos'))
+        host = argument_scope != 'twin-and-zos' and not (individual and acceptance_scope=='twin-and-zos')
         eligible_proof = scope == 'twin' and review.get('TCE', {}).get('identical') or review.get('class_covered') or individual
         (exclusions if eligible_proof and not (scope == 'zos-facing' and host) else unresolved).add(key)
     denominator = len(fresh) - len(exclusions) - len(refusals)

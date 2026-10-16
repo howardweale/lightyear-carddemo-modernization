@@ -29,7 +29,7 @@ def build(root, output):
     generator=next(r for r in proposal['bound_sources'] if r['path'].endswith('/scenario_generation.py'))
     generator_raw=(root/generator['path']).read_bytes().replace(b'\r\n',b'\n')
     if sha256(generator_raw).hexdigest()!=generator['lf_sha256']:raise ValueError('loader-generator-changed')
-    generator_lines=[i for i,line in enumerate(generator_raw.decode().splitlines(),1) if 'intcalc-duplicate-category' in line]
+    generator_lines=[i for i,line in enumerate(generator_raw.decode().splitlines(),1) if "'duplicate-category'" in line]
     if not generator_lines:raise ValueError('loader-generator-scenario-missing')
     class_ids=sorted(r['id'] for r in reviews if r.get('class_covered'))
     individual_ids=sorted(r['id'] for r in reviews if r['status'] in ('equivalent (argued, individual review pending)','equivalent (compiler-proven)'))

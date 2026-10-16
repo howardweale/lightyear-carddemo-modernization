@@ -109,7 +109,7 @@ def build(root, date):
         blockers.append("Loader gaps remain; deterministic fixes and a fresh CI campaign are required.")
     if not index.get("retention_complete"):
         blockers.append("Large original mutation receipts await the designated retention store; local staging and artifact hashes are recorded in the index.")
-    if not (ROOT/'src/lightyear_control_tower/threshold_evidence.py').is_file():
+    if not (root/'src/lightyear_control_tower/threshold_evidence.py').is_file():
         blockers.append("Typed threshold-condition validation is not present in this checkout.")
     blockers.append("No effective signed threshold policy has been applied; provisional engineering evidence does not become release evidence through signatures.")
     verdict = "Not releasable: " + " ".join(blockers)

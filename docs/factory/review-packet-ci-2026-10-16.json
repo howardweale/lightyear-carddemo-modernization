@@ -6,13 +6,13 @@
   "sources": [
     {
       "path": "docs/factory/current-status-2026-10-16.md",
-      "sha256": "f23fe170e22cca3236a8008b6398ee5aeaa52bedb0f240f790bcf956f6fd277b",
+      "sha256": "0e696630a77db56a3b05d7fbe74a448c8cf29b7c2f24d24300109049517ab139",
       "ci_import_sha256": "6f100e71154747ff4cd4c654ecca6ddb7bdd2d7a26549acd78f166bad9095e12",
       "document_render_adjustment": "Regenerated status and packet: immutable cross-PR links, source-presence inputs, formatted loader counts; unsigned request bytes unchanged."
     },
     {
       "path": "docs/factory/current-status-2026-10-16.json",
-      "sha256": "8cb1df6d7b6ad42989668acd18de758617e0de80c8f480f97e5a67fa28ccc062",
+      "sha256": "cb90ecfa64da4063d92573579818d9532c55fa14f593544479a7cfcbe44c122b",
       "ci_import_sha256": "f10fe77a8300c248e6a75890be35005672e124fb2a6aaf0ff0a9096ec70b403b",
       "document_render_adjustment": "Regenerated status and packet: immutable cross-PR links, source-presence inputs, formatted loader counts; unsigned request bytes unchanged."
     },

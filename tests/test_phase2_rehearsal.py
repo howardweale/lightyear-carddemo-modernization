@@ -17,7 +17,7 @@ from tools.finalize_posttran_phase2 import expiry_status
 class RehearsalTests(Phase2SignedProofTests):
     def exercise(self, fault=None):
         plan, env, at = self.fixture()
-        plan.update(generation_attempt=1, model_calls=0)
+        plan.update(generation_attempt=1, model_calls=0, preparation_run=122)
         plan['content_sha256'] = digest({k:v for k,v in plan.items() if k!='content_sha256'})
         from tools.posttran_phase2_authorization import PLAN
         from hashlib import sha256

@@ -9,12 +9,12 @@ from .screen_update import paragraph
 
 PARAGRAPHS=('1215-EDIT-MANDATORY','1220-EDIT-YESNO','1225-EDIT-ALPHA-REQD',
     '1230-EDIT-ALPHANUM-REQD','1235-EDIT-ALPHA-OPT','1240-EDIT-ALPHANUM-OPT','1245-EDIT-NUM-REQD')
-VERBS={'IF','SET','MOVE','INSPECT','STRING','GO','CONTINUE','EXIT','PERFORM','COMPUTE','END-COMPUTE','DIVIDE','INITIALIZE','CALL','ELSE','END-IF','.'}
-TOKEN=re.compile(r"\s+|,|'(?:[^']|'')*'|[A-Z][A-Z0-9-]*|[0-9]+|>=|<=|<>|[().:=<>]")
+VERBS={'IF','SET','MOVE','INSPECT','STRING','GO','CONTINUE','EXIT','PERFORM','COMPUTE','END-COMPUTE','DIVIDE','INITIALIZE','CALL','EVALUATE','WHEN','END-EVALUATE','ELSE','END-IF','.'}
+TOKEN=re.compile(r"\s+|,|'(?:[^']|'')*'|[0-9]+-[A-Z][A-Z0-9-]*|[A-Z][A-Z0-9-]*|-?[0-9]+|>=|<=|<>|[().:=<>]")
 
 class Parser:
-    def __init__(self,code,lines,source,name):
-        self.tokens=[];at=0;self.source=source;self.name=name;self.pos=0
+    def __init__(self,code,lines,source,name,performs=PARAGRAPHS):
+        self.tokens=[];at=0;self.source=source;self.name=name;self.pos=0;self.performs=set(performs)
         self.labels=set(re.findall(r'^\s*([A-Z][A-Z0-9-]*)\.\s*$',code,re.M))
         for m in TOKEN.finditer(code):
             if m.start()!=at:raise ValueError('unsupported edit token: '+code[at:m.start()])
@@ -30,19 +30,23 @@ class Parser:
     def expr(self):
         origin=self.origin();token=self.take()
         if token.startswith("'"):return dict(op='literal',value=token[1:-1].replace("''","'"),**origin)
-        if token.isdigit():return dict(op='number',value=token,**origin)
+        if re.fullmatch('-?[0-9]+',token):return dict(op='number',value=token,**origin)
         if token in ('SPACE','SPACES','LOW-VALUE','LOW-VALUES','ZERO','ZEROS','ZEROES'):
             return dict(op='figurative',value=token,**origin)
         if token=='FUNCTION':
             name=self.take()
             if name=='CURRENT-DATE':return dict(op=name,**origin)
-            if name not in ('LENGTH','TRIM','NUMVAL','INTEGER-OF-DATE','TEST-NUMVAL','TEST-NUMVAL-C'):raise ValueError('unsupported edit intrinsic: '+name)
+            if name not in ('LENGTH','TRIM','NUMVAL','INTEGER-OF-DATE','TEST-NUMVAL','TEST-NUMVAL-C','NUMVAL-C','UPPER-CASE','LOWER-CASE'):raise ValueError('unsupported edit intrinsic: '+name)
             self.take('(');operand=self.expr();self.take(')');return dict(op=name,operand=operand,**origin)
         if not re.fullmatch('[A-Z][A-Z0-9-]*',token) or token in VERBS:raise ValueError('unsupported edit expression: '+token)
         result=dict(op='field',name=token,**origin)
         if self.peek()=='(':
             self.take();start=self.expr();self.take(':');length=self.expr();self.take(')')
             result=dict(op='slice',operand=result,start=start,length=length,**origin)
+        if self.peek()=='OF':
+            self.take();qualifier=self.take()
+            if qualifier not in ('CACTUPAI','CACTUPAO'):raise ValueError('unsupported edit qualifier: '+qualifier)
+            result['qualifier']=qualifier
         return result
     def condition(self):
         left=self.conjunction()
@@ -74,7 +78,7 @@ class Parser:
         return dict(op='not',operand=result,**origin) if negate else result
     def block(self):
         result=[]
-        while self.peek() and self.peek() not in ('ELSE','END-IF','.'):
+        while self.peek() and self.peek() not in ('ELSE','END-IF','WHEN','END-EVALUATE','.'):
             origin=self.origin();verb=self.take()
             if verb in self.labels and self.peek()=='.':node=dict(op='label',name=verb)
             elif verb=='IF':
@@ -83,6 +87,18 @@ class Parser:
                 if self.peek()=='END-IF':self.take()
                 elif self.peek()!='.':raise ValueError('unterminated edit IF')
                 node=dict(op='if',test=test,yes=yes,no=no)
+            elif verb=='EVALUATE':
+                self.take('TRUE');branches=[]
+                while self.peek()=='WHEN':
+                    tests=[];default=False
+                    while self.peek()=='WHEN':
+                        self.take()
+                        if self.peek()=='OTHER':self.take();default=True
+                        else:tests.append(self.condition())
+                    actions=self.block()
+                    branches.append(dict(tests=tests,default=default,actions=actions))
+                    if default and self.peek()!='END-EVALUATE':raise ValueError('OTHER must be final EVALUATE branch')
+                self.take('END-EVALUATE');node=dict(op='evaluate',branches=branches)
             elif verb=='SET':
                 target=self.take();self.take('TO');self.take('TRUE');node=dict(op='set',name=target)
             elif verb=='MOVE':
@@ -119,7 +135,7 @@ class Parser:
                 node=dict(op='string',pieces=pieces,target=target)
             elif verb=='PERFORM':
                 label=self.take();self.take('THRU');end=self.take()
-                if label not in PARAGRAPHS or end!=label+'-EXIT':raise ValueError('unsupported edit perform: '+label)
+                if label not in self.performs or end!=label+'-EXIT':raise ValueError('unsupported edit perform: '+label)
                 node=dict(op='perform',paragraph=label)
             elif verb=='GO':
                 self.take('TO');label=self.take()
@@ -143,7 +159,10 @@ def declarations(raw,source):
     fields={};conditions={};stack=[];parent=None
     for i,m in enumerate(entries):
         level=int(m[1]);name=m[2];end=entries[i+1].start() if i+1<len(entries) else len(code)
-        body=code[m.end():end].split('.',1)[0];origin=dict(source=source,line=lines[m.start()+len(m[0])-len(name)])
+        tail=code[m.end():end]
+        terminators=[x for x in re.finditer(r"'(?:[^']|'')*'|[0-9]+[.][0-9]+|[.]",tail) if x[0]=='.']
+        body=tail[:terminators[0].start()] if terminators else tail
+        origin=dict(source=source,line=lines[m.start()+len(m[0])-len(name)])
         if level==88:
             values=re.search(r'\bVALUES?\s+(.+)',body,re.S)
             if values:conditions[name]=dict(parent=parent,text=values[1].strip(),**origin)
@@ -152,18 +171,22 @@ def declarations(raw,source):
         parent=name
         while stack and stack[-1][0]>=level:stack.pop()
         ancestors=[n for _,n in stack];stack.append((level,name))
-        pic=re.search(r'\bPIC\s+(S?9(?:\(\d+\)|9*)|X(?:\(\d+\)|X*))(?=\s|$)',body,re.I)
-        repeat=re.search(r'\((\d+)\)',pic[1]) if pic else None
-        width=(int(repeat[1]) if repeat else len(pic[1].lstrip('S'))) if pic else None
+        pic=re.search(r'\bPIC\s+(S?9(?:\(\d+\)|9*)(?:V9(?:\(\d+\)|9*))?|X(?:\(\d+\)|X*))(?=\s|$)',body,re.I)
+        def digits(part):
+            repeat=re.search(r'\((\d+)\)',part)
+            return int(repeat[1]) if repeat else len(part)
+        parts=pic[1].upper().lstrip('S').split('V') if pic else []
+        scale=digits(parts[1]) if len(parts)==2 else 0
+        width=sum(digits(part) for part in parts) if pic else None
         value=re.search(r"\bVALUE\s+('(?:[^']|'')*'|SPACES?|LOW-VALUES?|ZERO(?:S|ES)?|\d+)",body)
         fields[name]=dict(type=('number' if pic and '9' in pic[1] else 'text') if pic else 'group',
-            length=width,value=value[1] if value else None,
+            length=width,scale=scale,value=value[1] if value else None,
             ancestors=ancestors,body=body,**origin)
     return fields,conditions
 
 def build(raw,source,lookup=None):
     paragraphs={}
-    names=PARAGRAPHS+('1260-EDIT-US-PHONE-NUM','1265-EDIT-US-SSN','1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
+    names=PARAGRAPHS+('1250-EDIT-SIGNED-9V2','1260-EDIT-US-PHONE-NUM','1265-EDIT-US-SSN','1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
     for name in names:
         code,lines=paragraph(raw,source,name);paragraphs[name]=Parser(code,lines,source,name).parse()
     fields,conditions=declarations(raw,source)
@@ -196,7 +219,7 @@ def build(raw,source,lookup=None):
             storage['fields'].append(dict(path='WS-GENERIC-EDITS.'+name,offset=start,length=finish-start,
                 digits=0,scale=0,signed=False,usage='DISPLAY',sign='TRAILING',separate=False,line=fields[name]['line']))
     return dict(paragraphs=paragraphs,fields=bound_fields,conditions=bound_conditions,storage=storage,
-        limitations=['Generic, phone, SSN and source state/ZIP/FICO edits only; date, money and screen control-flow proof remain pending.'])
+        limitations=['Generic, monetary, phone, SSN and source state/ZIP/FICO edits; full screen control-flow proof remains pending.'])
 
 
 def bind_fields(paragraphs,fields,conditions):
@@ -249,7 +272,7 @@ def bind_fields(paragraphs,fields,conditions):
         else:
             if 'OCCURS' in f['body']:raise ValueError('unsupported edit occurrence')
             alias=re.search(r'\bREDEFINES\s+([A-Z][A-Z0-9-]*)',f['body'])
-            if alias:
+            if alias and not f.get('storage_bound'):
                 base=fields.get(alias[1])
                 if not base or initial(alias[1])['type']!='text' or initial(alias[1])['length']!=f['length'] or f['type']!='number' or re.search(r'\bCOMP|\bPIC\s+[^. ]*V',f['body']):
                     raise ValueError('unsupported edit alias')
@@ -259,7 +282,7 @@ def bind_fields(paragraphs,fields,conditions):
             elif token.startswith('LOW-VALUE'):value='\x00'*length
             elif token.startswith('SPACE'):value=' '*length
             else:value=token if f['type']=='number' else '0'*length
-        return dict(type='text' if f['type']=='group' else f['type'],length=length,initial=value,source=f['source'],line=f['line'])
+        return dict(type='text' if f['type']=='group' else f['type'],length=length,scale=f.get('scale',0),initial=value,explicit_initial=f.get('value') is not None,source=f['source'],line=f['line'])
     bound_fields={name:initial(name) for name in sorted(needed)}
     for item in list(bound_fields.values()):
         if 'alias_of' in item:

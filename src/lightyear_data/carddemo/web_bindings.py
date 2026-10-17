@@ -160,6 +160,9 @@ def build(root):
     from .date_edits import build as compile_dates
     p,raw=locate('COACTUPC','.cbl')
     account_update['date_edits']=compile_dates(raw,p,locate('CSUTLDWY','.cpy'),locate('CSUTLDPY','.cpy'),locate('CSUTLDTC','.cbl'))
+    from .update_edits import build as compile_update_edits
+    account_update['validation']=compile_update_edits(raw,p,account_update['generic_edits'],account_update['date_edits'],
+        commareas['COACTUPC'],locate('CSLKPCDY','.cpy'),locate('CSUTLDWY','.cpy'),locate('COCOM01Y','.cpy'),locate('CVCRD01Y','.cpy'),next(s for s in screens if s['program']=='COACTUPC')['model']['maps'][0],locate('CSSETATY','.cpy'))
     support_programs={}
     for name in scope.get('support_programs',[]):
         p,raw=locate(name,'.cbl');support_programs[name]=program(raw,p)

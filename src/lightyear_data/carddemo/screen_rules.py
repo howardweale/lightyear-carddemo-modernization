@@ -24,7 +24,7 @@ def comparisons(raw,source,paragraph):
     end=re.search(r'^\s*'+re.escape(paragraph)+r'-EXIT\.\s*$',text,re.M)
     if not start or not end:raise ValueError('comparison paragraph absent')
     code=text[start.end():end.start()];result=[]
-    for block in re.finditer(r'\bIF\s+(.*?)(?=\bCONTINUE\b|\bSET\b)',code,re.S):
+    for block in re.finditer(r'(?<![A-Z0-9-])IF\s+(.*?)(?=\bCONTINUE\b|\bSET\b)',code,re.S):
         for part in re.finditer(r'(?:^|\bAND\b)\s*(.*?)(?=\bAND\b|$)',block[1],re.S):
             sides=re.split(r'\bEQUAL\b|=',part[1])
             if len(sides)!=2:raise ValueError('comparison equality required')

@@ -57,6 +57,17 @@ public final class Commarea {
         return number.signum()<0?"-"+d:d;
     }
     public void set(String name,String value){write(field(name),value);}
+    public void initialize(String name){
+        JsonNode target=field(name);String prefix=target.path("path").asText()+".";
+        List<JsonNode> children=new ArrayList<>();for(JsonNode f:layout.path("fields"))if(f.path("path").asText().startsWith(prefix))children.add(f);
+        if(children.isEmpty()){write(target,target.path("digits").asInt()>0?"0":"");return;}
+        BitSet initialized=new BitSet(bytes.length);
+        for(JsonNode f:children){int off=f.path("offset").asInt(),len=f.path("length").asInt();
+            if(!f.path("path").asText().contains("FILLER")&&initialized.get(off,off+len).isEmpty())write(f,f.path("digits").asInt()>0?"0":"");
+            initialized.set(off,off+len);
+        }
+    }
+
     private void write(JsonNode f,String value){int off=f.path("offset").asInt(),len=f.path("length").asInt(),digits=f.path("digits").asInt();byte[] raw;
         if(digits==0){if(value.length()>len)throw new IllegalArgumentException("commarea-text-length");raw=encode(value+" ".repeat(len-value.length()));}
         else{
@@ -81,6 +92,10 @@ public final class Commarea {
         if(raw.length!=len)throw new IllegalArgumentException("commarea-encoding");System.arraycopy(raw,0,bytes,off,len);
     }
     public byte[] bytes(){return bytes.clone();}
+    void copyBytes(int offset,byte[] value){
+        if(offset<0||offset+value.length>bytes.length)throw new IllegalArgumentException("commarea-copy-bounds");
+        System.arraycopy(value,0,bytes,offset,value.length);
+    }
     /** XCTL copies the actual common prefix; a different program's private tail is initialized. */
     public Commarea transition(JsonNode target,int commonLength,boolean preserveTail){
         Commarea next=new Commarea(target,null);int length=preserveTail?Math.min(bytes.length,next.bytes.length):commonLength;

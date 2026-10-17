@@ -7875,6 +7875,248 @@
     "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
     "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
   },
+  "carddemo": {
+    "schema": "carddemo-slice-evidence/2",
+    "prepared_on": "2026-10-17",
+    "authorized_by": "Howard",
+    "performed_by": "Codex",
+    "supersedes": "docs/modernization/carddemo-slice-1-2026-10-15.json",
+    "scope": "Public-source generated data and typed PostgreSQL adapter; six-screen slice remains incomplete.",
+    "measurement": {
+      "pr": 367,
+      "head": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
+      "checkout_commit": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
+      "run_id": 39044984415,
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39044984415",
+      "conclusion": "success"
+    },
+    "durable_asset": {
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-17-carddemo/carddemo-data-evidence-2026-10-17.zip",
+      "asset_id": 650957992,
+      "sha256": "547dbaed40d237d2b820877873001cee293534a305301c2f91fd3de7df9c00ea",
+      "bytes": 109343,
+      "download_verified": true
+    },
+    "receipts": {
+      "volume-receipt.json": {
+        "archive_path": "12106268535/files/volume-receipt.json",
+        "sha256": "eecea8a1f320b89ae10001b25e1eddcd7ca1824853296c21eb2812b6fec51dae"
+      },
+      "typed-ims-replay.json": {
+        "archive_path": "12106268535/files/typed-ims-replay.json",
+        "sha256": "a8ea3faa1166fbbdb6514abcf016943cdfa82e728e0731d29dacd68a53039bf0"
+      },
+      "ims-replay/conformance.receipt.json": {
+        "archive_path": "12106268535/files/ims-replay/conformance.receipt.json",
+        "sha256": "c2d8f73066f5c27d4e1e85ad8886648b6b8e2f4194043a28d079467eb0ede338"
+      }
+    },
+    "generators": {
+      "src/lightyear_data/carddemo/access.py": "b9f52a6ad9c746f4282d808cba2339a8fffd9d52f605fb60b0c2edf16e670814",
+      "src/lightyear_data/carddemo/codec.py": "7444dc7c0493621d283c24c260710fe2e5c479219a7b7cc2537a41be1036a6e4",
+      "src/lightyear_data/carddemo/schema.py": "c862a1686ebf514d15a16be20eb3d4c1e045d1cdb35b2293331ff5aa0a86ce9c",
+      "src/lightyear_data/carddemo/volume.py": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e",
+      "src/lightyear_data/carddemo/ims_replay.py": "2d40f0acda6a93fdaea6dcf7a0a6660aa00c412f784e8375a37b74337e6a3425"
+    },
+    "plan_sha256": "6b7d51176589ff8fb3b2f2d4021f991eb7818e9b195facb3f1bb66728ed1f9e8",
+    "corpus_sha256": "a0f8ab38193fb26679e9bdf614f4b5bc31ca1fc2b6907ea6c2522a1e5f30bb04",
+    "volume": {
+      "records": 500000,
+      "files": [
+        {
+          "table": "acctdata",
+          "records": 100000,
+          "raw_round_trip": true,
+          "typed_round_trip": true,
+          "distinct_alternate_keys": {},
+          "non_display_primary_keys": 0,
+          "dataset_sha256": "c3377d05a95cba0af314c3ac73cabf86e703d90c5e9555dce878dfe63cfd50fc",
+          "browse": {
+            "compared": 52,
+            "matched": 52
+          }
+        },
+        {
+          "table": "custdata",
+          "records": 100000,
+          "raw_round_trip": true,
+          "typed_round_trip": true,
+          "distinct_alternate_keys": {},
+          "non_display_primary_keys": 0,
+          "dataset_sha256": "b7aaf6b49b7fefa8df368b97e26ec7c297864de5e7de895c884cdca0b4c730d7",
+          "browse": {
+            "compared": 52,
+            "matched": 52
+          }
+        },
+        {
+          "table": "carddata",
+          "records": 100000,
+          "raw_round_trip": true,
+          "typed_round_trip": true,
+          "distinct_alternate_keys": {
+            "ebcdic_key_aix_1": 20000
+          },
+          "non_display_primary_keys": 3,
+          "dataset_sha256": "dbcbecf1a0e2fd27459d7e58981e5f6e03e8ac229c916f5dea7356220021b609",
+          "browse": {
+            "compared": 106,
+            "matched": 106
+          }
+        },
+        {
+          "table": "cardxref",
+          "records": 100000,
+          "raw_round_trip": true,
+          "typed_round_trip": true,
+          "distinct_alternate_keys": {
+            "ebcdic_key_aix_1": 20000
+          },
+          "non_display_primary_keys": 3,
+          "dataset_sha256": "df554fcb89a9dee9f0f36eda9c443f6d8034fd4e5cd34629d23bb90e87a725c4",
+          "browse": {
+            "compared": 106,
+            "matched": 106
+          }
+        },
+        {
+          "table": "usrsec",
+          "records": 100000,
+          "raw_round_trip": true,
+          "typed_round_trip": true,
+          "distinct_alternate_keys": {},
+          "non_display_primary_keys": 3,
+          "dataset_sha256": "d4dabb248ae1afd637ba33003d940b2fbd447e1835c19c8a5fea1b27261df601",
+          "browse": {
+            "compared": 56,
+            "matched": 56
+          }
+        }
+      ],
+      "browse_compared": 372,
+      "browse_matched": 372,
+      "byte_key_edges": {
+        "compared": 58,
+        "matched": 58
+      }
+    },
+    "migrated_ims": {
+      "total": 40,
+      "adapter_cases": 27,
+      "matched": 27,
+      "unsupported": 13,
+      "segment_comparisons": 9,
+      "unexpected_differences": []
+    },
+    "unsupported_ims": [
+      {
+        "id": "04-gsam-sequential-read",
+        "operation": "GSAM_READ",
+        "reason": "No migrated implementation for GSAM_READ"
+      },
+      {
+        "id": "16-secondary-index-hit",
+        "operation": "INDEX_LOOKUP",
+        "reason": "No migrated implementation for INDEX_LOOKUP"
+      },
+      {
+        "id": "17-secondary-index-miss",
+        "operation": "INDEX_LOOKUP",
+        "reason": "No migrated implementation for INDEX_LOOKUP"
+      },
+      {
+        "id": "31-gsam-end-dataset",
+        "operation": "GSAM_READ",
+        "reason": "No migrated implementation for GSAM_READ"
+      },
+      {
+        "id": "32-pcb-binding-mismatch",
+        "operation": "PCB_ACCESS",
+        "reason": "No migrated implementation for PCB_ACCESS"
+      },
+      {
+        "id": "33-checkpoint-commit",
+        "operation": "CHKP",
+        "reason": "No migrated implementation for CHKP"
+      },
+      {
+        "id": "34-restart-resume",
+        "operation": "XRST",
+        "reason": "No migrated implementation for XRST"
+      },
+      {
+        "id": "35-rollback-discard",
+        "operation": "ROLB",
+        "reason": "No migrated implementation for ROLB"
+      },
+      {
+        "id": "36-dli-batch-route",
+        "operation": "ROUTE",
+        "reason": "No migrated implementation for ROUTE"
+      },
+      {
+        "id": "37-dedb-access-blocked",
+        "operation": "DEDB_ACCESS",
+        "reason": "No migrated implementation for DEDB_ACCESS"
+      },
+      {
+        "id": "38-msdb-access-blocked",
+        "operation": "MSDB_ACCESS",
+        "reason": "No migrated implementation for MSDB_ACCESS"
+      },
+      {
+        "id": "39-shared-queues-blocked",
+        "operation": "SHARED_QUEUES_ACCESS",
+        "reason": "No migrated implementation for SHARED_QUEUES_ACCESS"
+      },
+      {
+        "id": "40-dbrc-recovery-blocked",
+        "operation": "DBRC_RECOVERY",
+        "reason": "No migrated implementation for DBRC_RECOVERY"
+      }
+    ],
+    "status_corrections": [
+      {
+        "id": "07-gnp-without-parent",
+        "historical": "DJ",
+        "expected": "GP"
+      },
+      {
+        "id": "28-procopt-g-denies-update",
+        "historical": "DJ",
+        "expected": "AM"
+      }
+    ],
+    "screens": {
+      "required": 6,
+      "api_sessions_compared": 0,
+      "browser_sessions_compared": 0,
+      "handler_mutants_total": null,
+      "handler_mutants_caught": null,
+      "required_catch_rate": 0.9
+    },
+    "remaining_gaps": [
+      "13 of 40 IMS corpus cases have no migrated adapter implementation; the historical model is a separate baseline.",
+      "Public IMS unload framing and a native CICS/IMS baseline are not established.",
+      "Account-update and pending-authorization services, linked AUTHFRDS action, and complete source semantics remain unfinished.",
+      "Independent screen interpreter, API/Playwright sessions, every field/attribute/cursor/message and database after-state comparison remain unfinished.",
+      "Screen-handler mutation catch rate, Docker Compose acceptance and the final unsigned Factory request remain unfinished."
+    ],
+    "quirks": [
+      "Generic VSAM browse starts at the first key greater than or equal to the prefix and continues to EOF.",
+      "Non-display 00/FF/mixed primary keys are lossless in CARDDATA, CARDXREF and USRSEC.",
+      "Historical GNP-no-parent DJ and PROCOPT-G denial expectations are corrected to GP and AM; not counted as native IMS verification.",
+      "COACTUP account rewrite buffer omits ACCT-ADDR-ZIP present in CVACT01Y; screen proof must compare bytes rather than match field names.",
+      "Menu options 3 through 10 use the explicit not-in-this-slice endpoint; fifteen other BMS maps remain later slices.",
+      "Pending authorization PF5 requires COPAUS2C AUTHFRDS plus IMS detail effects within one interaction transaction."
+    ],
+    "signed": false,
+    "release_authorized": false,
+    "phase2_executed": false,
+    "verdict": "incomplete",
+    "content_sha256": "fd46fd9849425f85d72bca17d0b845416dae9618b64a0bd076fcc3029d3ae319",
+    "path": "docs/modernization/carddemo-slice-1-2026-10-17.json"
+  },
   "delivery": {
     "schema": "factory-delivery-snapshot/1",
     "checked_at": "2026-10-17T13:10:22+00:00",
@@ -10526,247 +10768,5 @@
   "retention_manifests": [
     "docs/factory/evidence-retention-2026-10-16-posttran.json",
     "docs/factory/evidence-retention-2026-10-16.json"
-  ],
-  "carddemo": {
-    "schema": "carddemo-slice-evidence/2",
-    "prepared_on": "2026-10-17",
-    "authorized_by": "Howard",
-    "performed_by": "Codex",
-    "supersedes": "docs/modernization/carddemo-slice-1-2026-10-15.json",
-    "scope": "Public-source generated data and typed PostgreSQL adapter; six-screen slice remains incomplete.",
-    "measurement": {
-      "pr": 367,
-      "head": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
-      "checkout_commit": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
-      "run_id": 39044984415,
-      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39044984415",
-      "conclusion": "success"
-    },
-    "durable_asset": {
-      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-17-carddemo/carddemo-data-evidence-2026-10-17.zip",
-      "asset_id": 650957992,
-      "sha256": "547dbaed40d237d2b820877873001cee293534a305301c2f91fd3de7df9c00ea",
-      "bytes": 109343,
-      "download_verified": true
-    },
-    "receipts": {
-      "volume-receipt.json": {
-        "archive_path": "12106268535/files/volume-receipt.json",
-        "sha256": "eecea8a1f320b89ae10001b25e1eddcd7ca1824853296c21eb2812b6fec51dae"
-      },
-      "typed-ims-replay.json": {
-        "archive_path": "12106268535/files/typed-ims-replay.json",
-        "sha256": "a8ea3faa1166fbbdb6514abcf016943cdfa82e728e0731d29dacd68a53039bf0"
-      },
-      "ims-replay/conformance.receipt.json": {
-        "archive_path": "12106268535/files/ims-replay/conformance.receipt.json",
-        "sha256": "c2d8f73066f5c27d4e1e85ad8886648b6b8e2f4194043a28d079467eb0ede338"
-      }
-    },
-    "generators": {
-      "src/lightyear_data/carddemo/access.py": "b9f52a6ad9c746f4282d808cba2339a8fffd9d52f605fb60b0c2edf16e670814",
-      "src/lightyear_data/carddemo/codec.py": "7444dc7c0493621d283c24c260710fe2e5c479219a7b7cc2537a41be1036a6e4",
-      "src/lightyear_data/carddemo/schema.py": "c862a1686ebf514d15a16be20eb3d4c1e045d1cdb35b2293331ff5aa0a86ce9c",
-      "src/lightyear_data/carddemo/volume.py": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e",
-      "src/lightyear_data/carddemo/ims_replay.py": "2d40f0acda6a93fdaea6dcf7a0a6660aa00c412f784e8375a37b74337e6a3425"
-    },
-    "plan_sha256": "6b7d51176589ff8fb3b2f2d4021f991eb7818e9b195facb3f1bb66728ed1f9e8",
-    "corpus_sha256": "a0f8ab38193fb26679e9bdf614f4b5bc31ca1fc2b6907ea6c2522a1e5f30bb04",
-    "volume": {
-      "records": 500000,
-      "files": [
-        {
-          "table": "acctdata",
-          "records": 100000,
-          "raw_round_trip": true,
-          "typed_round_trip": true,
-          "distinct_alternate_keys": {},
-          "non_display_primary_keys": 0,
-          "dataset_sha256": "c3377d05a95cba0af314c3ac73cabf86e703d90c5e9555dce878dfe63cfd50fc",
-          "browse": {
-            "compared": 52,
-            "matched": 52
-          }
-        },
-        {
-          "table": "custdata",
-          "records": 100000,
-          "raw_round_trip": true,
-          "typed_round_trip": true,
-          "distinct_alternate_keys": {},
-          "non_display_primary_keys": 0,
-          "dataset_sha256": "b7aaf6b49b7fefa8df368b97e26ec7c297864de5e7de895c884cdca0b4c730d7",
-          "browse": {
-            "compared": 52,
-            "matched": 52
-          }
-        },
-        {
-          "table": "carddata",
-          "records": 100000,
-          "raw_round_trip": true,
-          "typed_round_trip": true,
-          "distinct_alternate_keys": {
-            "ebcdic_key_aix_1": 20000
-          },
-          "non_display_primary_keys": 3,
-          "dataset_sha256": "dbcbecf1a0e2fd27459d7e58981e5f6e03e8ac229c916f5dea7356220021b609",
-          "browse": {
-            "compared": 106,
-            "matched": 106
-          }
-        },
-        {
-          "table": "cardxref",
-          "records": 100000,
-          "raw_round_trip": true,
-          "typed_round_trip": true,
-          "distinct_alternate_keys": {
-            "ebcdic_key_aix_1": 20000
-          },
-          "non_display_primary_keys": 3,
-          "dataset_sha256": "df554fcb89a9dee9f0f36eda9c443f6d8034fd4e5cd34629d23bb90e87a725c4",
-          "browse": {
-            "compared": 106,
-            "matched": 106
-          }
-        },
-        {
-          "table": "usrsec",
-          "records": 100000,
-          "raw_round_trip": true,
-          "typed_round_trip": true,
-          "distinct_alternate_keys": {},
-          "non_display_primary_keys": 3,
-          "dataset_sha256": "d4dabb248ae1afd637ba33003d940b2fbd447e1835c19c8a5fea1b27261df601",
-          "browse": {
-            "compared": 56,
-            "matched": 56
-          }
-        }
-      ],
-      "browse_compared": 372,
-      "browse_matched": 372,
-      "byte_key_edges": {
-        "compared": 58,
-        "matched": 58
-      }
-    },
-    "migrated_ims": {
-      "total": 40,
-      "adapter_cases": 27,
-      "matched": 27,
-      "unsupported": 13,
-      "segment_comparisons": 9,
-      "unexpected_differences": []
-    },
-    "unsupported_ims": [
-      {
-        "id": "04-gsam-sequential-read",
-        "operation": "GSAM_READ",
-        "reason": "No migrated implementation for GSAM_READ"
-      },
-      {
-        "id": "16-secondary-index-hit",
-        "operation": "INDEX_LOOKUP",
-        "reason": "No migrated implementation for INDEX_LOOKUP"
-      },
-      {
-        "id": "17-secondary-index-miss",
-        "operation": "INDEX_LOOKUP",
-        "reason": "No migrated implementation for INDEX_LOOKUP"
-      },
-      {
-        "id": "31-gsam-end-dataset",
-        "operation": "GSAM_READ",
-        "reason": "No migrated implementation for GSAM_READ"
-      },
-      {
-        "id": "32-pcb-binding-mismatch",
-        "operation": "PCB_ACCESS",
-        "reason": "No migrated implementation for PCB_ACCESS"
-      },
-      {
-        "id": "33-checkpoint-commit",
-        "operation": "CHKP",
-        "reason": "No migrated implementation for CHKP"
-      },
-      {
-        "id": "34-restart-resume",
-        "operation": "XRST",
-        "reason": "No migrated implementation for XRST"
-      },
-      {
-        "id": "35-rollback-discard",
-        "operation": "ROLB",
-        "reason": "No migrated implementation for ROLB"
-      },
-      {
-        "id": "36-dli-batch-route",
-        "operation": "ROUTE",
-        "reason": "No migrated implementation for ROUTE"
-      },
-      {
-        "id": "37-dedb-access-blocked",
-        "operation": "DEDB_ACCESS",
-        "reason": "No migrated implementation for DEDB_ACCESS"
-      },
-      {
-        "id": "38-msdb-access-blocked",
-        "operation": "MSDB_ACCESS",
-        "reason": "No migrated implementation for MSDB_ACCESS"
-      },
-      {
-        "id": "39-shared-queues-blocked",
-        "operation": "SHARED_QUEUES_ACCESS",
-        "reason": "No migrated implementation for SHARED_QUEUES_ACCESS"
-      },
-      {
-        "id": "40-dbrc-recovery-blocked",
-        "operation": "DBRC_RECOVERY",
-        "reason": "No migrated implementation for DBRC_RECOVERY"
-      }
-    ],
-    "status_corrections": [
-      {
-        "id": "07-gnp-without-parent",
-        "historical": "DJ",
-        "expected": "GP"
-      },
-      {
-        "id": "28-procopt-g-denies-update",
-        "historical": "DJ",
-        "expected": "AM"
-      }
-    ],
-    "screens": {
-      "required": 6,
-      "api_sessions_compared": 0,
-      "browser_sessions_compared": 0,
-      "handler_mutants_total": null,
-      "handler_mutants_caught": null,
-      "required_catch_rate": 0.9
-    },
-    "remaining_gaps": [
-      "13 of 40 IMS corpus cases have no migrated adapter implementation; the historical model is a separate baseline.",
-      "Public IMS unload framing and a native CICS/IMS baseline are not established.",
-      "Account-update and pending-authorization services, linked AUTHFRDS action, and complete source semantics remain unfinished.",
-      "Independent screen interpreter, API/Playwright sessions, every field/attribute/cursor/message and database after-state comparison remain unfinished.",
-      "Screen-handler mutation catch rate, Docker Compose acceptance and the final unsigned Factory request remain unfinished."
-    ],
-    "quirks": [
-      "Generic VSAM browse starts at the first key greater than or equal to the prefix and continues to EOF.",
-      "Non-display 00/FF/mixed primary keys are lossless in CARDDATA, CARDXREF and USRSEC.",
-      "Historical GNP-no-parent DJ and PROCOPT-G denial expectations are corrected to GP and AM; not counted as native IMS verification.",
-      "COACTUP account rewrite buffer omits ACCT-ADDR-ZIP present in CVACT01Y; screen proof must compare bytes rather than match field names.",
-      "Menu options 3 through 10 use the explicit not-in-this-slice endpoint; fifteen other BMS maps remain later slices.",
-      "Pending authorization PF5 requires COPAUS2C AUTHFRDS plus IMS detail effects within one interaction transaction."
-    ],
-    "signed": false,
-    "release_authorized": false,
-    "phase2_executed": false,
-    "verdict": "incomplete",
-    "content_sha256": "fd46fd9849425f85d72bca17d0b845416dae9618b64a0bd076fcc3029d3ae319",
-    "path": "docs/modernization/carddemo-slice-1-2026-10-17.json"
-  }
+  ]
 }

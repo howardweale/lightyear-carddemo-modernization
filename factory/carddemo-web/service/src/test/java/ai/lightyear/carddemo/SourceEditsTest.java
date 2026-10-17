@@ -38,7 +38,7 @@ class SourceEditsTest {
         var e=edits();operand(e,"First Name","Alice Smith",25);e.run("1225-EDIT-ALPHA-REQD");assertTrue(e.condition("FLG-ALPHA-ISVALID"));
         assertEquals(" ".repeat(256),e.get("WS-EDIT-ALPHANUM-ONLY"));
         var mixed=edits();operand(mixed,"First Name","A\u0000",25);mixed.run("1225-EDIT-ALPHA-REQD");assertTrue(mixed.condition("INPUT-ERROR"));
-        assertThrows(IllegalArgumentException.class,()->e.run("1250-EDIT-SIGNED-9V2"));
+        assertThrows(IllegalArgumentException.class,()->e.run("1299-UNTRANSLATED"));
     }
     @Test void lookupEditsPreservePinnedStateZipAndNumericAliasBoundaries()throws Exception{
         for(String state:new String[]{"CA","ca","ZZ"}){

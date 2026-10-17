@@ -11,6 +11,7 @@ public final class SourceEdits {
     private final JsonNode model;
     private final java.time.Clock clock;
     private final Commarea storage;
+    private ScreenFrame screen;
     private final Set<String> stored=new HashSet<>();
     private static final class Transfer extends RuntimeException{
         final String label;Transfer(String label){super(null,null,false,false);this.label=label;}
@@ -25,8 +26,58 @@ public final class SourceEdits {
         storage=model.path("storage").isObject()?new Commarea(model.path("storage"),null):null;
         if(storage!=null)for(JsonNode field:model.path("storage").path("fields")){
             String path=field.path("path").asText();stored.add(path.substring(path.lastIndexOf('.')+1));}
-        for(var entry:model.path("fields").properties())if(!entry.getValue().has("alias_of"))put(entry.getKey(),entry.getValue().path("initial").asText());
+        for(var entry:model.path("fields").properties())if(!entry.getValue().has("alias_of") && (!stored.contains(entry.getKey()) || entry.getValue().path("explicit_initial").asBoolean()))put(entry.getKey(),entry.getValue().path("initial").asText());
         setCondition("INPUT-OK");setCondition("WS-RETURN-MSG-OFF");
+    }
+    public void attachScreen(ScreenFrame frame){
+        screen=frame;
+        for(var entry:model.path("fields").properties())if(entry.getValue().path("screen_part").asText().equals("O"))
+            values.put(entry.getKey(),frame.values.get(entry.getValue().path("screen_field").asText()));
+    }
+    public void receiveScreen(Map<String,String> input){
+        if(screen==null)throw new IllegalStateException("screen-not-attached");
+        Map<String,String> received=screen.receive(input);
+        for(var entry:model.path("fields").properties()){
+            JsonNode f=entry.getValue();if(!f.path("screen_part").asText().equals("I"))continue;
+            String name=f.path("screen_field").asText();Map<String,Object> a=screen.attributes.get(name);
+            // Protected FSET values originate in the server-rendered screen only.
+            String value=received.get(name);
+            if(value==null)value=Boolean.TRUE.equals(a.get("modified"))?screen.values.get(name):"\u0000".repeat(f.path("length").asInt());
+            put(entry.getKey(),value);
+        }
+    }
+    private void screenWrite(JsonNode f,String value){
+        if(screen==null||!f.has("screen_field"))return;
+        String name=f.path("screen_field").asText(),part=f.path("screen_part").asText();
+        if(part.equals("I"))return;
+        if(part.equals("O")){
+            // BMS LOW-VALUES leaves the physical field unchanged.
+            if(value.chars().allMatch(c->c==0))return;
+            screen.set(name,value);if(name.equals("ERRMSG"))screen.message=value.stripTrailing();return;
+        }
+        if(part.equals("L")){if(value.equals("-1"))screen.cursor=name;return;}
+        Map<String,Object> attributes=screen.attributes.get(name);String symbol=value.stripTrailing();
+        if(part.equals("C")){
+            attributes.put("color",switch(symbol){case "DFHRED"->"RED";case "DFHDFCOL"->screen.field(name).path("color").asText();default->throw new IllegalArgumentException("bms-color:"+symbol);});return;
+        }
+        if(!part.equals("A"))throw new IllegalArgumentException("bms-attribute-kind");
+        // CICS DFHBMSCA: PRF includes MDT; FSE sets MDT without protection.
+        switch(symbol){
+            case "DFHBMPRF":attributes.put("protected",true);attributes.put("modified",true);attributes.put("hidden",false);attributes.put("intensity","NORMAL");break;
+            case "DFHBMFSE":attributes.put("protected",false);attributes.put("modified",true);attributes.put("hidden",false);attributes.put("intensity","NORMAL");break;
+            case "DFHBMASB":attributes.put("protected",true);attributes.put("autoskip",true);attributes.put("modified",false);attributes.put("hidden",false);attributes.put("intensity","BRIGHT");break;
+            case "DFHBMDAR":attributes.put("protected",false);attributes.put("modified",false);attributes.put("hidden",true);attributes.put("intensity","DARK");break;
+            default:throw new IllegalArgumentException("bms-basic-attribute:"+symbol);
+        }
+    }
+    public void loadArea(Commarea area){
+        if(!model.has("area_offset")||area.bytes().length!=model.path("area_length").asInt())throw new IllegalArgumentException("edit-area-layout");
+        storage.copyBytes(model.path("area_offset").asInt(),area.bytes());
+    }
+    public void saveArea(Commarea area){
+        int start=model.path("area_offset").asInt(),length=model.path("area_length").asInt();
+        if(area.bytes().length!=length)throw new IllegalArgumentException("edit-area-layout");
+        area.copyBytes(0,Arrays.copyOfRange(storage.bytes(),start,start+length));
     }
     private JsonNode field(String name){JsonNode f=model.path("fields").path(name);if(f.isMissingNode())throw new IllegalArgumentException("edit-field:"+name);return f;}
     public String get(String name){JsonNode f=field(name);
@@ -41,12 +92,12 @@ public final class SourceEdits {
             storage.set(name,value);return;
         }
         if(f.path("type").asText().equals("number")){
-            BigDecimal number=new BigDecimal(value);if(number.scale()>0&&number.stripTrailingZeros().scale()>0)throw new IllegalArgumentException("edit-integral-field");
-            String digits=number.toBigIntegerExact().toString();
+            BigDecimal number=new BigDecimal(value).setScale(f.path("scale").asInt(),java.math.RoundingMode.UNNECESSARY);
+            String digits=number.toPlainString();
             if(f.has("alias_of")){int n=f.path("length").asInt();if(number.signum()<0||digits.length()>n)throw new IllegalArgumentException("edit-alias-range");
                 put(f.path("alias_of").asText(),"0".repeat(n-digits.length())+digits);return;}
-            values.put(name,digits);
-        }else {int n=f.path("length").asInt();Commarea.encode(value);values.put(name,(value+" ".repeat(n)).substring(0,n));}
+            values.put(name,digits);screenWrite(f,digits);
+        }else {int n=f.path("length").asInt();Commarea.encode(value);String padded=(value+" ".repeat(n)).substring(0,n);values.put(name,padded);screenWrite(f,padded);}
     }
     public List<Location> trace(){return List.copyOf(trace);}
     private void visit(JsonNode node){if(++steps>10000)throw new IllegalStateException("edit-step-limit");trace.add(new Location(node.path("source").asText(),node.path("line").asInt()));}
@@ -70,7 +121,7 @@ public final class SourceEdits {
             &&compare(actual,conditionValue(range.path("upper").asText(),parent),numeric)<=0)return true;
         return false;
     }
-    private void setCondition(String name){JsonNode c=model.path("conditions").path(name);
+    public void setCondition(String name){JsonNode c=model.path("conditions").path(name);
         if(c.isMissingNode())throw new IllegalArgumentException("edit-condition:"+name);
         String parent=c.path("parent").asText();
         if(c.path("values").isEmpty())throw new IllegalArgumentException("edit-set-range-condition");
@@ -89,6 +140,8 @@ public final class SourceEdits {
             case "field":{String n=e.path("name").asText();return new Value(get(n),field(n).path("type").asText().equals("number"),false);}
             case "slice":{String text=evaluate(e.path("operand")).text();int a=integer(e.path("start"))-1,n=integer(e.path("length"));
                 if(a<0||n<1||a+n>text.length())throw new IllegalArgumentException("edit-reference-modification");return new Value(text.substring(a,a+n),false,false);}
+            case "UPPER-CASE":return new Value(evaluate(e.path("operand")).text().toUpperCase(Locale.ROOT),false,false);
+            case "LOWER-CASE":return new Value(evaluate(e.path("operand")).text().toLowerCase(Locale.ROOT),false,false);
             case "TRIM":return new Value(trimSpaces(evaluate(e.path("operand")).text()),false,false);
             case "LENGTH":return new Value(Integer.toString(evaluate(e.path("operand")).text().length()),true,false);
             case "CURRENT-DATE":return new Value(java.time.ZonedDateTime.now(clock).format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSxx",Locale.ROOT)),false,false);
@@ -96,11 +149,13 @@ public final class SourceEdits {
                 String value=evaluate(e.path("operand")).text();
                 var date=java.time.LocalDate.parse(value,java.time.format.DateTimeFormatter.BASIC_ISO_DATE);
                 return new Value(Long.toString(java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.of(1600,12,31),date)),true,false);}
+            case "TEST-NUMVAL-C":return new Value(CobolNumber.valid(evaluate(e.path("operand")).text(),true)?"0":"1",true,false);
             case "TEST-NUMVAL":{
                 // This date COPY uses only equality to zero, never the failure position.
                 String text=trimSpaces(evaluate(e.path("operand")).text());
                 return new Value(text.matches("[+-]?[0-9]+(?:[.][0-9]*)?")?"0":"1",true,false);}
 
+            case "NUMVAL-C":return new Value(CobolNumber.parse(evaluate(e.path("operand")).text(),true).toPlainString(),true,false);
             case "NUMVAL":{String text=trimSpaces(evaluate(e.path("operand")).text());
                 if(!text.matches("[+-]?[0-9]+(?:[.][0-9]*)?"))throw new IllegalArgumentException("edit-numval-outside-proved-subset");
                 return new Value(new BigDecimal(text).toPlainString(),true,false);}
@@ -127,6 +182,7 @@ public final class SourceEdits {
         if(target.path("op").asText().equals("field")){
             String name=target.path("name").asText();int n=field(name).path("length").asInt();String text=value.figurative()?figurative(value.text(),n):value.text();
             if(string){String previous=get(name);int length=Math.min(text.length(),previous.length());text=text.substring(0,length)+previous.substring(length);}
+            if(field(name).path("type").asText().equals("edited") && value.numeric())text=ScreenProjection.edited(text,field(name).path("picture").asText());
             put(name,text);return;
         }
         if(target.path("op").asText().equals("slice")&&target.path("operand").path("op").asText().equals("field")){
@@ -139,6 +195,12 @@ public final class SourceEdits {
     private boolean execute(JsonNode statements){return execute(statements,0);}
     private boolean execute(JsonNode statements,int start){for(int i=start;i<statements.size();i++){JsonNode statement=statements.get(i);visit(statement);switch(statement.path("op").asText()){
         case "if":if(execute(statement.path(test(statement.path("test"))?"yes":"no")))return true;break;
+        case "evaluate":{
+            for(JsonNode branch:statement.path("branches")){
+                boolean match=branch.path("default").asBoolean();
+                for(JsonNode condition:branch.path("tests"))if(test(condition)){match=true;break;}
+                if(match){if(execute(branch.path("actions")))return true;break;}
+            }break;}
         case "set":setCondition(statement.path("name").asText());break;
         case "move":{Value value=evaluate(statement.path("value"));for(JsonNode target:statement.path("targets"))assign(target,value,false);break;}
         case "string":{StringBuilder text=new StringBuilder();for(JsonNode piece:statement.path("pieces"))text.append(evaluate(piece).text());assign(statement.path("target"),new Value(text.toString(),false,false),true);break;}
@@ -156,7 +218,7 @@ public final class SourceEdits {
             for(JsonNode target:statement.path("targets")){
                 if(!target.path("op").asText().equals("field"))throw new IllegalArgumentException("edit-initialize-target");
                 String name=target.path("name").asText();JsonNode f=field(name);
-                put(name,f.path("type").asText().equals("number")?"0":"");
+                if(stored.contains(name))storage.initialize(name);else put(name,f.path("type").asText().equals("number")?"0":"");
             }break;}
         case "date-service":dateService();break;
         case "perform":run(statement.path("paragraph").asText());break;

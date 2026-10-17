@@ -57,6 +57,13 @@ class WebBindingsTests(unittest.TestCase):
         group=next(p for p in changed if leaf(p['left'])=='ACCT-GROUP-ID')
         self.assertEqual('UPPER-CASE',group['left']['operation'])
 
+    def test_end_if_is_not_the_start_of_another_comparison(self):
+        from lightyear_data.carddemo.screen_rules import comparisons
+        raw=b'       CHECK-PAIR.\n           IF A = B CONTINUE ELSE SET CHANGED TO TRUE END-IF\n           IF C = D CONTINUE ELSE SET CHANGED TO TRUE END-IF\n           .\n       CHECK-PAIR-EXIT.\n           EXIT.\n'
+        rows=comparisons(raw,'pair.cbl','CHECK-PAIR')
+        self.assertEqual(['A','C'],[r['left']['name'] for r in rows])
+        self.assertEqual(['B','D'],[r['right']['name'] for r in rows])
+
     def test_program_commareas_follow_transmitted_and_private_layouts(self):
         result=build(ROOT);layouts=result['program_commareas']
         self.assertEqual(2000,layouts['COACTVWC']['record_length'])
@@ -155,7 +162,7 @@ class WebBindingsTests(unittest.TestCase):
         raw=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
         path='app/cpy/CSLKPCDY.cpy';lookup=(ROOT/'upstream'/path).read_bytes()
         model=edits(raw,'app/cbl/COACTUPC.cbl',(path,lookup))
-        self.assertEqual(12,len(model['paragraphs']))
+        self.assertEqual(13,len(model['paragraphs']))
         self.assertEqual([dict(lower='300',upper='850')],model['conditions']['FICO-RANGE-IS-VALID']['ranges'])
         self.assertEqual('ACUP-NEW-CUST-FICO-SCORE-X',model['fields']['ACUP-NEW-CUST-FICO-SCORE']['alias_of'])
         self.assertIn("'CA94'",model['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
@@ -195,3 +202,12 @@ class WebBindingsTests(unittest.TestCase):
         self.assertEqual(8,fields['WS-EDIT-DATE-CCYYMMDD']['length'])
         self.assertEqual(2508,model['service']['feedback']['FC-BAD-DATE-VALUE']['message'])
         self.assertEqual('app/cbl/CSUTLDTC.cbl',model['service']['feedback']['FC-BAD-DATE-VALUE']['source'])
+
+    def test_validation_sequence_retains_no_change_confirmation_and_literal_periods(self):
+        result=build(ROOT)['account_update']['validation']
+        self.assertIn('1200-EDIT-MAP-INPUTS',result['paragraphs'])
+        self.assertIn('1250-EDIT-SIGNED-9V2',result['paragraphs'])
+        self.assertEqual(["'No change detected with respect to values fetched.'"],result['conditions']['NO-CHANGES-DETECTED']['values'])
+        self.assertGreater(result['area_offset'],0)
+        self.assertEqual(2000,result['area_length'])
+        self.assertTrue(any(f['path'].endswith('.ACUP-OLD-ACCT-DATA') for f in result['storage']['fields']))

@@ -19,6 +19,18 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
+      - name: Render status metadata for review
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -B tools/build_factory_current_status.py
+          mkdir -p work/carddemo-status-render
+          cp docs/factory/current-status.json docs/factory/current-status.md work/carddemo-status-render/
+      - uses: actions/upload-artifact@v7
+        with:
+          name: carddemo-status-render
+          path: work/carddemo-status-render
+          if-no-files-found: error
       - name: Derive six-screen bindings and linked data dependencies
         env:
           PYTHONPATH: src:tests

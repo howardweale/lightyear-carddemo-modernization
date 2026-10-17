@@ -9,6 +9,7 @@ import tools.jackson.databind.JsonNode;
  */
 public final class SourceEdits {
     private final JsonNode model;
+    private final java.time.Clock clock;
     private final Commarea storage;
     private final Set<String> stored=new HashSet<>();
     private static final class Transfer extends RuntimeException{
@@ -18,8 +19,9 @@ public final class SourceEdits {
     private final List<Location> trace=new ArrayList<>();private int steps;
     public record Location(String source,int line){}
     private record Value(String text,boolean numeric,boolean figurative){}
-    public SourceEdits(JsonNode model){
-        this.model=model;
+    public SourceEdits(JsonNode model){this(model,java.time.Clock.systemUTC());}
+    public SourceEdits(JsonNode model,java.time.Clock clock){
+        this.model=model;this.clock=clock;
         storage=model.path("storage").isObject()?new Commarea(model.path("storage"),null):null;
         if(storage!=null)for(JsonNode field:model.path("storage").path("fields")){
             String path=field.path("path").asText();stored.add(path.substring(path.lastIndexOf('.')+1));}
@@ -89,10 +91,18 @@ public final class SourceEdits {
                 if(a<0||n<1||a+n>text.length())throw new IllegalArgumentException("edit-reference-modification");return new Value(text.substring(a,a+n),false,false);}
             case "TRIM":return new Value(trimSpaces(evaluate(e.path("operand")).text()),false,false);
             case "LENGTH":return new Value(Integer.toString(evaluate(e.path("operand")).text().length()),true,false);
+            case "CURRENT-DATE":return new Value(java.time.ZonedDateTime.now(clock).format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSxx",Locale.ROOT)),false,false);
+            case "INTEGER-OF-DATE":{
+                String value=evaluate(e.path("operand")).text();
+                var date=java.time.LocalDate.parse(value,java.time.format.DateTimeFormatter.BASIC_ISO_DATE);
+                return new Value(Long.toString(java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.of(1600,12,31),date)),true,false);}
+            case "TEST-NUMVAL":{
+                // This date COPY uses only equality to zero, never the failure position.
+                String text=trimSpaces(evaluate(e.path("operand")).text());
+                return new Value(text.matches("[+-]?[0-9]+(?:[.][0-9]*)?")?"0":"1",true,false);}
+
             case "NUMVAL":{String text=trimSpaces(evaluate(e.path("operand")).text());
-                // This bounded intrinsic is emitted only after IS NUMERIC in the
-                // selected paragraphs. Broader NUMVAL/NUMVAL-C need their own proof.
-                if(!text.matches("[0-9]+"))throw new IllegalArgumentException("edit-numval-outside-proved-subset");
+                if(!text.matches("[+-]?[0-9]+(?:[.][0-9]*)?"))throw new IllegalArgumentException("edit-numval-outside-proved-subset");
                 return new Value(new BigDecimal(text).toPlainString(),true,false);}
             default:throw new IllegalArgumentException("edit-expression:"+op);
         }
@@ -136,6 +146,19 @@ public final class SourceEdits {
             if(before.length()!=after.length())throw new IllegalArgumentException("edit-conversion-length");StringBuilder converted=new StringBuilder();
             for(char c:text.toCharArray()){int index=before.indexOf(c);converted.append(index<0?c:after.charAt(index));}
             assign(target,new Value(converted.toString(),false,false),false);break;}
+
+        case "compute":assign(statement.path("target"),evaluate(statement.path("value")),false);break;
+        case "divide":{
+            BigDecimal[] parts=new BigDecimal(evaluate(statement.path("value")).text()).divideAndRemainder(new BigDecimal(evaluate(statement.path("divisor")).text()));
+            assign(statement.path("target"),new Value(parts[0].toPlainString(),true,false),false);
+            assign(statement.path("remainder"),new Value(parts[1].toPlainString(),true,false),false);break;}
+        case "initialize":{
+            for(JsonNode target:statement.path("targets")){
+                if(!target.path("op").asText().equals("field"))throw new IllegalArgumentException("edit-initialize-target");
+                String name=target.path("name").asText();JsonNode f=field(name);
+                put(name,f.path("type").asText().equals("number")?"0":"");
+            }break;}
+        case "date-service":dateService();break;
         case "perform":run(statement.path("paragraph").asText());break;
         case "jump":throw new Transfer(statement.path("label").asText());
         case "label":break;
@@ -143,6 +166,16 @@ public final class SourceEdits {
         case "continue":break;
         default:throw new IllegalArgumentException("edit-statement");
     }}return false;}
+    private void dateService(){
+        if(!get("WS-DATE-FORMAT").equals("YYYYMMDD"))throw new IllegalArgumentException("date-service-format");
+        String date=get("WS-EDIT-DATE-CCYYMMDD"),code="FC-INVALID-DATE";
+        try{java.time.LocalDate.parse(date,java.time.format.DateTimeFormatter.BASIC_ISO_DATE);}
+        catch(java.time.DateTimeException invalid){code="FC-BAD-DATE-VALUE";}
+        JsonNode feedback=model.path("service").path("feedback").path(code);
+        if(feedback.isMissingNode())throw new IllegalArgumentException("date-service-feedback-unbound");
+        put("WS-SEVERITY-N",Integer.toString(feedback.path("severity").asInt()));
+        put("WS-MSG-NO-N",Integer.toString(feedback.path("message").asInt()));
+    }
     public void run(String paragraph){JsonNode statements=model.path("paragraphs").path(paragraph);
         if(statements.isMissingNode())throw new IllegalArgumentException("untranslated-edit-paragraph:"+paragraph);
         Map<String,Integer> labels=new HashMap<>();for(int i=0;i<statements.size();i++){

@@ -157,6 +157,9 @@ def build(root):
     account_update["generic_edits"]=compile_edits(raw,p,(lookup_path,lookup_raw))
     from .source_closure import build as compile_closure
     source_closure=compile_closure(root,proof,scope)
+    from .date_edits import build as compile_dates
+    p,raw=locate('COACTUPC','.cbl')
+    account_update['date_edits']=compile_dates(raw,p,locate('CSUTLDWY','.cpy'),locate('CSUTLDPY','.cpy'),locate('CSUTLDTC','.cbl'))
     support_programs={}
     for name in scope.get('support_programs',[]):
         p,raw=locate(name,'.cbl');support_programs[name]=program(raw,p)

@@ -184,3 +184,14 @@ class WebBindingsTests(unittest.TestCase):
         self.assertEqual(flags['offset'],fields['WS-EDIT-US-PHONEA-FLG']['offset'])
         labels={x['name'] for x in model['paragraphs']['1260-EDIT-US-PHONE-NUM'] if x['op']=='label'}
         self.assertEqual({'EDIT-AREA-CODE','EDIT-US-PHONE-PREFIX','EDIT-US-PHONE-LINENUM','EDIT-US-PHONE-EXIT'},labels)
+
+
+    def test_date_copy_retains_fallthrough_labels_shared_storage_and_feedback_origins(self):
+        model=build(ROOT)['account_update']['date_edits']
+        labels={s['name'] for s in model['paragraphs']['EDIT-DATE-CCYYMMDD'] if s['op']=='label'}
+        self.assertTrue({'EDIT-YEAR-CCYY-EXIT','EDIT-MONTH','EDIT-DAY','EDIT-DATE-LE'} <= labels)
+        fields={f['path'].split('.')[-1]:f for f in model['storage']['fields']}
+        self.assertEqual(fields['WS-EDIT-DATE-CCYYMMDD']['offset'],fields['WS-EDIT-DATE-CCYYMMDD-N']['offset'])
+        self.assertEqual(8,fields['WS-EDIT-DATE-CCYYMMDD']['length'])
+        self.assertEqual(2508,model['service']['feedback']['FC-BAD-DATE-VALUE']['message'])
+        self.assertEqual('app/cbl/CSUTLDTC.cbl',model['service']['feedback']['FC-BAD-DATE-VALUE']['source'])

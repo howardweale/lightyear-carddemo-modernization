@@ -6,6 +6,6 @@ The retained campaign has no caught mutant for TRAN-MERCHANT-NAME, TRAN-MERCHANT
 
 The campaign and aggregate now emit each constant's exact source bindings, observed comparison status, complete comparison count and canonical mutant-record SHA-256. Incomplete comparisons remain listed as unqualified evidence. Threshold/3 refuses a constant when every qualified mutant survived or was equivalent.
 
-The new dated releasability report preserves the October 15 campaign and names its missing caught-mutant evidence. It does not claim a successful request-06 rehearsal. That rehearsal and its one-provisional-reason acceptance target remain unverified pending permission for disposable CI-only signing fixtures and fresh exact-head CI evidence.
+The new dated releasability report preserves the October 15 campaign and names its missing caught-mutant evidence. It does not claim a successful request-06 rehearsal. Howard authorized disposable CI-only test signatures. The aggregate now runs the request-06 rehearsal against its measured receipts and retains only an unsigned result summary. Its one-provisional-reason acceptance target remains unverified until fresh exact-head CI completes.
 
 No real request has been signed, imported or activated. No Phase 2 execution is authorized.

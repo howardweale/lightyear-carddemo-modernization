@@ -162,6 +162,7 @@ def check(campaign,job,shard=0,shards=1):
 
 def finalize(output,job,head,results,fresh,current,diversity,census,shard_records):
     old=population(job);counts=Counter(r['status'] for r in results)
+    write_json(output/'fresh-mutants.json',list(fresh.values()))
     differences=[dict(id=r['id'],historical=r.get('status'),fresh=fresh[r['id']]['status'])
         for r in json.loads((ROOT/f'docs/factory/systematic-{job.lower()}-review311.json').read_text())['mutants']
         if r['id'] in fresh and r['status']!=fresh[r['id']]['status']]

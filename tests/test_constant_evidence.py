@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from lightyear_mainframe.constant_evidence import build
 from lightyear_mainframe.equivalence_evidence import seal
-from lightyear_mainframe.systematic_mutation import generate, apply
+from lightyear_mainframe.systematic_mutation import generate, apply, generation_inventory
 from lightyear_factory.threshold3 import ACCEPTANCE
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -18,7 +18,9 @@ class ConstantEvidenceTests(unittest.TestCase):
         for row in targeted:
             self.assertIn("MOVE 'X' TO "+row['field'],apply(text,row))
         old=json.loads((ROOT/'docs/factory/systematic-intcalc-review311.json').read_bytes())['mutants']
-        self.assertTrue({r['id'] for r in old}<={r['id'] for r in inventory})
+        avoided={r['mutant']['id'] for r in generation_inventory(text,'CBACT04C')['avoided']}
+        self.assertEqual({r['id'] for r in old}-avoided,
+                         {r['id'] for r in inventory}-{r['id'] for r in targeted})
 
     def test_record_hash_and_comparison_count_are_measured(self):
         text=(ROOT/'spec/mainframe/public-source/CBACT04C.cbl').read_text()

@@ -81,10 +81,22 @@ def historical_population(root, job):
     return old, arguments, individual
 
 
+def added_sites(fresh, inventory):
+    """Retained observations cover their exact sites only; additions have no credit."""
+    ids = [row['id'] for row in fresh]
+    if len(ids) != len(set(ids)) or not set(ids) <= inventory.keys():
+        raise ValueError('baseline-inventory-mismatch')
+    for row in fresh:
+        if any(row[key] != inventory[row['id']][key] for key in ('line', 'operator')):
+            raise ValueError('baseline-site-binding-mismatch:' + row['id'])
+    return sorted(inventory.keys() - set(ids))
+
+
 def triage(root, job, head):
     program = PROGRAMS[job]; text, ir = load_ir(root, program)
     inventory = {r['id']: r for r in generate(text, program)}
     held_out = job == 'TRANREPT'
+    unmeasured = []
     if held_out:
         old, argued, individuals = [], {}, set()
         selected = set(inventory)
@@ -98,10 +110,9 @@ def triage(root, job, head):
         for current in fresh:
             if current['status'].startswith('killed-') and not outcome(current.get('baseline',{}),current.get('actual',{})).startswith('killed-'):
                 raise ValueError('baseline-kill-missing-two-executed-lanes:'+current['id'])
-        if len(fresh)!=len(inventory) or set(r['id'] for r in fresh) != set(inventory):
-            raise ValueError('baseline-inventory-mismatch')
+        unmeasured = added_sites(fresh, inventory)
         # The sealed per-mutant rows take precedence over stale aggregate ID lists.
-        selected = set(argued) | {r['id'] for r in fresh if r['status'] in ('survived', 'evidence-gap')}
+        selected = set(unmeasured) | set(argued) | {r['id'] for r in fresh if r['status'] in ('survived', 'evidence-gap')}
         from .equivalence_evidence import appl_result_census, class_covered
         census = appl_result_census(text, program)
         basis = {}
@@ -142,7 +153,7 @@ def triage(root, job, head):
             target=original_statement.get('target') if original_statement['kind']=='assignment' else None
             names=sorted(set(candidate['fields']) & fields.keys())
         sliced = slice_to_outputs(ir, {target} if target else set(names), outputs)
-        current = basis.get(mid, 'survivor')
+        current = 'new-unmeasured' if mid in unmeasured else basis.get(mid, 'survivor')
         route = 'S1' if current == 'compiler' else 'S2' if current == 'class' else 'S4'
         if route=='S4':
             try:
@@ -164,6 +175,7 @@ def triage(root, job, head):
     return sealed(dict(schema='equivalence-triage/1', head=head, program=job, held_out=held_out,
                        input_sha256={p: digest((root / p).read_bytes()) for p in files}, sources=ir['sources'],
                        ir_sha256=digest(ir), ir_issues=ir['issues'], inventory_count=len(inventory),
+                       new_unmeasured_sites=unmeasured,
                        baseline_counts=dict(Counter(r['current_basis'] for r in rows)),
                        route_candidates={route: dict(individual=sum(r['route'] == route and r['individual_review'] for r in rows),
                                                       survivors=sum(r['route'] == route and not r['argued'] for r in rows),

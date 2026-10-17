@@ -67,6 +67,20 @@ def build(root):
         text=(root/f'spec/mainframe/public-source/{program}.cbl').read_text(encoding='utf-8')
         if sha256(text.encode()).hexdigest()!=summary['source_sha256']:raise ValueError('program-source-binding')
         generation=generation_inventory(text,program)
+        # Reproduce the dated report from its original population. Later sites
+        # belong to later campaigns and must not rewrite this historical record.
+        historical_ids={row['id'] for row in rows}
+        current={row['id']:row for row in generation['candidates']}
+        current.update({row['mutant']['id']:row['mutant'] for row in generation['avoided']})
+        if not historical_ids <= current.keys():raise ValueError('historical-inventory-missing')
+        for row in rows:
+            if any(row[key]!=current[row['id']][key] for key in
+                   ('operator','line','end_line','original','replacement','source_sha256')):
+                raise ValueError('historical-site-binding-changed:'+row['id'])
+        generation=dict(generation,
+            candidates=[row for row in generation['candidates'] if row['id'] in historical_ids],
+            avoided=[row for row in generation['avoided'] if row['mutant']['id'] in historical_ids])
+        generation['avoided_count']=len(generation['avoided'])
         post={r['id']:r for r in additional if r['id'].startswith(program+'-')}
         population=[]
         for row in rows:

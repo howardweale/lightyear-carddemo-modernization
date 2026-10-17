@@ -57,6 +57,13 @@ public final class Commarea {
         return number.signum()<0?"-"+d:d;
     }
     public void set(String name,String value){write(field(name),value);}
+    /** Internal COBOL MOVE, distinct from strict external setter validation. */
+    public void move(String name,String value){
+        JsonNode f=field(name);int n=f.path("length").asInt();
+        if(f.path("digits").asInt()==0){write(f,ScreenFrame.pad(value,n));return;}
+        if(unsignedDisplayInteger(name)&&!value.matches("[0-9]+")){moveDisplayBytes(name,ScreenFrame.pad(value,n));return;}
+        write(f,value);
+    }
     boolean unsignedDisplayInteger(String name){JsonNode f=field(name);return f.path("usage").asText().equals("DISPLAY")&&f.path("digits").asInt()>0&&!f.path("signed").asBoolean()&&f.path("scale").asInt()==0;}
     String displayBytes(String name){JsonNode f=field(name);if(!unsignedDisplayInteger(name))throw new IllegalArgumentException("display-byte-view");return new String(Arrays.copyOfRange(bytes,f.path("offset").asInt(),f.path("offset").asInt()+f.path("length").asInt()),EBCDIC);}
     void moveDisplayBytes(String name,String value){JsonNode f=field(name);if(!unsignedDisplayInteger(name)||value.length()!=f.path("length").asInt())throw new IllegalArgumentException("display-byte-move-shape");copyBytes(f.path("offset").asInt(),encode(value));}

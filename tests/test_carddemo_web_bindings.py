@@ -211,3 +211,20 @@ class WebBindingsTests(unittest.TestCase):
         self.assertGreater(result['area_offset'],0)
         self.assertEqual(2000,result['area_length'])
         self.assertTrue(any(f['path'].endswith('.ACUP-OLD-ACCT-DATA') for f in result['storage']['fields']))
+
+    def test_authorization_render_and_linked_sql_are_derived_with_complete_inventory(self):
+        result=build(ROOT)
+        summary=result['authorization']['COPAUS0C'];detail=result['authorization']['COPAUS1C']
+        self.assertEqual(5,sum(name.startswith('ROW-') and name!='ROW-PREFIX' for name in summary['paragraphs']))
+        self.assertEqual(10,len(detail['lookups']['WS-DECLINE-REASON-TAB']))
+        self.assertEqual('INVALID CARD    ',detail['lookups']['WS-DECLINE-REASON-TAB'][1]['description'])
+        self.assertEqual('-ZZZZZZZ9.99',detail['fields']['WS-AUTH-AMT']['picture'])
+        self.assertEqual(26,len(result['fraud']['action']['bindings']))
+        self.assertEqual(['auth_fraud','fraud_rpt_date'],result['fraud']['action']['update_columns'])
+        for screen in result['screens']:
+            names={f['name'] for f in screen['model']['maps'][0]['fields'] if f['name']}
+            self.assertTrue(all(h['target'] in names for h in result['programs'][screen['program']]['headers']))
+
+    def test_header_scanner_does_not_treat_commarea_prefix_as_bms_output(self):
+        raw=b"       IDENTIFICATION DIVISION.\n       PROGRAM-ID. EXAMPLE1.\n           MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM\n           MOVE WS-PGMNAME TO PGMNAMEO\n"
+        self.assertEqual(['PGMNAME'],[h['target'] for h in program(raw,'example.cbl')['headers']])

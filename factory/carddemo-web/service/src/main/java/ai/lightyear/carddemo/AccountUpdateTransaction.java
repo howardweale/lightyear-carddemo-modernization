@@ -26,7 +26,7 @@ public final class AccountUpdateTransaction {
     }
     public void capture(Commarea area,Map<String,Map<String,Object>> rows){
         for(JsonNode move:bindings.root.path("account_update").path("fetched"))
-            area.set(move.path("target").asText(),expression(move.path("expression"),name->field(name,area,rows)));
+            area.move(move.path("target").asText(),expression(move.path("expression"),name->field(name,area,rows)));
     }
     public Map<String,byte[]> prepare(Commarea area,Map<String,Map<String,Object>> current){
         Map<String,Commarea> buffers=new LinkedHashMap<>();

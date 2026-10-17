@@ -31,8 +31,8 @@ public final class AccountUpdateService implements TransactionService {
             area.set("CDEMO-TO-PROGRAM",previous);area.set("CDEMO-TO-TRANID",transaction);
             area.set("CDEMO-FROM-PROGRAM",PROGRAM);area.set("CDEMO-FROM-TRANID",bindings.screen(PROGRAM).path("transaction").asText());
             area.set("CDEMO-USER-TYPE","U");area.set("CDEMO-PGM-CONTEXT","0");
-            area.set("CDEMO-LAST-MAPSET",bindings.program(PROGRAM).path("constants").path("LIT-THISMAPSET").asText());
-            area.set("CDEMO-LAST-MAP",bindings.program(PROGRAM).path("constants").path("LIT-THISMAP").asText());
+            area.move("CDEMO-LAST-MAPSET",bindings.program(PROGRAM).path("constants").path("LIT-THISMAPSET").asText());
+            area.move("CDEMO-LAST-MAP",bindings.program(PROGRAM).path("constants").path("LIT-THISMAP").asText());
             return new Result(previous.stripTrailing(),new ScreenFrame(bindings,PROGRAM),false);
         }
         String state=area.get("ACUP-CHANGE-ACTION");

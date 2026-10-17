@@ -54,7 +54,7 @@ def program(raw, source):
         aid='ENTER' if label.endswith('ENTER') else 'PF'+str(int(re.search(r'(\d+)$',label)[1]))
         aids.append(dict(aid=aid,symbol=label,**origin(m)))
     headers=[]
-    for m in re.finditer(r'\bMOVE\s+(CCDA-TITLE[0-9]+|WS-CURDATE-MM-DD-YY|WS-CURTIME-HH-MM-SS|LIT-THISPGM|WS-PGMNAME|WS-CICS-TRANID|LIT-THISTRANID|WS-TRANID)\s+TO\s+([A-Z0-9]+)O\b',text):
+    for m in re.finditer(r'\bMOVE\s+(CCDA-TITLE[0-9]+|WS-CURDATE-MM-DD-YY|WS-CURTIME-HH-MM-SS|LIT-THISPGM|WS-PGMNAME|WS-PGM-AUTH-SMRY|WS-PGM-AUTH-DTL|WS-CICS-TRANID|LIT-THISTRANID|WS-TRANID)\s+TO\s+([A-Z0-9]+)O(?![A-Z0-9-])',text):
         headers.append(dict(expression=m[1],target=m[2],**origin(m)))
     paragraphs=[dict(name=m[1],**origin(m)) for m in re.finditer(r'^\s{0,4}([A-Z0-9][A-Z0-9-]*)\.\s*$',text,re.M)]
     literals=[dict(value=m[1].replace("''", "'"),**origin(m)) for m in re.finditer(r"'((?:[^']|'')*)'",text)]
@@ -142,6 +142,8 @@ def build(root):
         source_path,program_raw=locate(screen['program'],'.cbl')
         commareas[screen['program']]=program_layout(program_raw,source_path,commarea,base_raw)
     p,raw=locate('AUTHFRDS','.ddl');fraud=fraud_schema(raw,p)
+    from .auth_fraud import build as compile_fraud
+    p,raw=locate('COPAUS2C','.cbl');fraud['action']=compile_fraud(raw,p,fraud)
     from .screen_projection import projection
     p,raw=locate('COACTVWC','.cbl')
     account_screen=next(s for s in screens if s['program']=='COACTVWC')['model']['maps'][0]
@@ -163,6 +165,11 @@ def build(root):
     from .update_edits import build as compile_update_edits
     account_update['validation']=compile_update_edits(raw,p,account_update['generic_edits'],account_update['date_edits'],
         commareas['COACTUPC'],locate('CSLKPCDY','.cpy'),locate('CSUTLDWY','.cpy'),locate('COCOM01Y','.cpy'),locate('CVCRD01Y','.cpy'),next(s for s in screens if s['program']=='COACTUPC')['model']['maps'][0],locate('CSSETATY','.cpy'))
+    from .auth_edits import build as compile_auth
+    authorization={}
+    for name in ('COPAUS0C','COPAUS1C'):
+        p,raw=locate(name,'.cbl')
+        authorization[name]=compile_auth(raw,p,next(s for s in screens if s['program']==name)['model']['maps'][0],locate('CSDAT01Y','.cpy'),locate('CIPAUDTY','.cpy'),locate('CIPAUSMY','.cpy'),(locate('CVACT01Y','.cpy'),locate('CVCUS01Y','.cpy')))
     support_programs={}
     for name in scope.get('support_programs',[]):
         p,raw=locate(name,'.cbl');support_programs[name]=program(raw,p)
@@ -175,7 +182,7 @@ def build(root):
         scope_sha256=sha256((root/'slice-1.json').read_bytes()).hexdigest(),
         screens=screens,programs=programs,support_programs=support_programs,source_closure=source_closure,menu=options,menu_outputs=outputs,menu_option_width=int(width[1]),
         common_constants=common,commarea=commarea,program_commareas=commareas,fraud=fraud,
-        account_view_projection=account_projection,account_update_comparisons=changes,account_update=account_update,
+        authorization=authorization,account_view_projection=account_projection,account_update_comparisons=changes,account_update=account_update,
         data_uses=dependencies,outside_endpoint=scope['outside_endpoint'],
         quirks=[dict(kind='menu-outside-slice',**r) for r in options if not r['in_slice']],
         limitations=['Source inventory and generated models do not prove screen-handler equivalence.',

@@ -36,18 +36,18 @@ public final class ScreenProjection {
     }
     /** Bounded numeric-editing grammar present in these BMS maps; unknown pictures refuse. */
     public static String edited(String value,String quotedPicture){
-        String picture=quotedPicture.replace("'","");
-        if(!picture.matches("\\+Z+(,Z+)*\\.9+"))throw new IllegalArgumentException("unsupported-edited-picture");
+        String picture=quotedPicture.replace("'","").toUpperCase(Locale.ROOT);
+        if(!picture.matches("[+-][Z9]+(,[Z9]+)*\\.9+"))throw new IllegalArgumentException("unsupported-edited-picture");
         BigDecimal n=new BigDecimal(value);int point=picture.indexOf('.'),scale=picture.length()-point-1;
         String fixed=n.abs().setScale(scale,RoundingMode.DOWN).toPlainString();String[] parts=fixed.split("\\.",-1);
-        int digits=(int)picture.substring(1,point).chars().filter(c->c=='Z').count();
+        int digits=(int)picture.substring(1,point).chars().filter(c->c=='Z'||c=='9').count();
         // COBOL numeric editing truncates high-order digits on receiving-field overflow.
         String integer=parts[0];if(integer.length()>digits)integer=integer.substring(integer.length()-digits);
         integer="0".repeat(Math.max(0,digits-integer.length()))+integer;
         char[] out=picture.toCharArray();int pos=0;boolean significant=false;
-        out[0]=n.signum()<0?'-':'+';
+        out[0]=n.signum()<0?'-':picture.charAt(0)=='+'?'+':' ';
         for(int i=1;i<point;i++){
-            if(out[i]=='Z'){char d=integer.charAt(pos++);if(d!='0')significant=true;out[i]=significant?d:' ';}
+            if(out[i]=='Z'||out[i]=='9'){char d=integer.charAt(pos++);if(d!='0'||out[i]=='9')significant=true;out[i]=significant?d:' ';}
             else if(!significant)out[i]=' ';
         }
         for(int i=point+1;i<out.length;i++)out[i]=parts.length>1?parts[1].charAt(i-point-1):'0';

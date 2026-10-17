@@ -41,11 +41,11 @@ class Parser:
         if not re.fullmatch('[A-Z][A-Z0-9-]*',token) or token in VERBS:raise ValueError('unsupported edit expression: '+token)
         result=dict(op='field',name=token,**origin)
         if self.peek()=='(':
-            self.take();start=self.expr();self.take(':');length=self.expr();self.take(')')
-            result=dict(op='slice',operand=result,start=start,length=length,**origin)
+            self.take();start=self.expr();self.take(':');remaining=self.peek()==')';length=None if remaining else self.expr();self.take(')')
+            result=dict(op='slice',operand=result,start=start,length=length,remaining=remaining,**origin)
         if self.peek()=='OF':
             self.take();qualifier=self.take()
-            if qualifier not in ('CACTUPAI','CACTUPAO'):raise ValueError('unsupported edit qualifier: '+qualifier)
+            if qualifier not in ('CACTUPAI','CACTUPAO','COPAU0AI','COPAU0AO','COPAU1AI','COPAU1AO'):raise ValueError('unsupported edit qualifier: '+qualifier)
             result['qualifier']=qualifier
         return result
     def condition(self):
@@ -128,9 +128,20 @@ class Parser:
                 target=self.expr();self.take('CONVERTING');before=self.expr();self.take('TO');after=self.expr()
                 node=dict(op='convert',target=target,before=before,after=after)
             elif verb=='STRING':
-                pieces=[]
-                while self.peek()!='DELIMITED':pieces.append(self.expr())
-                self.take();self.take('BY');self.take('SIZE');self.take('INTO');target=self.expr()
+                pieces=[];pending=[]
+                while self.peek()!='INTO':
+                    if self.peek()=='DELIMITED':
+                        self.take();self.take('BY');delimiter=self.take()
+                        if delimiter=='SIZE':pieces.extend(pending)
+                        elif delimiter in ('SPACE','SPACES') or delimiter.startswith("'"):
+                            value=' ' if delimiter in ('SPACE','SPACES') else delimiter[1:-1].replace("''","'")
+                            if not value:raise ValueError('empty STRING delimiter')
+                            pieces.extend(dict(op='delimited',operand=e,delimiter=value,**origin) for e in pending)
+                        else:raise ValueError('unsupported STRING delimiter')
+                        pending=[]
+                    else:pending.append(self.expr())
+                if pending:raise ValueError('STRING operand has no delimiter')
+                self.take('INTO');target=self.expr()
                 if self.peek()=='END-STRING':self.take()
                 node=dict(op='string',pieces=pieces,target=target)
             elif verb=='PERFORM':
@@ -195,7 +206,7 @@ def build(raw,source,lookup=None):
         if set(fields)&set(extra_fields) or set(conditions)&set(extra_conditions):
             raise ValueError('ambiguous edit lookup declaration')
         fields.update(extra_fields);conditions.update(extra_conditions)
-    bound_fields,bound_conditions=bind_fields(paragraphs,fields,conditions)
+    bound_fields,bound_conditions=bind_fields(paragraphs,fields,conditions,extra_fields=('WS-EDIT-US-PHONE-NUM','WS-EDIT-US-PHONE-NUM-FLGS') if lookup else ())
     storage=None
     if lookup:
         # Use the actual fixed-format group, including FILLER and REDEFINES.
@@ -222,8 +233,8 @@ def build(raw,source,lookup=None):
         limitations=['Generic, monetary, phone, SSN and source state/ZIP/FICO edits; full screen control-flow proof remains pending.'])
 
 
-def bind_fields(paragraphs,fields,conditions):
-    needed=set();flags=set()
+def bind_fields(paragraphs,fields,conditions,initial_flags=('INPUT-OK','WS-RETURN-MSG-OFF'),extra_fields=()):
+    needed=set(extra_fields);flags=set()
     def walk(value):
         if isinstance(value,list):
             for item in value:walk(item)
@@ -234,7 +245,7 @@ def bind_fields(paragraphs,fields,conditions):
             for item in value.values():walk(item)
     for value in paragraphs.values():walk(value)
     # Caller initializes these source flags and supplies the edit operands.
-    flags.update(('INPUT-OK','WS-RETURN-MSG-OFF'))
+    flags.update(initial_flags)
     # Flags copied by MOVE still expose their source 88 conditions. Their
     # storage is already referenced; no unseen state or new table is invented.
     flags.update(name for name,c in conditions.items() if c['parent'] in needed)

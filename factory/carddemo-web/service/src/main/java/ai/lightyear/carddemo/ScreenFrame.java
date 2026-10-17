@@ -46,7 +46,7 @@ public final class ScreenFrame {
             if(source.startsWith("CCDA-TITLE"))value=b.root.path("common_constants").path(source).asText();
             else if(source.equals("WS-CURDATE-MM-DD-YY"))value=now.format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yy",Locale.ROOT));
             else if(source.equals("WS-CURTIME-HH-MM-SS"))value=now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss",Locale.ROOT));
-            else if(source.equals("LIT-THISPGM")||source.equals("WS-PGMNAME"))value=program;
+            else if(source.equals("LIT-THISPGM")||source.equals("WS-PGMNAME")||source.startsWith("WS-PGM-AUTH-"))value=program;
             else value=transaction;
             set(h.path("target").asText(),value);
         }

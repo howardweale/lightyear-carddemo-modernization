@@ -22,8 +22,8 @@ public final class AccountViewService implements TransactionService {
             area.set("CDEMO-TO-PROGRAM",previous);area.set("CDEMO-TO-TRANID",transaction);
             area.set("CDEMO-FROM-PROGRAM",PROGRAM);area.set("CDEMO-FROM-TRANID",frame.transaction);
             area.set("CDEMO-USER-TYPE","U");area.set("CDEMO-PGM-CONTEXT","0");
-            area.set("CDEMO-LAST-MAPSET",bindings.program(PROGRAM).path("constants").path("LIT-THISMAPSET").asText());
-            area.set("CDEMO-LAST-MAP",bindings.program(PROGRAM).path("constants").path("LIT-THISMAP").asText());
+            area.move("CDEMO-LAST-MAPSET",bindings.program(PROGRAM).path("constants").path("LIT-THISMAPSET").asText());
+            area.move("CDEMO-LAST-MAP",bindings.program(PROGRAM).path("constants").path("LIT-THISMAP").asText());
             return new Result(previous.stripTrailing(),frame,false);
         }
         area.set("CDEMO-PGM-CONTEXT","1"); // 581; other PF keys are mapped to ENTER at 306–314.

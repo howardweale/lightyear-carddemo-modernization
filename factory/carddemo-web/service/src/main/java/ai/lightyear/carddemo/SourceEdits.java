@@ -26,8 +26,9 @@ public final class SourceEdits {
         storage=model.path("storage").isObject()?new Commarea(model.path("storage"),null):null;
         if(storage!=null)for(JsonNode field:model.path("storage").path("fields")){
             String path=field.path("path").asText();stored.add(path.substring(path.lastIndexOf('.')+1));}
+        if(storage!=null)for(JsonNode literal:model.path("storage_literals"))storage.copyBytes(literal.path("offset").asInt(),Commarea.encode(literal.path("value").asText()));
         for(var entry:model.path("fields").properties())if(!entry.getValue().has("alias_of") && (!stored.contains(entry.getKey()) || entry.getValue().path("explicit_initial").asBoolean()))put(entry.getKey(),entry.getValue().path("initial").asText());
-        setCondition("INPUT-OK");setCondition("WS-RETURN-MSG-OFF");
+        for(String flag:List.of("INPUT-OK","WS-RETURN-MSG-OFF"))if(model.path("conditions").has(flag))setCondition(flag);
     }
     public void attachScreen(ScreenFrame frame){
         screen=frame;
@@ -49,8 +50,8 @@ public final class SourceEdits {
     private void screenWrite(JsonNode f,String value){
         if(screen==null||!f.has("screen_field"))return;
         String name=f.path("screen_field").asText(),part=f.path("screen_part").asText();
-        if(part.equals("I"))return;
-        if(part.equals("O")){
+        if(part.equals("I")&&!f.path("input_overlay_output").asBoolean())return;
+        if(part.equals("O")||part.equals("I")){
             // BMS LOW-VALUES leaves the physical field unchanged.
             if(value.chars().allMatch(c->c==0))return;
             screen.set(name,value);if(name.equals("ERRMSG"))screen.message=value.stripTrailing();return;
@@ -58,11 +59,13 @@ public final class SourceEdits {
         if(part.equals("L")){if(value.equals("-1"))screen.cursor=name;return;}
         Map<String,Object> attributes=screen.attributes.get(name);String symbol=value.stripTrailing();
         if(part.equals("C")){
-            attributes.put("color",switch(symbol){case "DFHRED"->"RED";case "DFHDFCOL"->screen.field(name).path("color").asText();default->throw new IllegalArgumentException("bms-color:"+symbol);});return;
+            attributes.put("color",switch(symbol){case "DFHRED"->"RED";case "DFHGREEN"->"GREEN";case "DFHDFCOL"->screen.field(name).path("color").asText();default->throw new IllegalArgumentException("bms-color:"+symbol);});return;
         }
         if(!part.equals("A"))throw new IllegalArgumentException("bms-attribute-kind");
         // CICS DFHBMSCA: PRF includes MDT; FSE sets MDT without protection.
         switch(symbol){
+            case "DFHBMPRO":attributes.put("protected",true);attributes.put("modified",false);attributes.put("hidden",false);break;
+            case "DFHBMUNP":attributes.put("protected",false);attributes.put("modified",false);attributes.put("hidden",false);break;
             case "DFHBMPRF":attributes.put("protected",true);attributes.put("modified",true);attributes.put("hidden",false);attributes.put("intensity","NORMAL");break;
             case "DFHBMFSE":attributes.put("protected",false);attributes.put("modified",true);attributes.put("hidden",false);attributes.put("intensity","NORMAL");break;
             case "DFHBMASB":attributes.put("protected",true);attributes.put("autoskip",true);attributes.put("modified",false);attributes.put("hidden",false);attributes.put("intensity","BRIGHT");break;
@@ -84,7 +87,12 @@ public final class SourceEdits {
         if(stored.contains(name))return storage.unsignedDisplayInteger(name)?storage.displayBytes(name):storage.get(name);
         if(f.has("alias_of")){String raw=get(f.path("alias_of").asText());
             if(!raw.matches("[0-9]+"))throw new IllegalArgumentException("edit-numeric-alias");return raw;}
-        return values.get(name);
+        String value=values.get(name);
+        if(f.path("type").asText().equals("number")){
+            boolean negative=value.startsWith("-");String absolute=negative?value.substring(1):value;
+            int width=f.path("length").asInt()+(f.path("scale").asInt()>0?1:0);
+            value=(negative?"-":"")+"0".repeat(Math.max(0,width-absolute.length()))+absolute;
+        }return value;
     }
     public void put(String name,String value){JsonNode f=field(name);
         if(stored.contains(name)){
@@ -134,11 +142,12 @@ public final class SourceEdits {
     private static boolean paddedEqual(String a,String b){int n=Math.max(a.length(),b.length());return (a+" ".repeat(n-a.length())).equals(b+" ".repeat(n-b.length()));}
     private Value evaluate(JsonNode e){visit(e);String op=e.path("op").asText();
         switch(op){
+            case "delimited":{Value v=evaluate(e.path("operand"));String delimiter=e.path("delimiter").asText();int at=v.text().indexOf(delimiter);return new Value(at<0?v.text():v.text().substring(0,at),false,false);}
             case "literal":return new Value(e.path("value").asText(),false,false);
             case "number":return new Value(e.path("value").asText(),true,false);
             case "figurative":return new Value(e.path("value").asText(),false,true);
             case "field":{String n=e.path("name").asText();return new Value(get(n),field(n).path("type").asText().equals("number"),false);}
-            case "slice":{String text=evaluate(e.path("operand")).text();int a=integer(e.path("start"))-1,n=integer(e.path("length"));
+            case "slice":{String text=evaluate(e.path("operand")).text();int a=integer(e.path("start"))-1,n=e.path("remaining").asBoolean()?text.length()-a:integer(e.path("length"));
                 if(a<0||n<1||a+n>text.length())throw new IllegalArgumentException("edit-reference-modification");return new Value(text.substring(a,a+n),false,false);}
             case "UPPER-CASE":return new Value(evaluate(e.path("operand")).text().toUpperCase(Locale.ROOT),false,false);
             case "LOWER-CASE":return new Value(evaluate(e.path("operand")).text().toLowerCase(Locale.ROOT),false,false);
@@ -199,7 +208,7 @@ public final class SourceEdits {
             put(name,text);return;
         }
         if(target.path("op").asText().equals("slice")&&target.path("operand").path("op").asText().equals("field")){
-            String name=target.path("operand").path("name").asText(),old=get(name);int start=integer(target.path("start"))-1,n=integer(target.path("length"));
+            String name=target.path("operand").path("name").asText(),old=get(name);int start=integer(target.path("start"))-1,n=target.path("remaining").asBoolean()?old.length()-start:integer(target.path("length"));
             if(start<0||n<1||start+n>old.length())throw new IllegalArgumentException("edit-reference-modification");
             String text=value.figurative()?figurative(value.text(),n):value.text();text=(text+" ".repeat(n)).substring(0,n);
             put(name,old.substring(0,start)+text+old.substring(start+n));return;
@@ -214,6 +223,12 @@ public final class SourceEdits {
                 for(JsonNode condition:branch.path("tests"))if(test(condition)){match=true;break;}
                 if(match){if(execute(branch.path("actions")))return true;break;}
             }break;}
+        case "lookup":{
+            String sought=evaluate(statement.path("value")).text();JsonNode found=null;
+            for(JsonNode row:model.path("lookups").path(statement.path("table").asText()))if(paddedEqual(row.path("key").asText(),sought)){found=row;break;}
+            if(found==null){if(execute(statement.path("missing")))return true;}
+            else{put(statement.path("description_field").asText(),found.path("description").asText());if(execute(statement.path("found")))return true;}
+            break;}
         case "set":setCondition(statement.path("name").asText());break;
         case "move":{Value value=evaluate(statement.path("value"));for(JsonNode target:statement.path("targets"))assign(target,value,false);break;}
         case "string":{StringBuilder text=new StringBuilder();for(JsonNode piece:statement.path("pieces"))text.append(evaluate(piece).text());assign(statement.path("target"),new Value(text.toString(),false,false),true);break;}

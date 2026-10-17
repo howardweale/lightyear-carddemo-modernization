@@ -13,6 +13,35 @@ import tools.jackson.databind.json.JsonMapper;
 public final class TypedRecordImage {
     private TypedRecordImage(){}
     public record Image(Map<String,Object> columns,String metadata,String sha256){}
+    /** Reconstruct unchanged bytes from typed columns and validated encoding metadata. */
+    public static byte[] reconstruct(JsonNode mapping,Map<String,Object> row){
+        JsonNode meta=JsonMapper.builder().build().readTree(row.get("encoding_meta").toString());
+        if(meta.path("length").asInt()!=mapping.path("record_length").asInt()||!meta.path("codec").asText().equals("cp037"))throw new IllegalArgumentException("record-metadata-layout");
+        Commarea buffer=new Commarea(mapping,null);BitSet covered=new BitSet(mapping.path("record_length").asInt());Set<String> seen=new HashSet<>();
+        for(JsonNode active:meta.path("active")){
+            JsonNode f=null;String path=active.path("path").asText();
+            for(JsonNode candidate:mapping.path("fields"))if(candidate.path("path").asText().equals(path)){f=candidate;break;}
+            if(f==null||!seen.add(path)||f.path("offset").asInt()!=active.path("offset").asInt()||f.path("length").asInt()!=active.path("length").asInt())throw new IllegalArgumentException("record-metadata-field");
+            int off=f.path("offset").asInt(),len=f.path("length").asInt();
+            if(!covered.get(off,off+len).isEmpty())throw new IllegalArgumentException("record-metadata-overlap");covered.set(off,off+len);
+            if(f.path("filler").asBoolean())continue;
+            String column=f.path("column").asText();Object value=row.get(column+(f.path("date").asBoolean()?"_raw":""));
+            if(value==null)throw new IllegalArgumentException("record-missing-column");
+            buffer.set(path,value instanceof byte[] raw?new String(raw,Commarea.EBCDIC):value.toString());
+            JsonNode rep=meta.path("representations").path(path);
+            if(rep.has("sign_code")){
+                byte[] raw=buffer.bytes();boolean packed=f.path("usage").asText().equals("COMP-3");int index=packed?off+len-1:off+(f.path("sign").asText().equals("LEADING")?0:len-1);
+                int sign=rep.path("sign_code").asInt();if(sign!=12&&sign!=13&&sign!=15)throw new IllegalArgumentException("record-sign-code");
+                raw[index]=(byte)(packed?(raw[index]&240)|sign:(raw[index]&15)|(sign<<4));buffer.copyBytes(index,new byte[]{raw[index]});
+            }
+        }
+        for(JsonNode filler:meta.path("filler")){int off=filler.path("offset").asInt();byte[] bytes=HexFormat.of().parseHex(filler.path("hex").asText());boolean declared=false;
+            for(JsonNode f:mapping.path("fields"))if(f.path("filler").asBoolean()&&f.path("offset").asInt()==off&&f.path("length").asInt()==bytes.length)declared=true;
+            if(!declared)throw new IllegalArgumentException("record-filler-layout");buffer.copyBytes(off,bytes);}
+        if(covered.cardinality()!=mapping.path("record_length").asInt())throw new IllegalArgumentException("record-unaccounted-storage");
+        byte[] raw=buffer.bytes();try{if(!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(raw)).equals(row.get("source_sha256").toString().strip()))throw new IllegalArgumentException("record-hash-mismatch");}
+        catch(NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}return raw;
+    }
     public static Image project(JsonNode mapping,byte[] raw){
         if(raw.length!=mapping.path("record_length").asInt())throw new IllegalArgumentException("rewrite-record-length");
         Commarea decoded=new Commarea(mapping,raw);Map<String,Object> values=new LinkedHashMap<>(),representations=new LinkedHashMap<>();

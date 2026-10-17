@@ -1,0 +1,44 @@
+package ai.lightyear.carddemo;
+
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import tools.jackson.databind.json.JsonMapper;
+
+class AuthorizationTest {
+    private Bindings bindings()throws Exception{Path root=Path.of(System.getProperty("carddemo.root"));return new Bindings(root.resolve("work/carddemo-web-bindings/bindings.json"),root.resolve("work/carddemo-web-data/plan.json"),JsonMapper.builder().build());}
+    private void set(Bindings b,Map<String,Object> row,String field,String text){row.put(b.field("pautdtl1",field).path("column").asText(),Commarea.encode(text));}
+    @Test void sourceRenderingPreservesDeclineLookupDateMoneyAndFraudAttributes()throws Exception{
+        var b=bindings();var rows=new TypedRecords(b);var row=rows.initialized("pautdtl1");
+        set(b,row,"PA-AUTH-ORIG-DATE","261017");set(b,row,"PA-AUTH-ORIG-TIME","123456");set(b,row,"PA-AUTH-RESP-CODE","05");set(b,row,"PA-AUTH-RESP-REASON","3100");
+        row.put(b.field("pautdtl1","PA-APPROVED-AMT").path("column").asText(),new java.math.BigDecimal("12.34"));
+        set(b,row,"PA-AUTH-FRAUD","F");set(b,row,"PA-FRAUD-RPT-DATE","10/17/26");
+        var frame=new ScreenFrame(b,"COPAUS1C");new AuthorizationRendering(b).detail(frame,row);
+        assertEquals("10/17/26",frame.values.get("AUTHDT"));assertEquals("12:34:56",frame.values.get("AUTHTM"));
+        assertEquals("D",frame.values.get("AUTHRSP"));assertEquals("RED",frame.attributes.get("AUTHRSP").get("color"));
+        assertEquals("3100-INVALID CARD",frame.values.get("AUTHRSN").stripTrailing());assertEquals("F-10/17/26",frame.values.get("AUTHFRD").stripTrailing());
+        assertEquals("12.34",frame.values.get("AUTHAMT").strip());assertFalse(frame.trace.isEmpty());
+        set(b,row,"PA-AUTH-RESP-REASON","ZZZZ");new AuthorizationRendering(b).detail(frame,row);assertEquals("9999-ERROR",frame.values.get("AUTHRSN").stripTrailing());
+    }
+    @Test void pf3ExitsBothAuthorizationScreensWithoutDatabaseAccess()throws Exception{
+        var b=bindings();Connection db=mock(Connection.class);
+        for(String program:List.of("COPAUS0C","COPAUS1C")){
+            var area=new Commarea(b.root.path("program_commareas").path(program),null);
+            TransactionService service=program.equals("COPAUS0C")?new AuthorizationListService(b):new AuthorizationDetailService(b);
+            assertEquals(program.equals("COPAUS0C")?"COMEN01C":"COPAUS0C",service.interact(db,area,"PF3",Map.of()).nextProgram());
+        }verifyNoInteractions(db);
+    }
+    @Test void sourceMoneyPictureKeepsMandatoryZeroAndLeadingMinus() {
+        assertEquals("        0.00",ScreenProjection.edited("0","-ZZZZZZZ9.99"));
+        assertEquals("-      12.34",ScreenProjection.edited("-12.34","-ZZZZZZZ9.99"));
+    }
+    @Test void detailReconstructionRetainsFillerAndRejectsChangedTypedValueWithoutHash()throws Exception{
+        var b=bindings();var mapping=b.mapping("pautdtl1");Commarea area=new Commarea(mapping,null);area.set("PA-AUTH-ORIG-DATE","261017");
+        var image=TypedRecordImage.project(mapping,area.bytes());Map<String,Object> row=new LinkedHashMap<>(image.columns());row.put("encoding_meta",image.metadata());row.put("source_sha256",image.sha256());
+        assertArrayEquals(area.bytes(),TypedRecordImage.reconstruct(mapping,row));
+        set(b,row,"PA-AUTH-FRAUD","F");assertThrows(IllegalArgumentException.class,()->TypedRecordImage.reconstruct(mapping,row));
+    }
+}

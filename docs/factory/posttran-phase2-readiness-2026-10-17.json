@@ -13,7 +13,7 @@
   "supersedes": "posttran-phase2-readiness-2026-10-16.json",
   "prepared_on": "2026-10-17",
   "sign_and_launch_by": "2026-10-29T14:46:00+00:00",
-  "public_key_sha256": "42c4417fbc33aad3e97318af1a319c413252da674a2546e8351469d3f1415cfd",
+  "public_key_sha256": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61",
   "request_publication_commit": "5f50acac88abe371c4a2a0b2e10b55d00ee6923f",
   "request_file_sha256": "bc66b605325a11c306b6b58c1bec1e9be25a7fc85eb3844509a420b288729f5c",
   "plan_amendment": "docs/factory/posttran-phase2-plan-amendment-2026-10-17.json",

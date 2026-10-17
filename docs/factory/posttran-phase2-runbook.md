@@ -114,7 +114,7 @@ $RequestCheckout = '<new-public-request-worktree-directory>'
 $RequestRef = '5f50acac88abe371c4a2a0b2e10b55d00ee6923f'
 $Request = Join-Path $RequestCheckout 'docs\factory\posttran-phase2-authorization-request-2026-10-16.json'
 $PublicKey = '<existing-Factory-Tower-public-key.pem>'
-$ExpectedPublicKeyHash = '42c4417fbc33aad3e97318af1a319c413252da674a2546e8351469d3f1415cfd'
+$ExpectedPublicKeyHash = '7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61'
 $ExecutableCommit = '65bd4cd549067dd3695f4197e495cc15c9473417'
 $ExpectedRequestFileHash = 'bc66b605325a11c306b6b58c1bec1e9be25a7fc85eb3844509a420b288729f5c'
 $ExpectedQueueHash = 'ab22d84fcebabc79472a27e35012e3e4ff6b3bd330cb5995b08b3a7bc034c49b'
@@ -155,7 +155,7 @@ $ErrorActionPreference = 'Stop'
 $Checkout = '<existing-clean-Windows-checkout-at-65bd4cd549067dd3695f4197e495cc15c9473417>'
 $Python = '<installed-Windows-Tower-Python>'
 $ExpectedQueueHash = 'ab22d84fcebabc79472a27e35012e3e4ff6b3bd330cb5995b08b3a7bc034c49b'
-$ExpectedPublicKeyHash = '42c4417fbc33aad3e97318af1a319c413252da674a2546e8351469d3f1415cfd'
+$ExpectedPublicKeyHash = '7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61'
 foreach ($Path in @($Checkout, $Python)) { if (-not (Test-Path -LiteralPath $Path)) { throw "Missing: $Path" } }
 if ((git -C $Checkout rev-parse HEAD).Trim() -ne '65bd4cd549067dd3695f4197e495cc15c9473417') { throw 'Wrong executable checkout' }
 if (git -C $Checkout status --porcelain) { throw 'Checkout must be clean' }
@@ -196,6 +196,6 @@ Stop if the proof, contract, public key or current journal head cannot be indepe
 
 The request is read from the immutable publication ref `5f50acac88abe371c4a2a0b2e10b55d00ee6923f`, separately from the executable checkout. Do not extract it with PowerShell `>`: Windows PowerShell 5.1 may change its encoding. Git worktree extraction preserves its exact bytes.
 
-The committed authority PEM SHA-256 is `42c4417fbc33aad3e97318af1a319c413252da674a2546e8351469d3f1415cfd`. This is the CI trust anchor, **not evidence that the local Tower uses that key**. Howard must compare the existing Tower public key before signing; a mismatch is a stop, not permission to provision or replace a key.
+The committed authority PEM SHA-256 is `7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61`. This is the CI trust anchor, **not evidence that the local Tower uses that key**. Howard must compare the existing Tower public key before signing; a mismatch is a stop, not permission to provision or replace a key.
 
 The [dated plan amendment](posttran-phase2-plan-amendment-2026-10-17.json) records the single changed binding and the original CI artifact hash. The [new readiness record](posttran-phase2-readiness-2026-10-17.json) supersedes the October 16 description without modifying the request, plan, or authority. Authorized by: Howard (documentation and code follow-ups). Performed by: Codex. No signing, import, activation, reservation, or launch performed.

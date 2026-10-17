@@ -25,6 +25,14 @@ class HandoffFollowups(unittest.TestCase):
         self.assertEqual(ready['public_key_sha256'],sha256((ROOT/PUBLIC_KEY).read_bytes()).hexdigest())
         self.assertNotIn('signing_deadline',ready)
 
+    def test_pinned_plan_inventory_and_current_drift(self):
+        from tools.check_posttran_retained_plan import inspect
+        result = inspect(ROOT)
+        self.assertEqual(check(ROOT)['executable_commit'], result['retained_commit'])
+        self.assertGreater(result['validated_files'], 0)
+        self.assertFalse(result['execution_authorized'])
+        self.assertIn('.github/workflows/posttran-phase2.yml', result['changed_bound_files'])
+
     def test_clock_at_warning_boundary_exits_nonzero_without_issue_side_effect(self):
         with patch('tools.check_posttran_deadline.upsert_issue') as issue:
             self.assertEqual(0,main(['--root',str(ROOT)],now=datetime(2026,10,24,14,45,59,tzinfo=timezone.utc)))

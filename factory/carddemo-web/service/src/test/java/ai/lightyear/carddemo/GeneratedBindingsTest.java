@@ -24,6 +24,18 @@ class GeneratedBindingsTest {
         assertThrows(IllegalArgumentException.class,()->a.set("CDEMO-USER-ID","too-long-value"));
         assertThrows(IllegalArgumentException.class,()->Commarea.encode("\uD83D\uDE42"));
     }
+    @Test void privateCommareasUseSourceOffsetsAndPreserveImsNavigationAcrossXctl()throws Exception{
+        Bindings b=bindings();var layouts=b.root.path("program_commareas");
+        Commarea list=new Commarea(layouts.path("COPAUS0C"),null);
+        list.set("CDEMO-CPVS-PAGE-NUM","17");list.set("CDEMO-CPVS-AUTH-KEYS[5]","12345678");
+        Commarea detail=list.transition(layouts.path("COPAUS1C"),b.root.path("commarea").path("record_length").asInt(),true);
+        assertEquals("0017",detail.get("CDEMO-CPVD-PAGE-NUM"));assertEquals("12345678",detail.get("CDEMO-CPVD-AUTH-KEYS[5]"));
+        assertEquals(" ".repeat(100),detail.get("CDEMO-CPVD-FRAUD-DATA"));
+        Commarea update=new Commarea(layouts.path("COACTUPC"),null);
+        update.set("ACUP-OLD-CURR-BAL-N","-123.45");assertEquals("0000000123.45",update.get("ACUP-OLD-CURR-BAL-N").substring(1));
+        assertTrue(update.get("ACUP-OLD-CURR-BAL-N").startsWith("-"));assertEquals(2000,update.bytes().length);
+        assertThrows(IllegalArgumentException.class,()->list.set("CDEMO-CPVS-PAGE-NUM","10000"));
+    }
     @Test void menuJustificationAndEveryOutsideOptionAreSourceDerived()throws Exception{
         Bindings b=bindings();MenuService menu=new MenuService(b);
         for(int i=1;i<=11;i++){

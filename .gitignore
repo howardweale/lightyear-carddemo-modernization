@@ -37,3 +37,8 @@ factory/idempiere/ms86-journeys/runs/
 factory/annotations/ledger.jsonl
 factory/annotations/ledger.lock
 factory/knowledge-console.json
+
+# CardDemo web build products
+factory/carddemo-web/service/target/
+factory/carddemo-web/ui/node_modules/
+factory/carddemo-web/ui/dist/

@@ -32,6 +32,13 @@ jobs:
           java-version: '17'
       - name: Compile Java services and test generated bindings and disposable session tokens
         run: mvn -B -f factory/carddemo-web/service/pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" test
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Typecheck and compile the model-driven TypeScript UI
+        run: |
+          npm ci --prefix factory/carddemo-web/ui --ignore-scripts --no-audit --no-fund
+          npm run build --prefix factory/carddemo-web/ui
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -40,4 +47,5 @@ jobs:
             work/carddemo-web-bindings
             work/carddemo-web-data
             factory/carddemo-web/service/target/surefire-reports
+            factory/carddemo-web/ui/dist
           if-no-files-found: error

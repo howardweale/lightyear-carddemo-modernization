@@ -53,11 +53,14 @@ def program(raw, source):
         label=m[0]
         aid='ENTER' if label.endswith('ENTER') else 'PF'+str(int(re.search(r'(\d+)$',label)[1]))
         aids.append(dict(aid=aid,symbol=label,**origin(m)))
+    headers=[]
+    for m in re.finditer(r'\bMOVE\s+(CCDA-TITLE[0-9]+|WS-CURDATE-MM-DD-YY|WS-CURTIME-HH-MM-SS|LIT-THISPGM|WS-PGMNAME|WS-CICS-TRANID|LIT-THISTRANID|WS-TRANID)\s+TO\s+([A-Z0-9]+)O\b',text):
+        headers.append(dict(expression=m[1],target=m[2],**origin(m)))
     paragraphs=[dict(name=m[1],**origin(m)) for m in re.finditer(r'^\s{0,4}([A-Z0-9][A-Z0-9-]*)\.\s*$',text,re.M)]
     literals=[dict(value=m[1].replace("''", "'"),**origin(m)) for m in re.finditer(r"'((?:[^']|'')*)'",text)]
     return dict(program=identity[1],source=source,sha256=sha256(raw).hexdigest(),
         transaction=next(iter(transactions),None),constants=constants,calls=calls,
-        aids=aids,paragraphs=paragraphs,literals=literals,
+        aids=aids,headers=headers,paragraphs=paragraphs,literals=literals,
         behavior_verified=False)
 
 
@@ -133,7 +136,20 @@ def build(root):
         p,raw=locate(member,'.cpy');common.update(literal_constants(active(raw,p)[0]))
     p,raw=locate('COCOM01Y','.cpy');layout,_=copybook(raw.decode('utf-8'),p)
     commarea=dict(source=p,**layout.manifest())
+    from .screen_commarea import program_layout
+    base_raw=raw;commareas={}
+    for screen in screens:
+        source_path,program_raw=locate(screen['program'],'.cbl')
+        commareas[screen['program']]=program_layout(program_raw,source_path,commarea,base_raw)
     p,raw=locate('AUTHFRDS','.ddl');fraud=fraud_schema(raw,p)
+    from .screen_projection import projection
+    p,raw=locate('COACTVWC','.cbl')
+    account_screen=next(s for s in screens if s['program']=='COACTVWC')['model']['maps'][0]
+    account_projection=projection(raw,p,'1200-SETUP-SCREEN-VARS',account_screen)
+    from .screen_rules import comparisons
+    p,raw=locate('COACTUPC','.cbl')
+    changes=dict(no_change=comparisons(raw,p,'1205-COMPARE-OLD-NEW'),
+        concurrency=comparisons(raw,p,'9700-CHECK-CHANGE-IN-REC'))
     dependencies=[]
     for name,model in programs.items():
         for call in model['calls']:
@@ -142,7 +158,8 @@ def build(root):
     return dict(schema='carddemo-web-bindings/1',upstream_commit=PIN,
         scope_sha256=sha256((root/'slice-1.json').read_bytes()).hexdigest(),
         screens=screens,programs=programs,menu=options,menu_outputs=outputs,menu_option_width=int(width[1]),
-        common_constants=common,commarea=commarea,fraud=fraud,
+        common_constants=common,commarea=commarea,program_commareas=commareas,fraud=fraud,
+        account_view_projection=account_projection,account_update_comparisons=changes,
         data_uses=dependencies,outside_endpoint=scope['outside_endpoint'],
         quirks=[dict(kind='menu-outside-slice',**r) for r in options if not r['in_slice']],
         limitations=['Source inventory and generated models do not prove screen-handler equivalence.',

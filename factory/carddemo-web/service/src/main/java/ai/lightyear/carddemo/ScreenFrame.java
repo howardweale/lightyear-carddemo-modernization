@@ -13,7 +13,8 @@ public final class ScreenFrame {
     public String message="";
     public String cursor="";
     public String endpoint="";
-    public ScreenFrame(Bindings bindings,String program){
+    public ScreenFrame(Bindings bindings,String program){this(bindings,program,java.time.Clock.systemUTC());}
+    public ScreenFrame(Bindings bindings,String program,java.time.Clock clock){
         this.program=program;JsonNode screen=bindings.screen(program);transaction=screen.path("transaction").asText();
         model=screen.path("model").path("maps").get(0);
         for(JsonNode f:model.path("fields")){
@@ -21,8 +22,23 @@ public final class ScreenFrame {
             values.put(name,pad(f.path("initial").asText(""),f.path("length").asInt()));
             Map<String,Object> a=new LinkedHashMap<>();a.put("protected",f.path("protected").asBoolean());a.put("hidden",f.path("hidden").asBoolean());
             a.put("color",f.path("color").asText());a.put("highlight",f.path("highlight").asText());
+            a.put("basic",f.path("attributes"));a.put("modified",false);
+            for(JsonNode attr:f.path("attributes"))if(attr.asText().equals("FSET"))a.put("modified",true);
             attributes.put(name,a);
             for(JsonNode attr:f.path("attributes"))if(attr.asText().equals("IC"))cursor=name;
+        }
+        headers(bindings,clock);
+    }
+    private void headers(Bindings b,java.time.Clock clock){
+        java.time.ZonedDateTime now=java.time.ZonedDateTime.now(clock);
+        for(JsonNode h:b.program(program).path("headers")){
+            String source=h.path("expression").asText(),value;
+            if(source.startsWith("CCDA-TITLE"))value=b.root.path("common_constants").path(source).asText();
+            else if(source.equals("WS-CURDATE-MM-DD-YY"))value=now.format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yy",Locale.ROOT));
+            else if(source.equals("WS-CURTIME-HH-MM-SS"))value=now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss",Locale.ROOT));
+            else if(source.equals("LIT-THISPGM")||source.equals("WS-PGMNAME"))value=program;
+            else value=transaction;
+            set(h.path("target").asText(),value);
         }
     }
     public JsonNode field(String name){for(JsonNode f:model.path("fields"))if(f.path("name").asText().equals(name))return f;throw new IllegalArgumentException("unknown-screen-field");}

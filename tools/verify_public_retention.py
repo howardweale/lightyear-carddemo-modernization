@@ -44,8 +44,15 @@ def verify_all(root, output):
     names = subprocess.check_output(['git', 'ls-files', 'docs/factory/evidence-retention-*.json'], cwd=root, text=True).splitlines()
     if not names: raise ValueError('public-retention-no-committed-manifests')
     output.mkdir(parents=True, exist_ok=True)
+    failures = []
     for name in names:
-        verify(root/name, output/(Path(name).stem+'-verification.json'))
+        try:
+            verify(root/name, output/(Path(name).stem+'-verification.json'))
+        except Exception as error:
+            failures.append(dict(manifest=name, error=str(error)))
+    (output/'summary.json').write_text(json.dumps(dict(manifests=names, failures=failures), indent=2)+'\n', encoding='utf-8')
+    if failures:
+        raise ValueError('public-retention-failures: ' + '; '.join(row['manifest']+': '+row['error'] for row in failures))
 
 
 if __name__ == '__main__':

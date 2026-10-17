@@ -25,12 +25,21 @@ def require(condition, code="factory-contract-refused"):
         raise ValueError(code)
 
 
-def validate_contract(value):
+def validate_contract(value, root=None, *, check_evidence=True):
     require(isinstance(value, dict) and set(value) == COMMON)
     require(value["schema"] == "factory-contract/1" and value["kind"] in FIELDS)
     require(value["program"] in {"INTCALC", "POSTTRAN", "B06", "B07", "factory"})
     details = value["details"]
-    require(isinstance(details, dict) and set(details) == FIELDS[value["kind"]])
+    expected = FIELDS[value["kind"]]
+    require(isinstance(details, dict))
+    if value["kind"] == "scenario-threshold-approval":
+        require(set(details) in (expected, expected | {"conditions"}, expected | {"conditions", "evidence_head"}))
+        if 'evidence_head' in details:
+            require(isinstance(details['evidence_head'],str) and re.fullmatch('[0-9a-f]{40}',details['evidence_head']))
+    elif value["kind"] == "io-exception-acceptance":
+        require(set(details) in (expected, expected | {"basis"}))
+    else:
+        require(set(details) == expected)
     sources = value["sources"]
     require(isinstance(sources, list) and 0 < len(sources) <= 1000)
     paths = []
@@ -52,10 +61,14 @@ def validate_contract(value):
         for item in details["items"]:
             text_field(item, "Review item", 300)
     if kind == "scenario-threshold-approval":
+        from .threshold_conditions import validate_conditions
+        validate_conditions(value, root, check_evidence=check_evidence)
         text_field(details["version"], "Policy version", 100)
         text_field(details["effective_condition"], "Effective condition")
         require(details["compiler_refusals"] == "listed-excluded-not-blockers")
     if kind == "io-exception-acceptance":
+        if "basis" in details:
+            require(details["basis"] == "structurally-unreachable")
         require(type(details["line"]) is int and details["line"] > 0)
         text_field(details["outcome_id"], "Outcome ID", 300)
         text_field(details["outcome"], "Outcome", 100)
@@ -106,7 +119,7 @@ def load_contract(root, item):
     require(path.startswith("docs/factory/tower-requests/"))
     raw = read_bytes(confined(root, path))
     require(sha256(raw).hexdigest() == item["bound"]["contract"], "factory-contract-hash")
-    value = validate_contract(read_json(confined(root, path)))
+    value = validate_contract(read_json(confined(root, path)), root)
     require(value["kind"] == item["kind"])
     require(raw == canonical(value), "factory-contract-canonical")
     for source in value["sources"]:
@@ -134,7 +147,7 @@ class FactoryInbox(RequestInbox):
 def write_request(root, contract, *, proposer="factory-engine"):
     """Only prepares unsigned requests. Sources must already be imported public bytes."""
     from .status_export import atomic_new
-    value = validate_contract(contract)
+    value = validate_contract(contract, root)
     raw = canonical(value)
     fingerprint = sha256(raw).hexdigest()
     relative = "docs/factory/tower-requests/" + fingerprint + ".json"
@@ -169,6 +182,9 @@ def validate_decision(root, item, payload, events, session):
     kind, details = contract["kind"], contract["details"]
     result = dict(schema="factory-validation/1", contract=contract, disclosure=DISCLOSURE,
         operator_review=True, execution_authorized=False)
+    if kind == 'scenario-threshold-approval':
+        from .threshold_evidence import verify_reviews
+        verify_reviews(contract, root, events=events)
     if kind in {"equivalence-review", "twin-human-review"}:
         decisions = payload.get("factory_items")
         require(isinstance(decisions, dict) and set(decisions) == set(details["items"]), "factory-all-items-required")
@@ -188,7 +204,9 @@ def validate_decision(root, item, payload, events, session):
 def verify_validation(decision):
     validation = decision.get("validation", {})
     require(validation.get("schema") == "factory-validation/1" and validation.get("disclosure") == DISCLOSURE)
-    contract = validate_contract(validation["contract"])
+    # Journal validation verifies the signed shape; intake and consumption
+    # independently re-read current evidence bytes in their own trusted root.
+    contract = validate_contract(validation["contract"], check_evidence=False)
     require(contract["kind"] == decision["kind"])
     require(sha256(canonical(contract)).hexdigest() == decision["bound"]["contract"])
     if decision["kind"] in {"equivalence-review", "twin-human-review"}:
@@ -206,9 +224,10 @@ def verify_validation(decision):
 
 class FactoryDecisions:
     """Consumers get trust externally; never trust a key/head embedded in evidence."""
-    def __init__(self, public_key, trusted_head):
+    def __init__(self, public_key, trusted_head, *, evidence_root=None):
         require(public_key is not None and isinstance(trusted_head, str) and SHA.fullmatch(trusted_head), "factory-trusted-head-required")
         self.public_key, self.head = public_key, trusted_head
+        self.evidence_root = evidence_root
 
     def verify(self, proof, kind, contract, outcomes):
         from .verification import verify_decision, verify_journal
@@ -217,10 +236,16 @@ class FactoryDecisions:
         event = next((e for e in bound if e.get("content_sha256") == proof.get("decision_sha256")), None)
         require(event is not None, "factory-signed-decision-required")
         expected = dict(event["payload"]["bound"])
-        expected["contract"] = sha256(canonical(validate_contract(contract))).hexdigest()
+        expected["contract"] = sha256(canonical(validate_contract(contract, self.evidence_root))).hexdigest()
         decision = verify_decision(proof, self.public_key, kind, expected, scope=SCOPE,
             expected_head=self.head, outcomes=outcomes)
         require(decision["validation"]["contract"] == contract)
+        if self.evidence_root is not None:
+            for source in contract['sources']:
+                require(sha256(read_bytes(confined(self.evidence_root,source['path']))).hexdigest()==source['sha256'], 'factory-source-hash')
+        if kind == 'scenario-threshold-approval':
+            from .threshold_evidence import verify_reviews
+            verify_reviews(contract, self.evidence_root, authority=self, journal=proof['journal'])
         if kind == "equivalence-review":
             events = verify_journal(proof["journal"], self.public_key, scope=SCOPE, expected_head=self.head)
             for other in events:

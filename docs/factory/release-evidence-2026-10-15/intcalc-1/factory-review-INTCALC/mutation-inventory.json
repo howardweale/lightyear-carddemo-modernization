@@ -1,0 +1,3823 @@
+[
+  {
+    "end_line": 64,
+    "id": "CBACT04C-receiving-size-64-1",
+    "line": 64,
+    "operator": "receiving-size",
+    "original": "              10 FD-TRANCAT-ACCT-ID             PIC 9(11).                      ",
+    "replacement": "       10 FD-TRANCAT-ACCT-ID             PIC 9(10).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 64,
+    "id": "CBACT04C-receiving-scale-64-2",
+    "line": 64,
+    "operator": "receiving-scale",
+    "original": "              10 FD-TRANCAT-ACCT-ID             PIC 9(11).                      ",
+    "replacement": "       10 FD-TRANCAT-ACCT-ID             PIC 9(11)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 66,
+    "id": "CBACT04C-receiving-size-66-3",
+    "line": 66,
+    "operator": "receiving-size",
+    "original": "              10 FD-TRANCAT-CD                  PIC 9(04).                      ",
+    "replacement": "       10 FD-TRANCAT-CD                  PIC 9(3).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 66,
+    "id": "CBACT04C-receiving-scale-66-4",
+    "line": 66,
+    "operator": "receiving-scale",
+    "original": "              10 FD-TRANCAT-CD                  PIC 9(04).                      ",
+    "replacement": "       10 FD-TRANCAT-CD                  PIC 9(04)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 72,
+    "id": "CBACT04C-receiving-size-72-5",
+    "line": 72,
+    "operator": "receiving-size",
+    "original": "           05 FD-XREF-CUST-NUM                  PIC 9(09).                      ",
+    "replacement": "       05 FD-XREF-CUST-NUM                  PIC 9(8).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 72,
+    "id": "CBACT04C-receiving-scale-72-6",
+    "line": 72,
+    "operator": "receiving-scale",
+    "original": "           05 FD-XREF-CUST-NUM                  PIC 9(09).                      ",
+    "replacement": "       05 FD-XREF-CUST-NUM                  PIC 9(09)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 73,
+    "id": "CBACT04C-receiving-size-73-7",
+    "line": 73,
+    "operator": "receiving-size",
+    "original": "           05 FD-XREF-ACCT-ID                   PIC 9(11).                      ",
+    "replacement": "       05 FD-XREF-ACCT-ID                   PIC 9(10).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 73,
+    "id": "CBACT04C-receiving-scale-73-8",
+    "line": 73,
+    "operator": "receiving-scale",
+    "original": "           05 FD-XREF-ACCT-ID                   PIC 9(11).                      ",
+    "replacement": "       05 FD-XREF-ACCT-ID                   PIC 9(11)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 81,
+    "id": "CBACT04C-receiving-size-81-9",
+    "line": 81,
+    "operator": "receiving-size",
+    "original": "              10 FD-DIS-TRAN-CAT-CD             PIC 9(04).                      ",
+    "replacement": "       10 FD-DIS-TRAN-CAT-CD             PIC 9(3).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 81,
+    "id": "CBACT04C-receiving-scale-81-10",
+    "line": 81,
+    "operator": "receiving-scale",
+    "original": "              10 FD-DIS-TRAN-CAT-CD             PIC 9(04).                      ",
+    "replacement": "       10 FD-DIS-TRAN-CAT-CD             PIC 9(04)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 86,
+    "id": "CBACT04C-receiving-size-86-11",
+    "line": 86,
+    "operator": "receiving-size",
+    "original": "           05 FD-ACCT-ID                        PIC 9(11).                      ",
+    "replacement": "       05 FD-ACCT-ID                        PIC 9(10).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 86,
+    "id": "CBACT04C-receiving-scale-86-12",
+    "line": 86,
+    "operator": "receiving-scale",
+    "original": "           05 FD-ACCT-ID                        PIC 9(11).                      ",
+    "replacement": "       05 FD-ACCT-ID                        PIC 9(11)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 125,
+    "id": "CBACT04C-receiving-size-125-13",
+    "line": 125,
+    "operator": "receiving-size",
+    "original": "       01  TWO-BYTES-BINARY        PIC 9(4) BINARY.                             ",
+    "replacement": "       01  TWO-BYTES-BINARY        PIC 9(3) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 125,
+    "id": "CBACT04C-receiving-scale-125-14",
+    "line": 125,
+    "operator": "receiving-scale",
+    "original": "       01  TWO-BYTES-BINARY        PIC 9(4) BINARY.                             ",
+    "replacement": "       01  TWO-BYTES-BINARY        PIC 9(4)V9(1) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 130,
+    "id": "CBACT04C-receiving-size-130-15",
+    "line": 130,
+    "operator": "receiving-size",
+    "original": "           05  IO-STATUS-0401      PIC 9   VALUE 0.                             ",
+    "replacement": "       05  IO-STATUS-0401      PIC 9(2)   VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 130,
+    "id": "CBACT04C-receiving-scale-130-16",
+    "line": 130,
+    "operator": "receiving-scale",
+    "original": "           05  IO-STATUS-0401      PIC 9   VALUE 0.                             ",
+    "replacement": "       05  IO-STATUS-0401      PIC 9V9(1)   VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 131,
+    "id": "CBACT04C-receiving-scale-131-18",
+    "line": 131,
+    "operator": "receiving-scale",
+    "original": "           05  IO-STATUS-0403      PIC 999 VALUE 0.                             ",
+    "replacement": "       05  IO-STATUS-0403      PIC 999V9(1) VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 133,
+    "id": "CBACT04C-receiving-size-133-19",
+    "line": 133,
+    "operator": "receiving-size",
+    "original": "       01  APPL-RESULT             PIC S9(9)   COMP.                            ",
+    "replacement": "       01  APPL-RESULT             PIC S9(8)   COMP.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 133,
+    "id": "CBACT04C-receiving-scale-133-20",
+    "line": 133,
+    "operator": "receiving-scale",
+    "original": "       01  APPL-RESULT             PIC S9(9)   COMP.                            ",
+    "replacement": "       01  APPL-RESULT             PIC S9(9)V9(1)   COMP.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 138,
+    "id": "CBACT04C-receiving-size-138-21",
+    "line": 138,
+    "operator": "receiving-size",
+    "original": "       01  ABCODE                  PIC S9(9) BINARY.                            ",
+    "replacement": "       01  ABCODE                  PIC S9(8) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 138,
+    "id": "CBACT04C-receiving-scale-138-22",
+    "line": 138,
+    "operator": "receiving-scale",
+    "original": "       01  ABCODE                  PIC S9(9) BINARY.                            ",
+    "replacement": "       01  ABCODE                  PIC S9(9)V9(1) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 139,
+    "id": "CBACT04C-receiving-size-139-23",
+    "line": 139,
+    "operator": "receiving-size",
+    "original": "       01  TIMING                  PIC S9(9) BINARY.                            ",
+    "replacement": "       01  TIMING                  PIC S9(8) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 139,
+    "id": "CBACT04C-receiving-scale-139-24",
+    "line": 139,
+    "operator": "receiving-scale",
+    "original": "       01  TIMING                  PIC S9(9) BINARY.                            ",
+    "replacement": "       01  TIMING                  PIC S9(9)V9(1) BINARY.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 164,
+    "id": "CBACT04C-receiving-size-164-25",
+    "line": 164,
+    "operator": "receiving-size",
+    "original": "           06 DB2-MIL                   PIC 9(002).                             ",
+    "replacement": "       06 DB2-MIL                   PIC 9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 164,
+    "id": "CBACT04C-receiving-scale-164-26",
+    "line": 164,
+    "operator": "receiving-scale",
+    "original": "           06 DB2-MIL                   PIC 9(002).                             ",
+    "replacement": "       06 DB2-MIL                   PIC 9(002)V9(1).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 168,
+    "id": "CBACT04C-receiving-size-168-27",
+    "line": 168,
+    "operator": "receiving-size",
+    "original": "           05 WS-MONTHLY-INT            PIC S9(09)V99.                          ",
+    "replacement": "       05 WS-MONTHLY-INT            PIC S9(8)V99.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 168,
+    "id": "CBACT04C-receiving-scale-168-28",
+    "line": 168,
+    "operator": "receiving-scale",
+    "original": "           05 WS-MONTHLY-INT            PIC S9(09)V99.                          ",
+    "replacement": "       05 WS-MONTHLY-INT            PIC S9(09)V9(3).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 169,
+    "id": "CBACT04C-receiving-size-169-29",
+    "line": 169,
+    "operator": "receiving-size",
+    "original": "           05 WS-TOTAL-INT              PIC S9(09)V99.                          ",
+    "replacement": "       05 WS-TOTAL-INT              PIC S9(8)V99.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 169,
+    "id": "CBACT04C-receiving-scale-169-30",
+    "line": 169,
+    "operator": "receiving-scale",
+    "original": "           05 WS-TOTAL-INT              PIC S9(09)V99.                          ",
+    "replacement": "       05 WS-TOTAL-INT              PIC S9(09)V9(3).",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 172,
+    "id": "CBACT04C-receiving-size-172-31",
+    "line": 172,
+    "operator": "receiving-size",
+    "original": "           05 WS-RECORD-COUNT           PIC 9(09) VALUE 0.                      ",
+    "replacement": "       05 WS-RECORD-COUNT           PIC 9(8) VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 172,
+    "id": "CBACT04C-receiving-scale-172-32",
+    "line": 172,
+    "operator": "receiving-scale",
+    "original": "           05 WS-RECORD-COUNT           PIC 9(09) VALUE 0.                      ",
+    "replacement": "       05 WS-RECORD-COUNT           PIC 9(09)V9(1) VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 173,
+    "id": "CBACT04C-receiving-size-173-33",
+    "line": 173,
+    "operator": "receiving-size",
+    "original": "           05 WS-TRANID-SUFFIX          PIC 9(06) VALUE 0.                      ",
+    "replacement": "       05 WS-TRANID-SUFFIX          PIC 9(5) VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 173,
+    "id": "CBACT04C-receiving-scale-173-34",
+    "line": 173,
+    "operator": "receiving-scale",
+    "original": "           05 WS-TRANID-SUFFIX          PIC 9(06) VALUE 0.                      ",
+    "replacement": "       05 WS-TRANID-SUFFIX          PIC 9(06)V9(1) VALUE 0.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 177,
+    "id": "CBACT04C-receiving-size-177-35",
+    "line": 177,
+    "operator": "receiving-size",
+    "original": "           05  PARM-LENGTH         PIC S9(04) COMP.                             ",
+    "replacement": "       05  PARM-LENGTH         PIC S9(3) COMP.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 177,
+    "id": "CBACT04C-receiving-scale-177-36",
+    "line": 177,
+    "operator": "receiving-scale",
+    "original": "           05  PARM-LENGTH         PIC S9(04) COMP.                             ",
+    "replacement": "       05  PARM-LENGTH         PIC S9(04)V9(1) COMP.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 182,
+    "id": "CBACT04C-skip-PERFORM-182-37",
+    "line": 182,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 0000-TCATBALF-OPEN.                                          ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 183,
+    "id": "CBACT04C-skip-PERFORM-183-38",
+    "line": 183,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 0100-XREFFILE-OPEN.                                          ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 184,
+    "id": "CBACT04C-skip-PERFORM-184-39",
+    "line": 184,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 0200-DISCGRP-OPEN.                                           ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 185,
+    "id": "CBACT04C-skip-PERFORM-185-40",
+    "line": 185,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 0300-ACCTFILE-OPEN.                                          ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 187,
+    "id": "CBACT04C-skip-PERFORM-186-41",
+    "line": 186,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 0400-TRANFILE-OPEN.                                          \n                                                                                ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 188,
+    "id": "CBACT04C-relational-188-42",
+    "line": 188,
+    "operator": "relational",
+    "original": "           PERFORM UNTIL END-OF-FILE = 'Y'                                      ",
+    "replacement": "       PERFORM UNTIL END-OF-FILE <> 'Y'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 189,
+    "id": "CBACT04C-relational-189-43",
+    "line": 189,
+    "operator": "relational",
+    "original": "               IF  END-OF-FILE = 'N'                                            ",
+    "replacement": "       IF  END-OF-FILE <> 'N'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 189,
+    "id": "CBACT04C-negate-condition-189-44",
+    "line": 189,
+    "operator": "negate-condition",
+    "original": "               IF  END-OF-FILE = 'N'                                            ",
+    "replacement": "       IF NOT (END-OF-FILE = 'N')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 190,
+    "id": "CBACT04C-skip-PERFORM-190-45",
+    "line": 190,
+    "operator": "skip-PERFORM",
+    "original": "                   PERFORM 1000-TCATBALF-GET-NEXT                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 191,
+    "id": "CBACT04C-relational-191-46",
+    "line": 191,
+    "operator": "relational",
+    "original": "                   IF  END-OF-FILE = 'N'                                        ",
+    "replacement": "       IF  END-OF-FILE <> 'N'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 191,
+    "id": "CBACT04C-negate-condition-191-47",
+    "line": 191,
+    "operator": "negate-condition",
+    "original": "                   IF  END-OF-FILE = 'N'                                        ",
+    "replacement": "       IF NOT (END-OF-FILE = 'N')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 192,
+    "id": "CBACT04C-constant-192-48",
+    "line": 192,
+    "operator": "constant",
+    "original": "                     ADD 1 TO WS-RECORD-COUNT                                   ",
+    "replacement": "       ADD 0 TO WS-RECORD-COUNT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 192,
+    "id": "CBACT04C-constant-192-49",
+    "line": 192,
+    "operator": "constant",
+    "original": "                     ADD 1 TO WS-RECORD-COUNT                                   ",
+    "replacement": "       ADD 2 TO WS-RECORD-COUNT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 192,
+    "id": "CBACT04C-delete-ADD-192-50",
+    "line": 192,
+    "operator": "delete-ADD",
+    "original": "                     ADD 1 TO WS-RECORD-COUNT                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 194,
+    "id": "CBACT04C-relational-194-51",
+    "line": 194,
+    "operator": "relational",
+    "original": "                     IF TRANCAT-ACCT-ID NOT= WS-LAST-ACCT-NUM                   ",
+    "replacement": "       IF TRANCAT-ACCT-ID NOT<> WS-LAST-ACCT-NUM",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 194,
+    "id": "CBACT04C-negate-condition-194-52",
+    "line": 194,
+    "operator": "negate-condition",
+    "original": "                     IF TRANCAT-ACCT-ID NOT= WS-LAST-ACCT-NUM                   ",
+    "replacement": "       IF NOT (TRANCAT-ACCT-ID NOT= WS-LAST-ACCT-NUM)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 195,
+    "id": "CBACT04C-relational-195-53",
+    "line": 195,
+    "operator": "relational",
+    "original": "                       IF WS-FIRST-TIME NOT = 'Y'                               ",
+    "replacement": "       IF WS-FIRST-TIME NOT <> 'Y'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 195,
+    "id": "CBACT04C-negate-condition-195-54",
+    "line": 195,
+    "operator": "negate-condition",
+    "original": "                       IF WS-FIRST-TIME NOT = 'Y'                               ",
+    "replacement": "       IF NOT (WS-FIRST-TIME NOT = 'Y')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 196,
+    "id": "CBACT04C-skip-PERFORM-196-55",
+    "line": 196,
+    "operator": "skip-PERFORM",
+    "original": "                          PERFORM 1050-UPDATE-ACCOUNT                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 198,
+    "id": "CBACT04C-delete-MOVE-198-56",
+    "line": 198,
+    "operator": "delete-MOVE",
+    "original": "                          MOVE 'N' TO WS-FIRST-TIME                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 200,
+    "id": "CBACT04C-constant-200-57",
+    "line": 200,
+    "operator": "constant",
+    "original": "                       MOVE 0 TO WS-TOTAL-INT                                   ",
+    "replacement": "       MOVE -1 TO WS-TOTAL-INT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 200,
+    "id": "CBACT04C-constant-200-58",
+    "line": 200,
+    "operator": "constant",
+    "original": "                       MOVE 0 TO WS-TOTAL-INT                                   ",
+    "replacement": "       MOVE 1 TO WS-TOTAL-INT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 200,
+    "id": "CBACT04C-delete-MOVE-200-59",
+    "line": 200,
+    "operator": "delete-MOVE",
+    "original": "                       MOVE 0 TO WS-TOTAL-INT                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 201,
+    "id": "CBACT04C-delete-MOVE-201-60",
+    "line": 201,
+    "operator": "delete-MOVE",
+    "original": "                       MOVE TRANCAT-ACCT-ID TO WS-LAST-ACCT-NUM                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 202,
+    "id": "CBACT04C-delete-MOVE-202-61",
+    "line": 202,
+    "operator": "delete-MOVE",
+    "original": "                       MOVE TRANCAT-ACCT-ID TO FD-ACCT-ID                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 203,
+    "id": "CBACT04C-skip-PERFORM-203-62",
+    "line": 203,
+    "operator": "skip-PERFORM",
+    "original": "                       PERFORM 1100-GET-ACCT-DATA                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 204,
+    "id": "CBACT04C-delete-MOVE-204-63",
+    "line": 204,
+    "operator": "delete-MOVE",
+    "original": "                       MOVE TRANCAT-ACCT-ID TO FD-XREF-ACCT-ID                  ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 205,
+    "id": "CBACT04C-skip-PERFORM-205-64",
+    "line": 205,
+    "operator": "skip-PERFORM",
+    "original": "                       PERFORM 1110-GET-XREF-DATA                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 210,
+    "id": "CBACT04C-delete-MOVE-210-65",
+    "line": 210,
+    "operator": "delete-MOVE",
+    "original": "                     MOVE ACCT-GROUP-ID TO FD-DIS-ACCT-GROUP-ID                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 211,
+    "id": "CBACT04C-delete-MOVE-211-66",
+    "line": 211,
+    "operator": "delete-MOVE",
+    "original": "                     MOVE TRANCAT-CD TO FD-DIS-TRAN-CAT-CD                      ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 212,
+    "id": "CBACT04C-delete-MOVE-212-67",
+    "line": 212,
+    "operator": "delete-MOVE",
+    "original": "                     MOVE TRANCAT-TYPE-CD TO FD-DIS-TRAN-TYPE-CD                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 213,
+    "id": "CBACT04C-skip-PERFORM-213-68",
+    "line": 213,
+    "operator": "skip-PERFORM",
+    "original": "                     PERFORM 1200-GET-INTEREST-RATE                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 214,
+    "id": "CBACT04C-relational-214-69",
+    "line": 214,
+    "operator": "relational",
+    "original": "                     IF DIS-INT-RATE NOT = 0                                    ",
+    "replacement": "       IF DIS-INT-RATE NOT <> 0",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 214,
+    "id": "CBACT04C-constant-214-70",
+    "line": 214,
+    "operator": "constant",
+    "original": "                     IF DIS-INT-RATE NOT = 0                                    ",
+    "replacement": "       IF DIS-INT-RATE NOT = -1",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 214,
+    "id": "CBACT04C-constant-214-71",
+    "line": 214,
+    "operator": "constant",
+    "original": "                     IF DIS-INT-RATE NOT = 0                                    ",
+    "replacement": "       IF DIS-INT-RATE NOT = 1",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 214,
+    "id": "CBACT04C-negate-condition-214-72",
+    "line": 214,
+    "operator": "negate-condition",
+    "original": "                     IF DIS-INT-RATE NOT = 0                                    ",
+    "replacement": "       IF NOT (DIS-INT-RATE NOT = 0)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 215,
+    "id": "CBACT04C-skip-PERFORM-215-73",
+    "line": 215,
+    "operator": "skip-PERFORM",
+    "original": "                       PERFORM 1300-COMPUTE-INTEREST                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 216,
+    "id": "CBACT04C-skip-PERFORM-216-74",
+    "line": 216,
+    "operator": "skip-PERFORM",
+    "original": "                       PERFORM 1400-COMPUTE-FEES                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 220,
+    "id": "CBACT04C-skip-PERFORM-220-75",
+    "line": 220,
+    "operator": "skip-PERFORM",
+    "original": "                    PERFORM 1050-UPDATE-ACCOUNT                                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 224,
+    "id": "CBACT04C-skip-PERFORM-224-76",
+    "line": 224,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 9000-TCATBALF-CLOSE.                                         ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 225,
+    "id": "CBACT04C-skip-PERFORM-225-77",
+    "line": 225,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 9100-XREFFILE-CLOSE.                                         ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 226,
+    "id": "CBACT04C-skip-PERFORM-226-78",
+    "line": 226,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 9200-DISCGRP-CLOSE.                                          ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 227,
+    "id": "CBACT04C-skip-PERFORM-227-79",
+    "line": 227,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 9300-ACCTFILE-CLOSE.                                         ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 229,
+    "id": "CBACT04C-skip-PERFORM-228-80",
+    "line": 228,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 9400-TRANFILE-CLOSE.                                         \n                                                                                ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 235,
+    "id": "CBACT04C-constant-235-81",
+    "line": 235,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 235,
+    "id": "CBACT04C-constant-235-82",
+    "line": 235,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 235,
+    "id": "CBACT04C-delete-MOVE-235-83",
+    "line": 235,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 237,
+    "id": "CBACT04C-relational-237-84",
+    "line": 237,
+    "operator": "relational",
+    "original": "           IF  TCATBALF-STATUS = '00'                                           ",
+    "replacement": "       IF  TCATBALF-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 237,
+    "id": "CBACT04C-negate-condition-237-85",
+    "line": 237,
+    "operator": "negate-condition",
+    "original": "           IF  TCATBALF-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (TCATBALF-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 238,
+    "id": "CBACT04C-constant-238-86",
+    "line": 238,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 238,
+    "id": "CBACT04C-constant-238-87",
+    "line": 238,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 238,
+    "id": "CBACT04C-delete-MOVE-238-88",
+    "line": 238,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 240,
+    "id": "CBACT04C-constant-240-89",
+    "line": 240,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 240,
+    "id": "CBACT04C-constant-240-90",
+    "line": 240,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 240,
+    "id": "CBACT04C-delete-MOVE-240-91",
+    "line": 240,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 242,
+    "id": "CBACT04C-negate-condition-242-92",
+    "line": 242,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 246,
+    "id": "CBACT04C-delete-MOVE-246-93",
+    "line": 246,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TCATBALF-STATUS TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 247,
+    "id": "CBACT04C-skip-PERFORM-247-94",
+    "line": 247,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 248,
+    "id": "CBACT04C-skip-PERFORM-248-95",
+    "line": 248,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 253,
+    "id": "CBACT04C-constant-253-96",
+    "line": 253,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 253,
+    "id": "CBACT04C-constant-253-97",
+    "line": 253,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 253,
+    "id": "CBACT04C-delete-MOVE-253-98",
+    "line": 253,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 255,
+    "id": "CBACT04C-relational-255-99",
+    "line": 255,
+    "operator": "relational",
+    "original": "           IF  XREFFILE-STATUS = '00'                                           ",
+    "replacement": "       IF  XREFFILE-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 255,
+    "id": "CBACT04C-negate-condition-255-100",
+    "line": 255,
+    "operator": "negate-condition",
+    "original": "           IF  XREFFILE-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (XREFFILE-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 256,
+    "id": "CBACT04C-constant-256-101",
+    "line": 256,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 256,
+    "id": "CBACT04C-constant-256-102",
+    "line": 256,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 256,
+    "id": "CBACT04C-delete-MOVE-256-103",
+    "line": 256,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 258,
+    "id": "CBACT04C-constant-258-104",
+    "line": 258,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 258,
+    "id": "CBACT04C-constant-258-105",
+    "line": 258,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 258,
+    "id": "CBACT04C-delete-MOVE-258-106",
+    "line": 258,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 260,
+    "id": "CBACT04C-negate-condition-260-107",
+    "line": 260,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 264,
+    "id": "CBACT04C-delete-MOVE-264-108",
+    "line": 264,
+    "operator": "delete-MOVE",
+    "original": "               MOVE XREFFILE-STATUS TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 265,
+    "id": "CBACT04C-skip-PERFORM-265-109",
+    "line": 265,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 266,
+    "id": "CBACT04C-skip-PERFORM-266-110",
+    "line": 266,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 271,
+    "id": "CBACT04C-constant-271-111",
+    "line": 271,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 271,
+    "id": "CBACT04C-constant-271-112",
+    "line": 271,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 271,
+    "id": "CBACT04C-delete-MOVE-271-113",
+    "line": 271,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 273,
+    "id": "CBACT04C-relational-273-114",
+    "line": 273,
+    "operator": "relational",
+    "original": "           IF  DISCGRP-STATUS = '00'                                            ",
+    "replacement": "       IF  DISCGRP-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 273,
+    "id": "CBACT04C-negate-condition-273-115",
+    "line": 273,
+    "operator": "negate-condition",
+    "original": "           IF  DISCGRP-STATUS = '00'                                            ",
+    "replacement": "       IF NOT (DISCGRP-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 274,
+    "id": "CBACT04C-constant-274-116",
+    "line": 274,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 274,
+    "id": "CBACT04C-constant-274-117",
+    "line": 274,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 274,
+    "id": "CBACT04C-delete-MOVE-274-118",
+    "line": 274,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 276,
+    "id": "CBACT04C-constant-276-119",
+    "line": 276,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 276,
+    "id": "CBACT04C-constant-276-120",
+    "line": 276,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 276,
+    "id": "CBACT04C-delete-MOVE-276-121",
+    "line": 276,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 278,
+    "id": "CBACT04C-negate-condition-278-122",
+    "line": 278,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 282,
+    "id": "CBACT04C-delete-MOVE-282-123",
+    "line": 282,
+    "operator": "delete-MOVE",
+    "original": "               MOVE DISCGRP-STATUS TO IO-STATUS                                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 283,
+    "id": "CBACT04C-skip-PERFORM-283-124",
+    "line": 283,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 284,
+    "id": "CBACT04C-skip-PERFORM-284-125",
+    "line": 284,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 290,
+    "id": "CBACT04C-constant-290-126",
+    "line": 290,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 290,
+    "id": "CBACT04C-constant-290-127",
+    "line": 290,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 290,
+    "id": "CBACT04C-delete-MOVE-290-128",
+    "line": 290,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 292,
+    "id": "CBACT04C-relational-292-129",
+    "line": 292,
+    "operator": "relational",
+    "original": "           IF  ACCTFILE-STATUS = '00'                                           ",
+    "replacement": "       IF  ACCTFILE-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 292,
+    "id": "CBACT04C-negate-condition-292-130",
+    "line": 292,
+    "operator": "negate-condition",
+    "original": "           IF  ACCTFILE-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (ACCTFILE-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 293,
+    "id": "CBACT04C-constant-293-131",
+    "line": 293,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 293,
+    "id": "CBACT04C-constant-293-132",
+    "line": 293,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 293,
+    "id": "CBACT04C-delete-MOVE-293-133",
+    "line": 293,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 295,
+    "id": "CBACT04C-constant-295-134",
+    "line": 295,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 295,
+    "id": "CBACT04C-constant-295-135",
+    "line": 295,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 295,
+    "id": "CBACT04C-delete-MOVE-295-136",
+    "line": 295,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 297,
+    "id": "CBACT04C-negate-condition-297-137",
+    "line": 297,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 301,
+    "id": "CBACT04C-delete-MOVE-301-138",
+    "line": 301,
+    "operator": "delete-MOVE",
+    "original": "               MOVE ACCTFILE-STATUS TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 302,
+    "id": "CBACT04C-skip-PERFORM-302-139",
+    "line": 302,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 303,
+    "id": "CBACT04C-skip-PERFORM-303-140",
+    "line": 303,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 308,
+    "id": "CBACT04C-constant-308-141",
+    "line": 308,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 308,
+    "id": "CBACT04C-constant-308-142",
+    "line": 308,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 308,
+    "id": "CBACT04C-delete-MOVE-308-143",
+    "line": 308,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 310,
+    "id": "CBACT04C-relational-310-144",
+    "line": 310,
+    "operator": "relational",
+    "original": "           IF  TRANFILE-STATUS = '00'                                           ",
+    "replacement": "       IF  TRANFILE-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 310,
+    "id": "CBACT04C-negate-condition-310-145",
+    "line": 310,
+    "operator": "negate-condition",
+    "original": "           IF  TRANFILE-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (TRANFILE-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 311,
+    "id": "CBACT04C-constant-311-146",
+    "line": 311,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 311,
+    "id": "CBACT04C-constant-311-147",
+    "line": 311,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 311,
+    "id": "CBACT04C-delete-MOVE-311-148",
+    "line": 311,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 313,
+    "id": "CBACT04C-constant-313-149",
+    "line": 313,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 313,
+    "id": "CBACT04C-constant-313-150",
+    "line": 313,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 313,
+    "id": "CBACT04C-delete-MOVE-313-151",
+    "line": 313,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 315,
+    "id": "CBACT04C-negate-condition-315-152",
+    "line": 315,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 319,
+    "id": "CBACT04C-delete-MOVE-319-153",
+    "line": 319,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TRANFILE-STATUS TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 320,
+    "id": "CBACT04C-skip-PERFORM-320-154",
+    "line": 320,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 321,
+    "id": "CBACT04C-skip-PERFORM-321-155",
+    "line": 321,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 327,
+    "id": "CBACT04C-relational-327-156",
+    "line": 327,
+    "operator": "relational",
+    "original": "           IF  TCATBALF-STATUS  = '00'                                          ",
+    "replacement": "       IF  TCATBALF-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 327,
+    "id": "CBACT04C-negate-condition-327-157",
+    "line": 327,
+    "operator": "negate-condition",
+    "original": "           IF  TCATBALF-STATUS  = '00'                                          ",
+    "replacement": "       IF NOT (TCATBALF-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 328,
+    "id": "CBACT04C-constant-328-158",
+    "line": 328,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 328,
+    "id": "CBACT04C-constant-328-159",
+    "line": 328,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 328,
+    "id": "CBACT04C-delete-MOVE-328-160",
+    "line": 328,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 330,
+    "id": "CBACT04C-relational-330-161",
+    "line": 330,
+    "operator": "relational",
+    "original": "               IF  TCATBALF-STATUS  = '10'                                      ",
+    "replacement": "       IF  TCATBALF-STATUS  <> '10'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 330,
+    "id": "CBACT04C-negate-condition-330-162",
+    "line": 330,
+    "operator": "negate-condition",
+    "original": "               IF  TCATBALF-STATUS  = '10'                                      ",
+    "replacement": "       IF NOT (TCATBALF-STATUS  = '10')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 331,
+    "id": "CBACT04C-constant-331-163",
+    "line": 331,
+    "operator": "constant",
+    "original": "                   MOVE 16 TO APPL-RESULT                                       ",
+    "replacement": "       MOVE 15 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 331,
+    "id": "CBACT04C-constant-331-164",
+    "line": 331,
+    "operator": "constant",
+    "original": "                   MOVE 16 TO APPL-RESULT                                       ",
+    "replacement": "       MOVE 17 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 331,
+    "id": "CBACT04C-delete-MOVE-331-165",
+    "line": 331,
+    "operator": "delete-MOVE",
+    "original": "                   MOVE 16 TO APPL-RESULT                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 333,
+    "id": "CBACT04C-constant-333-166",
+    "line": 333,
+    "operator": "constant",
+    "original": "                   MOVE 12 TO APPL-RESULT                                       ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 333,
+    "id": "CBACT04C-constant-333-167",
+    "line": 333,
+    "operator": "constant",
+    "original": "                   MOVE 12 TO APPL-RESULT                                       ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 333,
+    "id": "CBACT04C-delete-MOVE-333-168",
+    "line": 333,
+    "operator": "delete-MOVE",
+    "original": "                   MOVE 12 TO APPL-RESULT                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 336,
+    "id": "CBACT04C-negate-condition-336-169",
+    "line": 336,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 339,
+    "id": "CBACT04C-negate-condition-339-170",
+    "line": 339,
+    "operator": "negate-condition",
+    "original": "               IF  APPL-EOF                                                     ",
+    "replacement": "       IF NOT (APPL-EOF)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 340,
+    "id": "CBACT04C-delete-MOVE-340-171",
+    "line": 340,
+    "operator": "delete-MOVE",
+    "original": "                   MOVE 'Y' TO END-OF-FILE                                      ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 343,
+    "id": "CBACT04C-delete-MOVE-343-172",
+    "line": 343,
+    "operator": "delete-MOVE",
+    "original": "                   MOVE TCATBALF-STATUS TO IO-STATUS                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 344,
+    "id": "CBACT04C-skip-PERFORM-344-173",
+    "line": 344,
+    "operator": "skip-PERFORM",
+    "original": "                   PERFORM 9910-DISPLAY-IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 345,
+    "id": "CBACT04C-skip-PERFORM-345-174",
+    "line": 345,
+    "operator": "skip-PERFORM",
+    "original": "                   PERFORM 9999-ABEND-PROGRAM                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 352,
+    "id": "CBACT04C-delete-ADD-352-175",
+    "line": 352,
+    "operator": "delete-ADD",
+    "original": "           ADD WS-TOTAL-INT  TO ACCT-CURR-BAL                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 353,
+    "id": "CBACT04C-constant-353-176",
+    "line": 353,
+    "operator": "constant",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-CREDIT                                       ",
+    "replacement": "       MOVE -1 TO ACCT-CURR-CYC-CREDIT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 353,
+    "id": "CBACT04C-constant-353-177",
+    "line": 353,
+    "operator": "constant",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-CREDIT                                       ",
+    "replacement": "       MOVE 1 TO ACCT-CURR-CYC-CREDIT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 353,
+    "id": "CBACT04C-delete-MOVE-353-178",
+    "line": 353,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-CREDIT                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 354,
+    "id": "CBACT04C-constant-354-179",
+    "line": 354,
+    "operator": "constant",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-DEBIT                                        ",
+    "replacement": "       MOVE -1 TO ACCT-CURR-CYC-DEBIT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 354,
+    "id": "CBACT04C-constant-354-180",
+    "line": 354,
+    "operator": "constant",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-DEBIT                                        ",
+    "replacement": "       MOVE 1 TO ACCT-CURR-CYC-DEBIT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 355,
+    "id": "CBACT04C-delete-MOVE-354-181",
+    "line": 354,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 0 TO ACCT-CURR-CYC-DEBIT                                        \n                                                                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 356,
+    "id": "CBACT04C-delete-REWRITE-356-182",
+    "line": 356,
+    "operator": "delete-REWRITE",
+    "original": "           REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD                         ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 357,
+    "id": "CBACT04C-relational-357-183",
+    "line": 357,
+    "operator": "relational",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF  ACCTFILE-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 357,
+    "id": "CBACT04C-negate-condition-357-184",
+    "line": 357,
+    "operator": "negate-condition",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF NOT (ACCTFILE-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 358,
+    "id": "CBACT04C-constant-358-185",
+    "line": 358,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 358,
+    "id": "CBACT04C-constant-358-186",
+    "line": 358,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 358,
+    "id": "CBACT04C-delete-MOVE-358-187",
+    "line": 358,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 360,
+    "id": "CBACT04C-constant-360-188",
+    "line": 360,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 360,
+    "id": "CBACT04C-constant-360-189",
+    "line": 360,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 360,
+    "id": "CBACT04C-delete-MOVE-360-190",
+    "line": 360,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 362,
+    "id": "CBACT04C-negate-condition-362-191",
+    "line": 362,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 366,
+    "id": "CBACT04C-delete-MOVE-366-192",
+    "line": 366,
+    "operator": "delete-MOVE",
+    "original": "               MOVE ACCTFILE-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 367,
+    "id": "CBACT04C-skip-PERFORM-367-193",
+    "line": 367,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 368,
+    "id": "CBACT04C-skip-PERFORM-368-194",
+    "line": 368,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 378,
+    "id": "CBACT04C-relational-378-195",
+    "line": 378,
+    "operator": "relational",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF  ACCTFILE-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 378,
+    "id": "CBACT04C-negate-condition-378-196",
+    "line": 378,
+    "operator": "negate-condition",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF NOT (ACCTFILE-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 379,
+    "id": "CBACT04C-constant-379-197",
+    "line": 379,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 379,
+    "id": "CBACT04C-constant-379-198",
+    "line": 379,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 379,
+    "id": "CBACT04C-delete-MOVE-379-199",
+    "line": 379,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 381,
+    "id": "CBACT04C-constant-381-200",
+    "line": 381,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 381,
+    "id": "CBACT04C-constant-381-201",
+    "line": 381,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 381,
+    "id": "CBACT04C-delete-MOVE-381-202",
+    "line": 381,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 383,
+    "id": "CBACT04C-negate-condition-383-203",
+    "line": 383,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 387,
+    "id": "CBACT04C-delete-MOVE-387-204",
+    "line": 387,
+    "operator": "delete-MOVE",
+    "original": "               MOVE ACCTFILE-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 388,
+    "id": "CBACT04C-skip-PERFORM-388-205",
+    "line": 388,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 389,
+    "id": "CBACT04C-skip-PERFORM-389-206",
+    "line": 389,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 400,
+    "id": "CBACT04C-relational-400-207",
+    "line": 400,
+    "operator": "relational",
+    "original": "           IF  XREFFILE-STATUS   = '00'                                         ",
+    "replacement": "       IF  XREFFILE-STATUS   <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 400,
+    "id": "CBACT04C-negate-condition-400-208",
+    "line": 400,
+    "operator": "negate-condition",
+    "original": "           IF  XREFFILE-STATUS   = '00'                                         ",
+    "replacement": "       IF NOT (XREFFILE-STATUS   = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 401,
+    "id": "CBACT04C-constant-401-209",
+    "line": 401,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 401,
+    "id": "CBACT04C-constant-401-210",
+    "line": 401,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 401,
+    "id": "CBACT04C-delete-MOVE-401-211",
+    "line": 401,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 403,
+    "id": "CBACT04C-constant-403-212",
+    "line": 403,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 403,
+    "id": "CBACT04C-constant-403-213",
+    "line": 403,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 403,
+    "id": "CBACT04C-delete-MOVE-403-214",
+    "line": 403,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 405,
+    "id": "CBACT04C-negate-condition-405-215",
+    "line": 405,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 409,
+    "id": "CBACT04C-delete-MOVE-409-216",
+    "line": 409,
+    "operator": "delete-MOVE",
+    "original": "               MOVE XREFFILE-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 410,
+    "id": "CBACT04C-skip-PERFORM-410-217",
+    "line": 410,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 411,
+    "id": "CBACT04C-skip-PERFORM-411-218",
+    "line": 411,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 422,
+    "id": "CBACT04C-relational-422-219",
+    "line": 422,
+    "operator": "relational",
+    "original": "           IF  DISCGRP-STATUS  = '00'  OR '23'                                  ",
+    "replacement": "       IF  DISCGRP-STATUS  <> '00'  OR '23'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 422,
+    "id": "CBACT04C-negate-condition-422-220",
+    "line": 422,
+    "operator": "negate-condition",
+    "original": "           IF  DISCGRP-STATUS  = '00'  OR '23'                                  ",
+    "replacement": "       IF NOT (DISCGRP-STATUS  = '00'  OR '23')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 423,
+    "id": "CBACT04C-constant-423-221",
+    "line": 423,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 423,
+    "id": "CBACT04C-constant-423-222",
+    "line": 423,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 423,
+    "id": "CBACT04C-delete-MOVE-423-223",
+    "line": 423,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 425,
+    "id": "CBACT04C-constant-425-224",
+    "line": 425,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 425,
+    "id": "CBACT04C-constant-425-225",
+    "line": 425,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 425,
+    "id": "CBACT04C-delete-MOVE-425-226",
+    "line": 425,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 428,
+    "id": "CBACT04C-negate-condition-428-227",
+    "line": 428,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 432,
+    "id": "CBACT04C-delete-MOVE-432-228",
+    "line": 432,
+    "operator": "delete-MOVE",
+    "original": "               MOVE DISCGRP-STATUS  TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 433,
+    "id": "CBACT04C-skip-PERFORM-433-229",
+    "line": 433,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 434,
+    "id": "CBACT04C-skip-PERFORM-434-230",
+    "line": 434,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 436,
+    "id": "CBACT04C-relational-436-231",
+    "line": 436,
+    "operator": "relational",
+    "original": "           IF  DISCGRP-STATUS  = '23'                                           ",
+    "replacement": "       IF  DISCGRP-STATUS  <> '23'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 436,
+    "id": "CBACT04C-negate-condition-436-232",
+    "line": 436,
+    "operator": "negate-condition",
+    "original": "           IF  DISCGRP-STATUS  = '23'                                           ",
+    "replacement": "       IF NOT (DISCGRP-STATUS  = '23')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 437,
+    "id": "CBACT04C-delete-MOVE-437-233",
+    "line": 437,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 'DEFAULT' TO FD-DIS-ACCT-GROUP-ID                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 438,
+    "id": "CBACT04C-skip-PERFORM-438-234",
+    "line": 438,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 1200-A-GET-DEFAULT-INT-RATE                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 446,
+    "id": "CBACT04C-relational-446-235",
+    "line": 446,
+    "operator": "relational",
+    "original": "           IF  DISCGRP-STATUS  = '00'                                           ",
+    "replacement": "       IF  DISCGRP-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 446,
+    "id": "CBACT04C-negate-condition-446-236",
+    "line": 446,
+    "operator": "negate-condition",
+    "original": "           IF  DISCGRP-STATUS  = '00'                                           ",
+    "replacement": "       IF NOT (DISCGRP-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 447,
+    "id": "CBACT04C-constant-447-237",
+    "line": 447,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 447,
+    "id": "CBACT04C-constant-447-238",
+    "line": 447,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 447,
+    "id": "CBACT04C-delete-MOVE-447-239",
+    "line": 447,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 449,
+    "id": "CBACT04C-constant-449-240",
+    "line": 449,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 449,
+    "id": "CBACT04C-constant-449-241",
+    "line": 449,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 449,
+    "id": "CBACT04C-delete-MOVE-449-242",
+    "line": 449,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 452,
+    "id": "CBACT04C-negate-condition-452-243",
+    "line": 452,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 456,
+    "id": "CBACT04C-delete-MOVE-456-244",
+    "line": 456,
+    "operator": "delete-MOVE",
+    "original": "               MOVE DISCGRP-STATUS  TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 457,
+    "id": "CBACT04C-skip-PERFORM-457-245",
+    "line": 457,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 458,
+    "id": "CBACT04C-skip-PERFORM-458-246",
+    "line": 458,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 464,
+    "id": "CBACT04C-rounded-464-247",
+    "line": 464,
+    "operator": "rounded",
+    "original": "           COMPUTE WS-MONTHLY-INT                                               ",
+    "replacement": "       COMPUTE WS-MONTHLY-INT ROUNDED",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 466,
+    "id": "CBACT04C-delete-COMPUTE-464-248",
+    "line": 464,
+    "operator": "delete-COMPUTE",
+    "original": "           COMPUTE WS-MONTHLY-INT                                               \n            = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1200                             \n                                                                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 465,
+    "id": "CBACT04C-arithmetic-465-249",
+    "line": 465,
+    "operator": "arithmetic",
+    "original": "            = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1200                             ",
+    "replacement": "       = ( TRAN-CAT-BAL / DIS-INT-RATE) / 1200",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 465,
+    "id": "CBACT04C-arithmetic-465-250",
+    "line": 465,
+    "operator": "arithmetic",
+    "original": "            = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1200                             ",
+    "replacement": "       = ( TRAN-CAT-BAL * DIS-INT-RATE) * 1200",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 465,
+    "id": "CBACT04C-constant-465-251",
+    "line": 465,
+    "operator": "constant",
+    "original": "            = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1200                             ",
+    "replacement": "       = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1199",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 465,
+    "id": "CBACT04C-constant-465-252",
+    "line": 465,
+    "operator": "constant",
+    "original": "            = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1200                             ",
+    "replacement": "       = ( TRAN-CAT-BAL * DIS-INT-RATE) / 1201",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 467,
+    "id": "CBACT04C-delete-ADD-467-253",
+    "line": 467,
+    "operator": "delete-ADD",
+    "original": "           ADD WS-MONTHLY-INT  TO WS-TOTAL-INT                                  ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 469,
+    "id": "CBACT04C-skip-PERFORM-468-254",
+    "line": 468,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM 1300-B-WRITE-TX.                                             \n                                                                                ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 474,
+    "id": "CBACT04C-constant-474-255",
+    "line": 474,
+    "operator": "constant",
+    "original": "           ADD 1 TO WS-TRANID-SUFFIX                                            ",
+    "replacement": "       ADD 0 TO WS-TRANID-SUFFIX",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 474,
+    "id": "CBACT04C-constant-474-256",
+    "line": 474,
+    "operator": "constant",
+    "original": "           ADD 1 TO WS-TRANID-SUFFIX                                            ",
+    "replacement": "       ADD 2 TO WS-TRANID-SUFFIX",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 475,
+    "id": "CBACT04C-delete-ADD-474-257",
+    "line": 474,
+    "operator": "delete-ADD",
+    "original": "           ADD 1 TO WS-TRANID-SUFFIX                                            \n                                                                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 482,
+    "id": "CBACT04C-delete-MOVE-482-258",
+    "line": 482,
+    "operator": "delete-MOVE",
+    "original": "           MOVE '01'                 TO TRAN-TYPE-CD                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 483,
+    "id": "CBACT04C-delete-MOVE-483-259",
+    "line": 483,
+    "operator": "delete-MOVE",
+    "original": "           MOVE '05'                 TO TRAN-CAT-CD                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 484,
+    "id": "CBACT04C-delete-MOVE-484-260",
+    "line": 484,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 'System'             TO TRAN-SOURCE                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 490,
+    "id": "CBACT04C-delete-MOVE-490-261",
+    "line": 490,
+    "operator": "delete-MOVE",
+    "original": "           MOVE WS-MONTHLY-INT       TO TRAN-AMT                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 491,
+    "id": "CBACT04C-constant-491-262",
+    "line": 491,
+    "operator": "constant",
+    "original": "           MOVE 0                    TO TRAN-MERCHANT-ID                        ",
+    "replacement": "       MOVE -1                    TO TRAN-MERCHANT-ID",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 491,
+    "id": "CBACT04C-constant-491-263",
+    "line": 491,
+    "operator": "constant",
+    "original": "           MOVE 0                    TO TRAN-MERCHANT-ID                        ",
+    "replacement": "       MOVE 1                    TO TRAN-MERCHANT-ID",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 491,
+    "id": "CBACT04C-delete-MOVE-491-264",
+    "line": 491,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 0                    TO TRAN-MERCHANT-ID                        ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 492,
+    "id": "CBACT04C-delete-MOVE-492-265",
+    "line": 492,
+    "operator": "delete-MOVE",
+    "original": "           MOVE SPACES               TO TRAN-MERCHANT-NAME                      ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 493,
+    "id": "CBACT04C-delete-MOVE-493-266",
+    "line": 493,
+    "operator": "delete-MOVE",
+    "original": "           MOVE SPACES               TO TRAN-MERCHANT-CITY                      ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 494,
+    "id": "CBACT04C-delete-MOVE-494-267",
+    "line": 494,
+    "operator": "delete-MOVE",
+    "original": "           MOVE SPACES               TO TRAN-MERCHANT-ZIP                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 495,
+    "id": "CBACT04C-delete-MOVE-495-268",
+    "line": 495,
+    "operator": "delete-MOVE",
+    "original": "           MOVE XREF-CARD-NUM        TO TRAN-CARD-NUM                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 496,
+    "id": "CBACT04C-skip-PERFORM-496-269",
+    "line": 496,
+    "operator": "skip-PERFORM",
+    "original": "           PERFORM Z-GET-DB2-FORMAT-TIMESTAMP                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 497,
+    "id": "CBACT04C-delete-MOVE-497-270",
+    "line": 497,
+    "operator": "delete-MOVE",
+    "original": "           MOVE DB2-FORMAT-TS        TO TRAN-ORIG-TS                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 499,
+    "id": "CBACT04C-delete-MOVE-498-271",
+    "line": 498,
+    "operator": "delete-MOVE",
+    "original": "           MOVE DB2-FORMAT-TS        TO TRAN-PROC-TS                            \n                                                                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 500,
+    "id": "CBACT04C-delete-WRITE-500-272",
+    "line": 500,
+    "operator": "delete-WRITE",
+    "original": "           WRITE FD-TRANFILE-REC FROM TRAN-RECORD                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 501,
+    "id": "CBACT04C-relational-501-273",
+    "line": 501,
+    "operator": "relational",
+    "original": "           IF  TRANFILE-STATUS   = '00'                                         ",
+    "replacement": "       IF  TRANFILE-STATUS   <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 501,
+    "id": "CBACT04C-negate-condition-501-274",
+    "line": 501,
+    "operator": "negate-condition",
+    "original": "           IF  TRANFILE-STATUS   = '00'                                         ",
+    "replacement": "       IF NOT (TRANFILE-STATUS   = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 502,
+    "id": "CBACT04C-constant-502-275",
+    "line": 502,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 502,
+    "id": "CBACT04C-constant-502-276",
+    "line": 502,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 502,
+    "id": "CBACT04C-delete-MOVE-502-277",
+    "line": 502,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 504,
+    "id": "CBACT04C-constant-504-278",
+    "line": 504,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 504,
+    "id": "CBACT04C-constant-504-279",
+    "line": 504,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 504,
+    "id": "CBACT04C-delete-MOVE-504-280",
+    "line": 504,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 507,
+    "id": "CBACT04C-negate-condition-507-281",
+    "line": 507,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 511,
+    "id": "CBACT04C-delete-MOVE-511-282",
+    "line": 511,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TRANFILE-STATUS   TO IO-STATUS                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 512,
+    "id": "CBACT04C-skip-PERFORM-512-283",
+    "line": 512,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 513,
+    "id": "CBACT04C-skip-PERFORM-513-284",
+    "line": 513,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 523,
+    "id": "CBACT04C-constant-523-285",
+    "line": 523,
+    "operator": "constant",
+    "original": "           MOVE 8 TO  APPL-RESULT.                                              ",
+    "replacement": "       MOVE 7 TO  APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 523,
+    "id": "CBACT04C-constant-523-286",
+    "line": 523,
+    "operator": "constant",
+    "original": "           MOVE 8 TO  APPL-RESULT.                                              ",
+    "replacement": "       MOVE 9 TO  APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 523,
+    "id": "CBACT04C-delete-MOVE-523-287",
+    "line": 523,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO  APPL-RESULT.                                              ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 525,
+    "id": "CBACT04C-relational-525-288",
+    "line": 525,
+    "operator": "relational",
+    "original": "           IF  TCATBALF-STATUS = '00'                                           ",
+    "replacement": "       IF  TCATBALF-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 525,
+    "id": "CBACT04C-negate-condition-525-289",
+    "line": 525,
+    "operator": "negate-condition",
+    "original": "           IF  TCATBALF-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (TCATBALF-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 526,
+    "id": "CBACT04C-constant-526-290",
+    "line": 526,
+    "operator": "constant",
+    "original": "               MOVE 0 TO  APPL-RESULT                                           ",
+    "replacement": "       MOVE -1 TO  APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 526,
+    "id": "CBACT04C-constant-526-291",
+    "line": 526,
+    "operator": "constant",
+    "original": "               MOVE 0 TO  APPL-RESULT                                           ",
+    "replacement": "       MOVE 1 TO  APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 526,
+    "id": "CBACT04C-delete-MOVE-526-292",
+    "line": 526,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO  APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 528,
+    "id": "CBACT04C-constant-528-293",
+    "line": 528,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 528,
+    "id": "CBACT04C-constant-528-294",
+    "line": 528,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 528,
+    "id": "CBACT04C-delete-MOVE-528-295",
+    "line": 528,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 530,
+    "id": "CBACT04C-negate-condition-530-296",
+    "line": 530,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 534,
+    "id": "CBACT04C-delete-MOVE-534-297",
+    "line": 534,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TCATBALF-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 535,
+    "id": "CBACT04C-skip-PERFORM-535-298",
+    "line": 535,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 536,
+    "id": "CBACT04C-skip-PERFORM-536-299",
+    "line": 536,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 542,
+    "id": "CBACT04C-constant-542-300",
+    "line": 542,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 542,
+    "id": "CBACT04C-constant-542-301",
+    "line": 542,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 542,
+    "id": "CBACT04C-delete-MOVE-542-302",
+    "line": 542,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 544,
+    "id": "CBACT04C-relational-544-303",
+    "line": 544,
+    "operator": "relational",
+    "original": "           IF  XREFFILE-STATUS = '00'                                           ",
+    "replacement": "       IF  XREFFILE-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 544,
+    "id": "CBACT04C-negate-condition-544-304",
+    "line": 544,
+    "operator": "negate-condition",
+    "original": "           IF  XREFFILE-STATUS = '00'                                           ",
+    "replacement": "       IF NOT (XREFFILE-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 545,
+    "id": "CBACT04C-constant-545-305",
+    "line": 545,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 545,
+    "id": "CBACT04C-constant-545-306",
+    "line": 545,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 545,
+    "id": "CBACT04C-delete-MOVE-545-307",
+    "line": 545,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 547,
+    "id": "CBACT04C-constant-547-308",
+    "line": 547,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 547,
+    "id": "CBACT04C-constant-547-309",
+    "line": 547,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 547,
+    "id": "CBACT04C-delete-MOVE-547-310",
+    "line": 547,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 549,
+    "id": "CBACT04C-negate-condition-549-311",
+    "line": 549,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 553,
+    "id": "CBACT04C-delete-MOVE-553-312",
+    "line": 553,
+    "operator": "delete-MOVE",
+    "original": "               MOVE XREFFILE-STATUS TO IO-STATUS                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 554,
+    "id": "CBACT04C-skip-PERFORM-554-313",
+    "line": 554,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 555,
+    "id": "CBACT04C-skip-PERFORM-555-314",
+    "line": 555,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 560,
+    "id": "CBACT04C-constant-560-315",
+    "line": 560,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 560,
+    "id": "CBACT04C-constant-560-316",
+    "line": 560,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 560,
+    "id": "CBACT04C-delete-MOVE-560-317",
+    "line": 560,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 562,
+    "id": "CBACT04C-relational-562-318",
+    "line": 562,
+    "operator": "relational",
+    "original": "           IF  DISCGRP-STATUS = '00'                                            ",
+    "replacement": "       IF  DISCGRP-STATUS <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 562,
+    "id": "CBACT04C-negate-condition-562-319",
+    "line": 562,
+    "operator": "negate-condition",
+    "original": "           IF  DISCGRP-STATUS = '00'                                            ",
+    "replacement": "       IF NOT (DISCGRP-STATUS = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 563,
+    "id": "CBACT04C-constant-563-320",
+    "line": 563,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 563,
+    "id": "CBACT04C-constant-563-321",
+    "line": 563,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 563,
+    "id": "CBACT04C-delete-MOVE-563-322",
+    "line": 563,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 565,
+    "id": "CBACT04C-constant-565-323",
+    "line": 565,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 565,
+    "id": "CBACT04C-constant-565-324",
+    "line": 565,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 565,
+    "id": "CBACT04C-delete-MOVE-565-325",
+    "line": 565,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 567,
+    "id": "CBACT04C-negate-condition-567-326",
+    "line": 567,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 571,
+    "id": "CBACT04C-delete-MOVE-571-327",
+    "line": 571,
+    "operator": "delete-MOVE",
+    "original": "               MOVE DISCGRP-STATUS TO IO-STATUS                                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 572,
+    "id": "CBACT04C-skip-PERFORM-572-328",
+    "line": 572,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 573,
+    "id": "CBACT04C-skip-PERFORM-573-329",
+    "line": 573,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 578,
+    "id": "CBACT04C-constant-578-330",
+    "line": 578,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 578,
+    "id": "CBACT04C-constant-578-331",
+    "line": 578,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 578,
+    "id": "CBACT04C-delete-MOVE-578-332",
+    "line": 578,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 580,
+    "id": "CBACT04C-relational-580-333",
+    "line": 580,
+    "operator": "relational",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF  ACCTFILE-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 580,
+    "id": "CBACT04C-negate-condition-580-334",
+    "line": 580,
+    "operator": "negate-condition",
+    "original": "           IF  ACCTFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF NOT (ACCTFILE-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 581,
+    "id": "CBACT04C-constant-581-335",
+    "line": 581,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 581,
+    "id": "CBACT04C-constant-581-336",
+    "line": 581,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 581,
+    "id": "CBACT04C-delete-MOVE-581-337",
+    "line": 581,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 583,
+    "id": "CBACT04C-constant-583-338",
+    "line": 583,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 583,
+    "id": "CBACT04C-constant-583-339",
+    "line": 583,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 583,
+    "id": "CBACT04C-delete-MOVE-583-340",
+    "line": 583,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 585,
+    "id": "CBACT04C-negate-condition-585-341",
+    "line": 585,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 589,
+    "id": "CBACT04C-delete-MOVE-589-342",
+    "line": 589,
+    "operator": "delete-MOVE",
+    "original": "               MOVE ACCTFILE-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 590,
+    "id": "CBACT04C-skip-PERFORM-590-343",
+    "line": 590,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 591,
+    "id": "CBACT04C-skip-PERFORM-591-344",
+    "line": 591,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 596,
+    "id": "CBACT04C-constant-596-345",
+    "line": 596,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 7 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 596,
+    "id": "CBACT04C-constant-596-346",
+    "line": 596,
+    "operator": "constant",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       MOVE 9 TO APPL-RESULT.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 596,
+    "id": "CBACT04C-delete-MOVE-596-347",
+    "line": 596,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 8 TO APPL-RESULT.                                               ",
+    "replacement": "       CONTINUE.",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 598,
+    "id": "CBACT04C-relational-598-348",
+    "line": 598,
+    "operator": "relational",
+    "original": "           IF  TRANFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF  TRANFILE-STATUS  <> '00'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 598,
+    "id": "CBACT04C-negate-condition-598-349",
+    "line": 598,
+    "operator": "negate-condition",
+    "original": "           IF  TRANFILE-STATUS  = '00'                                          ",
+    "replacement": "       IF NOT (TRANFILE-STATUS  = '00')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 599,
+    "id": "CBACT04C-constant-599-350",
+    "line": 599,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE -1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 599,
+    "id": "CBACT04C-constant-599-351",
+    "line": 599,
+    "operator": "constant",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       MOVE 1 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 599,
+    "id": "CBACT04C-delete-MOVE-599-352",
+    "line": 599,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0 TO APPL-RESULT                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 601,
+    "id": "CBACT04C-constant-601-353",
+    "line": 601,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 11 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 601,
+    "id": "CBACT04C-constant-601-354",
+    "line": 601,
+    "operator": "constant",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       MOVE 13 TO APPL-RESULT",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 601,
+    "id": "CBACT04C-delete-MOVE-601-355",
+    "line": 601,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 12 TO APPL-RESULT                                           ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 603,
+    "id": "CBACT04C-negate-condition-603-356",
+    "line": 603,
+    "operator": "negate-condition",
+    "original": "           IF  APPL-AOK                                                         ",
+    "replacement": "       IF NOT (APPL-AOK)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 607,
+    "id": "CBACT04C-delete-MOVE-607-357",
+    "line": 607,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TRANFILE-STATUS  TO IO-STATUS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 608,
+    "id": "CBACT04C-skip-PERFORM-608-358",
+    "line": 608,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9910-DISPLAY-IO-STATUS                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 609,
+    "id": "CBACT04C-skip-PERFORM-609-359",
+    "line": 609,
+    "operator": "skip-PERFORM",
+    "original": "               PERFORM 9999-ABEND-PROGRAM                                       ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 614,
+    "id": "CBACT04C-delete-MOVE-614-360",
+    "line": 614,
+    "operator": "delete-MOVE",
+    "original": "           MOVE FUNCTION CURRENT-DATE TO COBOL-TS                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 615,
+    "id": "CBACT04C-delete-MOVE-615-361",
+    "line": 615,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-YYYY TO DB2-YYYY                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 616,
+    "id": "CBACT04C-delete-MOVE-616-362",
+    "line": 616,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-MM   TO DB2-MM                                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 617,
+    "id": "CBACT04C-delete-MOVE-617-363",
+    "line": 617,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-DD   TO DB2-DD                                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 618,
+    "id": "CBACT04C-delete-MOVE-618-364",
+    "line": 618,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-HH   TO DB2-HH                                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 619,
+    "id": "CBACT04C-delete-MOVE-619-365",
+    "line": 619,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-MIN  TO DB2-MIN                                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 620,
+    "id": "CBACT04C-delete-MOVE-620-366",
+    "line": 620,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-SS   TO DB2-SS                                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 621,
+    "id": "CBACT04C-delete-MOVE-621-367",
+    "line": 621,
+    "operator": "delete-MOVE",
+    "original": "           MOVE COB-MIL  TO DB2-MIL                                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 622,
+    "id": "CBACT04C-delete-MOVE-622-368",
+    "line": 622,
+    "operator": "delete-MOVE",
+    "original": "           MOVE '0000'   TO DB2-REST                                            ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 623,
+    "id": "CBACT04C-delete-MOVE-623-369",
+    "line": 623,
+    "operator": "delete-MOVE",
+    "original": "           MOVE '-' TO DB2-STREEP-1 DB2-STREEP-2 DB2-STREEP-3                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 625,
+    "id": "CBACT04C-delete-MOVE-624-370",
+    "line": 624,
+    "operator": "delete-MOVE",
+    "original": "           MOVE '.' TO DB2-DOT-1 DB2-DOT-2 DB2-DOT-3                            \n      *    DISPLAY 'DB2-TIMESTAMP = ' DB2-FORMAT-TS                             ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 630,
+    "id": "CBACT04C-constant-630-371",
+    "line": 630,
+    "operator": "constant",
+    "original": "           MOVE 0 TO TIMING                                                     ",
+    "replacement": "       MOVE -1 TO TIMING",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 630,
+    "id": "CBACT04C-constant-630-372",
+    "line": 630,
+    "operator": "constant",
+    "original": "           MOVE 0 TO TIMING                                                     ",
+    "replacement": "       MOVE 1 TO TIMING",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 630,
+    "id": "CBACT04C-delete-MOVE-630-373",
+    "line": 630,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 0 TO TIMING                                                     ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 631,
+    "id": "CBACT04C-constant-631-374",
+    "line": 631,
+    "operator": "constant",
+    "original": "           MOVE 999 TO ABCODE                                                   ",
+    "replacement": "       MOVE 998 TO ABCODE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 631,
+    "id": "CBACT04C-constant-631-375",
+    "line": 631,
+    "operator": "constant",
+    "original": "           MOVE 999 TO ABCODE                                                   ",
+    "replacement": "       MOVE 1000 TO ABCODE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 631,
+    "id": "CBACT04C-delete-MOVE-631-376",
+    "line": 631,
+    "operator": "delete-MOVE",
+    "original": "           MOVE 999 TO ABCODE                                                   ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 637,
+    "id": "CBACT04C-negate-condition-636-377",
+    "line": 636,
+    "operator": "negate-condition",
+    "original": "           IF  IO-STATUS NOT NUMERIC                                            \n           OR  IO-STAT1 = '9'                                                   ",
+    "replacement": "       IF NOT (IO-STATUS NOT NUMERIC\n       OR  IO-STAT1 = '9')",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 637,
+    "id": "CBACT04C-relational-637-378",
+    "line": 637,
+    "operator": "relational",
+    "original": "           OR  IO-STAT1 = '9'                                                   ",
+    "replacement": "       OR  IO-STAT1 <> '9'",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 638,
+    "id": "CBACT04C-constant-638-380",
+    "line": 638,
+    "operator": "constant",
+    "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+    "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(2:1)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 638,
+    "id": "CBACT04C-constant-638-382",
+    "line": 638,
+    "operator": "constant",
+    "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+    "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(1:2)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 638,
+    "id": "CBACT04C-delete-MOVE-638-383",
+    "line": 638,
+    "operator": "delete-MOVE",
+    "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 639,
+    "id": "CBACT04C-constant-639-384",
+    "line": 639,
+    "operator": "constant",
+    "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+    "replacement": "       MOVE -1        TO TWO-BYTES-BINARY",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 639,
+    "id": "CBACT04C-constant-639-385",
+    "line": 639,
+    "operator": "constant",
+    "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+    "replacement": "       MOVE 1        TO TWO-BYTES-BINARY",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 639,
+    "id": "CBACT04C-delete-MOVE-639-386",
+    "line": 639,
+    "operator": "delete-MOVE",
+    "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 640,
+    "id": "CBACT04C-delete-MOVE-640-387",
+    "line": 640,
+    "operator": "delete-MOVE",
+    "original": "               MOVE IO-STAT2 TO TWO-BYTES-RIGHT                                 ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 641,
+    "id": "CBACT04C-delete-MOVE-641-388",
+    "line": 641,
+    "operator": "delete-MOVE",
+    "original": "               MOVE TWO-BYTES-BINARY TO IO-STATUS-0403                          ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 644,
+    "id": "CBACT04C-delete-MOVE-644-389",
+    "line": 644,
+    "operator": "delete-MOVE",
+    "original": "               MOVE '0000' TO IO-STATUS-04                                      ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 645,
+    "id": "CBACT04C-constant-645-390",
+    "line": 645,
+    "operator": "constant",
+    "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+    "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(2:2)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 645,
+    "id": "CBACT04C-constant-645-392",
+    "line": 645,
+    "operator": "constant",
+    "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+    "replacement": "       MOVE IO-STATUS TO IO-STATUS-04(3:1)",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 645,
+    "id": "CBACT04C-delete-MOVE-645-394",
+    "line": 645,
+    "operator": "delete-MOVE",
+    "original": "               MOVE IO-STATUS TO IO-STATUS-04(3:2)                              ",
+    "replacement": "       CONTINUE",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  {
+    "end_line": 5,
+    "id": "CBACT04C-CVACT01Y-receiving-size-5-1",
+    "line": 5,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-ID                           PIC 9(11).",
+    "replacement": "       05  ACCT-ID                           PIC 9(10).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 5,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-5-2",
+    "line": 5,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-ID                           PIC 9(11).",
+    "replacement": "       05  ACCT-ID                           PIC 9(11)V9(1).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVACT01Y-receiving-size-7-3",
+    "line": 7,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-CURR-BAL                     PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-BAL                     PIC S9(9)V99.",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-7-4",
+    "line": 7,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-CURR-BAL                     PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-BAL                     PIC S9(10)V9(3).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVACT01Y-receiving-size-8-5",
+    "line": 8,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-CREDIT-LIMIT                 PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CREDIT-LIMIT                 PIC S9(9)V99.",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-8-6",
+    "line": 8,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-CREDIT-LIMIT                 PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CREDIT-LIMIT                 PIC S9(10)V9(3).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVACT01Y-receiving-size-9-7",
+    "line": 9,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-CASH-CREDIT-LIMIT            PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CASH-CREDIT-LIMIT            PIC S9(9)V99.",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-9-8",
+    "line": 9,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-CASH-CREDIT-LIMIT            PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CASH-CREDIT-LIMIT            PIC S9(10)V9(3).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 13,
+    "id": "CBACT04C-CVACT01Y-receiving-size-13-9",
+    "line": 13,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-CURR-CYC-CREDIT              PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-CYC-CREDIT              PIC S9(9)V99.",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 13,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-13-10",
+    "line": 13,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-CURR-CYC-CREDIT              PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-CYC-CREDIT              PIC S9(10)V9(3).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 14,
+    "id": "CBACT04C-CVACT01Y-receiving-size-14-11",
+    "line": 14,
+    "operator": "receiving-size",
+    "original": "           05  ACCT-CURR-CYC-DEBIT               PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-CYC-DEBIT               PIC S9(9)V99.",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 14,
+    "id": "CBACT04C-CVACT01Y-receiving-scale-14-12",
+    "line": 14,
+    "operator": "receiving-scale",
+    "original": "           05  ACCT-CURR-CYC-DEBIT               PIC S9(10)V99.",
+    "replacement": "       05  ACCT-CURR-CYC-DEBIT               PIC S9(10)V9(3).",
+    "source_path": "CVACT01Y.cpy",
+    "source_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+  },
+  {
+    "end_line": 6,
+    "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+    "line": 6,
+    "operator": "receiving-size",
+    "original": "           05  XREF-CUST-ID                      PIC 9(09).                     ",
+    "replacement": "       05  XREF-CUST-ID                      PIC 9(8).",
+    "source_path": "CVACT03Y.cpy",
+    "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+  },
+  {
+    "end_line": 6,
+    "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+    "line": 6,
+    "operator": "receiving-scale",
+    "original": "           05  XREF-CUST-ID                      PIC 9(09).                     ",
+    "replacement": "       05  XREF-CUST-ID                      PIC 9(09)V9(1).",
+    "source_path": "CVACT03Y.cpy",
+    "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+    "line": 7,
+    "operator": "receiving-size",
+    "original": "           05  XREF-ACCT-ID                      PIC 9(11).                     ",
+    "replacement": "       05  XREF-ACCT-ID                      PIC 9(10).",
+    "source_path": "CVACT03Y.cpy",
+    "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+    "line": 7,
+    "operator": "receiving-scale",
+    "original": "           05  XREF-ACCT-ID                      PIC 9(11).                     ",
+    "replacement": "       05  XREF-ACCT-ID                      PIC 9(11)V9(1).",
+    "source_path": "CVACT03Y.cpy",
+    "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+  },
+  {
+    "end_line": 6,
+    "id": "CBACT04C-CVTRA01Y-receiving-size-6-1",
+    "line": 6,
+    "operator": "receiving-size",
+    "original": "              10 TRANCAT-ACCT-ID                       PIC 9(11).               ",
+    "replacement": "       10 TRANCAT-ACCT-ID                       PIC 9(10).",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 6,
+    "id": "CBACT04C-CVTRA01Y-receiving-scale-6-2",
+    "line": 6,
+    "operator": "receiving-scale",
+    "original": "              10 TRANCAT-ACCT-ID                       PIC 9(11).               ",
+    "replacement": "       10 TRANCAT-ACCT-ID                       PIC 9(11)V9(1).",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVTRA01Y-receiving-size-8-3",
+    "line": 8,
+    "operator": "receiving-size",
+    "original": "              10 TRANCAT-CD                            PIC 9(04).               ",
+    "replacement": "       10 TRANCAT-CD                            PIC 9(3).",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVTRA01Y-receiving-scale-8-4",
+    "line": 8,
+    "operator": "receiving-scale",
+    "original": "              10 TRANCAT-CD                            PIC 9(04).               ",
+    "replacement": "       10 TRANCAT-CD                            PIC 9(04)V9(1).",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVTRA01Y-receiving-size-9-5",
+    "line": 9,
+    "operator": "receiving-size",
+    "original": "           05  TRAN-CAT-BAL                            PIC S9(09)V99.           ",
+    "replacement": "       05  TRAN-CAT-BAL                            PIC S9(8)V99.",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVTRA01Y-receiving-scale-9-6",
+    "line": 9,
+    "operator": "receiving-scale",
+    "original": "           05  TRAN-CAT-BAL                            PIC S9(09)V99.           ",
+    "replacement": "       05  TRAN-CAT-BAL                            PIC S9(09)V9(3).",
+    "source_path": "CVTRA01Y.cpy",
+    "source_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVTRA02Y-receiving-size-8-1",
+    "line": 8,
+    "operator": "receiving-size",
+    "original": "              10 DIS-TRAN-CAT-CD                       PIC 9(04).               ",
+    "replacement": "       10 DIS-TRAN-CAT-CD                       PIC 9(3).",
+    "source_path": "CVTRA02Y.cpy",
+    "source_sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+  },
+  {
+    "end_line": 8,
+    "id": "CBACT04C-CVTRA02Y-receiving-scale-8-2",
+    "line": 8,
+    "operator": "receiving-scale",
+    "original": "              10 DIS-TRAN-CAT-CD                       PIC 9(04).               ",
+    "replacement": "       10 DIS-TRAN-CAT-CD                       PIC 9(04)V9(1).",
+    "source_path": "CVTRA02Y.cpy",
+    "source_sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVTRA02Y-receiving-size-9-3",
+    "line": 9,
+    "operator": "receiving-size",
+    "original": "           05  DIS-INT-RATE                            PIC S9(04)V99.           ",
+    "replacement": "       05  DIS-INT-RATE                            PIC S9(3)V99.",
+    "source_path": "CVTRA02Y.cpy",
+    "source_sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+  },
+  {
+    "end_line": 9,
+    "id": "CBACT04C-CVTRA02Y-receiving-scale-9-4",
+    "line": 9,
+    "operator": "receiving-scale",
+    "original": "           05  DIS-INT-RATE                            PIC S9(04)V99.           ",
+    "replacement": "       05  DIS-INT-RATE                            PIC S9(04)V9(3).",
+    "source_path": "CVTRA02Y.cpy",
+    "source_sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVTRA05Y-receiving-size-7-1",
+    "line": 7,
+    "operator": "receiving-size",
+    "original": "           05  TRAN-CAT-CD                             PIC 9(04).               ",
+    "replacement": "       05  TRAN-CAT-CD                             PIC 9(3).",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  },
+  {
+    "end_line": 7,
+    "id": "CBACT04C-CVTRA05Y-receiving-scale-7-2",
+    "line": 7,
+    "operator": "receiving-scale",
+    "original": "           05  TRAN-CAT-CD                             PIC 9(04).               ",
+    "replacement": "       05  TRAN-CAT-CD                             PIC 9(04)V9(1).",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  },
+  {
+    "end_line": 10,
+    "id": "CBACT04C-CVTRA05Y-receiving-size-10-3",
+    "line": 10,
+    "operator": "receiving-size",
+    "original": "           05  TRAN-AMT                                PIC S9(09)V99.           ",
+    "replacement": "       05  TRAN-AMT                                PIC S9(8)V99.",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  },
+  {
+    "end_line": 10,
+    "id": "CBACT04C-CVTRA05Y-receiving-scale-10-4",
+    "line": 10,
+    "operator": "receiving-scale",
+    "original": "           05  TRAN-AMT                                PIC S9(09)V99.           ",
+    "replacement": "       05  TRAN-AMT                                PIC S9(09)V9(3).",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  },
+  {
+    "end_line": 11,
+    "id": "CBACT04C-CVTRA05Y-receiving-size-11-5",
+    "line": 11,
+    "operator": "receiving-size",
+    "original": "           05  TRAN-MERCHANT-ID                        PIC 9(09).               ",
+    "replacement": "       05  TRAN-MERCHANT-ID                        PIC 9(8).",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  },
+  {
+    "end_line": 11,
+    "id": "CBACT04C-CVTRA05Y-receiving-scale-11-6",
+    "line": 11,
+    "operator": "receiving-scale",
+    "original": "           05  TRAN-MERCHANT-ID                        PIC 9(09).               ",
+    "replacement": "       05  TRAN-MERCHANT-ID                        PIC 9(09)V9(1).",
+    "source_path": "CVTRA05Y.cpy",
+    "source_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  }
+]

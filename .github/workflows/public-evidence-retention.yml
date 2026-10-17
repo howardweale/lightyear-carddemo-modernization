@@ -1,0 +1,33 @@
+name: Public evidence retention
+on:
+  schedule:
+    - cron: '0 15 * * 1'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/factory/evidence-retention-*.json'
+      - 'tools/verify_public_retention.py'
+      - 'tests/test_public_retention.py'
+      - '.github/workflows/public-evidence-retention.yml'
+permissions:
+  contents: read
+concurrency:
+  group: public-retention-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  download-and-hash:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify future-date, missing and changed asset rejection
+        run: PYTHONPATH=src:.:tests python3 -B -m unittest test_public_retention -v
+      - name: Reverify every committed public evidence manifest
+        run: python3 -B tools/verify_public_retention.py --all . work/retention-verification
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-retention-verification
+          path: work/retention-verification
+          retention-days: 90

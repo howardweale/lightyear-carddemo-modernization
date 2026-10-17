@@ -1,0 +1,40 @@
+{
+  "details": {
+    "compiler_refusals": "listed-excluded-not-blockers",
+    "effective_condition": "unconditional",
+    "policy_sha256": "2ba3dbbf0e041d0100c24dd415edcd353be49513d8cf2905f67714fef81c6437",
+    "version": "scenario-threshold/2",
+    "conditions": [
+      {
+        "condition_sha256": "3871cc1bd3eed1819181fcd0032303630e540f705dd93fe4783de86f2bdc01de",
+        "state": "not-met",
+        "evidence": null
+      },
+      {
+        "condition_sha256": "545be2ad28a50b6ab9a45d4e989842ea81b537492fa2e6f2725a5b7f0ee8a887",
+        "state": "not-met",
+        "evidence": null
+      },
+      {
+        "condition_sha256": "441763ef18f4593d4cc5bd534b37f23a9ca549d3cf9d9993e027db2c54621535",
+        "state": "not-met",
+        "evidence": null
+      },
+      {
+        "condition_sha256": "45d2de740aab2effb4ab59888ee307697faeab4f9f98a325772ee5bbfae443f8",
+        "state": "not-met",
+        "evidence": null
+      }
+    ]
+  },
+  "kind": "scenario-threshold-approval",
+  "program": "INTCALC",
+  "schema": "factory-contract/1",
+  "sources": [
+    {
+      "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+      "path": "docs/factory/howard-decisions-2026-10-11b.json",
+      "sha256": "74fe7a1d88d8740a7f3ba147dfcad8d9355c27c439f02cc5a85f7704b453b0e4"
+    }
+  ]
+}

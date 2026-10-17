@@ -1,0 +1,18 @@
+{
+  "command": [
+    "cobc",
+    "-c",
+    "-fixed",
+    "-std=ibm",
+    "-fsign=EBCDIC",
+    "-O2",
+    "-Q",
+    "-Wl,--build-id=none",
+    "-I",
+    ".",
+    "CBACT04C.cbl",
+    "-o",
+    "program.o"
+  ],
+  "returncode": 0
+}

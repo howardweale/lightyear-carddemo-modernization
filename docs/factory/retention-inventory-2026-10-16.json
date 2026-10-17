@@ -1,0 +1,140 @@
+{
+  "schema": "retention-inventory/1",
+  "checked_at": "2026-10-16T20:24:45.570878+00:00",
+  "primary_checkout": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization",
+  "primary_under_onedrive": true,
+  "active_followup_checkout": "C:\\Users\\howar\\.codex\\worktrees\\equivalence-scale\\lightyear-carddemo-modernization",
+  "repository_moved": false,
+  "oct14_indexed_receipts": [
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-INTCALC-summary.json",
+      "bytes": 65975,
+      "sha256": "fca4b187aa1e73b5076a45dc8e093b6e6372d78a0f8b11c90221367050fb167c",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-INTCALC-threshold-2-by-scope.json",
+      "bytes": 38523,
+      "sha256": "e882ab0735102a9e87760e53024782bdded14f54a4bcc99a6df01daa0cfc7a71",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-INTCALC-results.json",
+      "bytes": 349926,
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-summary.json",
+      "bytes": 55787,
+      "sha256": "4ef5afde0ac19e6bc3a286175ea2d75cacd16ecaeaebc2301ac8d648d166ddcb",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-threshold-2-by-scope.json",
+      "bytes": 42677,
+      "sha256": "4e811d78624b684b1e5a69f347411eee6c860cb57ef984c0f2993240fc1da2f8",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-POSTTRAN-results.json",
+      "bytes": 343066,
+      "sha256": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-summary.json",
+      "bytes": 65988,
+      "sha256": "83c92633a8343bd87cbb2ec9dd314e479726415cead9f8a484ec3e64aa0acd4c",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-threshold-2-by-scope.json",
+      "bytes": 38523,
+      "sha256": "e3dd36ed1a9557d7df47e7c665e9a2a2673d023a6fdae1bdcde904ae5ffc9949",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-INTCALC-results.json",
+      "bytes": 349926,
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-summary.json",
+      "bytes": 55768,
+      "sha256": "a178bb8a804b52d48d1512a64d1f6508e291c29eb396c122d3fb75e8eccdc1b0",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-threshold-2-by-scope.json",
+      "bytes": 42677,
+      "sha256": "ce27944181cd1d27ba5ac20b2592d6a711e07a4899914fc18fa551bdc219d31d",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/pr328-POSTTRAN-results.json",
+      "bytes": 343066,
+      "sha256": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003",
+      "committed": true
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-14/main-INTCALC-mutation-results.json",
+      "bytes": 8638708,
+      "sha256": "df4ff09df27754a70cdd39e728cec7eb6f77b28ad37f68edc48c9031a792078a",
+      "committed": true
+    }
+  ],
+  "oct14_unretained_indexed_receipts": [],
+  "posttran_additional_receipts": [
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-0-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-0-mutation-results.json",
+      "bytes": 11873268,
+      "sha256": "91d688ea2e71f3711b632f30cf1373320d6ab5d0d8e290f27b67b2062d311f2a",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-0-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-0\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-1-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-1-mutation-results.json",
+      "bytes": 11873288,
+      "sha256": "b963be7ade04e50ee69a067ef71882786b42cdf2e2cb66026eb517fb9702e489",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-1-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-1\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-2-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-2-mutation-results.json",
+      "bytes": 11873369,
+      "sha256": "b70b0f4f8dc1f6b7a27e182c1d5a77db04214a2323be854cc3d85979de7da822",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-2-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-2\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    },
+    {
+      "release": "evidence-2026-10-15-posttran",
+      "name": "factory-review-records-POSTTRAN-3-mutation-results.json",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/evidence-2026-10-15-posttran/factory-review-records-POSTTRAN-3-mutation-results.json",
+      "bytes": 11873287,
+      "sha256": "ca1ed0dec40a2b2b3a38dc5fddc5ec551778a318680f0390084f59f7c220c6cf",
+      "local_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets\\factory-review-records-POSTTRAN-3-mutation-results.json",
+      "original_staging_path": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\recovery-oct15-2026-10-16\\evidence\\38763552148\\factory-review-records-POSTTRAN-3\\factory-review-POSTTRAN\\mutation-results.json",
+      "source_run": 38763552148
+    }
+  ],
+  "carddemo": "Already published and hash-indexed in evidence-retention-2026-10-16.json",
+  "inventory_scope": "October 14 committed index and recovered October 15 public evidence set; no claim about unrelated private or B06 assets",
+  "deletion_candidate": "C:\\Users\\howar\\OneDrive\\Documents\\ChatGPT\\lightyear-carddemo-modernization\\work\\oct15-release-assets",
+  "deletion_precondition": "Every asset in both manifests passes download-and-hash verification; Howard explicitly authorizes deletion",
+  "local_deletion_authorized": false,
+  "posttran_release": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/evidence-2026-10-15-posttran",
+  "posttran_uploaded": true,
+  "remaining_local_only_large_receipts_in_inventoried_sets": [],
+  "download_verification": "Pending fresh CI; upload sizes and GitHub server digests verified"
+}

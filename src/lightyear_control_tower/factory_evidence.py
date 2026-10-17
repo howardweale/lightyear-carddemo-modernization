@@ -179,7 +179,7 @@ def for_service(service):
 def decision_view(service, token):
     queue=service.queue(token)
     journal=service.export_session(token)
-    reader=FactoryDecisions(service.public_key,journal["journal_head_sha256"])
+    reader=FactoryDecisions(service.public_key,journal["journal_head_sha256"], evidence_root=service.root)
     overlays=[];pending=[]
     for item in queue["items"]:
         if item.get("status")=="invalid":

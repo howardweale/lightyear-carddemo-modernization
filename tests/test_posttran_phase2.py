@@ -2,7 +2,7 @@
 import copy
 import unittest
 from tools.prepare_posttran_phase2 import digest
-from tools.run_posttran_phase2 import authorize, returncodes_agree
+from tools.run_posttran_phase2 import authorize, returncodes_agree, comparison_status
 
 
 class Phase2Tests(unittest.TestCase):
@@ -12,6 +12,13 @@ class Phase2Tests(unittest.TestCase):
         self.head = 'a' * 40
         self.env = dict(GITHUB_ACTIONS='true', GITHUB_EVENT_NAME='pull_request', GITHUB_RUN_ATTEMPT='1',
             POSTTRAN_PHASE2_APPROVED_PLAN=self.plan['content_sha256'], POSTTRAN_PHASE2_APPROVED_HEAD=self.head)
+
+    def test_equal_abends_remain_divergent_after_invariant_failures(self):
+        for code in (8, 12):
+            for valid in (False, True):
+                self.assertEqual('divergent', comparison_status(True, code, code, 'public:posttran-public', invariants_passed=valid))
+        self.assertEqual('equivalent', comparison_status(True, 999, 12, 'generated:posttran-duplicate-id'))
+        self.assertEqual('divergent', comparison_status(True, 999, 12, 'public:posttran-public'))
 
     def test_no_authorization_no_execution(self):
         for key in self.env:

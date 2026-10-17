@@ -1,0 +1,7 @@
+# INTCALC structurally unreachable I/O edge
+
+Draft exception for CBACT04C line 189, false edge. The draft uses an intentionally non-importable schema; the final Factory request will be generated only after the threshold guard lands, following the later brief’s ordering rule. It remains in the I/O denominator. The request labels its basis `structurally-unreachable` and binds the existing source argument and source digest.
+
+`END-OF-FILE` starts at `N` on line 137 and its only assignment is `Y` on line 340. The TEST BEFORE `PERFORM UNTIL END-OF-FILE = 'Y'` on line 188 therefore enters its body only while the flag is `N`. The very next statement, line 189, tests for `N`; no assignment or call lies between the guard and that test. The READ that can set `Y` occurs later, on line 190. The line 189 false edge cannot occur in this source and declared fault domain. This is an unexecuted, structurally unreachable branch, not an untested injected fault.
+
+This is the first registered case for a future solver proof of I/O unreachability: prove `(flag in {N,Y}) AND (flag != Y) AND (flag != N)` unsatisfiable, with the domain and dominance obligations established from the pinned source. Merely solving that formula without proving the source obligations earns no credit. Changed source, another assignment, a new alias, or an intervening call invalidates the case. No solver proof or signature is claimed by this registration.

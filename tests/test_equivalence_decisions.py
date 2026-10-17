@@ -64,11 +64,14 @@ class EquivalenceDecisionTests(unittest.TestCase):
   self.assertEqual({'CBACT04C-receiving-size-133-19','CBTRN02C-constant-718-445'},{r['id'] for r in amended})
   for approval in amended:
    row=dict(id=approval['id'],argument={'argument':'not z/OS','compiler_storage_semantics':{},'depends_on_register':[]},mutant={'source_sha256':approval['source_sha256']},TCE={},class_covered=False)
-   result=mutation_threshold_report([dict(id=row['id'],status='survived')],[row],accepted,'zos-facing',{'defects':[]})
+   from lightyear_mainframe.claim_scope import digest
+   scopes=dict(arguments=[dict(id=row['id'],record_sha256=digest(row['argument']),source_sha256=approval['source_sha256'],claim_scope='host-compiler-scoped')],
+     acceptances=[dict(id=row['id'],record_sha256=digest(approval),source_sha256=approval['source_sha256'],claim_scope='twin-and-zos')])
+   result=mutation_threshold_report([dict(id=row['id'],status='survived')],[row],accepted,'zos-facing',{'defects':[]},scope_decisions=scopes)
    self.assertEqual(1,len(result['excluded_equivalents']))
    wrong={**row,'mutant':{'source_sha256':'0'*64}}
-   result=mutation_threshold_report([dict(id=row['id'],status='survived')],[wrong],accepted,'zos-facing',{'defects':[]})
-   self.assertEqual(1,len(result['unresolved_survivors']))
+   with self.assertRaisesRegex(ValueError,'claim-scope-host-semantics-unclassified'):
+    mutation_threshold_report([dict(id=row['id'],status='survived')],[wrong],accepted,'zos-facing',{'defects':[]},scope_decisions=scopes)
  def test_threshold_does_not_accept_unreviewed_or_host_only_zos_arguments(self):
   from lightyear_mainframe.equivalence_evidence import mutation_threshold_report
   register={'defects':[]};identifier='CBTRN02C-delete-MOVE-718-447'

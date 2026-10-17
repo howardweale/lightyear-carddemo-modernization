@@ -40,7 +40,7 @@ def historical_contract(repository, commit):
 def import_request(repository, root, contract):
     # Validate all files before writing any bytes. Fetch only exact public Git blobs.
     from .factory_policy import validate_contract
-    validate_contract(contract)
+    validate_contract(contract, repository)
     if contract["kind"] == "factory-decision-backfill":
         require(len({s["commit"] for s in contract["sources"]}) == 1, "backfill-one-commit")
         require(contract == historical_contract(repository, contract["sources"][0]["commit"]), "backfill-complete-inventory-required")

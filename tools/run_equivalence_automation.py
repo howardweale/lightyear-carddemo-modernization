@@ -53,6 +53,13 @@ def budgets(start, output, solver_targets, generated_cases):
         raise RuntimeError('approved-output-budget-exhausted')
 
 
+def route_counts(resolutions, *, held_out=False):
+    return {route:dict(resolved=sum(r['route']==route and r['status'] in ('equivalent','killed') for r in resolutions),
+        individual_resolved=sum(r['route']==route and r['individual_review'] and r['status'] in ('equivalent','killed') for r in resolutions),
+        survivors_resolved=0 if held_out else sum(r['route']==route and not r['argued'] and r['status'] in ('equivalent','killed') for r in resolutions),
+        kills=0 if held_out else sum(r['route']==route and r['status']=='killed' for r in resolutions)) for route in ('S1','S2','S3','S4')}
+
+
 def execute_pipeline(job, output, head, search=True):
     require_ci(); output.mkdir(parents=True, exist_ok=False); start=time.monotonic()
     baseline=triage(ROOT,job,head); write(output/'triage.json',baseline)
@@ -167,10 +174,7 @@ def execute_pipeline(job, output, head, search=True):
         before=score(baseline['inventory_count'],kills,[],[])
         after=score(baseline['inventory_count'],kills,[],resolutions)
     summary=sealed(dict(schema='equivalence-automation/1',head=head,program=job,held_out=job=='TRANREPT',run_sha256=run_hash,
-                        baseline=baseline['baseline_counts'],routes={route:dict(resolved=sum(r['route']==route and r['status'] in ('equivalent','killed') for r in resolutions),
-                            individual_resolved=sum(r['route']==route and r['individual_review'] and r['status'] in ('equivalent','killed') for r in resolutions),
-                            survivors_resolved=sum(r['route']==route and not r['argued'] and r['status'] in ('equivalent','killed') for r in resolutions),
-                            kills=sum(r['route']==route and r['status']=='killed' for r in resolutions)) for route in ('S1','S2','S3','S4')},
+                        baseline=baseline['baseline_counts'],routes=route_counts(resolutions,held_out=job=='TRANREPT'),
                         argued_resolved=sum(r['argued'] and r['status'] in ('equivalent','killed') for r in resolutions),
                         argued_total=sum(r['argued'] for r in resolutions),unresolved=len(remaining),
                         unobservable=sum(r['status']=='unobservable' for r in resolutions),

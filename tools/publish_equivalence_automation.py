@@ -46,8 +46,16 @@ def publish(inputs,output,run_id):
     individual=sum(c['individual_resolved'] for s,_,_ in data for c in s['routes'].values())
     lines[8:8]=[f'This run resolves **{argued}/{total} ({100*argued/total:.1f}%)** of the argued equivalents automatically, including **{individual}/47 individual reviews**. The 95% target is not met. Unsigned class proposals are excluded.', '']
     for s,_,_ in data:
+        if s['held_out']:continue
         for route,c in s['routes'].items():lines.append(f"| {s['program']} | {route} | {c['resolved']} | {c['individual_resolved']} | {c['survivors_resolved']} | {c['kills']} |")
-    lines+=['','| Program | Argued resolved automatically | Unobservable | Unresolved, including unobservable | Estimated review minutes / 1,000 sites |','|---|---:|---:|---:|---:|']
+    lines+=['','## Held-out structural measurements','',
+            '| Program | Route | Compiler / local identities | Campaign survivors resolved |',
+            '|---|---|---:|---:|']
+    for s,_,_ in data:
+        if not s['held_out']:continue
+        for route,c in s['routes'].items():lines.append(f"| {s['program']} | {route} | {c['resolved']} | 0 |")
+    lines+=['','No held-out application campaign exists; structural identities provide no survivor-resolution credit.','',
+            '| Program | Argued resolved automatically | Unobservable | Unresolved, including unobservable | Estimated review minutes / 1,000 sites |','|---|---:|---:|---:|---:|']
     for s,b,_ in data:
         ratio=f"{s['argued_resolved']}/{s['argued_total']} ({100*s['argued_resolved']/s['argued_total']:.1f}%)" if s['argued_total'] else 'Not applicable (held out)'
         lines.append(f"| {s['program']} | {ratio} | {s['unobservable']} | {s['unresolved']} | {5000*s['unresolved']/b['inventory_count']:.1f} |")

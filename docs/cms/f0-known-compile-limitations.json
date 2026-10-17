@@ -1,0 +1,376 @@
+{
+  "schema": "cms-f0-known-compile-limitations/1",
+  "retained_run": 38955068672,
+  "retained_receipt_sha256": "59d489a86e30f3ffe8c7f0f3d66f50ba47241be7369819ac74e0cef0e53652c0",
+  "expected_failures": [
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL192",
+      "source_sha256": "e537854a50f150bcba532ea80d60ee07d9f8b80aba9bb9025476e7d11977d23f",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "f67ef5866070e99ec93a533e0a05861316df7664dc0bcfdcf42fec07a00fde12",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL204",
+      "source_sha256": "13add62f43ceade527d2d88dcab40a93d993a2591c856f19617cca4991f73c07",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "a4fe208bae34e6cf938314ecaa39ed5f7689e9a79110ff398ae2fc8a3a8b6df9",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL135",
+      "source_sha256": "31f2f890c4895cf7f97b84aacac1952aa1bd29b1e64da7e756db68636c4d60f2",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "9497dbe64c12cd49a2532574adce19de7a5da99c19786cbcdf5925af3264f038",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL119",
+      "source_sha256": "5912cd23f30c333fc2357348968360f7c96975a75bfacf604c12deaf30240b55",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "0c8606bccd88b26a5f1cbb604c545c1decb847fd3fdb96ee4a5d23bee70f6d4f",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL125",
+      "source_sha256": "7d2bb32db31c4d9911e99905dadf5ccd8debc5a7d6c3a0b82af3759d5133e539",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "beb2f57543fab05d908ea52a5dd4070ea56bdbef88ceab4cc284ef3197f7c793",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL182",
+      "source_sha256": "02d9e2a58b4b7c0c3747728afcd213aecde478d1b998e5c0e6d1d70d4abb3bf3",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "ca906a041bd83d80b12e050f420c8b26fd3109c0debe4ea39ba62081cecdda1c",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL163",
+      "source_sha256": "ca47827d352df33c6507d3d6802d6baccbe94a1af025868a3516787a03967420",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "277a34df19f230ae29f028251c0fa96501f887e87e95dcd6658f0f48bb419ac4",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL171",
+      "source_sha256": "bd7599879004a57abeb398f4d72ef70f48d2116a31f9eaf799bb4c8d53913db7",
+      "dialect": "mf",
+      "returncode": 1,
+      "diagnostic_sha256": "8b9e6f54c11f6947c9b3714eeb468cc340f2b2a44c0e62eac819620b0484319b",
+      "reason": "Retained non-FY2021.5 module compiler limitation; excluded from the five-call F0 scope, not a successful build."
+    }
+  ],
+  "program_inventory": [
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL056",
+      "source_sha256": "33386783ec0f1a8d5de46a523c6f5b7d8f713414eb8ccc84c3788522eda2b28b"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL062",
+      "source_sha256": "951aa8e73efb3655249fb1b75e197735361ff4cff483256ef9bcc0f397e1c637"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL070",
+      "source_sha256": "3ecc5a59a2c96372e9a7558544dd0fc909cd33d7f6d4bcc812d14b8c2f7a4700"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL071",
+      "source_sha256": "6d61ae3c45576a99c5820c88001f436911e697a313114d07a1ba8ecffe414b27"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL080",
+      "source_sha256": "f29fd566a6c578365e97c6f59c41882f004cc1df523892be65a0dbcd79dbc336"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL091",
+      "source_sha256": "c3175e4810702d7881201a267a4ecb7a39d81cec0d0d76f96685fbf97bbb63ec"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL100",
+      "source_sha256": "ebd3ef23a85c103cb47629e7bf634220efd293dbc1ae29c630c6b3b598b5c8de"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL117",
+      "source_sha256": "81f3025204a54c8ac505a37597931dccc0b04d9bd3be7d415899d69db87edb14"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL122",
+      "source_sha256": "1e3f307744f8f84f8c72518f850bba4a833548e508263d2e55ae4626eb15eecf"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL130",
+      "source_sha256": "100e9caa627102b8ffd2673371b2bfa445fb9a1d09c3975a36a20d997066a447"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL140",
+      "source_sha256": "4be4a035913032363d5bb3ed485e1e99840315fde2e3eba9b036d1b9280f8112"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL151",
+      "source_sha256": "83527815e859a1abf4a6cc0fa59451a50e017d184e13ee95689db2e49467ba39"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL160",
+      "source_sha256": "43b5c0e4153be5edc7727bd072e5e751b18f8e57c58aae2e49ccb558f2198bcf"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL170",
+      "source_sha256": "4ee3ae0e2d77585d6bdf4dc02e716c9d40a07626a1806396103e639eb2f67819"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL171",
+      "source_sha256": "5e14bf049170a0b92a21cac4169967783e99d2ef34912c13027de9bdaab04d27"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL180",
+      "source_sha256": "8a754f5b8e7deeb8f64f7105006fd1f30f0169d81734c3bbf86178294ac21799"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL191",
+      "source_sha256": "155cafbe854178f077e7a56de1cc9e0525a4b8aeac5b95a4491203eb682567ac"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL200",
+      "source_sha256": "d991965ae608d6f2570c16772f4a3d2b8cc07c8e90952468de3d88c1bc7805e3"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL202",
+      "source_sha256": "19b0e644471b14a51d368b2bb0010afdc900946896148cfdd2dcf564523d6b6c"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESCAL212",
+      "source_sha256": "6fe694277edb24ca3fc9d129a43ba263018ee2d1b3f79267769a62e66cfdf28a"
+    },
+    {
+      "package": "cy-20212-esrd-main-frame-pricing-programs.zip",
+      "program": "ESDRV212",
+      "source_sha256": "7572c8a088ae7ced13f479789c672230d2004df7616e029a4f914d8d358d7357"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL006",
+      "source_sha256": "51d974ba56f5a580c83a8e90c8560cb75d804a3eed9e69624e9b003f1ad4720b"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL017",
+      "source_sha256": "eabafd28ca6a6690d30019ebfcfac09aa856eb193173d271501d22f1770b2212"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL026",
+      "source_sha256": "b45e7bcfff2cb6b826ce490e9fb59640e3a45ae40d3b88134d0b054d1c2c5e18"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL038",
+      "source_sha256": "7d4bf12b079d4b56024afcc5f5948ed23e1e9ce5661fe87ce5490d7b65c3c326"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL04D",
+      "source_sha256": "d60037c0bc91e6f09b654d15d4d766cfbf57ce481594eb33d4ea07d7b0a3cf9a"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL059",
+      "source_sha256": "cf0bf5b558cca2e2df67af2d2a39c3cd01b3105607201675183de48ea2306781"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL069",
+      "source_sha256": "0ea740812177dffcecb6441473fcbaf23d856cdfb5051fe0d23e73b71b902b84"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL07B",
+      "source_sha256": "db1fa881b74cfadf015f4713be419c7b9321ac02cccf206f034783c0f611a20d"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL08D",
+      "source_sha256": "ee7df17c285e2e40492b3a6c5f8937544b5c0bfa305b51c0f1971831dfde5557"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL09D",
+      "source_sha256": "06acbafa68ce0499937c09215db5fcbe7d430ddb7f18f1d50fd049898c04e206"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL10O",
+      "source_sha256": "ba2ccd23f689015c814fafb644a1836a45dc033efb0d9ac7ddc45a765887ed21"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL10P",
+      "source_sha256": "e46e5ff809ee83a6a5f7c787bbc12eaefb4643c5f5efbb1560023aa994e093f6"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL119",
+      "source_sha256": "5912cd23f30c333fc2357348968360f7c96975a75bfacf604c12deaf30240b55"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL125",
+      "source_sha256": "7d2bb32db31c4d9911e99905dadf5ccd8debc5a7d6c3a0b82af3759d5133e539"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL135",
+      "source_sha256": "31f2f890c4895cf7f97b84aacac1952aa1bd29b1e64da7e756db68636c4d60f2"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL14B",
+      "source_sha256": "d696ef7b79406f7e70d64be4bb5ceb237c153ebf0fd4cb779b34be133cfb2782"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL156",
+      "source_sha256": "34709fb1ea73d1f3a02611d0381ab7a2d6499a49d7fbf9857acdc68ef934659b"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL163",
+      "source_sha256": "ca47827d352df33c6507d3d6802d6baccbe94a1af025868a3516787a03967420"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL171",
+      "source_sha256": "bd7599879004a57abeb398f4d72ef70f48d2116a31f9eaf799bb4c8d53913db7"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL182",
+      "source_sha256": "02d9e2a58b4b7c0c3747728afcd213aecde478d1b998e5c0e6d1d70d4abb3bf3"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL192",
+      "source_sha256": "e537854a50f150bcba532ea80d60ee07d9f8b80aba9bb9025476e7d11977d23f"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL204",
+      "source_sha256": "13add62f43ceade527d2d88dcab40a93d993a2591c856f19617cca4991f73c07"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL215",
+      "source_sha256": "8b2069ae3a39ef7a3669cd3bddf3a7cb62222e7d263f0e959657f6a2ddf1f7bd"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL884",
+      "source_sha256": "414335025dff7d321790a8b00dcaae838ba93faf2010bd94e3cdcbb06e0de1b0"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL894",
+      "source_sha256": "073bc00941b06e9c7f253f8712a570958a59c12ceeaf1a12a76d1b4a1b72f78a"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL905",
+      "source_sha256": "6360985108fa5fe4f816508cb33ec8f4895f9af6c99b53f4a248afde6436c374"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL915",
+      "source_sha256": "5ed00e9f01bb7a5b4a7ffbb6ca5950defa95f1950b1be80327458cd8afba4626"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL926",
+      "source_sha256": "2f5118bffd2c73e190ccecbcdfa644f8b55f593e02b34613565c5192c1346637"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL935",
+      "source_sha256": "6b3d3da8f1de0c304937edee5828e1e6501c51638985d648b571ec05c5591eb1"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL944",
+      "source_sha256": "f931e7d591c57688dce7fc48ed93ad8a2c0c0cee36ef7496423fcbcbd9999f14"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL954",
+      "source_sha256": "76ef3f4d0ba52923280128e11e5b819ff887486983ef2078d46a0f0e7f9f297d"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL964",
+      "source_sha256": "82920f81294e524a56960cf8d28a75539b852d42cb938ee4295efca85249a19e"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL974",
+      "source_sha256": "0667a78c743fd7937aea5ac321f13fd44fef32305ec38d63b768b506e58b00a8"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL987",
+      "source_sha256": "5b1be740322666bf00f77b43872f1ef97096c1379f9ff75e319ac8cf69f00cd5"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPCAL998",
+      "source_sha256": "b9f0031d4725cb17b4e2eeda9e5657bc87ae65336429746ee553cfa5a0ac4fde"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPDRV215",
+      "source_sha256": "1d149b409d1f140288cedbb4d8e4a3d4225fa327515057ffe2ce0f2323b2df5f"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPMGR215",
+      "source_sha256": "2af7020b0d24336d285d2146b85ad694ae20380dbbec0c64eeba67067579f434"
+    },
+    {
+      "package": "files-fy-20215-software-release.zip",
+      "program": "PPOPN215",
+      "source_sha256": "a4829e6334762f595182b71433c3ad0063478cbc6862ffa203bf988f3f27a9cc"
+    }
+  ]
+}

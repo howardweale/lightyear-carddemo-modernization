@@ -1,0 +1,173 @@
+{
+  "schema": "cms-f0-feasibility/1",
+  "prepared_on": "2026-10-17",
+  "authorized_by": "Howard",
+  "performed_by": "Codex",
+  "verdict": "NO-GO",
+  "scope": "FY2021.5 COBOL F0 interface/compile feasibility only; no matched-version cross-language payment equivalence",
+  "retained_ci": {
+    "run_id": 38955068672,
+    "head": "70aa78b8743988445791d8633e9a23ea240500eb",
+    "artifact_id": 12070038135,
+    "artifact_digest": "sha256:7bfa559b422debae60c9fff479067fe203e83e9e4a9dc03a3197e4ea263570fb",
+    "receipt_hashes": {
+      "compile-results.json": "59d489a86e30f3ffe8c7f0f3d66f50ba47241be7369819ac74e0cef0e53652c0",
+      "smoke-hashes.json": "4e9521a088f4f28ea86302b6d8745f87eeb6fa5d1cfe53f0ee4975d3c7387228"
+    },
+    "compile_attempts": 75,
+    "programs": 59,
+    "compiled": 51,
+    "ipps": {
+      "compiled": 30,
+      "programs": 38
+    },
+    "esrd": {
+      "compiled": 21,
+      "programs": 21
+    },
+    "generated_cobol_cases": {
+      "complete": 5,
+      "total": 5
+    },
+    "input_byte_checks": {
+      "passed": 225,
+      "total": 225
+    },
+    "captured_fields_per_case": 377
+  },
+  "retained_comparison": {
+    "provenance": "Read-only analysis of retained CI COBOL hashes and the retained private Java probe; not a new CI cross-language run.",
+    "comparison_sha256": "912b17b94d3151b023093d6c2ba5b5b42001060be07f880a558c9aed2fd15aa0",
+    "alignment_record_sha256": "a114b2766e44569c486426a44be79ca3ef62f5043ff11dcdaceaac3203a1b503",
+    "mapped_java_fields": {
+      "mapped": 71,
+      "total": 75
+    },
+    "unmapped_java_fields": 4,
+    "per_case_counts": [
+      {
+        "different": 7,
+        "equal": 37,
+        "java-null-not-coerced-to-zero": 27,
+        "unmapped-output": 4
+      },
+      {
+        "different": 7,
+        "equal": 37,
+        "java-null-not-coerced-to-zero": 27,
+        "unmapped-output": 4
+      },
+      {
+        "different": 7,
+        "equal": 37,
+        "java-null-not-coerced-to-zero": 27,
+        "unmapped-output": 4
+      },
+      {
+        "different": 7,
+        "equal": 37,
+        "java-null-not-coerced-to-zero": 27,
+        "unmapped-output": 4
+      },
+      {
+        "different": 7,
+        "equal": 37,
+        "java-null-not-coerced-to-zero": 27,
+        "unmapped-output": 4
+      }
+    ],
+    "cobol_version": "2021.5",
+    "java_reported_version": "2021.6",
+    "versions_proven_equivalent": false
+  },
+  "diagnostic_audit": {
+    "retained_logs_scanned": 75,
+    "numbered_source_excerpt_candidates": 0,
+    "check_limit": "Formatting check is not proof that free-text diagnostics contain no source fragments.",
+    "publication_policy": "Withhold every raw compiler log and raw diagnostic string; upload only allowlisted counts and hashes."
+  },
+  "input_field_names": {
+    "CLAIM": {
+      "providerCcn": "B-21-PROVIDER-NO",
+      "coveredCharges": "B-21-CHARGES-CLAIMED",
+      "coveredDays": "B-21-COVERED-DAYS",
+      "diagnosisRelatedGroup": "B-21-DRG",
+      "dischargeDate": "B-21-DISCHARGE-DATE",
+      "lengthOfStay": "B-21-LOS",
+      "lifetimeReserveDays": "B-21-LTR-DAYS",
+      "reviewCode": "B-21-REVIEW-CODE"
+    },
+    "PROVIDER": {
+      "bedSize": "P-NEW-BED-SIZE",
+      "bundleModel1Discount": "P-MODEL1-BUNDLE-DISPRCNT",
+      "capitalCostToChargeRatio": "P-NEW-CAPI-CSTCHG-RATIO",
+      "capitalExceptionPaymentRate": "P-NEW-CAPI-EXCEPTIONS",
+      "capitalIndirectMedicalEducationRatio": "P-NEW-CAPI-IME",
+      "costOfLivingAdjustment": "P-NEW-COLA",
+      "hrrAdjustment": "P-NEW-HOSP-HRR-ADJUSTMT",
+      "internsToBedsRatio": "P-NEW-INTERN-RATIO",
+      "lowVolumeAdjustmentFactor": "P-LV-ADJ-FACTOR",
+      "medicaidRatio": "P-NEW-MEDICAID-RATIO",
+      "oldCapitalHoldHarmlessRate": "P-NEW-CAPI-OLD-HARM-RATE",
+      "operatingCostToChargeRatio": "P-NEW-CCR",
+      "passThroughAmountForDirectMedicalEducation": "P-NEW-PASS-AMT-DIR-MED-ED",
+      "passThroughAmountForOrganAcquisition": "P-NEW-PASS-AMT-ORGAN-ACQ",
+      "passThroughTotalAmount": "P-NEW-PASS-AMT-PLUS-MISC",
+      "ppsFacilitySpecificRate": "P-NEW-CMI-ADJ-CPD",
+      "supplementalSecurityIncomeRatio": "P-NEW-SSI-RATIO",
+      "uncompensatedCareAmount": "P-UNCOMP-CARE-AMOUNT",
+      "vbpAdjustment": "P-NEW-VAL-BASED-PURCH-ADJUST",
+      "providerCcn": "P-NEW-PROVIDER-NO",
+      "countyCode": "P-NEW-COUNTY-CODE",
+      "effectiveDate": "P-NEW-EFF-DATE",
+      "fiscalYearBeginDate": "P-NEW-FY-BEGIN-DATE",
+      "providerType": "P-NEW-PROVIDER-TYPE",
+      "stateCode": "P-NEW-STATE-CODE",
+      "capitalPpsPaymentCode": "P-NEW-CAPI-PPS-PAY-CODE",
+      "cbsaActualGeographicLocation": "P-NEW-CBSA-GEO-LOC",
+      "cbsaWageIndexLocation": "P-NEW-CBSA-RECLASS-LOC",
+      "cbsaStandardizedAmountLocation": "P-NEW-CBSA-STAND-AMT-LOC",
+      "hospitalQualityIndicator": "P-NEW-CBSA-HOSP-QUAL-IND",
+      "hrrParticipantIndicator": "P-NEW-HOSP-READMISSION-REDU",
+      "hacReductionParticipantIndicator": "P-HAC-REDUC-IND",
+      "vbpParticipantIndicator": "P-NEW-VAL-BASED-PURCH-PARTIPNT",
+      "waiverIndicator": "P-NEW-WAIVER-CODE",
+      "newHospital": "P-NEW-CAPI-NEW-HOSP",
+      "supplementalWageIndexIndicator": "P-NEW-SUPP-WI-IND",
+      "supplementalWageIndex": "P-NEW-SUPP-WI"
+    }
+  },
+  "estimates": [
+    {
+      "phase": "F1",
+      "scope": "Reusable driver, generated ABI mappings and version alignment",
+      "engineer_days": "3\u20135"
+    },
+    {
+      "phase": "F2",
+      "scope": "Matched-version corpus, error paths and field-level mapping review",
+      "engineer_days": "4\u20137"
+    },
+    {
+      "phase": "F3",
+      "scope": "Independent differential comparison, rounding boundaries and mutation probes",
+      "engineer_days": "5\u201310"
+    },
+    {
+      "phase": "F4",
+      "scope": "Reproducible packaging, durable receipts and governed review",
+      "engineer_days": "2\u20134"
+    }
+  ],
+  "estimate_basis": "Planning estimate, not measured delivery time; excludes licensing review, CMS clarification and obtaining a matching release.",
+  "remaining": [
+    "Resolve or explicitly justify the FY2021.5 versus FY2021.6 baseline before any GO decision.",
+    "Explain seven differences, twenty-seven Java nulls and four unmapped outputs in each of the five retained comparisons; null is not zero.",
+    "Complete F1\u2013F4 at the agreed matched-version scope; five generated cases are not broad payment verification.",
+    "Obtain fresh CI evidence for these fail-closed harness changes."
+  ],
+  "source_committed": false,
+  "pricing_bytes_committed": false,
+  "release_authorized": false,
+  "phase2_executed": false
+}

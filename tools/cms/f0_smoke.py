@@ -14,6 +14,7 @@ import subprocess
 import zipfile
 
 from tools.cms.f0_layout import layout
+from tools.cms.f0_policy import diagnostic_metadata, require_smoke
 
 PACKAGE = "files-fy-20215-software-release.zip"
 PIN = "83aeeb51bab7f8410756f57504590d741f8d4c02c3db74bf8cce6b98886bc7af"
@@ -237,7 +238,7 @@ def main():
     exe = root / 'F0SMOKE'
     build = subprocess.run(['cobc', '-x', '-free', '-std=ibm', '-I', str(src), '-o', str(exe), str(path)], capture_output=True, timeout=90)
     record['build_returncode'] = build.returncode
-    record['build_diagnostics'] = build.stderr.decode(errors='replace')
+    record['build_diagnostic_metadata'] = diagnostic_metadata(build.stderr.decode(errors='replace'), active(source))
     if build.returncode == 0:
         try:
             run = subprocess.run([str(exe)], cwd=root, env=env, capture_output=True, timeout=60)
@@ -263,6 +264,7 @@ def main():
     else:
         record['complete'] = False
     (root / 'smoke-hashes.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
+    require_smoke(record)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,72 @@
+{
+  "after": null,
+  "argued_resolved": 0,
+  "argued_total": 0,
+  "audit": [
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBTRN03C-constant-637-396",
+        "CBTRN03C-constant-637-397"
+      ],
+      "observed_error_rate": null,
+      "population": 2,
+      "program": "TRANREPT",
+      "reviewed": 0,
+      "route": "S1",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    }
+  ],
+  "baseline": {
+    "survivor": 413
+  },
+  "before": null,
+  "claim_scope": "twin",
+  "class_requests": 0,
+  "content_sha256": "49d38e92e6bab37ddc9a534e04bd93ebd7148e0a229a302b1322ae00ae35be6e",
+  "disabled_encoders": [],
+  "generated_cases": 0,
+  "head": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+  "held_out": true,
+  "model_calls": 0,
+  "program": "TRANREPT",
+  "qualification_credit": false,
+  "release_authorized": false,
+  "routes": {
+    "S1": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 2,
+      "survivors_resolved": 2
+    },
+    "S2": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    },
+    "S3": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    },
+    "S4": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    }
+  },
+  "run_sha256": "60ca79e8a8ed2a0276d66a96942fab713628837fae156e6887410b69390ad4f6",
+  "schema": "equivalence-automation/1",
+  "solver_targets": 144,
+  "unobservable": 0,
+  "unresolved": 411,
+  "unsupported_limits": [
+    "No paragraph/path-to-output solver encoding",
+    "No ON SIZE ERROR handlers, division or alias encoder",
+    "No held-out executable application harness"
+  ]
+}

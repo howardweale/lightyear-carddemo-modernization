@@ -1,0 +1,113 @@
+{
+  "after": {
+    "adjusted": {
+      "denominator": 479,
+      "numerator": 360
+    },
+    "excluded_equivalents": 4,
+    "raw": {
+      "denominator": 483,
+      "numerator": 360
+    },
+    "unobservable": 0,
+    "unresolved": 119
+  },
+  "argued_resolved": 4,
+  "argued_total": 114,
+  "audit": [
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBTRN02C-constant-718-445",
+        "CBTRN02C-constant-718-446",
+        "CBTRN02C-receiving-size-142-13"
+      ],
+      "observed_error_rate": null,
+      "population": 3,
+      "program": "POSTTRAN",
+      "reviewed": 0,
+      "route": "S1",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    },
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBTRN02C-rounded-403-196"
+      ],
+      "observed_error_rate": null,
+      "population": 1,
+      "program": "POSTTRAN",
+      "reviewed": 0,
+      "route": "S3",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    }
+  ],
+  "baseline": {
+    "class": 96,
+    "compiler": 1,
+    "individual": 17,
+    "survivor": 9
+  },
+  "before": {
+    "adjusted": {
+      "denominator": 483,
+      "numerator": 360
+    },
+    "excluded_equivalents": 0,
+    "raw": {
+      "denominator": 483,
+      "numerator": 360
+    },
+    "unobservable": 0,
+    "unresolved": 123
+  },
+  "claim_scope": "twin",
+  "class_requests": 2,
+  "content_sha256": "90b4b8db9dc842c023cd312dc8448070c4199ba669dc760f2714c28266570a4e",
+  "disabled_encoders": [],
+  "generated_cases": 1000,
+  "head": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+  "held_out": false,
+  "model_calls": 0,
+  "program": "POSTTRAN",
+  "qualification_credit": false,
+  "release_authorized": false,
+  "routes": {
+    "S1": {
+      "individual_resolved": 2,
+      "kills": 0,
+      "resolved": 3,
+      "survivors_resolved": 0
+    },
+    "S2": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    },
+    "S3": {
+      "individual_resolved": 1,
+      "kills": 0,
+      "resolved": 1,
+      "survivors_resolved": 0
+    },
+    "S4": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    }
+  },
+  "run_sha256": "fac8555b363cad65e30efd9db73f19eb5a0db3886824ebe0e38b7d2728fac231",
+  "schema": "equivalence-automation/1",
+  "solver_targets": 100,
+  "unobservable": 0,
+  "unresolved": 119,
+  "unsupported_limits": [
+    "No paragraph/path-to-output solver encoding",
+    "No ON SIZE ERROR handlers, division or alias encoder",
+    "No held-out executable application harness"
+  ]
+}

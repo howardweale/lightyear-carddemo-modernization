@@ -75,6 +75,7 @@ jobs:
             work/factory-review-${{ matrix.job }}/resource-usage.json
             work/factory-review-${{ matrix.job }}/campaign-start.json
             work/factory-review-${{ matrix.job }}/campaign-manifest.json
+            work/factory-review-${{ matrix.job }}/constant-field-evidence.json
             work/factory-review-${{ matrix.job }}/review-summary.json
             work/factory-review-${{ matrix.job }}/mutation-results.json
             work/factory-review-${{ matrix.job }}/loader-domain-overlay.json

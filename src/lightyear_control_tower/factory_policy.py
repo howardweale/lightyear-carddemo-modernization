@@ -26,14 +26,19 @@ def require(condition, code="factory-contract-refused"):
 
 
 def validate_contract(value, root=None, *, check_evidence=True):
-    require(isinstance(value, dict) and set(value) == COMMON)
+    require(isinstance(value, dict) and set(value) in (COMMON, COMMON | {"signing_order"}))
     require(value["schema"] == "factory-contract/1" and value["kind"] in FIELDS)
     require(value["program"] in {"INTCALC", "POSTTRAN", "B06", "B07", "factory"})
+    from .factory_order import shape
+    shape(value)
     details = value["details"]
     expected = FIELDS[value["kind"]]
     require(isinstance(details, dict))
     if value["kind"] == "scenario-threshold-approval":
-        require(set(details) in (expected, expected | {"conditions"}, expected | {"conditions", "evidence_head"}))
+        require(set(details) in (expected, expected | {"conditions"}, expected | {"conditions", "evidence_head"}, expected | {"conditions", "evidence_head", "required_review_ids"}))
+        if "required_review_ids" in details:
+            ids=details["required_review_ids"]
+            require(isinstance(ids,list) and bool(ids) and all(isinstance(i,str) and i for i in ids) and len(set(ids))==len(ids))
         if 'evidence_head' in details:
             require(isinstance(details['evidence_head'],str) and re.fullmatch('[0-9a-f]{40}',details['evidence_head']))
     elif value["kind"] == "io-exception-acceptance":
@@ -144,9 +149,11 @@ class FactoryInbox(RequestInbox):
         return item
 
 
-def write_request(root, contract, *, proposer="factory-engine"):
+def write_request(root, contract, *, proposer="factory-engine", journal=None, public_key=None, trusted_head=None):
     """Only prepares unsigned requests. Sources must already be imported public bytes."""
     from .status_export import atomic_new
+    from .factory_order import intake
+    intake(contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
     value = validate_contract(contract, root)
     raw = canonical(value)
     fingerprint = sha256(raw).hexdigest()
@@ -179,6 +186,8 @@ def write_request(root, contract, *, proposer="factory-engine"):
 
 def validate_decision(root, item, payload, events, session):
     contract = load_contract(root, item)
+    from .factory_order import check
+    check(contract,events)
     kind, details = contract["kind"], contract["details"]
     result = dict(schema="factory-validation/1", contract=contract, disclosure=DISCLOSURE,
         operator_review=True, execution_authorized=False)
@@ -240,6 +249,8 @@ class FactoryDecisions:
         decision = verify_decision(proof, self.public_key, kind, expected, scope=SCOPE,
             expected_head=self.head, outcomes=outcomes)
         require(decision["validation"]["contract"] == contract)
+        from .factory_order import check
+        check(contract,verify_journal(proof["journal"], self.public_key,scope=SCOPE,expected_head=self.head),before=event["sequence"])
         if self.evidence_root is not None:
             for source in contract['sources']:
                 require(sha256(read_bytes(confined(self.evidence_root,source['path']))).hexdigest()==source['sha256'], 'factory-source-hash')

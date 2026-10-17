@@ -11,7 +11,9 @@ def semantic_fresh(rows):
     def execution(row):
         return {k:row.get(k) for k in ('status','returncode','outputs','stdout_sha256','stderr_sha256')}
     return [{k:r.get(k) for k in ('id','status','killed_by')} | {
-        'actual':execution(r.get('actual',{})), 'baseline':execution(r.get('baseline',{}))}
+        'actual':execution(r.get('actual',{})), 'baseline':execution(r.get('baseline',{})),
+        'comparisons':[dict(case=p.get('case'),status=p.get('status'),baseline=execution(p['baseline']),actual=execution(p['actual'])) for p in r.get('comparisons',[])],
+        'evidence_gaps':bool(r.get('evidence_gaps'))}
         for r in rows]
 
 

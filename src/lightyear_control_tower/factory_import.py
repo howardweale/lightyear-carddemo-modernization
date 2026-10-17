@@ -37,9 +37,11 @@ def historical_contract(repository, commit):
         sources=sources, details=dict(records=records, activation="signed-factory-decisions-only", historical_only=True))
 
 
-def import_request(repository, root, contract):
+def import_request(repository, root, contract, *, journal=None, public_key=None, trusted_head=None):
     # Validate all files before writing any bytes. Fetch only exact public Git blobs.
     from .factory_policy import validate_contract
+    from .factory_order import intake
+    intake(contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
     validate_contract(contract, repository)
     if contract["kind"] == "factory-decision-backfill":
         require(len({s["commit"] for s in contract["sources"]}) == 1, "backfill-one-commit")
@@ -57,7 +59,7 @@ def import_request(repository, root, contract):
         if not target.exists():
             with target.open("xb") as stream:
                 stream.write(raw)
-    return write_request(root, contract)
+    return write_request(root, contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
 
 
 def main():
@@ -65,8 +67,13 @@ def main():
     parser.add_argument("--repository", type=Path, required=True)
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--contract", type=Path, required=True)
+    parser.add_argument("--journal",type=Path)
+    parser.add_argument("--public-key",type=Path)
+    parser.add_argument("--trusted-head")
     args = parser.parse_args()
-    print(json.dumps(import_request(args.repository, args.root, json.loads(read_bytes(args.contract))), indent=2))
+    trust=dict(journal=json.loads(read_bytes(args.journal)) if args.journal else None,
+        public_key=read_bytes(args.public_key) if args.public_key else None,trusted_head=args.trusted_head)
+    print(json.dumps(import_request(args.repository, args.root, json.loads(read_bytes(args.contract)),**trust), indent=2))
 
 
 if __name__ == "__main__":

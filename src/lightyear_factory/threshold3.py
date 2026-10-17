@@ -48,4 +48,6 @@ def exemptions(adequacy, threshold, compared_fields, root=None):
                 or not isinstance(mutant.get('record_sha256'),str)
                 or re.fullmatch('[0-9a-f]{64}',mutant['record_sha256']) is None):
                 raise ValueError('threshold3-mutation-required')
+        if not any(m['status'] in ('killed-failure','killed-divergent') for m in mutants):
+            raise ValueError('threshold3-constant-mutant-not-caught:'+name)
     return set(expected)

@@ -117,3 +117,35 @@ class WebBindingsTests(unittest.TestCase):
             self.assertTrue('MOVE' in line or 'STRING' in line)
         with self.assertRaisesRegex(ValueError,'unaccounted update buffer'):
             compile_update(source.replace(b'MOVE ACCT-ID                  TO ACUP-OLD-ACCT-ID',b'MOVE FUNCTION ABS(ACCT-ID) TO ACUP-OLD-ACCT-ID'),'changed.cbl')
+
+
+    def test_generic_edit_compiler_preserves_messages_predicates_and_refuses_new_verbs(self):
+        from lightyear_data.carddemo.screen_edits import build as edits
+        raw=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
+        model=edits(raw,'app/cbl/COACTUPC.cbl')
+        self.assertEqual(7,len(model['paragraphs']))
+        self.assertEqual('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',model['fields']['LIT-ALL-ALPHA-FROM-X']['initial'])
+        self.assertEqual(["'Y'","'N'"],model['conditions']['FLG-YES-NO-ISVALID']['values'])
+        self.assertEqual(75,model['fields']['WS-RETURN-MSG']['length'])
+        import json
+        changed=edits(raw.replace(b"' must not be zero.'",b"' zero is forbidden.'"),'changed.cbl')
+        self.assertIn(' zero is forbidden.',json.dumps(changed))
+        with self.assertRaisesRegex(ValueError,'unsupported edit verb'):
+            edits(raw.replace(b'SET FLG-MANDATORY-NOT-OK    TO TRUE',b'DISPLAY WS-EDIT-ALPHANUM-ONLY'),'changed.cbl')
+        with self.assertRaisesRegex(ValueError,'unsupported edit transfer'):
+            edits(raw.replace(b'GO TO  1215-EDIT-MANDATORY-EXIT',b'GO TO SOME-OTHER-PARAGRAPH'),'changed.cbl')
+
+
+    def test_quoted_copy_and_called_date_service_are_in_the_source_closure(self):
+        import json
+        from lightyear_data.carddemo.source_closure import build as closure
+        model=build(ROOT)
+        self.assertEqual({'CSUTLDTC'},set(model['support_programs']))
+        dependencies=model['source_closure']['dependencies']
+        for name in ('CSUTLDWY','CSSTRPFY','CSUTLDTC'):
+            self.assertTrue(any(d['name']==name and d['resolution']=='pinned-source' for d in dependencies))
+        self.assertTrue(any(d['name']=='CEEDAYS' and d['resolution']=='external-intrinsic' for d in dependencies))
+        proof=json.loads((ROOT/'provenance.json').read_bytes())
+        del proof['files']['app/cpy/CSUTLDWY.cpy']
+        with self.assertRaisesRegex(ValueError,'source dependency absent.*CSUTLDWY'):
+            closure(ROOT,proof,json.loads((ROOT/'slice-1.json').read_bytes()))

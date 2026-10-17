@@ -48,5 +48,18 @@ public final class TypedRecords {
             }
         }
     }
+    /** Caller owns commit/rollback and acquires both source records before rewriting. */
+    public void rewrite(Connection connection,String table,byte[] originalKey,byte[] raw)throws SQLException {
+        TypedRecordImage.Image image=TypedRecordImage.project(bindings.mapping(table),raw);
+        if(!Arrays.equals(originalKey,(byte[])image.columns().get("ebcdic_key")))throw new IllegalArgumentException("rewrite-primary-key-change");
+        List<String> clauses=new ArrayList<>();List<Object> values=new ArrayList<>();
+        for(var entry:image.columns().entrySet()){clauses.add(identifier(entry.getKey())+"=?");values.add(entry.getValue());}
+        clauses.add("encoding_meta=?::jsonb");values.add(image.metadata());
+        clauses.add("source_sha256=?");values.add(image.sha256());values.add(originalKey);
+        try(PreparedStatement statement=connection.prepareStatement("UPDATE "+identifier(table)+" SET "+String.join(",",clauses)+" WHERE ebcdic_key=?")){
+            for(int i=0;i<values.size();i++)statement.setObject(i+1,values.get(i));
+            if(statement.executeUpdate()!=1)throw new SQLException("rewrite-record-not-found");
+        }
+    }
     public static String identifier(String value){if(!value.matches("[a-z][a-z0-9_]{0,62}"))throw new IllegalArgumentException("unsafe-sql-identifier");return "\""+value+"\"";}
 }

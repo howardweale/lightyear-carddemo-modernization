@@ -152,6 +152,13 @@ def build(root):
         concurrency=comparisons(raw,p,'9700-CHECK-CHANGE-IN-REC'))
     from .screen_update import build as update_bindings
     account_update=update_bindings(raw,p)
+    from .screen_edits import build as compile_edits
+    account_update["generic_edits"]=compile_edits(raw,p)
+    from .source_closure import build as compile_closure
+    source_closure=compile_closure(root,proof,scope)
+    support_programs={}
+    for name in scope.get('support_programs',[]):
+        p,raw=locate(name,'.cbl');support_programs[name]=program(raw,p)
     dependencies=[]
     for name,model in programs.items():
         for call in model['calls']:
@@ -159,7 +166,7 @@ def build(root):
                 dependencies.append(dict(program=name,**call))
     return dict(schema='carddemo-web-bindings/1',upstream_commit=PIN,
         scope_sha256=sha256((root/'slice-1.json').read_bytes()).hexdigest(),
-        screens=screens,programs=programs,menu=options,menu_outputs=outputs,menu_option_width=int(width[1]),
+        screens=screens,programs=programs,support_programs=support_programs,source_closure=source_closure,menu=options,menu_outputs=outputs,menu_option_width=int(width[1]),
         common_constants=common,commarea=commarea,program_commareas=commareas,fraud=fraud,
         account_view_projection=account_projection,account_update_comparisons=changes,account_update=account_update,
         data_uses=dependencies,outside_endpoint=scope['outside_endpoint'],

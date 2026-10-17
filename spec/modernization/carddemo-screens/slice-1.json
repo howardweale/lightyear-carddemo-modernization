@@ -36,6 +36,10 @@
   "external_intrinsics": [
     "DFHAID",
     "DFHBMSCA",
-    "SQLCA"
+    "SQLCA",
+    "CEEDAYS"
+  ],
+  "support_programs": [
+    "CSUTLDTC"
   ]
 }

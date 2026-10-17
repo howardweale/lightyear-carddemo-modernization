@@ -1,0 +1,822 @@
+{
+  "schema": "cms-f0-ci-observation/1",
+  "recorded_on": "2026-10-17",
+  "authorized_by": "Howard",
+  "performed_by": "Codex",
+  "supersedes_fresh_evidence_gap_in": "feasibility-ipps-fy2021.md",
+  "evidence_head": "b700a8740c6a5595a523efb787fdcfc6e2dd9fda",
+  "run_id": 39047679905,
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39047679905",
+  "artifact_id": 12107215147,
+  "artifact_name": "cms-f0-compile",
+  "artifact_sha256": "4b868153ec4e3f905b91aab26a6a04d22baaa81c13d4c68f47bd3507b54f89fd",
+  "artifact_expires_at": "2026-10-31T16:18:17Z",
+  "original_receipt_sha256": "d86502b0a0a2f5975871f7f2dc78173cae524ccb744325ae03428a778a24a665",
+  "public_receipt": {
+    "schema": "cms-f0-public-receipt/1",
+    "notice": "Public CMS software, independently tested",
+    "raw_diagnostics_uploaded": false,
+    "pricing_outputs_uploaded": false,
+    "source_uploaded": false,
+    "comparison_verdict": "not supplied",
+    "release_authorized": false,
+    "private_receipt_hashes": {
+      "compile-results.json": "72357582414ed1765068e10c832a794400e30db92ebf1688c141cd7037e82a69",
+      "smoke-hashes.json": "d590d6b58f5d31e9bcc9cc6c5fc7ebf592dd42b8ae79a600a019775501c30ef1"
+    },
+    "compile": {
+      "programs": 59,
+      "compiled": 51,
+      "complete": true,
+      "all_programs_compiled": false,
+      "inventory_matched": true,
+      "expected_limitations": [
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL192",
+          "source_sha256": "e537854a50f150bcba532ea80d60ee07d9f8b80aba9bb9025476e7d11977d23f",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "f67ef5866070e99ec93a533e0a05861316df7664dc0bcfdcf42fec07a00fde12"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL204",
+          "source_sha256": "13add62f43ceade527d2d88dcab40a93d993a2591c856f19617cca4991f73c07",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "a4fe208bae34e6cf938314ecaa39ed5f7689e9a79110ff398ae2fc8a3a8b6df9"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL135",
+          "source_sha256": "31f2f890c4895cf7f97b84aacac1952aa1bd29b1e64da7e756db68636c4d60f2",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "9497dbe64c12cd49a2532574adce19de7a5da99c19786cbcdf5925af3264f038"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL119",
+          "source_sha256": "5912cd23f30c333fc2357348968360f7c96975a75bfacf604c12deaf30240b55",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "0c8606bccd88b26a5f1cbb604c545c1decb847fd3fdb96ee4a5d23bee70f6d4f"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL125",
+          "source_sha256": "7d2bb32db31c4d9911e99905dadf5ccd8debc5a7d6c3a0b82af3759d5133e539",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "beb2f57543fab05d908ea52a5dd4070ea56bdbef88ceab4cc284ef3197f7c793"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL182",
+          "source_sha256": "02d9e2a58b4b7c0c3747728afcd213aecde478d1b998e5c0e6d1d70d4abb3bf3",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "ca906a041bd83d80b12e050f420c8b26fd3109c0debe4ea39ba62081cecdda1c"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL163",
+          "source_sha256": "ca47827d352df33c6507d3d6802d6baccbe94a1af025868a3516787a03967420",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "277a34df19f230ae29f028251c0fa96501f887e87e95dcd6658f0f48bb419ac4"
+        },
+        {
+          "package": "files-fy-20215-software-release.zip",
+          "program": "PPCAL171",
+          "source_sha256": "bd7599879004a57abeb398f4d72ef70f48d2116a31f9eaf799bb4c8d53913db7",
+          "dialect": "mf",
+          "returncode": 1,
+          "diagnostic_sha256": "8b9e6f54c11f6947c9b3714eeb468cc340f2b2a44c0e62eac819620b0484319b"
+        }
+      ],
+      "unexpected_failures": [],
+      "attempts": 75,
+      "diagnostic_audit": [
+        {
+          "program": "PPCAL038",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL926",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL905",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL987",
+          "dialect": "ibm",
+          "sha256": "04ba869260228c770c92e2e0be186f5704f094cd743164c9c71471fe44d352d5",
+          "normalized_sha256": "8d9fa642afcb5c2d92bd66034721e12e7f1aa33c889535aae94024c54184d5d9",
+          "bytes": 323,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPOPN215",
+          "dialect": "ibm",
+          "sha256": "a0fd0d43d3bb138635c0f0551db07db3ea12d1db306d9b3912e5a7678d136333",
+          "normalized_sha256": "ba14da7e38a0003a61bc9c3446f96dca727cf04e3e611c75620a87349a798ab2",
+          "bytes": 323,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL954",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL10O",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL026",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL215",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL006",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL156",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL07B",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL192",
+          "dialect": "ibm",
+          "sha256": "ce873159687f01e43fe22a903b2dde9a6d625541bd00bc1421a4cd436cb77894",
+          "normalized_sha256": "f67ef5866070e99ec93a533e0a05861316df7664dc0bcfdcf42fec07a00fde12",
+          "bytes": 14479,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL192",
+          "dialect": "default",
+          "sha256": "ce873159687f01e43fe22a903b2dde9a6d625541bd00bc1421a4cd436cb77894",
+          "normalized_sha256": "f67ef5866070e99ec93a533e0a05861316df7664dc0bcfdcf42fec07a00fde12",
+          "bytes": 14479,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL192",
+          "dialect": "mf",
+          "sha256": "ce873159687f01e43fe22a903b2dde9a6d625541bd00bc1421a4cd436cb77894",
+          "normalized_sha256": "f67ef5866070e99ec93a533e0a05861316df7664dc0bcfdcf42fec07a00fde12",
+          "bytes": 14479,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL069",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL998",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL204",
+          "dialect": "ibm",
+          "sha256": "87f904fb73d5955b0aa16b7e7b19be96003271a3a7199fff64632c6f684d6953",
+          "normalized_sha256": "a4fe208bae34e6cf938314ecaa39ed5f7689e9a79110ff398ae2fc8a3a8b6df9",
+          "bytes": 17251,
+          "possible_source_quote": true,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL204",
+          "dialect": "default",
+          "sha256": "87f904fb73d5955b0aa16b7e7b19be96003271a3a7199fff64632c6f684d6953",
+          "normalized_sha256": "a4fe208bae34e6cf938314ecaa39ed5f7689e9a79110ff398ae2fc8a3a8b6df9",
+          "bytes": 17251,
+          "possible_source_quote": true,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL204",
+          "dialect": "mf",
+          "sha256": "87f904fb73d5955b0aa16b7e7b19be96003271a3a7199fff64632c6f684d6953",
+          "normalized_sha256": "a4fe208bae34e6cf938314ecaa39ed5f7689e9a79110ff398ae2fc8a3a8b6df9",
+          "bytes": 17251,
+          "possible_source_quote": true,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPMGR215",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL935",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL884",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL135",
+          "dialect": "ibm",
+          "sha256": "70555a928cd9e26c17d895cdb8ceb868c07cb7a03b65890703a65ef3ef0abc24",
+          "normalized_sha256": "9497dbe64c12cd49a2532574adce19de7a5da99c19786cbcdf5925af3264f038",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL135",
+          "dialect": "default",
+          "sha256": "7ce97f71bc41f9e42b31eebbd92791c16fc89a8dc19eb8d402b1a37bf0cf5fcf",
+          "normalized_sha256": "2d39800786e546120625956eb2cb14ff4e2f4d57794ce2a4a7eceff5157c0713",
+          "bytes": 188,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL135",
+          "dialect": "mf",
+          "sha256": "70555a928cd9e26c17d895cdb8ceb868c07cb7a03b65890703a65ef3ef0abc24",
+          "normalized_sha256": "9497dbe64c12cd49a2532574adce19de7a5da99c19786cbcdf5925af3264f038",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL119",
+          "dialect": "ibm",
+          "sha256": "154312c43ff0f26808f301565a45d5fceab3d634f8808eb53f98bf16c481848c",
+          "normalized_sha256": "0c8606bccd88b26a5f1cbb604c545c1decb847fd3fdb96ee4a5d23bee70f6d4f",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL119",
+          "dialect": "default",
+          "sha256": "2ae6506013ec381f9ab739b40f638a9491fbc5ff54b0d6ddb823227ee9c727d0",
+          "normalized_sha256": "9cad5ccfe6137aa1f607ad0fbc8cd0810982484ce8fa912d77c6f2933340fc2c",
+          "bytes": 188,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL119",
+          "dialect": "mf",
+          "sha256": "154312c43ff0f26808f301565a45d5fceab3d634f8808eb53f98bf16c481848c",
+          "normalized_sha256": "0c8606bccd88b26a5f1cbb604c545c1decb847fd3fdb96ee4a5d23bee70f6d4f",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL894",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL059",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL017",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL125",
+          "dialect": "ibm",
+          "sha256": "0164f3b1e4e129f070b1e462e538e75687cb8e68397fe93260724b85ffe74796",
+          "normalized_sha256": "beb2f57543fab05d908ea52a5dd4070ea56bdbef88ceab4cc284ef3197f7c793",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL125",
+          "dialect": "default",
+          "sha256": "2c498331bb6e6c6b27c11383ab0faf4e106920c08665b01df09cd93d6c2ff69f",
+          "normalized_sha256": "45f3bd05ea0bad67e36bc775d547e9d2d50a0f40f572b7c9869389bd0899cf77",
+          "bytes": 188,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL125",
+          "dialect": "mf",
+          "sha256": "0164f3b1e4e129f070b1e462e538e75687cb8e68397fe93260724b85ffe74796",
+          "normalized_sha256": "beb2f57543fab05d908ea52a5dd4070ea56bdbef88ceab4cc284ef3197f7c793",
+          "bytes": 419,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL944",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL14B",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL964",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL10P",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL08D",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL182",
+          "dialect": "ibm",
+          "sha256": "f07369002150635489b324b82889a177318f41552de699487d6791e38927cb31",
+          "normalized_sha256": "ca906a041bd83d80b12e050f420c8b26fd3109c0debe4ea39ba62081cecdda1c",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL182",
+          "dialect": "default",
+          "sha256": "f07369002150635489b324b82889a177318f41552de699487d6791e38927cb31",
+          "normalized_sha256": "ca906a041bd83d80b12e050f420c8b26fd3109c0debe4ea39ba62081cecdda1c",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL182",
+          "dialect": "mf",
+          "sha256": "f07369002150635489b324b82889a177318f41552de699487d6791e38927cb31",
+          "normalized_sha256": "ca906a041bd83d80b12e050f420c8b26fd3109c0debe4ea39ba62081cecdda1c",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL04D",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL163",
+          "dialect": "ibm",
+          "sha256": "1b6db47b7e791bcdfdd9e9dac36c959d2f3833ad4df5608e1ae45b30111be006",
+          "normalized_sha256": "277a34df19f230ae29f028251c0fa96501f887e87e95dcd6658f0f48bb419ac4",
+          "bytes": 13277,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL163",
+          "dialect": "default",
+          "sha256": "1b6db47b7e791bcdfdd9e9dac36c959d2f3833ad4df5608e1ae45b30111be006",
+          "normalized_sha256": "277a34df19f230ae29f028251c0fa96501f887e87e95dcd6658f0f48bb419ac4",
+          "bytes": 13277,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL163",
+          "dialect": "mf",
+          "sha256": "1b6db47b7e791bcdfdd9e9dac36c959d2f3833ad4df5608e1ae45b30111be006",
+          "normalized_sha256": "277a34df19f230ae29f028251c0fa96501f887e87e95dcd6658f0f48bb419ac4",
+          "bytes": 13277,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL974",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL171",
+          "dialect": "ibm",
+          "sha256": "6c58b33cfa290d081f20fed80cec2273d1030900ca28ff92f44c42ed0cf283c4",
+          "normalized_sha256": "8b9e6f54c11f6947c9b3714eeb468cc340f2b2a44c0e62eac819620b0484319b",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL171",
+          "dialect": "default",
+          "sha256": "6c58b33cfa290d081f20fed80cec2273d1030900ca28ff92f44c42ed0cf283c4",
+          "normalized_sha256": "8b9e6f54c11f6947c9b3714eeb468cc340f2b2a44c0e62eac819620b0484319b",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL171",
+          "dialect": "mf",
+          "sha256": "6c58b33cfa290d081f20fed80cec2273d1030900ca28ff92f44c42ed0cf283c4",
+          "normalized_sha256": "8b9e6f54c11f6947c9b3714eeb468cc340f2b2a44c0e62eac819620b0484319b",
+          "bytes": 6695,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL915",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPCAL09D",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "PPDRV215",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL122",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL171",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL212",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL200",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL080",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL130",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL202",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL091",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESDRV212",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL070",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL100",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL117",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL170",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL191",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL160",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL071",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL140",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL180",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL062",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL151",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        },
+        {
+          "program": "ESCAL056",
+          "dialect": "ibm",
+          "sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "normalized_sha256": "acafe4b21599508a37218452bd14bdcd0402f2c3540824910c88bcc787fd0e66",
+          "bytes": 123,
+          "possible_source_quote": false,
+          "raw_diagnostics_uploaded": false
+        }
+      ]
+    },
+    "smoke": {
+      "complete": true,
+      "source_modified": false,
+      "source_sha256": "a4829e6334762f595182b71433c3ad0063478cbc6862ffa203bf988f3f27a9cc",
+      "hold_copy_sha256": "b626c2f436dcad195befd07db95a133fbb10f09cff46ed15803f61d866b580e1",
+      "claims_sha256": "b343b7ec838d2ed182c4a130f32091d9ce5fbfea2d5f6d5446bc21cac7ba5666",
+      "driver_sha256": "74334c4cac7518594179faffeb09db5891f5299fbd08dfde22f446f0be850904",
+      "module_layout_sha256": {
+        "PPDRV215": "1d149b409d1f140288cedbb4d8e4a3d4225fa327515057ffe2ce0f2323b2df5f",
+        "PPCAL215": "8b2069ae3a39ef7a3669cd3bddf3a7cb62222e7d263f0e959657f6a2ddf1f7bd"
+      },
+      "table_adapters": {
+        "MSAX045": {
+          "source_sha256": "91a2c0f6f34d71e119a473f8bc1bdc443b1cbb39eb2efc8d01713300bf0a60cd",
+          "fixed_sha256": "f712e4de3ced73addf37bf70fb0441ab4578ce991c4408fd3607bcbaa1ca8bfb",
+          "records": 8931
+        },
+        "CBSA212": {
+          "source_sha256": "32e0341a8bdc6149b242fa76595fea24b5d5c0a086ba6e445078c872cb821550",
+          "fixed_sha256": "7826523e6823029190641c03203253471ebb81851dc88c187d8d67018b59f958",
+          "records": 7804
+        }
+      },
+      "build_returncode": 0,
+      "run_returncode": 0,
+      "stdout_sha256": "cfbc2ebcea8a34b48b2a491224afad15a9ca08f95a4cfe6509380d5531d69219",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cases": 5,
+      "fields_per_case": 377,
+      "input_checks": 225
+    },
+    "complete": true
+  },
+  "verdict": "NO-GO for cross-language payment equivalence",
+  "remaining": [
+    "COBOL FY2021.5 versus Java FY2021.6 remains unresolved.",
+    "Retained comparisons still have seven differences, twenty-seven Java nulls and four unmapped outputs per case.",
+    "Eight compiler limitations remain; a green harness does not mean all programs compiled.",
+    "Full F1-F4 matched-version comparison and governance remain outstanding."
+  ],
+  "scope": "Fresh metadata-only CMS harness evidence; not matched-version payment proof or authorization.",
+  "release_authorized": false,
+  "phase2_authorized": false
+}

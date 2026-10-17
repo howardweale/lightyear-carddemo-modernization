@@ -63,6 +63,19 @@ def load_supplemental() -> list[dict[str, Any]]:
     return records
 
 
+def supplemental_addenda() -> list[str]:
+    payload = json.loads(SUPPLEMENTAL_CATALOG.read_text(encoding="utf-8"))
+    paths = payload.get("addenda", [])
+    if not isinstance(paths, list) or len(paths) != len(set(paths)):
+        raise ValueError("invalid milestone addenda")
+    numbers = {entry["number"] for entry in load_supplemental()}
+    for path in paths:
+        match = re.fullmatch(r"MS-(\d+)/as-of-\d{4}-\d{2}-\d{2}\.md", path)
+        if not match or int(match[1]) not in numbers:
+            raise ValueError("unbound milestone addendum")
+    return paths
+
+
 SUPPLEMENTAL_MARKDOWN = tuple(entry["path"] for entry in load_supplemental())
 
 BOUNDARY_TERMS = (
@@ -546,7 +559,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
 
 def source_sha256() -> str:
     digest = hashlib.sha256()
-    for path in (Path(__file__).resolve(), CATALOG_PATH, SUPPLEMENTAL_CATALOG, DOC_ROOT / "reconciliation-2026-10-14.json", DOC_ROOT / "reconciliation-2026-10-14.md", DOC_ROOT / "reconciliation-2026-10-15.json", DOC_ROOT / "reconciliation-2026-10-15.md", ROOT / "tools/generate_supplemental_milestone_formats.py", CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
+    for path in (Path(__file__).resolve(), CATALOG_PATH, SUPPLEMENTAL_CATALOG, DOC_ROOT / "reconciliation-2026-10-14.json", DOC_ROOT / "reconciliation-2026-10-14.md", DOC_ROOT / "reconciliation-2026-10-15.json", DOC_ROOT / "reconciliation-2026-10-15.md", ROOT / "tools/generate_supplemental_milestone_formats.py", CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in (*SUPPLEMENTAL_MARKDOWN, *supplemental_addenda()))):
         digest.update(path.relative_to(ROOT).as_posix().encode()); digest.update(b"\0")
         digest.update(path.read_bytes()); digest.update(b"\0")
     return digest.hexdigest()
@@ -565,7 +578,7 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
         "# LIGHTYEAR milestone documentation library", "",
         f"This library is the customer-readable body of record for MS #1 through MS #{EXPECTED_MILESTONES[-1]}. Every milestone is",
         "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.",
-        f"The same searchable index includes {len(load_supplemental())} later implementation records in Markdown, Word and PDF.", "",
+        f"The same searchable index includes {len(load_supplemental())} later implementation records in their declared formats.", "",
         f"**[Open the searchable milestone index]({PAGES_INDEX})** to filter by milestone number, title,",
         "customer value, capability, release, or roadmap phase.", "",
         "The documents explain purpose, customer value, delivered capability, evidence posture, limitations, and",
@@ -587,6 +600,10 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
             label, target = ("Download Word", github_raw(path)) if suffix == "docx" else ("PDF", github_blob(path))
             links.append(f"[{label}]({target})")
         lines.append(f"| MS #{record['number']:02d} | {record['title']} | {record['status']} | {' - '.join(links)} |")
+
+    if supplemental_addenda():
+        lines.extend(["", "## Dated status corrections", ""])
+        lines.extend(f"- [As of {Path(p).stem.removeprefix('as-of-')} — {Path(p).parent.name}]({p})" for p in supplemental_addenda())
 
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
@@ -639,6 +656,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
               <td class="formats">{''.join(links)}</td>
             </tr>'''
         )
+    addendum_links = " ".join(f'<a href="{html.escape(p, quote=True)}">{html.escape(Path(p).parent.name)} as of {html.escape(Path(p).stem.removeprefix("as-of-"))}</a>' for p in supplemental_addenda())
     total = len(models) + len(supplemental)
     page = f'''<!doctype html>
 <html lang="en">
@@ -715,6 +733,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
     </section>
 
   </main>
+  <aside aria-label="Dated status corrections">{addendum_links}</aside>
   <footer>These briefs package committed repository evidence. Underlying receipts, ledgers, gates, tests, and policy decisions remain authoritative.</footer>
   <script>
     (() => {{
@@ -807,6 +826,7 @@ def build() -> None:
 def supplemental_artifacts() -> list[dict]:
     paths = [Path(entry["path"]).with_suffix("." + suffix)
              for entry in load_supplemental() for suffix in entry.get("formats", ["md"])]
+    paths.extend(Path(p) for p in supplemental_addenda())
     return [{"path": (DOC_ROOT / p).relative_to(ROOT).as_posix(),
              "bytes": (DOC_ROOT / p).stat().st_size, "sha256": sha256_path(DOC_ROOT / p)}
             for p in paths]

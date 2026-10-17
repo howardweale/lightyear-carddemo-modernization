@@ -35,7 +35,8 @@ public final class Commarea {
             StringBuilder decimal=new StringBuilder();for(int i=0;i<raw.length;i++){
                 int high=(raw[i]>>>4)&15,low=raw[i]&15;if(high>9)throw new IllegalArgumentException("commarea-packed-digit");decimal.append(high);
                 if(i<raw.length-1){if(low>9)throw new IllegalArgumentException("commarea-packed-digit");decimal.append(low);}
-                else if(low!=12&&low!=13&&low!=15)throw new IllegalArgumentException("commarea-packed-sign");}
+                else if(f.path("signed").asBoolean()?(low!=12&&low!=13&&low!=15):low!=15)throw new IllegalArgumentException("commarea-packed-sign");}
+            if(decimal.length()>digits){if(decimal.length()!=digits+1||decimal.charAt(0)!='0')throw new IllegalArgumentException("commarea-packed-padding");decimal.deleteCharAt(0);}
             number=new BigInteger(decimal.toString());if((raw[raw.length-1]&15)==13)number=number.negate();
         }else if(usage.equals("DISPLAY")){
             String text=new String(raw,EBCDIC);boolean negative=false;
@@ -44,12 +45,14 @@ public final class Commarea {
                 if(f.path("separate").asBoolean()){
                     char sign=text.charAt(at);if(sign!='+'&&sign!='-')throw new IllegalArgumentException("commarea-display-sign");negative=sign=='-';text=text.substring(0,at)+text.substring(at+1);
                 }else{char last=text.charAt(at);int pos="{ABCDEFGHI".indexOf(last),neg="}JKLMNOPQR".indexOf(last);
-                    if(pos<0&&neg<0)throw new IllegalArgumentException("commarea-zoned-sign");negative=neg>=0;
-                    text=text.substring(0,at)+(char)('0'+(negative?neg:pos))+text.substring(at+1);}
+                    // Preferred COBOL signs include positive zone F as well as C.
+                    if(pos<0&&neg<0){if(last<'0'||last>'9')throw new IllegalArgumentException("commarea-zoned-sign");pos=last-'0';}
+                    negative=neg>=0;text=text.substring(0,at)+(char)('0'+(negative?neg:pos))+text.substring(at+1);}
             }
             if(!text.matches("[0-9]+"))throw new IllegalArgumentException("commarea-display-digit");number=new BigInteger(text);if(negative)number=number.negate();
         }else throw new IllegalArgumentException("commarea-usage");
-        String d=number.abs().toString();d="0".repeat(Math.max(0,digits-d.length()))+d;int scale=f.path("scale").asInt();
+        String d=number.abs().toString();if(!usage.equals("COMP-5")&&d.length()>digits)throw new IllegalArgumentException("commarea-picture-range");
+        d="0".repeat(Math.max(0,digits-d.length()))+d;int scale=f.path("scale").asInt();
         if(scale>0)d=d.substring(0,d.length()-scale)+"."+d.substring(d.length()-scale);
         return number.signum()<0?"-"+d:d;
     }
@@ -59,8 +62,8 @@ public final class Commarea {
         else{
             BigInteger number;try{number=new BigDecimal(value).setScale(f.path("scale").asInt(),RoundingMode.UNNECESSARY).unscaledValue();}
             catch(NumberFormatException|ArithmeticException invalid){throw new IllegalArgumentException("commarea-number",invalid);}
-            String d=number.abs().toString();if(d.length()>digits||number.signum()<0&&!f.path("signed").asBoolean())throw new IllegalArgumentException("commarea-number-range");
-            d="0".repeat(digits-d.length())+d;String usage=f.path("usage").asText();
+            String usage=f.path("usage").asText();String d=number.abs().toString();if((!usage.equals("COMP-5")&&d.length()>digits)||number.signum()<0&&!f.path("signed").asBoolean())throw new IllegalArgumentException("commarea-number-range");
+            d="0".repeat(Math.max(0,digits-d.length()))+d;
             if(usage.equals("BINARY")||usage.equals("COMP-5")){
                 int bits=len*8-(f.path("signed").asBoolean()?1:0);if(number.bitLength()>bits)throw new IllegalArgumentException("commarea-binary-range");
                 byte[] n=number.toByteArray();raw=new byte[len];Arrays.fill(raw,number.signum()<0?(byte)0xff:(byte)0);

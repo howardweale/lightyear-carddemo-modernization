@@ -153,7 +153,8 @@ def build(root):
     from .screen_update import build as update_bindings
     account_update=update_bindings(raw,p)
     from .screen_edits import build as compile_edits
-    account_update["generic_edits"]=compile_edits(raw,p)
+    lookup_path,lookup_raw=locate("CSLKPCDY",".cpy")
+    account_update["generic_edits"]=compile_edits(raw,p,(lookup_path,lookup_raw))
     from .source_closure import build as compile_closure
     source_closure=compile_closure(root,proof,scope)
     support_programs={}

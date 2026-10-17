@@ -112,7 +112,7 @@ class Parser:
         return result
 
 def declarations(raw,source):
-    code,lines=active(raw,source);code=code[:code.index('PROCEDURE DIVISION')]
+    code,lines=active(raw,source);code=code.split('PROCEDURE DIVISION',1)[0]
     entries=list(re.finditer(r'^\s*(\d\d)\s+([A-Z][A-Z0-9-]*)\b',code,re.M))
     fields={};conditions={};stack=[];parent=None
     for i,m in enumerate(entries):
@@ -133,11 +133,18 @@ def declarations(raw,source):
             ancestors=ancestors,body=body,**origin)
     return fields,conditions
 
-def build(raw,source):
+def build(raw,source,lookup=None):
     paragraphs={}
-    for name in PARAGRAPHS:
+    names=PARAGRAPHS+('1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
+    for name in names:
         code,lines=paragraph(raw,source,name);paragraphs[name]=Parser(code,lines,source,name).parse()
-    fields,conditions=declarations(raw,source);needed=set();flags=set()
+    fields,conditions=declarations(raw,source)
+    if lookup:
+        extra_fields,extra_conditions=declarations(lookup[1],lookup[0])
+        if set(fields)&set(extra_fields) or set(conditions)&set(extra_conditions):
+            raise ValueError('ambiguous edit lookup declaration')
+        fields.update(extra_fields);conditions.update(extra_conditions)
+    needed=set();flags=set()
     def walk(value):
         if isinstance(value,list):
             for item in value:walk(item)
@@ -152,10 +159,24 @@ def build(raw,source):
     for name in flags:
         c=conditions.get(name)
         if not c or not c['parent']:raise ValueError('edit condition absent: '+name)
-        tokens=re.findall(r"'(?:[^']|'')*'|[A-Z][A-Z0-9-]*|\d+",c['text'])
-        if not tokens or any(t not in ('SPACE','SPACES','LOW-VALUE','LOW-VALUES','ZERO','ZEROS','ZEROES') and not t.startswith("'") and not t.isdigit() for t in tokens):
-            raise ValueError('unsupported edit condition values: '+name)
-        needed.add(c['parent']);bound_conditions[name]=dict(parent=c['parent'],values=tokens,source=c['source'],line=c['line'])
+        tokens=[];position=0
+        for match in re.finditer(r"\s+|,|'(?:[^']|'')*'|[A-Z][A-Z0-9-]*|\d+",c['text']):
+            if match.start()!=position:raise ValueError('unsupported edit condition values: '+name)
+            position=match.end()
+            if not match[0].isspace() and match[0]!=',':tokens.append(match[0])
+        if position!=len(c['text']) or not tokens:raise ValueError('unsupported edit condition values: '+name)
+        def valid(t):
+            return t in ('SPACE','SPACES','LOW-VALUE','LOW-VALUES','ZERO','ZEROS','ZEROES') or t.startswith("'") or t.isdigit()
+        values=[];ranges=[];index=0
+        while index<len(tokens):
+            lower=tokens[index];index+=1
+            if not valid(lower):raise ValueError('unsupported edit condition values: '+name)
+            if index<len(tokens) and tokens[index] in ('THRU','THROUGH'):
+                index+=1
+                if index>=len(tokens) or not valid(tokens[index]):raise ValueError('unsupported edit condition range: '+name)
+                ranges.append(dict(lower=lower,upper=tokens[index]));index+=1
+            else:values.append(lower)
+        needed.add(c['parent']);bound_conditions[name]=dict(parent=c['parent'],values=values,ranges=ranges,source=c['source'],line=c['line'])
     def initial(name):
         if name not in fields:raise ValueError('edit declaration absent: '+name)
         f=fields[name]
@@ -164,12 +185,22 @@ def build(raw,source):
             if not children:raise ValueError('empty edit constant group: '+name)
             value=''.join(initial(n)['initial'] for n in children);length=len(value)
         else:
-            if 'REDEFINES' in f['body'] or 'OCCURS' in f['body']:raise ValueError('unsupported edit alias')
+            if 'OCCURS' in f['body']:raise ValueError('unsupported edit occurrence')
+            alias=re.search(r'\bREDEFINES\s+([A-Z][A-Z0-9-]*)',f['body'])
+            if alias:
+                base=fields.get(alias[1])
+                if not base or base['type']!='text' or base['length']!=f['length'] or f['type']!='number' or re.search(r'\bCOMP|\bPIC\s+[^. ]*V',f['body']):
+                    raise ValueError('unsupported edit alias')
+                return dict(type='number',length=f['length'],initial='0',alias_of=alias[1],source=f['source'],line=f['line'])
             length=f['length'];token=f['value'] or ('0' if f['type']=='number' else 'SPACES')
             if token.startswith("'"):value=token[1:-1].replace("''","'").ljust(length)[:length]
             elif token.startswith('LOW-VALUE'):value='\x00'*length
             elif token.startswith('SPACE'):value=' '*length
             else:value=token if f['type']=='number' else '0'*length
         return dict(type='text' if f['type']=='group' else f['type'],length=length,initial=value,source=f['source'],line=f['line'])
-    return dict(paragraphs=paragraphs,fields={name:initial(name) for name in sorted(needed)},conditions=bound_conditions,
-        limitations=['Only seven generic edit paragraphs are translated here. Date, money, phone, cross-field and screen control-flow proof remain pending.'])
+    bound_fields={name:initial(name) for name in sorted(needed)}
+    for item in list(bound_fields.values()):
+        if 'alias_of' in item:
+            name=item['alias_of'];bound_fields.setdefault(name,initial(name))
+    return dict(paragraphs=paragraphs,fields=bound_fields,conditions=bound_conditions,
+        limitations=['Generic edits and optional source state/ZIP/FICO edits only; date, money, phone, SSN and screen control-flow proof remain pending.'])

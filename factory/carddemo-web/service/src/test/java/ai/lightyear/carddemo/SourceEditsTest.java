@@ -40,4 +40,24 @@ class SourceEditsTest {
         var mixed=edits();operand(mixed,"First Name","A\u0000",25);mixed.run("1225-EDIT-ALPHA-REQD");assertTrue(mixed.condition("INPUT-ERROR"));
         assertThrows(IllegalArgumentException.class,()->e.run("1250-EDIT-SIGNED-9V2"));
     }
+    @Test void lookupEditsPreservePinnedStateZipAndNumericAliasBoundaries()throws Exception{
+        for(String state:new String[]{"CA","ca","ZZ"}){
+            var e=edits();e.put("ACUP-NEW-CUST-ADDR-STATE-CD",state);e.run("1270-EDIT-US-STATE-CD");
+            assertEquals(state.equals("CA"),e.condition("INPUT-OK"));
+        }
+        for(int score:new int[]{299,300,850,851}){
+            var e=edits();e.put("WS-EDIT-VARIABLE-NAME","FICO Score");
+            e.put("ACUP-NEW-CUST-FICO-SCORE-X",Integer.toString(score));e.run("1275-EDIT-FICO-SCORE");
+            assertEquals(score>=300&&score<=850,e.condition("INPUT-OK"));
+        }
+        var alias=edits();alias.put("ACUP-NEW-CUST-FICO-SCORE","7");assertEquals("007",alias.get("ACUP-NEW-CUST-FICO-SCORE-X"));
+        alias.put("ACUP-NEW-CUST-FICO-SCORE-X","7X0");assertThrows(IllegalArgumentException.class,()->alias.run("1275-EDIT-FICO-SCORE"));
+        for(String zip:new String[]{"94105","10001"}){
+            var e=edits();e.put("ACUP-NEW-CUST-ADDR-STATE-CD","CA");e.put("ACUP-NEW-CUST-ADDR-ZIP",zip);
+            e.run("1280-EDIT-US-STATE-ZIP-CD");assertEquals(zip.equals("94105"),e.condition("INPUT-OK"));
+            if(zip.equals("10001")){assertTrue(e.condition("FLG-STATE-NOT-OK"));assertTrue(e.condition("FLG-ZIPCODE-NOT-OK"));
+                assertEquals("Invalid zip code for state",e.get("WS-RETURN-MSG").stripTrailing());}
+        }
+    }
+
 }

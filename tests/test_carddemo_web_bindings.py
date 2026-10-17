@@ -149,3 +149,17 @@ class WebBindingsTests(unittest.TestCase):
         del proof['files']['app/cpy/CSUTLDWY.cpy']
         with self.assertRaisesRegex(ValueError,'source dependency absent.*CSUTLDWY'):
             closure(ROOT,proof,json.loads((ROOT/'slice-1.json').read_bytes()))
+
+    def test_lookup_edits_bind_source_tables_ranges_and_aliases(self):
+        from lightyear_data.carddemo.screen_edits import build as edits
+        raw=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
+        path='app/cpy/CSLKPCDY.cpy';lookup=(ROOT/'upstream'/path).read_bytes()
+        model=edits(raw,'app/cbl/COACTUPC.cbl',(path,lookup))
+        self.assertEqual(10,len(model['paragraphs']))
+        self.assertEqual([dict(lower='300',upper='850')],model['conditions']['FICO-RANGE-IS-VALID']['ranges'])
+        self.assertEqual('ACUP-NEW-CUST-FICO-SCORE-X',model['fields']['ACUP-NEW-CUST-FICO-SCORE']['alias_of'])
+        self.assertIn("'CA94'",model['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
+        changed=edits(raw,'app/cbl/COACTUPC.cbl',(path,lookup.replace(b"'CA94'",b"'CA00'")))
+        self.assertNotIn("'CA94'",changed['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
+        self.assertIn("'CA00'",changed['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
+        self.assertEqual(path,model['conditions']['VALID-US-STATE-CODE']['source'])

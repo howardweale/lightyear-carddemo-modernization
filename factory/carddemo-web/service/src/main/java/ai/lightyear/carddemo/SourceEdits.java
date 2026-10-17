@@ -19,11 +19,18 @@ public final class SourceEdits {
         setCondition("INPUT-OK");setCondition("WS-RETURN-MSG-OFF");
     }
     private JsonNode field(String name){JsonNode f=model.path("fields").path(name);if(f.isMissingNode())throw new IllegalArgumentException("edit-field:"+name);return f;}
-    public String get(String name){field(name);return values.get(name);}
+    public String get(String name){JsonNode f=field(name);
+        if(f.has("alias_of")){String raw=get(f.path("alias_of").asText());
+            if(!raw.matches("[0-9]+"))throw new IllegalArgumentException("edit-numeric-alias");return raw;}
+        return values.get(name);
+    }
     public void put(String name,String value){JsonNode f=field(name);
         if(f.path("type").asText().equals("number")){
             BigDecimal number=new BigDecimal(value);if(number.scale()>0&&number.stripTrailingZeros().scale()>0)throw new IllegalArgumentException("edit-integral-field");
-            values.put(name,number.toBigIntegerExact().toString());
+            String digits=number.toBigIntegerExact().toString();
+            if(f.has("alias_of")){int n=f.path("length").asInt();if(number.signum()<0||digits.length()>n)throw new IllegalArgumentException("edit-alias-range");
+                put(f.path("alias_of").asText(),"0".repeat(n-digits.length())+digits);return;}
+            values.put(name,digits);
         }else {int n=f.path("length").asInt();Commarea.encode(value);values.put(name,(value+" ".repeat(n)).substring(0,n));}
     }
     public List<Location> trace(){return List.copyOf(trace);}
@@ -42,12 +49,21 @@ public final class SourceEdits {
     public boolean condition(String name){JsonNode condition=model.path("conditions").path(name);
         if(condition.isMissingNode())throw new IllegalArgumentException("edit-condition:"+name);
         String parent=condition.path("parent").asText();String actual=get(parent);
-        for(JsonNode v:condition.path("values"))if(paddedEqual(actual,conditionValue(v.asText(),parent)))return true;
+        boolean numeric=field(parent).path("type").asText().equals("number");
+        for(JsonNode v:condition.path("values"))if(compare(actual,conditionValue(v.asText(),parent),numeric)==0)return true;
+        for(JsonNode range:condition.path("ranges"))if(compare(actual,conditionValue(range.path("lower").asText(),parent),numeric)>=0
+            &&compare(actual,conditionValue(range.path("upper").asText(),parent),numeric)<=0)return true;
         return false;
     }
     private void setCondition(String name){JsonNode c=model.path("conditions").path(name);
         if(c.isMissingNode())throw new IllegalArgumentException("edit-condition:"+name);
-        String parent=c.path("parent").asText();put(parent,conditionValue(c.path("values").get(0).asText(),parent));
+        String parent=c.path("parent").asText();
+        if(c.path("values").isEmpty())throw new IllegalArgumentException("edit-set-range-condition");
+        put(parent,conditionValue(c.path("values").get(0).asText(),parent));
+    }
+    private static int compare(String a,String b,boolean numeric){
+        if(numeric)return new BigDecimal(a).compareTo(new BigDecimal(b));
+        int n=Math.max(a.length(),b.length());return Arrays.compareUnsigned(Commarea.encode(a+" ".repeat(n-a.length())),Commarea.encode(b+" ".repeat(n-b.length())));
     }
     private static boolean paddedEqual(String a,String b){int n=Math.max(a.length(),b.length());return (a+" ".repeat(n-a.length())).equals(b+" ".repeat(n-b.length()));}
     private Value evaluate(JsonNode e){visit(e);String op=e.path("op").asText();

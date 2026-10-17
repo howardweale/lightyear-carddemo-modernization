@@ -16,6 +16,12 @@ from tools.check_factory_review import attempt
 from lightyear_mainframe.campaign_provenance import validate as validate_campaign
 
 
+def write_review_projection(path, value):
+    # Same canonical seal required by the downstream real-evidence rehearsal.
+    # The measured payload is not changed or made effective by sealing it.
+    write_json(path, sealed(value))
+
+
 def population(job):
     old=json.loads((ROOT/f'docs/factory/systematic-{job.lower()}-review311.json').read_text())['mutants']
     rows={r['id']:r for r in old if r['status']=='equivalent (argued, listed)'}
@@ -196,7 +202,7 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
         projected={scope:mutation_threshold_report(projections[0],results,supplemented,scope,register) if scope=='twin' else scoped[scope] for scope in ('twin','zos-facing')}
         from tools.crosscheck_release_threshold import check as crosscheck
         independent={scope:crosscheck(projections[0] if scope=='twin' else list(fresh.values()),results,supplemented if scope=='twin' else acceptance['accepted_mutants'],scope,projected[scope]) for scope in ('twin','zos-facing')}
-        write_json(output/'loader-domain-review-projection.json',dict(schema='intcalc-loader-domain-review-projection/1',head=head,
+        write_review_projection(output/'loader-domain-review-projection.json',dict(schema='intcalc-loader-domain-review-projection/1',head=head,
             raw_thresholds=scoped,projected_thresholds=projected,independent_crosscheck=independent,overlays=[r['loader_domain_overlay'] for r in shard_records],
             effective=False,release_authorized=False,pending_effective_acceptances=pending,supplement_sha256=supplement_sha,limitation='Unsigned review projection only, conditional on explicit effectiveness signatures; no new z/OS-facing acceptance or active-policy change.'))
     accepted_ids={r['id'] for r in acceptance['accepted_mutants']}

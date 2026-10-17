@@ -62,6 +62,16 @@ public final class TypedRecords {
     public void rewrite(Connection connection,String table,byte[] originalKey,byte[] raw)throws SQLException {
         TypedRecordImage.Image image=TypedRecordImage.project(bindings.mapping(table),raw);
         if(!Arrays.equals(originalKey,(byte[])image.columns().get("ebcdic_key")))throw new IllegalArgumentException("rewrite-primary-key-change");
+        writeImage(connection,table,originalKey,image);
+    }
+    public void rewriteSegment(Connection connection,String table,Map<String,Object> original,byte[] raw)throws SQLException{
+        if(!bindings.mapping(table).has("segment"))throw new IllegalArgumentException("segment-mapping-required");
+        TypedRecordImage.Image image=TypedRecordImage.project(bindings.mapping(table),raw);
+        if(!Arrays.equals(AuthorizationRecords.key(original),(byte[])image.columns().get("ebcdic_key")))throw new IllegalArgumentException("segment-key-change");
+        byte[] path=(byte[])original.get("ebcdic_key");Map<String,Object> columns=new LinkedHashMap<>(image.columns());columns.put("ebcdic_key",path);
+        writeImage(connection,table,path,new TypedRecordImage.Image(columns,image.metadata(),image.sha256()));
+    }
+    private void writeImage(Connection connection,String table,byte[] originalKey,TypedRecordImage.Image image)throws SQLException{
         List<String> clauses=new ArrayList<>();List<Object> values=new ArrayList<>();
         for(var entry:image.columns().entrySet()){clauses.add(identifier(entry.getKey())+"=?");values.add(entry.getValue());}
         clauses.add("encoding_meta=?::jsonb");values.add(image.metadata());

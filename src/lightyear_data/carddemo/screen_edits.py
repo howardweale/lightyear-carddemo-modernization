@@ -190,7 +190,7 @@ def declarations(raw,source):
         scale=digits(parts[1]) if len(parts)==2 else 0
         width=sum(digits(part) for part in parts) if pic else None
         value=re.search(r"\bVALUE\s+('(?:[^']|'')*'|SPACES?|LOW-VALUES?|ZERO(?:S|ES)?|\d+)",body)
-        fields[name]=dict(type=('number' if pic and '9' in pic[1] else 'text') if pic else 'group',
+        fields[name]=dict(type=('number' if pic and pic[1].upper().lstrip('S').startswith('9') else 'text') if pic else 'group',
             length=width,scale=scale,value=value[1] if value else None,
             ancestors=ancestors,body=body,**origin)
     return fields,conditions

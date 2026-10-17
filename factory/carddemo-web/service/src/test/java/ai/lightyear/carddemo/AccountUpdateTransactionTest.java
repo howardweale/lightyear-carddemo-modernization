@@ -60,8 +60,9 @@ class AccountUpdateTransactionTest {
         // A concurrent name edit must not be lost even when only another field is submitted.
         customer.put(b.field("custdata","CUST-FIRST-NAME").path("column").asText(),Commarea.encode("Changed                  "));
         Connection db=mock(Connection.class);when(db.getAutoCommit()).thenReturn(false);
-        when(db.prepareStatement(startsWith("SELECT * FROM \"acctdata\""))).thenReturn(statement(account));
-        when(db.prepareStatement(startsWith("SELECT * FROM \"custdata\""))).thenReturn(statement(customer));
+        PreparedStatement accountStatement=statement(account),customerStatement=statement(customer);
+        when(db.prepareStatement(startsWith("SELECT * FROM \"acctdata\""))).thenReturn(accountStatement);
+        when(db.prepareStatement(startsWith("SELECT * FROM \"custdata\""))).thenReturn(customerStatement);
         assertEquals(AccountUpdateTransaction.Outcome.CONFLICT,update.save(db,area));
         verify(db,times(2)).prepareStatement(endsWith("FOR UPDATE"));
         verify(db,never()).prepareStatement(startsWith("UPDATE"));verify(db,never()).commit();

@@ -23,13 +23,13 @@ public final class AuthorizationRecords {
         if(limit<1||limit>6)throw new IllegalArgumentException("authorization-page-limit");
         if(parent==null)return List.of();
         String sql="SELECT * FROM pautdtl1 WHERE parent_path_key=?"+(start==null?"":" AND (twin_seq,path_key)"+(inclusive?">=":">")+"(SELECT twin_seq,path_key FROM pautdtl1 WHERE parent_path_key=? AND ebcdic_key=?)")+" ORDER BY twin_seq,path_key LIMIT ?";
-        try(var q=db.prepareStatement(sql)){int i=1;q.setBytes(i++,(byte[])parent.get("path_key"));if(start!=null){q.setBytes(i++,(byte[])parent.get("path_key"));q.setBytes(i++,start);}q.setInt(i,limit);
+        try(var q=db.prepareStatement(sql)){int i=1;q.setBytes(i++,(byte[])parent.get("path_key"));if(start!=null){q.setBytes(i++,(byte[])parent.get("path_key"));q.setBytes(i++,path(parent,start));}q.setInt(i,limit);
             try(var rs=q.executeQuery()){List<Map<String,Object>> rows=new ArrayList<>();while(rs.next())rows.add(row(rs));return rows;}}
     }
     public Map<String,Object> detail(Connection db,Map<String,Object> parent,byte[] key,boolean lock)throws SQLException{
         if(parent==null)return null;
         try(var q=db.prepareStatement("SELECT * FROM pautdtl1 WHERE parent_path_key=? AND ebcdic_key=?"+(lock?" FOR UPDATE":""))){
-            q.setBytes(1,(byte[])parent.get("path_key"));q.setBytes(2,key);try(var rs=q.executeQuery()){if(!rs.next())return null;return row(rs);}}
+            q.setBytes(1,(byte[])parent.get("path_key"));q.setBytes(2,path(parent,key));try(var rs=q.executeQuery()){if(!rs.next())return null;return row(rs);}}
     }
     public void load(SourceEdits edits,JsonNode model,String table,Map<String,Object> row){
         if(row==null)return;
@@ -38,5 +38,6 @@ public final class AuthorizationRecords {
             if(!f.path("filler").asBoolean()&&model.path("fields").has(name))edits.put(name,records.text(table,row,name));
         }
     }
-    public static byte[] key(Map<String,Object> row){return ((byte[])row.get("ebcdic_key")).clone();}
+    private static byte[] path(Map<String,Object> parent,byte[] key){byte[] root=(byte[])parent.get("path_key");byte[] result=Arrays.copyOf(root,root.length+key.length);System.arraycopy(key,0,result,root.length,key.length);return result;}
+    public static byte[] key(Map<String,Object> row){byte[] path=(byte[])row.get("ebcdic_key"),parent=(byte[])row.get("parent_path_key");if(parent==null||path.length<=parent.length||!Arrays.equals(parent,Arrays.copyOf(path,parent.length)))throw new IllegalArgumentException("detail-path-key");return Arrays.copyOfRange(path,parent.length,path.length);}
 }

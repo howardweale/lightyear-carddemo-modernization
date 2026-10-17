@@ -9,6 +9,14 @@ import static org.mockito.Mockito.*;
 import tools.jackson.databind.json.JsonMapper;
 
 class AuthorizationTest {
+    @Test void detailKeyUsesTheParentQualifiedPathWithoutMixingAccounts() {
+        byte[] parent={1,2,3},businessKey={4,5,6,7,8,9,10,11};
+        byte[] path={1,2,3,4,5,6,7,8,9,10,11};
+        assertThrows(IllegalArgumentException.class,()->AuthorizationRecords.key(Map.of("ebcdic_key",path,"parent_path_key",new byte[]{9,9,9})));
+        assertArrayEquals(businessKey,AuthorizationRecords.key(Map.of("ebcdic_key",path,"parent_path_key",parent)));
+        assertThrows(IllegalArgumentException.class,()->AuthorizationRecords.key(Map.of("ebcdic_key",parent,"parent_path_key",parent)));
+    }
+
     private Bindings bindings()throws Exception{Path root=Path.of(System.getProperty("carddemo.root"));return new Bindings(root.resolve("work/carddemo-web-bindings/bindings.json"),root.resolve("work/carddemo-web-data/plan.json"),JsonMapper.builder().build());}
     private void set(Bindings b,Map<String,Object> row,String field,String text){row.put(b.field("pautdtl1",field).path("column").asText(),Commarea.encode(text));}
     @Test void sourceRenderingPreservesDeclineLookupDateMoneyAndFraudAttributes()throws Exception{

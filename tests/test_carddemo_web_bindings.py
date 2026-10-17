@@ -6,6 +6,14 @@ ROOT=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens'
 
 
 class WebBindingsTests(unittest.TestCase):
+    def test_text_picture_lengths_containing_nine_are_not_numeric(self):
+        from lightyear_data.carddemo.screen_edits import declarations
+        raw=b'       01 SAMPLE.\n           05 ZIP PIC X(09).\n           05 NAME PIC X(19).\n           05 COUNT PIC 9(09).\n'
+        fields,_=declarations(raw,'pictures.cpy')
+        self.assertEqual(('text',9),(fields['ZIP']['type'],fields['ZIP']['length']))
+        self.assertEqual(('text',19),(fields['NAME']['type'],fields['NAME']['length']))
+        self.assertEqual(('number',9),(fields['COUNT']['type'],fields['COUNT']['length']))
+
     def test_six_transactions_and_linked_fraud_are_source_bound(self):
         result=build(ROOT)
         self.assertEqual({'CC00','CM00','CAVW','CAUP','CPVS','CPVD'}, {s['transaction'] for s in result['screens']})

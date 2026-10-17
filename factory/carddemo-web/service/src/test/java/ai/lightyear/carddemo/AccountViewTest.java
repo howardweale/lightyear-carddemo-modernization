@@ -57,7 +57,7 @@ class AccountViewTest {
         ScreenFrame frame=new ScreenFrame(b,"COACTVWC");
         new ScreenProjection(b).apply(frame,b.root.path("account_view_projection"),Map.of("acctdata",acct,"custdata",cust));
         assertEquals("-  1,234,567.89",frame.values.get("ACURBAL"));
-        assertEquals("012-34-5678  ",frame.values.get("ACSTSSN"));
+        assertEquals("012-34-5678 ",frame.values.get("ACSTSSN"));
         assertEquals("2026-10-17",frame.values.get("ACSTDOB"));assertEquals("Ada                      ",frame.values.get("ACSFNAM"));
         assertThrows(IllegalArgumentException.class,()->ScreenProjection.edited("1","unrecognized"));
     }

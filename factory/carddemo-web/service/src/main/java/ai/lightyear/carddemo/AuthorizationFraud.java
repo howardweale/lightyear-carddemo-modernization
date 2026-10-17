@@ -41,7 +41,7 @@ public final class AuthorizationFraud {
         for(JsonNode column:schema.path("action").path("update_columns")){String id=TypedRecords.identifier(column.asText());updates.add(id+"=EXCLUDED."+id);}
         String sql="INSERT INTO "+TypedRecords.identifier(schema.path("table").asText())+" ("+String.join(",",columns)+") VALUES ("+String.join(",",parameters)+") ON CONFLICT ("+String.join(",",keys)+") DO UPDATE SET "+String.join(",",updates);
         try(var statement=db.prepareStatement(sql)){for(int i=0;i<values.size();i++)statement.setObject(i+1,values.get(i));if(statement.executeUpdate()!=1)throw new SQLException("fraud-action-row-count");}
-        byte[] raw=image.bytes();records.rewrite(db,"pautdtl1",AuthorizationRecords.key(detail),raw);
-        var projected=TypedRecordImage.project(mapping,raw);Map<String,Object> result=new LinkedHashMap<>(detail);result.putAll(projected.columns());result.put("encoding_meta",projected.metadata());result.put("source_sha256",projected.sha256());return result;
+        byte[] raw=image.bytes();records.rewriteSegment(db,"pautdtl1",detail,raw);
+        var projected=TypedRecordImage.project(mapping,raw);Map<String,Object> result=new LinkedHashMap<>(detail);result.putAll(projected.columns());result.put("ebcdic_key",detail.get("ebcdic_key"));result.put("encoding_meta",projected.metadata());result.put("source_sha256",projected.sha256());return result;
     }
 }

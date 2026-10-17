@@ -1,0 +1,41 @@
+{
+  "schema": "carddemo-field-policy/1",
+  "basis": "Explicit ISO date interpretations reviewed against pinned public copybook declarations; invalid values quarantine. All other PIC X storage is lossless cp037 bytes.",
+  "files": {
+    "app/cpy/CVACT01Y.cpy": {
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+      "fields": {
+        "ACCOUNT-RECORD.ACCT-OPEN-DATE": {
+          "line": 10,
+          "interpretation": "iso-date"
+        },
+        "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE": {
+          "line": 11,
+          "interpretation": "iso-date"
+        },
+        "ACCOUNT-RECORD.ACCT-REISSUE-DATE": {
+          "line": 12,
+          "interpretation": "iso-date"
+        }
+      }
+    },
+    "app/cpy/CVACT02Y.cpy": {
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+      "fields": {
+        "CARD-RECORD.CARD-EXPIRAION-DATE": {
+          "line": 9,
+          "interpretation": "iso-date"
+        }
+      }
+    },
+    "app/cpy/CVCUS01Y.cpy": {
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+      "fields": {
+        "CUSTOMER-RECORD.CUST-DOB-YYYY-MM-DD": {
+          "line": 19,
+          "interpretation": "iso-date"
+        }
+      }
+    }
+  }
+}

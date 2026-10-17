@@ -1,5 +1,5 @@
 import unittest
-from lightyear_data.carddemo.volume import generated, boundary_cases, check_browse
+from lightyear_data.carddemo.volume import generated, generated_mapped, boundary_cases, check_browse
 
 
 class VolumeTests(unittest.TestCase):
@@ -16,6 +16,23 @@ class VolumeTests(unittest.TestCase):
             def browse(self,*args,**kwargs):return [2,1]
         result=check_browse(BadStore(),[b'00',b'99'])
         self.assertLess(result['matched'],result['compared'])
+
+    def test_public_volume_uses_distinct_duplicates_and_pic_x_boundaries(self):
+        from pathlib import Path
+        from lightyear_data.carddemo.plan import build
+        root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-data'
+        _,entries=build(root)
+        for item,layout,m in entries:
+            if item.get('synthetic'):continue
+            template=(root/'upstream'/item['data']).read_bytes()[:layout.record_length]
+            rows=list(generated_mapped(template,m,20001));k=m['keys'][0]
+            keys=[r[k['key_offset']:k['key_offset']+k['key_length']] for r in rows]
+            self.assertEqual(len(rows),len(set(keys)))
+            if item['name'] in ('usrsec','carddata','cardxref'):
+                self.assertEqual(b'\0'*k['key_length'],keys[0]);self.assertEqual(b'\xff'*k['key_length'],keys[1])
+            for k in m['keys'][1:]:
+                keys=[r[k['key_offset']:k['key_offset']+k['key_length']] for r in rows]
+                self.assertEqual(20000,len(set(keys)));self.assertEqual(keys[0],keys[-1])
 
     def test_edges_and_prefixes_are_explicit(self):
         cases=boundary_cases([b'00',b'99'])

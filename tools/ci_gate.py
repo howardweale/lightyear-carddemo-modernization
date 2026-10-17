@@ -47,7 +47,7 @@ def evaluate(expected,runs,head,pr_number):
         if not any(p['number']==pr_number for p in run.get('pull_requests',[])):
             continue
         path=run['path'].split('@')[0]
-        if path in expected and run['id'] > latest.get(path,{}).get('id',-1):
+        if path in expected and (run['id'],run.get('run_attempt',1)) > (latest.get(path,{}).get('id',-1),latest.get(path,{}).get('run_attempt',0)):
             latest[path]=run
     failed=sorted(p for p,r in latest.items() if r['status']=='completed' and r['conclusion']!='success')
     waiting=sorted(p for p in expected if p not in latest or latest[p]['status']!='completed')
@@ -86,12 +86,12 @@ def gate():
             raise SystemExit('PR head changed; obsolete gate refused')
         runs=pages(f'{prefix}/actions/runs?head_sha={head}&event=pull_request','workflow_runs')
         failed,waiting=evaluate(expected,runs,head,number)
-        if failed:
+        if failed and not waiting:
             raise SystemExit('Required workflow failed/cancelled/skipped: '+', '.join(failed))
-        if not waiting:
+        if not waiting and not failed:
             print('All selected final-head workflows completed green.',flush=True)
             return
-        print('Waiting:',', '.join(waiting),flush=True)
+        print('Waiting:',', '.join(waiting),'Completed failures:',', '.join(failed),flush=True)
         time.sleep(30)
     raise SystemExit('CI timed out; missing/queued/running is not acceptance')
 

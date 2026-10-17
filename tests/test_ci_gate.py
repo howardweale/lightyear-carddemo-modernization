@@ -23,6 +23,13 @@ class GateTests(unittest.TestCase):
             self.assertEqual(evaluate({'x'},[dict(r,**change)],'new',9),([],['x']))
         self.assertEqual(evaluate({'x'},[],'new',9),([],['x']))
         self.assertEqual(evaluate({'x'},[r,dict(r,id=2,conclusion='failure')],'new',9),(['x'],[]))
+    def test_new_attempt_supersedes_failed_completed_snapshot(self):
+        failed=dict(id=10,path='x',head_sha='h',event='pull_request',pull_requests=[{'number':1}],status='completed',conclusion='failure',run_attempt=1)
+        rerunning=dict(failed,status='in_progress',conclusion=None,run_attempt=2)
+        for runs in ([failed,rerunning],[rerunning,failed]):
+            self.assertEqual(([],['x']),evaluate({'x'},runs,'h',1))
+        self.assertEqual(([],[]),evaluate({'x'},[failed,dict(rerunning,status='completed',conclusion='success')],'h',1))
+
     def test_root_markdown_and_negative_paths(self):
         self.assertFalse(selected({'on':{'pull_request':{'paths-ignore':['**/*.md']}}},['README.md']))
         self.assertFalse(selected({'on':{'pull_request':{'paths':['src/**','!src/excluded/**']}}},['src/excluded/a']))

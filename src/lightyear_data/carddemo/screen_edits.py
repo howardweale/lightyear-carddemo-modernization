@@ -9,7 +9,7 @@ from .screen_update import paragraph
 
 PARAGRAPHS=('1215-EDIT-MANDATORY','1220-EDIT-YESNO','1225-EDIT-ALPHA-REQD',
     '1230-EDIT-ALPHANUM-REQD','1235-EDIT-ALPHA-OPT','1240-EDIT-ALPHANUM-OPT','1245-EDIT-NUM-REQD')
-VERBS={'IF','SET','MOVE','INSPECT','STRING','GO','CONTINUE','EXIT','ELSE','END-IF','.'}
+VERBS={'IF','SET','MOVE','INSPECT','STRING','GO','CONTINUE','EXIT','PERFORM','ELSE','END-IF','.'}
 TOKEN=re.compile(r"\s+|,|'(?:[^']|'')*'|[A-Z][A-Z0-9-]*|[0-9]+|>=|<=|<>|[().:=<>]")
 
 class Parser:
@@ -96,6 +96,10 @@ class Parser:
                 self.take();self.take('BY');self.take('SIZE');self.take('INTO');target=self.expr()
                 if self.peek()=='END-STRING':self.take()
                 node=dict(op='string',pieces=pieces,target=target)
+            elif verb=='PERFORM':
+                label=self.take();self.take('THRU');end=self.take()
+                if label not in PARAGRAPHS or end!=label+'-EXIT':raise ValueError('unsupported edit perform: '+label)
+                node=dict(op='perform',paragraph=label)
             elif verb=='GO':
                 self.take('TO');label=self.take()
                 if label!=self.name+'-EXIT':raise ValueError('unsupported edit transfer: '+label)
@@ -135,7 +139,7 @@ def declarations(raw,source):
 
 def build(raw,source,lookup=None):
     paragraphs={}
-    names=PARAGRAPHS+('1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
+    names=PARAGRAPHS+('1265-EDIT-US-SSN','1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
     for name in names:
         code,lines=paragraph(raw,source,name);paragraphs[name]=Parser(code,lines,source,name).parse()
     fields,conditions=declarations(raw,source)
@@ -155,6 +159,9 @@ def build(raw,source,lookup=None):
     for value in paragraphs.values():walk(value)
     # Caller initializes these source flags and supplies the edit operands.
     flags.update(('INPUT-OK','WS-RETURN-MSG-OFF'))
+    # Flags copied by MOVE still expose their source 88 conditions. Their
+    # storage is already referenced; no unseen state or new table is invented.
+    flags.update(name for name,c in conditions.items() if c['parent'] in needed)
     bound_conditions={}
     for name in flags:
         c=conditions.get(name)
@@ -203,4 +210,4 @@ def build(raw,source,lookup=None):
         if 'alias_of' in item:
             name=item['alias_of'];bound_fields.setdefault(name,initial(name))
     return dict(paragraphs=paragraphs,fields=bound_fields,conditions=bound_conditions,
-        limitations=['Generic edits and optional source state/ZIP/FICO edits only; date, money, phone, SSN and screen control-flow proof remain pending.'])
+        limitations=['Generic edits and optional source state/ZIP/FICO edits only; date, money, phone and screen control-flow proof remain pending.'])

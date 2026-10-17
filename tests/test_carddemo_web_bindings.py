@@ -155,7 +155,7 @@ class WebBindingsTests(unittest.TestCase):
         raw=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
         path='app/cpy/CSLKPCDY.cpy';lookup=(ROOT/'upstream'/path).read_bytes()
         model=edits(raw,'app/cbl/COACTUPC.cbl',(path,lookup))
-        self.assertEqual(10,len(model['paragraphs']))
+        self.assertEqual(11,len(model['paragraphs']))
         self.assertEqual([dict(lower='300',upper='850')],model['conditions']['FICO-RANGE-IS-VALID']['ranges'])
         self.assertEqual('ACUP-NEW-CUST-FICO-SCORE-X',model['fields']['ACUP-NEW-CUST-FICO-SCORE']['alias_of'])
         self.assertIn("'CA94'",model['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
@@ -163,3 +163,12 @@ class WebBindingsTests(unittest.TestCase):
         self.assertNotIn("'CA94'",changed['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
         self.assertIn("'CA00'",changed['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
         self.assertEqual(path,model['conditions']['VALID-US-STATE-CODE']['source'])
+
+    def test_ssn_implicit_period_scope_and_perform_are_not_flattened(self):
+        model=build(ROOT)['account_update']['generic_edits']
+        body=model['paragraphs']['1265-EDIT-US-SSN']
+        outer=next(x for x in body if x['op']=='if')
+        self.assertEqual('FLG-EDIT-US-SSN-PART1-ISVALID',outer['test']['name'])
+        self.assertEqual(2,sum(x['op']=='perform' for x in outer['yes']))
+        self.assertEqual(1,sum(x['op']=='perform' for x in body))
+        self.assertEqual([dict(lower='900',upper='999')],model['conditions']['INVALID-SSN-PART1']['ranges'])

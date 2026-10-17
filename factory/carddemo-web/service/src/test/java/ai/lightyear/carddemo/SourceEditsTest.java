@@ -60,4 +60,19 @@ class SourceEditsTest {
         }
     }
 
+    @Test void ssnRetainsTheSourceImplicitScopeAndFirstError()throws Exception{
+        var valid=edits();valid.put("ACUP-NEW-CUST-SSN-1","123");valid.put("ACUP-NEW-CUST-SSN-2","45");valid.put("ACUP-NEW-CUST-SSN-3","6789");
+        valid.run("1265-EDIT-US-SSN");assertTrue(valid.condition("INPUT-OK"));
+        for(int part=1;part<=3;part++)assertTrue(valid.condition("FLG-EDIT-US-SSN-PART"+part+"-ISVALID"));
+        var first=edits();first.put("ACUP-NEW-CUST-SSN-1","000");first.put("ACUP-NEW-CUST-SSN-2","00");first.put("ACUP-NEW-CUST-SSN-3","0000");
+        String before2=first.get("WS-EDIT-US-SSN-PART2-FLGS"),before3=first.get("WS-EDIT-US-SSN-PART3-FLGS");
+        first.run("1265-EDIT-US-SSN");assertEquals(before2,first.get("WS-EDIT-US-SSN-PART2-FLGS"));assertEquals(before3,first.get("WS-EDIT-US-SSN-PART3-FLGS"));
+        assertEquals("SSN: First 3 chars must not be zero.",first.get("WS-RETURN-MSG").stripTrailing());
+        for(String prefix:new String[]{"666","900","999"}){
+            var e=edits();e.put("ACUP-NEW-CUST-SSN-1",prefix);e.put("ACUP-NEW-CUST-SSN-2","00");e.put("ACUP-NEW-CUST-SSN-3","0000");e.run("1265-EDIT-US-SSN");
+            assertTrue(e.condition("FLG-EDIT-US-SSN-PART1-NOT-OK"));assertTrue(e.condition("FLG-EDIT-US-SSN-PART2-NOT-OK"));assertTrue(e.condition("FLG-EDIT-US-SSN-PART3-NOT-OK"));
+            assertEquals("SSN: First 3 chars: should not be 000, 666, or between 900 and 999",e.get("WS-RETURN-MSG").stripTrailing());
+        }
+    }
+
 }

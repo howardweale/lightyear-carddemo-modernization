@@ -122,6 +122,7 @@ public final class SourceEdits {
             if(before.length()!=after.length())throw new IllegalArgumentException("edit-conversion-length");StringBuilder converted=new StringBuilder();
             for(char c:text.toCharArray()){int index=before.indexOf(c);converted.append(index<0?c:after.charAt(index));}
             assign(target,new Value(converted.toString(),false,false),false);break;}
+        case "perform":run(statement.path("paragraph").asText());break;
         case "return":return true;
         case "continue":break;
         default:throw new IllegalArgumentException("edit-statement");

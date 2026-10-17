@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control-build/INTCALC/bin/ACCTFILE",
+    "load",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/before/ACCTFILE",
+    "/home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/loader-domain/control/files/ACCTFILE"
+  ],
+  "returncode": 0
+}

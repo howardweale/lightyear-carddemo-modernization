@@ -1,0 +1,75 @@
+{
+  "details": {
+    "claim_scope": "twin",
+    "class_proof_sha256": null,
+    "dependencies": [
+      "CBACT04C-FINAL-ACCOUNT-EOF-ELSE"
+    ],
+    "items": [
+      "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "CBACT04C-constant-192-48",
+      "CBACT04C-constant-192-49",
+      "CBACT04C-constant-638-382",
+      "CBACT04C-constant-639-384",
+      "CBACT04C-constant-639-385",
+      "CBACT04C-delete-ADD-192-50",
+      "CBACT04C-delete-MOVE-491-264",
+      "CBACT04C-delete-MOVE-492-265",
+      "CBACT04C-delete-MOVE-493-266",
+      "CBACT04C-delete-MOVE-494-267",
+      "CBACT04C-delete-MOVE-630-373",
+      "CBACT04C-delete-MOVE-639-386",
+      "CBACT04C-delete-MOVE-644-389",
+      "CBACT04C-receiving-scale-133-20",
+      "CBACT04C-receiving-scale-139-24",
+      "CBACT04C-receiving-scale-164-26",
+      "CBACT04C-receiving-scale-169-30",
+      "CBACT04C-receiving-scale-172-32",
+      "CBACT04C-receiving-scale-173-34",
+      "CBACT04C-receiving-scale-72-6",
+      "CBACT04C-receiving-size-125-13",
+      "CBACT04C-receiving-size-133-19",
+      "CBACT04C-receiving-size-138-21",
+      "CBACT04C-receiving-size-139-23",
+      "CBACT04C-receiving-size-172-31",
+      "CBACT04C-receiving-size-177-35",
+      "CBACT04C-skip-PERFORM-216-74",
+      "CBACT04C-skip-PERFORM-220-75"
+    ],
+    "packet_sha256": "78a929440858073758589ea604699329bf906a30c5a32325e0a4f170259e02e4",
+    "reviewer_type": "AI-assisted"
+  },
+  "kind": "equivalence-review",
+  "program": "INTCALC",
+  "schema": "factory-contract/1",
+  "sources": [
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+      "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/keep-or-fix-register.json",
+      "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+      "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    }
+  ]
+}

@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 import unittest
 from lightyear_control_tower.factory_policy import validate_contract
-from tools.build_release_packet import DECISIONS, DATE
+DATE = '2026-10-14'  # Immutable historical packet under test.
+DECISIONS = ['equivalence-operator-acceptance-2026-10-12.json', 'intcalc-duplicate-category-approval-2026-10-12.json',
+    'posttran-phase1-rerun-authorization-2026-10-12.json', 'b06-afternoon-preparation-2026-10-13.json', 'merge-hold-lift-2026-10-14.json']
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -31,7 +33,10 @@ class ReleasePacketTests(unittest.TestCase):
     def test_unsigned_requests_and_no_phase2_claim(self):
         for name in ('intcalc-io-exception-request','scenario-threshold-effective-request'):
             value=json.loads((ROOT/f'docs/factory/{name}-{DATE}.json').read_bytes())
-            validate_contract(value);self.assertNotIn('signature',value)
+            if name == 'scenario-threshold-effective-request':
+                with self.assertRaisesRegex(ValueError, 'threshold-conditions-unmet'): validate_contract(value)
+            else: validate_contract(value)
+            self.assertNotIn('signature',value)
         record=json.loads((ROOT/f'docs/factory/intcalc-releasability-{DATE}.json').read_bytes())
         self.assertFalse(record['release_authorized']);self.assertFalse(record['effective'])
         self.assertEqual(113,len(record['remaining_evidence_gaps']))

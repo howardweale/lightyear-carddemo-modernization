@@ -1,0 +1,20 @@
+{
+  "details": {
+    "argument_sha256": "5905fe8a67f25d49fd250b60c1f8ffe5f0e95ed3537a52fabd3032b1fd3544f2",
+    "line": 189,
+    "outcome": "false",
+    "outcome_id": "legacy:cobol-decision:CBACT04C:189:671",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "basis": "structurally-unreachable"
+  },
+  "kind": "io-exception-acceptance",
+  "program": "INTCALC",
+  "schema": "factory-contract-draft/1",
+  "sources": [
+    {
+      "commit": "299317a868274765d95c193b7df403ffe1474c3f",
+      "path": "docs/factory/io-gap-arguments.json",
+      "sha256": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90"
+    }
+  ]
+}

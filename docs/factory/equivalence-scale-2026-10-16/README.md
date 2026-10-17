@@ -20,39 +20,9 @@ POSTTRAN evidence-gap/survivor members are outside the 227 argued population and
 remain in the full mutation denominator. These are different denominators.
 Reviewer minutes per 1,000 sites are not measured.
 
-## Signing the two requests
+## Signing handoff
 
-Use `INTCALC-tower-contract.json` and `POSTTRAN-tower-contract.json` beside this
-document. Each binds the complete original class packet, its census, and a new
-30-member audit with source context. The companion `*-class-request.json` files
-retain the exact class proof for the signed review overlay.
-
-The old contracts pointed at measurement commit `7d95d7d`, where the generated
-packet files did not yet exist. These contracts bind the identical packet bytes
-at publication commit `78be9cafb322b6a9dacaa94fd6027df2aeb605e5`. Measurement head,
-matcher, members and class-proof seals stay unchanged. The new audit selection
-is explicit; this document does not assert Howard has reviewed this newly
-packaged sample or applied a signature.
-
-Import with the **existing Factory root**, then open Factory Work queue on 8769.
-These commands prepare unsigned requests; they do not provision, activate or sign.
-Do not substitute the B06 root or port 8768.
-
-```powershell
-$Repository = 'C:\Users\howar\.codex\worktrees\equivalence-scale\lightyear-carddemo-modernization'
-$Packet = Join-Path $Repository 'docs\factory\equivalence-scale-2026-10-16'
-# Set $FactoryRoot to the existing provisioned Factory data root.
-# Use the installed Tower Python environment as $Python.
-& $Python -m lightyear_control_tower.factory_import --repository $Repository --root $FactoryRoot --contract "$Packet\INTCALC-tower-contract.json"
-& $Python -m lightyear_control_tower.factory_import --repository $Repository --root $FactoryRoot --contract "$Packet\POSTTRAN-tower-contract.json"
-```
-
-In each request, verify the program, twin scope, source/matcher hashes and all
-81 or 96 member IDs. Record individual outcomes and reasons through the Tower.
-After signing, export the signed decisions and journal with the operator-owned
-public trust configuration. `tools.apply_equivalence_reviews` verifies them and
-writes a new overlay; the #341 ledger remains unchanged. A class signature does
-not authorize a threshold, release, model spend or z/OS-facing claim.
+Use only [PR #359’s merged signing packet](../appl-result-signing-2026-10-16/README.md); #357 provides measurement evidence, not importable contracts.
 
 ## Work order and gates
 
@@ -72,3 +42,17 @@ calls. None of these stages is represented as completed by E1.
 Execution and tests are CI-only. No model calls or main merge are authorized.
 Z3 remains pinned to 4.15.3.0 and the existing wheel SHA-256s. All raw #341
 evidence, historical scores and requests remain immutable.
+
+## Fresh E1 measurement
+
+[Run 38930496735](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38930496735) at `9a4ecbdf924b7e238b19d4c6880f59ef91a94dac` completed successfully.
+
+| Program | Fresh resolved | Fresh after pending signatures | Generated cases | Person-minutes per 1,000 sites |
+|---|---:|---:|---:|---|
+| INTCALC | 4/113 | 85/113 | 1,000 | not measured |
+| POSTTRAN | 4/114 | 100/114 | 1,000 | not measured |
+| TRANREPT/CBTRN03C | 2/413 compiler identities | no class matches | 0 | not measured |
+
+Fresh E1 totals are 8/227 now and 185/227 after pending signatures, separately reproducing the preserved #341 figures, not adding another 177 resolutions. All 113 INTCALC, 123 POSTTRAN (including nine outside the argued denominator), and 413 TRANREPT mutant results were identical across both full runs. The six exact summary/repeat receipts are in `fresh-e1/`; these measure resolutions, not signed acceptances.
+
+Reviewer effort method: prospectively log active review start/stop intervals and reviewer count for the exact site population; exclude CI wait time, sum person-minutes, divide by distinct reviewed sites and multiply by 1,000. No retrospective estimate is substituted.

@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: public.ecr.aws/docker/library/postgres@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+    environment:
+      POSTGRES_DB: carddemo
+      POSTGRES_USER: carddemo
+      POSTGRES_PASSWORD: public-demo-only
+    ports:
+      - "127.0.0.1:55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carddemo -d carddemo"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - carddemo-data:/var/lib/postgresql/data
+  load-and-prove:
+    build:
+      context: ../..
+      dockerfile: factory/carddemo-data/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      CARDDEMO_DATA_DSN: postgresql://carddemo:public-demo-only@postgres:5432/carddemo
+    command: ["--schema", "carddemo_slice", "--out", "/evidence/carddemo-data-proof"]
+    volumes:
+      - ../../work/carddemo-compose-evidence:/evidence
+volumes:
+  carddemo-data:

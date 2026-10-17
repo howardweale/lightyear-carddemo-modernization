@@ -1,0 +1,32 @@
+{
+  "bound_sources": [
+    {
+      "lf_sha256": "13755d905a9e5c02f52cc21f3d66e796ec18352174475f45e4595ff78fa70852",
+      "path": "src/lightyear_mainframe/scenario_generation.py"
+    },
+    {
+      "lf_sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea",
+      "path": "src/lightyear_mainframe/legacy_twin.py"
+    },
+    {
+      "lf_sha256": "cb717fd8bfd02733ea5be7818211b671d7503a93492338f6b1f310a2b6221210",
+      "path": "tools/check_generated_scenarios.py"
+    },
+    {
+      "lf_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+      "path": "spec/mainframe/public-source/CBACT04C.cbl"
+    }
+  ],
+  "execute_authorized": false,
+  "expected_application_execution": false,
+  "proposal_sha256": "2f276582c307f4b0f6f9e98d2fe22a6a1e02484a39cede1ad789de2e3e25f322",
+  "required_capture": [
+    "Exact input hashes and duplicate keys",
+    "IDCAMS command, SYSIN and complete SYSPRINT",
+    "Loader return code and dataset definition",
+    "Proof that CBACT04C did not start",
+    "Ordinary valid-domain control load"
+  ],
+  "scenario_id": "intcalc-duplicate-category",
+  "schema": "zos-loader-capture-case/1"
+}

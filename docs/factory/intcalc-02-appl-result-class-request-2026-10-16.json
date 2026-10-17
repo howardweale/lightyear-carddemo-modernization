@@ -1,11 +1,8 @@
 {
   "details": {
     "claim_scope": "twin",
-    "class_proof_sha256": "3c8c26041aedf74454c4853c849d4d2c193dec60fe31ae5aa94893ef8b2bc41e",
-    "dependencies": [
-      "legacy-APPL-RESULT/1",
-      "matcher:0ba15b8cec35656269fb3f26c92ce7b3f2075c325e28089c953fab12133a3825"
-    ],
+    "class_proof_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+    "dependencies": [],
     "items": [
       "CBACT04C-constant-235-81",
       "CBACT04C-constant-235-82",
@@ -89,27 +86,37 @@
       "CBACT04C-delete-MOVE-596-347",
       "CBACT04C-delete-MOVE-601-355"
     ],
-    "packet_sha256": "3bbf87bc6a90135fcfe9dfb07652da5ade509c190bdf769ff194cec17b94a68a",
-    "reviewer_type": "human"
+    "packet_sha256": "78a929440858073758589ea604699329bf906a30c5a32325e0a4f170259e02e4",
+    "reviewer_type": "AI-assisted"
   },
   "kind": "equivalence-review",
   "program": "INTCALC",
   "schema": "factory-contract/1",
   "sources": [
     {
-      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
-      "path": "docs/factory/equivalence-evidence-2026-10-15/INTCALC/class-packets/legacy-APPL-RESULT-1.json",
-      "sha256": "3bbf87bc6a90135fcfe9dfb07652da5ade509c190bdf769ff194cec17b94a68a"
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
     },
     {
-      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
-      "path": "docs/factory/equivalence-evidence-2026-10-15/INTCALC/legacy-class-census.json",
-      "sha256": "bb0d7c5f81d09455eb777a3023831132ed251cc15ca63030a074f27ea71b11ea"
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+      "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
     },
     {
-      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
-      "path": "docs/factory/equivalence-scale-2026-10-16/INTCALC-class-audit.json",
-      "sha256": "92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44"
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/keep-or-fix-register.json",
+      "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+      "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+    },
+    {
+      "commit": "27d79c7853b5d67cc57ed73835fed1aa2728eb1f",
+      "path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
     }
   ]
 }

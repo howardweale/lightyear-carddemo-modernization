@@ -1,0 +1,19 @@
+{
+  "command": [
+    "cobc",
+    "-x",
+    "-free",
+    "-std=ibm",
+    "-fsign=EBCDIC",
+    "-O2",
+    "-Q",
+    "-Wl,--build-id=none",
+    "-fstatic-call",
+    "main.cob",
+    "abend.cob",
+    "program.o",
+    "-o",
+    "bin/twin"
+  ],
+  "returncode": 0
+}

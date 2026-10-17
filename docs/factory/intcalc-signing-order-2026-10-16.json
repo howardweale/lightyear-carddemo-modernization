@@ -1,0 +1,55 @@
+{
+  "schema": "factory-unsigned-signing-order/1",
+  "prepared_on": "2026-10-16",
+  "program": "INTCALC",
+  "claim_scope": "twin",
+  "items": [
+    {
+      "order": 1,
+      "path": "docs/factory/intcalc-01-loader-domain-request-2026-10-16.json",
+      "sha256": "d7ae2253b73711f694c73aa8e5d5a93adc59bb32d1eed9b42061d0462cad96b9",
+      "kind": "legacy-behaviour-disposition",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 2,
+      "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-16.json",
+      "sha256": "563714b591bdf0caf2846ce44fd372c0d9e030dd7b76401679e03b57a15b5c07",
+      "kind": "equivalence-review",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 3,
+      "path": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-16.json",
+      "sha256": "e7097237ee4187ef3508181abd34c808183b564047ffd78a6575fb33ece4ea8b",
+      "kind": "equivalence-review",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 4,
+      "path": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-16.json",
+      "sha256": "336358178f50fc6b50ff4672f204658f2413e2f030539f52d4f5cd03128a59ad",
+      "kind": "scenario-threshold-approval",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 5,
+      "path": "docs/factory/intcalc-05-line189-io-request-2026-10-16.json",
+      "sha256": "77b139c6f6cd40ddb06a490d2a600245b02c72fd382e724b785a5627277fce65",
+      "kind": "io-exception-acceptance",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 6,
+      "path": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-16.json",
+      "sha256": "bb3e46e8537347e435c547b5d7fd4bd48277c9faad6cd1cc248d2541c821f5b5",
+      "kind": "scenario-threshold-approval",
+      "signable_prerequisites_complete": false
+    }
+  ],
+  "effective": false,
+  "signed": false,
+  "release_authorized": false,
+  "blocker": "Final effective request intentionally refuses: all four typed conditions must be re-bound to real evidence, including trusted signed review proofs. The current evidence is provisional engineering evidence; signatures cannot change that scope.",
+  "next_step": "Sign/review the ordered prerequisites only after the final implementation is approved. Rebuild the effective request against the completed signed evidence; do not mark missing proofs met by hand."
+}

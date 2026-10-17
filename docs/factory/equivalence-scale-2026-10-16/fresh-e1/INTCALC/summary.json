@@ -1,0 +1,100 @@
+{
+  "after": {
+    "adjusted": {
+      "denominator": 417,
+      "numerator": 308
+    },
+    "excluded_equivalents": 4,
+    "raw": {
+      "denominator": 421,
+      "numerator": 308
+    },
+    "unobservable": 3,
+    "unresolved": 109
+  },
+  "argued_resolved": 4,
+  "argued_total": 113,
+  "audit": [
+    {
+      "confirmed_errors": 0,
+      "items": [
+        "CBACT04C-constant-639-384",
+        "CBACT04C-constant-639-385",
+        "CBACT04C-receiving-size-133-19",
+        "CBACT04C-receiving-size-177-35"
+      ],
+      "observed_error_rate": null,
+      "population": 4,
+      "program": "INTCALC",
+      "reviewed": 0,
+      "route": "S1",
+      "status": "unsigned-review-pending",
+      "upper_95": null
+    }
+  ],
+  "baseline": {
+    "class": 81,
+    "compiler": 2,
+    "individual": 30
+  },
+  "before": {
+    "adjusted": {
+      "denominator": 421,
+      "numerator": 308
+    },
+    "excluded_equivalents": 0,
+    "raw": {
+      "denominator": 421,
+      "numerator": 308
+    },
+    "unobservable": 0,
+    "unresolved": 113
+  },
+  "claim_scope": "twin",
+  "class_requests": 1,
+  "content_sha256": "16feff4aa9fccce4f10762c090d823f6f1e0f8b04d1cf1892b82ead8fdfb3bf3",
+  "disabled_encoders": [],
+  "generated_cases": 1000,
+  "head": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+  "held_out": false,
+  "model_calls": 0,
+  "program": "INTCALC",
+  "qualification_credit": false,
+  "release_authorized": false,
+  "routes": {
+    "S1": {
+      "individual_resolved": 2,
+      "kills": 0,
+      "resolved": 4,
+      "survivors_resolved": 0
+    },
+    "S2": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    },
+    "S3": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    },
+    "S4": {
+      "individual_resolved": 0,
+      "kills": 0,
+      "resolved": 0,
+      "survivors_resolved": 0
+    }
+  },
+  "run_sha256": "060763f48ce9093b39c9da1fe8958b83b0db0e95fbac322fc80a7dfae3109ff7",
+  "schema": "equivalence-automation/1",
+  "solver_targets": 84,
+  "unobservable": 3,
+  "unresolved": 109,
+  "unsupported_limits": [
+    "No paragraph/path-to-output solver encoding",
+    "No ON SIZE ERROR handlers, division or alias encoder",
+    "No held-out executable application harness"
+  ]
+}

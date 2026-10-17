@@ -7,11 +7,15 @@ PRs are ready. No action in this document has been executed on Howard's behalf.
 
 ## Before signing
 
-Open `posttran-phase2-readiness-2026-10-16.json` beside the new unsigned
+Open `posttran-phase2-readiness-2026-10-17.json` beside the new unsigned
 `posttran-phase2-authorization-request-2026-10-16.json`. The readiness receipt
-must name the actual compiler artifact ID, preparation run, expiry, signing
+must name the actual compiler artifact ID, preparation run, expiry, sign-and-launch
 deadline and executable commit. Do not use an estimated expiry. The deadline is
-24 hours before the artifact expires; a warning appears at or below five days remaining before the signing deadline.
+24 hours before the artifact expires; a warning appears at or below five days remaining before the sign-and-launch deadline.
+Sign and launch by **2026-10-29 14:46 UTC (07:46 Pacific)**, exclusively.
+Push the execution branch and open its PR before 29 Oct 14:46 UTC (07:46 Pacific). A run that starts later is refused.
+The `reserve` authorization check must start before the cutoff; an earlier PR opening does not guarantee timely runner scheduling. Allow queue time.
+The daily [deadline workflow](../../.github/workflows/posttran-handoff-deadline.yml) evaluates the real UTC clock independently of this dated status snapshot. At or after 24 Oct 14:46 UTC it fails and maintains one warning issue; scheduled jobs may be delayed.
 If the receipt is absent or a deadline has passed, stop for fresh preparation.
 The October 14 and October 15 plans and requests are historical only.
 
@@ -91,12 +95,11 @@ python -B -m tools.finalize_posttran_phase2 --root . --artifacts <saved-artifact
 
 Publish its request and readiness receipt without changing executable bindings.
 The builder checks that the plan is committed and the artifact's run/head match.
-CI checks the complete fresh binding inventory again. If other follow-ups change
-bound code before launch, prepare a new dated plan; never execute across drift.
+CI checks the complete fresh binding inventory again. Drift is measured from the signed executable commit to the proposed execution head, not from current main. A branch based on `65bd4cd549067dd3695f4197e495cc15c9473417` may add only the request and proof. Changes on main alone do not invalidate that branch. Any other change on the execution branch needs new preparation and approval.
 
 ## Howard's roles and exact Windows commands (execute later)
 
-Howard performs the repository fetch/checkout, public request import, individual UI review/signing, proof export, and final variable/readback steps. Codex prepares and checks public files only; it has no authority to sign or launch. These commands are documentation, not an executed handoff. Before signing, recheck the final reviewed executable ancestry: only request/proof may differ after the executable commit. If other follow-ups landed, finalize a new request for that reviewed commit first; do not use the draft below across drift.
+Howard performs the repository fetch/checkout, public request import, individual UI review/signing, proof export, and final variable/readback steps. Codex prepares and checks public files only; it has no authority to sign or launch. These commands are documentation, not an executed handoff. Before signing, recheck the final reviewed executable ancestry: only request/proof may differ after the executable commit. Main moving on is not execution-branch drift. Keep the execution branch based on the signed executable commit; do not merge current main into it. Any other file difference requires fresh preparation and approval.
 
 ### Import step 3
 
@@ -107,15 +110,29 @@ $ErrorActionPreference = 'Stop'
 $Checkout = '<existing-clean-Windows-checkout>'
 $FactoryRoot = '<existing-Windows-Factory-root>'
 $Python = '<installed-Windows-Tower-Python>'
-$Request = '<absolute-path-to-reviewed-posttran-phase2-authorization-request-2026-10-16.json>'
+$RequestCheckout = '<new-public-request-worktree-directory>'
+$RequestRef = '5f50acac88abe371c4a2a0b2e10b55d00ee6923f'
+$Request = Join-Path $RequestCheckout 'docs\factory\posttran-phase2-authorization-request-2026-10-16.json'
+$PublicKey = '<existing-Factory-Tower-public-key.pem>'
+$ExpectedPublicKeyHash = '7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61'
 $ExecutableCommit = '65bd4cd549067dd3695f4197e495cc15c9473417'
 $ExpectedRequestFileHash = 'bc66b605325a11c306b6b58c1bec1e9be25a7fc85eb3844509a420b288729f5c'
 $ExpectedQueueHash = 'ab22d84fcebabc79472a27e35012e3e4ff6b3bd330cb5995b08b3a7bc034c49b'
-foreach ($Path in @($Checkout, $FactoryRoot, $Python, $Request)) { if (-not (Test-Path -LiteralPath $Path)) { throw "Missing: $Path" } }
+foreach ($Path in @($Checkout, $FactoryRoot, $Python, $PublicKey)) { if (-not (Test-Path -LiteralPath $Path)) { throw "Missing: $Path" } }
 if ($FactoryRoot -match '(?i)b06') { throw 'Use Factory 8769, never B06' }
 if (git -C $Checkout status --porcelain) { throw 'Checkout must be clean' }
 git -C $Checkout fetch origin
 if ($LASTEXITCODE -ne 0) { throw 'Fetch failed' }
+if (Test-Path -LiteralPath $RequestCheckout) { throw 'Use a new request worktree path; preserve existing files' }
+git -C $Checkout worktree add --detach $RequestCheckout $RequestRef
+if ($LASTEXITCODE -ne 0) { throw 'Request worktree creation failed' }
+if (-not (Test-Path -LiteralPath $Request)) { throw 'Published request missing' }
+if ((Get-FileHash -LiteralPath $PublicKey -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ExpectedPublicKeyHash) { throw 'Factory Tower public key differs; STOP before import or signing' }
+$InstalledPlan = Join-Path $FactoryRoot 'docs\factory\posttran-phase2-plan-2026-10-16.json'
+$ExpectedPlanFileHash = 'bd4eda8ebab9209202653e4c96cb931830f9beb538cb3ed9d220fff784884881'
+if (Test-Path -LiteralPath $InstalledPlan) {
+  if ((Get-FileHash -LiteralPath $InstalledPlan -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ExpectedPlanFileHash) { throw 'Existing immutable plan differs (possibly the earlier #354 version). STOP; preserve it and request a reviewed supersession. Do not delete, replace, or create another Factory root.' }
+}
 git -C $Checkout checkout --detach $ExecutableCommit
 if ($LASTEXITCODE -ne 0) { throw 'Checkout failed' }
 git -C $Checkout merge-base --is-ancestor $ExecutableCommit origin/main
@@ -134,6 +151,17 @@ if ($LASTEXITCODE -ne 0) { throw 'Import refused' }
 Use Howard's current authenticated Factory session token and the decision SHA shown in Decision history. The endpoint exports the existing public proof; it does not create a new decision. Never substitute an activation-time journal head.
 
 ```powershell
+$ErrorActionPreference = 'Stop'
+$Checkout = '<existing-clean-Windows-checkout-at-65bd4cd549067dd3695f4197e495cc15c9473417>'
+$Python = '<installed-Windows-Tower-Python>'
+$ExpectedQueueHash = 'ab22d84fcebabc79472a27e35012e3e4ff6b3bd330cb5995b08b3a7bc034c49b'
+$ExpectedPublicKeyHash = '7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61'
+foreach ($Path in @($Checkout, $Python)) { if (-not (Test-Path -LiteralPath $Path)) { throw "Missing: $Path" } }
+if ((git -C $Checkout rev-parse HEAD).Trim() -ne '65bd4cd549067dd3695f4197e495cc15c9473417') { throw 'Wrong executable checkout' }
+if (git -C $Checkout status --porcelain) { throw 'Checkout must be clean' }
+Set-Location -LiteralPath $Checkout
+$env:PYTHONPATH = 'src;.'
+$env:PYTHONUTF8 = '1'
 $Tower = 'http://localhost:8769'
 $DecisionSha = '<64-hex-signed-decision-SHA-from-Decision-history>'
 $ProofPath = '<absolute-new-path-to-posttran-phase2-authorization-proof-2026-10-16.json>'
@@ -141,6 +169,7 @@ $PublicKey = '<existing-Factory-public-key.pem>'
 if ($DecisionSha -notmatch '^[0-9a-f]{64}$') { throw 'Decision SHA required' }
 if (Test-Path -LiteralPath $ProofPath) { throw 'Do not overwrite a preserved proof' }
 if (-not (Test-Path -LiteralPath $PublicKey)) { throw 'Public key missing' }
+if ((Get-FileHash -LiteralPath $PublicKey -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ExpectedPublicKeyHash) { throw 'Factory Tower public key differs' }
 $SecureToken = Read-Host 'Current Factory session token' -AsSecureString
 $Token = [Net.NetworkCredential]::new('', $SecureToken).Password
 try {
@@ -162,3 +191,11 @@ if ($LASTEXITCODE -ne 0) { throw 'Public proof verification refused' }
 ```
 
 Stop if the proof, contract, public key or current journal head cannot be independently verified. No private-key command belongs in this runbook.
+
+## October 17 correction record
+
+The request is read from the immutable publication ref `5f50acac88abe371c4a2a0b2e10b55d00ee6923f`, separately from the executable checkout. Do not extract it with PowerShell `>`: Windows PowerShell 5.1 may change its encoding. Git worktree extraction preserves its exact bytes.
+
+The committed authority PEM SHA-256 is `7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61`. This is the CI trust anchor, **not evidence that the local Tower uses that key**. Howard must compare the existing Tower public key before signing; a mismatch is a stop, not permission to provision or replace a key.
+
+The [dated plan amendment](posttran-phase2-plan-amendment-2026-10-17.json) records the single changed binding and the original CI artifact hash. The [new readiness record](posttran-phase2-readiness-2026-10-17.json) supersedes the October 16 description without modifying the request, plan, or authority. Authorized by: Howard (documentation and code follow-ups). Performed by: Codex. No signing, import, activation, reservation, or launch performed.

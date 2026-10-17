@@ -1,0 +1,272 @@
+{
+  "schema": "factory-delivery-snapshot/1",
+  "checked_at": "2026-10-17T13:10:22+00:00",
+  "main_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+  "merges": [
+    {
+      "number": 353,
+      "head": "72259341e8a39c618dfa46488f3e06f416ac58d4",
+      "merge": "62e705d959d34041eb42a20388bbbf06b2425cba",
+      "merged_at": "2026-10-17T00:25:34Z",
+      "green_workflows": 10,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/353"
+    },
+    {
+      "number": 341,
+      "head": "54568e72a8d8ad636ccf6b5dd62854ad303ef70a",
+      "merge": "0e5ea5f66fe42cd61205fcdce1810f5af0a64539",
+      "merged_at": "2026-10-17T02:03:57Z",
+      "green_workflows": 16,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/341"
+    },
+    {
+      "number": 357,
+      "head": "89d70b463e372f81abb38da53eacd7e76d95bbc9",
+      "merge": "f0ac25c338e96309803655d7e6d09f5b29b4e3c1",
+      "merged_at": "2026-10-17T03:33:50Z",
+      "green_workflows": 16,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/357"
+    },
+    {
+      "number": 358,
+      "head": "4aaba04befef05d777b1edc4da17087222bde187",
+      "merge": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "merged_at": "2026-10-17T05:01:54Z",
+      "green_workflows": 18,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/358"
+    }
+  ],
+  "push_workflows": [
+    {
+      "id": 39004763228,
+      "name": "Business rules offline",
+      "path": ".github/workflows/business-rules.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763228"
+    },
+    {
+      "id": 39004763258,
+      "name": "CardDemo data component",
+      "path": ".github/workflows/carddemo-data.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763258"
+    },
+    {
+      "id": 39004763107,
+      "name": "CardDemo zOS folder intake rehearsal",
+      "path": ".github/workflows/carddemo-zos-intake.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763107"
+    },
+    {
+      "id": 39004763067,
+      "name": "Control Tower human decisions",
+      "path": ".github/workflows/control-tower-decisions.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763067"
+    },
+    {
+      "id": 39004763174,
+      "name": "Factory generated scenarios",
+      "path": ".github/workflows/factory-generated-scenarios.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763174"
+    },
+    {
+      "id": 39004763057,
+      "name": "Factory legacy twin",
+      "path": ".github/workflows/factory-legacy-twin.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763057"
+    },
+    {
+      "id": 39004763126,
+      "name": "Factory three-way reconciliation",
+      "path": ".github/workflows/factory-reconciliation.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763126"
+    },
+    {
+      "id": 39004763056,
+      "name": "Factory scenario coverage",
+      "path": ".github/workflows/factory-scenario-coverage.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763056"
+    },
+    {
+      "id": 39004763112,
+      "name": "Factory scenario policy",
+      "path": ".github/workflows/factory-scenario-policy.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763112"
+    },
+    {
+      "id": 39004763348,
+      "name": "Factory systematic review",
+      "path": ".github/workflows/factory-systematic-review.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763348"
+    },
+    {
+      "id": 39004763182,
+      "name": "Factory twin reproducibility",
+      "path": ".github/workflows/factory-twin-reproducibility.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763182"
+    },
+    {
+      "id": 39004763192,
+      "name": "Lightyear Verify zero-model acceptance",
+      "path": ".github/workflows/lightyear-verify-mcp.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763192"
+    },
+    {
+      "id": 39004763090,
+      "name": "Local agent workflow",
+      "path": ".github/workflows/local-agent.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763090"
+    },
+    {
+      "id": 39004763164,
+      "name": "Mainframe inventory and arrival kit",
+      "path": ".github/workflows/mainframe-arrival.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763164"
+    },
+    {
+      "id": 39004763058,
+      "name": "POSTTRAN public review",
+      "path": ".github/workflows/posttran-review.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763058"
+    },
+    {
+      "id": 39004763175,
+      "name": "POSTTRAN independent plan",
+      "path": ".github/workflows/posttran-second-opinion.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763175"
+    },
+    {
+      "id": 39004763061,
+      "name": "Required CI gate",
+      "path": ".github/workflows/required-ci.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763061"
+    },
+    {
+      "id": 39004763161,
+      "name": "Twin indexed key experiment",
+      "path": ".github/workflows/twin-index-order.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763161"
+    },
+    {
+      "id": 39004763137,
+      "name": "Runtime verifier qualification",
+      "path": ".github/workflows/verifier-qualification.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763137"
+    },
+    {
+      "id": 39004763085,
+      "name": "Verify graph context (zero model)",
+      "path": ".github/workflows/verify-graph-context.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763085"
+    },
+    {
+      "id": 39004763095,
+      "name": "Verify oracle and Spring Batch candidate",
+      "path": ".github/workflows/verify.yml",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763095"
+    }
+  ],
+  "check_run_count": 60,
+  "successful_check_run_count": 60,
+  "protected_checks": [
+    {
+      "name": "required-ci",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763061/job/117314912148",
+      "app_id": 15368
+    },
+    {
+      "name": "documentation-and-lint",
+      "head_sha": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39004763061/job/117314846788",
+      "app_id": 15368
+    }
+  ],
+  "scope": "Observed push workflows on this exact main commit only. Equivalence automation and storage workflows are pull-request/manual workflows; their pre-merge results are separate. This snapshot grants no acceptance, signing, execution, release or z/OS authority."
+}

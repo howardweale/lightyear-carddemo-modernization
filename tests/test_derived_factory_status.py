@@ -53,3 +53,12 @@ class DerivedStatusTests(unittest.TestCase):
         value, text = render(model)
         self.assertEqual("41/42", value["rates"]["twin"]["projected"])
         self.assertIn("41/42", text)
+
+    def test_ci_snapshot_cannot_borrow_success_from_another_commit_or_pending_run(self):
+        model = load()
+        self.assertFalse(render(model)[0]['release_authorized'])
+        for field, value in (('head_sha', 'another-commit'), ('status', 'in_progress'), ('conclusion', 'failure')):
+            changed = copy.deepcopy(model)
+            changed['delivery']['push_workflows'][0][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'delivery-snapshot-not-green'):
+                render(changed)

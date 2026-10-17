@@ -126,6 +126,156 @@
       "bytes": 1533,
       "sha256": "ef8ce44572885d63e46a02516f992cabbbc57ea94235000fd376325750e26eda",
       "git_blob": "b8065beef92fec793c1a70ab8c61d35a77c63d38"
+    },
+    "app/cbl/COACTVWC.cbl": {
+      "sha256": "4f1e55176f69edfb55b7af7a161aceb8c3bc3bd1b2924a704a76256e0e751b54",
+      "bytes": 74764,
+      "git_blob": "9e3a27d87110c7023b0f7e295f5e4a0ca5c60472"
+    },
+    "app/cbl/COACTUPC.cbl": {
+      "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+      "bytes": 182463,
+      "git_blob": "d66944150c9ad91fe0459ef304cc536b651b9a42"
+    },
+    "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl": {
+      "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254",
+      "bytes": 44043,
+      "git_blob": "994add3283d1e583b898156fc80e6d0624f03732"
+    },
+    "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl": {
+      "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e",
+      "bytes": 23000,
+      "git_blob": "054ecf98b0aa680d68fcba3fd9c9d08567469b93"
+    },
+    "app/cpy-bms/COACTVW.CPY": {
+      "sha256": "f3bf70a636aecb5874518ccc53f9826bcc69070b8307bdc551b2c57b9dd61dce",
+      "bytes": 18399,
+      "git_blob": "1fa37ceda07993de0f48d390f63e377aeaff16b1"
+    },
+    "app/cpy/COCOM01Y.cpy": {
+      "sha256": "77097557ee4c365f62138328d3e280ce7aba5f81d418c6f16434f0fbb2aafa6c",
+      "bytes": 2714,
+      "git_blob": "62d5261c746e1f9c9fb70c0e2d31d0e9b254d0d5"
+    },
+    "app/cpy/COTTL01Y.cpy": {
+      "sha256": "5032bfa9428354bb4a62e8c82ba1efa7dcf6b80f27544ad99a81c8a8df8ed41b",
+      "bytes": 1642,
+      "git_blob": "fae37ba27479a5c5b49b444082f23b64bcdd54e2"
+    },
+    "app/cpy/CSDAT01Y.cpy": {
+      "sha256": "61dd7b01d974c13cd47f71774c613dd67996418a22fae730d09b246c0b710ad7",
+      "bytes": 3234,
+      "git_blob": "2277864fcc72121ba52c1791d1a7e0773a51e52c"
+    },
+    "app/cpy/CSMSG02Y.cpy": {
+      "sha256": "0238a3a75e723272e0c287b46a52d365de8549dada1a73d15df75660ad7bd2ea",
+      "bytes": 1921,
+      "git_blob": "15b983971d1bb4e7ba4096602f1fcacf43f09479"
+    },
+    "app/cpy/CSUSR01Y.cpy": {
+      "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb",
+      "bytes": 1582,
+      "git_blob": "58bbe8e8e3240cd35f29d3a92f515f8e4f2eb907"
+    },
+    "app/cpy/CVACT01Y.cpy": {
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+      "bytes": 1125,
+      "git_blob": "598a526f674f977c676acae17122f3401cb89490"
+    },
+    "app/cpy/CVACT02Y.cpy": {
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+      "bytes": 730,
+      "git_blob": "2498714c8455b5b231b3b3d25c79f7179f6982d2"
+    },
+    "app/cpy/CVACT03Y.cpy": {
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "bytes": 736,
+      "git_blob": "fc8e697956749b94268085751815df69362ef8c9"
+    },
+    "app/cpy/CVCRD01Y.cpy": {
+      "sha256": "52b6dbe09f7648f3fdbd7c00f4683d434fe6b631f6c8854466a24f42c1c92445",
+      "bytes": 3436,
+      "git_blob": "8f88f1a0a27f9c17c8f4fa1625d0c819a4b5f36e"
+    },
+    "app/cpy/CVCUS01Y.cpy": {
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+      "bytes": 1588,
+      "git_blob": "33b5c73882aec9d2a7f5d8b8ef937e7fa81daea4"
+    },
+    "app/cpy-bms/COACTUP.CPY": {
+      "sha256": "2ae13a55cb35c63988c17e96744ce77dfda9663896e65061b818f47d9be983dc",
+      "bytes": 26048,
+      "git_blob": "9d3ad3ba1478ab10b9ed652219e6c61b99442d3d"
+    },
+    "app/cpy/CSLKPCDY.cpy": {
+      "sha256": "098d384b9580abd5b4b77ae9c33b8cb65b28be45390130b22c48c3714200cca2",
+      "bytes": 51399,
+      "git_blob": "997ca134110b1e11940f4e7978269adee62db811"
+    },
+    "app/cpy/CSSETATY.cpy": {
+      "sha256": "45000f93a9be6e8132262e53faa1db03ab1f20fbee4063272b890837216d1fcb",
+      "bytes": 1885,
+      "git_blob": "06e0e264e4a8d2b25aa392c5b7d1db408991bf18"
+    },
+    "app/cpy/CSUTLDPY.cpy": {
+      "sha256": "80f83e3d55ff84c0d9088e68399f30ebad4db763280d47bdec220eadc45ba2af",
+      "bytes": 13061,
+      "git_blob": "3251d2a9c3bcf56510923e699df96be43fd69ece"
+    },
+    "app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy": {
+      "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077",
+      "bytes": 3887,
+      "git_blob": "998b8c9217961a01714e5eeab2325da0a83c27ae"
+    },
+    "app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy": {
+      "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29",
+      "bytes": 2050,
+      "git_blob": "14e87d0a4398fe0dda84b917101aef6eabd8beb0"
+    },
+    "app/app-authorization-ims-db2-mq/cpy-bms/COPAU00.cpy": {
+      "sha256": "7bd332d0966e4b0a289521716d5ef5f00c8f55e50f5992dce10e15dbbf04da7d",
+      "bytes": 61372,
+      "git_blob": "7cdd3cb09f55911fa4a79bcbe9adb0db64fff83b"
+    },
+    "app/app-authorization-ims-db2-mq/cpy-bms/COPAU01.cpy": {
+      "sha256": "bee60b3bfeb37d5df0d0ff3182f564bd1aa8cb1f36100c4f7ed4fc42108a7937",
+      "bytes": 27352,
+      "git_blob": "a13528f0f3e0e9f45fa693c6a9b3e1b8d5c1ded8"
+    },
+    "app/cpy-bms/COSGN00.CPY": {
+      "sha256": "e2a2f8f6e76e1613cbd8f0baaca87d571a49a7bc219d16a732e4e4ecd7485407",
+      "bytes": 6302,
+      "git_blob": "3a55dda619a1116c3ff5594d07349689362f1fdd"
+    },
+    "app/cpy-bms/COMEN01.CPY": {
+      "sha256": "21275363519e57f47c5c7842178344208f3ad773a551e74e5eeff285c775ad5c",
+      "bytes": 10506,
+      "git_blob": "d5d7e71b0b1e520139b5d2e64e9909ae73589210"
+    },
+    "app/cpy/COMEN02Y.cpy": {
+      "sha256": "433f5b373c2a42c3c83d62eef1dfb5b101265a9db62e42857ba58acf8c50011d",
+      "bytes": 5324,
+      "git_blob": "2be37613f257a516749026b866ae366c93aae464"
+    },
+    "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl": {
+      "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e",
+      "bytes": 19050,
+      "git_blob": "e2e87cff63d36443c8b7902bba89494161629152"
+    },
+    "app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl": {
+      "sha256": "737c2bb757ef256976ac7658e071d1833fc2ea24d7010dbeff137e6c98fb66a6",
+      "bytes": 6641,
+      "git_blob": "9b502ed3e849a420e2e04177124e3ee71480ad4e"
+    },
+    "app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl": {
+      "sha256": "1634f898360955f32872bd9c35533513e2879135018681b92caa51c787abaeaf",
+      "bytes": 1351,
+      "git_blob": "1d80b531696a946df29b8df20a142ddb840c9c41"
+    },
+    "app/app-authorization-ims-db2-mq/ddl/XAUTHFRD.ddl": {
+      "sha256": "880bb53afed368bdcb858cd7e4ddb6252a47ac16d819df4ca58ca6bab90921b4",
+      "bytes": 110,
+      "git_blob": "ae712327def1cae27abf81de0c92d4112a407c70"
     }
   }
 }

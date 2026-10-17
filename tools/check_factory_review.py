@@ -176,7 +176,7 @@ def check(output,job):
     for mutant in mutants:
         if size(output)>BUDGET:raise RuntimeError('fresh-compiled-output-budget-exhausted')
         folder=output/'mutants'/mutant['id'];folder.mkdir(parents=True)
-        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[],valid_domain_comparisons=[])
+        record=dict(id=mutant['id'],operator=mutant['operator'],line=mutant['line'],status='survived',killed_by=None,evidence_gaps=[],valid_domain_comparisons=[],comparisons=[])
         try:build(folder/'build',systematic=mutant,jobs=[job])
         except (RuntimeError,ValueError) as e:record.update(status='not-compiled',detail=str(e))
         else:
@@ -186,6 +186,7 @@ def check(output,job):
                     record['evidence_gaps'].append(dict(case=case,status='baseline-evidence-gap',baseline=baseline));continue
                 with retention.case(folder/'build',case,attempt) as (temporary,changed):
                     classification=outcome(baseline,changed)
+                    record['comparisons'].append(dict(case=case,status=classification,baseline=baseline,actual=changed))
                     if job=='INTCALC' and case!='intcalc-duplicate-category':
                         record['valid_domain_comparisons'].append(dict(case=case,status=classification,baseline=baseline,actual=changed))
                     reasons=['witness'] if classification.startswith('killed-') else ['sample'] if case==cases[0] or case==cases[-1] else []
@@ -204,6 +205,7 @@ def check(output,job):
                         build(challenge/'build',systematic=mutant,fault=fault['id'],jobs=[job])
                         with retention.case(challenge/'build',case,attempt) as (temporary,changed):
                             classification=outcome(fault_row['actual'],changed)
+                            record['comparisons'].append(dict(case='fault:'+fault['id']+':'+case,status=classification,baseline=fault_row['actual'],actual=changed))
                             if classification.startswith('killed-'):retention.retain(temporary,changed,['witness'])
                         attempt_row.update(status=classification,actual=changed)
                         if classification.endswith('evidence-gap'):
@@ -230,7 +232,19 @@ def check(output,job):
         mutant_witnesses={r['id']:r['killed_by'] for r in results if r['killed_by']},
         unresolved=[r['id'] for r in results if r['status'] in ('survived','evidence-gap')]))
     counts=Counter(r['status'] for r in results);after=observe(inv,'\n'.join(streams))
-    summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,before_faults=before,after_faults=after,
+    from lightyear_mainframe.constant_evidence import build as constant_evidence
+    from lightyear_mainframe.records import load_copybook, from_ascii_fixed
+    from lightyear_mainframe.zos_bindings import load_bindings, dataset_binding
+    observed_fields = set()
+    if job == 'INTCALC':
+        layout = load_copybook(ROOT/dataset_binding(load_bindings(),job,'STEP15','TRANSACT')['copybook'])
+        for group in ('public','cases'):
+            for path in (output/group).glob('*/after/TRANSACT'):
+                for record in from_ascii_fixed(layout,path.read_bytes()):
+                    observed_fields.update('TRANSACT:'+f['path'] for f in record['fields'] if not f['filler'])
+    constants = constant_evidence(ROOT,program,results,mutants,observed_fields)
+    write_json(output/'constant-field-evidence.json',constants)
+    summary=receipt(output/'review-summary.json',phase='factory-review-engineering',job=job,constant_field_evidence=constants,before_faults=before,after_faults=after,
         compiler_binary_layout=compiler_layout,compiler_storage_semantics=storage,compiler_runtime_contract=runtime,fault_count=len(faults),fault_expectations_met=sum(r.get('expectation_met',False) for r in faults),mutant_count=len(mutants),mutation_counts=dict(counts),
         kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)}",excluded_equivalents=[r for r in results if r['status']=='equivalent (argued, listed)'],
         eligible_kill_rate=f"{counts['killed-divergent']+counts['killed-failure']}/{len(mutants)-counts['equivalent (argued, listed)']-counts['not-compiled']}",

@@ -1,0 +1,51 @@
+{
+  "details": {
+    "argument_sha256": "5905fe8a67f25d49fd250b60c1f8ffe5f0e95ed3537a52fabd3032b1fd3544f2",
+    "basis": "structurally-unreachable",
+    "line": 189,
+    "outcome": "false",
+    "outcome_id": "legacy:cobol-decision:CBACT04C:189:671",
+    "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+  },
+  "kind": "io-exception-acceptance",
+  "program": "INTCALC",
+  "schema": "factory-contract/1",
+  "signing_order": {
+    "packet_sha256": "eea7efe7884ec8949c18aa080ee759c9726a69e3855366595da6ed3a4961195f",
+    "position": 5,
+    "predecessor_contract_sha256": "46f3d68ef5d4650023692dcb2d1e968ba89b14a18cff5e9abca52fbf5db7699c",
+    "predecessor_decision_sha256": null
+  },
+  "sources": [
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+      "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/keep-or-fix-register.json",
+      "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+      "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/io-gap-arguments.json",
+      "sha256": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90"
+    }
+  ]
+}

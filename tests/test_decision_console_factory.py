@@ -47,7 +47,9 @@ class FactoryTests(unittest.TestCase):
             sources=[dict(path="docs/factory/public.json",sha256=hashlib.sha256(self.source.read_bytes()).hexdigest(),commit="b"*40)],details=d)
 
     def decide(self, contract, outcome=None):
-        request = write_request(self.root, contract)
+        journal=self.service.export_session(self.token) if "signing_order" in contract else None
+        request = write_request(self.root, contract,journal=journal,public_key=self.service.public_key,
+            trusted_head=journal["journal_head_sha256"] if journal else None)
         item = self.service.review(self.token, request["id"])
         payload = dict(item_id=item["id"],bound=item["bound"],
             outcome=outcome or factory_registry().get(contract["kind"]).outcomes[0],reason="Reviewed public fixture",

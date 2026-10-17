@@ -47,7 +47,10 @@ class FactoryDecisionsTests(unittest.TestCase):
             self.assertEqual(count,generated['avoided_count'])
             self.assertEqual(refused,{r['mutant']['id'] for r in generated['avoided']})
             before={r['id']:r for r in candidates(text,program)}
-            self.assertEqual(len(historical),generated['generated_site_count'])
+            added=set(before)-{r['id'] for r in historical}
+            self.assertEqual(3 if job=='intcalc' else 0,len(added))
+            self.assertTrue(all(before[mid]['operator']=='constant-output' for mid in added))
+            self.assertEqual(len(historical)+len(added),generated['generated_site_count'])
             for row in generated['candidates']:self.assertEqual(before[row['id']],row)
             self.assertEqual(set(before)-refused,{r['id'] for r in generated['candidates']})
 

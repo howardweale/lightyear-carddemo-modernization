@@ -36,7 +36,7 @@ class ThresholdConditionTests(unittest.TestCase):
                 required_ids=['mutant-1','mutant-2'],claim_scope='twin',proofs=[proof])),
             ('docs/factory/campaign.json',dict(schema='release-evidence-index/2',head='b'*40,conclusion='success',run_id=1,sources=[dict(head='b'*40,run_id=1)])),
             ('docs/factory/keep-or-fix-register.json',dict(schema='factory-keep-or-fix-register/1',defects=[dict(id='registered')]))]
-        c['details'].update(effective_condition='unconditional',evidence_head='b'*40,conditions=[])
+        c['details'].update(effective_condition='unconditional',evidence_head='b'*40,required_review_ids=['mutant-1','mutant-2'],conditions=[])
         for condition,(path,value) in zip(CONDITIONS,values):
             raw=json.dumps(value).encode(); (self.root/path).write_bytes(raw)
             evidence=dict(path=path,sha256=hashlib.sha256(raw).hexdigest(),commit='b'*40)
@@ -55,6 +55,7 @@ class ThresholdConditionTests(unittest.TestCase):
             if mode == "legacy":
                 del c["details"]["conditions"]
                 del c["details"]["evidence_head"]
+                del c["details"]["required_review_ids"]
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, "threshold-conditions-unmet"):
                 write_request(self.root, c)
 
@@ -88,6 +89,14 @@ class ThresholdConditionTests(unittest.TestCase):
             next(s for s in c['sources'] if s['path']==evidence['path'])['sha256']=evidence['sha256']
             with self.subTest(position=position), self.assertRaisesRegex(ValueError,'threshold-condition-evidence-type'):
                 validate_contract(c,self.root)
+
+    def test_self_declared_subset_is_refused(self):
+        c=self.threshold();e=c['details']['conditions'][1]['evidence']
+        value=json.loads((self.root/e['path']).read_bytes());value['required_ids']=['mutant-1']
+        raw=json.dumps(value).encode();(self.root/e['path']).write_bytes(raw)
+        e['sha256']=hashlib.sha256(raw).hexdigest()
+        next(s for s in c['sources'] if s['path']==e['path'])['sha256']=e['sha256']
+        with self.assertRaisesRegex(ValueError,'threshold-condition-evidence-type'):validate_contract(c,self.root)
 
     def test_foreign_review_cannot_be_used_to_sign_threshold(self):
         c=self.threshold(); evidence=c['details']['conditions'][1]['evidence']

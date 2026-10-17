@@ -22,7 +22,7 @@ class EquivalenceDecisionTests(unittest.TestCase):
   for job,program in [('INTCALC','CBACT04C'),('POSTTRAN','CBTRN02C')]:
    old=population(job);total+=len(old);text=(ROOT/f'spec/mainframe/public-source/{program}.cbl').read_text();census=appl_result_census(text,program)
    current={r['id']:r for r in generate(text,program)}
-   self.assertEqual(421 if job=='INTCALC' else 483,len(current))
+   self.assertEqual(424 if job=='INTCALC' else 483,len(current))
    covered=[k for k,r in old.items() if class_covered(current[k],r['disposition'],census)]
    self.assertGreater(len(covered),70)
   self.assertEqual(227,total)

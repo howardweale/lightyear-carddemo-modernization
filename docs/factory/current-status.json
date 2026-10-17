@@ -1,8 +1,8 @@
 {
   "schema": "factory-current-review-status/2",
-  "as_of": "2026-10-16",
-  "release_evidence_sha256": "653f4b2f032044335771b01013ec131b43b3cf0ebb3bd70f98de7bb7df68c758",
-  "intcalc": "Not releasable: exact threshold/3 comparison and mutation bindings, ordered effective signatures and non-provisional release evidence remain required.",
+  "as_of": "2026-10-17",
+  "release_evidence_sha256": "cacf9014b23aab87bad893ae43a913630228edd0fb7e10a4eb60b9fe6fe09cd7",
+  "intcalc": "Not releasable: Fresh complete caught-mutant evidence required for: TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP. Retained campaign index does not certify complete durable retention. Ordered effective decisions are not recorded in these unsigned inputs. Non-provisional release evidence is not established by this retained engineering campaign.",
   "business": "8/8",
   "io": "85/86",
   "raw_mutation": "308/421",
@@ -7875,6 +7875,7 @@
     "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
     "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
   },
+  "verdict_path": "docs/factory/intcalc-releasability-2026-10-17.json",
   "delivery": {
     "schema": "factory-delivery-snapshot/1",
     "checked_at": "2026-10-17T13:10:22+00:00",

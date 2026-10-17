@@ -41,6 +41,13 @@ class Threshold3Tests(unittest.TestCase):
             if change=='missing': t['constant_exemptions'].pop()
             with self.subTest(change=change), self.assertRaises(ValueError): exemptions(a,t,f)
 
+    def test_survived_and_equivalent_only_refuses(self):
+        for status in ('survived','equivalent (argued, listed)'):
+            t,a,f=self.fixture()
+            a['constant_field_evidence'][f[0]]['mutants'][0]['status']=status
+            with self.subTest(status=status), self.assertRaisesRegex(ValueError,'constant-mutant-not-caught'):
+                exemptions(a,t,f)
+
     def test_changed_source_line_refuses(self):
         t,a,f=self.fixture()
         with tempfile.TemporaryDirectory() as folder:

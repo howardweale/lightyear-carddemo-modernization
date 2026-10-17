@@ -1,0 +1,11 @@
+{
+  "schema": "runbook-supersessions/1",
+  "records": [
+    {
+      "historical_path": "docs/factory/b06-oct13-runbook.md",
+      "sha256": "10438689dbee3400f90e7a8f4897477696c877a31aea8b004b4b0596e839ef7f",
+      "replacement_path": "docs/factory/b06-oct13-runbook-2026-10-17.md",
+      "reason": "Preserve historical window; current syntax companion contains independent blocks and an unconditional historical-window refusal."
+    }
+  ]
+}

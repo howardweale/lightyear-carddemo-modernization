@@ -1,0 +1,20 @@
+{
+  "schema": "retention-inventory-addendum/1",
+  "prepared_on": "2026-10-17",
+  "supersedes_fields_of": "retention-inventory-2026-10-16.json",
+  "download_verification": {
+    "status": "success",
+    "run": 38978940046,
+    "head": "74df8b632caec92b31997f637683690751badae7",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/38978940046",
+    "completed_at": "2026-10-16T23:02:21Z",
+    "scope": "Both indexed public release-asset manifests; a dated successful check, not a perpetual availability claim."
+  },
+  "deletion_candidates": [
+    "work/oct15-release-assets",
+    "work/recovery-oct15-2026-10-16"
+  ],
+  "local_deletion_authorized": false,
+  "authorized_by": "Howard: follow-up preparation only",
+  "performed_by": "Codex"
+}

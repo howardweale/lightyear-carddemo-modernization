@@ -1,5 +1,38 @@
 {
   "schema": "record-commit-claims/1",
   "policy_start": "2026-10-17",
-  "claims": []
+  "claims": [
+    {
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
+      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "role": "source",
+      "source_path": "docs/factory/equivalence-evidence-2026-10-15/INTCALC/class-packets/legacy-APPL-RESULT-1.json",
+      "source_sha256": "3bbf87bc6a90135fcfe9dfb07652da5ade509c190bdf769ff194cec17b94a68a"
+    },
+    {
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
+      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "role": "source",
+      "source_path": "docs/factory/equivalence-scale-2026-10-16/INTCALC-class-audit.json",
+      "source_sha256": "92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44"
+    },
+    {
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
+      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "role": "source",
+      "source_path": "docs/factory/equivalence-evidence-2026-10-15/POSTTRAN/class-packets/legacy-APPL-RESULT-1.json",
+      "source_sha256": "fb7ea5ee6e418bd05a00457e732fd965c552bc611c6dfc5363c442440216eaa3"
+    },
+    {
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
+      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "role": "source",
+      "source_path": "docs/factory/equivalence-scale-2026-10-16/POSTTRAN-class-audit.json",
+      "source_sha256": "831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f"
+    }
+  ]
 }

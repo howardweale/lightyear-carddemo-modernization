@@ -28,7 +28,7 @@ def browse_gate(store, originals, loaded):
             cases=[(None,None)] + [(s,None) for s in sorted(starts)] + [(None,p) for p in sorted(prefixes)]
             for start,prefix in cases:
                 wanted=[i for i in expected if (start is None or (key_bytes(i)<=start if reverse else key_bytes(i)>=start))
-                        and (prefix is None or key_bytes(i).startswith(prefix))]
+                        and (prefix is None or (key_bytes(i)<=prefix.ljust(key['key_length'],b'\xff') if reverse else key_bytes(i)>=prefix))]
                 actual=store.browse(key['column'],start=start,prefix=prefix,reverse=reverse)
                 comparisons.append(dict(index=key['name'],reverse=reverse,start_hex=start.hex() if start is not None else None,
                     prefix_hex=prefix.hex() if prefix is not None else None,expected=wanted,actual=actual,equal=wanted==actual))

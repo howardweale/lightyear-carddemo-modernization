@@ -8,7 +8,7 @@ import subprocess
 import time
 
 from .plan import build
-from .schema import quote
+from .schema import quote, ddl
 from .store import Store
 from .codec import split_fixed
 
@@ -20,6 +20,21 @@ def generated(template, key, count):
     for number in range(count):
         value=str(number).zfill(width).encode('cp037')
         yield template[:offset]+value+template[offset+width:]
+
+
+def generated_mapped(template,mapping,count):
+    primary=mapping['keys'][0];off=primary['key_offset'];width=primary['key_length']
+    f=next(f for f in mapping['fields'] if f['offset']==off and f['length']==width)
+    for number,record in enumerate(generated(template,primary,count)):
+        raw=bytearray(record)
+        if not f['digits'] and number<3:
+            raw[off:off+width]=[b'\0'*width,b'\xff'*width,(b'\0\xff\xc1\xf0'*width)[:width]][number]
+        for key in mapping['keys'][1:]:
+            if not (key['key_offset']>=off+width or key['key_offset']+key['key_length']<=off):raise ValueError('overlapping volume keys')
+            alternate=str(number%20000).zfill(key['key_length']).encode('cp037')
+            if len(alternate)!=key['key_length']:raise ValueError('alternate key capacity')
+            raw[key['key_offset']:key['key_offset']+key['key_length']]=alternate
+        yield bytes(raw)
 
 
 def boundary_cases(keys):
@@ -40,7 +55,7 @@ def check_browse(store, originals):
         for reverse in (False,True):
             ordered=list(reversed(reference)) if reverse else reference
             for start,prefix in boundary_cases([row[0] for row in reference]):
-                expected=[i for k,_,i in ordered if (start is None or (k<=start if reverse else k>=start)) and (prefix is None or k.startswith(prefix))]
+                expected=[i for k,_,i in ordered if (start is None or (k<=start if reverse else k>=start)) and (prefix is None or (k<=prefix.ljust(key['key_length'],b'\xff') if reverse else k>=prefix))]
                 begin=time.monotonic();actual=store.browse(key['column'],start=start,prefix=prefix,reverse=reverse)
                 fingerprint=lambda ids:sha256(b''.join(i.to_bytes(8,'big') for i in ids)).hexdigest()
                 checks.append(dict(index=key['name'],reverse=reverse,start_hex=None if start is None else start.hex(),
@@ -66,15 +81,28 @@ def run(connection, root, count):
     for item,layout,mapping in entries:
         if item.get('synthetic'):continue
         begin=time.monotonic();template=split_fixed((root/'upstream'/item['data']).read_bytes(),layout.record_length)[0]
-        records=list(generated(template,mapping['keys'][0],count))
-        load_index(connection,mapping,records)
+        records=list(generated_mapped(template,mapping,count))
+        connection.execute(ddl(mapping))
+        store=Store(connection,mapping,layout)
+        store.load_many(records)
+        connection.execute('ANALYZE '+quote(mapping['table']))
         load_seconds=time.monotonic()-begin
         store=Store(connection,mapping,layout);gate=check_browse(store,records)
-        rows=connection.execute('SELECT source_ordinal,raw_record FROM '+quote(mapping['table'])+' ORDER BY source_ordinal').fetchall()
-        exact=len(rows)==count and all(bytes(raw)==records[i-1] for i,raw in rows)
+        from psycopg.rows import dict_row
+        exact=True;seen=0
+        with connection.cursor(name='typed_volume_'+mapping['table'],row_factory=dict_row) as cursor:
+            cursor.execute('SELECT * FROM '+quote(mapping['table'])+' ORDER BY source_ordinal')
+            for row in cursor:
+                seen+=1;exact = (store.bytes(row)==records[row['source_ordinal']-1]) and exact
+        exact = exact and seen==count
+        alternate_counts={k['column']:len({raw[k['key_offset']:k['key_offset']+k['key_length']] for raw in records}) for k in mapping['keys'][1:]}
+        if count>20000 and any(not 1<n<count for n in alternate_counts.values()):raise ValueError('alternate duplicates not exercised')
+        primary=mapping['keys'][0];keyfield=next(f for f in mapping['fields'] if f['offset']==primary['key_offset'] and f['length']==primary['key_length'])
+        edge_count=0 if keyfield['digits'] else min(count,3)
         disk=connection.execute('SELECT pg_total_relation_size(%s)',(mapping['table'],)).fetchone()[0]
         reports.append(dict(table=mapping['table'],records=count,bytes=sum(map(len,records)),relation_bytes=disk,
-            load_seconds=load_seconds,wall_seconds=time.monotonic()-begin,raw_round_trip=exact,browse=gate,
+            load_seconds=load_seconds,wall_seconds=time.monotonic()-begin,raw_round_trip=exact,typed_round_trip=exact,browse=gate,
+            distinct_alternate_keys=alternate_counts,non_display_primary_keys=edge_count,
             dataset_sha256=sha256(b''.join(records)).hexdigest()))
     # Raw key semantics include non-display bytes which would be invalid in PIC 9.
     # Keep these explicitly separate from the valid-record data set.
@@ -85,7 +113,7 @@ def run(connection, root, count):
     ok=all(r['raw_round_trip'] and r['browse']['matched']==r['browse']['compared'] for r in reports) and edge_result['matched']==edge_result['compared']
     return dict(schema='carddemo-volume-browse/1',head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         plan_sha256=plan['content_sha256'],records_per_file=count,files=reports,byte_key_edges=edge_result,
-        scope='PostgreSQL raw-record byte-key browse at volume; not typed reconstruction at volume or a z/OS baseline',
+        scope='PostgreSQL typed reconstruction and byte-key browse at volume; generated public fixtures, not a z/OS baseline',
         baseline='Independent Python lexicographic sort/filter of generated original key bytes',
         verdict='equivalent' if ok else 'divergent',release_authorized=False)
 

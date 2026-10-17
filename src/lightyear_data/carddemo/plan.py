@@ -15,10 +15,17 @@ def build(root):
     def text(path):
         if path not in provenance['files']: raise ValueError('unbound source: '+path)
         return (source/path).read_bytes().decode('utf-8')
+    policy_raw = (root/'field-policy.json').read_bytes()
+    policy = json.loads(policy_raw)
+    if policy['schema'] != 'carddemo-field-policy/1': raise ValueError('field policy schema')
+    for path, item in policy['files'].items():
+        if path not in provenance['files'] or item['sha256'] != provenance['files'][path]['sha256']:
+            raise ValueError('field policy copybook hash mismatch')
     entries = []
     for item in spec['datasets']:
         layout, shift = copybook(text(item['copybook']), item['copybook'])
-        m = mapping(item['name'],layout,item['copybook'],idcams(text(item['idcams']),item['idcams']),shift)
+        m = mapping(item['name'],layout,item['copybook'],idcams(text(item['idcams']),item['idcams']),shift,
+            field_policy=policy['files'].get(item['copybook'],{}).get('fields',{}))
         if item['data'] not in provenance['files']: raise ValueError('unbound data')
         entries.append((item, layout, m))
     ims = spec['ims']; hierarchy = dbd(text(ims['dbd']),ims['dbd'])
@@ -34,6 +41,7 @@ def build(root):
         entries.append(({'name':segment['name'].lower(),'copybook':path,'synthetic':True},layout,m))
     plan = dict(schema='carddemo-data-plan/1',claim_scope='public-source-twin',upstream=provenance,
         configuration_sha256=sha256((root/'slice.json').read_bytes()).hexdigest(),
+        field_policy_sha256=sha256(policy_raw).hexdigest(),
         mappings=[m for _,_,m in entries],
         unsupported=hierarchy['unsupported'] + [dict(reason='public IMS utility unload framing is not verified',source=ims['public_unload'])],
         read_only_plan=True,execution_authorized=False)

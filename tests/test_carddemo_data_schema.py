@@ -15,7 +15,8 @@ def fixture(body, kind='KSDS', key=(1,0)):
     layout,_=copybook(text,'fixture.cpy')
     definition=dict(name='R',kind=kind,minimum=layout.minimum_length,maximum=layout.record_length,
         key_length=key[0] if key else None,key_offset=key[1] if key else None,unique=True,relate=None,source='fixture.jcl',line=1)
-    return layout,mapping('sample',layout,'fixture.cpy',[definition])
+    policy={f.path:dict(line=f.line,interpretation='iso-date') for f in layout.fields if f.path=='R.OPEN-DATE'}
+    return layout,mapping('sample',layout,'fixture.cpy',[definition],field_policy=policy)
 
 
 class SchemaTests(unittest.TestCase):
@@ -30,6 +31,17 @@ class SchemaTests(unittest.TestCase):
         detail=next(m for m in plan['mappings'] if m['table']=='pautdtl1')
         self.assertIn('REFERENCES "pautsum0"(path_key)',ddl(detail))
         self.assertTrue(plan['unsupported'])
+
+    def test_explicit_birth_date_policy_and_hash_line_binding(self):
+        plan,_=build(ROOT/'spec/modernization/carddemo-data')
+        m=next(m for m in plan['mappings'] if m['table']=='custdata')
+        f=next(f for f in m['fields'] if f['path'].endswith('.CUST-DOB-YYYY-MM-DD'))
+        self.assertEqual(('date',19),(f['sql_type'],f['line']))
+        self.assertIn(f['column']+'_raw',ddl(m))
+        layout,m=fixture(['05 K PIC X.','05 SOMETHING-DATE PIC X(10).'])
+        self.assertFalse(m['fields'][1]['date'])
+        with self.assertRaisesRegex(ValueError,'line mismatch'):
+            mapping('sample',layout,'fixture.cpy',[m['definition']],field_policy={'R.SOMETHING-DATE':dict(line=99,interpretation='iso-date')})
 
     def test_packed_c_d_f_and_negative_zero_reconstruct_from_values(self):
         layout,m=fixture(['05 K PIC X.','05 N PIC S9(3)V99 COMP-3.','05 FILLER PIC X(2).'])
@@ -49,7 +61,10 @@ class SchemaTests(unittest.TestCase):
         for value in ('2026-02-30','0000-00-00'):
             with self.assertRaises(ValueError):project(layout,m,('A'+value).encode('cp037'))
         for k in (b'\x00',b'\xff'):
-            with self.assertRaises(ValueError):project(layout,m,k+'2026-10-15'.encode('cp037'))
+            raw=k+'2026-10-15'.encode('cp037');p=project(layout,m,raw)
+            self.assertEqual(raw,reconstruct(m,p['values'],p['metadata']))
+        m['fields'][0]['text_policy']='printable'
+        with self.assertRaises(ValueError):project(layout,m,b'\0'+'2026-10-15'.encode('cp037'))
 
     def test_occurs_depending_on_and_sliding_tail(self):
         layout,m=fixture(['05 K PIC X.','05 N PIC 9.','05 ITEM OCCURS 0 TO 3 DEPENDING ON N.','10 V PIC 9(2).','05 TAIL PIC X.'])

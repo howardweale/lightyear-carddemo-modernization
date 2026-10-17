@@ -17,6 +17,12 @@ NOTICE are preserved in `LICENSES/Apache-2.0.txt` and
 
 Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
+The data component bundles a bounded set of public CardDemo copybooks, IDCAMS JCL,
+IMS definitions, the purge program, and EBCDIC sample files under
+`spec/modernization/carddemo-data/upstream`. `provenance.json` records the exact
+upstream commit and original byte hashes. The upstream Apache 2.0 license is
+retained beside these files. These are public demonstration records, not customer data.
+
 ## iDempiere release 13
 
 The iDempiere reference-estate builder reads this pinned public source:

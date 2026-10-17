@@ -1057,17 +1057,17 @@
     "docx",
     "pdf"
   ],
-  "generator_version": "1.27",
+  "generator_version": "1.28",
   "library_files": [
     {
-      "bytes": 49758,
+      "bytes": 50931,
       "path": "docs/milestones/README.md",
-      "sha256": "2798d0f62a49846aa547c54e5661eb89afc4911f5b72a5a6bdf4aa910b46abba"
+      "sha256": "53a147b8c2c76134d5e8993fc5ba9657b520f3d2b6041c58d818ff2e543c2055"
     },
     {
-      "bytes": 494252,
+      "bytes": 506448,
       "path": "docs/milestones/index.html",
-      "sha256": "a709f29f9631b89919617708bc31026f4c6c4493658fed4b12768efbc3ece500"
+      "sha256": "68ad41052a24c4127d40bc3d98cb93a3308dc4e29c987f0abc9359fcd445c227"
     },
     {
       "bytes": 805,
@@ -1077,8 +1077,8 @@
   ],
   "milestone_count": 70,
   "schema_version": "1.1",
-  "searchable_milestone_count": 104,
-  "source_sha256": "67b08549ceca652c87ff4d628dacf65958964407fb1fa360f188a4554a9f6a69",
+  "searchable_milestone_count": 106,
+  "source_sha256": "6d183117114f7044059411e3deb095cb1c275de3eb1f2ad77ded6b263b5bbcd6",
   "supplemental_artifacts": [
     {
       "bytes": 4374,
@@ -1589,7 +1589,37 @@
       "bytes": 65757,
       "path": "docs/milestones/MS-106/MS-106.pdf",
       "sha256": "b7063b79562ba9d35f09adcd333680805088ec34cb88d71b0b2cb8e8f1a8c96d"
+    },
+    {
+      "bytes": 5219,
+      "path": "docs/milestones/MS-107/MS-107.md",
+      "sha256": "354f6a9aa323068499486988a03fa463e66cc4f5381e98629deb12a7f0e4857a"
+    },
+    {
+      "bytes": 47544,
+      "path": "docs/milestones/MS-107/MS-107.docx",
+      "sha256": "c12aeb566ca52638e76e49f2df8d7813989213ede748d7a64fec7df3ab470d22"
+    },
+    {
+      "bytes": 97479,
+      "path": "docs/milestones/MS-107/MS-107.pdf",
+      "sha256": "14fef7bd0630ddf272221e2e1c510ea393c9a085fd24e69309321e6145589a76"
+    },
+    {
+      "bytes": 4207,
+      "path": "docs/milestones/MS-108/MS-108.md",
+      "sha256": "48dcec5cc56b39e8fc948185ebe8306f37bf2168689631dd32472ac1aac03ba1"
+    },
+    {
+      "bytes": 47186,
+      "path": "docs/milestones/MS-108/MS-108.docx",
+      "sha256": "42c5d4bdf13850b91249dff4847cdcc1d16641bec73f4990e10591920d44bc45"
+    },
+    {
+      "bytes": 98449,
+      "path": "docs/milestones/MS-108/MS-108.pdf",
+      "sha256": "6f7d0d25edb126eece33b8a92e887b7622703449d41ed3943dba703e2f8a3fbf"
     }
   ],
-  "supplemental_milestone_count": 34
+  "supplemental_milestone_count": 36
 }

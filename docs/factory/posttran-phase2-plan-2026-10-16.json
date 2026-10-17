@@ -1,0 +1,907 @@
+{
+  "abend_contract": {
+    "candidate_process_code": 231,
+    "candidate_source_code": 999,
+    "scope": "Only attempt-1 POSTTRAN duplicate-WRITE abend; neither code substitutes for the other elsewhere.",
+    "twin_process_code": 12
+  },
+  "bound_files": {
+    ".github/workflows/posttran-phase2.yml": "bab0459268754f5dc6508995ff4a53fd9a2797490749c242002abbd69718a712",
+    "docs/factory/keep-or-fix-register.json": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a",
+    "docs/factory/twin-limits.md": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+    "spec/mainframe/arrival-kit.json": "0b4c22371ffe8fa9e557a8a6e47295000dbb43cfdc543d56128fb1ff434ffd5a",
+    "spec/mainframe/carddemo-bindings.json": "49537996bb9ec230b5bba89729135e5b4f79a4103cbda027c25b02113a6b62c2",
+    "spec/mainframe/copybooks/ARRIVAL.cpy": "18b0151eb3962d26b00446ce08057e2ed3d76bbeba1b114412d7709de29e8d7a",
+    "spec/mainframe/copybooks/BANKEXT.cpy": "00b4a220ea03719f58bd5beb407fa38e6cdf2827b7996a2bcbef31a9e60e4de0",
+    "spec/mainframe/copybooks/COSTM01.cpy": "108170f314aa951281fdda321c4609c89638caee8d4d7085d08cdca5dc6bec36",
+    "spec/mainframe/copybooks/CUSTREC-INTAKE.cpy": "90a17b56e9338592d71f192c5c48b34fa91c1f21b5f769aee3cb5ec02259b99e",
+    "spec/mainframe/copybooks/CUSTREC.cpy": "f87a0a041fbd8f38dc9c23a9519b917af9c7008527e9cb924f91c2fb4e0a2ecc",
+    "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "spec/mainframe/copybooks/CVACT02Y.cpy": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+    "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+    "spec/mainframe/copybooks/CVCUS01Y.cpy": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+    "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+    "spec/mainframe/copybooks/CVTRA02Y.cpy": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c",
+    "spec/mainframe/copybooks/CVTRA03Y.cpy": "fb15dbc4a6924cbddce0704932f9e61c067ac10004cd00839dff0ed7c7bb0667",
+    "spec/mainframe/copybooks/CVTRA04Y.cpy": "89803bc13a06347e1f3d8a599a5383b87235b203dce9f18a486bc233186479f8",
+    "spec/mainframe/copybooks/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "spec/mainframe/copybooks/CVTRA06Y.cpy": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1",
+    "spec/mainframe/copybooks/CVTRA07Y.cpy": "72ba597b1a40e1e6cf908e15da9e6a818a0ab899ef1d27d15edeb074963102fa",
+    "spec/mainframe/copybooks/LICENSE": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+    "spec/mainframe/copybooks/NOTICE": "d4290ed64c2edd0fce1d84e3f9dfb2881240fe534def76b8cd29ed6af683e287",
+    "spec/mainframe/copybooks/POSTREJS.cpy": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd",
+    "spec/mainframe/copybooks/PROVENANCE.json": "bfedc57e5caeb4886dfeb72c8a7135d8e052e56aaa86a2b369f1889b059dd30d",
+    "spec/mainframe/extended-golden.json": "9af6b5bf278c5598c0906d37ae136ff3bfdb4d770276f7cb9274a902436dfcb3",
+    "spec/mainframe/mock/intcalc-mapping.json": "40cdeb0c791bb69d559dd8565ce1d139db5527f0d14728e0e51d1deab63111a7",
+    "spec/mainframe/mock/intcalc-source.json": "ede13178bd66d1bd2f406f3dc76ab882de7c766dec3d9f672a9fb062975a5ea2",
+    "spec/mainframe/mock/intcalc-target.json": "5b9c1d0e8f02593905a41823befb894f568cb76530a8dd918dd6b92124c5161a",
+    "spec/mainframe/mock/posttran-mapping.json": "b16a82ac7f1c7e7be790d076748039b364bc6d8d1e358a8773ce97cd50f1f7aa",
+    "spec/mainframe/mock/posttran-source.json": "228d4636a68caaebcec3ac894f7bf8552a2fe56553a055115cb8917711bef07e",
+    "spec/mainframe/mock/posttran-target.json": "078bb795ec784fe4f0292ca79ef55fa663a9d4a8739720067a8865ac84c28bdd",
+    "spec/mainframe/packed-golden.hex": "7d3b73aab2d111ea4724028df5ff788fedcb3163ce859fae2d2efc7f0c8da613",
+    "spec/mainframe/posttran-independent/attempt-1/PosttranCandidate.java": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
+    "spec/mainframe/posttran-independent/attempt-1/provenance.json": "6b8d2da6e4bfb04bd9ac65ef3e1862f1851ab33aa668a5c1cda3d123565a502a",
+    "spec/mainframe/public-source/CBACT04C.cbl": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "spec/mainframe/public-source/CBSTM03A.CBL": "23c8753b6b4e0c24d4560c83861fe8162626bab195faec0fe88cf80b8bf432b5",
+    "spec/mainframe/public-source/CBSTM03B.CBL": "ac004f7f40dcb3f2a14dfb83a743f83fed9383675bc93452f3424c40cb6475a7",
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/mainframe/public-source/CBTRN03C.cbl": "8691e625502b7efcfd7ba4ae61797132e7b68f3fd5fedcdcc7dd6488f6871eef",
+    "spec/mainframe/public-source/CREASTMT.JCL": "d32627022d7686d1811ba253faa2c5d86295c8055428b2a610a27d8f84751950",
+    "spec/mainframe/public-source/INTCALC.jcl": "61afa664a807558e58213641d9f3317ab3b354a350c4c1536a630897d194d275",
+    "spec/mainframe/public-source/POSTTRAN.jcl": "ecff62c691e6ce101de08690e72ec065bc98bd845744ddf914899097d37c9191",
+    "spec/mainframe/public-source/README.md": "6f5a14442b318c314d06e4dc7cc75313e325e0071337ee2898c6becac7e9948a",
+    "spec/mainframe/public-source/REPROC.prc": "4562039d1c7b90f05cc946dd1cd1cb93571bb279740c5c9777acfa3ea23fbc9f",
+    "spec/mainframe/public-source/TRANREPT.jcl": "7d8fc0777e6b9fb1c62aee6b4b10a67d127057c84b92203c7152f230b3db9571",
+    "spec/mainframe/public-source/TRANREPT.prc": "1e4c34eeb874ec32a485e8f7b736df2715585f07264bb0fe0bd08332ea0d3144",
+    "src/carddemo_oracle/__init__.py": "2628a32f8b33841123067090675516b750207c6414b2e7cdc8bbc87add76350a",
+    "src/carddemo_oracle/__main__.py": "0f7d54f3fbb1f79a85eb8110f11793db99da6f3c61ee979de5abe9a1b5f3fdb3",
+    "src/carddemo_oracle/cli.py": "6be852e8e61eaae773e6413a593f61b7039d273ae0fa4e7b7e4da6c4f4a78733",
+    "src/carddemo_oracle/compare.py": "aa7ef3f1ca93ca9a40f4ce9e5f0027f5b7395db9b389c7edf5e738599577d452",
+    "src/carddemo_oracle/demo.py": "84f4363d6b51855a5c0bfaa7007070aed25a037b53ea9f6116c76629b0a91227",
+    "src/carddemo_oracle/oracle.py": "da9718cb9a8ae84194ac73a7b6de004e0fce033ee43ca9f4e7adeeb14ca376b2",
+    "src/carddemo_oracle/records.py": "36cadb354b8345456da751619fa63827151e403b800831375a81aa0dc1473d61",
+    "src/lightyear_mainframe/__init__.py": "9f4ebd83d2619ef261d5ae9acde109917aab14d4ee5f74667ed14f9f3f9076f8",
+    "src/lightyear_mainframe/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "src/lightyear_mainframe/arrival.py": "1e488f1654c41374d8c92176b3912bfa439437db6518ab75bfde7f097735fd25",
+    "src/lightyear_mainframe/campaign_provenance.py": "ce1d83d5c105ce2e5de891ecae8f428479757e0aec5b88ad1cc0d17ba1842250",
+    "src/lightyear_mainframe/claim_scope.py": "baedf58b852b45f89114e8ab9f16d94c4d49df247c718e14bc2ec4707639b7b0",
+    "src/lightyear_mainframe/cli.py": "b77d7bca9f612491627a793fc13146bee05c2c47167ba21a4f98af37f7992e6a",
+    "src/lightyear_mainframe/cp037_twin.py": "8f83f78e683df2abcaf5f999f438456f585a6dbee0d6da8b83366dc94ea3d488",
+    "src/lightyear_mainframe/equivalence_evidence.py": "673f3aaeaa4adcb2f8a120322fb16f6b81546dce7418b88e5d7e6dc9f97c998a",
+    "src/lightyear_mainframe/generic_scenario_ir.py": "5438974e5d310bc68899e44d672ac15503acd56c627ab47a0a308d41c6e85e1c",
+    "src/lightyear_mainframe/inventory.py": "d2a9e5d9b22fcab955088095c3d47031baaf7e2ba4ecd1a06309b6749c960364",
+    "src/lightyear_mainframe/io_faults.py": "4680cfb382cb13cff5db7a0c39c89ed15d534e142fb7860d4798e6f45ddaa001",
+    "src/lightyear_mainframe/legacy_twin.py": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea",
+    "src/lightyear_mainframe/loader_domain.py": "2750c4080638077f420feb3822e35ee6303496ab8bc3004c9e7ce9bba50d5c03",
+    "src/lightyear_mainframe/mutant_equivalence.py": "101bc868cb1440b1dc7a49f3977ad170eb8adb2bdbea210f087712dec8924280",
+    "src/lightyear_mainframe/posttran_invariants.py": "a4c91fce30ae90cb796d5817c62d02a21304e2aa1639a2bd44ab285b48f14780",
+    "src/lightyear_mainframe/posttran_review.py": "4645451a8b9cd89b932a595fa50392d4a670baac1192afb4143be3e502ef5d44",
+    "src/lightyear_mainframe/public_corpus.py": "b79f46a496373582ae36e99699dca7f7ef341f7179ccf3783f97da1323372130",
+    "src/lightyear_mainframe/records.py": "d873f4f11a14d0064b76a66dca3c57f165960e21ff2961e7a85d5275989bd204",
+    "src/lightyear_mainframe/release_projection.py": "3cd9f5369efc267dd89f5c303838fcfacf4db82845c9358187d66e8def39d8e0",
+    "src/lightyear_mainframe/scenario_coverage.py": "b6d526d5fd4ff88441a1064618582f6b62de5ebda48eabbe6653ba974ba832e3",
+    "src/lightyear_mainframe/scenario_generation.py": "13755d905a9e5c02f52cc21f3d66e796ec18352174475f45e4595ff78fa70852",
+    "src/lightyear_mainframe/source.py": "5cc8826b7b99839eef1f120e0d4b8dac00b48afee7143fe23158907d78cd5ad0",
+    "src/lightyear_mainframe/systematic_mutation.py": "c4218407e70f50d0bde10b13b569ff52ca3c6b3e218ec5d3ac1a8300a477110d",
+    "src/lightyear_mainframe/target_retention.py": "2bf67b6855f6b2be68270d169db4649ff46401fc711c1581d56f3eac26d69178",
+    "src/lightyear_mainframe/targeted_witness.py": "c87a05546bd23e2c4a73cc7c57a5e49406c21e17827e8b14f29f7cfb57d40738",
+    "src/lightyear_mainframe/twin_reconciliation.py": "7d9d84639a0468b9567333a1313a479bd59c2458dfaf79272b00a9483c997389",
+    "src/lightyear_mainframe/zos_bindings.py": "e30d40f7c34475b82b5a86469930219946e5a2fea273502eb7f5c976acc0fb71",
+    "src/lightyear_mainframe/zos_bridge.py": "6697271c5dd5b1dd4ddc6ddc49a60147c20b8cf8ff25b39160fe19450b3f59ca",
+    "src/lightyear_mainframe/zos_cli.py": "1bbdd7abadb2510b2604db8ce13760be6d282578caede5307518c8a19e1c84d7",
+    "src/lightyear_mainframe/zos_compare.py": "1cc032f20c1b432a3bd62feb635d256b73c6fe954f39518695ed2d22b7819ed1",
+    "src/lightyear_mainframe/zos_evidence.py": "5fdf478e5745f28e9e82713f4f73fdd14b525b8852afa3951d00a2777a29a7ff",
+    "src/lightyear_mainframe/zos_intake.py": "579eed97462d716b1a138544cd7da113ae9949642b96d74c1779d09b3442ab51",
+    "src/lightyear_mainframe/zos_logs.py": "a56f110398ed8e4a6f1188169d08d58c187a806b4b724abd01a2b22af9653a90",
+    "src/lightyear_mainframe/zos_rehearsal.py": "6a347491547f5a8b8fe08efda4e458b4f116b799b2f9a961019b8a79118ec5b0",
+    "tests/mainframe/fixtures/PROVENANCE.json": "ae38a93aee5634c1c8a39dd424cd82c314af5d17f141d6d7a2eaf780bd37cb1d",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/after/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/after/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/after/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/after/TRANSACT.bin": "b1f32d8f67b8922cbf029aaab6991437e7cbef3ee28b276dac9cbbf9636dc690",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/after/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/before/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/before/TRANSACT.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/compiler.lst": "3f8f2599799348cd907b9f3efd5b9a0067799a97b58a5ef7e7f3ca584086df4b",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/job-output.txt": "12bee899f76813e97986b3045b362f3494e2a4e4f1bf41bd16ea849d66151c41",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/note.txt": "d747e5e462c9e0314e0e982313669a2c0e53d56f620be27ec704d30731894b38",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/return-codes.txt": "ea7f51c5b768815e20e1d66379f7f9ba72afe8a0282ac99784b519a8706761e9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/run.json": "8f66f1ed58d04a35d3d95aa588ca97ef32cb39ec9b10507455ef9c31ec7e3fa2",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run1-2026-10-05/submitted.jcl": "61afa664a807558e58213641d9f3317ab3b354a350c4c1536a630897d194d275",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/after/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/after/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/after/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/after/TRANSACT.bin": "4176e8707056bff98672b0996d8a19806ab3e442f844ddc416849e97a8cf40dc",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/after/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/before/DISCGRP.bin": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/before/TRANSACT.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/compiler.lst": "3f8f2599799348cd907b9f3efd5b9a0067799a97b58a5ef7e7f3ca584086df4b",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/job-output.txt": "eb7a37b930ceb4b49c476cdf8b1aff83180357a5a90d7ced2a1405471b622755",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/note.txt": "d747e5e462c9e0314e0e982313669a2c0e53d56f620be27ec704d30731894b38",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/return-codes.txt": "ea7f51c5b768815e20e1d66379f7f9ba72afe8a0282ac99784b519a8706761e9",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/run.json": "8f66f1ed58d04a35d3d95aa588ca97ef32cb39ec9b10507455ef9c31ec7e3fa2",
+    "tests/mainframe/fixtures/arrival-rehearsal/INTCALC-run2-2026-10-05/submitted.jcl": "61afa664a807558e58213641d9f3317ab3b354a350c4c1536a630897d194d275",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/DALYREJS.bin": "ecdf4c895f6ce29509e7e77be06a2a9ff13abc22530a1aac91fea13f40b37a6a",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/DALYTRAN.bin": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/after/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/ACCTFILE.bin": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYREJS.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/DALYTRAN.bin": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TCATBALF.bin": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/TRANFILE.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/before/XREFFILE.bin": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/compiler.lst": "3f8f2599799348cd907b9f3efd5b9a0067799a97b58a5ef7e7f3ca584086df4b",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/job-output.txt": "c8aeb7fa8d209aafe2580b9813a488ac1ff7c5527957bb8a756d5db99d54740d",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/note.txt": "d747e5e462c9e0314e0e982313669a2c0e53d56f620be27ec704d30731894b38",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/return-codes.txt": "9338f9b61a3f08dc5e75acad67ba238266f2332d53dec1c0d09db59507f198b5",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/run.json": "5a52d2e379f5b3994de4b2d4a3ce55650475820faaf6f7dd301815a495dbf487",
+    "tests/mainframe/fixtures/arrival-rehearsal/POSTTRAN-run1-2026-10-05/submitted.jcl": "ecff62c691e6ce101de08690e72ec065bc98bd845744ddf914899097d37c9191",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/after/ACCTFILE.bin": "922a49e00624754455d5f6fb8afad87b05d0e89fafa16ed49d14ad5fafd3fc82",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/after/DISCGRP.bin": "13311e203d96913555569dedf45c026d809a0d363e0122803759a9d9c9533965",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/after/TCATBALF.bin": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/after/TRANSACT.bin": "38733c46a8d1ba3e418ab08a63f5970671c39e566291b4aecf569f5d457f97e7",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/after/XREFFILE.bin": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/before/ACCTFILE.bin": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/before/DISCGRP.bin": "13311e203d96913555569dedf45c026d809a0d363e0122803759a9d9c9533965",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/before/TCATBALF.bin": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/before/TRANSACT.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/before/XREFFILE.bin": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/missing-disclosure/ACCTFILE.bin": "6de8f26ddd170cb85035dafd319b32240d6efbd75378cb9a1ff46a48b33d9cab",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/missing-disclosure/DISCGRP.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/missing-disclosure/TCATBALF.bin": "e9a91434a3ea9d06f2389a6615df4310a3775d940e2bc2db9c678c6733211147",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/missing-disclosure/TRANSACT.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/missing-disclosure/XREFFILE.bin": "d12e5b54fae31941fb7854a086a91c7bf3c4dff45f51830b7b36167ca8ce4c5e",
+    "tests/mainframe/fixtures/intcalc-discriminating-v1/run.json": "a52cd745580aed17ca27e4ef5bf862764ae094740efbda5e001faf54a059fa48",
+    "tests/mainframe/fixtures/public-bridge/ACCTFILE.ebcdic": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+    "tests/mainframe/fixtures/public-bridge/DALYTRAN.ebcdic": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+    "tests/mainframe/fixtures/public-bridge/DISCGRP.ebcdic": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+    "tests/mainframe/fixtures/public-bridge/TCATBALF.ebcdic": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+    "tests/mainframe/fixtures/public-bridge/XREFFILE.ebcdic": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+    "tests/mainframe/fixtures/public-bridge/acctdata.txt": "c2a97b6a32dc4a87a7aafdf7f72e6712e560412d30b00c5526cca80fc9dfd260",
+    "tests/mainframe/fixtures/public-bridge/cardxref.txt": "efec3825ec0d5b791cf54f815bf688abfcc9db832c1600371ed2209df4e97764",
+    "tests/mainframe/fixtures/public-bridge/discgrp.txt": "dfdd3832805e3a4bf1d811ea2340ee8f6bf8e9fdf8d040fbd50e3c7b45b0ce2b",
+    "tests/mainframe/fixtures/public-bridge/tcatbal.txt": "a33eda6c526646e738164fd036ffdf525780466ade7141039bf72d4e25237afd",
+    "tests/mainframe/fixtures/twin-posttran-output-v1/ACCTFILE": "173a21a83b4550cf24863c4b1dc1667cf827510caea403b6934b306c39154734",
+    "tests/mainframe/fixtures/twin-posttran-output-v1/DALYREJS": "730af35c0e8d4cc28e6c205c562a32e623dfc858ef6843ec8530cec6933ac68e",
+    "tests/mainframe/fixtures/twin-posttran-output-v1/PROVENANCE.json": "9fe393023e1a5521b9b31fda52f8df2accd4ce9c4e19f0bda93eeeef04dcb8db",
+    "tests/mainframe/fixtures/twin-posttran-output-v1/TCATBALF": "b2a8654114a60e095b8c0a5fc4276a9def34494e240d9c7a973096227730df5f",
+    "tests/mainframe/fixtures/twin-posttran-output-v1/TRANFILE": "3b676ae400a11cbd3572a327c5116ab2cf43e25e311687cd8d35ea803f284e3a",
+    "tools/check_posttran_attempt1_phase1.py": "a3392d26ac92a08e42aae6f4018ba63382c3714a41337cde56e231db899e4ad7",
+    "tools/legacy_twin/collation-probe.cob": "611860d6802cad45ab88a35235536f70c4b5efa92eca403f03f6612570aa7fba",
+    "tools/legacy_twin/index_order.py": "de0e33476d1cfe3700eb0f0bbb9f18bc2592730097ab1be008f409737988042c",
+    "tools/legacy_twin/install-pinned.sh": "4832913e251ce802c4b973b1240c321fbf40267d497b9d2011f8c3f0f3ecd6d7",
+    "tools/legacy_twin/mixed_key_probe.py": "5e24daa671f3f0a660165d99c9cb879bf3586c8c4d34792842a9d50ef2e4cbb3",
+    "tools/legacy_twin/platform-probe.cob": "b9c845567d48d83703e34b1466e4b20f38d8f226e77289b62b634b6e7175a9e2",
+    "tools/legacy_twin/posting_io.py": "c055f3258a6404c78bb3fd47f6afc7b790891f0399b0556051bcb0926042db68",
+    "tools/legacy_twin/reproducible.Containerfile": "a5825203f639f0cb9c847291f115bccfe256efcd9905b921eb4a56ee3a9f8e85",
+    "tools/legacy_twin/reproducible_build.py": "bf70d495ffb197aeedf5f1b691284f35e7286e639a323820b0da1f653969e9bf",
+    "tools/legacy_twin/run_reproduction.sh": "2b197292d41cdf8e79295f19cffb514ea26495a59649479c3a54c30cc35e4d8e",
+    "tools/posttran_phase2_authorization.py": "6c32d4ac4716d2ce856250d94a6f5caaaa404369256b282d581fe3d83af7bf00",
+    "tools/prepare_posttran_phase2.py": "c7ef4a64a7cf815c554bf88d3131acc71e9c0fbbce9614321d6cede53a0b44b6",
+    "tools/run_posttran_phase2.py": "9abc9ce00f39cdce0117cb51d66f5eacf907a1279fc5bc0ba7b5d5cd631b50e4"
+  },
+  "candidate_files": {
+    "spec/mainframe/posttran-independent/attempt-1/PosttranCandidate.java": "1b501ff62f1578064d6867c18ad1a0a412d8d7c6e91bb82c91d52bb538134186",
+    "spec/mainframe/posttran-independent/attempt-1/provenance.json": "6b8d2da6e4bfb04bd9ac65ef3e1862f1851ab33aa668a5c1cda3d123565a502a"
+  },
+  "candidate_repair_authorized": false,
+  "compared_outputs": {
+    "ACCTFILE": {
+      "copybook": "spec/mainframe/copybooks/CVACT01Y.cpy",
+      "fields": [
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-ID"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-CURR-BAL"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP"
+        },
+        {
+          "filler": false,
+          "path": "ACCOUNT-RECORD.ACCT-GROUP-ID"
+        },
+        {
+          "filler": true,
+          "path": "ACCOUNT-RECORD.#13.FILLER"
+        }
+      ],
+      "keys": [
+        "ACCOUNT-RECORD.ACCT-ID"
+      ]
+    },
+    "DALYREJS": {
+      "copybook": "spec/mainframe/copybooks/POSTREJS.cpy",
+      "fields": [
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-TYPE-CD"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CAT-CD"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-SOURCE"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-DESC"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-AMT"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ID"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-NAME"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-CITY"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-MERCHANT-ZIP"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-CARD-NUM"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ORIG-TS"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS"
+        },
+        {
+          "filler": true,
+          "path": "REJECT-RECORD.DALYTRAN-RECORD.#14.FILLER"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON"
+        },
+        {
+          "filler": false,
+          "path": "REJECT-RECORD.WS-VALIDATION-TRAILER.WS-VALIDATION-FAIL-REASON-DESC"
+        }
+      ],
+      "keys": [
+        "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID"
+      ]
+    },
+    "TCATBALF": {
+      "copybook": "spec/mainframe/copybooks/CVTRA01Y.cpy",
+      "fields": [
+        {
+          "filler": false,
+          "path": "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-CAT-BAL-RECORD.TRAN-CAT-BAL"
+        },
+        {
+          "filler": true,
+          "path": "TRAN-CAT-BAL-RECORD.#3.FILLER"
+        }
+      ],
+      "keys": [
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD"
+      ]
+    },
+    "TRANFILE": {
+      "copybook": "spec/mainframe/copybooks/CVTRA05Y.cpy",
+      "fields": [
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-ID"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-TYPE-CD"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-CAT-CD"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-SOURCE"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-DESC"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-AMT"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-MERCHANT-ID"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-MERCHANT-NAME"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-MERCHANT-CITY"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-MERCHANT-ZIP"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-CARD-NUM"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-ORIG-TS"
+        },
+        {
+          "filler": false,
+          "path": "TRAN-RECORD.TRAN-PROC-TS"
+        },
+        {
+          "filler": true,
+          "path": "TRAN-RECORD.#14.FILLER"
+        }
+      ],
+      "keys": [
+        "TRAN-RECORD.TRAN-ID"
+      ]
+    }
+  },
+  "comparison": "Exact output bytes, including filler, record order, signs and timestamps; decode differences only for diagnosis.",
+  "compiler_image_artifact": "posttran-phase2-compiler-image",
+  "content_sha256": "9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13",
+  "execution_authorized": false,
+  "generation_attempt": 1,
+  "keep_or_fix": {
+    "cycle_debit_sign": "keep source sign behaviour: public workload has 38 rejects, not 23",
+    "duplicate_id": "keep non-atomic balance posting before duplicate WRITE abend"
+  },
+  "model_calls": 0,
+  "normalization_rules": [],
+  "outcomes": {
+    "divergent": "Both executions yield readable complete outputs but at least one byte or scoped return code differs.",
+    "equivalent": "All four complete output byte streams and scoped return-code contract agree, and the fixed keep-or-fix checks pass.",
+    "indeterminate": "A required input binding, execution receipt, output, or decoder is missing or invalid."
+  },
+  "preparation_head": "e3ee73d8bff7e18491724d377ea9329e96896f71",
+  "preparation_run": 38917806865,
+  "prepared_on": "2026-10-16",
+  "qualification_credit": false,
+  "release_authorized": false,
+  "retries": 0,
+  "return_code_rule": {
+    "equal_allowed": [
+      0,
+      4
+    ],
+    "equal_other": "divergent",
+    "exception": {
+      "candidate": 999,
+      "scenario": "generated:posttran-duplicate-id",
+      "twin": 12
+    }
+  },
+  "scenario_count": 29,
+  "scenarios": [
+    {
+      "id": "public:posttran-missing-card",
+      "input_sha256": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "466093ef4c07a443de460bf03a641c051fd671f3770e5d2a78966de1f8fa7b9e",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "public",
+      "name": "posttran-missing-card",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "public:posttran-missing-account",
+      "input_sha256": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "942e2a172840e615a0d4351df94322c3953e54b7fab51caf1fb38723b8f96be0"
+      },
+      "job": "POSTTRAN",
+      "kind": "public",
+      "name": "posttran-missing-account",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "public:posttran-expired-account",
+      "input_sha256": {
+        "ACCTFILE": "f8c7028069f142bb47393f2d70c44950fb91d0ac10450fe0416d3c7078441492",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "354d154faf1899e25de91916b722641a632e48adcd96818f7bd3ecfa4f67b8df",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "public",
+      "name": "posttran-expired-account",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "public:posttran-public",
+      "input_sha256": {
+        "ACCTFILE": "4219deb59488e1e6364695e03c5a5172d2c1c078baa7f801054641ca288f0cf2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "1605206de7009cba771a921bf13f4dfcd1673fc13f1b844150355e9a95fa8da3",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "public",
+      "name": "posttran-public",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-zero",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "85330e36be422bf23f39ec7e33529c1ee458ad91a22582b8cf2f6fb2494f391b",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-zero",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-positive",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-positive",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-negative",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "def659c6323a7c2f3fec1fefca3eb18e44bbfe9797f7837ceeb84530c3c4889a",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-negative",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-credit-equal",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "6896e58f265f804a54820b1c379ca50f6cf26ed334d5fe624bf62ac687b3e971",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-credit-equal",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-credit-above",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "5d68890915f70c6ede7e01f0b9436eb00ceeabf8c0447a5073b1bf9f510de939",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-credit-above",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-expiry-equal",
+      "input_sha256": {
+        "ACCTFILE": "82fd74f2bd05ade4ab7805838138b3c4f0cfe53d3538a554495a0056a6619e46",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-expiry-equal",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-expiry-before",
+      "input_sha256": {
+        "ACCTFILE": "d069801d58cfa61475e559418ad43c39418db1f7e6717a532ed5307e600eabe9",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-expiry-before",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-missing-card",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "190813c90d32c4a9191bfb5a757e48952f5dbf0f76c46e72d8dff8e7fcb0334d",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-missing-card",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-missing-account",
+      "input_sha256": {
+        "ACCTFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-missing-account",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-empty",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-empty",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-duplicate-id",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "a8b6903107a200fb5e658ab6409659a79833f4f5b085f9bb35f351a827cc3057",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-duplicate-id",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-new-category",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b77241e10e4b5263dded5fc7a9e1078120a20c6f6cf74272eceaefa2da36f293",
+        "TCATBALF": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-new-category",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-large-amount",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "14a4ae49db04a1343b67903c243f86233ef56eea98a68b78267bb7d1f020d21c",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-large-amount",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-cycle-debit",
+      "input_sha256": {
+        "ACCTFILE": "2a7ffb7934042d8264727e6d77e45617e7c8c992c5b96b758a8fc13c033bf9d3",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "a7e53e54c214e473aad2417047dcc809c8c6f09b7c9f02de246df0eb10c80d9b",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-cycle-debit",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-invalid-then-valid",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "199ad62e94b1bd327164a00879db8a35e147d7afafe69ebeeb684afca27a839c",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-invalid-then-valid",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-new-then-existing",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "9475af089213ec705c0ae54af63baf167bdd037eef8e66fdc9d7d3dcf1c134e2",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-new-then-existing",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-expiry-next-day",
+      "input_sha256": {
+        "ACCTFILE": "82fd74f2bd05ade4ab7805838138b3c4f0cfe53d3538a554495a0056a6619e46",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "15e97eec81dc8479eb8893c7722323bcd13e3735be1cdaaffbe0b87aef91e4ef",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-expiry-next-day",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-expiry-equal-dash",
+      "input_sha256": {
+        "ACCTFILE": "82fd74f2bd05ade4ab7805838138b3c4f0cfe53d3538a554495a0056a6619e46",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "30812642aca530f5c7a0757ffc509400223ec8e2cd167cd3120099aa77a60e1c",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-expiry-equal-dash",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-cycle-debit-sign",
+      "input_sha256": {
+        "ACCTFILE": "8ee6ff86d59eceb9f492d89c3aa2143c46a439d1ab78fea534478b295989a156",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "1ef4e73e562b7fdc6bfd74f30157c861a0701acaa16ee6bb27b2cd0461bcbd29",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-cycle-debit-sign",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-solver-credit-false",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "5d68890915f70c6ede7e01f0b9436eb00ceeabf8c0447a5073b1bf9f510de939",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-solver-credit-false",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-solver-credit-true",
+      "input_sha256": {
+        "ACCTFILE": "74f622b7be51a20269650c18a4cc482922b415053648003f469dfbe12acc9df2",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "27ee47f39cb794fff3662901ddc7c03ba16594072cdfd3766fbee3b3b4a5b401",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-solver-credit-true",
+      "timestamp": "2022-07-18-00.00.00.000000"
+    },
+    {
+      "id": "generated:posttran-diversity-0",
+      "input_sha256": {
+        "ACCTFILE": "1c3e7d92018afd80961de79e0e40c85d44e320bf64c07d40982317491ff8fc83",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "b202fedb45a08e4e5c0bc409ef9c0efef6471aa66614b007c719dff74ece7d23",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-diversity-0",
+      "timestamp": "2022-06-12-10.20.30.000000"
+    },
+    {
+      "id": "generated:posttran-diversity-reject-0",
+      "input_sha256": {
+        "ACCTFILE": "1c3e7d92018afd80961de79e0e40c85d44e320bf64c07d40982317491ff8fc83",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "197f5a801984a849c0c44dbaf6822fdc2b5f63143dba0804f915832a9a2e3be0",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-diversity-reject-0",
+      "timestamp": "2022-06-12-10.20.30.000000"
+    },
+    {
+      "id": "generated:posttran-diversity-1",
+      "input_sha256": {
+        "ACCTFILE": "4dc470277793930c872892745cceb83916eaf12ad4d5b5c2de6850c72ddd21e8",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "512f73a402431cc6fc6a9671f5a8182b5b59028716de844c9a3be3a9beaa226c",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-diversity-1",
+      "timestamp": "2022-06-13-10.20.30.000000"
+    },
+    {
+      "id": "generated:posttran-diversity-reject-1",
+      "input_sha256": {
+        "ACCTFILE": "4dc470277793930c872892745cceb83916eaf12ad4d5b5c2de6850c72ddd21e8",
+        "DALYREJS": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "DALYTRAN": "74fa6fb330752594e017bc25e43276b4fc5daa4d0a1d61eeb1f954c6d512dc8d",
+        "TCATBALF": "2c45817e7986ffe29cce285c8ce8feb3cf7303c4624d830dc7bdd9c9cdb03b71",
+        "TRANFILE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "XREFFILE": "91d68611b821186ad91910679638d20177f6e47176e5c8aea1c44df948327d12"
+      },
+      "job": "POSTTRAN",
+      "kind": "generated",
+      "name": "posttran-diversity-reject-1",
+      "timestamp": "2022-06-13-10.20.30.000000"
+    }
+  ],
+  "schema": "posttran-phase2-plan/2",
+  "twin": {
+    "base_image": "ubuntu@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b",
+    "compiler_package": "3.1.2-5.1ubuntu1",
+    "image_archive_sha256": "bac290dafdb7342822f51a4b40822c8a232cb3ae61b4de490c0127ac1c6484a2",
+    "image_id": "sha256:c88e45c7d65cf9392819fb0b048c1802dba2e2e7df4762f2df889528236c16e7",
+    "oracle_status": "provisional",
+    "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "zos_confirmation": false
+  }
+}

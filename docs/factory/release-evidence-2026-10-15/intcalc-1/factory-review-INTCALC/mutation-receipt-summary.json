@@ -1,0 +1,5045 @@
+{
+  "schema": "mutation-receipt-summary/1",
+  "original_sha256": "e67c6bb59a6bfc4935bd51e06eb7056d5813074ede668f38df15d21f0e102124",
+  "original_size": 86282820,
+  "rows": [
+    {
+      "id": "CBACT04C-receiving-size-64-1",
+      "status": "killed-failure",
+      "line": 64,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-64-2",
+      "status": "killed-divergent",
+      "line": 64,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-size-66-3",
+      "status": "killed-failure",
+      "line": 66,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-66-4",
+      "status": "killed-divergent",
+      "line": 66,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-size-72-5",
+      "status": "killed-failure",
+      "line": 72,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-72-6",
+      "status": "evidence-gap",
+      "line": 72,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-73-7",
+      "status": "killed-failure",
+      "line": 73,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-73-8",
+      "status": "killed-failure",
+      "line": 73,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-size-81-9",
+      "status": "killed-failure",
+      "line": 81,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-81-10",
+      "status": "killed-failure",
+      "line": 81,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-size-86-11",
+      "status": "killed-failure",
+      "line": 86,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-86-12",
+      "status": "killed-failure",
+      "line": 86,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-size-125-13",
+      "status": "evidence-gap",
+      "line": 125,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-125-14",
+      "status": "killed-divergent",
+      "line": 125,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-extended-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-receiving-size-130-15",
+      "status": "killed-divergent",
+      "line": 130,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-130-16",
+      "status": "killed-divergent",
+      "line": 130,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-131-18",
+      "status": "killed-divergent",
+      "line": 131,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-receiving-size-133-19",
+      "status": "evidence-gap",
+      "line": 133,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-133-20",
+      "status": "evidence-gap",
+      "line": 133,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-138-21",
+      "status": "evidence-gap",
+      "line": 138,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-138-22",
+      "status": "killed-divergent",
+      "line": 138,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-receiving-size-139-23",
+      "status": "evidence-gap",
+      "line": 139,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-139-24",
+      "status": "evidence-gap",
+      "line": 139,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-164-25",
+      "status": "killed-divergent",
+      "line": 164,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-164-26",
+      "status": "evidence-gap",
+      "line": 164,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-168-27",
+      "status": "killed-divergent",
+      "line": 168,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-168-28",
+      "status": "killed-divergent",
+      "line": 168,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-round-n0_39"
+    },
+    {
+      "id": "CBACT04C-receiving-size-169-29",
+      "status": "killed-divergent",
+      "line": 169,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-169-30",
+      "status": "evidence-gap",
+      "line": 169,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-172-31",
+      "status": "evidence-gap",
+      "line": 172,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-172-32",
+      "status": "evidence-gap",
+      "line": 172,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-173-33",
+      "status": "killed-divergent",
+      "line": 173,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-receiving-scale-173-34",
+      "status": "evidence-gap",
+      "line": 173,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-size-177-35",
+      "status": "evidence-gap",
+      "line": 177,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-receiving-scale-177-36",
+      "status": "killed-divergent",
+      "line": 177,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-182-37",
+      "status": "killed-failure",
+      "line": 182,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-183-38",
+      "status": "killed-failure",
+      "line": 183,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-184-39",
+      "status": "killed-failure",
+      "line": 184,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-185-40",
+      "status": "killed-failure",
+      "line": 185,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-186-41",
+      "status": "killed-failure",
+      "line": 186,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-188-42",
+      "status": "killed-divergent",
+      "line": 188,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-189-43",
+      "status": "killed-failure",
+      "line": 189,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-189-44",
+      "status": "killed-failure",
+      "line": 189,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-190-45",
+      "status": "killed-failure",
+      "line": 190,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-191-46",
+      "status": "killed-divergent",
+      "line": 191,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-negate-condition-191-47",
+      "status": "killed-divergent",
+      "line": 191,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-192-48",
+      "status": "evidence-gap",
+      "line": 192,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-192-49",
+      "status": "evidence-gap",
+      "line": 192,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-ADD-192-50",
+      "status": "evidence-gap",
+      "line": 192,
+      "operator": "delete-ADD",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-194-51",
+      "status": "killed-failure",
+      "line": 194,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-194-52",
+      "status": "killed-failure",
+      "line": 194,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-195-53",
+      "status": "killed-failure",
+      "line": 195,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-195-54",
+      "status": "killed-failure",
+      "line": 195,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-196-55",
+      "status": "killed-divergent",
+      "line": 196,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-198-56",
+      "status": "killed-divergent",
+      "line": 198,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-200-57",
+      "status": "killed-divergent",
+      "line": 200,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-200-58",
+      "status": "killed-divergent",
+      "line": 200,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-200-59",
+      "status": "killed-divergent",
+      "line": 200,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-three-accounts"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-201-60",
+      "status": "killed-divergent",
+      "line": 201,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-two-categories"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-202-61",
+      "status": "killed-failure",
+      "line": 202,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-203-62",
+      "status": "killed-failure",
+      "line": 203,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-204-63",
+      "status": "killed-failure",
+      "line": 204,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-205-64",
+      "status": "killed-divergent",
+      "line": 205,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-210-65",
+      "status": "killed-failure",
+      "line": 210,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-211-66",
+      "status": "killed-failure",
+      "line": 211,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-212-67",
+      "status": "killed-failure",
+      "line": 212,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-213-68",
+      "status": "killed-divergent",
+      "line": 213,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-214-69",
+      "status": "killed-divergent",
+      "line": 214,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-214-70",
+      "status": "killed-divergent",
+      "line": 214,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "intcalc-solver-rate-false"
+    },
+    {
+      "id": "CBACT04C-constant-214-71",
+      "status": "killed-divergent",
+      "line": 214,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "intcalc-solver-rate-false"
+    },
+    {
+      "id": "CBACT04C-negate-condition-214-72",
+      "status": "killed-divergent",
+      "line": 214,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-215-73",
+      "status": "killed-divergent",
+      "line": 215,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-216-74",
+      "status": "evidence-gap",
+      "line": 216,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-220-75",
+      "status": "evidence-gap",
+      "line": 220,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-224-76",
+      "status": "killed-divergent",
+      "line": 224,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-225-77",
+      "status": "killed-divergent",
+      "line": 225,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-226-78",
+      "status": "killed-divergent",
+      "line": 226,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-227-79",
+      "status": "killed-divergent",
+      "line": 227,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-228-80",
+      "status": "killed-divergent",
+      "line": 228,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-235-81",
+      "status": "evidence-gap",
+      "line": 235,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-235-82",
+      "status": "evidence-gap",
+      "line": 235,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-235-83",
+      "status": "evidence-gap",
+      "line": 235,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-237-84",
+      "status": "killed-failure",
+      "line": 237,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-237-85",
+      "status": "killed-failure",
+      "line": 237,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-238-86",
+      "status": "killed-failure",
+      "line": 238,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-238-87",
+      "status": "killed-failure",
+      "line": 238,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-238-88",
+      "status": "killed-failure",
+      "line": 238,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-240-89",
+      "status": "evidence-gap",
+      "line": 240,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-240-90",
+      "status": "evidence-gap",
+      "line": 240,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-240-91",
+      "status": "evidence-gap",
+      "line": 240,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-242-92",
+      "status": "killed-failure",
+      "line": 242,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-246-93",
+      "status": "killed-divergent",
+      "line": 246,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:236-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-247-94",
+      "status": "killed-divergent",
+      "line": 247,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:236-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-248-95",
+      "status": "killed-divergent",
+      "line": 248,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:236-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-253-96",
+      "status": "evidence-gap",
+      "line": 253,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-253-97",
+      "status": "evidence-gap",
+      "line": 253,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-253-98",
+      "status": "evidence-gap",
+      "line": 253,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-255-99",
+      "status": "killed-failure",
+      "line": 255,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-255-100",
+      "status": "killed-failure",
+      "line": 255,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-256-101",
+      "status": "killed-failure",
+      "line": 256,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-256-102",
+      "status": "killed-failure",
+      "line": 256,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-256-103",
+      "status": "killed-failure",
+      "line": 256,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-258-104",
+      "status": "evidence-gap",
+      "line": 258,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-258-105",
+      "status": "evidence-gap",
+      "line": 258,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-258-106",
+      "status": "evidence-gap",
+      "line": 258,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-260-107",
+      "status": "killed-failure",
+      "line": 260,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-264-108",
+      "status": "killed-divergent",
+      "line": 264,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:254-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-265-109",
+      "status": "killed-divergent",
+      "line": 265,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:254-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-266-110",
+      "status": "killed-divergent",
+      "line": 266,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:254-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-271-111",
+      "status": "evidence-gap",
+      "line": 271,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-271-112",
+      "status": "evidence-gap",
+      "line": 271,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-271-113",
+      "status": "evidence-gap",
+      "line": 271,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-273-114",
+      "status": "killed-failure",
+      "line": 273,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-273-115",
+      "status": "killed-failure",
+      "line": 273,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-274-116",
+      "status": "killed-failure",
+      "line": 274,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-274-117",
+      "status": "killed-failure",
+      "line": 274,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-274-118",
+      "status": "killed-failure",
+      "line": 274,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-276-119",
+      "status": "evidence-gap",
+      "line": 276,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-276-120",
+      "status": "evidence-gap",
+      "line": 276,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-276-121",
+      "status": "evidence-gap",
+      "line": 276,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-278-122",
+      "status": "killed-failure",
+      "line": 278,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-282-123",
+      "status": "killed-divergent",
+      "line": 282,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:272-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-283-124",
+      "status": "killed-divergent",
+      "line": 283,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:272-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-284-125",
+      "status": "killed-divergent",
+      "line": 284,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:272-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-290-126",
+      "status": "evidence-gap",
+      "line": 290,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-290-127",
+      "status": "evidence-gap",
+      "line": 290,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-290-128",
+      "status": "evidence-gap",
+      "line": 290,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-292-129",
+      "status": "killed-failure",
+      "line": 292,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-292-130",
+      "status": "killed-failure",
+      "line": 292,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-293-131",
+      "status": "killed-failure",
+      "line": 293,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-293-132",
+      "status": "killed-failure",
+      "line": 293,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-293-133",
+      "status": "killed-failure",
+      "line": 293,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-295-134",
+      "status": "evidence-gap",
+      "line": 295,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-295-135",
+      "status": "evidence-gap",
+      "line": 295,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-295-136",
+      "status": "evidence-gap",
+      "line": 295,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-297-137",
+      "status": "killed-failure",
+      "line": 297,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-301-138",
+      "status": "killed-divergent",
+      "line": 301,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:291-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-302-139",
+      "status": "killed-divergent",
+      "line": 302,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:291-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-303-140",
+      "status": "killed-divergent",
+      "line": 303,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:291-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-308-141",
+      "status": "evidence-gap",
+      "line": 308,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-308-142",
+      "status": "evidence-gap",
+      "line": 308,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-308-143",
+      "status": "evidence-gap",
+      "line": 308,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-310-144",
+      "status": "killed-failure",
+      "line": 310,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-310-145",
+      "status": "killed-failure",
+      "line": 310,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-311-146",
+      "status": "killed-failure",
+      "line": 311,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-311-147",
+      "status": "killed-failure",
+      "line": 311,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-311-148",
+      "status": "killed-failure",
+      "line": 311,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-313-149",
+      "status": "evidence-gap",
+      "line": 313,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-313-150",
+      "status": "evidence-gap",
+      "line": 313,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-313-151",
+      "status": "evidence-gap",
+      "line": 313,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-315-152",
+      "status": "killed-failure",
+      "line": 315,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-319-153",
+      "status": "killed-divergent",
+      "line": 319,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:309-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-320-154",
+      "status": "killed-divergent",
+      "line": 320,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:309-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-321-155",
+      "status": "killed-divergent",
+      "line": 321,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:309-missing:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-relational-327-156",
+      "status": "killed-failure",
+      "line": 327,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-327-157",
+      "status": "killed-failure",
+      "line": 327,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-328-158",
+      "status": "killed-failure",
+      "line": 328,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-328-159",
+      "status": "killed-failure",
+      "line": 328,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-328-160",
+      "status": "evidence-gap",
+      "line": 328,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-330-161",
+      "status": "killed-failure",
+      "line": 330,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-330-162",
+      "status": "killed-failure",
+      "line": 330,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-331-163",
+      "status": "killed-failure",
+      "line": 331,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-331-164",
+      "status": "killed-failure",
+      "line": 331,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-331-165",
+      "status": "killed-failure",
+      "line": 331,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-333-166",
+      "status": "evidence-gap",
+      "line": 333,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-333-167",
+      "status": "evidence-gap",
+      "line": 333,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-333-168",
+      "status": "killed-divergent",
+      "line": 333,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-negate-condition-336-169",
+      "status": "killed-failure",
+      "line": 336,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-339-170",
+      "status": "killed-failure",
+      "line": 339,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-340-171",
+      "status": "killed-failure",
+      "line": 340,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-343-172",
+      "status": "killed-divergent",
+      "line": 343,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-344-173",
+      "status": "killed-divergent",
+      "line": 344,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-345-174",
+      "status": "killed-divergent",
+      "line": 345,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-delete-ADD-352-175",
+      "status": "killed-divergent",
+      "line": 352,
+      "operator": "delete-ADD",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-353-176",
+      "status": "killed-divergent",
+      "line": 353,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-353-177",
+      "status": "killed-divergent",
+      "line": 353,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-353-178",
+      "status": "killed-divergent",
+      "line": 353,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-354-179",
+      "status": "killed-divergent",
+      "line": 354,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-354-180",
+      "status": "killed-divergent",
+      "line": 354,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-354-181",
+      "status": "killed-divergent",
+      "line": 354,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-REWRITE-356-182",
+      "status": "killed-divergent",
+      "line": 356,
+      "operator": "delete-REWRITE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-relational-357-183",
+      "status": "killed-failure",
+      "line": 357,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-negate-condition-357-184",
+      "status": "killed-failure",
+      "line": 357,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-358-185",
+      "status": "killed-failure",
+      "line": 358,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-constant-358-186",
+      "status": "killed-failure",
+      "line": 358,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-358-187",
+      "status": "evidence-gap",
+      "line": 358,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-360-188",
+      "status": "evidence-gap",
+      "line": 360,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-360-189",
+      "status": "evidence-gap",
+      "line": 360,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-360-190",
+      "status": "killed-failure",
+      "line": 360,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:356-rewrite-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-negate-condition-362-191",
+      "status": "killed-failure",
+      "line": 362,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-366-192",
+      "status": "killed-divergent",
+      "line": 366,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:356-rewrite-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-367-193",
+      "status": "killed-divergent",
+      "line": 367,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:356-rewrite-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-368-194",
+      "status": "killed-failure",
+      "line": 368,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:356-rewrite-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-relational-378-195",
+      "status": "killed-failure",
+      "line": 378,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-378-196",
+      "status": "killed-failure",
+      "line": 378,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-379-197",
+      "status": "killed-failure",
+      "line": 379,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-379-198",
+      "status": "killed-failure",
+      "line": 379,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-379-199",
+      "status": "evidence-gap",
+      "line": 379,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-381-200",
+      "status": "evidence-gap",
+      "line": 381,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-381-201",
+      "status": "evidence-gap",
+      "line": 381,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-381-202",
+      "status": "killed-divergent",
+      "line": 381,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-account"
+    },
+    {
+      "id": "CBACT04C-negate-condition-383-203",
+      "status": "killed-failure",
+      "line": 383,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-387-204",
+      "status": "killed-divergent",
+      "line": 387,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-account"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-388-205",
+      "status": "killed-divergent",
+      "line": 388,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-account"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-389-206",
+      "status": "killed-divergent",
+      "line": 389,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-account"
+    },
+    {
+      "id": "CBACT04C-relational-400-207",
+      "status": "killed-failure",
+      "line": 400,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-400-208",
+      "status": "killed-failure",
+      "line": 400,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-401-209",
+      "status": "killed-failure",
+      "line": 401,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-401-210",
+      "status": "killed-failure",
+      "line": 401,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-401-211",
+      "status": "evidence-gap",
+      "line": 401,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-403-212",
+      "status": "evidence-gap",
+      "line": 403,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-403-213",
+      "status": "evidence-gap",
+      "line": 403,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-403-214",
+      "status": "killed-failure",
+      "line": 403,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-xref"
+    },
+    {
+      "id": "CBACT04C-negate-condition-405-215",
+      "status": "killed-failure",
+      "line": 405,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-409-216",
+      "status": "killed-divergent",
+      "line": 409,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-xref"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-410-217",
+      "status": "killed-divergent",
+      "line": 410,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-xref"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-411-218",
+      "status": "killed-failure",
+      "line": 411,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-xref"
+    },
+    {
+      "id": "CBACT04C-relational-422-219",
+      "status": "killed-failure",
+      "line": 422,
+      "operator": "relational",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:416-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-negate-condition-422-220",
+      "status": "killed-failure",
+      "line": 422,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-423-221",
+      "status": "killed-failure",
+      "line": 423,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-423-222",
+      "status": "killed-failure",
+      "line": 423,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-423-223",
+      "status": "evidence-gap",
+      "line": 423,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-425-224",
+      "status": "evidence-gap",
+      "line": 425,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-425-225",
+      "status": "evidence-gap",
+      "line": 425,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-425-226",
+      "status": "killed-failure",
+      "line": 425,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:416-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-negate-condition-428-227",
+      "status": "killed-failure",
+      "line": 428,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-432-228",
+      "status": "killed-divergent",
+      "line": 432,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:416-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-433-229",
+      "status": "killed-divergent",
+      "line": 433,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:416-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-434-230",
+      "status": "killed-failure",
+      "line": 434,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:416-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-relational-436-231",
+      "status": "killed-failure",
+      "line": 436,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-436-232",
+      "status": "killed-failure",
+      "line": 436,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-437-233",
+      "status": "killed-failure",
+      "line": 437,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-438-234",
+      "status": "killed-divergent",
+      "line": 438,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-relational-446-235",
+      "status": "killed-failure",
+      "line": 446,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-negate-condition-446-236",
+      "status": "killed-failure",
+      "line": 446,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-447-237",
+      "status": "killed-failure",
+      "line": 447,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-447-238",
+      "status": "killed-failure",
+      "line": 447,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-447-239",
+      "status": "evidence-gap",
+      "line": 447,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-449-240",
+      "status": "evidence-gap",
+      "line": 449,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-449-241",
+      "status": "evidence-gap",
+      "line": 449,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-449-242",
+      "status": "killed-failure",
+      "line": 449,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-negate-condition-452-243",
+      "status": "killed-failure",
+      "line": 452,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-default-disclosure"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-456-244",
+      "status": "killed-divergent",
+      "line": 456,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-457-245",
+      "status": "killed-divergent",
+      "line": 457,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-458-246",
+      "status": "killed-failure",
+      "line": 458,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-rounded-464-247",
+      "status": "killed-divergent",
+      "line": 464,
+      "operator": "rounded",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-COMPUTE-464-248",
+      "status": "killed-divergent",
+      "line": 464,
+      "operator": "delete-COMPUTE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-arithmetic-465-249",
+      "status": "killed-divergent",
+      "line": 465,
+      "operator": "arithmetic",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-arithmetic-465-250",
+      "status": "killed-divergent",
+      "line": 465,
+      "operator": "arithmetic",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-465-251",
+      "status": "killed-divergent",
+      "line": 465,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-465-252",
+      "status": "killed-divergent",
+      "line": 465,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-ADD-467-253",
+      "status": "killed-divergent",
+      "line": 467,
+      "operator": "delete-ADD",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-large-rate"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-468-254",
+      "status": "killed-divergent",
+      "line": 468,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-474-255",
+      "status": "killed-divergent",
+      "line": 474,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-474-256",
+      "status": "killed-divergent",
+      "line": 474,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-ADD-474-257",
+      "status": "killed-divergent",
+      "line": 474,
+      "operator": "delete-ADD",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-482-258",
+      "status": "killed-divergent",
+      "line": 482,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-483-259",
+      "status": "killed-divergent",
+      "line": 483,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-484-260",
+      "status": "killed-divergent",
+      "line": 484,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-490-261",
+      "status": "killed-divergent",
+      "line": 490,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-491-262",
+      "status": "killed-divergent",
+      "line": 491,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-491-263",
+      "status": "killed-divergent",
+      "line": 491,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-491-264",
+      "status": "evidence-gap",
+      "line": 491,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-492-265",
+      "status": "evidence-gap",
+      "line": 492,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-493-266",
+      "status": "evidence-gap",
+      "line": 493,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-494-267",
+      "status": "evidence-gap",
+      "line": 494,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-495-268",
+      "status": "killed-divergent",
+      "line": 495,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-496-269",
+      "status": "killed-divergent",
+      "line": 496,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-497-270",
+      "status": "killed-divergent",
+      "line": 497,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-498-271",
+      "status": "killed-divergent",
+      "line": 498,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-WRITE-500-272",
+      "status": "killed-divergent",
+      "line": 500,
+      "operator": "delete-WRITE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-relational-501-273",
+      "status": "killed-failure",
+      "line": 501,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-501-274",
+      "status": "killed-failure",
+      "line": 501,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-502-275",
+      "status": "killed-failure",
+      "line": 502,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-502-276",
+      "status": "killed-failure",
+      "line": 502,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-502-277",
+      "status": "evidence-gap",
+      "line": 502,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-504-278",
+      "status": "evidence-gap",
+      "line": 504,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-504-279",
+      "status": "evidence-gap",
+      "line": 504,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-504-280",
+      "status": "killed-failure",
+      "line": 504,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:500-write-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-negate-condition-507-281",
+      "status": "killed-failure",
+      "line": 507,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-511-282",
+      "status": "killed-divergent",
+      "line": 511,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:500-write-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-512-283",
+      "status": "killed-divergent",
+      "line": 512,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:500-write-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-513-284",
+      "status": "killed-failure",
+      "line": 513,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:500-write-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-523-285",
+      "status": "evidence-gap",
+      "line": 523,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-523-286",
+      "status": "evidence-gap",
+      "line": 523,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-523-287",
+      "status": "evidence-gap",
+      "line": 523,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-525-288",
+      "status": "killed-failure",
+      "line": 525,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-525-289",
+      "status": "killed-failure",
+      "line": 525,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-526-290",
+      "status": "killed-failure",
+      "line": 526,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-526-291",
+      "status": "killed-failure",
+      "line": 526,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-526-292",
+      "status": "killed-failure",
+      "line": 526,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-528-293",
+      "status": "evidence-gap",
+      "line": 528,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-528-294",
+      "status": "evidence-gap",
+      "line": 528,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-528-295",
+      "status": "evidence-gap",
+      "line": 528,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-530-296",
+      "status": "killed-failure",
+      "line": 530,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-534-297",
+      "status": "killed-divergent",
+      "line": 534,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:524-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-535-298",
+      "status": "killed-divergent",
+      "line": 535,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:524-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-536-299",
+      "status": "killed-failure",
+      "line": 536,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:524-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-542-300",
+      "status": "evidence-gap",
+      "line": 542,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-542-301",
+      "status": "evidence-gap",
+      "line": 542,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-542-302",
+      "status": "evidence-gap",
+      "line": 542,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-544-303",
+      "status": "killed-failure",
+      "line": 544,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-544-304",
+      "status": "killed-failure",
+      "line": 544,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-545-305",
+      "status": "killed-failure",
+      "line": 545,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-545-306",
+      "status": "killed-failure",
+      "line": 545,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-545-307",
+      "status": "killed-failure",
+      "line": 545,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-547-308",
+      "status": "evidence-gap",
+      "line": 547,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-547-309",
+      "status": "evidence-gap",
+      "line": 547,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-547-310",
+      "status": "evidence-gap",
+      "line": 547,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-549-311",
+      "status": "killed-failure",
+      "line": 549,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-553-312",
+      "status": "killed-divergent",
+      "line": 553,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:543-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-554-313",
+      "status": "killed-divergent",
+      "line": 554,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:543-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-555-314",
+      "status": "killed-failure",
+      "line": 555,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:543-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-560-315",
+      "status": "evidence-gap",
+      "line": 560,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-560-316",
+      "status": "evidence-gap",
+      "line": 560,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-560-317",
+      "status": "evidence-gap",
+      "line": 560,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-562-318",
+      "status": "killed-failure",
+      "line": 562,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-562-319",
+      "status": "killed-failure",
+      "line": 562,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-563-320",
+      "status": "killed-failure",
+      "line": 563,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-563-321",
+      "status": "killed-failure",
+      "line": 563,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-563-322",
+      "status": "killed-failure",
+      "line": 563,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-565-323",
+      "status": "evidence-gap",
+      "line": 565,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-565-324",
+      "status": "evidence-gap",
+      "line": 565,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-565-325",
+      "status": "evidence-gap",
+      "line": 565,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-567-326",
+      "status": "killed-failure",
+      "line": 567,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-571-327",
+      "status": "killed-divergent",
+      "line": 571,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:561-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-572-328",
+      "status": "killed-divergent",
+      "line": 572,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:561-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-573-329",
+      "status": "killed-failure",
+      "line": 573,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:561-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-578-330",
+      "status": "evidence-gap",
+      "line": 578,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-578-331",
+      "status": "evidence-gap",
+      "line": 578,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-578-332",
+      "status": "evidence-gap",
+      "line": 578,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-580-333",
+      "status": "killed-failure",
+      "line": 580,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-580-334",
+      "status": "killed-failure",
+      "line": 580,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-581-335",
+      "status": "killed-failure",
+      "line": 581,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-581-336",
+      "status": "killed-failure",
+      "line": 581,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-581-337",
+      "status": "killed-failure",
+      "line": 581,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-583-338",
+      "status": "evidence-gap",
+      "line": 583,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-583-339",
+      "status": "evidence-gap",
+      "line": 583,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-583-340",
+      "status": "evidence-gap",
+      "line": 583,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-585-341",
+      "status": "killed-failure",
+      "line": 585,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-589-342",
+      "status": "killed-divergent",
+      "line": 589,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:579-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-590-343",
+      "status": "killed-divergent",
+      "line": 590,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:579-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-591-344",
+      "status": "killed-failure",
+      "line": 591,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:579-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-596-345",
+      "status": "evidence-gap",
+      "line": 596,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-596-346",
+      "status": "evidence-gap",
+      "line": 596,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-596-347",
+      "status": "evidence-gap",
+      "line": 596,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-relational-598-348",
+      "status": "killed-failure",
+      "line": 598,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-negate-condition-598-349",
+      "status": "killed-failure",
+      "line": 598,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-599-350",
+      "status": "killed-failure",
+      "line": 599,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-599-351",
+      "status": "killed-failure",
+      "line": 599,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-599-352",
+      "status": "killed-failure",
+      "line": 599,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-601-353",
+      "status": "evidence-gap",
+      "line": 601,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-601-354",
+      "status": "evidence-gap",
+      "line": 601,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-601-355",
+      "status": "evidence-gap",
+      "line": 601,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-negate-condition-603-356",
+      "status": "killed-failure",
+      "line": 603,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-607-357",
+      "status": "killed-divergent",
+      "line": 607,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:597-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-608-358",
+      "status": "killed-divergent",
+      "line": 608,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:597-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-skip-PERFORM-609-359",
+      "status": "killed-failure",
+      "line": 609,
+      "operator": "skip-PERFORM",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:597-close-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-614-360",
+      "status": "killed-divergent",
+      "line": 614,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-615-361",
+      "status": "killed-divergent",
+      "line": 615,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-616-362",
+      "status": "killed-divergent",
+      "line": 616,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-617-363",
+      "status": "killed-divergent",
+      "line": 617,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-618-364",
+      "status": "killed-divergent",
+      "line": 618,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-619-365",
+      "status": "killed-divergent",
+      "line": 619,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-620-366",
+      "status": "killed-divergent",
+      "line": 620,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-621-367",
+      "status": "killed-divergent",
+      "line": 621,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-622-368",
+      "status": "killed-divergent",
+      "line": 622,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-623-369",
+      "status": "killed-divergent",
+      "line": 623,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-624-370",
+      "status": "killed-divergent",
+      "line": 624,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-constant-630-371",
+      "status": "killed-divergent",
+      "line": 630,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-630-372",
+      "status": "killed-divergent",
+      "line": 630,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-630-373",
+      "status": "evidence-gap",
+      "line": 630,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-631-374",
+      "status": "killed-divergent",
+      "line": 631,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-631-375",
+      "status": "killed-divergent",
+      "line": 631,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-631-376",
+      "status": "killed-divergent",
+      "line": 631,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-negate-condition-636-377",
+      "status": "killed-divergent",
+      "line": 636,
+      "operator": "negate-condition",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-relational-637-378",
+      "status": "killed-divergent",
+      "line": 637,
+      "operator": "relational",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-638-380",
+      "status": "killed-divergent",
+      "line": 638,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-extended-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-638-382",
+      "status": "evidence-gap",
+      "line": 638,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-638-383",
+      "status": "killed-divergent",
+      "line": 638,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-extended-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-constant-639-384",
+      "status": "evidence-gap",
+      "line": 639,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-639-385",
+      "status": "evidence-gap",
+      "line": 639,
+      "operator": "constant",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-639-386",
+      "status": "evidence-gap",
+      "line": 639,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-640-387",
+      "status": "killed-divergent",
+      "line": 640,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-extended-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-641-388",
+      "status": "killed-divergent",
+      "line": 641,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": "fault:326-extended-read-error:intcalc-two-accounts"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-644-389",
+      "status": "evidence-gap",
+      "line": 644,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-constant-645-390",
+      "status": "killed-divergent",
+      "line": 645,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-constant-645-392",
+      "status": "killed-divergent",
+      "line": 645,
+      "operator": "constant",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-delete-MOVE-645-394",
+      "status": "killed-divergent",
+      "line": 645,
+      "operator": "delete-MOVE",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-missing-disclosure"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-5-1",
+      "status": "killed-failure",
+      "line": 5,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-5-2",
+      "status": "killed-failure",
+      "line": 5,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-7-3",
+      "status": "killed-failure",
+      "line": 7,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-7-4",
+      "status": "killed-failure",
+      "line": 7,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-8-5",
+      "status": "killed-failure",
+      "line": 8,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-8-6",
+      "status": "killed-failure",
+      "line": 8,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-9-7",
+      "status": "killed-failure",
+      "line": 9,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-9-8",
+      "status": "killed-failure",
+      "line": 9,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-13-9",
+      "status": "killed-failure",
+      "line": 13,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-13-10",
+      "status": "killed-failure",
+      "line": 13,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-size-14-11",
+      "status": "killed-failure",
+      "line": 14,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT01Y-receiving-scale-14-12",
+      "status": "killed-failure",
+      "line": 14,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "status": "evidence-gap",
+      "line": 6,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "status": "evidence-gap",
+      "line": 6,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "status": "evidence-gap",
+      "line": 7,
+      "operator": "receiving-size",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "status": "evidence-gap",
+      "line": 7,
+      "operator": "receiving-scale",
+      "evidence_gaps": [
+        {
+          "baseline": {
+            "detail": "command refused with rc=66; see /home/runner/work/lightyear-carddemo-modernization/lightyear-carddemo-modernization/work/factory-review-INTCALC/cases/intcalc-duplicate-category/logs/load-TCATBALF",
+            "error_type": "RuntimeError",
+            "status": "execution-refusal"
+          },
+          "case": "intcalc-duplicate-category",
+          "status": "baseline-evidence-gap"
+        }
+      ],
+      "killed_by": null
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-size-6-1",
+      "status": "killed-failure",
+      "line": 6,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-scale-6-2",
+      "status": "killed-failure",
+      "line": 6,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-size-8-3",
+      "status": "killed-failure",
+      "line": 8,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-scale-8-4",
+      "status": "killed-divergent",
+      "line": 8,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-size-9-5",
+      "status": "killed-divergent",
+      "line": 9,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA01Y-receiving-scale-9-6",
+      "status": "killed-divergent",
+      "line": 9,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA02Y-receiving-size-8-1",
+      "status": "killed-divergent",
+      "line": 8,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA02Y-receiving-scale-8-2",
+      "status": "killed-divergent",
+      "line": 8,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA02Y-receiving-size-9-3",
+      "status": "killed-divergent",
+      "line": 9,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA02Y-receiving-scale-9-4",
+      "status": "killed-divergent",
+      "line": 9,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-size-7-1",
+      "status": "killed-divergent",
+      "line": 7,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-scale-7-2",
+      "status": "killed-divergent",
+      "line": 7,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-size-10-3",
+      "status": "killed-divergent",
+      "line": 10,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-scale-10-4",
+      "status": "killed-divergent",
+      "line": 10,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-size-11-5",
+      "status": "killed-divergent",
+      "line": 11,
+      "operator": "receiving-size",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    },
+    {
+      "id": "CBACT04C-CVTRA05Y-receiving-scale-11-6",
+      "status": "killed-divergent",
+      "line": 11,
+      "operator": "receiving-scale",
+      "evidence_gaps": [],
+      "killed_by": "intcalc-pic-0"
+    }
+  ]
+}

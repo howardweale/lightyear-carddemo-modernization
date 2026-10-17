@@ -1,0 +1,1568 @@
+{
+  "already_accepted_ids": [
+    "CBTRN02C-constant-718-445",
+    "CBTRN02C-delete-MOVE-718-447"
+  ],
+  "job": "POSTTRAN",
+  "mutants": [
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51276,
+          "files": {
+            "CBTRN02C.c": "70222cdb9c0efd3d02a97fead390fc8d58f182ce1a3713041fa035a2fb7e8b3f",
+            "CBTRN02C.c.h": "0158492e6fe4632ff6ae17c19c2d489b03f215c4648580a820555e37ff1d7ea6",
+            "CBTRN02C.c.l.h": "57add49b6ba12b529a68e1bbfcd903300a0bca39b8261fa295b265a903520f0a"
+          },
+          "sha256": "4a8415f5a6d234d9049270953270b157365f7a554372f22ba78efb76ff697e11"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "argument": "The receiving account item extends from11 integer bytes to11 integer plus1 fractional byte. READ INTO preserves the first11 bytes; the extra byte comes from following unused filler. Every consumer is a numeric MOVE to an unsigned11-digit integer at394,469,505. The XREF group/filler has no external consumer. In the exact pinned runtime, cob_move_display_to_display invokes store_common_region with source size12/scale1 and target size11/scale0: lf1=-1,lf2=0,hf1=hf2=11,lcf=0,gcf=11,csize=11,p=source,q=target. It copies exactly the first11 bytes without examining the fractional byte. All declared decimal account IDs and any filler byte therefore preserve keys/output IDs. This mutation does not alter the FD/index layout.",
+        "copybook_source_lines": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "depends_on_register": [],
+        "end_line": 7,
+        "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+        "line": 7,
+        "operator": "receiving-scale",
+        "operator_accepted": false,
+        "original": "           05  XREF-ACCT-ID                      PIC 9(11).                     ",
+        "program_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "qualification_credit": false,
+        "replacement": "       05  XREF-ACCT-ID                      PIC 9(11)V9(1).",
+        "review_classification": "equivalent (argued, listed)",
+        "runtime_library_sha256": "67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429",
+        "runtime_source": "libcob/move.c:123-151,334-343",
+        "runtime_source_sha256": "ccad500cf90e8c9781dad38cce0d4d855edf97882ea43b8a000ad063471df10e",
+        "scope": "Exact pinned source, verified host runtime and declared public twin input contract; not native z/OS, malformed databases or returning abend replacements.",
+        "source_path": "CVACT03Y.cpy",
+        "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+        "supporting_source_lines": [
+          383,
+          394,
+          469,
+          505
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "survived",
+      "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+      "mutant": {
+        "end_line": 7,
+        "id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+        "line": 7,
+        "operator": "receiving-scale",
+        "original": "           05  XREF-ACCT-ID                      PIC 9(11).                     ",
+        "replacement": "       05  XREF-ACCT-ID                      PIC 9(11)V9(1).",
+        "source_path": "CVACT03Y.cpy",
+        "source_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "survived",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "3879d0666709ca7d11e60f30451e982b18e5b5679e842875a45b7d9d0c18b5f2",
+        "count": 200,
+        "field_plan": [
+          "customer suffix",
+          "account suffix with coordinated account keys"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+        "name": "xref-suffix",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51155,
+          "files": {
+            "CBTRN02C.c": "ef6871bd0baec22ca8dfd7ed5605efe13267c49227e0bda1526907512b85f3fc",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "274eb81a7174fd0ff2c3d390b0a2ef02c6be4c7ce1285bb7eae655b1bb8b61fa"
+          },
+          "sha256": "0a576ec0886c850568e598e88d5b8f000de9f013ce36baadd627b07f440805df"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The only additional write is padding destination byte2 with a space. Before any display/read of IO-STATUS-04, the unchanged MOVE TWO-BYTES-BINARY TO IO-STATUS-0403 overwrites bytes2-4 completely. Byte1 is unchanged and intermediate operations access only the separate TWO-BYTES item. Thus the extra destination byte is a dead store for every status byte value.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-constant-717-443",
+        "source_line": 717,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          717,
+          718,
+          719,
+          720,
+          721
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-constant-717-443",
+      "mutant": {
+        "end_line": 717,
+        "id": "CBTRN02C-constant-717-443",
+        "line": 717,
+        "operator": "constant",
+        "original": "               MOVE IO-STAT1 TO IO-STATUS-04(1:1)                               ",
+        "replacement": "       MOVE IO-STAT1 TO IO-STATUS-04(1:2)",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "6ed6b27c9d60ce9e2a4cc1bb2d44b6208967f79124416815bacd63c3f9f02d13",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-constant-717-443",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51295,
+          "files": {
+            "CBTRN02C.c": "d0e6cdaa3645affde6cd0b695f8b58f7ebb8676b39efdc8716fe028dff979c1b",
+            "CBTRN02C.c.h": "8ce7d1aecbe75573603a43267373500afe12790aebb2bc38faecc5cf5019ce82",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "64b23d3eb76dfd340c085c53fb423675c980e841d210df5cf5032b01bc476dc3"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The pinned compiler exhaustively tested every256 possible right-byte value: both unsigned initializers+1 and-1 followed by the unchanged right-byte write matched initializer0 (512 equalities). The left byte and final numeric/display value are thus identical for the full byte domain, not merely the declared fault statuses.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-constant-718-445",
+        "source_line": 718,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          718
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-constant-718-445",
+      "mutant": {
+        "end_line": 718,
+        "id": "CBTRN02C-constant-718-445",
+        "line": 718,
+        "operator": "constant",
+        "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+        "replacement": "       MOVE -1        TO TWO-BYTES-BINARY",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "accepted by Howard, AI-assisted stated scope",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "05d1bfd5f887b340f7d1583a66838a0ed3acfd8f5edd89d41faa007ab0c5b189",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-constant-718-445",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51295,
+          "files": {
+            "CBTRN02C.c": "d0e6cdaa3645affde6cd0b695f8b58f7ebb8676b39efdc8716fe028dff979c1b",
+            "CBTRN02C.c.h": "8ce7d1aecbe75573603a43267373500afe12790aebb2bc38faecc5cf5019ce82",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "64b23d3eb76dfd340c085c53fb423675c980e841d210df5cf5032b01bc476dc3"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The pinned compiler exhaustively tested every256 possible right-byte value: both unsigned initializers+1 and-1 followed by the unchanged right-byte write matched initializer0 (512 equalities). The left byte and final numeric/display value are thus identical for the full byte domain, not merely the declared fault statuses.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-constant-718-446",
+        "source_line": 718,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          718
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-constant-718-446",
+      "mutant": {
+        "end_line": 718,
+        "id": "CBTRN02C-constant-718-446",
+        "line": 718,
+        "operator": "constant",
+        "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+        "replacement": "       MOVE 1        TO TWO-BYTES-BINARY",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "05d1bfd5f887b340f7d1583a66838a0ed3acfd8f5edd89d41faa007ab0c5b189",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-constant-718-446",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51035,
+          "files": {
+            "CBTRN02C.c": "f668bf4852b1d0f4f018e1f52b29c500f9f14a12ff535bcb46a9c3a6ac6faeea",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "262e04ee0b04687e163d9cbeb40c55614a29919a44f8d765f00796bd03708069"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "argument": "The only external description read is the whole80-byte WS-VALIDATION-TRAILER copied to a reject record at448. That path is selected only by nonzero validation reason after1500-VALIDATE-TRAN. Every validation failure100/101/102/103 first assigns a complete space-padded literal to the76-byte description. Successful validation never takes the reject path. Later posting failure109 occurs after the reject-versus-post choice; its description is never consumed before the next iteration resets validation. Deleting the initial spaces assignment therefore changes no consumed byte, including multiple records, without assuming initial storage.",
+        "depends_on_register": [
+          {
+            "entry_sha256": "3e594ded713e215d42eab988ea80be98bdaf0dbd1d6856feae54d09b04e05ffa",
+            "id": "REWRITE-109",
+            "required_disposition": "keep-by-default"
+          }
+        ],
+        "end_line": 209,
+        "id": "CBTRN02C-delete-MOVE-209-47",
+        "line": 209,
+        "operator": "delete-MOVE",
+        "operator_accepted": false,
+        "original": "                     MOVE SPACES TO WS-VALIDATION-FAIL-REASON-DESC              ",
+        "program_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "qualification_credit": false,
+        "replacement": "       CONTINUE",
+        "review_classification": "equivalent (argued, listed)",
+        "scope": "Exact pinned source, verified host runtime and declared public twin input contract; not native z/OS, malformed databases or returning abend replacements.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          180,
+          181,
+          182,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          370,
+          372,
+          385,
+          386,
+          387,
+          397,
+          398,
+          399,
+          410,
+          411,
+          412,
+          417,
+          418,
+          419,
+          440,
+          441,
+          442,
+          448,
+          556,
+          557,
+          558
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "survived",
+      "id": "CBTRN02C-delete-MOVE-209-47",
+      "mutant": {
+        "end_line": 209,
+        "id": "CBTRN02C-delete-MOVE-209-47",
+        "line": 209,
+        "operator": "delete-MOVE",
+        "original": "                     MOVE SPACES TO WS-VALIDATION-FAIL-REASON-DESC              ",
+        "replacement": "       CONTINUE",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "survived",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "90e880a0c83100a02e811b8dc2d235d91243f821ab93ef08e3fd3e251c277ddf",
+        "count": 200,
+        "field_plan": [
+          "selected declared I/O fault paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-delete-MOVE-209-47",
+        "name": "status-path",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51024,
+          "files": {
+            "CBTRN02C.c": "2dbbd7915f6082a511574c01173b5922e10f79804e7aaee0d417b0ff547c6733",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "c020ca1de57984df5cf90f643ed1a45eec542b0ceeb67d72360cc58bd7f86b79"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "argument": "The account REWRITE INVALID KEY branch assigns this description after the main loop already selected posting at211/212. The posting paragraph returns from2800, performs2900 and exits. No branch to2500-WRITE-REJECT-REC follows. The next loop either ends or resets the numeric reason before validation; every later rejecting validation overwrites the entire description. Thus the557 assignment has no consumer and is a dead store. The original reason109 failure-propagation gap (observed RC0) remains unresolved and is not repaired or accepted by this argument.",
+        "depends_on_register": [
+          {
+            "entry_sha256": "3e594ded713e215d42eab988ea80be98bdaf0dbd1d6856feae54d09b04e05ffa",
+            "id": "REWRITE-109",
+            "required_disposition": "keep-by-default"
+          }
+        ],
+        "end_line": 558,
+        "id": "CBTRN02C-delete-MOVE-557-314",
+        "line": 557,
+        "operator": "delete-MOVE",
+        "operator_accepted": false,
+        "original": "                MOVE 'ACCOUNT RECORD NOT FOUND'                                 \n                  TO WS-VALIDATION-FAIL-REASON-DESC                             ",
+        "program_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "qualification_credit": false,
+        "replacement": "       CONTINUE",
+        "review_classification": "equivalent (argued, listed)",
+        "scope": "Exact pinned source, verified host runtime and declared public twin input contract; not native z/OS, malformed databases or returning abend replacements.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          208,
+          209,
+          210,
+          211,
+          212,
+          215,
+          219,
+          440,
+          441,
+          442,
+          444,
+          448,
+          554,
+          555,
+          556,
+          557,
+          558,
+          559,
+          560
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "survived",
+      "id": "CBTRN02C-delete-MOVE-557-314",
+      "mutant": {
+        "end_line": 558,
+        "id": "CBTRN02C-delete-MOVE-557-314",
+        "line": 557,
+        "operator": "delete-MOVE",
+        "original": "                MOVE 'ACCOUNT RECORD NOT FOUND'                                 \n                  TO WS-VALIDATION-FAIL-REASON-DESC                             ",
+        "replacement": "       CONTINUE",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "survived",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "91bcf51235f4eb82cad96627d05db131da8dfcadf7dee6184ee979fb2b4a4259",
+        "count": 200,
+        "field_plan": [
+          "selected declared I/O fault paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-delete-MOVE-557-314",
+        "name": "status-path",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "normal": 200
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51041,
+          "files": {
+            "CBTRN02C.c": "cb0ad16249c7dbe3432fc898f647ca8df7bbaf7e8baeddc84a4cd806e7bc9569",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "afa0a21bb8cfdd412193461e3e2ef41d5b0089a46cbd3f0c1f3aa20111c9cf28"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The pinned compiler probe records initial TIMING0. The only assignment is MOVE0 and the only read is the one terminal host CEE3ABD call; that shim stops the process. Deleting this zero assignment cannot expose another value in this one-invocation execution contract.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-delete-MOVE-709-434",
+        "source_line": 709,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          709
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-delete-MOVE-709-434",
+      "mutant": {
+        "end_line": 709,
+        "id": "CBTRN02C-delete-MOVE-709-434",
+        "line": 709,
+        "operator": "delete-MOVE",
+        "original": "           MOVE 0 TO TIMING                                                     ",
+        "replacement": "       CONTINUE",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "c95d02082a81b57e12710dfc368b32e4f5e4d62a26e2df8a7e46c6b20e9efafc",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-delete-MOVE-709-434",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51041,
+          "files": {
+            "CBTRN02C.c": "352234b1a6f20763d2c8decfe5b13492855c3acfa313294f080b8a0335455c0f",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "c7de497af0ef6ce038237bd234df2452295e3befef4de834f5306fa2c774e308"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The pinned compiler probe confirms this unsigned binary item initially has numeric0. Its only other writer overwrites the right byte before every read; the left byte is never changed. The unchanged whole-item zero assignment only re-zeroes that already-zero left byte, while the following right-byte write replaces the other byte. Induction over all calls preserves both final bytes for the entire256-byte input domain.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-delete-MOVE-718-447",
+        "review_classification": "equivalent (host-compiler-scoped)",
+        "source_line": 718,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          718
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-delete-MOVE-718-447",
+      "mutant": {
+        "end_line": 718,
+        "id": "CBTRN02C-delete-MOVE-718-447",
+        "line": 718,
+        "operator": "delete-MOVE",
+        "original": "               MOVE 0        TO TWO-BYTES-BINARY                                ",
+        "replacement": "       CONTINUE",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "accepted by Howard, AI-assisted stated scope",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "ed426ba353ae06cd9dd12161cff1e2f42d9c282e64c455856698c8dbbc70e569",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-delete-MOVE-718-447",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51040,
+          "files": {
+            "CBTRN02C.c": "3155de7b062baf52b4cf696acac036b1a7fb42a5329f83b32cfc9ee62d1fa4bb",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "2f440b418a2f35903a04fd2dcd585e754e43055a750342d6546407059b07177f"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "IO-STATUS-04 consists of PIC9 VALUE0 followed by PIC999 VALUE0, so its initial four bytes are0000. In this numeric-status branch, the following MOVE overwrites bytes3-4. Bytes1-2 remain their initial00. Every call is on an error path immediately followed by the terminating host CEE3ABD shim; there is no subsequent invocation with a previously formatted nonnumeric status. Thus this single deletion preserves all displayed bytes under the recorded one-invocation host contract, not an arbitrary returning abend implementation.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-delete-MOVE-723-450",
+        "source_line": 723,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          138,
+          139,
+          140,
+          723,
+          724,
+          725,
+          711
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-delete-MOVE-723-450",
+      "mutant": {
+        "end_line": 723,
+        "id": "CBTRN02C-delete-MOVE-723-450",
+        "line": 723,
+        "operator": "delete-MOVE",
+        "original": "               MOVE '0000' TO IO-STATUS-04                                      ",
+        "replacement": "       CONTINUE",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "ade11f2b672caae4342f474ba056ae2e6423e73abddfecb5d86f6295b96ed6e7",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-delete-MOVE-723-450",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51316,
+          "files": {
+            "CBTRN02C.c": "a25057c6b2da68f502a8e7858974a7ede03dd18972734df23525fb858141efa7",
+            "CBTRN02C.c.h": "1795b0f7e5514d1e28734ac64e877b04140b49cd24da945565d002b630d6702e",
+            "CBTRN02C.c.l.h": "990f47ed5e3a9c96013dd1a6fb9f5b2011b80774eb899ba5576c7b5e8912c1b7"
+          },
+          "sha256": "190c70fbb01d747e3a8af8041c2012db9334e6cd0a90a3a038293a14b7b5258f"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "APPL-RESULT has only integral0/8/12/16 assignments and numeric0/16 condition-name consumers. Adding one fractional digit preserves all those exactly; it is not displayed, aliased or passed externally. Physical storage change is unobservable to this program.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-scale-142-14",
+        "source_line": 142,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          142
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-scale-142-14",
+      "mutant": {
+        "end_line": 142,
+        "id": "CBTRN02C-receiving-scale-142-14",
+        "line": 142,
+        "operator": "receiving-scale",
+        "original": "       01  APPL-RESULT             PIC S9(9)   COMP.                            ",
+        "replacement": "       01  APPL-RESULT             PIC S9(9)V9(1)   COMP.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "3b467931a82c0b8e7c3b3a3f06af5276d13d320c3d9d99d7835bba3759ee19b5",
+        "count": 200,
+        "field_plan": [
+          "amount/balance in cents",
+          "rate",
+          "credit/debit state",
+          "normal and reject paths"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-scale-142-14",
+        "name": "numeric",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51131,
+          "files": {
+            "CBTRN02C.c": "7c0c27e65db08eb71fb661f204e88f37a19b30dad0987ff9f1c0927462141131",
+            "CBTRN02C.c.h": "b00583967edb7e76350e282c7aab9f7885e20fba3820ef8c3cc5458eaf031fff",
+            "CBTRN02C.c.l.h": "e5192c6bc558aaaee6ab977fcfee3f245bec4dd957e52cd7d9dbdfcb597cf747"
+          },
+          "sha256": "8d6440c2c56ecfcccd66d0e836b83ad80545e901c49550ea9a99a08885de96fd"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "TIMING has a sole integral assignment0 immediately before its only external read. The pinned compiler records the original and scaled binary storage as4/8 bytes; binary zero consists entirely of zero bytes, so the terminating host shim reading its declared4-byte parameter still receives0. No other field offset or raw group is consumed. This is scoped to the recorded host ABI, not native z/OS.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-scale-148-18",
+        "source_line": 148,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          148
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-scale-148-18",
+      "mutant": {
+        "end_line": 148,
+        "id": "CBTRN02C-receiving-scale-148-18",
+        "line": 148,
+        "operator": "receiving-scale",
+        "original": "       01  TIMING                  PIC S9(9) BINARY.                            ",
+        "replacement": "       01  TIMING                  PIC S9(9)V9(1) BINARY.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "a09c68f4183d0b64058224dbc6a6e0639d133e9aa527c02dbd0534bd65d1f4ed",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-scale-148-18",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "f87e8281634a45344e223fb61a3cc07f36e1b431697a17882240ce484774a818",
+            "CBTRN02C.c.h": "824d05c0f3a92f4c76e132ebadebc7593eb772756b620b4fd8364581b83b6b7c",
+            "CBTRN02C.c.l.h": "bc4ac6feb79477e91509e54795cb2f4861c9267bd07813cb2ec5e88ef63bc784"
+          },
+          "sha256": "f3d4bc9c360f9ad1c5eab4f2708f5de465a3c5c1f3caca315f7e88a7b6feaed4"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "DB2-MIL receives an integral two-digit COB-MIL. Adding one fractional picture digit appends a stored zero. The immediately following DB2-REST is assigned four literal zeros. The whole timestamp is moved into fixed26-character transaction fields, so the new27-character group loses only its final zero. Every copied byte remains identical for every two-digit millisecond input; no numeric field offset is consumed externally.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-scale-173-20",
+        "source_line": 173,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          173
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-scale-173-20",
+      "mutant": {
+        "end_line": 173,
+        "id": "CBTRN02C-receiving-scale-173-20",
+        "line": 173,
+        "operator": "receiving-scale",
+        "original": "           06 DB2-MIL                   PIC 9(002).                             ",
+        "replacement": "       06 DB2-MIL                   PIC 9(002)V9(1).",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "6d3fbdb065a4146461719c475161d97a524916b3e169484dff6311c463e7c2b4",
+        "count": 200,
+        "field_plan": [
+          "runtime date/time",
+          "processing parameter date",
+          "multi-record suffix count"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-scale-173-20",
+        "name": "timestamp",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51132,
+          "files": {
+            "CBTRN02C.c": "e41347ad410c7d18515460a56a9a196dcf6f83068993ee8f3ffcb05bfb1445d3",
+            "CBTRN02C.c.h": "546dae95056841b3e5e2e77274e7f06bb85a9ace2f20dcce1e3c2b6d50f31097",
+            "CBTRN02C.c.l.h": "a80f5e78e3dad68d67071b7709d7d40a534663bcd1cd1fa36ef7c86442884ed9"
+          },
+          "sha256": "c5ea1297e9b90470a70e02a7f24302310663564ffa7044ec769a5eee7783a9df"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The accumulator receives only sums/differences of source amounts already quantized to cents, with the same integer range. An added fractional digit or ROUNDED on this exact cent-valued sum cannot change its value or overflow condition. Its consumers are numeric assignment/comparison, never raw storage output.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-scale-187-28",
+        "source_line": 187,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          187
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-scale-187-28",
+      "mutant": {
+        "end_line": 187,
+        "id": "CBTRN02C-receiving-scale-187-28",
+        "line": 187,
+        "operator": "receiving-scale",
+        "original": "           05 WS-TEMP-BAL                   PIC S9(09)V99.                      ",
+        "replacement": "       05 WS-TEMP-BAL                   PIC S9(09)V9(3).",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "e7dd6f575d58f26afbb365bff65c34536cbdcce468e98f0298f5e8a0aabf90ff",
+        "count": 200,
+        "field_plan": [
+          "amount/balance in cents",
+          "rate",
+          "credit/debit state",
+          "normal and reject paths"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-scale-187-28",
+        "name": "numeric",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "793e9e76e3d7bd5f34651c4a34ad89a2013df700694174276a2432f96be79b7a",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "e2e0e71a31ab36e12418855db38e8f49eca4680d400522e9a1da698ba70c011c"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The pinned compiler probe records both unsigned9(4) and9(3) as2-byte storage. Every possible second status byte is exercised (256 values); after the unchanged zero-and-right-byte writes, the largest numeric value is255, fitting both pictures. The same byte representation/offset and every representable use are preserved.",
+        "compiler_storage_semantics": {
+          "initial_defaults": true,
+          "overlay_equalities": 512,
+          "overlay_maximum": 255,
+          "timing_lengths": [
+            4,
+            8
+          ],
+          "unsigned_lengths": [
+            2,
+            2
+          ]
+        },
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-size-134-7",
+        "source_line": 134,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          134
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-size-134-7",
+      "mutant": {
+        "end_line": 134,
+        "id": "CBTRN02C-receiving-size-134-7",
+        "line": 134,
+        "operator": "receiving-size",
+        "original": "       01  TWO-BYTES-BINARY        PIC 9(4) BINARY.                             ",
+        "replacement": "       01  TWO-BYTES-BINARY        PIC 9(3) BINARY.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "677c69c14fe906b580514afd9e180c904991b11fcfc19fbf9a61a31d987e99b4",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-size-134-7",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51131,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "db7f645b54dbac710b7091d40f552738da8071d5cf8ebd1bba815ec6a74989b3",
+            "CBTRN02C.c.l.h": "e51540cc0d28861fa43e298dfce394c88d02e392a9059ea23f6d43261a3dbde0"
+          },
+          "sha256": "d892afe563c8d8402adda3e88d97ecc20058e7bac7b4fcbe05839d6fc9c60bff"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The recorded compiler LENGTH probe confirms this isolated binary item remains in the same GnuCOBOL storage-size class (9/8digits:4bytes;4/3digits:2bytes). All assignments are small integers (APPL-RESULT0/8/12/16, ABCODE999, TIMING0, parameter length10), representable in both pictures. It has no arithmetic range-dependent use or changed external field offset; by-reference ABI and numeric comparisons are preserved. This argument is for the pinned host compiler, not z/OS equivalence.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-size-147-15",
+        "source_line": 147,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          147
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-size-147-15",
+      "mutant": {
+        "end_line": 147,
+        "id": "CBTRN02C-receiving-size-147-15",
+        "line": 147,
+        "operator": "receiving-size",
+        "original": "       01  ABCODE                  PIC S9(9) BINARY.                            ",
+        "replacement": "       01  ABCODE                  PIC S9(8) BINARY.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "3eee3c30b6506937560947aef129eea7e01c2b0ee3bfb4fe32a3bf138d66f875",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-size-147-15",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51131,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "8d4ca1c9e3db20e2c158cefed622021a6cf45f14dedf4de2597dbd6fe94269fe",
+            "CBTRN02C.c.l.h": "e51540cc0d28861fa43e298dfce394c88d02e392a9059ea23f6d43261a3dbde0"
+          },
+          "sha256": "6e728835098aaff29a41afee1a67615a19a5a2bdcf17e572781ccec4e22a9753"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "The recorded compiler LENGTH probe confirms this isolated binary item remains in the same GnuCOBOL storage-size class (9/8digits:4bytes;4/3digits:2bytes). All assignments are small integers (APPL-RESULT0/8/12/16, ABCODE999, TIMING0, parameter length10), representable in both pictures. It has no arithmetic range-dependent use or changed external field offset; by-reference ABI and numeric comparisons are preserved. This argument is for the pinned host compiler, not z/OS equivalence.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-receiving-size-148-17",
+        "source_line": 148,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          148
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-receiving-size-148-17",
+      "mutant": {
+        "end_line": 148,
+        "id": "CBTRN02C-receiving-size-148-17",
+        "line": 148,
+        "operator": "receiving-size",
+        "original": "       01  TIMING                  PIC S9(9) BINARY.                            ",
+        "replacement": "       01  TIMING                  PIC S9(8) BINARY.",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "3eee3c30b6506937560947aef129eea7e01c2b0ee3bfb4fe32a3bf138d66f875",
+        "count": 200,
+        "field_plan": [
+          "selected normal/extended status paths",
+          "amount",
+          "credit/debit state"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-receiving-size-148-17",
+        "name": "storage-display",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "238-missing": 50,
+        "346-extended-read-error": 50,
+        "528-rewrite-error": 50,
+        "normal": 50
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    },
+    {
+      "TCE": {
+        "identical": false,
+        "method": "GnuCOBOL -O2 generated C, exact after only comment and line-directive removal",
+        "mutant": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "4aeb5ce4b0e83ebbaa737cd7e580919f20861d3a97140601aacb75f71cfaca01",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "798ed724e2161cc58371052812611892a5a5f8309b0c13dfb520d0e614d8edfd"
+        },
+        "original": {
+          "bytes": 51061,
+          "files": {
+            "CBTRN02C.c": "509258680ff861c9c44116c8fefc2c0be44ce1f90456fabee966238872ea4bc3",
+            "CBTRN02C.c.h": "c50739dfdbca92a931054507900a9e0c89dc9f3339b09027b157c4ae05064a2d",
+            "CBTRN02C.c.l.h": "e5617568d1f1ede0275d09b762b249450fc85215befae9953c8d6cd29d11f401"
+          },
+          "sha256": "076607bcd27e07386fe48357d06cddf458208e67682c495ff40ec5ee920649f0"
+        },
+        "scope": "pinned-host-compiler only; not z/OS"
+      },
+      "argument": {
+        "approval": "listed-for-operator-review; not a release approval",
+        "argument": "WS-TEMP-BAL sums/differences three two-decimal source amounts. The exact result is cent-valued, so ROUNDED to the existing two-decimal target cannot change the result or integer overflow.",
+        "depends_on_register": [],
+        "kind": "argued",
+        "mutant_id": "CBTRN02C-rounded-403-196",
+        "source_line": 403,
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "supporting_source_lines": [
+          403
+        ]
+      },
+      "class_covered": false,
+      "fresh_status": "equivalent (argued, listed)",
+      "id": "CBTRN02C-rounded-403-196",
+      "mutant": {
+        "end_line": 403,
+        "id": "CBTRN02C-rounded-403-196",
+        "line": 403,
+        "operator": "rounded",
+        "original": "                COMPUTE WS-TEMP-BAL = ACCT-CURR-CYC-CREDIT                      ",
+        "replacement": "       COMPUTE WS-TEMP-BAL ROUNDED = ACCT-CURR-CYC-CREDIT",
+        "source_sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f"
+      },
+      "operator_review": "not individually accepted",
+      "prior_status": "equivalent (argued, listed)",
+      "refuted": false,
+      "status": "equivalent (argued, individual review pending)",
+      "target_plan": {
+        "argument_sha256": "81110dd58ebb23f8dd66e1f64db6727eda22dd1964ce81209c37a282b0667ed1",
+        "count": 200,
+        "field_plan": [
+          "amount/balance in cents",
+          "rate",
+          "credit/debit state",
+          "normal and reject paths"
+        ],
+        "limitation": "Curated targeted engineering attempts; finite cases do not prove equivalence. Internal storage/ABI semantics remain bound to recorded compiler probes, not varied by fabricated input fields.",
+        "mutant_id": "CBTRN02C-rounded-403-196",
+        "name": "numeric",
+        "seed": "Howard-B1-2026-10-11-200"
+      },
+      "targeted_cases": 200,
+      "targeted_counts": {
+        "survived": 200
+      },
+      "targeted_evidence_complete": true,
+      "targeted_evidence_gaps": [],
+      "targeted_fault_case_counts": {
+        "normal": 200
+      },
+      "targeted_limitation": "Finite cases and selected declared status paths only; full internal-byte/ABI arguments retain their separately recorded compiler probes and scope.",
+      "targeted_valid_comparisons": 200
+    }
+  ],
+  "requires_new_review_ids": [
+    "CBTRN02C-CVACT03Y-receiving-scale-7-4",
+    "CBTRN02C-constant-717-443",
+    "CBTRN02C-constant-718-446",
+    "CBTRN02C-delete-MOVE-209-47",
+    "CBTRN02C-delete-MOVE-557-314",
+    "CBTRN02C-delete-MOVE-709-434",
+    "CBTRN02C-delete-MOVE-723-450",
+    "CBTRN02C-receiving-scale-142-14",
+    "CBTRN02C-receiving-scale-148-18",
+    "CBTRN02C-receiving-scale-173-20",
+    "CBTRN02C-receiving-scale-187-28",
+    "CBTRN02C-receiving-size-134-7",
+    "CBTRN02C-receiving-size-147-15",
+    "CBTRN02C-receiving-size-148-17",
+    "CBTRN02C-rounded-403-196"
+  ],
+  "review_class": "AI-assisted operator review pending; not independent attestation"
+}

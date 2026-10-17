@@ -1,0 +1,192 @@
+{
+  "schema": "milestone-merge-reconciliation/1",
+  "recorded_on": "2026-10-15",
+  "integration": {
+    "headRefOid": "a4c7c4880949156d64782e20bd0cdc94caa97113",
+    "mergeCommit": {
+      "oid": "d03dd607624fef39b4dfe6c55ba8014f9df7fc1b"
+    },
+    "mergedAt": "2026-10-16T00:24:08Z",
+    "number": 352,
+    "state": "MERGED",
+    "title": "Integrate approved release safeguards and CardDemo data proof",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/352"
+  },
+  "pull_requests": [
+    {
+      "headRefOid": "ae6fd7bb1f9ad10dd2e9ee7a1f4ce18cf2cb406f",
+      "mergeCommit": {
+        "oid": "f048d92066a35b40760624928f305419f51919e8"
+      },
+      "mergedAt": "2026-10-15T22:43:38Z",
+      "number": 342,
+      "state": "MERGED",
+      "title": "Enforce threshold conditions before signing and consumption",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/342"
+    },
+    {
+      "headRefOid": "a33be1027271cac855968fd4769156d898157e37",
+      "mergeCommit": {
+        "oid": "cf7ea48ac6282d8eb0cde74deb6318f4d358be06"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 343,
+      "state": "MERGED",
+      "title": "Publish fresh INTCALC loader results and explicit release blockers",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/343"
+    },
+    {
+      "headRefOid": "cf7ea48ac6282d8eb0cde74deb6318f4d358be06",
+      "mergeCommit": {
+        "oid": "37fe1310364ad7bbf459df43983a295c6f33aa05"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 344,
+      "state": "MERGED",
+      "title": "Derive Factory status and packets from current evidence",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/344"
+    },
+    {
+      "headRefOid": "d63d1e8d30810d30f5b12bbc36c46df791cbb831",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 345,
+      "state": "MERGED",
+      "title": "Verify signed POSTTRAN approval and image before consuming attempt",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/345"
+    },
+    {
+      "headRefOid": "4e97c85df8381a1c836ab83740f5164121fcf3be",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 346,
+      "state": "MERGED",
+      "title": "Use explicit claim scopes for independent zOS denominator checks",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/346"
+    },
+    {
+      "headRefOid": "03bffac80063881c268d6a23c9c78124787cbe06",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:10Z",
+      "number": 347,
+      "state": "MERGED",
+      "title": "Add pinned-download retries and explicit I/O exception basis",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/347"
+    },
+    {
+      "headRefOid": "0bffaa0cfe41e10c77b512d24d7741a1b8cfed2d",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 348,
+      "state": "MERGED",
+      "title": "Record B06 evidence access block and read-only inventory helper",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/348"
+    },
+    {
+      "headRefOid": "37fe1310364ad7bbf459df43983a295c6f33aa05",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 349,
+      "state": "MERGED",
+      "title": "Propose explicit threshold3 exemptions for source-assigned constants",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/349"
+    },
+    {
+      "headRefOid": "a8405b487d894cf9144b9ce73da2f515f9bdf9e9",
+      "mergeCommit": {
+        "oid": "0c0df6b71bf78035a7ee5aa5aa1f253bdbdfb226"
+      },
+      "mergedAt": "2026-10-16T00:24:11Z",
+      "number": 350,
+      "state": "MERGED",
+      "title": "Generate source-bound CardDemo PostgreSQL data mappings",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/350"
+    },
+    {
+      "headRefOid": "1527dfefe1c460badb47fe9e2df4e815e689857b",
+      "mergeCommit": {
+        "oid": "b42037ff2c272ab9963fecccf8c70e4b94606c16"
+      },
+      "mergedAt": "2026-10-16T00:24:10Z",
+      "number": 351,
+      "state": "MERGED",
+      "title": "Prove CardDemo PostgreSQL data loading and EBCDIC browse order",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/351"
+    }
+  ],
+  "milestones": [
+    {
+      "number": 107,
+      "pull_requests": [
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349
+      ],
+      "sources": [
+        {
+          "path": "docs/factory/intcalc-releasability-2026-10-15.json",
+          "sha256": "bf86e8a4dd3f4b55087789f28023c94668337ffb08a778f680a8e4a109778a4b"
+        },
+        {
+          "path": "docs/factory/claim-scope-decisions-2026-10-15.json",
+          "sha256": "ddff0d41c0870e5e493b57ba95b07a667c855995aba2eeeabf8df815a05413c5"
+        },
+        {
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "path": "docs/factory/posttran-phase2-plan-2026-10-15.json",
+          "sha256": "c0b63bc2281ebc427b74cbaa552b0e531bcff08cd9525464f7009c83f1231795"
+        },
+        {
+          "path": "docs/factory/b06-part6-2026-10-15.json",
+          "sha256": "1d9796b80d5194440fe06c518b7f1ee4c2faa598c6b6d6b58a3be6e14124df36"
+        }
+      ]
+    },
+    {
+      "number": 108,
+      "pull_requests": [
+        350,
+        351
+      ],
+      "sources": [
+        {
+          "path": "docs/modernization/carddemo-slice-1-2026-10-15.json",
+          "sha256": "cad74c2d7b77a23e735fcfb0ff81af34b26d57e9ce85b9aeabc62462f04c8f35"
+        },
+        {
+          "path": "docs/modernization/carddemo-data-2026-10-15/index.json",
+          "sha256": "3a304c6a472d243ffcd74dca7f355751dd1bc9d21f5cde18b200c48a994fe586"
+        },
+        {
+          "path": "docs/factory/carddemo-data-review-evidence-2026-10-15.json",
+          "sha256": "07b5e4dbe16d58ad69d54f43bef63ffcb90f8ac647b1c23fbe22853a9663d218"
+        },
+        {
+          "path": "docs/factory/carddemo-data-review-request-2026-10-15.json",
+          "sha256": "29ccf6aef62d7ea1e13b7258ad375a6e31cb4116a3fee5cf3ff11c27f9904cf9"
+        }
+      ]
+    }
+  ],
+  "signing_performed": false,
+  "release_authorized": false,
+  "native_execution_performed": false
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "carddemo-data-review-evidence/1",
+  "run_id": 38816713103,
+  "code_commit": "aad91e37a4b84d0d92c9cd886bb44d5a0915c036",
+  "summary": {
+    "path": "docs/modernization/carddemo-slice-1-2026-10-15.json",
+    "sha256": "cad74c2d7b77a23e735fcfb0ff81af34b26d57e9ce85b9aeabc62462f04c8f35"
+  },
+  "original_receipt_sha256": "a8927dc6458db80c067c2023e738a1d3c171e2545dcd0c4647f06d1f727508fd",
+  "plan_sha256": "cb58098569284695c72d3ab8e4d82e88e52e85855055b9beba0806684a8a66b1",
+  "upstream_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "covers": [
+    "210 public VSAM records round-tripped byte exactly",
+    "5 file reconciliations",
+    "1560 EBCDIC byte-order browse comparisons",
+    "6 generated IMS segments and one generated traversal stream"
+  ],
+  "does_not_cover": [
+    "public IMS utility unload",
+    "full DL/I compatibility or 40-case replay",
+    "z/OS equivalence",
+    "CICS or web screens",
+    "customer release",
+    "large-receipt durable retention"
+  ],
+  "signed": false,
+  "release_authorized": false
+}

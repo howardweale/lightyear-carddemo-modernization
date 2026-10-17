@@ -1,0 +1,86 @@
+{
+  "schema": "carddemo-data-artifact-index/1",
+  "run_id": 38816713103,
+  "head": "aad91e37a4b84d0d92c9cd886bb44d5a0915c036",
+  "artifact_id": 12011775185,
+  "artifact_zip_digest": "sha256:9405ca64e00ae4a4ec5945117a0102bad4c374cc86031f4583d9e5fee5a542a2",
+  "expires_at": "2027-01-13T22:22:58Z",
+  "files": {
+    "mapping/acctdata.json": {
+      "sha256": "20bc113ed6c919b0087772b54d047d9894a60f1040e9bd7dd5d5db4473cf7256",
+      "bytes": 7373
+    },
+    "mapping/acctdata.sql": {
+      "sha256": "5c1b1080040da63823f77bb6efd7fd51050138ca0df3f99d2866ca823e287ce6",
+      "bytes": 1239
+    },
+    "mapping/carddata.json": {
+      "sha256": "7ca6eb9d95c94112d75c88a93215c59413ec2a99ab6dd010899d01b9f6864bdf",
+      "bytes": 4636
+    },
+    "mapping/carddata.sql": {
+      "sha256": "e98eafecacca7ab5600e9e42d32d5bd70a3aca9dfc4b8d2e7b2b6fbf8ddb0031",
+      "bytes": 834
+    },
+    "mapping/cardxref.json": {
+      "sha256": "2005a37776f72b521de6fa562bd2c244f99a4574b402f6f0460991904b4e94cf",
+      "bytes": 3201
+    },
+    "mapping/cardxref.sql": {
+      "sha256": "2d90744e267142fb3ae1caa44dea8c728340a191dffbf3f4947a633bb66b1242",
+      "bytes": 638
+    },
+    "mapping/custdata.json": {
+      "sha256": "5964c94d107b137fee26e0388c14e50889996d9a98116a7c158a365c01e087c7",
+      "bytes": 10382
+    },
+    "mapping/custdata.sql": {
+      "sha256": "9e27f2c5782fee0e46870882ae3110fead40d6febd650bf49b232581233bc741",
+      "bytes": 1406
+    },
+    "mapping/pautdtl1.json": {
+      "sha256": "94398084407f406d973776e0874eff772d30a37d10dd891bcdc622051b8c3ea2",
+      "bytes": 16004
+    },
+    "mapping/pautdtl1.sql": {
+      "sha256": "2095e223ac0c5049fe4df0f0c8266119f88df9263f0dcba74f95f3230b260e13",
+      "bytes": 2037
+    },
+    "mapping/pautsum0.json": {
+      "sha256": "2a3080b884e78370d453858d062719a6c2796d7f5cd24a8a2cf4a3e0ce2c25e1",
+      "bytes": 10624
+    },
+    "mapping/pautsum0.sql": {
+      "sha256": "de03cdedce0e45e7d7ec66d1488c748a393e25b97ac85ab5fd81fa824cef9764",
+      "bytes": 1404
+    },
+    "mapping/usrsec.json": {
+      "sha256": "bfef480deae4eea90ed774346615bdcfd437c17fc777a2e999630d8b336afd79",
+      "bytes": 3781
+    },
+    "mapping/usrsec.sql": {
+      "sha256": "74dd7d6893e46cbf69e83632f8c4103c3c1fc570ff9281ea1eaf4a756fe5f98f",
+      "bytes": 675
+    },
+    "plan.json": {
+      "sha256": "22ba3b0fd059877e8d112eff3519daa519912347fd2afa0c3b94df33f5110d45",
+      "bytes": 69839
+    },
+    "receipt.json": {
+      "sha256": "a8927dc6458db80c067c2023e738a1d3c171e2545dcd0c4647f06d1f727508fd",
+      "bytes": 1230556
+    },
+    "receipt.md": {
+      "sha256": "2601b0bd8fba1f31e2cacf3c7b244b79cf8dac10a6369eba5577d167c55aa4ee",
+      "bytes": 917
+    },
+    "schema.sql": {
+      "sha256": "c53f6ada4c5dc6fb128d1b1603cde3939cc7aaad7cabdb500a5ae2fc93533b65",
+      "bytes": 8239
+    }
+  },
+  "large_file_retention": {
+    "receipt.json": "staged in ignored work/modernization/carddemo-data-2026-10-15; designated retention-store location pending"
+  },
+  "retention_complete": false
+}

@@ -14,6 +14,7 @@ HISTORY = "docs/factory/howard-decisions-2026-10-11b.json"
 INDEX = "docs/factory/tower-status-input-index.json"
 PUBLIC = "docs/factory/factory-status-public-inputs.json"
 PHASE2_PUBLIC_ROOT = ""
+DELIVERY = "docs/factory/delivery-snapshot-2026-10-17.json"
 
 
 def latest(root):
@@ -38,6 +39,7 @@ def inputs(root=ROOT):
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
@@ -93,6 +95,7 @@ def load(root=ROOT):
     return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,
                 phase2=phase2, evaluated_at=clock, retention=retention,
+                delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
                 threshold3_implemented=(root/'src/lightyear_factory/threshold3.py').is_file())
@@ -115,12 +118,34 @@ def render(model):
         review=projections['INTCALC']
         current.update(as_of=review['prepared_on'],intcalc=review['verdict'],
             rates={scope:dict(raw=review['raw_thresholds'][scope]['kill_rate'],projected=row['kill_rate']) for scope,row in review['projected_thresholds'].items()})
+    delivery = model.get("delivery")
+    if delivery and (
+        not delivery['push_workflows']
+        or any(row['head_sha'] != delivery['main_sha'] or row['status'] != 'completed'
+               or row['conclusion'] != 'success' for row in delivery['push_workflows'] + delivery['protected_checks'])
+        or delivery['successful_check_run_count'] != delivery['check_run_count']
+        or {(row['name'], row['app_id']) for row in delivery['protected_checks']}
+            != {('required-ci', 15368), ('documentation-and-lint', 15368)}
+    ):
+        raise ValueError('delivery-snapshot-not-green')
+    current["delivery"] = delivery
+    snapshot_date = delivery["checked_at"][:10] if delivery else current["as_of"]
     factory = "activated locally (signed-only)" if current["factory_activated"] else "local signed-only activation not recorded"
     policy = "effective" if current["effective_policy"] else "not effective"
-    text = ["# Factory current status — " + current["as_of"], "",
+    text = ["# Factory current status — " + snapshot_date, "",
             f"Factory: {factory}; threshold policy {policy}.", "",
             f"INTCALC business outcomes {current['business']}; I/O {current['io']}; raw mutation kills {current['raw_mutation']}.", "",
             "| Scope | Raw | Projected, pending decisions |", "| --- | --- | --- |"]
+    if delivery:
+        summary = ["## Completed merges and main CI", "",
+            "CI snapshot checked at " + delivery["checked_at"] + ". Evidence measurements below retain their dated scope (" + current["as_of"] + ").", "",
+            "| PR | Merge commit | Merged at (UTC) |", "| --- | --- | --- |"]
+        for row in delivery["merges"]:
+            summary.append(f"| [#{row['number']}]({row['url']}) | `{row['merge']}` | {row['merged_at']} |")
+        summary += ["", f"Main `{delivery['main_sha']}`: all {len(delivery['push_workflows'])} observed push workflows and {delivery['successful_check_run_count']}/{delivery['check_run_count']} check runs completed successfully, including `required-ci` and `documentation-and-lint`.",
+            "[Snapshot and full workflow links](" + Path(DELIVERY).name + ").",
+            delivery["scope"], "", "## INTCALC evidence", ""]
+        text[2:2] = summary
     for scope, row in current["rates"].items():
         text.append(f"| {scope} | {row['raw']} | {row['projected']} |")
     text += ["", "Loader assessments: " + "; ".join(f"{name}: {count}" for name, count in current["loader_domain"]["assessment_counts"].items()) + ".", "",
@@ -140,7 +165,7 @@ def render(model):
     phase2=model.get('phase2')
     if phase2:
         from tools.check_posttran_handoff import timing
-        current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(model['evaluated_at']))}
+        current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(delivery["checked_at"] if delivery else model['evaluated_at']))}
         text+=['','| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |',
                '|---|---|---|---|---:|',
                f"| POSTTRAN | `{phase2['plan_sha256']}` | `{phase2['executable_commit']}` | {phase2['signing_deadline']} | {current['phase2']['days_remaining']} |",
@@ -154,7 +179,15 @@ def render(model):
     text+=['','## CardDemo data slice','','210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.',
            '','## B06 access','',
            'Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.' if model.get('b06',{} ) else 'Current Windows metadata verification is not available in this snapshot.',
-           '','## Draft #341','','The targeted equivalence draft remains separate and unsigned; no new acceptances are imported from it. [Review PR #341](https://github.com/howardweale/lightyear-carddemo-modernization/pull/341).',
+           '','## Equivalence evidence still outstanding','',
+           'The implementation PRs #341, #357 and #358 are merged as recorded above; their merge does not import acceptances or complete the evidence gates.' if delivery else 'Implementation delivery is not recorded in this snapshot; no new acceptances are inferred.',
+           '', 'Resolved now: **8/227**. **185/227 (81.5%)** is conditional on the two pending class signatures, below the 95% target. Fresh E1 repeats reproduce the preserved totals; they do not add resolutions. [E1 evidence and remaining gates](equivalence-scale-2026-10-16/README.md).',
+           '', 'TRANREPT has two compiler identities in 413 sites and zero class matches; generality and reviewer person-minutes remain unmeasured.',
+           '', 'Byte storage support is implemented, but whole-program acceptance remains incomplete: zero unsupported constructs, whole-program control/effects, and 1,000 byte-exact differential inputs per program are still required. Storage inspection alone earns no differential credit.',
+           '', 'E3 equivalence and all-killed-mutant rejection checks, E4 build comparisons and measured speedup, E5 held-out campaigns, and E6 policy approval remain separate gates. E7 residual grouping does not resolve evidence.',
+           '','## Other unfinished work','',
+           'CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.',
+           '', 'The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.',
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",

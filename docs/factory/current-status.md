@@ -1,4 +1,21 @@
-# Factory current status — 2026-10-16
+# Factory current status — 2026-10-17
+
+## Completed merges and main CI
+
+CI snapshot checked at 2026-10-17T13:10:22+00:00. Evidence measurements below retain their dated scope (2026-10-16).
+
+| PR | Merge commit | Merged at (UTC) |
+| --- | --- | --- |
+| [#353](https://github.com/howardweale/lightyear-carddemo-modernization/pull/353) | `62e705d959d34041eb42a20388bbbf06b2425cba` | 2026-10-17T00:25:34Z |
+| [#341](https://github.com/howardweale/lightyear-carddemo-modernization/pull/341) | `0e5ea5f66fe42cd61205fcdce1810f5af0a64539` | 2026-10-17T02:03:57Z |
+| [#357](https://github.com/howardweale/lightyear-carddemo-modernization/pull/357) | `f0ac25c338e96309803655d7e6d09f5b29b4e3c1` | 2026-10-17T03:33:50Z |
+| [#358](https://github.com/howardweale/lightyear-carddemo-modernization/pull/358) | `7bbdac9112143b283ed2ea376797d42a1b86954d` | 2026-10-17T05:01:54Z |
+
+Main `7bbdac9112143b283ed2ea376797d42a1b86954d`: all 21 observed push workflows and 60/60 check runs completed successfully, including `required-ci` and `documentation-and-lint`.
+[Snapshot and full workflow links](delivery-snapshot-2026-10-17.json).
+Observed push workflows on this exact main commit only. Equivalence automation and storage workflows are pull-request/manual workflows; their pre-merge results are separate. This snapshot grants no acceptance, signing, execution, release or z/OS authority.
+
+## INTCALC evidence
 
 Factory: activated locally (signed-only); threshold policy not effective.
 
@@ -60,8 +77,8 @@ zos-facing: 360/390 projected; 30 unresolved.
 
 | Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |
 |---|---|---|---|---:|
-| POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 12.765 |
-Evaluated at 2026-10-16T20:24:45.328626+00:00. Request: [posttran-phase2-authorization-request-2026-10-16.json](posttran-phase2-authorization-request-2026-10-16.json).
+| POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 12.066 |
+Evaluated at 2026-10-17T13:10:22+00:00. Request: [posttran-phase2-authorization-request-2026-10-16.json](posttran-phase2-authorization-request-2026-10-16.json).
 More than five days remain before signing deadline at snapshot time.
 [Operator runbook](posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.
 
@@ -79,9 +96,23 @@ Dated October 14/15 retention statements remain historical; use these manifests 
 
 Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.
 
-## Draft #341
+## Equivalence evidence still outstanding
 
-The targeted equivalence draft remains separate and unsigned; no new acceptances are imported from it. [Review PR #341](https://github.com/howardweale/lightyear-carddemo-modernization/pull/341).
+The implementation PRs #341, #357 and #358 are merged as recorded above; their merge does not import acceptances or complete the evidence gates.
+
+Resolved now: **8/227**. **185/227 (81.5%)** is conditional on the two pending class signatures, below the 95% target. Fresh E1 repeats reproduce the preserved totals; they do not add resolutions. [E1 evidence and remaining gates](equivalence-scale-2026-10-16/README.md).
+
+TRANREPT has two compiler identities in 413 sites and zero class matches; generality and reviewer person-minutes remain unmeasured.
+
+Byte storage support is implemented, but whole-program acceptance remains incomplete: zero unsupported constructs, whole-program control/effects, and 1,000 byte-exact differential inputs per program are still required. Storage inspection alone earns no differential credit.
+
+E3 equivalence and all-killed-mutant rejection checks, E4 build comparisons and measured speedup, E5 held-out campaigns, and E6 policy approval remain separate gates. E7 residual grouping does not resolve evidence.
+
+## Other unfinished work
+
+CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.
+
+The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.
 
 Typed condition support: True. Threshold/3 support: True. Presence of code is not effective policy approval.
 

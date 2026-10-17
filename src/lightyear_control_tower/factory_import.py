@@ -38,6 +38,8 @@ def historical_contract(repository, commit):
 
 
 def import_request(repository, root, contract):
+    from .factory_history_supersessions import reject_historical_supersession
+    reject_historical_supersession(contract)
     # Validate all files before writing any bytes. Fetch only exact public Git blobs.
     from .factory_policy import validate_contract
     validate_contract(contract, repository)

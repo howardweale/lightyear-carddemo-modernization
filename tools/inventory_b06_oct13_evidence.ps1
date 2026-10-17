@@ -5,7 +5,7 @@ $root = Get-Item -LiteralPath $EvidenceRoot
 if (-not $root.PSIsContainer -or ($root.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
     throw 'Evidence root must be an existing regular directory'
 }
-$files = @(Get-ChildItem -LiteralPath $root.FullName -File -Recurse | Sort-Object FullName)
+$files = @(Get-ChildItem -LiteralPath $root.FullName -File -Force -Recurse | Sort-Object FullName)
 $inventory = foreach ($file in $files) {
     if ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked evidence refused' }
     [ordered]@{

@@ -40,7 +40,7 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
             code=code[receive.end():];lines=lines[receive.end():]
         paragraphs[name]=Parser(code,lines,source,name,allowed).parse()
     fields,conditions=declarations(raw,source)
-    for path,data in (lookup,date_work,common,card_work,screen,attribute_copy):
+    for path,data in (lookup,date_work,common,card_work):
         f,c=declarations(data,path);fields.update(f);conditions.update(c)
     # These independent roots contain every overlaid edit operand. Other scalar
     # working fields remain scalar; no manually assigned source offsets exist.
@@ -75,4 +75,4 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
 
     return dict(paragraphs=paragraphs,fields=bound,conditions=flags,storage=storage,
         service=dates['service'],area_offset=area_offset,area_length=commarea['record_length'],
-        limitations=dates['limitations']+['Source validation control flow; screen/database/browser equivalence is a separate gate.'])
+        limitations=dates['limitations']+['Invalid unsigned DISPLAY bytes are retained for source NUMERIC checks and compared in EBCDIC byte order; this deterministic reference assumption needs a native baseline.', 'Source validation control flow; screen/database/browser equivalence is a separate gate.'])

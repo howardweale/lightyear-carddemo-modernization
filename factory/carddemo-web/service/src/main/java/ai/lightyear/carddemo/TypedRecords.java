@@ -21,6 +21,16 @@ public final class TypedRecords {
             }
         }
     }
+    /** Deterministic initialized working-storage baseline for unsuccessful READ INTO.
+     * This is an explicit public reference assumption, not native CICS evidence. */
+    public Map<String,Object> initialized(String table){
+        Map<String,Object> row=new LinkedHashMap<>();
+        for(JsonNode field:bindings.mapping(table).path("fields"))if(!field.path("filler").asBoolean()){
+            String column=field.path("column").asText();
+            row.put(column,field.path("digits").asInt()>0?java.math.BigDecimal.ZERO:Commarea.encode(" ".repeat(field.path("length").asInt())));
+            if(field.path("date").asBoolean())row.put(column+"_raw"," ".repeat(field.path("length").asInt()));
+        }return row;
+    }
     public String text(String table,Map<String,Object> row,String leaf){
         JsonNode f=bindings.field(table,leaf);Object value=row.get(f.path("column").asText()+(f.path("date").asBoolean()?"_raw":""));
         if(value instanceof byte[] bytes)return new String(bytes,Commarea.EBCDIC);

@@ -20,6 +20,6 @@ public class CardDemoApplication {
         return new SessionToken(Base64.getDecoder().decode(key),bindings.hash,Clock.systemUTC(),JsonMapper.builder().build());
     }
     @Bean InteractionEngine engine(Bindings b,SessionToken tokens,DataSource database){
-        return new InteractionEngine(b,tokens,database,Map.of("COSGN00C",new SignonService(b),"COMEN01C",new MenuService(b),"COACTVWC",new AccountViewService(b)));
+        return new InteractionEngine(b,tokens,database,Map.of("COSGN00C",new SignonService(b),"COMEN01C",new MenuService(b),"COACTVWC",new AccountViewService(b),"COACTUPC",new AccountUpdateService(b)));
     }
 }

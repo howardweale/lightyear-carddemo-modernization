@@ -46,7 +46,7 @@ public final class AccountViewService implements TransactionService {
         // Keep this source quirk visible; the independent reference must exercise it.
         Map<String,Map<String,Object>> rows=new LinkedHashMap<>();if(acct!=null)rows.put("acctdata",acct);
         var cust=records.read(db,"custdata",Commarea.encode(customer),false);if(cust!=null)rows.put("custdata",cust);
-        if(acct==null && cust!=null)throw new IllegalStateException("account-view-uninitialized-master-reference-required");
+        if(acct==null && cust!=null)rows.put("acctdata",records.initialized("acctdata")); // Explicit deterministic uninitialized-record reference assumption.
         projection.apply(frame,bindings.root.path("account_view_projection"),rows); // 471–523
         if(cust==null && frame.message.isEmpty()){ // 9400: master data already read is still displayed.
             String reason=message("CustId:")+customer+message(" not found")+message(" in customer master.Resp: ")+response(13)+message(" REAS:")+response(0);

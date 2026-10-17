@@ -1,5 +1,5 @@
 type Field = {name:string|null;data_offset:number;length:number;initial:string;attributes:string[];protected:boolean;hidden:boolean;color:string;highlight:string};
-type Attributes = {protected:boolean;hidden:boolean;color:string;highlight:string;modified?:boolean};
+type Attributes = {protected:boolean;hidden:boolean;color:string;highlight:string;modified?:boolean;intensity?:string;autoskip?:boolean};
 type Frame = {program:string;transaction:string;model:{rows:number;columns:number;fields:Field[]};values:Record<string,string>;attributes:Record<string,Attributes>;cursor:string;message:string;endpoint:string};
 type Reply = {token:string|null;screen:Frame;ended:boolean;sourceHash:string};
 const form=document.querySelector<HTMLFormElement>('#screen')!;
@@ -11,9 +11,9 @@ const colors:Record<string,string>={BLUE:'#6daaff',RED:'#ff7373',GREEN:'#74e59a'
 function style(node:HTMLElement,f:Field,a:Attributes,offset:number,width:number):void {
   const columns=current!.model.columns;
   node.style.left=`${offset%columns}ch`;node.style.top=`${Math.floor(offset/columns)*1.25}em`;node.style.width=`${width}ch`;
-  const color=a.color==='DEFAULT'?(a.protected?(f.attributes.includes('BRT')?'NEUTRAL':'BLUE'):(f.attributes.includes('BRT')?'RED':'GREEN')):a.color;
+  const color=a.color==='DEFAULT'?(a.protected?((a.intensity==='BRIGHT'||(!a.intensity&&f.attributes.includes('BRT')))?'NEUTRAL':'BLUE'):((a.intensity==='BRIGHT'||(!a.intensity&&f.attributes.includes('BRT')))?'RED':'GREEN')):a.color;
   if(!(color in colors))throw new Error('Unsupported screen color');
-  node.style.color=colors[color];if(f.attributes.includes('BRT'))node.classList.add('bright');
+  node.style.color=colors[color];if((a.intensity==='BRIGHT'||(!a.intensity&&f.attributes.includes('BRT'))))node.classList.add('bright');
   if(a.highlight==='UNDERLINE')node.classList.add('underline');
   else if(a.highlight==='REVERSE')node.classList.add('reverse');
   else if(a.highlight==='BLINK')node.classList.add('blink');

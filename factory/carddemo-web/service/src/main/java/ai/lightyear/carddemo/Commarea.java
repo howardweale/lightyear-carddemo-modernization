@@ -57,10 +57,20 @@ public final class Commarea {
         return number.signum()<0?"-"+d:d;
     }
     public void set(String name,String value){write(field(name),value);}
+    boolean unsignedDisplayInteger(String name){JsonNode f=field(name);return f.path("usage").asText().equals("DISPLAY")&&f.path("digits").asInt()>0&&!f.path("signed").asBoolean()&&f.path("scale").asInt()==0;}
+    String displayBytes(String name){JsonNode f=field(name);if(!unsignedDisplayInteger(name))throw new IllegalArgumentException("display-byte-view");return new String(Arrays.copyOfRange(bytes,f.path("offset").asInt(),f.path("offset").asInt()+f.path("length").asInt()),EBCDIC);}
+    void moveDisplayBytes(String name,String value){JsonNode f=field(name);if(!unsignedDisplayInteger(name)||value.length()!=f.path("length").asInt())throw new IllegalArgumentException("display-byte-move-shape");copyBytes(f.path("offset").asInt(),encode(value));}
+
     public void initialize(String name){
-        JsonNode target=field(name);String prefix=target.path("path").asText()+".";
-        List<JsonNode> children=new ArrayList<>();for(JsonNode f:layout.path("fields"))if(f.path("path").asText().startsWith(prefix))children.add(f);
-        if(children.isEmpty()){write(target,target.path("digits").asInt()>0?"0":"");return;}
+        Set<String> prefixes=new HashSet<>();
+        for(JsonNode f:layout.path("fields")){
+            String path=f.path("path").asText();String[] parts=path.split("\\.");
+            for(int i=0;i<parts.length-1;i++)if(parts[i].equals(name))prefixes.add(String.join(".",Arrays.copyOfRange(parts,0,i+1))+".");
+        }
+        if(prefixes.size()>1)throw new IllegalArgumentException("ambiguous-initialize-group");
+        if(prefixes.isEmpty()){JsonNode target=field(name);write(target,target.path("digits").asInt()>0?"0":"");return;}
+        String prefix=prefixes.iterator().next();List<JsonNode> children=new ArrayList<>();
+        for(JsonNode f:layout.path("fields"))if(f.path("path").asText().startsWith(prefix))children.add(f);
         BitSet initialized=new BitSet(bytes.length);
         for(JsonNode f:children){int off=f.path("offset").asInt(),len=f.path("length").asInt();
             if(!f.path("path").asText().contains("FILLER")&&initialized.get(off,off+len).isEmpty())write(f,f.path("digits").asInt()>0?"0":"");

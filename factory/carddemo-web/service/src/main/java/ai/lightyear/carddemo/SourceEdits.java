@@ -81,7 +81,7 @@ public final class SourceEdits {
     }
     private JsonNode field(String name){JsonNode f=model.path("fields").path(name);if(f.isMissingNode())throw new IllegalArgumentException("edit-field:"+name);return f;}
     public String get(String name){JsonNode f=field(name);
-        if(stored.contains(name))return storage.get(name);
+        if(stored.contains(name))return storage.unsignedDisplayInteger(name)?storage.displayBytes(name):storage.get(name);
         if(f.has("alias_of")){String raw=get(f.path("alias_of").asText());
             if(!raw.matches("[0-9]+"))throw new IllegalArgumentException("edit-numeric-alias");return raw;}
         return values.get(name);
@@ -173,7 +173,17 @@ public final class SourceEdits {
             Value a=evaluate(e.path("left")),b=evaluate(e.path("right"));
             String left=a.figurative()?figurative(a.text(),b.text().length()):a.text();
             String right=b.figurative()?figurative(b.text(),left.length()):b.text();int comparison;
-            if(a.numeric()||b.numeric())comparison=new BigDecimal(left).compareTo(new BigDecimal(right));
+            if(a.numeric()||b.numeric()){
+                if(left.matches("[+-]?[0-9]+(?:[.][0-9]+)?")&&right.matches("[+-]?[0-9]+(?:[.][0-9]+)?"))comparison=new BigDecimal(left).compareTo(new BigDecimal(right));
+                else {
+                    // Explicit deterministic reference assumption for invalid DISPLAY bytes:
+                    // retain them until the source's NUMERIC check, compare in EBCDIC order.
+                    int n=Math.max(left.length(),right.length());
+                    if(left.matches("[0-9]+"))left="0".repeat(n-left.length())+left;
+                    if(right.matches("[0-9]+"))right="0".repeat(n-right.length())+right;
+                    comparison=Arrays.compareUnsigned(Commarea.encode(left),Commarea.encode(right));
+                }
+            }
             else{int n=Math.max(left.length(),right.length());comparison=Arrays.compareUnsigned(Commarea.encode(left+" ".repeat(n-left.length())),Commarea.encode(right+" ".repeat(n-right.length())));}
             return switch(e.path("operator").asText()){case "EQUAL","="->comparison==0;case "<>"->comparison!=0;case ">"->comparison>0;case "<"->comparison<0;case ">="->comparison>=0;case "<="->comparison<=0;default->throw new IllegalArgumentException("edit-comparator");};}
         default:throw new IllegalArgumentException("edit-predicate");
@@ -181,6 +191,9 @@ public final class SourceEdits {
     private void assign(JsonNode target,Value value,boolean string){
         if(target.path("op").asText().equals("field")){
             String name=target.path("name").asText();int n=field(name).path("length").asInt();String text=value.figurative()?figurative(value.text(),n):value.text();
+            if(!value.numeric()&&!value.figurative()&&stored.contains(name)&&storage.unsignedDisplayInteger(name)&&!text.matches("[0-9]+")){
+                storage.moveDisplayBytes(name,text);return;
+            }
             if(string){String previous=get(name);int length=Math.min(text.length(),previous.length());text=text.substring(0,length)+previous.substring(length);}
             if(field(name).path("type").asText().equals("edited") && value.numeric())text=ScreenProjection.edited(text,field(name).path("picture").asText());
             put(name,text);return;

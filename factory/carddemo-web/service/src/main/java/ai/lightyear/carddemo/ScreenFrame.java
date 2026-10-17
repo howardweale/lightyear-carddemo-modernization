@@ -13,6 +13,7 @@ public final class ScreenFrame {
     public String message="";
     public String cursor="";
     public String endpoint="";
+    public final List<SourceEdits.Location> trace=new ArrayList<>();
     public ScreenFrame(Bindings bindings,String program){this(bindings,program,java.time.Clock.systemUTC());}
     public ScreenFrame(Bindings bindings,String program,java.time.Clock clock){
         this.program=program;JsonNode screen=bindings.screen(program);transaction=screen.path("transaction").asText();
@@ -28,6 +29,15 @@ public final class ScreenFrame {
             for(JsonNode attr:f.path("attributes"))if(attr.asText().equals("IC"))cursor=name;
         }
         headers(bindings,clock);
+    }
+    public void restore(SessionToken.Terminal terminal){
+        if(terminal==null||!values.keySet().equals(terminal.values().keySet())||!attributes.keySet().equals(terminal.attributes().keySet()))throw new IllegalArgumentException("terminal-layout");
+        for(var entry:terminal.values().entrySet()){
+            if(entry.getValue()==null||entry.getValue().length()!=field(entry.getKey()).path("length").asInt())throw new IllegalArgumentException("terminal-field-length");
+            Commarea.encode(entry.getValue());values.put(entry.getKey(),entry.getValue());
+        }
+        for(var entry:terminal.attributes().entrySet())attributes.put(entry.getKey(),new LinkedHashMap<>(entry.getValue()));
+        cursor=terminal.cursor();message=terminal.message();endpoint=terminal.endpoint();
     }
     private void headers(Bindings b,java.time.Clock clock){
         java.time.ZonedDateTime now=java.time.ZonedDateTime.now(clock);

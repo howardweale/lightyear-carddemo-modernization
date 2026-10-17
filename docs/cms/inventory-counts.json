@@ -1,0 +1,32 @@
+{
+  "cy-2021-esrd-pc-pricer.zip": {
+    "member_files_including_nested": 27
+  },
+  "cy-20212-esrd-main-frame-pricing-programs.zip": {
+    "member_files_including_nested": 34,
+    "source_categories": {
+      "rate-data": 4,
+      "copybook": 7,
+      "program": 21,
+      "documentation": 2
+    }
+  },
+  "files-fy-20215-software-release.zip": {
+    "member_files_including_nested": 50,
+    "source_categories": {
+      "rate-data": 2,
+      "copybook": 8,
+      "documentation": 2,
+      "program": 38
+    }
+  },
+  "inpc21d-inpatient-pps-pc-pricer.zip": {
+    "member_files_including_nested": 13
+  },
+  "ipps-pricer-2027-0-v2-14-1-executable-jar.zip": {
+    "member_files_including_nested": 16669
+  },
+  "ipps-pricer-2027-0-v2-14-1-java-source-code.zip": {
+    "member_files_including_nested": 395
+  }
+}

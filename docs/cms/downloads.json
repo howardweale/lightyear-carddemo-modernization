@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://www.cms.gov/files/zip/cy-2021-esrd-pc-pricer.zip",
+    "size_bytes": 27605367,
+    "sha256": "fdad72c6c8f87b464c29a6062abf3b01b3c766dc031956aa4e5a53df39e8c7cf",
+    "downloaded_utc": "2026-10-16T17:58:50.225824+00:00"
+  },
+  {
+    "url": "https://www.cms.gov/files/zip/cy-20212-esrd-main-frame-pricing-programs.zip",
+    "size_bytes": 479527,
+    "sha256": "eafa667da31e8dfee4595f77bbb07fde67cb6469cc10240d84a9d43296334213",
+    "downloaded_utc": "2026-10-16T17:58:45.847625+00:00"
+  },
+  {
+    "url": "https://www.cms.gov/files/zip/files-fy-20215-software-release.zip",
+    "size_bytes": 1341810,
+    "sha256": "83aeeb51bab7f8410756f57504590d741f8d4c02c3db74bf8cce6b98886bc7af",
+    "downloaded_utc": "2026-10-16T17:59:18.011443+00:00"
+  },
+  {
+    "url": "https://www.cms.gov/files/zip/inpc21d-inpatient-pps-pc-pricer.zip",
+    "size_bytes": 28302764,
+    "sha256": "32de2c8668e886df0f3ef8f9ef00c20de482318e32367b960e1cf965684cc032",
+    "downloaded_utc": "2026-10-16T17:56:26.213279+00:00"
+  },
+  {
+    "url": "https://www.cms.gov/files/zip/ipps-pricer-2027-0-v2-14-1-executable-jar.zip",
+    "size_bytes": 25602465,
+    "sha256": "f101f1ab6c960735e4f044814dfc854cdd6d0da8d6f6dc2b7bc06833fcf01410",
+    "downloaded_utc": "2026-10-16T17:56:40.979027+00:00"
+  },
+  {
+    "url": "https://www.cms.gov/files/zip/ipps-pricer-2027-0-v2-14-1-java-source-code.zip",
+    "size_bytes": 513477,
+    "sha256": "0cec6be936546262a9d11027c90a6c186a87afca832cea85e4904d51cb77530b",
+    "downloaded_utc": "2026-10-16T17:56:42.568085+00:00"
+  }
+]

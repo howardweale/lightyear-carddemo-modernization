@@ -1,0 +1,41 @@
+{
+  "schema": "carddemo-web-scope/1",
+  "upstream_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "authorized_by": "Howard",
+  "scope": "Six screens, two journeys; program IDs and mapsets only. Runtime mappings are generated from pinned source.",
+  "screens": [
+    {
+      "mapset": "COSGN00",
+      "program": "COSGN00C"
+    },
+    {
+      "mapset": "COMEN01",
+      "program": "COMEN01C"
+    },
+    {
+      "mapset": "COACTVW",
+      "program": "COACTVWC"
+    },
+    {
+      "mapset": "COACTUP",
+      "program": "COACTUPC"
+    },
+    {
+      "mapset": "COPAU00",
+      "program": "COPAUS0C"
+    },
+    {
+      "mapset": "COPAU01",
+      "program": "COPAUS1C"
+    }
+  ],
+  "linked_actions": [
+    "COPAUS2C"
+  ],
+  "outside_endpoint": "/not-in-this-slice",
+  "external_intrinsics": [
+    "DFHAID",
+    "DFHBMSCA",
+    "SQLCA"
+  ]
+}

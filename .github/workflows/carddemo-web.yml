@@ -1,0 +1,43 @@
+name: CardDemo web slice
+on:
+  pull_request:
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', '.github/workflows/carddemo-web.yml']
+  push:
+    branches: [main]
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', '.github/workflows/carddemo-web.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  source-and-service-foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Derive six-screen bindings and linked data dependencies
+        env:
+          PYTHONPATH: src:tests
+        run: |
+          python -B -m unittest test_carddemo_web_bindings -v
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compile Java services and test generated bindings and disposable session tokens
+        run: mvn -B -f factory/carddemo-web/service/pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" test
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-web-foundation
+          path: |
+            work/carddemo-web-bindings
+            work/carddemo-web-data
+            factory/carddemo-web/service/target/surefire-reports
+          if-no-files-found: error

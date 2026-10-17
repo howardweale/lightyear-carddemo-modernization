@@ -17,7 +17,10 @@ public class CardDemoApplication {
         return new Bindings(Path.of(path),Path.of(plan),JsonMapper.builder().build());
     }
     @Bean SessionToken sessionToken(Bindings bindings,@Value("${carddemo.session-key}") String key){
-        return new SessionToken(Base64.getDecoder().decode(key),bindings.hash,Clock.systemUTC(),JsonMapper.builder().build());
+        byte[] sessionKey;
+        if(key.isEmpty()){sessionKey=new byte[32];new java.security.SecureRandom().nextBytes(sessionKey);}
+        else sessionKey=Base64.getDecoder().decode(key);
+        return new SessionToken(sessionKey,bindings.hash,Clock.systemUTC(),JsonMapper.builder().build());
     }
     @Bean InteractionEngine engine(Bindings b,SessionToken tokens,DataSource database){
         return new InteractionEngine(b,tokens,database,Map.of("COSGN00C",new SignonService(b),"COMEN01C",new MenuService(b),"COACTVWC",new AccountViewService(b),"COACTUPC",new AccountUpdateService(b),"COPAUS0C",new AuthorizationListService(b),"COPAUS1C",new AuthorizationDetailService(b)));

@@ -25,7 +25,7 @@ class AuthorizationTest {
         row.put(b.field("pautdtl1","PA-APPROVED-AMT").path("column").asText(),new java.math.BigDecimal("12.34"));
         set(b,row,"PA-AUTH-FRAUD","F");set(b,row,"PA-FRAUD-RPT-DATE","10/17/26");
         var frame=new ScreenFrame(b,"COPAUS1C");new AuthorizationRendering(b).detail(frame,row);
-        assertEquals("10/17/26",frame.values.get("AUTHDT"));assertEquals("12:34:56",frame.values.get("AUTHTM"));
+        assertEquals("10/17/26  ",frame.values.get("AUTHDT"));assertEquals("12:34:56  ",frame.values.get("AUTHTM"));
         assertEquals("D",frame.values.get("AUTHRSP"));assertEquals("RED",frame.attributes.get("AUTHRSP").get("color"));
         assertEquals("3100-INVALID CARD",frame.values.get("AUTHRSN").stripTrailing());assertEquals("F-10/17/26",frame.values.get("AUTHFRD").stripTrailing());
         assertEquals("12.34",frame.values.get("AUTHAMT").strip());assertFalse(frame.trace.isEmpty());

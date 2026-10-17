@@ -1,0 +1,18 @@
+FROM python:3.13-slim AS bindings
+WORKDIR /source
+COPY src src
+COPY spec/modernization/carddemo-data spec/modernization/carddemo-data
+COPY spec/modernization/carddemo-screens spec/modernization/carddemo-screens
+ENV PYTHONPATH=/source/src
+RUN python -B -m lightyear_data.carddemo.web_bindings --out /generated/web && python -B -m lightyear_data.carddemo.plan --out /generated/data
+FROM maven:3.9-eclipse-temurin-17 AS java
+WORKDIR /source
+COPY factory/carddemo-web/service service
+RUN mvn -B -f service/pom.xml -DskipTests package
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=java /source/service/target/carddemo-web-slice-0.1.0-SNAPSHOT.jar app.jar
+COPY --from=bindings /generated /generated
+ENV CARDDEMO_BINDINGS=/generated/web/bindings.json CARDDEMO_PLAN=/generated/data/plan.json
+USER 10001
+ENTRYPOINT ["java","-jar","/app/app.jar"]

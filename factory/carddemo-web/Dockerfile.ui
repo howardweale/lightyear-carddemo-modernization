@@ -1,0 +1,10 @@
+FROM node:24-bookworm-slim AS ui
+WORKDIR /ui
+COPY factory/carddemo-web/ui/package*.json ./
+RUN npm ci --ignore-scripts --no-audit --no-fund
+COPY factory/carddemo-web/ui .
+RUN npm run build
+FROM nginx:1.28-alpine
+COPY factory/carddemo-web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=ui /ui/index.html /ui/style.css /usr/share/nginx/html/
+COPY --from=ui /ui/dist /usr/share/nginx/html/dist

@@ -1,0 +1,9 @@
+FROM python:3.13-slim
+WORKDIR /source
+RUN pip install --no-cache-dir psycopg[binary]==3.2.10
+COPY src src
+COPY spec/modernization/carddemo-data spec/modernization/carddemo-data
+COPY spec/modernization/carddemo-screens spec/modernization/carddemo-screens
+COPY factory/carddemo-web/runtime runtime
+ENV PYTHONPATH=/source/src
+ENTRYPOINT ["python","-B","runtime/seed.py"]

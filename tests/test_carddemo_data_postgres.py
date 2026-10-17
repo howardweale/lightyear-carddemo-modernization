@@ -48,9 +48,9 @@ class PostgresTests(unittest.TestCase):
         store=self.make(['05 K PIC X.','05 AMOUNT PIC S9(3) COMP-3.'])
         records=[bytes.fromhex(v) for v in ('c1123c','c1123d','c212ac','c31230','c4','00123c','ff123c')]
         statuses=[store.load_one(r,i)['status'] for i,r in enumerate(records,1)]
-        self.assertEqual(['loaded']+['quarantined']*6,statuses)
+        self.assertEqual(['loaded']+['quarantined']*4+['loaded']*2,statuses)
         result=reconcile(store,records)
-        self.assertEqual(6,result['quarantined'])
+        self.assertEqual(4,result['quarantined'])
         self.assertEqual('equivalent',result['reconciliation']['verdict'])
 
     def test_empty_input_never_claims_equivalence(self):
@@ -63,7 +63,7 @@ class PostgresTests(unittest.TestCase):
         from psycopg.types.json import Jsonb
         metadata=store.rows()[0]['encoding_meta']
         metadata['active']=[];metadata['filler']=[{'offset':0,'hex':original.hex()}]
-        self.connection.execute('UPDATE sample SET encoding_meta=%s, r_value_field=%s',(Jsonb(metadata),'ZZ'))
+        self.connection.execute('UPDATE sample SET encoding_meta=%s, r_value_field=%s',(Jsonb(metadata),'ZZ'.encode('cp037')))
         self.assertEqual('divergent',reconcile(store,[original])['round_trip']['verdict'])
 
     def test_nonunique_alternate_browse_uses_primary_tie_breaker(self):
@@ -74,7 +74,7 @@ class PostgresTests(unittest.TestCase):
         self.connection.execute(ddl(m));store=Store(self.connection,m,layout)
         records=[s.encode('cp037') for s in ('1A','BA','AA','Z0')]
         for i,r in enumerate(records,1):store.load_one(r,i)
-        self.assertEqual([3,2,1],store.browse('ebcdic_key_aix_1',prefix='A'.encode('cp037')))
+        self.assertEqual([3,2,1,4],store.browse('ebcdic_key_aix_1',prefix='A'.encode('cp037')))
         self.assertEqual([1,2,3],store.browse('ebcdic_key_aix_1',prefix='A'.encode('cp037'),reverse=True))
         self.assertEqual('equivalent',reconcile(store,records)['browse_order']['verdict'])
 

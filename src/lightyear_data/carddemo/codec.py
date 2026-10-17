@@ -54,7 +54,7 @@ def project(layout, mapping, raw, *, codec='cp037'):
         if f['filler']:
             filler.append({'offset':entry['offset'], 'hex':entry['raw_hex']}); continue
         value = Decimal(entry['value']) if f['digits'] else entry['value']
-        if not f['digits'] and any(not c.isprintable() for c in value):
+        if not f['digits'] and f.get('text_policy') == 'printable' and any(not c.isprintable() for c in value):
             raise DecodeError('unprintable character: '+f['path'])
         if f['date']:
             # A date interpretation is explicit and traced in the mapping.

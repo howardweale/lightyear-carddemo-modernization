@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -55,6 +57,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -92,6 +96,11 @@ jobs:
           PYTHONPATH: src
           CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
         run: python -B -m lightyear_data.carddemo.volume --count 100000 --out work/carddemo-volume
+      - name: Replay all forty corpus cases through migrated typed adapters with explicit gaps
+        env:
+          PYTHONPATH: src
+          CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
+        run: python -B -m lightyear_data.carddemo.ims_replay --out work/carddemo-volume/typed-ims-replay.json
       - name: Replay the existing 40-case DL/I conformance model into new output
         env:
           PYTHONPATH: src

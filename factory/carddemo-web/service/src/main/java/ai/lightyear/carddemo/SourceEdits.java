@@ -9,22 +9,35 @@ import tools.jackson.databind.JsonNode;
  */
 public final class SourceEdits {
     private final JsonNode model;
+    private final Commarea storage;
+    private final Set<String> stored=new HashSet<>();
+    private static final class Transfer extends RuntimeException{
+        final String label;Transfer(String label){super(null,null,false,false);this.label=label;}
+    }
     private final Map<String,String> values=new LinkedHashMap<>();
     private final List<Location> trace=new ArrayList<>();private int steps;
     public record Location(String source,int line){}
     private record Value(String text,boolean numeric,boolean figurative){}
     public SourceEdits(JsonNode model){
         this.model=model;
-        for(var entry:model.path("fields").properties())values.put(entry.getKey(),entry.getValue().path("initial").asText());
+        storage=model.path("storage").isObject()?new Commarea(model.path("storage"),null):null;
+        if(storage!=null)for(JsonNode field:model.path("storage").path("fields")){
+            String path=field.path("path").asText();stored.add(path.substring(path.lastIndexOf('.')+1));}
+        for(var entry:model.path("fields").properties())if(!entry.getValue().has("alias_of"))put(entry.getKey(),entry.getValue().path("initial").asText());
         setCondition("INPUT-OK");setCondition("WS-RETURN-MSG-OFF");
     }
     private JsonNode field(String name){JsonNode f=model.path("fields").path(name);if(f.isMissingNode())throw new IllegalArgumentException("edit-field:"+name);return f;}
     public String get(String name){JsonNode f=field(name);
+        if(stored.contains(name))return storage.get(name);
         if(f.has("alias_of")){String raw=get(f.path("alias_of").asText());
             if(!raw.matches("[0-9]+"))throw new IllegalArgumentException("edit-numeric-alias");return raw;}
         return values.get(name);
     }
     public void put(String name,String value){JsonNode f=field(name);
+        if(stored.contains(name)){
+            if(f.path("type").asText().equals("text")){int n=f.path("length").asInt();value=(value+" ".repeat(n)).substring(0,n);}
+            storage.set(name,value);return;
+        }
         if(f.path("type").asText().equals("number")){
             BigDecimal number=new BigDecimal(value);if(number.scale()>0&&number.stripTrailingZeros().scale()>0)throw new IllegalArgumentException("edit-integral-field");
             String digits=number.toBigIntegerExact().toString();
@@ -113,7 +126,8 @@ public final class SourceEdits {
             put(name,old.substring(0,start)+text+old.substring(start+n));return;
         }throw new IllegalArgumentException("edit-assignment-target");
     }
-    private boolean execute(JsonNode statements){for(JsonNode statement:statements){visit(statement);switch(statement.path("op").asText()){
+    private boolean execute(JsonNode statements){return execute(statements,0);}
+    private boolean execute(JsonNode statements,int start){for(int i=start;i<statements.size();i++){JsonNode statement=statements.get(i);visit(statement);switch(statement.path("op").asText()){
         case "if":if(execute(statement.path(test(statement.path("test"))?"yes":"no")))return true;break;
         case "set":setCondition(statement.path("name").asText());break;
         case "move":{Value value=evaluate(statement.path("value"));for(JsonNode target:statement.path("targets"))assign(target,value,false);break;}
@@ -123,12 +137,19 @@ public final class SourceEdits {
             for(char c:text.toCharArray()){int index=before.indexOf(c);converted.append(index<0?c:after.charAt(index));}
             assign(target,new Value(converted.toString(),false,false),false);break;}
         case "perform":run(statement.path("paragraph").asText());break;
+        case "jump":throw new Transfer(statement.path("label").asText());
+        case "label":break;
         case "return":return true;
         case "continue":break;
         default:throw new IllegalArgumentException("edit-statement");
     }}return false;}
     public void run(String paragraph){JsonNode statements=model.path("paragraphs").path(paragraph);
         if(statements.isMissingNode())throw new IllegalArgumentException("untranslated-edit-paragraph:"+paragraph);
-        execute(statements);
+        Map<String,Integer> labels=new HashMap<>();for(int i=0;i<statements.size();i++){
+            JsonNode s=statements.get(i);if(s.path("op").asText().equals("label")&&labels.put(s.path("name").asText(),i)!=null)throw new IllegalArgumentException("duplicate-edit-label");}
+        int start=0;
+        while(true){try{execute(statements,start);return;}catch(Transfer transfer){
+            Integer target=labels.get(transfer.label);if(target==null)throw new IllegalArgumentException("edit-transfer-outside-paragraph");start=target;
+        }}
     }
 }

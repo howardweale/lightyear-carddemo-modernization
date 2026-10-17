@@ -155,7 +155,7 @@ class WebBindingsTests(unittest.TestCase):
         raw=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
         path='app/cpy/CSLKPCDY.cpy';lookup=(ROOT/'upstream'/path).read_bytes()
         model=edits(raw,'app/cbl/COACTUPC.cbl',(path,lookup))
-        self.assertEqual(11,len(model['paragraphs']))
+        self.assertEqual(12,len(model['paragraphs']))
         self.assertEqual([dict(lower='300',upper='850')],model['conditions']['FICO-RANGE-IS-VALID']['ranges'])
         self.assertEqual('ACUP-NEW-CUST-FICO-SCORE-X',model['fields']['ACUP-NEW-CUST-FICO-SCORE']['alias_of'])
         self.assertIn("'CA94'",model['conditions']['VALID-US-STATE-ZIP-CD2-COMBO']['values'])
@@ -172,3 +172,15 @@ class WebBindingsTests(unittest.TestCase):
         self.assertEqual(2,sum(x['op']=='perform' for x in outer['yes']))
         self.assertEqual(1,sum(x['op']=='perform' for x in body))
         self.assertEqual([dict(lower='900',upper='999')],model['conditions']['INVALID-SSN-PART1']['ranges'])
+
+    def test_phone_storage_and_internal_transfers_come_from_source(self):
+        model=build(ROOT)['account_update']['generic_edits']
+        fields={f['path'].split('.')[-1]:f for f in model['storage']['fields']}
+        text=fields['WS-EDIT-US-PHONE-NUMA'];numeric=fields['WS-EDIT-US-PHONE-NUMA-N']
+        self.assertEqual(text['offset'],numeric['offset'])
+        self.assertEqual(3,numeric['length'])
+        flags=fields['WS-EDIT-US-PHONE-NUM-FLGS']
+        self.assertEqual(3,flags['length'])
+        self.assertEqual(flags['offset'],fields['WS-EDIT-US-PHONEA-FLG']['offset'])
+        labels={x['name'] for x in model['paragraphs']['1260-EDIT-US-PHONE-NUM'] if x['op']=='label'}
+        self.assertEqual({'EDIT-AREA-CODE','EDIT-US-PHONE-PREFIX','EDIT-US-PHONE-LINENUM','EDIT-US-PHONE-EXIT'},labels)

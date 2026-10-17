@@ -75,4 +75,18 @@ class SourceEditsTest {
         }
     }
 
+    @Test void phoneUsesOverlaidStorageAndRetainsTheRepeatedAreaCodeCondition()throws Exception{
+        var valid=edits();valid.put("WS-EDIT-VARIABLE-NAME","Phone Number 1");valid.put("WS-EDIT-US-PHONE-NUM","(415)555-1234");
+        valid.run("1260-EDIT-US-PHONE-NUM");assertTrue(valid.condition("INPUT-OK"));assertTrue(valid.condition("WS-EDIT-US-PHONE-IS-VALID"));
+        assertEquals("415",valid.get("WS-EDIT-US-PHONE-NUMA-N"));
+        var quirk=edits();quirk.put("WS-EDIT-US-PHONE-NUM","(   )   -9999");quirk.run("1260-EDIT-US-PHONE-NUM");
+        // Source repeats NUMA SPACES in the final optional-phone predicate.
+        assertTrue(quirk.condition("INPUT-OK"));assertTrue(quirk.condition("WS-EDIT-US-PHONE-IS-VALID"));
+        var invalid=edits();invalid.put("WS-EDIT-VARIABLE-NAME","Phone Number 1");invalid.put("WS-EDIT-US-PHONE-NUM","(000)000-0000");
+        invalid.run("1260-EDIT-US-PHONE-NUM");assertTrue(invalid.condition("INPUT-ERROR"));
+        assertTrue(invalid.condition("FLG-EDIT-US-PHONEA-NOT-OK"));assertTrue(invalid.condition("FLG-EDIT-US-PHONEB-NOT-OK"));assertTrue(invalid.condition("FLG-EDIT-US-PHONEC-NOT-OK"));
+        assertEquals("Phone Number 1: Area code cannot be zero",invalid.get("WS-RETURN-MSG").stripTrailing());
+        assertEquals("000",invalid.get("WS-EDIT-US-PHONE-NUM-FLGS"));
+    }
+
 }

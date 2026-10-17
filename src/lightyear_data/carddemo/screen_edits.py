@@ -15,6 +15,7 @@ TOKEN=re.compile(r"\s+|,|'(?:[^']|'')*'|[A-Z][A-Z0-9-]*|[0-9]+|>=|<=|<>|[().:=<>
 class Parser:
     def __init__(self,code,lines,source,name):
         self.tokens=[];at=0;self.source=source;self.name=name;self.pos=0
+        self.labels=set(re.findall(r'^\s*([A-Z][A-Z0-9-]*)\.\s*$',code,re.M))
         for m in TOKEN.finditer(code):
             if m.start()!=at:raise ValueError('unsupported edit token: '+code[at:m.start()])
             at=m.end()
@@ -74,7 +75,8 @@ class Parser:
         result=[]
         while self.peek() and self.peek() not in ('ELSE','END-IF','.'):
             origin=self.origin();verb=self.take()
-            if verb=='IF':
+            if verb in self.labels and self.peek()=='.':node=dict(op='label',name=verb)
+            elif verb=='IF':
                 test=self.condition();yes=self.block();no=[]
                 if self.peek()=='ELSE':self.take();no=self.block()
                 if self.peek()=='END-IF':self.take()
@@ -102,8 +104,9 @@ class Parser:
                 node=dict(op='perform',paragraph=label)
             elif verb=='GO':
                 self.take('TO');label=self.take()
-                if label!=self.name+'-EXIT':raise ValueError('unsupported edit transfer: '+label)
-                node=dict(op='return')
+                if label==self.name+'-EXIT':node=dict(op='return')
+                elif label in self.labels:node=dict(op='jump',label=label)
+                else:raise ValueError('unsupported edit transfer: '+label)
             elif verb in ('CONTINUE','EXIT'):node=dict(op='continue')
             else:raise ValueError('unsupported edit verb: '+verb)
             result.append(dict(**node,**origin))
@@ -130,16 +133,18 @@ def declarations(raw,source):
         parent=name
         while stack and stack[-1][0]>=level:stack.pop()
         ancestors=[n for _,n in stack];stack.append((level,name))
-        pic=re.search(r'\bPIC\s+(S?9|X)(?:\((\d+)\))?(?![A-Z0-9V])',body)
+        pic=re.search(r'\bPIC\s+(S?9(?:\(\d+\)|9*)|X(?:\(\d+\)|X*))(?=\s|$)',body)
+        repeat=re.search(r'\((\d+)\)',pic[1]) if pic else None
+        width=(int(repeat[1]) if repeat else len(pic[1].lstrip('S'))) if pic else None
         value=re.search(r"\bVALUE\s+('(?:[^']|'')*'|SPACES?|LOW-VALUES?|ZERO(?:S|ES)?|\d+)",body)
         fields[name]=dict(type=('number' if pic and '9' in pic[1] else 'text') if pic else 'group',
-            length=int(pic[2] or 1) if pic else None,value=value[1] if value else None,
+            length=width,value=value[1] if value else None,
             ancestors=ancestors,body=body,**origin)
     return fields,conditions
 
 def build(raw,source,lookup=None):
     paragraphs={}
-    names=PARAGRAPHS+('1265-EDIT-US-SSN','1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
+    names=PARAGRAPHS+('1260-EDIT-US-PHONE-NUM','1265-EDIT-US-SSN','1270-EDIT-US-STATE-CD','1275-EDIT-FICO-SCORE','1280-EDIT-US-STATE-ZIP-CD') if lookup else PARAGRAPHS
     for name in names:
         code,lines=paragraph(raw,source,name);paragraphs[name]=Parser(code,lines,source,name).parse()
     fields,conditions=declarations(raw,source)
@@ -163,7 +168,7 @@ def build(raw,source,lookup=None):
     # storage is already referenced; no unseen state or new table is invented.
     flags.update(name for name,c in conditions.items() if c['parent'] in needed)
     bound_conditions={}
-    for name in flags:
+    for name in sorted(flags):
         c=conditions.get(name)
         if not c or not c['parent']:raise ValueError('edit condition absent: '+name)
         tokens=[];position=0
@@ -209,5 +214,27 @@ def build(raw,source,lookup=None):
     for item in list(bound_fields.values()):
         if 'alias_of' in item:
             name=item['alias_of'];bound_fields.setdefault(name,initial(name))
-    return dict(paragraphs=paragraphs,fields=bound_fields,conditions=bound_conditions,
-        limitations=['Generic edits and optional source state/ZIP/FICO edits only; date, money, phone and screen control-flow proof remain pending.'])
+    storage=None
+    if lookup:
+        # Use the actual fixed-format group, including FILLER and REDEFINES.
+        # Independent numeric variables would break the source phone flags and
+        # numeric views. The existing copybook compiler supplies byte offsets.
+        from .schema import copybook
+        code,lines=active(raw,source)
+        begin=re.search(r'\b05\s+WS-GENERIC-EDITS\.',code)
+        end=re.search(r'\b05\s+',code[begin.end():])
+        first=lines[begin.start()];last=lines[begin.end()+end.start()]
+        physical=raw.decode().splitlines()[first-1:last-1]
+        physical[0]=re.sub(r'\b05\b','01',physical[0],count=1)
+        layout,_=copybook('\n'*(first-1)+'\n'.join(physical)+'\n',source)
+        storage=layout.manifest()
+        for name in bound_fields:
+            if fields[name]['type']!='group' or 'WS-GENERIC-EDITS' not in fields[name]['ancestors']:continue
+            prefix='WS-GENERIC-EDITS.'+name+'.'
+            children=[f for f in storage['fields'] if f['path'].startswith(prefix)]
+            if not children:raise ValueError('edit storage group absent: '+name)
+            start=min(f['offset'] for f in children);finish=max(f['offset']+f['length'] for f in children)
+            storage['fields'].append(dict(path='WS-GENERIC-EDITS.'+name,offset=start,length=finish-start,
+                digits=0,scale=0,signed=False,usage='DISPLAY',sign='TRAILING',separate=False,line=fields[name]['line']))
+    return dict(paragraphs=paragraphs,fields=bound_fields,conditions=bound_conditions,storage=storage,
+        limitations=['Generic, phone, SSN and source state/ZIP/FICO edits only; date, money and screen control-flow proof remain pending.'])

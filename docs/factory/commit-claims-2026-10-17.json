@@ -1,5 +1,22 @@
 {
   "schema": "record-commit-claims/1",
   "policy_start": "2026-10-17",
-  "claims": []
+  "claims": [
+    {
+      "record": "docs/factory/current-status.json",
+      "reference": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
+      "commit": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
+      "role": "source",
+      "source_path": "src/lightyear_data/carddemo/volume.py",
+      "source_sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
+    },
+    {
+      "record": "docs/factory/current-status.json",
+      "reference": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
+      "commit": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
+      "role": "source",
+      "source_path": "src/lightyear_data/carddemo/volume.py",
+      "source_sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
+    }
+  ]
 }

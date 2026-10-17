@@ -15,6 +15,7 @@ import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
+from tools.cms.f0_policy import compile_outcome, diagnostic_metadata, require_compile, require_java
 
 
 def save(path, value):
@@ -29,6 +30,7 @@ def main():
     parser.add_argument("--compile", action="store_true")
     parser.add_argument("--java", action="store_true")
     parser.add_argument("--claims", type=Path)
+    parser.add_argument("--expected-failures", type=Path, default=Path("docs/cms/f0-known-compile-limitations.json"))
     args = parser.parse_args()
     root = args.output.resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -47,12 +49,14 @@ def main():
             raise ValueError("Pinned download verification failed: " + name)
         packages[name] = dest
     if args.compile:
-        compile_probe(root, packages)
+        policy = json.loads(args.expected_failures.read_bytes())
+        if policy.get("schema") != "cms-f0-known-compile-limitations/1" or not policy.get("program_inventory"):raise ValueError("unbound compile inventory")
+        compile_probe(root, packages, policy["expected_failures"], policy["program_inventory"])
     if args.java:
         java_probe(root, packages, args.claims)
 
 
-def compile_probe(root, packages):
+def compile_probe(root, packages, expected=(), inventory=None):
     version = subprocess.check_output(["cobc", "-V"], text=True)
     if "3.1.2" not in version.splitlines()[0]:
         raise ValueError("Expected pinned GnuCOBOL 3.1.2")
@@ -84,13 +88,16 @@ def compile_probe(root, packages):
                 log = root / "compile-logs" / (package + "-" + name + "-" + dialect + ".txt")
                 log.parent.mkdir(exist_ok=True)
                 log.write_text(result.stdout + result.stderr, encoding="utf-8")
-                rows.append({"package": package, "program": name, "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "dialect": dialect, "returncode": result.returncode, "elapsed_seconds": round(time.monotonic()-start, 3), "calls": calls, "missing_static_calls": sorted(set(calls)-set(modules)), "copies": copies, "missing_copybooks": [n for n in copies if not (src/n).exists()], "log": str(log.relative_to(root)), "log_sha256": hashlib.sha256(log.read_bytes()).hexdigest(), "diagnostics": result.stderr})
+                rows.append({"package": package, "program": name, "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "dialect": dialect, "returncode": result.returncode, "elapsed_seconds": round(time.monotonic()-start, 3), "calls": calls, "missing_static_calls": sorted(set(calls)-set(modules)), "copies": copies, "missing_copybooks": [n for n in copies if not (src/n).exists()], "log": str(log.relative_to(root)), "log_sha256": hashlib.sha256(log.read_bytes()).hexdigest(), "diagnostic_metadata": diagnostic_metadata(result.stdout + result.stderr, active.splitlines())})
                 if result.returncode == 0:
                     break
-        save(root / "compile-results.json", {"compiler": version, "results": rows, "source_modified": False})
+    outcome = compile_outcome(rows, expected, inventory)
+    save(root / "compile-results.json", {"compiler": version, "results": rows, "source_modified": False, "outcome": outcome})
+    require_compile(outcome)
 
 
 def java_probe(root, packages, claims_path=None):
+    claims_required = claims_path is not None or (root / "generated-claims.json").exists()
     # Refuse occupied ports; never send synthetic requests to another service.
     for port in (18771, 18772):
         with socket.socket() as probe:
@@ -143,7 +150,9 @@ def java_probe(root, packages, claims_path=None):
                 process.wait(timeout=5)
             result["owned_process_stopped"] = process.poll() is not None
             result["elapsed_seconds"] = round(time.monotonic()-start, 3)
+            require_java(result, claims_required)
             save(root / "java-results.json", result)
+    if not result["complete"]:raise SystemExit("cms-f0-java-incomplete")
 
 
 if __name__ == "__main__":

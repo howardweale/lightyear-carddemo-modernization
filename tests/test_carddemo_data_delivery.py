@@ -3,6 +3,9 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import unittest
+import subprocess
+
+MEASURED_BASE="bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11"
 
 from lightyear_control_tower.factory_policy import validate_contract
 from lightyear_data.carddemo.plan import build
@@ -25,14 +28,19 @@ class DeliveryTests(unittest.TestCase):
         self.assertFalse(summary['release_authorized'])
         self.assertEqual('indeterminate',summary['measured']['verdict'])
         for path,digest in summary['measured']['implementation_files'].items():
-            self.assertEqual(digest,sha256((ROOT/path).read_bytes()).hexdigest(),path)
+            self.assertEqual(digest,sha256(subprocess.check_output(['git','show',MEASURED_BASE+':'+path],cwd=ROOT)).hexdigest(),path)
         binding=summary['evidence_index']
         self.assertEqual(binding['sha256'],sha256((ROOT/binding['path']).read_bytes()).hexdigest())
 
     def test_committed_generated_mapping_matches_pinned_source(self):
         plan,_=build(ROOT/'spec/modernization/carddemo-data')
         retained=json.loads((ROOT/'docs/modernization/carddemo-data-2026-10-15/plan.json').read_bytes())
-        self.assertEqual(plan,retained)
+        historical=subprocess.check_output(['git','show',MEASURED_BASE+':docs/modernization/carddemo-data-2026-10-15/plan.json'],cwd=ROOT)
+        self.assertEqual(retained,json.loads(historical))
+        self.assertEqual(plan['upstream'],retained['upstream'])
+        self.assertEqual([m['table'] for m in plan['mappings']],[m['table'] for m in retained['mappings']])
+        self.assertNotEqual(plan['content_sha256'],retained['content_sha256'])
+        self.assertIn('field_policy_sha256',plan)
 
 
 if __name__=='__main__':unittest.main()

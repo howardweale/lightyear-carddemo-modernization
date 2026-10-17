@@ -35,7 +35,7 @@ jobs:
         env:
           PYTHONPATH: src:tests
         run: |
-          python -B -m unittest test_carddemo_web_bindings -v
+          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference -v
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
       - uses: actions/setup-java@v5

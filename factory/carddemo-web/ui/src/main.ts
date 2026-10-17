@@ -1,3 +1,4 @@
+export {}; // Keep browser declarations in module scope.
 type Field = {name:string|null;data_offset:number;length:number;initial:string;attributes:string[];protected:boolean;hidden:boolean;color:string;highlight:string};
 type Attributes = {protected:boolean;hidden:boolean;color:string;highlight:string;modified?:boolean;intensity?:string;autoskip?:boolean};
 type Frame = {program:string;transaction:string;model:{rows:number;columns:number;fields:Field[]};values:Record<string,string>;attributes:Record<string,Attributes>;cursor:string;message:string;endpoint:string};

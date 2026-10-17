@@ -86,7 +86,7 @@ def copybook(text, source, *, segment=None):
     return layout, int(wrapped)
 
 
-def mapping(name, layout, source, definitions, line_shift=0):
+def mapping(name, layout, source, definitions, line_shift=0, *, field_policy=None):
     base = [d for d in definitions if d['kind'] != 'AIX']
     if len(base) != 1: raise ValueError('select exactly one VSAM/segment definition')
     base = base[0]
@@ -95,6 +95,8 @@ def mapping(name, layout, source, definitions, line_shift=0):
     if layout.overlays:
         raise LayoutError('REDEFINES requires reviewed discriminator and live-reader policy; migration unsupported')
     name = identifier(name); fields = []; children = {}; seen = set()
+    field_policy = field_policy or {}
+    matched_policy = set()
     for f in layout.fields:
         row = asdict(f); row['line'] -= line_shift; row['source'] = source
         repeated = re.search(r'\[(\d+)\]', f.path)
@@ -108,12 +110,21 @@ def mapping(name, layout, source, definitions, line_shift=0):
         row['column'] = identifier(re.sub(r'\[\d+\]', '', f.path))
         precision = len(str(2 ** (f.length*8-int(f.signed))-1)) if f.usage=='COMP-5' else f.digits
         if precision > 1000: raise LayoutError('numeric precision exceeds PostgreSQL limit')
-        row['sql_type'] = f'numeric({precision},{f.scale})' if f.digits else f'char({f.length})'
-        row['date'] = not f.digits and f.length == 10 and f.path.endswith('-DATE')
+        row['sql_type'] = f'numeric({precision},{f.scale})' if f.digits else 'bytea'
+        policy = field_policy.get(f.path, {})
+        if policy:
+            if policy.get('line') != row['line']: raise ValueError('field policy/source line mismatch')
+            matched_policy.add(f.path)
+        row['text_policy'] = policy.get('text_policy', 'lossless')
+        if row['text_policy'] not in ('lossless', 'printable'): raise ValueError('unknown text policy')
+        row['date'] = policy.get('interpretation') == 'iso-date'
+        if policy.get('interpretation') not in (None, 'iso-date'): raise ValueError('unknown field interpretation')
+        if row['date'] and (f.digits or f.length != 10): raise ValueError('date policy field shape')
         if row['date']: row['sql_type'] = 'date'
         identity = (row['table'], row['column'], row['ordinal'])
         if identity in seen and not f.filler: raise ValueError('generated column collision')
         seen.add(identity); fields.append(row)
+    if matched_policy != set(field_policy): raise ValueError('field policy names absent from copybook')
     keys = []
     for d in definitions:
         if d['kind'] == 'AIX' and d['relate'] != base['name']: raise ValueError('alternate index targets another cluster')

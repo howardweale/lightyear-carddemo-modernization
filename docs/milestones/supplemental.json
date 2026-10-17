@@ -408,6 +408,30 @@
         "docx",
         "pdf"
       ]
+    },
+    {
+      "number": 107,
+      "path": "MS-107/MS-107.md",
+      "title": "Release safeguards and evidence reconciliation",
+      "customer_value": "Trace release conditions, scoped mutation results and guarded execution to their evidence before authorizing a workload.",
+      "status": "Safeguards and evidence merged; threshold/3 remains proposed and INTCALC release and POSTTRAN execution remain gated",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
+    },
+    {
+      "number": 108,
+      "path": "MS-108/MS-108.md",
+      "title": "CardDemo PostgreSQL data migration proof",
+      "customer_value": "Derive data mappings from public mainframe definitions and measure byte fidelity, reconciliation and key ordering in PostgreSQL.",
+      "status": "Bounded public data gates passed; overall migration remains indeterminate with IMS and application behavior still open",
+      "formats": [
+        "md",
+        "docx",
+        "pdf"
+      ]
     }
   ]
 }

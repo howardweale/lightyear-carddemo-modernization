@@ -1,0 +1,16 @@
+{
+  "content_sha256": "f402f4ae436c7d9b5a1b6798cddaec46f6c969803af33187a7a509d5f2c33c5d",
+  "disabled_classes": [],
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "held_out": false,
+  "matcher_sha256": "0ba15b8cec35656269fb3f26c92ce7b3f2075c325e28089c953fab12133a3825",
+  "measurements": [
+    {
+      "class_id": "receiving-pic-identity/1",
+      "id": "CBTRN02C-rounded-403-196",
+      "passed": true,
+      "validation_sha256": "721d73f3844e49c03df01375883f889ed624d2ce9687d3c127250567fba4aca7"
+    }
+  ],
+  "program": "POSTTRAN"
+}

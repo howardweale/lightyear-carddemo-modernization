@@ -34,6 +34,9 @@ def profile(mutant, argument):
 def case(identifier):
     from .scenario_generation import case as curated
     parts=identifier.split(':')
+    if len(parts)==4 and parts[0]=='b1-target' and parts[2]=='equivalence-cex':
+        from .equivalence_scenarios import case as counterexample
+        return counterexample(identifier)
     if len(parts)!=4 or parts[0]!='b1-target' or parts[1] not in ('INTCALC','POSTTRAN') or parts[2] not in PROFILES:
         raise ValueError('target-witness-identifier')
     job,kind=parts[1:3]; index=int(parts[3])

@@ -1,0 +1,3922 @@
+{
+  "content_sha256": "3a39b5baad022d07a202782aa39e369983483fa27d1e63f51a437563a09e3afd",
+  "disabled": 0,
+  "enabled": 100,
+  "minimum_inputs_per_statement": 10000,
+  "model_calls": 0,
+  "program": "POSTTRAN",
+  "statements": [
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-237-71",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-237-72",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-242-79",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-242-80",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-255-86",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-255-87",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-260-94",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-260-95",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-274-101",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-274-102",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-279-109",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-279-110",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-292-116",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-292-117",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-297-124",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-297-125",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-310-131",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-310-132",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-315-139",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-315-140",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-328-146",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-328-147",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-333-154",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-333-155",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "f356dd522b5a1e7cd871cb952d69d8388be90488df029e2debaefb01f424e268",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-354-171",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "4aee043f591af52de6d50a91c39eb407e41b8af40c4b700e22b0862167f4d2a9",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "1b30d310223f6c894192ab9b6603ac95ddcc3a6abc5fe9c8f56b9f11b519410f"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1473bcd9063137a008ddcdb511750008e0df49a0e8ba7af004462eeabbc26d7e",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-354-172",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "4aa7514adf13696c5c4c8562dad51a21addaa42d89e34803c9d020a46c6ab3b6",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "e53c37c636f9516a277e2d1647537a52030c6e9033968f91e93b216aaeb79b10"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "87b906452e736af94f2c417c4177aea7976f6566f7b1818b1ccdc4e6f2e6144c",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-450-235",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "27cf197452a5e3c2498e437a2f8419565e2960d784344499b93e6163758b7841",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "954d150bfb7064b1e8c0346250881fbd48ad19e0618c58259fe9aca0157b6d07"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a2db618ed4ac4f464a56313cd6abe3c966efe735287adbb0e498f5284e9c558e",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-450-236",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "b1e6036e76f41bbefe1cbe126c50745a8943c42877602c96339217870ad92241",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "40608a504d20ec266bf6db78644304eeaf2f6145d07980abda4f342a724eaf00"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-455-244",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-455-245",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-484-261",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-484-262",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-515-282",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-515-283",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-533-296",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-533-297",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "b5c9770ca47ad48084267e7f554d810c8bfeb0cea3ef2db29eeb18f062f190f8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-563-315",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "dd6ed6be7098be8193872df2ffd84384723ef7aac0231c5611e71d24c99b7c2b",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "804c3a49d97e7ec8acfae1b0454fe4a8af79d7ce74b2edcfd6fb945fd391473f",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "b923621068faa1c2603bcc60623948d13131bda699e84f147e7e059ca8fefe25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "3231379fb77e12a3200925f857fec5a146ad7b33ffa9137602070ebb518de395",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-563-316",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "2b22ad3529515163828fcafeee539b0474f31b8679189a8541cc372027bb746a",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "eed2a0f5f0ba5807daa4d1b2981a05ffc525418a21c8221f295f836e7ba532b0",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6c7d7e316189388319868556c9f443b9dbd96254ab5b77b284ae247caaf85d1f"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-569-324",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-569-325",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "b5c9770ca47ad48084267e7f554d810c8bfeb0cea3ef2db29eeb18f062f190f8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-583-331",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "dd6ed6be7098be8193872df2ffd84384723ef7aac0231c5611e71d24c99b7c2b",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "804c3a49d97e7ec8acfae1b0454fe4a8af79d7ce74b2edcfd6fb945fd391473f",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "b923621068faa1c2603bcc60623948d13131bda699e84f147e7e059ca8fefe25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "3231379fb77e12a3200925f857fec5a146ad7b33ffa9137602070ebb518de395",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-583-332",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "2b22ad3529515163828fcafeee539b0474f31b8679189a8541cc372027bb746a",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "eed2a0f5f0ba5807daa4d1b2981a05ffc525418a21c8221f295f836e7ba532b0",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6c7d7e316189388319868556c9f443b9dbd96254ab5b77b284ae247caaf85d1f"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-588-339",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-588-340",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "b5c9770ca47ad48084267e7f554d810c8bfeb0cea3ef2db29eeb18f062f190f8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-601-346",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "dd6ed6be7098be8193872df2ffd84384723ef7aac0231c5611e71d24c99b7c2b",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "804c3a49d97e7ec8acfae1b0454fe4a8af79d7ce74b2edcfd6fb945fd391473f",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "b923621068faa1c2603bcc60623948d13131bda699e84f147e7e059ca8fefe25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "3231379fb77e12a3200925f857fec5a146ad7b33ffa9137602070ebb518de395",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-601-347",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "2b22ad3529515163828fcafeee539b0474f31b8679189a8541cc372027bb746a",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "eed2a0f5f0ba5807daa4d1b2981a05ffc525418a21c8221f295f836e7ba532b0",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6c7d7e316189388319868556c9f443b9dbd96254ab5b77b284ae247caaf85d1f"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-606-354",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-606-355",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-620-361",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-620-362",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-625-369",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-625-370",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-638-376",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-638-377",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-643-384",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-643-385",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-656-391",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-656-392",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-661-399",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-661-400",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "a9012dcb3749fd1849c6848b2817044b3b15a2a52de8873a1a2368472ba98a37",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-675-406",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "353e6cc1a5a3dab28d6dc77c1a735abfc51348b894b617194311f1b9496be981",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "cff4fe39f5ee0abce9874164007b2df8a9906d517b34cd4e6df76a5532aaa14d",
+          "stdout_sha256": "59b2054eadd1c3dd6374213679c5ccf8567f8d60f8b712f1bb1dea5bca068c0a",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "bf58a89e94b29ca009b5592c09b4428262c79f559c4b14ac4036e7f3f1f0fc1d"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "5a32366ff8b316103af9cff709556ef70fa71dfd9bdf9d466ad464e8771b8789",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-675-407",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "70e210f67e75ab0fe30c05bd75478c44963cf786bcb266f735f2b6ecf36a9427",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "a54db5293ddf7dd9884bf9e7ca71aae6d200d501e319623232d4055e4fcc9053",
+          "stdout_sha256": "36c8f1b26c5c8d6d07a2c4b13d62ac672363323214eeecd9351871510403511d",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6d7d298377d58036eee906ab75a203dd23ecc94ef2cded9b6fc62638bc87fc18"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "1b2edbd86ce0b0bd20771ae3c529bd617dece598db6963eee09c3e1713fdd991",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-680-414",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "e827c8f3008ca5c27c58b6ac396c3e8d5f036d65d6d9c5f5d349b9466c5c94ae",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "60086dd65bf3604396d6ff4bb08f11c4b33afeb1c6b0e8aaa2e919aed71d8271",
+          "stdout_sha256": "a957bf81cf4829f329e33029dc181f1d17e5da0067f1d0099caf9fd647928716",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "aa023b8dbc8c40c376cf6d1dcbb823381ba87eff01f696eb1b2fc462d43ebb8a"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "8c474d7f78ec19085e3491a326bb5540314a7cac68ab7cf55e5066da3c108413",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-constant-680-415",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "48559f28e205e0b36f7eb7e2c05eb7bfaf871cabbf80efc52bc7126957b326bf",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "b7b45857c7b18fcf0caa54e0de2973988ddec01230501b27d9b6154351fabee3",
+          "stdout_sha256": "37670904cf5c4c44e225a7a9d80dea98e3b2e84af4ed1d1cf3c07a8c4b969d69",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8e153403562a0d8f2b0ffb54ef2acf0c0e167f58b0976b9aa7a262ab04b8ab42"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-237-73",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-242-81",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-255-88",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-260-96",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-274-103",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-279-111",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-292-118",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-297-126",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-310-133",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-315-141",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-328-148",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-333-156",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "e538991ea83f839e066831e8ab40cd9406fa820b452d5fd709bc914446742a3c",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-348-165",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "3f816c3f984500dd2e8737b10d97928aa1c3fcdc41c8c9857069887680d58372",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "3bd558eab5ac3ec28ee15e8c7334643b50e1fd4371fff71de835ad9e7d8620b6",
+          "stdout_sha256": "ca972c11cd9d040fa78a764b8f6d4f8db34ba8618432eeb06384bd284cab2cb9",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "2c32e24c899b20262ae432694297146be5fb87736d4a8fae7d946e1a293683d8",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "ac20e2cf5fb254a2fa70af474e63915053d412851a683a872e96bd180e01f469"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "ef1b1b9e38de9e71848ecf301c1bf37ed3d409db66dc6fbfcd8e019e9dfae4f5",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-354-173",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "343b9407f754cbc73435cb077b3904eae573d1e195a7c05a67145f76c135de8c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "b8f73de5c7279f87303a07fdfcf7625242426bc45b37464bd9731724006cc7b8",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "6cfe257279d9b7c7f8deb5b0d834782ca66483543703bf102bf1c83ec129ae67"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "4849882bba8d74db89488084675da4daaf14bae1998068c0a62ce9aeae03b749",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-450-237",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "2909759f7c5890ab87c802b7bcca08ecce867430301524fd0a110041ed8a9c56",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "1137dae014dfb4ddeb0a91933b8833d65a16c6a6821b467f75b39d3e38ac130b",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8519e3b49c9565a533a27403e850822efeb7611d95a3ee27203ee082ffb20b85"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-455-246",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "91a42ea44f50f7a0e9a758cdea1318538a10ca0ba75b5cca01dcb433b89e85d8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-482-260",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "d60dbcded47d448d15da0e01e323927d6151c0e62cd62b347f0fd6ee4420e117",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "2fc94c9be66c6d467d068681cd0987f8d14bcfec688760f14b39baa5e8c0c8c2",
+          "stdout_sha256": "ca972c11cd9d040fa78a764b8f6d4f8db34ba8618432eeb06384bd284cab2cb9",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "22a031825b1cec1c66bc41569ac5527c475a1980072a3e9f9d98e95c149c3046",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "85b1e797cd342c5e3ea23ca38276bfed00b36fa9bfae7415dc1adc30bbea6df9"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "91a42ea44f50f7a0e9a758cdea1318538a10ca0ba75b5cca01dcb433b89e85d8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-513-281",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "d60dbcded47d448d15da0e01e323927d6151c0e62cd62b347f0fd6ee4420e117",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "2fc94c9be66c6d467d068681cd0987f8d14bcfec688760f14b39baa5e8c0c8c2",
+          "stdout_sha256": "ca972c11cd9d040fa78a764b8f6d4f8db34ba8618432eeb06384bd284cab2cb9",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "22a031825b1cec1c66bc41569ac5527c475a1980072a3e9f9d98e95c149c3046",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "85b1e797cd342c5e3ea23ca38276bfed00b36fa9bfae7415dc1adc30bbea6df9"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "91a42ea44f50f7a0e9a758cdea1318538a10ca0ba75b5cca01dcb433b89e85d8",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-531-295",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "d60dbcded47d448d15da0e01e323927d6151c0e62cd62b347f0fd6ee4420e117",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "2fc94c9be66c6d467d068681cd0987f8d14bcfec688760f14b39baa5e8c0c8c2",
+          "stdout_sha256": "ca972c11cd9d040fa78a764b8f6d4f8db34ba8618432eeb06384bd284cab2cb9",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "22a031825b1cec1c66bc41569ac5527c475a1980072a3e9f9d98e95c149c3046",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "85b1e797cd342c5e3ea23ca38276bfed00b36fa9bfae7415dc1adc30bbea6df9"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "ad83aca2f050066622f9d7cec3714e4bbbae900c7729b9c9b6d2ade0ebfeb9a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-563-317",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "84b09decf60e6c443be69fdc1c68d6de85acb22fbd3140634840400a501f08d8",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "fb2959254f3fbb64de20166d4c434930503ba160465de1f1b3558e102fe5d46e",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "14319ce830c5ddfd166902c8378b7543649a03d11ff7521fafc738eb4f059d25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-569-326",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "ad83aca2f050066622f9d7cec3714e4bbbae900c7729b9c9b6d2ade0ebfeb9a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-583-333",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "84b09decf60e6c443be69fdc1c68d6de85acb22fbd3140634840400a501f08d8",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "fb2959254f3fbb64de20166d4c434930503ba160465de1f1b3558e102fe5d46e",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "14319ce830c5ddfd166902c8378b7543649a03d11ff7521fafc738eb4f059d25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-588-341",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "ad83aca2f050066622f9d7cec3714e4bbbae900c7729b9c9b6d2ade0ebfeb9a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-601-348",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "84b09decf60e6c443be69fdc1c68d6de85acb22fbd3140634840400a501f08d8",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "91e7b77be1118aae318ce66a74cb0e62d544ad88b00c605a2c7fb720867ea216",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "fb2959254f3fbb64de20166d4c434930503ba160465de1f1b3558e102fe5d46e",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "14319ce830c5ddfd166902c8378b7543649a03d11ff7521fafc738eb4f059d25"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-606-356",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-620-363",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-625-371",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-638-378",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-643-386",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-656-393",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-661-401",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "48ba2b5b4f44103a56caa1d6d721cba64b13b5202eca988dcd5d97956fa5b4a3",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-675-408",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "f66c4d7ff1526b09217358f5d5ece71b586ad88222c15bbed17adb80e853f18c",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "5fc2083c7c138ddb188734b853e951696ea001ee14a6ca790ec40cae0b7e85bc",
+          "stdout_sha256": "39d5ec96a4435d627c7dcd8738024dc7b0f6f14b5d7a8df43f15b8ce9931ce6e",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "e4f455df1753bdfbe8d812565d7884a563c48c36e234b0add9f2daddc15a27b4",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "28333a97c0329d709bb261d09e21bc7e131fc46bcc781ab642e9f043f6ff5545"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "916f3ce55b893079ac87aa42dbc6132529ebccdd8da2734243f6e94cc0527846",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-680-416",
+      "input_domains": {
+        "APPL-RESULT": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "09b523149e53cd746e3f464f0c26433da54245bbe461ee479dc7af0d95a25553",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "8ec779f2f7b5fa36e8ae9cf3378230cb1468cdd4dac799fc1b935cf40cd6bd17",
+          "stdout_sha256": "de933926f98a75adab655397bc3990dfeb28bcac35090cd8fe32dc3a60a7a9c7",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "868a9ea5b5bfc0355f38399381e926f28a56baf1145aaab3b66c227ed11b3550",
+          "stdout_sha256": "461b5d8068e1e40b4b899b7fa660942f93b394494252af6f6b0a5a36b5dce150",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "8cc3ff0533df8c545f57e5e49e8bec32ebc2b4888591589819e395b75f91eae1"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "9e063fc32939d50b4993b8e18b32469e276d1ae158cb41d087da5a6eb217db16",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-709-434",
+      "input_domains": {
+        "TIMING": [
+          -2147483648,
+          2147483647
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "a36013123b9d75b8d0de2be20e0da8f7f3125d9de8d2db4c085565061b50a3dc",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "ff70d8e68e992d2bb2cc06d0525d6aa3722610eadc37bbb671f3ecad35a2f508",
+          "stdout_sha256": "ca972c11cd9d040fa78a764b8f6d4f8db34ba8618432eeb06384bd284cab2cb9",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "8b7823d750bc65c0b57c0007df38db79ea283754c6597deaed23ffa566c7f23d",
+          "stdout_sha256": "4d630dee5faba060190f037f3475af4f2477bf80c49b06eaa031959bdba479ba",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "5da3dff7f30ad07eef7a3319996cbed1fa5aa256250e0faf436f8a6cc8a6f43c"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "0fcdb107aec29a483dd446219149f8a5e041bbfdfcf11426cceb8e63cb329484",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-delete-MOVE-718-447",
+      "input_domains": {
+        "TWO-BYTES-BINARY": [
+          0,
+          65535
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "5997cd19dd0d0b878d648f165e2484c8566ffb6ea3ab96cd11e264837eb4d0ac",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "f0447039e98100955ae6e59e2e82e065ce4d28b295c7b4ca342ecd8d2bb7fa40",
+          "stdout_sha256": "7d2e3c6304006370c2c10af8b66f99770e6e404de727a9e5e5e31512395776f1",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "c19a820acb888842e35b3091e46d9876de195e7b065137155c08d45e2b98c1c0",
+          "stdout_sha256": "f078ea3ad1b8f1cf7f927c5757004e1f07f9dd3090bb540ce2735adb1323f73b",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "65e0869968caa85c1423c41bf5aef6dd2e31ce0b7264a4a6ab2d8822e869918b"
+    },
+    {
+      "binary_truncate": false,
+      "byteorder": "big",
+      "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+      "content_sha256": "721d73f3844e49c03df01375883f889ed624d2ce9687d3c127250567fba4aca7",
+      "count": 10006,
+      "edge_count": 6,
+      "enabled": true,
+      "id": "CBTRN02C-rounded-403-196",
+      "input_domains": {
+        "ACCT-CURR-CYC-CREDIT": [
+          -999999999999,
+          999999999999
+        ],
+        "ACCT-CURR-CYC-DEBIT": [
+          -999999999999,
+          999999999999
+        ],
+        "DALYTRAN-AMT": [
+          -99999999999,
+          99999999999
+        ],
+        "WS-TEMP-BAL": [
+          -99999999999,
+          99999999999
+        ]
+      },
+      "input_initialization": "exact-storage-byte-codes",
+      "input_sha256": "617f017461bf1da9e8c666f1ce4b64defe96aa3761021be9433f60c2b041e6f9",
+      "negative_zero_edge": true,
+      "random_count": 10000,
+      "reports": [
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "original",
+          "source_sha256": "417e39b4668a03f511026321a98e46545ee0c2c74fdfff250aa78c0522ccdf05",
+          "stdout_sha256": "97fb98081debfdf89d037d0d3a8f0b4422c9bc103a7fb3e3a425694fd78afb38",
+          "tested": 10006
+        },
+        {
+          "agreement": true,
+          "mismatches": [],
+          "side": "mutant",
+          "source_sha256": "994488dd21cc57fbf07a4fff511027170d3f0db005e88d2c91946cb92bf89037",
+          "stdout_sha256": "97fb98081debfdf89d037d0d3a8f0b4422c9bc103a7fb3e3a425694fd78afb38",
+          "tested": 10006
+        }
+      ],
+      "shape_sha256": "70b5c41fd7fc3329298f748225ea6108363383ec35b8eda63ae1b3d894a45ada"
+    }
+  ]
+}

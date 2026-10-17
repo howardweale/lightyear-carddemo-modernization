@@ -1,0 +1,5 @@
+# Z3 4.15.3.0 wheels from https://pypi.org/pypi/z3-solver/4.15.3.0/json
+# Linux x86_64 and Windows amd64; no source distributions.
+z3-solver==4.15.3.0 \
+    --hash=sha256:a9afd9ceb290482097474d43f08415bcc1874f433189d1449f6c1508e9c68384 \
+    --hash=sha256:06abdf6c36f97c463aea827533504fd59476d015a65cf170a88bd6a53ba13ab5

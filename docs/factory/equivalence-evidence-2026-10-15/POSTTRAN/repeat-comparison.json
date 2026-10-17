@@ -1,0 +1,9 @@
+{
+  "compared": "every mutant, including unresolved and unobservable",
+  "content_sha256": "7c196e472d6ebc3cea6f60b91ea4c4df9112f5d137192539af455761649e9402",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "identical_resolutions": true,
+  "mutants": 123,
+  "program": "POSTTRAN",
+  "resolutions_sha256": "b26a3857fddb6d389214b6efafa1e859b9abca66ad7e2094519f9e30d353a453"
+}

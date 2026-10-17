@@ -1,0 +1,9 @@
+{
+  "compared": "every mutant, including unresolved and unobservable",
+  "content_sha256": "fc23dfb31b975be5b5b56ce94782ad7c44360046d8dc7e2a18d5ad10c3624e4b",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "identical_resolutions": true,
+  "mutants": 413,
+  "program": "TRANREPT",
+  "resolutions_sha256": "8d4a3d3d3bf17e3be61f2d8bf2f5792e3028f97eb88e332643cc5db74f36671a"
+}

@@ -1,0 +1,50 @@
+{
+  "binary_truncate": false,
+  "byteorder": "big",
+  "complete_written_state": "all receiving storage bytes; solver also compares overflow condition",
+  "content_sha256": "721d73f3844e49c03df01375883f889ed624d2ce9687d3c127250567fba4aca7",
+  "count": 10006,
+  "edge_count": 6,
+  "enabled": true,
+  "input_domains": {
+    "ACCT-CURR-CYC-CREDIT": [
+      -999999999999,
+      999999999999
+    ],
+    "ACCT-CURR-CYC-DEBIT": [
+      -999999999999,
+      999999999999
+    ],
+    "DALYTRAN-AMT": [
+      -99999999999,
+      99999999999
+    ],
+    "WS-TEMP-BAL": [
+      -99999999999,
+      99999999999
+    ]
+  },
+  "input_initialization": "exact-storage-byte-codes",
+  "input_sha256": "617f017461bf1da9e8c666f1ce4b64defe96aa3761021be9433f60c2b041e6f9",
+  "negative_zero_edge": true,
+  "random_count": 10000,
+  "reports": [
+    {
+      "agreement": true,
+      "mismatches": [],
+      "side": "original",
+      "source_sha256": "417e39b4668a03f511026321a98e46545ee0c2c74fdfff250aa78c0522ccdf05",
+      "stdout_sha256": "97fb98081debfdf89d037d0d3a8f0b4422c9bc103a7fb3e3a425694fd78afb38",
+      "tested": 10006
+    },
+    {
+      "agreement": true,
+      "mismatches": [],
+      "side": "mutant",
+      "source_sha256": "994488dd21cc57fbf07a4fff511027170d3f0db005e88d2c91946cb92bf89037",
+      "stdout_sha256": "97fb98081debfdf89d037d0d3a8f0b4422c9bc103a7fb3e3a425694fd78afb38",
+      "tested": 10006
+    }
+  ],
+  "shape_sha256": "70b5c41fd7fc3329298f748225ea6108363383ec35b8eda63ae1b3d894a45ada"
+}

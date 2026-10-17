@@ -1,0 +1,9 @@
+{
+  "compared": "every mutant, including unresolved and unobservable",
+  "content_sha256": "5c8b05b28fc03f4d07b198b1d5e476087043ab6a36396f95f1bf35ee8269596e",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "identical_resolutions": true,
+  "mutants": 113,
+  "program": "INTCALC",
+  "resolutions_sha256": "8bb80f4373ce90cdd3267af85f272f203325eb14a0573a17f76f587406004ad6"
+}

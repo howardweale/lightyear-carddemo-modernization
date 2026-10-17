@@ -1,0 +1,15 @@
+{
+  "class_id": "receiving-pic-identity/1",
+  "content_sha256": "b2514cd3e16dead6c5f662a9d9effc56bc6cfdaebc0737d1d2526ce48c5360ee",
+  "head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+  "matcher_sha256": "0ba15b8cec35656269fb3f26c92ce7b3f2075c325e28089c953fab12133a3825",
+  "matches": {
+    "CBTRN02C-rounded-403-196": {
+      "mutant_sha256": "a4721fb4824902655292ec36e6c2ca81840a76309d1236dbd6dc979ab6ec0e70",
+      "pair_sha256": "70b5c41fd7fc3329298f748225ea6108363383ec35b8eda63ae1b3d894a45ada",
+      "solver_sha256": "a91002c71c3c38024cd83a3b1bbec139a57c92bae9d549d209a2a24f2b70ce3e",
+      "validation_sha256": "721d73f3844e49c03df01375883f889ed624d2ce9687d3c127250567fba4aca7"
+    }
+  },
+  "program": "POSTTRAN"
+}

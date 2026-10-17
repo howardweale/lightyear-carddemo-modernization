@@ -1,0 +1,135 @@
+name: Equivalence automation
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_mainframe/**'
+      - 'tools/*equivalence*'
+      - 'tests/test_equivalence_automation.py'
+      - '.github/workflows/equivalence-automation.yml'
+      - 'docs/factory/equivalence-automation*'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install checksum-pinned solver
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/equivalence-requirements.txt
+      - name: Adversarial accounting, proof and IR tests
+        env:
+          PYTHONPATH: src:.:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B -m unittest test_equivalence_automation test_generic_scenario_ir test_oct12_operator_review -v
+      - name: Publish complete stage-zero baseline
+        env:
+          EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          PYTHONPATH: src:.
+        run: |
+          python -B -m tools.run_equivalence_automation INTCALC work/triage/INTCALC --triage-only
+          python -B -m tools.run_equivalence_automation POSTTRAN work/triage/POSTTRAN --triage-only
+          python -B -m tools.run_equivalence_automation TRANREPT work/triage/TRANREPT --triage-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: equivalence-triage
+          path: work/triage
+          retention-days: 30
+  measure:
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 200
+    strategy:
+      fail-fast: false
+      matrix:
+        program: [INTCALC, POSTTRAN, TRANREPT]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Fetch checksum-pinned solver wheel for isolated runner
+        run: |
+          python -m pip install --target work/solver --require-hashes --only-binary=:all: -r tools/equivalence-requirements.txt
+      - name: Build exact pinned compiler and GCC environment
+        run: docker build --platform linux/amd64 -f tools/legacy_twin/reproducible.Containerfile -t equivalence-toolchain .
+      - name: Measure public mutations within approved zero-model budgets
+        env:
+          EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          mkdir -p work/equivalence
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/equivalence",dst=/output \
+            --env GITHUB_ACTIONS=true --env EQUIVALENCE_HEAD \
+            --env PYTHONPATH=/source/src:/source:/source/work/solver \
+            --env PYTHONDONTWRITEBYTECODE=1 --workdir /source equivalence-toolchain \
+            python3 -B -m tools.run_equivalence_automation ${{ matrix.program }} /output/run
+      - name: Repeat the complete pipeline and compare every resolution
+        env:
+          EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/equivalence",dst=/output \
+            --env GITHUB_ACTIONS=true --env EQUIVALENCE_HEAD \
+            --env PYTHONPATH=/source/src:/source:/source/work/solver \
+            --env PYTHONDONTWRITEBYTECODE=1 --workdir /source equivalence-toolchain \
+            python3 -B -m tools.run_equivalence_automation ${{ matrix.program }} /output/repeat
+          PYTHONPATH=src:. python -B -m tools.compare_equivalence_runs \
+            work/equivalence/run/resolutions.json work/equivalence/repeat/resolutions.json \
+            work/equivalence/repeat-comparison.json
+      - name: Independently rebuild and recheck every resolution on the same head
+        env:
+          EQUIVALENCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          docker run --rm --network none --platform linux/amd64 \
+            --mount type=bind,src="$PWD",dst=/source,readonly \
+            --mount type=bind,src="$PWD/work/equivalence",dst=/output \
+            --env GITHUB_ACTIONS=true --env EQUIVALENCE_HEAD \
+            --env PYTHONPATH=/source/src:/source:/source/work/solver \
+            --env PYTHONDONTWRITEBYTECODE=1 --workdir /source equivalence-toolchain \
+            python3 -B -m tools.recheck_equivalence_automation /output/run /output/recheck
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: equivalence-evidence-${{ matrix.program }}
+          path: work/equivalence
+          retention-days: 30
+  publish:
+    needs: measure
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: equivalence-evidence-*
+          path: work/inputs
+      - name: Render counts, denominators and unsigned review requests from complete evidence
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.publish_equivalence_automation work/inputs work/publication --run-id '${{ github.run_id }}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: equivalence-publication
+          path: work/publication
+          retention-days: 30

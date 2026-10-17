@@ -50,7 +50,7 @@ jobs:
           PYTHONPATH: src:.:tests
         run: python3 -B -m unittest test_posttran_phase2 test_phase2_authorization test_phase2_rehearsal test_intcalc_loader_domain test_release_crosscheck test_release_packet -v
       - name: Inspect retained plan at its recorded commit without execution
-        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-14.json') != ''
+        if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') != ''
         env:
           PYTHONPATH: src:.
         run: python3 -B -m tools.check_posttran_retained_plan
@@ -82,7 +82,7 @@ jobs:
         if: hashFiles('docs/factory/posttran-phase2-plan-2026-10-16.json') != ''
         env:
           PYTHONPATH: src:.
-        run: python3 -B -c "from tools.run_posttran_phase2 import bound_plan; bound_plan()"
+        run: python3 -B -m tools.check_posttran_retained_plan
   reserve:
     if: vars.POSTTRAN_PHASE2_APPROVED_HEAD == github.event.pull_request.head.sha && vars.POSTTRAN_PHASE2_APPROVED_PLAN != '' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04

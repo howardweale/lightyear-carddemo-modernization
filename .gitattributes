@@ -246,3 +246,6 @@ spec/modernization/carddemo-data/upstream/** -text -whitespace
 docs/factory/b06-part6-recovery-review-2026-10-16.md -text
 docs/factory/b06-part6-reverification-2026-10-16.json -text
 spec/modernization/carddemo-screens/upstream/** -text -whitespace
+
+# The handoff records this public PEM file hash; keep its Git bytes across hosts.
+docs/factory/factory-authority.public.pem text eol=lf

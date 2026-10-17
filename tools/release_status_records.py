@@ -42,6 +42,7 @@ def inputs(root=ROOT):
     carddemo = 'docs/factory/carddemo-data-review-evidence-2026-10-15.json'
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
+    additional += [p for p in ('docs/factory/posttran-phase2-readiness-2026-10-17.json', 'docs/factory/posttran-phase2-plan-amendment-2026-10-17.json', 'docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json', 'docs/factory/factory-authority.public.pem') if (root/p).is_file()]
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
@@ -217,16 +218,16 @@ def render(model):
     if phase2:
         from tools.check_posttran_handoff import timing
         current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(delivery["checked_at"] if delivery else model['evaluated_at']))}
-        text+=['','| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |',
+        text+=['','| Phase 2 | Plan seal | Executable commit | Sign and launch by (UTC) | Days remaining |',
                '|---|---|---|---|---:|',
-               f"| POSTTRAN | `{phase2['plan_sha256']}` | `{phase2['executable_commit']}` | {phase2['signing_deadline']} | {current['phase2']['days_remaining']} |",
-               'Evaluated at '+current['phase2']['evaluated_at']+'. Request: ['+Path(phase2['request_path']).name+']('+Path(phase2['request_path']).name+').',
-               'Warning: five days or fewer remain before signing deadline.' if current['phase2']['warning'] else 'More than five days remain before signing deadline at snapshot time.',
-               '[Operator runbook](posttran-phase2-runbook.md). Preparation and rehearsal do not authorize execution.']
+               f"| POSTTRAN | `{phase2['plan_sha256']}` | `{phase2['executable_commit']}` | {phase2.get('sign_and_launch_by', phase2.get('signing_deadline'))} | {current['phase2']['days_remaining']} |",
+               '', 'Evaluated at '+current['phase2']['evaluated_at']+'. Request: ['+Path(phase2['request_path']).name+']('+Path(phase2['request_path']).name+').',
+               'Warning: five days or fewer remain before sign-and-launch deadline.' if current['phase2']['warning'] else 'More than five days remain before sign-and-launch deadline at snapshot time.',
+               '[Operator runbook](posttran-phase2-runbook.md). The window end applies to the reserve launch check as well as signing. The daily deadline workflow uses the real UTC clock; this page is a dated snapshot. Preparation and rehearsal do not authorize execution.']
     current['retention_manifests']=model.get('retention',[])
     text+=['','## Durable public evidence','',
            *['Current retention manifest: ['+Path(p).name+']('+Path(p).name+'); scheduled download/hash verification applies. Local deletion remains unauthorized.' for p in model.get('retention',[])],
-           'Dated October 14/15 retention statements remain historical; use these manifests for current storage status.']
+           'Dated October 14/15 retention statements remain historical; use these manifests for current storage status. [October 17 verification and deletion addendum](retention-inventory-2026-10-17.json); local deletion remains unauthorized.']
     text+=['','## CardDemo data slice','',carddemo_text(model.get('carddemo')),
            '','## B06 access','',
            b06_text(model.get('b06')),

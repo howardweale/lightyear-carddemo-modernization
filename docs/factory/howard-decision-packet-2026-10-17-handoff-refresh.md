@@ -14,9 +14,10 @@ Decisions only. The measured status and failure inventories are in the current s
 | Separate | [z/OS loader-domain proposal](intcalc-zos-loader-domain-proposal-2026-10-16.json) | Requires real loader capture and confirmation before any z/OS-facing overlay. |
 | Separate | [POSTTRAN execution request](posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |
 
-| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |
+| Phase 2 | Plan seal | Executable commit | Sign and launch by (UTC) | Days remaining |
 |---|---|---|---|---:|
 | POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 12.066 |
+
 Evaluated at 2026-10-17T13:10:22+00:00. More than five days remain.
 Compiler expiry: 2026-10-30T14:46:00+00:00. No signing or execution has been performed.
 

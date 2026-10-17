@@ -13,7 +13,7 @@ def expiry_status(expires_at, now=None):
     now = now or datetime.now(timezone.utc)
     expiry = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
     return dict(artifact_expires_at=expiry.isoformat(), signing_deadline=(expiry-timedelta(hours=24)).isoformat(),
-                warning='Five days or fewer remain before signing deadline' if expiry-timedelta(hours=24)-now <= timedelta(days=5) else None,
+                warning='Five days or fewer remain before sign-and-launch deadline' if expiry-timedelta(hours=24)-now <= timedelta(days=5) else None,
                 expired=expiry <= now)
 
 

@@ -6,9 +6,9 @@ import re
 import subprocess
 
 
-PLAN = "docs/factory/posttran-phase2-plan-2026-10-15.json"
+PLAN = "docs/factory/posttran-phase2-plan-2026-10-16.json"
 ORIGINAL = "docs/factory/posttran-phase2-plan-2026-10-14.json"
-REQUEST = "docs/factory/posttran-phase2-authorization-request-2026-10-15.json"
+REQUEST = "docs/factory/posttran-phase2-authorization-request-2026-10-16.json"
 
 
 def sha(raw):
@@ -54,15 +54,30 @@ def inspect(root):
     sealed(plan)
     if request["details"]["request_seal"] != plan["content_sha256"]:
         raise ValueError("phase2-retained-request-seal")
-    original_raw = read_blob(root, revision, ORIGINAL)
-    if original_raw != (root / ORIGINAL).read_bytes() or sha(original_raw) != plan["original_plan_sha256"]:
-        raise ValueError("phase2-retained-original-binding")
-    original = json.loads(original_raw)
-    sealed(original)
-    for key in ("candidate_files", "twin", "scenarios", "scenario_count", "compared_outputs",
-                "normalization_rules", "preparation_run"):
-        if plan[key] != original[key]:
-            raise ValueError("phase2-retained-preparation-changed:" + key)
+    if plan.get('schema') == 'posttran-phase2-plan/2':
+        # Publication checks Git objects at the executable pin. The reserve
+        # path still calls bound_plan() against the actual execution checkout.
+        trees = ('src/lightyear_mainframe', 'src/carddemo_oracle', 'spec/mainframe',
+                 'tests/mainframe/fixtures', 'tools/legacy_twin')
+        inventory = set(subprocess.check_output(
+            ['git', 'ls-tree', '-r', '--name-only', revision, '--', *trees],
+            cwd=root, text=True).splitlines())
+        inventory.update(('tools/prepare_posttran_phase2.py', 'tools/run_posttran_phase2.py',
+            'tools/check_posttran_attempt1_phase1.py', 'tools/posttran_phase2_authorization.py',
+            '.github/workflows/posttran-phase2.yml', 'docs/factory/keep-or-fix-register.json',
+            'docs/factory/twin-limits.md'))
+        if set(plan['bound_files']) != inventory:
+            raise ValueError('phase2-retained-binding-inventory')
+    else:
+        original_raw = read_blob(root, revision, ORIGINAL)
+        if original_raw != (root / ORIGINAL).read_bytes() or sha(original_raw) != plan["original_plan_sha256"]:
+            raise ValueError("phase2-retained-original-binding")
+        original = json.loads(original_raw)
+        sealed(original)
+        for key in ("candidate_files", "twin", "scenarios", "scenario_count", "compared_outputs",
+                    "normalization_rules", "preparation_run"):
+            if plan[key] != original[key]:
+                raise ValueError("phase2-retained-preparation-changed:" + key)
     bindings = {**plan["bound_files"], **plan["candidate_files"]}
     drift = []
     for path, expected in sorted(bindings.items()):
@@ -76,7 +91,7 @@ def inspect(root):
                 validated_plan_sha256=plan["content_sha256"], validated_files=len(bindings),
                 current_checkout_matches_plan=not drift, changed_bound_files=drift,
                 execution_authorized=False,
-                next_step="Execution still requires a matching plan, exact head and signed proof; drift requires a new reviewed plan.")
+                next_step="Execution still requires a matching plan, exact head and signed proof; execution-checkout drift requires a new reviewed plan; later main changes do not authorize execution.")
 
 
 if __name__ == "__main__":

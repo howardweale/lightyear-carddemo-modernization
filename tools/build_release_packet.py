@@ -7,11 +7,11 @@ if __package__ in (None, ""):
 from tools.release_status_records import ROOT, PHASE2_PUBLIC_ROOT, load, render
 
 
-def build(commit=None, root=ROOT):
+def build(commit=None, root=ROOT, prepared_on=None):
     model = load(root)
     value, _ = render(model)
     import json
-    date=value['as_of']+'-handoff-refresh'
+    date=(prepared_on or value['as_of'])+'-handoff-refresh'
     lines = ['# Howard decision packet — '+date, '',
              'Decisions only. The measured status and failure inventories are in the current status and program verdicts.', '',
              '| Order | Decision | Consequence of signing |', '| --- | --- | --- |']
@@ -32,9 +32,9 @@ def build(commit=None, root=ROOT):
             '| Separate | [POSTTRAN execution request]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
     if model.get('phase2'):
         p=value['phase2']
-        lines+=['', '| Phase 2 | Plan seal | Executable commit | Signing deadline (UTC) | Days remaining |', '|---|---|---|---|---:|',
-                f"| POSTTRAN | `{p['plan_sha256']}` | `{p['executable_commit']}` | {p['signing_deadline']} | {p['days_remaining']} |",
-                'Evaluated at '+p['evaluated_at']+'. '+('WARNING: five days or fewer remain.' if p['warning'] else 'More than five days remain.'),
+        lines+=['', '| Phase 2 | Plan seal | Executable commit | Sign and launch by (UTC) | Days remaining |', '|---|---|---|---|---:|',
+                f"| POSTTRAN | `{p['plan_sha256']}` | `{p['executable_commit']}` | {p.get('sign_and_launch_by', p.get('signing_deadline'))} | {p['days_remaining']} |",
+                '', 'Evaluated at '+p['evaluated_at']+'. '+('WARNING: five days or fewer remain.' if p['warning'] else 'More than five days remain.'),
                 'Compiler expiry: '+p['artifact_expires_at']+'. No signing or execution has been performed.']
     lines += ['', 'Current public retention: '+', '.join('['+Path(p).name+']('+Path(p).name+')' for p in model.get('retention',[]))+'. Historical packets remain unchanged.']
     lines += ['', 'All new requests are unsigned. Exact-final-green-commit merge approval remains separate.', '']

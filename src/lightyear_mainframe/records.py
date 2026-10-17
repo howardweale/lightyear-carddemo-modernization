@@ -73,14 +73,14 @@ class Layout:
         return result
 
 
-def picture(pic):
+def picture(pic, *, max_length=32760):
     if not re.fullmatch(r'S?(?:[X9AV](?:\([0-9]+\))?)+', pic):
         raise LayoutError(f'unsupported picture {pic}')
     expanded = ''
     for symbol, count in re.findall(r'([SX9AV])(?:\(([0-9]+)\))?', pic):
         n = int(count or 1)
-        if not 1 <= n <= 32760:
-            raise LayoutError('picture exceeds fixed-record limit')
+        if not 1 <= n <= max_length:
+            raise LayoutError('picture exceeds area limit')
         expanded += symbol*n
     if re.fullmatch(r'X+|A+', expanded):
         return expanded, 0, 0, False
@@ -89,13 +89,15 @@ def picture(pic):
     return expanded, expanded.count('9'), len(expanded.split('V')[1]) if 'V' in expanded else 0, expanded.startswith('S')
 
 
-def compile_copybook(text: str, name='<memory>') -> Layout:
+def compile_copybook(text: str, name='<memory>', *, max_length=32760, storage_overlays=False) -> Layout:
     """Compile one level-01 fixed layout. Unsupported clauses fail closed.
 
     Supports IBM binary storage, explicit overlay choices and one bounded ODO
     table with sliding following fields. Alignment, nested ODO, and ODO inside
     overlays/repeated groups are refused rather than assigning guessed offsets.
     """
+    if type(max_length) is not int or not 1 <= max_length <= 16*1024*1024:
+        raise LayoutError('invalid layout resource budget')
     tokens = tokenize(text, name)
     declarations, current = [], []
     for t in tokens:
@@ -140,7 +142,7 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
                 while k < len(words) and re.fullmatch(r'[SX9AV0-9]+|\(|\)', words[k]):
                     parts.append(words[k]); k += 1
                 node.picture = ''.join(parts)
-                picture(node.picture)
+                picture(node.picture, max_length=max_length)
             elif word == 'USAGE' or word in usages:
                 if word == 'USAGE':
                     k += 1
@@ -156,7 +158,7 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
                 node.redefines = words[k]; k += 1
             elif word == 'OCCURS':
                 k += 1
-                if k == len(words) or not words[k].isdigit() or not 0 <= int(words[k]) <= 32760:
+                if k == len(words) or not words[k].isdigit() or not 0 <= int(words[k]) <= max_length:
                     raise LayoutError('OCCURS requires bounded literals')
                 node.occurs = node.occurs_min = int(words[k]); k += 1
                 variable = k < len(words) and words[k] == 'TO'
@@ -164,7 +166,7 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
                     k += 1
                     if k == len(words) or not words[k].isdigit(): raise LayoutError('missing OCCURS maximum')
                     node.occurs = int(words[k]); k += 1
-                    if not node.occurs_min <= node.occurs <= 32760: raise LayoutError('invalid OCCURS bounds')
+                    if not node.occurs_min <= node.occurs <= max_length: raise LayoutError('invalid OCCURS bounds')
                 if k < len(words) and words[k] == 'TIMES': k += 1
                 if variable:
                     if words[k:k+2] != ['DEPENDING', 'ON'] or k+2 >= len(words):
@@ -227,7 +229,7 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
             if repeated or overlay or variables: raise LayoutError('nested, repeated, or overlaid ODO is unsupported')
             variables.append(node)
         if node.picture is not None:
-            expanded, digits, scale, signed = picture(node.picture)
+            expanded, digits, scale, signed = picture(node.picture, max_length=max_length)
             if node.usage != 'DISPLAY' and (not digits or node.separate or node.sign != 'TRAILING'):
                 raise LayoutError('invalid numeric usage or sign clause')
             if (node.separate or node.sign != 'TRAILING') and not signed:
@@ -244,9 +246,11 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
             for alternatives in groups(node):
                 for child in alternatives:
                     size(child, repeated or node.occurs > 1 or bool(node.depending), overlay or len(alternatives) > 1)
+                if storage_overlays and node is not root and any(c.width*c.occurs > alternatives[0].width*alternatives[0].occurs for c in alternatives[1:]):
+                    raise LayoutError('larger-subordinate-REDEFINES-unsupported')
                 node.width += max(c.width*c.occurs for c in alternatives)
                 node.min_width += max(c.min_width*c.occurs_min for c in alternatives)
-        if node.width*node.occurs > 32760: raise LayoutError('layout exceeds record limit')
+        if node.width*node.occurs > max_length: raise LayoutError('layout exceeds area limit')
     size(root)
 
     def emit(node, prefix, offset, restricted=False):
@@ -266,7 +270,7 @@ def compile_copybook(text: str, name='<memory>') -> Layout:
                         child_index += 1
                     offset += max(c.width*c.occurs for c in alternatives)
             else:
-                _, digits, scale, signed = picture(node.picture)
+                _, digits, scale, signed = picture(node.picture, max_length=max_length)
                 f = Field(path, offset, node.width, node.picture, node.usage, digits, scale,
                           signed, node.sign, node.separate, node.name == 'FILLER', node.line)
                 fields.append(f)

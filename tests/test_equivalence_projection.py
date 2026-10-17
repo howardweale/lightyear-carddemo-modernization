@@ -67,11 +67,22 @@ class ProjectionTests(unittest.TestCase):
             _, req, _ = self.fixture(p)
             with tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
-                item = import_request(ROOT, root, req['contract'])
+                with self.assertRaisesRegex(ValueError,'factory-request-superseded'):
+                    import_request(ROOT, root, req['contract'])
+                wrapper=json.loads((ROOT/f'docs/factory/equivalence-scale-supersession-2026-10-17/{p}-class-request.json').read_bytes())
+                self.assertEqual(req['contract'],wrapper['superseded_contract'])
+                with self.assertRaisesRegex(ValueError,'factory-request-superseded'):
+                    import_request(ROOT,root,wrapper)
+                self.assertEqual([],list(root.iterdir()))
+                contract=json.loads((ROOT/f'docs/factory/appl-result-signing-2026-10-16/{p}/contract.json').read_bytes())
+                item = import_request(ROOT, root, contract)
+                self.assertEqual(wrapper['replacement_request_id'],item['id'])
+                if p=='INTCALC':self.assertTrue(item['id'].startswith('factory-50bbd415'))
                 verified = FactoryInbox(root, 'factory', factory_registry()).item(item['id'])
                 self.assertEqual(item['id'], verified['id'])
                 self.assertEqual(count, len(req['contract']['details']['items']))
-                self.assertEqual('factory-' + digest(req['contract']), item['id'])
+                from lightyear_control_tower.decisions import digest as contract_digest
+                self.assertEqual('factory-' + contract_digest(contract), item['id'])
                 audit = json.loads((NEW / (p + '-class-audit.json')).read_text())
                 self.assertEqual(30, len({r['id'] for r in audit['sample']}))
                 self.assertEqual(count, len(audit['members']))
@@ -79,3 +90,18 @@ class ProjectionTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+class SigningGeneratorTests(unittest.TestCase):
+    def test_prepare_roundtrip_matches_published_bytes_without_extra_contract(self):
+        import subprocess
+        from tools.prepare_equivalence_signing import prepare,DEST,FRESH_COMMIT
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)
+            prepare(ROOT,'043c4ef3ac0c46753ea283bd8dfc1e00410256ad',output_root=output)
+            before={p.relative_to(output).as_posix():p.read_bytes() for p in output.rglob('*') if p.is_file()}
+            self.assertFalse(any(name.endswith('-tower-contract.json') for name in before))
+            self.assertEqual(7,len(before))
+            for path,raw in before.items():
+                self.assertEqual(subprocess.check_output(['git','show',FRESH_COMMIT+':'+path],cwd=ROOT),raw,path)
+            prepare(ROOT,'043c4ef3ac0c46753ea283bd8dfc1e00410256ad',output_root=output)
+            self.assertEqual(before,{p.relative_to(output).as_posix():p.read_bytes() for p in output.rglob('*') if p.is_file()})

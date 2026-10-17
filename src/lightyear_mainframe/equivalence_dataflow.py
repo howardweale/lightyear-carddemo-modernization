@@ -7,13 +7,18 @@ before using a certificate as resolution authority.
 from .equivalence_automation import sealed, verify, digest
 
 
-def cells(spans):
+def cells(spans, *, area_kinds=None):
     result = set()
     for span in spans:
         if set(span) != {'area', 'offset', 'length'} or not isinstance(span['area'], str):
             raise ValueError('invalid-byte-span')
+        from .equivalence_storage import AREA_LIMITS
+        kind = 'FD' if area_kinds is None else area_kinds.get(span['area'])
+        if kind not in AREA_LIMITS:raise ValueError('unbound-byte-area-kind')
+        limit = AREA_LIMITS[kind]
         if (type(span['offset']) is not int or type(span['length']) is not int
-                or span['offset'] < 0 or not 0 < span['length'] <= 32760):
+                or span['offset'] < 0 or not 0 < span['length'] <= limit
+                or span['offset'] + span['length'] > limit):
             raise ValueError('invalid-byte-span')
         result.update((span['area'], n) for n in range(span['offset'], span['offset']+span['length']))
     return result
@@ -35,7 +40,7 @@ def graph(cfg):
             raise ValueError('invalid-CFG-effect-flags')
         if any(s not in nodes for s in n['successors']):
             raise ValueError('unbound-CFG-edge')
-        cells(n['reads']); cells(n['writes'])
+        cells(n['reads'],area_kinds=cfg.get('area_kinds')); cells(n['writes'],area_kinds=cfg.get('area_kinds'))
     return nodes
 
 
@@ -45,7 +50,8 @@ def dead_store(cfg, starts, changed_bytes, *, max_states=10000):
     Partial overwrites and aliases are byte sets. A branch reading the value,
     unknown effects, exit with live bytes, or a non-progressing cycle refuses.
     """
-    nodes = graph(cfg); changed = frozenset(cells(changed_bytes))
+    cellset = lambda spans: cells(spans,area_kinds=cfg.get('area_kinds'))
+    nodes = graph(cfg); changed = frozenset(cellset(changed_bytes))
     if not starts or not changed or any(s not in nodes for s in starts):
         raise ValueError('dead-store-start-or-span')
     memo = {}; active = set(); trace = []
@@ -62,10 +68,10 @@ def dead_store(cfg, starts, changed_bytes, *, max_states=10000):
             raise ValueError('def-use-state-budget')
         active.add(key)
         node = nodes[node_id]
-        if cells(node['reads']) & remaining:
+        if cellset(node['reads']) & remaining:
             result = False
         else:
-            next_bytes = remaining - cells(node['writes'])
+            next_bytes = remaining - cellset(node['writes'])
             result = not next_bytes or bool(node['successors']) and all(
                 visit(s, next_bytes) for s in sorted(node['successors']))
         active.remove(key); memo[key] = result
@@ -90,16 +96,17 @@ def recheck_dead_store(cfg, certificate):
 
 def output_relevance(cfg):
     """May dependency fixpoint. Outputs AND branch reads are observation sinks."""
+    cellset = lambda spans: cells(spans,area_kinds=cfg.get('area_kinds'))
     nodes = graph(cfg); relevant = set()
     for n in nodes.values():
         if n['observable'] or n['branch']:
-            relevant.update(cells(n['reads']))
+            relevant.update(cellset(n['reads']))
     iterations = 0
     while True:
         before = set(relevant)
         for n in nodes.values():
-            if cells(n['writes']) & relevant:
-                relevant.update(cells(n['reads']))
+            if cellset(n['writes']) & relevant:
+                relevant.update(cellset(n['reads']))
         iterations += 1
         if relevant == before:
             break

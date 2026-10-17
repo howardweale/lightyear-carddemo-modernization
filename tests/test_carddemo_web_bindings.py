@@ -92,3 +92,28 @@ class WebBindingsTests(unittest.TestCase):
         for p in result['programs'].values():
             raw=(ROOT/'upstream'/p['source']).read_text(encoding='utf-8').splitlines()
             for aid in p['aids']:self.assertIn(aid['symbol'],raw[aid['line']-1])
+
+    def test_account_update_transfers_and_validators_are_generated(self):
+        from lightyear_data.carddemo.screen_update import build as compile_update
+        result=build(ROOT)['account_update']
+        self.assertEqual(5,len(result['inputs']['numeric_conversions']))
+        self.assertGreater(len(result['inputs']['moves']),35)
+        self.assertGreater(len(result['validations']),20)
+        first=next(v for v in result['validations'] if v['label']=='First Name')
+        self.assertEqual(['ACUP-NEW-CUST-FIRST-NAME'],first['fields'])
+        self.assertEqual('1225-EDIT-ALPHA-REQD',first['calls'][0]['paragraph'])
+        self.assertEqual(300,result['buffers']['ACCT-UPDATE-RECORD']['record_length'])
+        self.assertEqual(500,result['buffers']['CUST-UPDATE-RECORD']['record_length'])
+        # The original account rewrite layout omits ACCT-ADDR-ZIP. Preserve that
+        # byte-layout discrepancy for the reference proof, never map by names.
+        account=result['buffers']['ACCT-UPDATE-RECORD']['fields']
+        self.assertFalse(any('ADDR-ZIP' in f['path'] for f in account))
+        source=(ROOT/'upstream/app/cbl/COACTUPC.cbl').read_bytes()
+        changed=compile_update(source.replace(b'MOVE CUST-FIRST-NAME',b'MOVE CUST-MIDDLE-NAME'),'changed.cbl')
+        transfer=next(v for v in changed['fetched'] if v['target']=='ACUP-OLD-CUST-FIRST-NAME')
+        self.assertEqual('CUST-MIDDLE-NAME',transfer['expression']['name'])
+        for row in result['writes']+result['fetched']:
+            line=source.decode().splitlines()[row['line']-1]
+            self.assertTrue('MOVE' in line or 'STRING' in line)
+        with self.assertRaisesRegex(ValueError,'unaccounted update buffer'):
+            compile_update(source.replace(b'MOVE ACCT-ID                  TO ACUP-OLD-ACCT-ID',b'MOVE FUNCTION ABS(ACCT-ID) TO ACUP-OLD-ACCT-ID'),'changed.cbl')

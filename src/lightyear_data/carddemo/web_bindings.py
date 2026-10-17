@@ -150,6 +150,8 @@ def build(root):
     p,raw=locate('COACTUPC','.cbl')
     changes=dict(no_change=comparisons(raw,p,'1205-COMPARE-OLD-NEW'),
         concurrency=comparisons(raw,p,'9700-CHECK-CHANGE-IN-REC'))
+    from .screen_update import build as update_bindings
+    account_update=update_bindings(raw,p)
     dependencies=[]
     for name,model in programs.items():
         for call in model['calls']:
@@ -159,7 +161,7 @@ def build(root):
         scope_sha256=sha256((root/'slice-1.json').read_bytes()).hexdigest(),
         screens=screens,programs=programs,menu=options,menu_outputs=outputs,menu_option_width=int(width[1]),
         common_constants=common,commarea=commarea,program_commareas=commareas,fraud=fraud,
-        account_view_projection=account_projection,account_update_comparisons=changes,
+        account_view_projection=account_projection,account_update_comparisons=changes,account_update=account_update,
         data_uses=dependencies,outside_endpoint=scope['outside_endpoint'],
         quirks=[dict(kind='menu-outside-slice',**r) for r in options if not r['in_slice']],
         limitations=['Source inventory and generated models do not prove screen-handler equivalence.',

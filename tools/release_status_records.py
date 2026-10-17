@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
+from tools import carddemo_status_record
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -39,6 +40,8 @@ def inputs(root=ROOT):
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    carddemo_path=carddemo_status_record.latest(root)
+    if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
@@ -95,6 +98,7 @@ def load(root=ROOT):
     return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,
                 phase2=phase2, evaluated_at=clock, retention=retention,
+                carddemo=carddemo_status_record.load(root),
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
@@ -128,6 +132,7 @@ def render(model):
             != {('required-ci', 15368), ('documentation-and-lint', 15368)}
     ):
         raise ValueError('delivery-snapshot-not-green')
+    current["carddemo"] = model.get("carddemo")
     current["delivery"] = delivery
     snapshot_date = delivery["checked_at"][:10] if delivery else current["as_of"]
     factory = "activated locally (signed-only)" if current["factory_activated"] else "local signed-only activation not recorded"
@@ -176,7 +181,7 @@ def render(model):
     text+=['','## Durable public evidence','',
            *['Current retention manifest: ['+Path(p).name+']('+Path(p).name+'); scheduled download/hash verification applies. Local deletion remains unauthorized.' for p in model.get('retention',[])],
            'Dated October 14/15 retention statements remain historical; use these manifests for current storage status.']
-    text+=['','## CardDemo data slice','','210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.',
+    text+=['','## CardDemo data slice','',carddemo_status_record.paragraph(model.get('carddemo')),
            '','## B06 access','',
            'Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.' if model.get('b06',{} ) else 'Current Windows metadata verification is not available in this snapshot.',
            '','## Equivalence evidence still outstanding','',

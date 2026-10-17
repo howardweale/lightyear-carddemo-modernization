@@ -90,7 +90,7 @@ Dated October 14/15 retention statements remain historical; use these manifests 
 
 ## CardDemo data slice
 
-210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.
+500,000 generated records; 372/372 volume browse comparisons; 58/58 byte-key edge comparisons. Migrated IMS adapter: 27/40 corpus cases matched, 13 unsupported. Screen API/browser sessions: 0/0; handler mutation proof and Compose acceptance remain unfinished. [Dated receipt and durable archive](../modernization/carddemo-slice-1-2026-10-17.md). Overall incomplete; no signing, activation, Phase 2 or release authority.
 
 ## B06 access
 

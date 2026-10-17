@@ -62,3 +62,31 @@ class DerivedStatusTests(unittest.TestCase):
             changed['delivery']['push_workflows'][0][field] = value
             with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'delivery-snapshot-not-green'):
                 render(changed)
+
+    def test_carddemo_counts_come_from_the_dated_receipt(self):
+        model=load();value,text=render(model)
+        self.assertIn('27/40 corpus cases matched, 13 unsupported',text)
+        self.assertEqual(500000,value['carddemo']['volume']['records'])
+        changed=copy.deepcopy(model)
+        changed['carddemo']['migrated_ims']['matched']=26
+        changed['carddemo']['screens']['api_sessions_compared']=17
+        _,text=render(changed)
+        self.assertIn('26/40 corpus cases matched',text)
+        self.assertIn('sessions: 17/0',text)
+        self.assertIn('Overall incomplete',text)
+
+    def test_carddemo_receipt_rejects_tampering_or_hidden_unsupported_cases(self):
+        import json
+        from hashlib import sha256
+        from tools import carddemo_status_record as records
+        source=Path(__file__).resolve().parents[1]
+        record=records.load(source);record.pop('path')
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);directory=root/'docs/modernization';directory.mkdir(parents=True)
+            path=directory/'carddemo-slice-1-2026-10-17.json'
+            record['migrated_ims']['matched']=40
+            path.write_text(json.dumps(record))
+            with self.assertRaisesRegex(ValueError,'receipt-hash'):records.load(root)
+            record['content_sha256']=sha256(json.dumps({k:v for k,v in record.items() if k!='content_sha256'},sort_keys=True,separators=(',',':')).encode()).hexdigest()
+            path.write_text(json.dumps(record))
+            with self.assertRaisesRegex(ValueError,'denominator'):records.load(root)

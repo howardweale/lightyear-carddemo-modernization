@@ -14,6 +14,7 @@ class HandoffTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'docs/factory').mkdir(parents=True)
             for p in (ROOT/'docs/factory').glob('posttran-phase2-*.json'):shutil.copyfile(p,root/'docs/factory'/p.name)
+            shutil.copyfile(ROOT/'docs/factory/factory-authority.public.pem',root/'docs/factory/factory-authority.public.pem')
             path=root/READINESS;original=json.loads(path.read_bytes())
             for field,value in [('plan_sha256','0'*64),('executable_commit','0'*40),('artifact_id',1)]:
                 changed=dict(original);changed[field]=value;path.write_text(json.dumps(changed))

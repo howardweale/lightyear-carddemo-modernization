@@ -1,0 +1,28 @@
+{
+  "schema": "posttran-plan-amendment/1",
+  "prepared_on": "2026-10-17",
+  "authorized_by": "Howard: review follow-up implementation; no execution authorization",
+  "performed_by": "Codex",
+  "amendment_commit": "65bd4cd549067dd3695f4197e495cc15c9473417",
+  "preparation_run": 38917806865,
+  "preparation_head": "e3ee73d8bff7e18491724d377ea9329e96896f71",
+  "artifact_id": 12052624443,
+  "original_path": "docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json",
+  "original_file_sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c",
+  "original_plan_sha256": "bcccc1d3b05922108cbb6017abfe124b2fa4779613af0f20a5b43fd99c317126",
+  "amended_path": "docs/factory/posttran-phase2-plan-2026-10-16.json",
+  "amended_file_sha256": "bd4eda8ebab9209202653e4c96cb931830f9beb538cb3ed9d220fff784884881",
+  "amended_plan_sha256": "9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13",
+  "amended_fields": [
+    {
+      "path": [
+        "bound_files",
+        "src/lightyear_mainframe/release_projection.py"
+      ],
+      "before": "64578aa3d57411200158286af63bf623130d360a7556a7f054b40a59d20ae3fb",
+      "after": "3cd9f5369efc267dd89f5c303838fcfacf4db82845c9358187d66e8def39d8e0"
+    }
+  ],
+  "reason": "The published plan rebound src/lightyear_mainframe/release_projection.py to the reviewed plan-publication checkout after the preparation run. The content seal was recomputed; preparation provenance was retained. This amendment records that difference and does not assert that CI produced the amended bytes.",
+  "execution_authorized": false
+}

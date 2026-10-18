@@ -29,6 +29,15 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(178, acct.fields[-1].length)
         self.assertTrue(acct.fields[-1].filler)
 
+    def test_level_88_plural_values_and_ranges_allocate_no_storage(self):
+        schema = layout('05 FLAG PIC X.', "88 YESNO VALUES 'Y', 'N'.",
+                        '05 MONTH PIC 99.', '88 VALID-MONTH VALUES 1 THROUGH 12.',
+                        '05 NEXT-FIELD PIC X.')
+        self.assertEqual(4, schema.record_length)
+        self.assertEqual([0, 1, 3], [f.offset for f in schema.fields])
+        with self.assertRaises(LayoutError):
+            layout('05 FLAG PIC X.', '88 MISSING-VALUES.')
+
     def test_nested_fixed_occurs_and_filler_offsets(self):
         l = layout('05 ROWS OCCURS 2 TIMES.', '10 NAME PIC X(2).', '10 AMT PIC S9(3)V99 COMP-3.', '05 FILLER PIC X.', '05 FILLER PIC X.')
         self.assertEqual(12, l.record_length)

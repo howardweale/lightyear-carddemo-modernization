@@ -39,3 +39,5 @@ Public files here contain hashes, verdicts and audit summaries only. Raw archive
 Customer-scale dependency closure, customer policy approval, performance/concurrency/security equivalence and certification remain outside this public-corpus qualification.
 
 Source-byte check after documentation: 54 T-SQL implementation/bridge files still match the executed revision 4 source bundle exactly. Git attributes preserve those bytes after checkout.
+
+The October 18 CI dependency repair pins pglast 7.20 because the 7.10 PyPI release endpoint returns HTTP 404 and both verifier runners cannot resolve it. The parser remains on the PostgreSQL 17 major line; current parser provenance reports 7.20. Historical receipts and the earlier source-byte statement above retain their original parser identities and hashes; the two current parser modules now differ from that historical source bundle. Existing SQL/PLpgSQL contract regressions must pass afresh; prior parser results are not reissued. See [release metadata](https://pypi.org/project/pglast/7.20/) and [upstream changes](https://github.com/lelit/pglast/blob/v7/CHANGES.rst).

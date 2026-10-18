@@ -88,7 +88,11 @@ Dated October 14/15 retention statements remain historical; use these manifests 
 
 ## CardDemo data slice
 
-210/210 original records reconstructed; 1560/1560 browse comparisons. Overall indeterminate. logical/index relationship requires explicit target DBD resolution; public IMS utility unload framing is not verified; No z/OS capture or CICS baseline; no signed release authorization. Screen sessions compared: 0; indeterminate: data component only; screens not implemented.
+500,000 generated records; 372/372 volume browse comparisons; 58/58 byte-key edge comparisons. Migrated IMS adapter: 27/40 corpus cases matched, 13 unsupported. At that data measurement, screen API/browser sessions: 0/0; handler mutation proof and Compose acceptance remain unfinished. [Dated receipt and durable archive](../modernization/carddemo-slice-1-2026-10-17.md). Overall incomplete; no signing, activation, Phase 2 or release authority.
+
+## CardDemo six-screen proof
+
+CI run 39127778944: 120/120 cases and 678/678 API/browser interactions across six programs (666 BMS interactions). Strict mutation: 701/768 KILLED (91.28%); 49 survivors, 17 uncovered and 1 timeout remain in the denominator. [Unsigned receipt and complete retained artifacts](../modernization/carddemo-slice-1-2026-10-18.md). Bounded raw-source reference and disclosed synthetic fixtures; native execution and SQL-error screen equivalence remain unproved. Final publication-head CI and Howard merge approval are separate. No signing, import, activation, Phase 2 or release authority.
 
 ## B06 access
 

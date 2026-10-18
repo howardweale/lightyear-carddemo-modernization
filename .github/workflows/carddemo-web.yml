@@ -1,0 +1,223 @@
+name: CardDemo web slice
+on:
+  pull_request:
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
+  push:
+    branches: [main]
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  source-and-service-foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Render status metadata for review
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -B tools/build_factory_current_status.py
+          mkdir -p work/carddemo-status-render
+          cp docs/factory/current-status.json docs/factory/current-status.md work/carddemo-status-render/
+      - uses: actions/upload-artifact@v7
+        with:
+          name: carddemo-status-render
+          path: work/carddemo-status-render
+          if-no-files-found: error
+      - name: Derive six-screen bindings and linked data dependencies
+        env:
+          PYTHONPATH: src:tests
+        run: |
+          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference -v
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compile Java services and test generated bindings and disposable session tokens
+        run: mvn -B -f factory/carddemo-web/service/pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" test
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Typecheck and compile the model-driven TypeScript UI
+        run: |
+          npm ci --prefix factory/carddemo-web/ui --ignore-scripts --no-audit --no-fund
+          npm run build --prefix factory/carddemo-web/ui
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-web-foundation
+          path: |
+            work/carddemo-web-bindings
+            work/carddemo-web-data
+            factory/carddemo-web/service/target/surefire-reports
+            factory/carddemo-web/ui/dist
+          if-no-files-found: error
+
+  compose-smoke:
+    needs: source-and-service-foundation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Acquire the pinned PostgreSQL digest through existing CI mirrors
+        run: |
+          image="$(python -B tools/ci_postgres_image.py)"
+          echo "CARDDEMO_POSTGRES_IMAGE=$image" >> "$GITHUB_ENV"
+      - name: Build and start disposable six-screen application
+        run: docker compose -f factory/carddemo-web/compose.yaml -f factory/carddemo-web/compose.ci.yaml up -d --build
+      - name: Wait for generated public and synthetic fixture
+        run: |
+          mkdir -p work/carddemo-compose
+          for i in $(seq 1 120); do
+            if docker compose -f factory/carddemo-web/compose.yaml cp seed:/fixture/fixture.json work/carddemo-compose/fixture.json; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Exercise six-screen API journey and atomic fraud toggle
+        run: python -B factory/carddemo-web/runtime/smoke.py --fixture work/carddemo-compose/fixture.json --out work/carddemo-compose/api
+      - name: Compare sign-on and menu with independently interpreted pinned COBOL
+        env:
+          PYTHONPATH: src
+        run: python -B factory/carddemo-web/runtime/prove_signon.py --out work/carddemo-compose/reference-signon
+      - name: Install browser from the existing locked CI dependency
+        run: |
+          npm ci --prefix tests/browser --ignore-scripts --no-audit --no-fund
+          cd tests/browser
+          npx --no-install playwright install --with-deps chromium
+      - name: Compare rendered browser fields with every service response
+        env:
+          CARDDEMO_FIXTURE: work/carddemo-compose/fixture.json
+          CARDDEMO_BROWSER_OUT: work/carddemo-compose/browser
+          CARDDEMO_REFERENCE_SIGNON: work/carddemo-compose/reference-signon/cases.json
+        run: node tests/browser/carddemo-slice.mjs
+      - name: Preserve runtime diagnostics
+        if: always()
+        run: |
+          mkdir -p work/carddemo-compose
+          docker compose -f factory/carddemo-web/compose.yaml ps -a > work/carddemo-compose/containers.txt
+          docker compose -f factory/carddemo-web/compose.yaml logs --no-color > work/carddemo-compose/runtime.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-compose-smoke
+          path: work/carddemo-compose
+          if-no-files-found: error
+
+  full-slice-proof:
+    needs: source-and-service-foundation
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [api, browser, mutation]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Acquire the pinned PostgreSQL digest through existing CI mirrors
+        run: |
+          image="$(python -B tools/ci_postgres_image.py)"
+          echo "CARDDEMO_POSTGRES_IMAGE=$image" >> "$GITHUB_ENV"
+      - name: Derive mappings and start an isolated disposable fixture
+        env:
+          PYTHONPATH: src
+        run: |
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+          docker compose -f factory/carddemo-web/compose.yaml -f factory/carddemo-web/compose.ci.yaml -f factory/carddemo-web/compose.mutation-ci.yaml up -d --build
+          mkdir -p work/carddemo-proof
+          for i in $(seq 1 120); do
+            if docker compose -f factory/carddemo-web/compose.yaml cp seed:/fixture/fixture.json work/carddemo-proof/fixture.json && docker compose -f factory/carddemo-web/compose.yaml cp seed:/fixture/reference-fixture.json work/carddemo-proof/reference-fixture.json && curl -fsS http://127.0.0.1:8080 >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Execute the independent raw COBOL reference sessions
+        env:
+          PYTHONPATH: src
+          PROOF_MODE: ${{ matrix.mode }}
+        run: |
+          args=()
+          if [ "$PROOF_MODE" != api ]; then args+=(--reference-only); fi
+          python -B factory/carddemo-web/runtime/prove_slice.py --fixture work/carddemo-proof/fixture.json --raw-fixture work/carddemo-proof/reference-fixture.json --out work/carddemo-proof/reference "${args[@]}"
+      - name: Compare browser rendering and complete PostgreSQL after-state
+        if: matrix.mode == 'browser'
+        env:
+          CARDDEMO_CASES: work/carddemo-proof/reference/cases.json
+          CARDDEMO_BROWSER_OUT: work/carddemo-proof/browser
+        run: |
+          npm ci --prefix tests/browser --ignore-scripts --no-audit --no-fund
+          (cd tests/browser && npx --no-install playwright install --with-deps chromium)
+          node tests/browser/carddemo-proof.mjs
+      - name: Prove baseline then measure all configured handler mutants
+        if: matrix.mode == 'mutation'
+        run: |
+          mvn -B -f factory/carddemo-web/service/pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" -Dcarddemo.cases="$GITHUB_WORKSPACE/work/carddemo-proof/reference/cases.json" -Dcarddemo.proof=true test org.pitest:pitest-maven:mutationCoverage
+      - name: Preserve full proof and failed-run evidence
+        if: always()
+        run: |
+          mkdir -p work/carddemo-proof
+          docker compose -f factory/carddemo-web/compose.yaml logs --no-color > work/carddemo-proof/runtime.log
+          if [ -d factory/carddemo-web/service/target/pit-reports ]; then cp -r factory/carddemo-web/service/target/pit-reports work/carddemo-proof/; fi
+          if [ -d factory/carddemo-web/service/target/surefire-reports ]; then cp -r factory/carddemo-web/service/target/surefire-reports work/carddemo-proof/; fi
+          cp -r work/carddemo-web-bindings work/carddemo-web-data work/carddemo-proof/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-proof-${{ matrix.mode }}
+          path: work/carddemo-proof
+          if-no-files-found: error
+
+  unsigned-receipt:
+    if: ${{ !cancelled() }}
+    needs: [source-and-service-foundation, compose-smoke, full-slice-proof]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: carddemo-proof-*
+          path: work/carddemo-proof-artifacts
+      - name: Collect exact-run unsigned receipt, including missing or failed gates
+        if: ${{ !cancelled() }}
+        env:
+          SOURCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          PROOF_JOB_RESULTS: ${{ toJSON(needs) }}
+          PYTHONPATH: src
+        run: |
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+          python -B factory/carddemo-web/runtime/receipt.py --artifacts work/carddemo-proof-artifacts --out work/carddemo-unsigned-receipt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-unsigned-receipt
+          path: work/carddemo-unsigned-receipt
+          if-no-files-found: error

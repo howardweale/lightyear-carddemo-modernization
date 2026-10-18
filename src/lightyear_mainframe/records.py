@@ -119,7 +119,7 @@ def compile_copybook(text: str, name='<memory>', *, max_length=32760, storage_ov
             raise LayoutError('expected a level-number data declaration')
         level, name = int(words[0]), words[1]
         if level == 88:
-            if not stack or 'VALUE' not in words[2:]:
+            if not stack or not set(words[2:]) & {'VALUE', 'VALUES'}:
                 raise LayoutError('invalid level-88 condition')
             continue
         if level not in range(1, 50) or not re.fullmatch(r'[A-Z0-9][A-Z0-9-]*', name):

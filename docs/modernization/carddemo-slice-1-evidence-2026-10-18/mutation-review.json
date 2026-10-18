@@ -1,0 +1,562 @@
+{
+  "schema": "carddemo-mutation-review/1",
+  "run_id": 39127778944,
+  "review_method": "Static inspection of every remaining mutant location against the tested Java sources; no local execution",
+  "counts": {
+    "KILLED": 701,
+    "NO_COVERAGE": 17,
+    "SURVIVED": 49,
+    "TIMED_OUT": 1
+  },
+  "disposition": "All 67 remain in the denominator. None is waived, reclassified as killed, or claimed proven equivalent.",
+  "limitations": [
+    "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed.",
+    "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite.",
+    "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper.",
+    "Residual numeric picture padding and boundary arithmetic; the supported grammar remains bounded.",
+    "Missing-account initialized-buffer condition survives; the deterministic missing-buffer assumption remains disclosed.",
+    "Repeated user/context writes survive; complete returned-state assertions still apply to every returned interaction.",
+    "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper.",
+    "Admin-only role branch and repeated OPTION assignment are not distinguished by this slice; admin destination remains excluded.",
+    "Post-write action assignment survives; account/customer disappearance at locked READ has uncovered mutants.",
+    "Initial flags and scratch-field resets survive; reverse row-loop increment times out and receives no killed credit."
+  ],
+  "mutants": [
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "dateService",
+      "line": "271",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::put",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "evaluate",
+      "line": "154",
+      "description": "Replaced integer subtraction with addition",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "evaluate",
+      "line": "157",
+      "description": "replaced return value with null for ai/lightyear/carddemo/SourceEdits::evaluate",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "execute",
+      "line": "223",
+      "description": "replaced boolean return with false for ai/lightyear/carddemo/SourceEdits::execute",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "execute",
+      "line": "228",
+      "description": "replaced boolean return with false for ai/lightyear/carddemo/SourceEdits::execute",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "execute",
+      "line": "233",
+      "description": "replaced boolean return with false for ai/lightyear/carddemo/SourceEdits::execute",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "execute",
+      "line": "234",
+      "description": "replaced boolean return with false for ai/lightyear/carddemo/SourceEdits::execute",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "figurative",
+      "line": "116",
+      "description": "replaced return value with \"\" for ai/lightyear/carddemo/SourceEdits::figurative",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "get",
+      "line": "94",
+      "description": "Replaced integer addition with subtraction",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "put",
+      "line": "106",
+      "description": "changed conditional boundary",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "put",
+      "line": "106",
+      "description": "changed conditional boundary",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "test",
+      "line": "195",
+      "description": "Replaced integer subtraction with addition",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "test",
+      "line": "196",
+      "description": "Replaced integer subtraction with addition",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "test",
+      "line": "195",
+      "description": "negated conditional",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "test",
+      "line": "196",
+      "description": "negated conditional",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SourceEdits",
+      "method": "test",
+      "line": "179",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::visit",
+      "review_note": "Residual interpreter branches, alias/reference-modification boundaries, numeric comparison and date feedback; no equivalence or unreachable-code exemption is claimed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "gather",
+      "line": "73",
+      "description": "removed call to ai/lightyear/carddemo/AuthorizationListService::missing",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "gather",
+      "line": "77",
+      "description": "removed call to ai/lightyear/carddemo/AuthorizationListService::missing",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "interact",
+      "line": "26",
+      "description": "removed call to ai/lightyear/carddemo/ScreenFrame::set",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "interact",
+      "line": "28",
+      "description": "removed call to ai/lightyear/carddemo/ScreenFrame::set",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "interact",
+      "line": "46",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "page",
+      "line": "97",
+      "description": "changed conditional boundary",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "page",
+      "line": "101",
+      "description": "changed conditional boundary",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationListService",
+      "method": "receiveFrame",
+      "line": "68",
+      "description": "removed call to java/util/Map::forEach",
+      "review_note": "Intermediate missing-record messages and receive/header writes, previous-page state and page-history boundaries remain incompletely distinguished by the suite."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "fetch",
+      "line": "73",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "fetch",
+      "line": "78",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "fetch",
+      "line": "78",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "fetch",
+      "line": "80",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "54",
+      "description": "negated conditional",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "43",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::copyBytes",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "44",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "44",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "52",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "54",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "56",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::saveArea",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "61",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "61",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "63",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "63",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "65",
+      "description": "removed call to java/sql/Connection::releaseSavepoint",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "67",
+      "description": "removed call to java/sql/Connection::rollback",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "67",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "interact",
+      "line": "67",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateService",
+      "method": "missing",
+      "line": "89",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Intermediate flags/context and save-area writes remain; lock-miss and SQL-exception rollback branches have uncovered mutants. Savepoint release survives the replay transaction wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.ScreenProjection",
+      "method": "edited",
+      "line": "45",
+      "description": "changed conditional boundary",
+      "review_note": "Residual numeric picture padding and boundary arithmetic; the supported grammar remains bounded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.ScreenProjection",
+      "method": "edited",
+      "line": "53",
+      "description": "changed conditional boundary",
+      "review_note": "Residual numeric picture padding and boundary arithmetic; the supported grammar remains bounded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.ScreenProjection",
+      "method": "edited",
+      "line": "41",
+      "description": "Replaced integer subtraction with addition",
+      "review_note": "Residual numeric picture padding and boundary arithmetic; the supported grammar remains bounded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.ScreenProjection",
+      "method": "edited",
+      "line": "41",
+      "description": "Replaced integer subtraction with addition",
+      "review_note": "Residual numeric picture padding and boundary arithmetic; the supported grammar remains bounded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountViewService",
+      "method": "interact",
+      "line": "49",
+      "description": "negated conditional",
+      "review_note": "Missing-account initialized-buffer condition survives; the deterministic missing-buffer assumption remains disclosed."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SignonService",
+      "method": "interact",
+      "line": "38",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Repeated user/context writes survive; complete returned-state assertions still apply to every returned interaction."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.SignonService",
+      "method": "interact",
+      "line": "38",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Repeated user/context writes survive; complete returned-state assertions still apply to every returned interaction."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AuthorizationDetailService",
+      "method": "interact",
+      "line": "27",
+      "description": "negated conditional",
+      "review_note": "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AuthorizationDetailService",
+      "method": "interact",
+      "line": "27",
+      "description": "removed call to ai/lightyear/carddemo/ScreenFrame::error",
+      "review_note": "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationDetailService",
+      "method": "interact",
+      "line": "33",
+      "description": "removed call to java/sql/Connection::releaseSavepoint",
+      "review_note": "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AuthorizationDetailService",
+      "method": "interact",
+      "line": "35",
+      "description": "removed call to java/sql/Connection::rollback",
+      "review_note": "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AuthorizationDetailService",
+      "method": "interact",
+      "line": "37",
+      "description": "removed call to ai/lightyear/carddemo/AuthorizationRendering::detail",
+      "review_note": "Last-detail and absent-detail fallback paths and SQL rollback are not fully covered; savepoint release survives the replay wrapper."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.MenuService",
+      "method": "interact",
+      "line": "39",
+      "description": "negated conditional",
+      "review_note": "Admin-only role branch and repeated OPTION assignment are not distinguished by this slice; admin destination remains excluded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.MenuService",
+      "method": "interact",
+      "line": "38",
+      "description": "removed call to ai/lightyear/carddemo/ScreenFrame::set",
+      "review_note": "Admin-only role branch and repeated OPTION assignment are not distinguished by this slice; admin destination remains excluded."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.MenuService",
+      "method": "interact",
+      "line": "40",
+      "description": "removed call to ai/lightyear/carddemo/ScreenFrame::error",
+      "review_note": "Admin-only role branch and repeated OPTION assignment are not distinguished by this slice; admin destination remains excluded."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.MenuService",
+      "method": "interact",
+      "line": "40",
+      "description": "replaced return value with null for ai/lightyear/carddemo/MenuService::interact",
+      "review_note": "Admin-only role branch and repeated OPTION assignment are not distinguished by this slice; admin destination remains excluded."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateTransaction",
+      "method": "save",
+      "line": "61",
+      "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+      "review_note": "Post-write action assignment survives; account/customer disappearance at locked READ has uncovered mutants."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateTransaction",
+      "method": "save",
+      "line": "50",
+      "description": "replaced return value with null for ai/lightyear/carddemo/AccountUpdateTransaction::save",
+      "review_note": "Post-write action assignment survives; account/customer disappearance at locked READ has uncovered mutants."
+    },
+    {
+      "status": "NO_COVERAGE",
+      "class_name": "ai.lightyear.carddemo.AccountUpdateTransaction",
+      "method": "save",
+      "line": "52",
+      "description": "replaced return value with null for ai/lightyear/carddemo/AccountUpdateTransaction::save",
+      "review_note": "Post-write action assignment survives; account/customer disappearance at locked READ has uncovered mutants."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationRendering",
+      "method": "account",
+      "line": "36",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::put",
+      "review_note": "Initial flags and scratch-field resets survive; reverse row-loop increment times out and receives no killed credit."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationRendering",
+      "method": "account",
+      "line": "40",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::put",
+      "review_note": "Initial flags and scratch-field resets survive; reverse row-loop increment times out and receives no killed credit."
+    },
+    {
+      "status": "TIMED_OUT",
+      "class_name": "ai.lightyear.carddemo.AuthorizationRendering",
+      "method": "clearRows",
+      "line": "21",
+      "description": "Changed increment from 1 to -1",
+      "review_note": "Initial flags and scratch-field resets survive; reverse row-loop increment times out and receives no killed credit."
+    },
+    {
+      "status": "SURVIVED",
+      "class_name": "ai.lightyear.carddemo.AuthorizationRendering",
+      "method": "edits",
+      "line": "11",
+      "description": "removed call to ai/lightyear/carddemo/SourceEdits::setCondition",
+      "review_note": "Initial flags and scratch-field resets survive; reverse row-loop increment times out and receives no killed credit."
+    }
+  ]
+}

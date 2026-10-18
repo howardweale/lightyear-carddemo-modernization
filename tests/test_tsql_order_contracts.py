@@ -11,6 +11,17 @@ class PgContracts(unittest.TestCase):
     def setUp(self):
         try:import pglast
         except ImportError:self.skipTest('install .[tsql] for pinned PostgreSQL parser')
+    def test_parser_provenance_and_version_rejection(self):
+        from unittest.mock import patch
+        from lightyear_data.tsql_procedures import postgresql_syntax, postgresql_syntax_v8
+        for module in (postgresql_syntax, postgresql_syntax_v8):
+            with self.subTest(module=module.__name__):
+                self.assertEqual(module.contract('SELECT 1')['parser'], 'pglast-7.20')
+                for unsupported in ('7.10', '8.7'):
+                    with patch.object(module, 'version', return_value=unsupported):
+                        with self.assertRaisesRegex(ValueError, 'pinned-postgresql-parser-required'):
+                            module.contract('SELECT 1')
+
     def test_real_target_ast_not_keyword_scan(self):
         for query in ('SELECT x FROM t FETCH FIRST 1 ROW ONLY','SELECT DISTINCT ON(x) x FROM t',
                       'SELECT array_agg(x) FROM t','SELECT statement_timestamp()',

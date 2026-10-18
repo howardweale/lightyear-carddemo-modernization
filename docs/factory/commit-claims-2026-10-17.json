@@ -3,100 +3,36 @@
   "policy_start": "2026-10-17",
   "claims": [
     {
-      "record": "docs/factory/intcalc-01-loader-domain-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
+      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
       "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+      "source_path": "docs/factory/equivalence-evidence-2026-10-15/INTCALC/class-packets/legacy-APPL-RESULT-1.json",
+      "source_sha256": "3bbf87bc6a90135fcfe9dfb07652da5ade509c190bdf769ff194cec17b94a68a"
     },
     {
-      "record": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
+      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
       "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+      "source_path": "docs/factory/equivalence-scale-2026-10-16/INTCALC-class-audit.json",
+      "source_sha256": "92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44"
     },
     {
-      "record": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
+      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
       "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+      "source_path": "docs/factory/equivalence-evidence-2026-10-15/POSTTRAN/class-packets/legacy-APPL-RESULT-1.json",
+      "source_sha256": "fb7ea5ee6e418bd05a00457e732fd965c552bc611c6dfc5363c442440216eaa3"
     },
     {
-      "record": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
+      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
       "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
-    },
-    {
-      "record": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
-      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "role": "merge",
-      "pr": 337,
-      "parents": [
-        "544247928a871bca4ecb9971185584569a51cdad",
-        "3f1ddcfb340673b906cff77922bb217320f04eab"
-      ],
-      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
-    },
-    {
-      "record": "docs/factory/intcalc-05-line189-io-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
-    },
-    {
-      "record": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
-      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
-      "role": "source",
-      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
-      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
-    },
-    {
-      "record": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
-      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "role": "merge",
-      "pr": 337,
-      "parents": [
-        "544247928a871bca4ecb9971185584569a51cdad",
-        "3f1ddcfb340673b906cff77922bb217320f04eab"
-      ],
-      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
-    },
-    {
-      "record": "docs/factory/intcalc-releasability-2026-10-17.json",
-      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "role": "merge",
-      "pr": 337,
-      "parents": [
-        "544247928a871bca4ecb9971185584569a51cdad",
-        "3f1ddcfb340673b906cff77922bb217320f04eab"
-      ],
-      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
-    },
-    {
-      "record": "docs/factory/intcalc-releasability-2026-10-17.md",
-      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
-      "role": "merge",
-      "pr": 337,
-      "parents": [
-        "544247928a871bca4ecb9971185584569a51cdad",
-        "3f1ddcfb340673b906cff77922bb217320f04eab"
-      ],
-      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+      "source_path": "docs/factory/equivalence-scale-2026-10-16/POSTTRAN-class-audit.json",
+      "source_sha256": "831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f"
     },
     {
       "record": "docs/factory/factory-local-activation-correction-2026-10-17.json",
@@ -256,36 +192,132 @@
       "pr": 361
     },
     {
-      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
-      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
-      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "record": "docs/factory/current-status.json",
+      "reference": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
+      "commit": "1f638ed0f0e9c132bdb99c63cfbf0dc4d8b2d76c",
       "role": "source",
-      "source_path": "docs/factory/equivalence-evidence-2026-10-15/INTCALC/class-packets/legacy-APPL-RESULT-1.json",
-      "source_sha256": "3bbf87bc6a90135fcfe9dfb07652da5ade509c190bdf769ff194cec17b94a68a"
+      "source_path": "src/lightyear_data/carddemo/volume.py",
+      "source_sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
     },
     {
-      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/INTCALC-class-request.json",
-      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
-      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "record": "docs/factory/current-status.json",
+      "reference": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
+      "commit": "cf43585fc4fb7ae4466f7414eb4ae5028bcccad8",
       "role": "source",
-      "source_path": "docs/factory/equivalence-scale-2026-10-16/INTCALC-class-audit.json",
-      "source_sha256": "92be09aac90db3d3f3a9bb6defe95c874f45ae05c9e3ef4a6976be65d2f33c44"
+      "source_path": "src/lightyear_data/carddemo/volume.py",
+      "source_sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
     },
     {
-      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
-      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
-      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "record": "docs/factory/carddemo-web-review-request-2026-10-18.json",
+      "reference": "e5b5489d8b613ac026101ef091d073639a093c59",
+      "commit": "e5b5489d8b613ac026101ef091d073639a093c59",
       "role": "source",
-      "source_path": "docs/factory/equivalence-evidence-2026-10-15/POSTTRAN/class-packets/legacy-APPL-RESULT-1.json",
-      "source_sha256": "fb7ea5ee6e418bd05a00457e732fd965c552bc611c6dfc5363c442440216eaa3"
+      "source_path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
+      "source_sha256": "5012ae18309362857b122ce2af80f4267cfe8219bff0892272efc368a5ad2c2a"
     },
     {
-      "record": "docs/factory/equivalence-scale-supersession-2026-10-17/POSTTRAN-class-request.json",
-      "reference": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
-      "commit": "043c4ef3ac0c46753ea283bd8dfc1e00410256ad",
+      "record": "docs/factory/carddemo-web-review-request-2026-10-18.json",
+      "reference": "01445c368daf0c1860800f47a79cb10649f75ae2",
+      "commit": "01445c368daf0c1860800f47a79cb10649f75ae2",
       "role": "source",
-      "source_path": "docs/factory/equivalence-scale-2026-10-16/POSTTRAN-class-audit.json",
-      "source_sha256": "831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f"
+      "source_path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
+      "source_sha256": "8404a871910afc6e4a26a3f3c3cb58d4c456c6ccaa86d3a429a89c470f920e4c"
+    },
+    {
+      "record": "docs/factory/intcalc-01-loader-domain-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
+      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "role": "merge",
+      "pr": 337,
+      "parents": [
+        "544247928a871bca4ecb9971185584569a51cdad",
+        "3f1ddcfb340673b906cff77922bb217320f04eab"
+      ],
+      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+    },
+    {
+      "record": "docs/factory/intcalc-05-line189-io-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
+      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "role": "merge",
+      "pr": 337,
+      "parents": [
+        "544247928a871bca4ecb9971185584569a51cdad",
+        "3f1ddcfb340673b906cff77922bb217320f04eab"
+      ],
+      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+    },
+    {
+      "record": "docs/factory/intcalc-releasability-2026-10-17.json",
+      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "role": "merge",
+      "pr": 337,
+      "parents": [
+        "544247928a871bca4ecb9971185584569a51cdad",
+        "3f1ddcfb340673b906cff77922bb217320f04eab"
+      ],
+      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+    },
+    {
+      "record": "docs/factory/intcalc-releasability-2026-10-17.md",
+      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "role": "merge",
+      "pr": 337,
+      "parents": [
+        "544247928a871bca4ecb9971185584569a51cdad",
+        "3f1ddcfb340673b906cff77922bb217320f04eab"
+      ],
+      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
     }
   ]
 }

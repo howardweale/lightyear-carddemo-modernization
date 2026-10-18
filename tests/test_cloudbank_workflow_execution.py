@@ -237,13 +237,16 @@ class CloudBankWorkflowTests(unittest.TestCase):
 
 
 class WorkerCleanupRaceTests(unittest.TestCase):
-    def exercise_permission_race(self, after_signal):
+    def exercise_permission_race(self, after_signal, *, exits_during_grace=False):
         from types import SimpleNamespace
         from unittest.mock import Mock
         import os
         process = Mock(pid=123, returncode=0)
         # Output limit fires while the worker is live; it may exit during cleanup.
         process.poll.side_effect = [None, None, after_signal]
+        if after_signal is None and not exits_during_grace:
+            import subprocess
+            process.wait.side_effect = subprocess.TimeoutExpired("worker", 1)
         process.stdin = Mock()
         fake_os = SimpleNamespace(
             name="posix", environ=os.environ, fstat=os.fstat,
@@ -273,11 +276,18 @@ class WorkerCleanupRaceTests(unittest.TestCase):
         self.signal_attempt.assert_called_once()
         self.process.wait.assert_called_once()
 
+    def test_delayed_exit_preserves_output_limit_after_bounded_reap(self):
+        from unittest.mock import call
+        with self.assertRaisesRegex(WorkerFailure, "worker-output-limit"):
+            self.exercise_permission_race(None, exits_during_grace=True)
+        self.signal_attempt.assert_called_once()
+        self.assertEqual([call(timeout=1), call()], self.process.wait.call_args_list)
+
     def test_live_worker_signal_denial_is_not_suppressed(self):
         with self.assertRaises(PermissionError):
             self.exercise_permission_race(None)
         self.signal_attempt.assert_called_once()
-        self.process.wait.assert_not_called()
+        self.process.wait.assert_called_once_with(timeout=1)
 
 
 if __name__ == "__main__":

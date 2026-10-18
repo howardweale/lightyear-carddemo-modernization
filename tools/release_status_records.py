@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
+from tools import carddemo_status_record
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -39,6 +40,10 @@ def inputs(root=ROOT):
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    carddemo_path=carddemo_status_record.latest(root)
+    if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
+    web_path=carddemo_status_record.latest(root,'carddemo-slice-receipt/1')
+    if web_path:additional.extend([web_path.relative_to(root).as_posix(),carddemo_status_record.web_packet_path(web_path)])
     carddemo = 'docs/factory/carddemo-data-review-evidence-2026-10-15.json'
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
@@ -108,8 +113,10 @@ def load(root=ROOT):
         carddemo = json.loads(raw)
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
     return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
-                historical_view=historical_view,projections=projections,projection_paths=projection_paths,carddemo=carddemo,
+                historical_view=historical_view,projections=projections,projection_paths=projection_paths,carddemo_historical=carddemo,
                 phase2=phase2, evaluated_at=clock, retention=retention,
+                carddemo=carddemo_status_record.load(root) or carddemo,
+                carddemo_web=carddemo_status_record.load_web(root),
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
@@ -117,6 +124,8 @@ def load(root=ROOT):
 
 
 def carddemo_text(record):
+    if record and record.get('schema') == 'carddemo-slice-evidence/2':
+        return carddemo_status_record.paragraph(record)
     if not record:
         return 'Current CardDemo measurements are not recorded.'
     measured=record['measured']; rows=measured['vsam']
@@ -179,6 +188,8 @@ def render(model):
             != {('required-ci', 15368), ('documentation-and-lint', 15368)}
     ):
         raise ValueError('delivery-snapshot-not-green')
+    current["carddemo"] = model.get("carddemo")
+    current["carddemo_web"] = model.get("carddemo_web")
     current["verdict_path"] = verdict_path
     current["delivery"] = delivery
     snapshot_date = delivery["checked_at"][:10] if delivery else current["as_of"]
@@ -229,6 +240,7 @@ def render(model):
            *['Current retention manifest: ['+Path(p).name+']('+Path(p).name+'); scheduled download/hash verification applies. Local deletion remains unauthorized.' for p in model.get('retention',[])],
            'Dated October 14/15 retention statements remain historical; use these manifests for current storage status. [October 17 verification and deletion addendum](retention-inventory-2026-10-17.json); local deletion remains unauthorized.']
     text+=['','## CardDemo data slice','',carddemo_text(model.get('carddemo')),
+           '','## CardDemo six-screen proof','',carddemo_status_record.web_paragraph(model.get('carddemo_web')),
            '','## B06 access','',
            b06_text(model.get('b06')),
            '','## Equivalence evidence still outstanding','',

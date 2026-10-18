@@ -1,0 +1,9 @@
+# Explicit disposable CI adapter. Normal compose.yaml uses the real clock.
+services:
+  postgres:
+    # CI acquired this exact digest before Compose; never reacquire during startup.
+    pull_policy: never
+  service:
+    environment:
+      SPRING_PROFILES_ACTIVE: reference-ci
+      CARDDEMO_REFERENCE_INSTANT: '2026-10-17T12:34:56Z'

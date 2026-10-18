@@ -1,0 +1,31 @@
+{
+  "schema": "factory-contract/1",
+  "kind": "equivalence-review",
+  "program": "factory",
+  "sources": [
+    {
+      "path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
+      "sha256": "8404a871910afc6e4a26a3f3c3cb58d4c456c6ccaa86d3a429a89c470f920e4c",
+      "commit": "01445c368daf0c1860800f47a79cb10649f75ae2"
+    }
+  ],
+  "details": {
+    "packet_sha256": "8404a871910afc6e4a26a3f3c3cb58d4c456c6ccaa86d3a429a89c470f920e4c",
+    "items": [
+      "carddemo-six-screen-raw-reference-api",
+      "carddemo-six-screen-browser-full-state",
+      "carddemo-six-screen-strict-mutation",
+      "carddemo-six-screen-quirks-and-remaining-mutants"
+    ],
+    "class_proof_sha256": null,
+    "reviewer_type": "AI-assisted",
+    "claim_scope": "twin",
+    "dependencies": [
+      "Bounded raw COBOL baseline, shared BMS parser and typed projection; public and disclosed synthetic fixtures only",
+      "49 surviving, 17 uncovered and one timed-out mutant remain in the full denominator",
+      "Native CICS/IMS/DB2/LE, production data, other maps/services and SQL-error screen equivalence remain unproved",
+      "Final publication head requires fresh exact-head CI and Howard merge approval",
+      "Unsigned review only; no signing, import, activation, release or Phase 2 authority"
+    ]
+  }
+}

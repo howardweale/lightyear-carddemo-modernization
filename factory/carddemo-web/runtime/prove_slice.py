@@ -192,8 +192,16 @@ class Proof:
             self.start('authorization-pages-and-fraud','11');self.step('ENTER',{'ACCTID':self.fixture['account']})
             self.step('PF7',self.inputs());self.step('PF8',self.inputs());self.step('PF8',self.inputs());self.step('PF7',self.inputs())
             fields=self.inputs();selection=next(k for k,v in fields.items() if len(self.current['values'][k])==1)
-            fields[selection]='X';self.step('ENTER',fields);fields=self.inputs();fields[selection]='S';self.step('ENTER',fields)
-            self.step('PF5',self.inputs());self.step('PF5',self.inputs());self.step('PF8',self.inputs());self.step('PF3');self.step('PF3')
+            fields[selection]='X';result=self.step('ENTER',fields)
+            assert result['program']=='COPAUS0C' and self.current['message']=='Invalid selection. Valid value is S'
+            fields=self.inputs();fields[selection]='S';result=self.step('ENTER',fields)
+            assert result['program']=='COPAUS1C','valid selection did not reach authorization detail'
+            before=deepcopy(self.engine.store.fraud)
+            self.step('PF5',self.inputs());assert self.current['message']=='AUTH MARKED FRAUD...'
+            assert len(self.engine.store.fraud)==len(before)+1
+            self.step('PF5',self.inputs());assert self.current['message']=='AUTH FRAUD REMOVED...'
+            assert self.engine.store.fraud==before
+            self.step('PF8',self.inputs());self.step('PF3');self.step('PF3')
         self.case('authorization-pages-and-fraud',authorizations)
         def prepare(name,new_name):
             self.start(name,'2');self.step('ENTER',{'ACCTSID':self.fixture['account']})

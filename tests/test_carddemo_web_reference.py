@@ -99,6 +99,20 @@ class ReferenceStorageTests(unittest.TestCase):
         self.assertTrue(state.predicate(lex('TEXT-A = LOW-VALUES')))
         state.assign(lex('TEXT-A'),state.value(lex('ZEROS')));self.assertEqual('0000',m.read('TEXT-A'))
 
+    def test_abbreviated_relational_not_is_inherited_but_logical_not_is_not(self):
+        from lightyear_data.carddemo.reference_values import Values
+        m=self.memory();state=Values(m)
+        lex=lambda text:tokens(source(text),'abbreviated.cbl')
+        for value,expected in [('S',True),('X',True),(' ',False),('\0'*4,False)]:
+            with self.subTest(value=value):
+                m.write('TEXT-A',value)
+                self.assertEqual(expected,state.predicate(lex('TEXT-A NOT = SPACES AND LOW-VALUES')))
+                self.assertEqual(state.predicate(lex('TEXT-A NOT = SPACES AND TEXT-A NOT = LOW-VALUES')),
+                                 state.predicate(lex('TEXT-A NOT = SPACES AND LOW-VALUES')))
+        m.write('TEXT-A','abcd')
+        self.assertTrue(state.predicate(lex("NOT TEXT-A = 'abcd' OR 'abcd'")))
+        self.assertFalse(state.predicate(lex("TEXT-A NOT = 'abcd' OR 'abcd'")))
+
     def test_numval_c_accepts_source_edited_amounts_without_accepting_embedded_digit_spaces(self):
         from lightyear_data.carddemo.reference_values import Values
         state=Values(self.memory())
@@ -280,6 +294,19 @@ class RawRemainingScreenTests(unittest.TestCase):
         self.assertEqual(bytes.fromhex('404040'+'00'*22),bytes.fromhex(frame['symbolic_output']['CNAME']))
         self.assertEqual(','+' '*24,frame['values']['ADDR001'])
         self.assertEqual('Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000',frame['message'])
+
+    def test_raw_authorization_selection_transfers_to_detail(self):
+        from lightyear_data.carddemo.reference_screens import AuthorizationListReference
+        from lightyear_data.carddemo.reference_signon import TransferScreen
+        from lightyear_data.carddemo.reference_values import Values
+        reference=AuthorizationListReference(self.root);reference.memory=reference.storage()
+        memory=reference.memory;memory.write('ACCTIDI','00000000050')
+        memory.write('SEL0001I','S');memory.write('CDEMO-CPVS-AUTH-KEYS[1]','12345678')
+        state=Values(memory,external=reference.external)
+        with self.assertRaises(TransferScreen) as transfer:
+            Machine(reference.program,state).run('PROCESS-ENTER-KEY')
+        self.assertEqual('COPAUS1C',transfer.exception.program)
+        self.assertEqual('12345678',memory.read('CDEMO-CPVS-PAU-SELECTED'))
 
     def test_authorization_receive_only_carries_modified_protected_fields(self):
         from lightyear_data.carddemo.reference_screens import AuthorizationListReference

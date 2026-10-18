@@ -168,9 +168,12 @@ class Values:
                         # comparison assumption. IS NUMERIC still rejects them;
                         # do not turn invalid input into a Python decimal crash.
                         pass
-                last[0]=(left,op)
+                # Relational NOT belongs to the inherited operator in an
+                # abbreviated condition (A NOT = B AND C). Leading logical
+                # NOT is handled above and must not propagate to the next term.
+                last[0]=(left,op,negate)
             elif last[0] is not None and not negate:
-                right=left;left,op=last[0]
+                right=left;left,op,negate=last[0]
             else:raise Unsupported('reference predicate operator '+op)
             c=self.compare(left,right);answer={'EQUAL':c==0,'=':c==0,'<>':c!=0,'>':c>0,'<':c<0,'>=':c>=0,'<=':c<=0}[op]
             return not answer if negate else answer

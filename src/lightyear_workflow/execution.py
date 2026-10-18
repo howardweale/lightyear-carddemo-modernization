@@ -78,11 +78,15 @@ def run_worker(root: Path, action: dict, policy: dict, timeout: float, *, cancel
                         os.killpg(process.pid, signal.SIGKILL)
                 except ProcessLookupError:
                     pass  # Worker exited between poll and termination.
-                except PermissionError:
-                    # Some hosts deny a signal during exit. Suppress it only
-                    # after confirming termination; live-worker denial is fatal.
+                except PermissionError as exc:
+                    # A host can deny a signal before an exiting child becomes
+                    # waitable. Bound the reap grace period and suppress the
+                    # denial only after confirmed exit; never accept a live child.
                     if process.poll() is None:
-                        raise
+                        try:
+                            process.wait(timeout=1)
+                        except subprocess.TimeoutExpired:
+                            raise exc
             process.wait()
 
 

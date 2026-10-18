@@ -242,9 +242,10 @@ class FraudReference(ScreenReference):
         text=' '.join(t.text for t in items);m=self.memory
         def host(name):
             if name=='MERCHANT-NAME':return m.read('MERCHANT-NAME-TEXT')[:int(m.read('MERCHANT-NAME-LEN'))]
-            value=m.read(name)
-            return value if isinstance(value,Decimal) else value.rstrip(' ')
-        def timestamp(value):return datetime.strptime(value,'%y-%m-%d %H.%M.%S%f').isoformat(sep=' ')
+            # AUTHFRDS DCL fixed PIC X hosts retain their complete width.
+            # Only the VARCHAR host above uses an explicit length prefix.
+            return m.read(name)
+        def timestamp(value):return datetime.strptime(value.rstrip(' '),'%y-%m-%d %H.%M.%S%f').isoformat(sep=' ')
         if text.startswith('SQL INSERT INTO CARDDEMO . AUTHFRDS'):
             columns=text.split('(',1)[1].split(')',1)[0].split();hosts=re.findall(r': ([A-Z][A-Z0-9-]*)',text)
             if len(columns)!=26 or len(hosts)!=25:raise Unsupported('reference SQL INSERT arity')

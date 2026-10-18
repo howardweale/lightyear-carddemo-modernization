@@ -295,6 +295,32 @@ class RawRemainingScreenTests(unittest.TestCase):
         self.assertEqual(','+' '*24,frame['values']['ADDR001'])
         self.assertEqual('Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000',frame['message'])
 
+    def test_raw_fraud_sql_preserves_fixed_hosts_and_varchar_length(self):
+        from lightyear_data.carddemo.reference_screens import FraudReference
+        from lightyear_data.carddemo.reference_signon import Returned
+        from lightyear_data.carddemo.reference_values import Values
+        reference=FraudReference(self.root);area=reference.storage()
+        def link():
+            reference.memory=reference.storage()
+            reference.memory.write('DFHCOMMAREA',area.raw('DFHCOMMAREA').decode('cp037'))
+            state=Values(reference.memory,clock=reference.clock,external=reference.external)
+            with self.assertRaises(Returned):Machine(reference.program,state).run('MAIN-PARA')
+        for name,value in {'WS-ACCT-ID':'00000000050','WS-CUST-ID':'000000050',
+                           'WS-FRD-ACTION':'F','PA-CARD-NUM':'0500024453765740',
+                           'PA-AUTH-ORIG-DATE':'261017','PA-AUTH-TIME-9C':999999999-123456007,
+                           'PA-MERCHANT-ID':'7','PA-MERCHANT-CITY':'SEATTLE',
+                           'PA-MERCHANT-NAME':'PUBLIC DEMO 7','PA-TRANSACTION-ID':'7'}.items():area.write(name,value)
+        link()
+        row=reference.store.fraud[0]
+        self.assertEqual(' '*6,row['auth_id_code']);self.assertEqual(' '*6,row['message_type'])
+        self.assertEqual(' '*6,row['message_source']);self.assertEqual('7'+' '*14,row['merchant_id'])
+        self.assertEqual('7'+' '*14,row['transaction_id']);self.assertEqual('SEATTLE'+' '*6,row['merchant_city'])
+        self.assertEqual('PUBLIC DEMO 7'.ljust(22),row['merchant_name'])
+        self.assertEqual('2026-10-17 12:34:56.007000',row['auth_ts'])
+        before=dict(row);area.write('WS-FRD-ACTION','R')
+        link()
+        self.assertEqual([{**before,'auth_fraud':'R'}],reference.store.fraud)
+
     def test_raw_authorization_top_pf7_keeps_received_length_without_cursor(self):
         from lightyear_data.carddemo.reference_screens import AuthorizationListReference
         from lightyear_data.carddemo.reference_menu import MenuReference

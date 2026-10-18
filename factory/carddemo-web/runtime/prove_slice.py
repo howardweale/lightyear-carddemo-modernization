@@ -100,8 +100,9 @@ class Proof:
                 target=next(v for v in state[child_table] if v['source_ordinal']==ordinal and v['ordinal']==child_ordinal);target.update(child)
             old.update(row)
         state['authfrds']=deepcopy(self.engine.store.fraud)
+        # Match PostgreSQL JSON timestamp text, preserving all microsecond digits.
         for row in state['authfrds']:
-            row['auth_ts']=datetime.fromisoformat(row['auth_ts']).isoformat()
+            row['auth_ts']=datetime.fromisoformat(row['auth_ts']).isoformat(timespec='microseconds').rstrip('0').rstrip('.')
         return {table:sorted([canonical(row) for row in rows],key=lambda r:json.dumps(r,sort_keys=True)) for table,rows in state.items()}
     def step(self,aid,fields=None):
         fields=fields or {};before=self.engine.program
@@ -124,7 +125,7 @@ class Proof:
             with urllib.request.urlopen(urllib.request.Request(self.args.url+'/api/interaction',body,{'Content-Type':'application/json'}),timeout=30) as response:actual=json.load(response)
             self.token=actual['token'];compare_frame(actual['screen'],expected);assert actual['ended']==expected['ended']
             observed=snapshot(self.out/'database');data=json.loads((self.out/'database'/observed['path']).read_bytes())
-            for item in data['authfrds']:item['auth_ts']=datetime.fromisoformat(item['auth_ts']).isoformat()
+            for item in data['authfrds']:item['auth_ts']=datetime.fromisoformat(item['auth_ts']).isoformat(timespec='microseconds').rstrip('0').rstrip('.')
             data={table:sorted([canonical(r) for r in rows],key=lambda r:json.dumps(r,sort_keys=True)) for table,rows in data.items()}
             assert data==state,dict(reason='PostgreSQL after-state differs',tables=[t for t in state if state[t]!=data.get(t)])
             row['actual']=actual['screen'];row['database_after_sha256']=digest(data)

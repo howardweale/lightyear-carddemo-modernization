@@ -72,9 +72,47 @@ class AccessTests(unittest.TestCase):
     def test_ims_corpus_actual_adapter(self):
         from lightyear_data.carddemo.ims_replay import replay
         result=replay(self.c,ROOT/'spec/modernization/carddemo-data',ROOT/'readiness/ims-expiry/conformance/cases.json')
-        self.assertEqual(40,result['total'])
+        self.assertEqual(42,result['total'])
+        self.assertEqual(40,result['historical_corpus_cases'])
+        self.assertEqual(2,result['supplementary_cases'])
         self.assertFalse(result['unexpected_differences'])
-        self.assertGreater(result['adapter_cases'],20)
+        self.assertEqual(24,result['adapter_cases'])
+        self.assertEqual(5,result['replay_local_cases'])
+        self.assertEqual(13,result['unsupported'])
+        self.assertEqual(24,result['adapter_matched'])
+        self.assertEqual(5,result['replay_local_matched'])
+        for row in result['cases'][-2:]:
+            self.assertEqual('adapter',row['execution_scope'])
+            self.assertEqual('matched',row['verdict'])
+            self.assertTrue(row['segment_compared'])
+            self.assertTrue(row['segment_equal'])
+            self.assertTrue(row['after_state_equal'])
         self.assertEqual(['07-gnp-without-parent','28-procopt-g-denies-update'],[r['id'] for r in result['cases'] if r.get('status_correction')])
         self.assertGreater(result['segment_comparisons'],0)
         self.assertFalse(result['release_authorized'])
+
+
+class ReplayScopeTests(unittest.TestCase):
+    def test_replay_local_answers_do_not_earn_adapter_credit(self):
+        from lightyear_data.carddemo.ims_replay import execution_scope,replay_counts,scope_text
+        requests=[dict(operation='PROCOPT'),dict(operation='SENSEG'),
+                  dict(operation='SSA',syntax='INVALID'),dict(operation='GN'),dict(operation='CHKP')]
+        rows=[dict(execution_scope=execution_scope(q),verdict='matched' if q['operation']!='CHKP' else 'unsupported') for q in requests]
+        counts=replay_counts(rows)
+        self.assertEqual(1,counts['adapter_cases']);self.assertEqual(3,counts['replay_local_cases'])
+        self.assertEqual(1,counts['unsupported']);self.assertEqual(1,counts['adapter_matched'])
+        before=scope_text(counts);rows[3]['verdict']='divergent'
+        after=scope_text(replay_counts(rows))
+        self.assertNotEqual(before,after)
+        self.assertIn('Adapter calls: 0/1',after)
+
+    def test_gn_dispatch_does_not_filter_children(self):
+        from lightyear_data.carddemo.ims_replay import dispatch
+        class Repository:
+            def __init__(self):self.calls=[]
+            def gn(self,hold=False,**kwargs):
+                self.calls.append((hold,kwargs));return ('  ',b'child')
+        repo=Repository();mapping={'keys':[dict(key_offset=0,key_length=1)]}
+        result=dispatch(repo,dict(operation='GHN',position=4),{'R001':b'r'},{'D001':b'd'},mapping,mapping,b'')
+        self.assertEqual(('  ',b'child'),result)
+        self.assertEqual([(True,{})]*5,repo.calls)

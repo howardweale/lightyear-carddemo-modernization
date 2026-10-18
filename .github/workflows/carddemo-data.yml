@@ -100,7 +100,7 @@ jobs:
           PYTHONPATH: src
           CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
         run: python -B -m lightyear_data.carddemo.volume --count 100000 --out work/carddemo-volume
-      - name: Replay all forty corpus cases through migrated typed adapters with explicit gaps
+      - name: Replay historical corpus plus child traversal, separating adapter and local answers
         env:
           PYTHONPATH: src
           CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo

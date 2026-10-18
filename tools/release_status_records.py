@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_status_record
+from tools import carddemo_status_record, appl_contract_selection
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -48,6 +48,7 @@ def inputs(root=ROOT):
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
     additional += [p for p in ('docs/factory/posttran-phase2-readiness-2026-10-17.json', 'docs/factory/posttran-phase2-plan-amendment-2026-10-17.json', 'docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json', 'docs/factory/factory-authority.public.pem') if (root/p).is_file()]
+    additional += [appl_contract_selection.PATH] if (root/appl_contract_selection.PATH).is_file() else []
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
@@ -112,7 +113,7 @@ def load(root=ROOT):
             raise ValueError('status-carddemo-evidence-hash')
         carddemo = json.loads(raw)
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
-    return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
+    return dict(appl_contract_selection=appl_contract_selection.load(root), release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,projection_paths=projection_paths,carddemo_historical=carddemo,
                 phase2=phase2, evaluated_at=clock, retention=retention,
                 carddemo=carddemo_status_record.load(root) or carddemo,
@@ -188,6 +189,7 @@ def render(model):
             != {('required-ci', 15368), ('documentation-and-lint', 15368)}
     ):
         raise ValueError('delivery-snapshot-not-green')
+    current["appl_contract_selection"] = model.get("appl_contract_selection")
     current["carddemo"] = model.get("carddemo")
     current["carddemo_web"] = model.get("carddemo_web")
     current["verdict_path"] = verdict_path
@@ -253,6 +255,8 @@ def render(model):
            'CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.',
            '', 'The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.',
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
+    if model.get("appl_contract_selection"):
+        text += ["", "## Selected APPL-RESULT contracts", "", appl_contract_selection.markdown(model["appl_contract_selection"]), "", "[Current signing guide](appl-result-signing-2026-10-18.md) · [Contract decision addendum](howard-decision-packet-2026-10-18-appl-selection.md)"]
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
              f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]

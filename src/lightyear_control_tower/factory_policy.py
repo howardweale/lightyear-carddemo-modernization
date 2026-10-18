@@ -26,11 +26,13 @@ def require(condition, code="factory-contract-refused"):
 
 
 def validate_contract(value, root=None, *, check_evidence=True):
-    require(isinstance(value, dict) and set(value) in (COMMON, COMMON | {"signing_order"}))
+    require(isinstance(value, dict) and set(value) in (COMMON, COMMON | {"signing_order"}, COMMON | {"supersession"}, COMMON | {"signing_order", "supersession"}))
     require(value["schema"] == "factory-contract/1" and value["kind"] in FIELDS)
     require(value["program"] in {"INTCALC", "POSTTRAN", "B06", "B07", "factory"})
     from .factory_order import shape
     shape(value)
+    from .factory_supersessions import reference_shape
+    reference_shape(value)
     details = value["details"]
     expected = FIELDS[value["kind"]]
     require(isinstance(details, dict))

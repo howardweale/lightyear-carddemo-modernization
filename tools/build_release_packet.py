@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from tools import appl_contract_selection
 from tools.release_status_records import ROOT, PHASE2_PUBLIC_ROOT, load, render
 
 
@@ -37,6 +38,8 @@ def build(commit=None, root=ROOT, prepared_on=None):
                 '', 'Evaluated at '+p['evaluated_at']+'. '+('WARNING: five days or fewer remain.' if p['warning'] else 'More than five days remain.'),
                 'Compiler expiry: '+p['artifact_expires_at']+'. No signing or execution has been performed.']
     lines += ['', 'Current public retention: '+', '.join('['+Path(p).name+']('+Path(p).name+')' for p in model.get('retention',[]))+'. Historical packets remain unchanged.']
+    if model.get('appl_contract_selection'):
+        lines += ['', appl_contract_selection.markdown(model['appl_contract_selection']), '', '[Current signing guide](appl-result-signing-2026-10-18.md)']
     lines += ['', 'All new requests are unsigned. Exact-final-green-commit merge approval remains separate.', '']
     path = root/'docs/factory'/('howard-decision-packet-'+date+'.md')
     path.write_text('\n'.join(lines), encoding='utf-8', newline='\n')

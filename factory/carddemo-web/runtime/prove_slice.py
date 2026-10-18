@@ -122,6 +122,13 @@ class Proof:
             row['actual']=actual['screen'];row['database_after_sha256']=digest(data)
         self.current=expected['screen'];self.rows.append(row);return expected
     def inputs(self):return {k:v.rstrip(' ') for k,v in self.current['values'].items() if not self.current['attributes'][k]['protected']}
+    def valid_update_inputs(self):
+        fields=self.inputs()
+        # Public data contains an SSN in the source-rejected 900s and a state/ZIP
+        # mismatch. Submit explicit synthetic edits for positive cases; retain
+        # the original bytes and their validation-error sessions.
+        synthetic=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001')
+        assert set(synthetic)<=set(fields);fields.update(synthetic);return fields
     def start(self,case,option=None):
         self.case_id=case;self.session=next(self.sessions);self.engine.reset();self.token=None;self.step('INITIAL')
         self.step('ENTER',dict(USERID=self.fixture['user'],PASSWD=self.fixture['password']))
@@ -168,15 +175,18 @@ class Proof:
             for invalid in ('','!'):
                 def body(field=field,invalid=invalid):
                     self.start('update-'+field+'-'+('blank' if not invalid else 'invalid'),'2');self.step('ENTER',{'ACCTSID':self.fixture['account']})
-                    edited=self.inputs();edited[field]=invalid;self.step('ENTER',edited);self.step('PF3')
+                    edited=self.valid_update_inputs();edited[field]=invalid;self.step('ENTER',edited);self.step('PF3')
                 self.case('update-'+field+'-'+('blank' if not invalid else 'invalid'),body)
         def unchanged():
             self.start('update-no-change','2');self.step('ENTER',{'ACCTSID':self.fixture['account']});self.step('ENTER',self.inputs());self.step('PF3')
         self.case('update-no-change',unchanged)
         for label,date_fields in [('leap-day-invalid',{'DOBYEAR':'1990','DOBMON':'02','DOBDAY':'29'}),('leap-day-valid',{'DOBYEAR':'2000','DOBMON':'02','DOBDAY':'29'})]:
             def body(label=label,date_fields=date_fields):
-                self.start(label,'2');self.step('ENTER',{'ACCTSID':self.fixture['account']});edited=self.inputs()
-                assert set(date_fields)<=set(edited);edited.update(date_fields);self.step('ENTER',edited);self.step('PF3')
+                self.start(label,'2');self.step('ENTER',{'ACCTSID':self.fixture['account']});edited=self.valid_update_inputs()
+                assert set(date_fields)<=set(edited);edited.update(date_fields);self.step('ENTER',edited)
+                state=self.engine.adapters['COACTUPC'].values
+                assert state.condition('INPUT-ERROR' if label=='leap-day-invalid' else 'ACUP-CHANGES-OK-NOT-CONFIRMED'),(label,self.current['message'])
+                self.step('PF3')
             self.case(label,body)
         def authorizations():
             self.start('authorization-pages-and-fraud','11');self.step('ENTER',{'ACCTID':self.fixture['account']})
@@ -187,15 +197,21 @@ class Proof:
         self.case('authorization-pages-and-fraud',authorizations)
         def prepare(name,new_name):
             self.start(name,'2');self.step('ENTER',{'ACCTSID':self.fixture['account']})
-            changed=self.inputs();assert 'ACSFNAM' in changed
+            changed=self.valid_update_inputs();assert 'ACSFNAM' in changed
             changed['ACSFNAM']=new_name;self.step('ENTER',changed)
             adapter=self.engine.adapters['COACTUPC']
-            assert adapter.values.condition('ACUP-CHANGES-OK-NOT-CONFIRMED'),'source did not reach confirmation state'
+            assert adapter.values.condition('ACUP-CHANGES-OK-NOT-CONFIRMED'),('source did not reach confirmation state',self.current['message'])
         def committed():
             prepare('update-committed','PROOFALPHA');self.step('PF5',self.inputs())
             assert {e['dataset'] for e in self.engine.store.events if e['operation']=='REWRITE'}=={'ACCTDAT','CUSTDAT'}
             self.step('PF3')
         self.case('update-committed',committed)
+        def valid_unchanged():
+            self.start('update-valid-no-change','2');self.step('ENTER',{'ACCTSID':self.fixture['account']})
+            self.step('ENTER',self.inputs());state=self.engine.adapters['COACTUPC'].values
+            assert state.condition('NO-CHANGES-DETECTED') and not state.condition('INPUT-ERROR')
+            assert not any(e['operation']=='REWRITE' for e in self.engine.store.events);self.step('PF3')
+        self.case('update-valid-no-change',valid_unchanged)
         def cancelled():
             prepare('update-cancelled','PROOFBETA');self.step('PF12',self.inputs())
             assert not any(e['operation']=='REWRITE' for e in self.engine.store.events);self.step('PF3')
@@ -219,6 +235,8 @@ class Proof:
             completed_case_count=len(self.cases),planned_case_count=len(self.cases) if passed else None,case_denominator_status='complete generated suite' if passed else 'not fully enumerated after failure; no completion claim',validated_fields=sorted(self.validated_fields),
             source_faults=[dict(case=r['case'],failure=r['expected']['source_fault'],trace=r['expected']['trace']) for r in self.rows if r['expected'].get('source_fault')],
             bounded_date_cases=['leap-day-invalid','leap-day-valid'],
+            synthetic_positive_update_inputs=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001'),
+            terminal_projection='Visible null cells are blank; exact symbolic output octets remain in each reference frame.',
             shared_dependencies=['BMS parser','physical data plan and typed projection codec'],
             full_slice_screen_equivalence=passed,terminal_text_contract='SEND TEXT compares complete message and ended state; no BMS fields exist in that source response',remaining=self.failures),indent=2)+'\n')
 

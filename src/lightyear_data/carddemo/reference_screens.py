@@ -185,7 +185,7 @@ class ScreenReference(SignonReference):
                     name=f['name']
                     if not name:continue
                     if 'ERASE' not in flags and self.prior and 'values' in self.prior:
-                        if not any(m.raw(name+'O')):self.frame['values'][name]=self.prior['values'][name]
+                        if not m.raw(name+'O')[0]:self.frame['values'][name]=self.prior['values'][name]
                         self.frame['attributes'][name]=deepcopy(self.prior['attributes'][name])
                     for suffix in ('A','C'):
                         try:raw=m.raw(name+suffix).decode('cp037')

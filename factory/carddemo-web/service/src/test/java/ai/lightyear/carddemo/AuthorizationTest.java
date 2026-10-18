@@ -39,6 +39,23 @@ class AuthorizationTest {
             assertEquals(program.equals("COPAUS0C")?"COMEN01C":"COPAUS0C",service.interact(db,area,"PF3",Map.of()).nextProgram());
         }verifyNoInteractions(db);
     }
+    @Test void consecutiveMissingReadStringsRetainThePreviousTail() {
+        String buffer=" ".repeat(75);
+        buffer=AuthorizationListService.stringOverlay(buffer,"Account:00000000000 not found in XREF file. Resp:000000013 Reas:000000000");
+        buffer=AuthorizationListService.stringOverlay(buffer,"Account:00000000000 not found in ACCT file. Resp:000000013 Reas:000000000");
+        buffer=AuthorizationListService.stringOverlay(buffer,"Customer:000000000 not found in CUST file. Resp:000000013 Reas:000000000");
+        assertEquals("Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000",buffer.stripTrailing());
+    }
+    @Test void rawNullProjectionAndFreshStringStorageDoNotReuseTerminalText()throws Exception{
+        var b=bindings();var frame=new ScreenFrame(b,"COPAUS0C");var renderer=new AuthorizationRendering(b);
+        frame.set("CNAME","OLDER CUSTOMER");var e=renderer.edits("COPAUS0C",frame);
+        e.put("CNAMEO","\u0000SHOULD NOT DISPLAY");assertEquals("OLDER CUSTOMER",frame.values.get("CNAME").stripTrailing());
+        e.put("CNAMEO","A\u0000B");assertEquals("A B",frame.values.get("CNAME").stripTrailing());
+        var records=new TypedRecords(b);
+        renderer.account(frame,Map.of("acctdata",records.initialized("acctdata"),"custdata",records.initialized("custdata")),null);
+        assertEquals(" ".repeat(25),frame.values.get("CNAME"));
+        assertEquals(","+" ".repeat(24),frame.values.get("ADDR001"));
+    }
     @Test void sourceMoneyPictureKeepsMandatoryZeroAndLeadingMinus() {
         assertEquals("        0.00",ScreenProjection.edited("0","-ZZZZZZZ9.99"));
         assertEquals("-      12.34",ScreenProjection.edited("-12.34","-ZZZZZZZ9.99"));

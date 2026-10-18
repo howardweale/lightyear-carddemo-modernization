@@ -53,8 +53,9 @@ public final class SourceEdits {
         if(part.equals("I")&&!f.path("input_overlay_output").asBoolean())return;
         if(part.equals("O")||part.equals("I")){
             // BMS LOW-VALUES leaves the physical field unchanged.
-            if(value.chars().allMatch(c->c==0))return;
-            screen.set(name,value);if(name.equals("ERRMSG"))screen.message=value.stripTrailing();return;
+            if(!value.isEmpty()&&value.charAt(0)==0)return;
+            String visible=value.replace('\u0000',' ');
+            screen.set(name,visible);if(name.equals("ERRMSG"))screen.message=visible.stripTrailing();return;
         }
         if(part.equals("L")){if(value.equals("-1"))screen.cursor=name;return;}
         Map<String,Object> attributes=screen.attributes.get(name);String symbol=value.stripTrailing();

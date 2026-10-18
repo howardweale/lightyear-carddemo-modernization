@@ -98,11 +98,14 @@ class SignonReference:
         elif operation=='SEND':
             if 'TEXT' in flags:
                 self.ended=True;self.frame=dict(message=values.value(o['FROM']).rstrip(' '));return
-            frame=dict(values={},attributes={},cursor='',message='')
+            frame=dict(values={},attributes={},cursor='',message='',symbolic_output={})
             for f in self.model['fields']:
                 name=f['name']
                 if not name:continue
-                raw=m.raw(name+'O');text=raw.decode('cp037') if any(raw) else f.get('initial','')
+                raw=m.raw(name+'O');frame['symbolic_output'][name]=raw.hex()
+                # Visible terminal cells render null as blank; preserve exact symbolic
+                # octets separately. BMS selects data by its FIRST byte, not any byte.
+                text=raw.decode('cp037').replace('\0',' ') if raw[0] else f.get('initial','')
                 frame['values'][name]=text.ljust(f['length'])[:f['length']]
                 frame['attributes'][name]={k:f[k] for k in ('protected','hidden','color','highlight')}
                 frame['attributes'][name].update(basic=f['attributes'],modified='FSET' in f['attributes'])

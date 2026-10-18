@@ -88,3 +88,5 @@ the pinned programs do not consume the invalid-character position. Grammar is
 based on [IBM NUMVAL-C](https://www.ibm.com/docs/en/cobol-zos/6.3.0?topic=functions-numval-c),
 not candidate Java results. Protected FSET input is reconstructed from the prior
 reference frame, with caller attempts to overwrite protected fields rejected.
+
+The proof retains the public fixture bytes, including its source-invalid SSN and state/ZIP pair. Positive update scenarios submit explicitly synthetic SSN 123-45-6789 and OR/97001; invalid-field cases start with these valid inputs so unrelated public-data errors cannot mask the target edit. Every submitted field remains in the case artifacts. Visible terminal values render null cells as blanks, while each raw reference frame retains exact symbolic-output hex. First-byte null selection follows [IBM BMS output rules](https://www.ibm.com/docs/en/cics-ts/6.x?topic=support-bms-design-performance). This remains a bounded terminal projection, not a native 3270 execution claim.

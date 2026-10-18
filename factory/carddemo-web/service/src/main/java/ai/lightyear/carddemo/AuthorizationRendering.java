@@ -34,6 +34,10 @@ public final class AuthorizationRendering {
         for(var entry:rows.entrySet())records.load(e,model,entry.getKey(),entry.getValue());
         if(summary!=null){records.load(e,model,"pautsum0",summary);e.setCondition("FOUND-PAUT-SMRY-SEG");}
         else e.put(model.path("conditions").path("FOUND-PAUT-SMRY-SEG").path("parent").asText(),"N");
+        // STRING leaves the destination suffix intact. Each CICS invocation has
+        // fresh symbolic output storage, not the preceding physical frame.
+        for(JsonNode statement:model.path("paragraphs").path("GATHER-ACCOUNT-DETAILS"))
+            if(statement.path("op").asText().equals("string"))e.put(statement.path("target").path("name").asText(),"");
         e.run("GATHER-ACCOUNT-DETAILS");frame.trace.addAll(e.trace());
     }
     public void detail(ScreenFrame frame,Map<String,Object> row){

@@ -268,6 +268,19 @@ class RawRemainingScreenTests(unittest.TestCase):
         reference.input={'ACSCTRY':'XXX'}
         with self.assertRaisesRegex(Unsupported,'protected input'):reference.external(operation,values)
 
+    def test_authorization_missing_reads_keep_string_suffix_and_symbolic_nulls(self):
+        from lightyear_data.carddemo.reference_screens import AuthorizationListReference
+        from lightyear_data.carddemo.reference_menu import MenuReference
+        menu=MenuReference(self.root);first=menu.interact('INITIAL')
+        transfer=menu.interact('ENTER',{'OPTION':'11'},first['commarea'])
+        reference=AuthorizationListReference(self.root)
+        result=reference.interact('INITIAL',commarea=transfer['commarea'])
+        frame=result['screen']
+        self.assertEqual(' '*25,frame['values']['CNAME'])
+        self.assertEqual(bytes.fromhex('404040'+'00'*22),bytes.fromhex(frame['symbolic_output']['CNAME']))
+        self.assertEqual(','+' '*24,frame['values']['ADDR001'])
+        self.assertEqual('Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000',frame['message'])
+
     def test_edited_decimal_receivers_use_source_width_and_suppression(self):
         from lightyear_data.carddemo.reference_declarations import layout
         from lightyear_data.carddemo.reference_storage import Memory

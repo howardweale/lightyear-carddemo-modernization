@@ -61,7 +61,15 @@ public final class AuthorizationListService implements TransactionService {
         render.account(frame,Map.of("acctdata",acct,"custdata",cust),summary);render.clearRows(frame);
         if(summary!=null)page(db,area,frame,summary,null,false);
     }
-    private void missing(ScreenFrame f,String prefix,String key,String text){f.error(b.literal(PROGRAM,prefix)+key+b.literal(PROGRAM,text)+"000000013"+b.literal(PROGRAM," Reas:")+"000000000","ACCTID");}
+    static String stringOverlay(String previous,String prefix){
+        int n=Math.min(previous.length(),prefix.length());return prefix.substring(0,n)+previous.substring(n);
+    }
+    private void missing(ScreenFrame f,String prefix,String key,String text){
+        String value=b.literal(PROGRAM,prefix)+key+b.literal(PROGRAM,text)+"000000013"+b.literal(PROGRAM," Reas:")+"000000000";
+        // Three consecutive failed reads STRING into the same WS-MESSAGE;
+        // a shorter later message retains the previous suffix (COPAUS0C 836-959).
+        f.error(stringOverlay(f.values.get("ERRMSG"),value).stripTrailing(),"ACCTID");
+    }
     private void page(Connection db,Commarea area,ScreenFrame frame,Map<String,Object> summary,byte[] start,boolean inclusive)throws SQLException{
         List<Map<String,Object>> rows=auth.page(db,summary,start,inclusive,6);render.clearRows(frame);area.set(PREFIX+"PAUKEY-LAST","\u0000".repeat(8));
         int count=Math.min(5,rows.size());

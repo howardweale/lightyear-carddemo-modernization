@@ -25,14 +25,20 @@ class MasterReadFailureTest {
     @Test void missingMastersRetainFirstErrorAndStillReadCustomerAsPinnedSourceDoes()throws Exception{
         var b=bindings();var typed=new TypedRecords(b);
         for(String program:List.of("COACTVWC","COACTUPC"))for(int absent:new int[]{1,2,3}){
-            var db=mock(Connection.class);var xref=statement(cross(b));var account=statement((absent&1)!=0?null:typed.initialized("acctdata"));var customer=statement((absent&2)!=0?null:typed.initialized("custdata"));
+            var accountRow=typed.initialized("acctdata");accountRow.put(b.field("acctdata","ACCT-ID").path("column").asText(),new java.math.BigDecimal("50"));
+            var customerRow=typed.initialized("custdata");customerRow.put(b.field("custdata","CUST-ID").path("column").asText(),new java.math.BigDecimal("543210987"));
+            var db=mock(Connection.class);var xref=statement(cross(b));var account=statement((absent&1)!=0?null:accountRow);var customer=statement((absent&2)!=0?null:customerRow);
             when(db.prepareStatement(anyString())).thenReturn(xref,account,customer);
             var area=new Commarea(b.root.path("program_commareas").path(program),null);TransactionService service=program.equals("COACTVWC")?new AccountViewService(b):new AccountUpdateService(b);
             var initial=service.interact(db,area,"INITIAL",Map.of());
             var result=service.interact(db,area,"ENTER",Map.of("ACCTSID","00000000050"),initial.screen());
             String expected=(absent&1)!=0?"Account:00000000050 not found in Acct Master file.Resp:000000013  Reas:000000000 ":"CustId:123456789 not found in customer master.Resp: 000000013  REAS:000000000 ";
             assertEquals(ScreenFrame.pad(expected,75).stripTrailing(),result.screen().message,program+" missing "+absent);
-            assertEquals("123456789",area.get("CDEMO-CUST-ID"));assertEquals("1234567890123456",area.get("CDEMO-CARD-NUM"));
+            // COACTUPC 3805-3811 replaces context from fetched master buffers;
+            // a missing master uses the disclosed initialized-buffer assumption.
+            assertEquals(program.equals("COACTUPC")?((absent&2)!=0?"000000000":"543210987"):"123456789",area.get("CDEMO-CUST-ID"));
+            assertEquals(program.equals("COACTUPC")&&(absent&1)!=0?"00000000000":"00000000050",area.get("CDEMO-ACCT-ID"));
+            assertEquals("1234567890123456",area.get("CDEMO-CARD-NUM"));
             verify(db,times(3)).prepareStatement(anyString());verify(customer).executeQuery();
             verify(db,never()).commit();for(var q:List.of(xref,account,customer))verify(q,never()).executeUpdate();
         }

@@ -40,7 +40,10 @@ class RoutingStateTest {
             assertEquals(result.screen().transaction,area.get("CDEMO-FROM-TRANID"));assertEquals("0",area.get("CDEMO-PGM-CONTEXT"));
             if(program.equals("COPAUS1C"))assertTrue(area.get("CDEMO-CPVD-FRAUD-DATA").isBlank());
             var invalid=service.interact(db,area,"PF24",Map.of());
-            assertEquals(b.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText().stripTrailing(),invalid.screen().message);
+            // Preserve the fixed-width source literal, including its trailing spaces.
+            String invalidKey=b.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText();
+            assertEquals(invalidKey,invalid.screen().message);
+            assertEquals(ScreenFrame.pad(invalidKey,invalid.screen().values.get("ERRMSG").length()),invalid.screen().values.get("ERRMSG"));
         }verifyNoInteractions(db);
     }
     @Test void invalidAccountClearsStaleSearchAndPaginationAndFifthSelectionIsReachable()throws Exception{

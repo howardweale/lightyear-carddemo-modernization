@@ -10788,6 +10788,7 @@
   },
   "retention_manifests": [
     "docs/factory/evidence-retention-2026-10-16-posttran.json",
-    "docs/factory/evidence-retention-2026-10-16.json"
+    "docs/factory/evidence-retention-2026-10-16.json",
+    "docs/factory/evidence-retention-2026-10-18-intcalc.json"
   ]
 }

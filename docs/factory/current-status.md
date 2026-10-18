@@ -84,6 +84,7 @@ More than five days remain before sign-and-launch deadline at snapshot time.
 
 Current retention manifest: [evidence-retention-2026-10-16-posttran.json](evidence-retention-2026-10-16-posttran.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
 Current retention manifest: [evidence-retention-2026-10-16.json](evidence-retention-2026-10-16.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
+Current retention manifest: [evidence-retention-2026-10-18-intcalc.json](evidence-retention-2026-10-18-intcalc.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
 Dated October 14/15 retention statements remain historical; use these manifests for current storage status. [October 17 verification and deletion addendum](retention-inventory-2026-10-17.json); local deletion remains unauthorized.
 
 ## CardDemo data slice

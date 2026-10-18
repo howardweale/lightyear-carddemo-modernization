@@ -48,7 +48,9 @@ def inputs(root=ROOT):
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
     additional += [p for p in ('docs/factory/posttran-phase2-readiness-2026-10-17.json', 'docs/factory/posttran-phase2-plan-amendment-2026-10-17.json', 'docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json', 'docs/factory/factory-authority.public.pem') if (root/p).is_file()]
-    additional += [appl_contract_selection.PATH] if (root/appl_contract_selection.PATH).is_file() else []
+    if (root/appl_contract_selection.PATH).is_file():
+        selection=appl_contract_selection.load(root)
+        additional += [appl_contract_selection.PATH,*[row['path'] for row in selection['records']]]
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]

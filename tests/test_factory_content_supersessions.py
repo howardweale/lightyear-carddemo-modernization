@@ -148,3 +148,9 @@ class ContentSupersessionTests(unittest.TestCase):
             overlay_projections(out,root)
             for name in names:self.assertEqual(b'committed selected bytes',(folder/name).read_bytes())
             self.assertEqual(b'new measured projection',(folder/'intcalc-review-verdict-2026-10-17.json').read_bytes())
+
+    def test_status_input_inventory_contains_the_selected_contract_bytes(self):
+        from tools.release_status_records import inputs
+        record=appl_contract_selection.load(ROOT);paths=inputs(ROOT)
+        self.assertIn(appl_contract_selection.PATH,paths)
+        for row in record['records']:self.assertIn(row['path'],paths)

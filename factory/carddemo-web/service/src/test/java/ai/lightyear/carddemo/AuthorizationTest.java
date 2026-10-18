@@ -39,6 +39,22 @@ class AuthorizationTest {
             assertEquals(program.equals("COPAUS0C")?"COMEN01C":"COPAUS0C",service.interact(db,area,"PF3",Map.of()).nextProgram());
         }verifyNoInteractions(db);
     }
+    @Test void selectedDetailTransferPreservesCompletePaginationState()throws Exception{
+        var b=bindings();Connection db=mock(Connection.class);var service=new AuthorizationListService(b);
+        for(String selection:List.of("S","s")){
+            var layout=b.root.path("program_commareas").path("COPAUS0C");var area=new Commarea(layout,null);
+            area.set("CDEMO-CPVS-PAGE-NUM","3");area.set("CDEMO-CPVS-NEXT-PAGE-FLG","Y");
+            area.set("CDEMO-CPVS-AUTH-KEYS[1]","AUTHKEY1");area.set("CDEMO-CPVS-PAUKEY-LAST","LASTKEY1");
+            area.set("CDEMO-CPVS-PAUKEY-PREV-PG[3]","PAGEKEY3");
+            var expected=new Commarea(layout,area.bytes());var prior=new ScreenFrame(b,"COPAUS0C");
+            expected.set("CDEMO-ACCT-ID","00000000050");expected.set("CDEMO-CPVS-PAU-SEL-FLG",selection);
+            expected.set("CDEMO-CPVS-PAU-SELECTED","AUTHKEY1");expected.set("CDEMO-TO-PROGRAM","COPAUS1C");
+            expected.set("CDEMO-FROM-PROGRAM","COPAUS0C");expected.set("CDEMO-FROM-TRANID",prior.transaction);expected.set("CDEMO-PGM-CONTEXT","0");
+            var result=service.interact(db,area,"ENTER",Map.of("ACCTID","00000000050","SEL0001",selection),prior);
+            assertEquals("COPAUS1C",result.nextProgram());assertArrayEquals(expected.bytes(),area.bytes());
+        }
+        verifyNoInteractions(db);
+    }
     @Test void receivedBlankAccountClearsNonMdtFieldsButRetainsProtectedFset()throws Exception{
         var b=bindings();var prior=new ScreenFrame(b,"COPAUS0C");
         prior.set("CUSTID","123456789");prior.set("ADDR001","OLD ADDRESS");prior.set("APPRCNT","007");

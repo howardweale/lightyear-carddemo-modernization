@@ -112,3 +112,5 @@ Run 39108067159 at source head 0517cbab passed the 120-case API proof and 678-in
 The full returned-state gate also requires the menu first-entry SET CDEMO-PGM-REENTER before SEND/RETURN (COMEN01C lines 86-90). API failures retain both complete expected and observed COMMAREA byte strings for diagnosis; comparison remains exact.
 
 COACTUPC saves the requested account ID in its old-details area before reading the cross-reference (line 3614), including not-found returns. The exact session-state proof retains this search key and the initialized remainder of old details.
+
+COPAUS0C selected-detail XCTL occurs before GATHER-DETAILS resets the page counter. The transferred COMMAREA retains the current page and complete pagination history; invalid account entry and ordinary gathers still reset the page as the source does.

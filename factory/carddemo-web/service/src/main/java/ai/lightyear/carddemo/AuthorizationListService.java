@@ -24,9 +24,9 @@ public final class AuthorizationListService implements TransactionService {
             Map<String,String> values=f.receive(input);String account=values.getOrDefault("ACCTID","");
             // RECEIVE overlay survives the subsequent SEND, including selection characters.
             for(var v:values.entrySet())f.set(v.getKey(),v.getValue());
-            area.set(PREFIX+"PAGE-NUM","0");
-            if(blank(account)){f.set("ACCTID","");message(f,"Please enter Acct Id...");}
-            else if(!account.matches("[0-9]{11}")){f.set("ACCTID","");message(f,"Acct Id must be Numeric ...");}
+            // Selection XCTL precedes GATHER-DETAILS (347), so it retains the current page.
+            if(blank(account)){area.set(PREFIX+"PAGE-NUM","0");f.set("ACCTID","");message(f,"Please enter Acct Id...");}
+            else if(!account.matches("[0-9]{11}")){area.set(PREFIX+"PAGE-NUM","0");f.set("ACCTID","");message(f,"Acct Id must be Numeric ...");}
             else{
                 area.set("CDEMO-ACCT-ID",account);String selection="",selected="";
                 for(int i=1;i<=5;i++){String value=values.getOrDefault(render.selectionField(i),"");if(!blank(value)){selection=value;selected=area.get(PREFIX+"AUTH-KEYS["+i+"]");break;}}

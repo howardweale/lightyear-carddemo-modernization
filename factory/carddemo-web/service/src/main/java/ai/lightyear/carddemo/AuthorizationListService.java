@@ -13,7 +13,9 @@ public final class AuthorizationListService implements TransactionService {
     private Result next(Commarea a,ScreenFrame f,String target){a.set("CDEMO-TO-PROGRAM",target);a.set("CDEMO-FROM-PROGRAM",PROGRAM);a.set("CDEMO-FROM-TRANID",f.transaction);a.set("CDEMO-PGM-CONTEXT","0");return new Result(target,f,false);}
     @Override public Result interact(Connection db,Commarea area,String aid,Map<String,String> input)throws SQLException{return interact(db,area,aid,input,null);}
     @Override public Result interact(Connection db,Commarea area,String aid,Map<String,String> input,ScreenFrame prior)throws SQLException{
-        ScreenFrame f=prior==null?new ScreenFrame(b,PROGRAM):prior;f.error("","ACCTID");
+        ScreenFrame f=prior==null?new ScreenFrame(b,PROGRAM):prior;
+        if(!aid.equals("INITIAL")&&!aid.equals("PF3"))f=receiveFrame(f,input,aid.equals("PF7")||aid.equals("PF8"));
+        f.error("","ACCTID");
         f.trace.add(new SourceEdits.Location(b.program(PROGRAM).path("source").asText(),178));
         if(aid.equals("PF3"))return next(area,f,b.program(PROGRAM).path("constants").path("WS-PGM-MENU").asText());
         if(aid.equals("INITIAL")){
@@ -46,6 +48,22 @@ public final class AuthorizationListService implements TransactionService {
             else{String key=area.get(PREFIX+"PAUKEY-LAST");page(db,area,f,auth.summary(db,area.get("CDEMO-ACCT-ID")),blank(key)?null:Commarea.encode(key),false);}
         }else f.error(b.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText(),"ACCTID");
         area.set("CDEMO-PGM-CONTEXT","1");return new Result(PROGRAM,f,false);
+    }
+    private ScreenFrame receiveFrame(ScreenFrame prior,Map<String,String> input,boolean keepAttributes){
+        // COPAU0AI is fresh working storage on each CICS invocation. RECEIVE
+        // overlays unprotected input and protected MDT/FSET bytes only. Other
+        // text stays blank; POPULATE-HEADER-INFO writes the source headers anew.
+        Map<String,String> received=prior.receive(input);ScreenFrame fresh=new ScreenFrame(b,PROGRAM);
+        Map<String,String> headers=new LinkedHashMap<>();
+        for(var h:b.program(PROGRAM).path("headers")){String name=h.path("target").asText();headers.put(name,fresh.values.get(name));}
+        for(String name:fresh.values.keySet()){
+            var attributes=prior.attributes.get(name);
+            String value=received.get(name);
+            if(value==null)value=Boolean.TRUE.equals(attributes.get("modified"))?prior.values.get(name):"";
+            fresh.set(name,value);
+            if(keepAttributes)fresh.attributes.put(name,new LinkedHashMap<>(attributes));
+        }
+        headers.forEach(fresh::set);return fresh;
     }
     private void gather(Connection db,Commarea area,ScreenFrame frame,String account)throws SQLException{
         area.set(PREFIX+"PAGE-NUM","0");

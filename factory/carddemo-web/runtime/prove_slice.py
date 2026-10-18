@@ -125,9 +125,9 @@ class Proof:
     def valid_update_inputs(self):
         fields=self.inputs()
         # Public data contains an SSN in the source-rejected 900s and a state/ZIP
-        # mismatch. Submit explicit synthetic edits for positive cases; retain
+        # mismatch and invalid second phone area code. Submit synthetic edits; retain
         # the original bytes and their validation-error sessions.
-        synthetic=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001')
+        synthetic=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001',ACSPH2A='206',ACSPH2B='555',ACSPH2C='0102')
         assert set(synthetic)<=set(fields);fields.update(synthetic);return fields
     def start(self,case,option=None):
         self.case_id=case;self.session=next(self.sessions);self.engine.reset();self.token=None;self.step('INITIAL')
@@ -235,7 +235,7 @@ class Proof:
             completed_case_count=len(self.cases),planned_case_count=len(self.cases) if passed else None,case_denominator_status='complete generated suite' if passed else 'not fully enumerated after failure; no completion claim',validated_fields=sorted(self.validated_fields),
             source_faults=[dict(case=r['case'],failure=r['expected']['source_fault'],trace=r['expected']['trace']) for r in self.rows if r['expected'].get('source_fault')],
             bounded_date_cases=['leap-day-invalid','leap-day-valid'],
-            synthetic_positive_update_inputs=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001'),
+            synthetic_positive_update_inputs=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001',ACSPH2A='206',ACSPH2B='555',ACSPH2C='0102'),
             terminal_projection='Visible null cells are blank; exact symbolic output octets remain in each reference frame.',
             shared_dependencies=['BMS parser','physical data plan and typed projection codec'],
             full_slice_screen_equivalence=passed,terminal_text_contract='SEND TEXT compares complete message and ended state; no BMS fields exist in that source response',remaining=self.failures),indent=2)+'\n')

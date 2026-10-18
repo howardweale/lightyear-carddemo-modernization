@@ -39,6 +39,20 @@ class AuthorizationTest {
             assertEquals(program.equals("COPAUS0C")?"COMEN01C":"COPAUS0C",service.interact(db,area,"PF3",Map.of()).nextProgram());
         }verifyNoInteractions(db);
     }
+    @Test void receivedBlankAccountClearsNonMdtFieldsButRetainsProtectedFset()throws Exception{
+        var b=bindings();var prior=new ScreenFrame(b,"COPAUS0C");
+        prior.set("CUSTID","123456789");prior.set("ADDR001","OLD ADDRESS");prior.set("APPRCNT","007");
+        prior.set("CREDLIM","     6169.00");prior.set("TRNID01","RETAINED");
+        var area=new Commarea(b.root.path("program_commareas").path("COPAUS0C"),null);Connection db=mock(Connection.class);
+        var service=new AuthorizationListService(b);var result=service.interact(db,area,"ENTER",Map.of(),prior);
+        assertEquals(" ".repeat(9),result.screen().values.get("CUSTID"));
+        assertEquals(" ".repeat(25),result.screen().values.get("ADDR001"));
+        assertEquals("   ",result.screen().values.get("APPRCNT"));
+        assertEquals("     6169.00",result.screen().values.get("CREDLIM"));
+        assertEquals("RETAINED",result.screen().values.get("TRNID01").stripTrailing());
+        assertEquals("Please enter Acct Id...",result.screen().message);verifyNoInteractions(db);
+        assertThrows(IllegalArgumentException.class,()->service.interact(db,area,"ENTER",Map.of("CUSTID","OVERRIDE"),prior));
+    }
     @Test void consecutiveMissingReadStringsRetainThePreviousTail() {
         String buffer=" ".repeat(75);
         buffer=AuthorizationListService.stringOverlay(buffer,"Account:00000000000 not found in XREF file. Resp:000000013 Reas:000000000");

@@ -281,6 +281,19 @@ class RawRemainingScreenTests(unittest.TestCase):
         self.assertEqual(','+' '*24,frame['values']['ADDR001'])
         self.assertEqual('Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000',frame['message'])
 
+    def test_authorization_receive_only_carries_modified_protected_fields(self):
+        from lightyear_data.carddemo.reference_screens import AuthorizationListReference
+        from lightyear_data.carddemo.reference_menu import MenuReference
+        menu=MenuReference(self.root);first=menu.interact('INITIAL')
+        transfer=menu.interact('ENTER',{'OPTION':'11'},first['commarea'])
+        reference=AuthorizationListReference(self.root);first=reference.interact('INITIAL',commarea=transfer['commarea'])
+        prior=first['screen'];prior['values'].update(CUSTID='123456789',ADDR001='OLD ADDRESS'.ljust(25),APPRCNT='007',CREDLIM='     6169.00',TRNID01='RETAINED'.ljust(16))
+        frame=reference.interact('ENTER',{},first['commarea'],prior=prior)['screen']
+        self.assertEqual(' '*9,frame['values']['CUSTID']);self.assertEqual(' '*25,frame['values']['ADDR001'])
+        self.assertEqual('   ',frame['values']['APPRCNT']);self.assertEqual('     6169.00',frame['values']['CREDLIM'])
+        self.assertEqual('RETAINED'.ljust(16),frame['values']['TRNID01'])
+        self.assertEqual('Please enter Acct Id...',frame['message'])
+
     def test_edited_decimal_receivers_use_source_width_and_suppression(self):
         from lightyear_data.carddemo.reference_declarations import layout
         from lightyear_data.carddemo.reference_storage import Memory

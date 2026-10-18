@@ -42,6 +42,7 @@ def compile_area(name, declarations, *, kind='WORKING-STORAGE'):
         raise StorageError('empty-storage-area')
     words = ['01', 'LY-AREA', '.']
     locations = {}
+    first_record = None
     for serial, declaration in enumerate(declarations):
         values = [t.text for t in declaration]
         if values[-1:] == ['.']:
@@ -63,6 +64,12 @@ def compile_area(name, declarations, *, kind='WORKING-STORAGE'):
         # Anonymous overlays are legal; make their internal path unambiguous.
         if original == 'FILLER':
             values[1] = f'LY-FILLER-{serial}'
+        if kind == 'FD' and level == 1:
+            if first_record is None:
+                first_record = values[1]
+            elif 'REDEFINES' not in values:
+                # Distinct FD record descriptions implicitly share byte zero.
+                values[2:2] = ['REDEFINES', first_record]
         locations[len(words)+1] = declaration[0].location()
         words.extend(values + ['.'])
     layout = compile_copybook('\n'.join('       ' + word for word in words),
@@ -220,11 +227,6 @@ def storage_ir(program, copybooks):
                 if section and not section.startswith('FD:'):
                     flush()
                     area = section + ':' + tokens[i+1].text
-                elif declarations:
-                    # Multiple FD 01 descriptions share a record area implicitly;
-                    # concatenating them would invent incorrect byte offsets.
-                    issues.append(dict(reason='multiple-FD-record-alternatives-not-yet-translated',
-                                       **token.location()))
             if area is None:
                 issues.append(dict(reason='data-outside-storage-area', **token.location()))
             current.append(token)

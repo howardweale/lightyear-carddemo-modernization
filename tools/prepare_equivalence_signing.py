@@ -12,6 +12,8 @@ BASE = 'docs/factory/equivalence-evidence-2026-10-15'
 DEST = 'docs/factory/equivalence-scale-2026-10-16'
 EVIDENCE_COMMIT = '78be9cafb322b6a9dacaa94fd6027df2aeb605e5'
 CLASS = 'legacy-APPL-RESULT/1'
+FRESH_COMMIT = 'e5b041754c7bf38c874836eff2c7f36ede90234b'
+FRESH_RUN = 38930496735
 
 
 def blob(root, path, commit=EVIDENCE_COMMIT):
@@ -32,7 +34,30 @@ def write(root, path, value):
     path.write_bytes(raw)
 
 
-def prepare(root, audit_commit=None):
+def measurements(root,total):
+    programs=[];heads=set()
+    for program in ('INTCALC','POSTTRAN','TRANREPT'):
+        folder=DEST+'/fresh-e1/'+program
+        raw=blob(root,folder+'/summary.json',FRESH_COMMIT)
+        repeat_raw=blob(root,folder+'/repeat-comparison.json',FRESH_COMMIT)
+        summary=verify(json.loads(raw));repeat=verify(json.loads(repeat_raw))
+        if summary['head']!=repeat['head'] or summary['program']!=repeat['program'] or not repeat['identical_resolutions']:
+            raise ValueError('fresh-E1-provenance-mismatch')
+        heads.add(summary['head'])
+        programs.append(dict(program=program,argued_resolved=summary['argued_resolved'],
+            argued_total=summary['argued_total'],generated_cases=summary['generated_cases'],
+            routes=summary['routes'],identical_resolutions=repeat['identical_resolutions'],
+            mutants_compared_twice=repeat['mutants'],repeat_sha256=digest(repeat_raw),summary_sha256=digest(raw)))
+    if len(heads)!=1:raise ValueError('fresh-E1-mixed-heads')
+    if sum(p['argued_resolved'] for p in programs)!=total['resolved_now'] or sum(p['argued_total'] for p in programs)!=total['denominator']:
+        raise ValueError('fresh-E1-projection-count-mismatch')
+    return dict(fresh_E1=dict(total,head=heads.pop(),run_id=FRESH_RUN,programs=programs),
+        preserved_341=dict(total,evidence_commit=EVIDENCE_COMMIT),
+        person_minutes_per_1000_sites=dict(method='Prospective active-review intervals times reviewer count, excluding CI wait; sum person-minutes / distinct reviewed sites * 1000.',status='not measured',value=None))
+
+
+def prepare(root, audit_commit=None, *, output_root=None):
+    output_root = root if output_root is None else output_root
     reports = []
     for program, source in (('INTCALC', 'CBACT04C'), ('POSTTRAN', 'CBTRN02C')):
         folder = BASE + '/' + program
@@ -78,7 +103,7 @@ def prepare(root, audit_commit=None):
             signature_status='unsigned', review_statement='Howard reports reviewing the APPL-RESULT audit sample; no cryptographic signature inferred.',
             audit_observed_error_rate=None, qualification_credit=False, release_authorized=False))
         audit_path = DEST + '/' + program + '-class-audit.json'
-        write(root, audit_path, audit)
+        write(output_root, audit_path, audit)
         md = [f'# {program}: APPL-RESULT class signing packet', '',
               f'{len(members)} exact members; 30-member deterministic audit. Twin scope only.', '',
               f'Source SHA-256: `{digest(source_bytes)}`',
@@ -89,7 +114,7 @@ def prepare(root, audit_commit=None):
             md += [f'## {index}. {row["id"]}', '', row['binding']['argument']['argument'], '', '```cobol']
             md += [f'{r["line"]:4}: {r["text"]}' for r in row['source_context']]
             md += ['```', '']
-        write(root, DEST + '/' + program + '-class-audit.md', '\n'.join(md) + '\n')
+        write(output_root, DEST + '/' + program + '-class-audit.md', '\n'.join(md) + '\n')
         rebound = copy.deepcopy(request)
         # Preserve measurement/proof identities. Only the import location changes.
         for binding in rebound['contract']['sources']:
@@ -101,12 +126,11 @@ def prepare(root, audit_commit=None):
                                                   sha256=digest(blob(root, census_path))))
         if audit_commit:
             raw = blob(root, audit_path, audit_commit)
-            if raw != (root / audit_path).read_bytes():
+            if raw != (output_root / audit_path).read_bytes():
                 raise ValueError('audit-publication-mismatch')
             rebound['contract']['sources'].append(dict(path=audit_path, commit=audit_commit, sha256=digest(raw)))
             validate_contract(rebound['contract'])
-            write(root, DEST + '/' + program + '-class-request.json', rebound)
-            write(root, DEST + '/' + program + '-tower-contract.json', rebound['contract'])
+            write(output_root, DEST + '/' + program + '-class-request.json', rebound)
         ledger = verify(read(root, folder + '/resolutions.json'))
         reports.append(project(ledger, [rebound], proof['matcher_sha256']))
     # Request digests depend on audit publication, so only seal the final scorecard then.
@@ -114,8 +138,8 @@ def prepare(root, audit_commit=None):
         total = dict(denominator=sum(r['denominator'] for r in reports),
                      resolved_now=sum(r['resolved_now'] for r in reports),
                      resolved_after_pending_signatures=sum(r['resolved_after_pending_signatures'] for r in reports))
-        write(root, DEST + '/scorecard.json', sealed(dict(stage='E1', evidence_commit=EVIDENCE_COMMIT,
-            measurements='preserved #341 baseline; fresh stage pipeline pending', programs=reports, total=total,
+        write(output_root, DEST + '/scorecard.json', sealed(dict(stage='E1', evidence_commit=EVIDENCE_COMMIT,
+            measurements=measurements(root,total), programs=reports, total=total,
             held_out=dict(program='TRANREPT/CBTRN03C', compiler_identities=2, sites=413,
                           class_matches=0, conclusion='no evidence of generality',
                           CBSTM03A='not measured', CBSTM03B='not measured'),

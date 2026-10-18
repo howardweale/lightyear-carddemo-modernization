@@ -65,3 +65,30 @@ class PolicyTests(unittest.TestCase):
             self.assertEqual(2,len(receipt['outcome']['unexpected_failures']))
             self.assertFalse(receipt['outcome']['complete'])
             self.assertTrue(all('diagnostics' not in row for row in receipt['results']))
+
+
+class StaleLimitationTests(unittest.TestCase):
+    def test_now_compiled_entry_refuses_until_limitation_is_reviewed(self):
+        from tools.cms.f0_policy import require_compile
+        row=dict(package='fixture.zip',program='FIXTURE',source_sha256='a'*64,dialect='mf',returncode=1,
+                 diagnostic_metadata=diagnostic_metadata('synthetic limitation'))
+        expected=dict(package=row['package'],program=row['program'],source_sha256=row['source_sha256'],
+                      dialect=row['dialect'],returncode=1,reason='synthetic only',
+                      diagnostic_sha256=row['diagnostic_metadata']['normalized_sha256'])
+        known=compile_outcome([row],[expected]);self.assertTrue(known['complete'])
+        success=dict(row,returncode=0)
+        stale=compile_outcome([row,success],[expected])
+        self.assertTrue(stale['all_programs_compiled']);self.assertFalse(stale['complete'])
+        self.assertEqual('FIXTURE',stale['stale_expected_limitations'][0]['program'])
+        with self.assertRaises(SystemExit):require_compile(stale)
+        self.assertTrue(compile_outcome([success],[])['complete'])
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);path=root/'compile-results.json'
+            path.write_text(json.dumps(dict(results=[row],outcome=known)))
+            publish(root);before=(root/'public/receipt.json').read_text()
+            path.write_text(json.dumps(dict(results=[success],outcome=stale)))
+            publish(root);after=(root/'public/receipt.json').read_text()
+            self.assertNotEqual(before,after)
+            result=json.loads(after)['compile']
+            self.assertEqual(1,len(result['stale_expected_limitations']))
+            self.assertFalse(result['complete']);self.assertNotIn('synthetic limitation',after)

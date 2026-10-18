@@ -1,6 +1,6 @@
 """PostgreSQL/PLpgSQL AST contracts. No keyword scan establishes ordering.
 
-Pinned pglast 7.10; unsupported dynamic result construction remains unresolved.
+Pinned pglast 7.20; unsupported dynamic result construction remains unresolved.
 SQL expressions extracted from the PLpgSQL parser are parsed again as SQL ASTs.
 """
 import json
@@ -17,7 +17,7 @@ def walk(value):
 
 
 def contract(source):
-    if version('pglast')!='7.10':raise ValueError('pinned-postgresql-parser-required')
+    if version('pglast')!='7.20':raise ValueError('pinned-postgresql-parser-required')
     from pglast import parse_plpgsql
     from pglast.parser import parse_sql_json
     rules=[];issues=set();trees=[]
@@ -148,5 +148,5 @@ def contract(source):
     except Exception:
         issues.add('target-syntax-unresolved')
     return dict(schema='postgresql-syntax-contract/2',source_sha256=sha(source.encode()),
-        parser='pglast-7.10',parser_output_sha256=sha(canonical(trees)),result_contracts=rules,
+        parser='pglast-7.20',parser_output_sha256=sha(canonical(trees)),result_contracts=rules,
         policy_obligations=sorted(issues),determinism_proven=not issues)

@@ -1,0 +1,27 @@
+{
+  "schema": "cms-draft-decision-plan/1",
+  "checked_at": "2026-10-18T17:25:34.612149+00:00",
+  "pull_requests": [
+    {
+      "number": 360,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/360",
+      "state": "open",
+      "draft": true,
+      "head": "70aa78b8743988445791d8633e9a23ea240500eb",
+      "base": "main"
+    },
+    {
+      "number": 370,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/370",
+      "state": "open",
+      "draft": true,
+      "head": "ea2d060cdf829bcc49570c7a96fd34e779bd2aad",
+      "base": "codex/cms-pricer-feasibility"
+    }
+  ],
+  "payment_equivalence": "NO-GO",
+  "ci_java_execution": false,
+  "field_identifiers_under_review": 45,
+  "source": "Public PR metadata and exact PR370 workflow; no CMS source or diagnostic artifacts inspected",
+  "decision_status": "proposal-only; Howard and counsel decisions outstanding"
+}

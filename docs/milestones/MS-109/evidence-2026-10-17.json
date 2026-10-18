@@ -1,0 +1,92 @@
+{
+  "schema": "milestone-delivery-reconciliation/1",
+  "as_of": "2026-10-17",
+  "authorized_by": "Howard",
+  "performed_by": "Codex",
+  "pull_requests": [
+    {
+      "number": 354,
+      "title": "Refresh POSTTRAN preparation and retain October 15 public receipts",
+      "state": "closed",
+      "draft": false,
+      "head": "2d62f3652f5cc9d8c874834af88d98be7b92a83f",
+      "merge": "78d2f80a1f33956dc1cffb6f876c7591da1a1692",
+      "merged_at": "2026-10-16T18:39:51Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/354"
+    },
+    {
+      "number": 355,
+      "title": "Enforce typed threshold conditions and seven constant exemptions",
+      "state": "closed",
+      "draft": false,
+      "head": "788fe2a885fad665d2f78a7a04872723d27c2061",
+      "merge": "e5db4321255eb50da2107b3e944abc3eb228d93c",
+      "merged_at": "2026-10-16T22:55:50Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/355"
+    },
+    {
+      "number": 356,
+      "title": "Expand CardDemo volume, IMS and screen slice evidence",
+      "state": "closed",
+      "draft": false,
+      "head": "96c2615399646794159bf6a8e399248e3d68b920",
+      "merge": "46b7b4e3e8f6b629efefaa23efd0b9aa5f88d22a",
+      "merged_at": "2026-10-16T16:55:40Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/356"
+    },
+    {
+      "number": 357,
+      "title": "Make APPL-RESULT class requests signable and separate projected resolution rates",
+      "state": "closed",
+      "draft": false,
+      "head": "89d70b463e372f81abb38da53eacd7e76d95bbc9",
+      "merge": "f0ac25c338e96309803655d7e6d09f5b29b4e3c1",
+      "merged_at": "2026-10-17T03:33:50Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/357"
+    },
+    {
+      "number": 358,
+      "title": "Introduce byte-backed storage views for whole-program equivalence IR",
+      "state": "closed",
+      "draft": false,
+      "head": "4aaba04befef05d777b1edc4da17087222bde187",
+      "merge": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "merged_at": "2026-10-17T05:01:54Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/358"
+    },
+    {
+      "number": 359,
+      "title": "Carve out APPL-RESULT class signing packets and Windows import handoff",
+      "state": "closed",
+      "draft": false,
+      "head": "3d793dac626b2c16b983c027d84590b207a615be",
+      "merge": "b7c44d07e90b625616078a706bdb6f22972a202a",
+      "merged_at": "2026-10-16T19:51:18Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/359"
+    },
+    {
+      "number": 360,
+      "title": "CMS IPPS FY2021 feasibility: pinned sources and compile probe",
+      "state": "open",
+      "draft": true,
+      "head": "70aa78b8743988445791d8633e9a23ea240500eb",
+      "merge": null,
+      "merged_at": null,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/360"
+    },
+    {
+      "number": 361,
+      "title": "Harden readiness deadlines, retention verification and Windows handoffs",
+      "state": "closed",
+      "draft": false,
+      "head": "74df8b632caec92b31997f637683690751badae7",
+      "merge": "5f50acac88abe371c4a2a0b2e10b55d00ee6923f",
+      "merged_at": "2026-10-16T23:41:40Z",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/361"
+    }
+  ],
+  "signatures_created": 0,
+  "activations": 0,
+  "phase2_runs": 0,
+  "ci_scope": "Merge reconciliation only; exact-head CI evidence remains in the linked PRs and retained receipts."
+}

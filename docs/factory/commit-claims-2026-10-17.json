@@ -214,6 +214,14 @@
       "role": "source",
       "source_path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
       "source_sha256": "5012ae18309362857b122ce2af80f4267cfe8219bff0892272efc368a5ad2c2a"
+    },
+    {
+      "record": "docs/factory/carddemo-web-review-request-2026-10-18.json",
+      "reference": "01445c368daf0c1860800f47a79cb10649f75ae2",
+      "commit": "01445c368daf0c1860800f47a79cb10649f75ae2",
+      "role": "source",
+      "source_path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
+      "source_sha256": "8404a871910afc6e4a26a3f3c3cb58d4c456c6ccaa86d3a429a89c470f920e4c"
     }
   ]
 }

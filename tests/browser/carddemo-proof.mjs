@@ -2,6 +2,15 @@ import {chromium} from 'playwright';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {dirname,resolve} from 'node:path';
+async function expectedDatabase(row){
+ const ref=row.database_file;assert.match(ref?.sha256??'',/^[0-9a-f]{64}$/);
+ assert.equal(ref.path,'expected-database/'+ref.sha256+'.json');
+ const bytes=await readFile(resolve(dirname(process.env.CARDDEMO_CASES),ref.path));
+ assert.equal(createHash('sha256').update(bytes).digest('hex'),ref.sha256,'reference database hash');
+ return JSON.parse(bytes.toString('utf8'));
+}
 const cases=JSON.parse(await readFile(process.env.CARDDEMO_CASES,'utf8'));
 const out=process.env.CARDDEMO_BROWSER_OUT;await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});const pages=new Map();const frames=[];
@@ -69,8 +78,9 @@ try{
   for(const item of state.authfrds)item.auth_ts=item.auth_ts.replace(' ','T');
   const normalized=Object.fromEntries(Object.entries(state).map(([table,rows])=>[table,rows.map(canonical).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)))]));
   // Compare row multisets without relying on locale-dependent sorting order.
-  assert.deepEqual(Object.keys(normalized).sort(),Object.keys(row.database).sort());
-  for(const table of Object.keys(normalized))assert.deepEqual(normalized[table].map(JSON.stringify).sort(),row.database[table].map(v=>JSON.stringify(canonical(v))).sort(),row.case+' '+table);
+  const wanted=await expectedDatabase(row);
+  assert.deepEqual(Object.keys(normalized).sort(),Object.keys(wanted).sort());
+  for(const table of Object.keys(normalized))assert.deepEqual(normalized[table].map(JSON.stringify).sort(),wanted[table].map(v=>JSON.stringify(canonical(v))).sort(),row.case+' '+table);
   frames.push({case:row.case,session:row.session,aid:row.aid,screen:last.screen,database_after:meta});
   remaining.set(row.session,remaining.get(row.session)-1);if(!remaining.get(row.session)){await page.close();pages.delete(row.session);}
  }

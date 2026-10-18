@@ -43,6 +43,14 @@ class ReferenceScenarioTest {
             try(var s=c.createStatement();var q=s.executeQuery("SELECT to_jsonb(t)::text FROM "+table+" t")){while(q.next())rows.add(canonical(json.readTree(q.getString(1))));}result.put(table,rows);
         }return result;
     }
+    JsonNode expectedDatabase(JsonNode row)throws Exception{
+        JsonNode ref=row.path("database_file");String hash=ref.path("sha256").asText();
+        assertTrue(hash.matches("[0-9a-f]{64}"));assertEquals("expected-database/"+hash+".json",ref.path("path").asText());
+        Path parent=Path.of(System.getProperty("carddemo.cases")).toAbsolutePath().getParent();
+        byte[] bytes=Files.readAllBytes(parent.resolve(ref.path("path").asText()));
+        assertEquals(hash,HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes)));
+        return json.readTree(bytes);
+    }
     List<String> multiset(List<?> values){return values.stream().map(json::writeValueAsString).sorted().toList();}
     @Test void everyRawReferenceInteractionMatchesAllFieldsAttributesCursorMessageAndDatabase()throws Exception{
         Path root=Path.of(System.getProperty("carddemo.root"));Clock clock=Clock.fixed(Instant.parse("2026-10-17T12:34:56Z"),ZoneOffset.UTC);
@@ -71,9 +79,9 @@ class ReferenceScenarioTest {
                     for(String part:List.of("values","cursor"))assertEquals(expected.path("screen").path(part),screen.path(part),row.path("case").asText()+" "+part);
                     assertEquals(attrs(expected.path("screen").path("attributes")),attrs(screen.path("attributes")));
                 }
-                var observed=state(actual);assertEquals(new TreeSet<>(row.path("database").propertyNames()),observed.keySet());
+                JsonNode expectedState=expectedDatabase(row);var observed=state(actual);assertEquals(new TreeSet<>(expectedState.propertyNames()),observed.keySet());
                 for(String table:observed.keySet()){
-                    List<Object> wanted=new ArrayList<>();for(JsonNode item:row.path("database").path(table))wanted.add(canonical(item));
+                    List<Object> wanted=new ArrayList<>();for(JsonNode item:expectedState.path(table))wanted.add(canonical(item));
                     assertEquals(multiset(wanted),multiset(observed.get(table)),row.path("case").asText()+" "+table);
                 }
             }assertEquals(Set.of("COSGN00C","COMEN01C","COACTVWC","COACTUPC","COPAUS0C","COPAUS1C"),seen);

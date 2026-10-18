@@ -60,6 +60,13 @@ class SourceEditsTest {
         }
     }
 
+    @Test void numericSsnConditionRetainsLowValuesAndInvalidDisplayBytes()throws Exception{
+        for(String value:new String[]{"\u0000\u0000\u0000","   ","!23","123","000","666","899","900","999"}){
+            var e=edits();e.put("WS-EDIT-US-SSN-PART1",value);
+            assertEquals(java.util.Set.of("000","666","900","999").contains(value),e.condition("INVALID-SSN-PART1"),value);
+            assertEquals(value,e.get("WS-EDIT-US-SSN-PART1"));
+        }
+    }
     @Test void ssnRetainsTheSourceImplicitScopeAndFirstError()throws Exception{
         var valid=edits();valid.put("ACUP-NEW-CUST-SSN-1","123");valid.put("ACUP-NEW-CUST-SSN-2","45");valid.put("ACUP-NEW-CUST-SSN-3","6789");
         valid.run("1265-EDIT-US-SSN");assertTrue(valid.condition("INPUT-OK"));

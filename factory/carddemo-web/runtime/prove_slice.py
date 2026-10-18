@@ -106,7 +106,15 @@ class Proof:
     def step(self,aid,fields=None):
         fields=fields or {};before=self.engine.program
         expected=self.engine.step(aid,fields);self.seen.add(before);self.seen.add(expected['program']);state=self.expected_state()
-        row=dict(case=self.case_id,session=self.session,aid=aid,fields=fields,expected=expected,database=state)
+        # Preserve the complete after-state once per content hash, rather than
+        # duplicating it hundreds of times in one browser-sized JSON string.
+        payload=json.dumps(state,sort_keys=True,separators=(',',':')).encode('utf-8')
+        state_hash=sha256(payload).hexdigest();relative='expected-database/'+state_hash+'.json'
+        target=self.out/relative;target.parent.mkdir(exist_ok=True)
+        if target.exists():assert target.read_bytes()==payload
+        else:target.write_bytes(payload)
+        row=dict(case=self.case_id,session=self.session,aid=aid,fields=fields,expected=expected,
+                 database_file=dict(path=relative,sha256=state_hash))
         # SEND TEXT has no BMS map: compare its complete text and ended state,
         # and disclose that there are zero BMS fields in this terminal response.
         if expected['ended']:row['terminal_text_only']=True
@@ -251,7 +259,7 @@ class Proof:
         assert self.seen==set(PROGRAMS),self.seen
         assert self.validated_fields,'empty validated-field denominator' 
     def save(self,passed):
-        (self.out/'cases.json').write_text(json.dumps(self.rows,indent=2,default=str)+'\n')
+        (self.out/'cases.json').write_text(json.dumps(self.rows,separators=(',',':'),default=str)+'\n')
         (self.out/'summary.json').write_text(json.dumps(dict(schema='carddemo-six-screen-proof/1',passed=passed,
             head=__import__('os').environ.get('GITHUB_SHA'),programs_compared=sorted(self.seen),required_programs=PROGRAMS,
             cases=self.cases,interactions_compared=len(self.rows),bms_interactions_compared=sum(not r.get('terminal_text_only') and not r.get('navigation_boundary_only') for r in self.rows),navigation_boundaries=[dict(case=r['case'],destination=r['expected']['outside_program']) for r in self.rows if r.get('navigation_boundary_only')],

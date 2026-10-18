@@ -137,7 +137,10 @@ public final class SourceEdits {
         put(parent,conditionValue(c.path("values").get(0).asText(),parent));
     }
     private static int compare(String a,String b,boolean numeric){
-        if(numeric)return new BigDecimal(a).compareTo(new BigDecimal(b));
+        if(numeric&&a.matches("[+-]?[0-9]+(?:[.][0-9]+)?")&&b.matches("[+-]?[0-9]+(?:[.][0-9]+)?"))
+            return new BigDecimal(a).compareTo(new BigDecimal(b));
+        // Numeric DISPLAY aliases may contain LOW-VALUES or invalid input.
+        // Preserve the disclosed EBCDIC comparison bound until source validation.
         int n=Math.max(a.length(),b.length());return Arrays.compareUnsigned(Commarea.encode(a+" ".repeat(n-a.length())),Commarea.encode(b+" ".repeat(n-b.length())));
     }
     private static boolean paddedEqual(String a,String b){int n=Math.max(a.length(),b.length());return (a+" ".repeat(n-a.length())).equals(b+" ".repeat(n-b.length()));}

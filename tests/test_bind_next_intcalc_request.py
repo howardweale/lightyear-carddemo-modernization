@@ -69,7 +69,15 @@ class BindNextTests(unittest.TestCase):
         self.assertNotEqual(0,self.command(journal,1,output).returncode)
         self.assertFalse(output.exists())
 
-    def test_committed_templates_are_verified_without_claiming_final_conditions_met(self):
-        contracts=templates(ROOT,'docs/factory/intcalc-signing-order-2026-10-17.json')
+    def test_committed_packet_refuses_until_final_conditions_are_met(self):
+        packet='docs/factory/intcalc-signing-order-2026-10-17.json'
+        rows=json.loads((ROOT/packet).read_bytes())['items']
+        contracts=[json.loads((ROOT/row['path']).read_bytes()) for row in rows]
         self.assertEqual(6,len(contracts));self.assertEqual('unconditional',contracts[-1]['details']['effective_condition'])
         self.assertTrue(any(r['state']=='not-met' for r in contracts[-1]['details']['conditions']))
+        with self.assertRaisesRegex(ValueError,'threshold-conditions-unmet'):
+            templates(ROOT,packet)
+        from tools.bind_next_intcalc_request import bind
+        journal=self.fixture.service.export_session(self.fixture.token)
+        with self.assertRaisesRegex(ValueError,'threshold-conditions-unmet'):
+            bind(journal,self.fixture.service.public_key,journal['journal_head_sha256'],1,root=ROOT,packet=packet)

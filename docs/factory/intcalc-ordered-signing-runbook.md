@@ -10,7 +10,9 @@ a second root, use B06 port 8768, or supply a private key to the binding command
 Howard must approve the exact final green implementation before these commands
 are used. Review the complete selected packet and any changed evidence binding.
 The current sixth template deliberately has unmet typed conditions: it cannot
-be signed just because a predecessor hash is available. Prepare and approve the
+be signed just because a predecessor hash is available. The binding tool validates
+all six templates before producing any output, so this incomplete packet also
+refuses round 1 preparation. Prepare and approve the
 complete evidence-backed packet before starting; do not edit packet bodies
 mid-chain. A new packet identity requires its own reviewed sequence.
 

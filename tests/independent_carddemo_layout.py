@@ -82,3 +82,27 @@ def decode_display(raw,fields,length):
             value=Decimal(('-' if negative else '')+''.join(digits)).scaleb(-f['scale'])
         values[f['path']]=value
     return values
+
+
+
+def synthetic_records(originals,fields,length,count=950):
+    """Labeled public-derived fixtures; no claim these are public source rows.
+
+    Vary every numeric DISPLAY field, including sign zones and negative zero.
+    Text/date/filler bytes come from the public templates. Primary IDs occupy a
+    deterministic high range and collisions are refused by the caller.
+    """
+    if not originals or not fields[0]['numeric']:raise ValueError('independent-fixture-shape')
+    for index in range(count):
+        raw=bytearray(originals[index%len(originals)])
+        for number,f in enumerate(fields):
+            if not f['numeric']:continue
+            width=f['length']
+            value=(8*10**(width-1)+index) if number==0 else index*(number+1)%10**width
+            digits=str(value).zfill(width)
+            if len(digits)!=width:raise ValueError('independent-fixture-overflow')
+            data=bytearray(0xf0+int(c) for c in digits)
+            if f['signed']:data[-1]=(13,12,15)[index%3]*16+(data[-1]&15)
+            raw[f['offset']:f['offset']+width]=data
+        if len(raw)!=length:raise ValueError('independent-fixture-length')
+        yield bytes(raw)

@@ -29,7 +29,19 @@ jobs:
       - name: Verify retained bounded review and implementation bindings
         env:
           PYTHONPATH: src:tests
-        run: python -B -m unittest test_carddemo_data_delivery test_carddemo_independent_layout -v
+        run: python -B -m unittest test_carddemo_data_delivery -v
+      - name: Independently check BMS layouts and approved public/synthetic records
+        env:
+          PYTHONPATH: src:tests
+          CARDDEMO_INDEPENDENT_REPORT: work/carddemo-independent-layout
+        run: python -B -m unittest test_carddemo_independent_layout -v
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-independent-layout
+          path: work/carddemo-independent-layout
+          if-no-files-found: error
+          retention-days: 90
       - name: Generate mappings and PostgreSQL DDL
         env:
           PYTHONPATH: src

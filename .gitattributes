@@ -251,4 +251,4 @@ spec/modernization/carddemo-screens/upstream/** -text -whitespace
 docs/factory/factory-authority.public.pem text eol=lf
 
 # Preserve the original unsigned CI receipt bytes, including its empty-gap line.
-docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md -text -whitespace
+docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md.txt -text -whitespace

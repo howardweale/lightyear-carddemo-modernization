@@ -22,3 +22,5 @@ The independent baseline executes pinned raw COBOL through a bounded interpreter
 Native CICS/IMS/DB2/LE and production data are unobserved. Other maps and destination services, SQL-error screen equivalence, public IMS unload compatibility, release and z/OS acceptance remain outside this proof. The October 17 data receipt is preserved unchanged.
 
 This is unsigned evidence for review. It grants no signature, evidence acceptance, import, activation, merge, release or Phase 2 authority. Final PR readiness still requires fresh checks on the publication commit and Howard's approval of that exact green SHA. No local tests, application, generators, compilers or Docker were executed to prepare this packet.
+
+The original CI Markdown has a misencoded heading and is retained byte-for-byte as [raw text](carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md.txt) and inside its original archive. The readable receipt above is separately authored; the CI JSON and all measured results are unchanged. Future CI receipt headings use ASCII punctuation.

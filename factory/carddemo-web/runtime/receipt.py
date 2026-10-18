@@ -53,7 +53,7 @@ def main():
     record['status']='proved-in-ci' if record['acceptance_complete'] else 'incomplete'
     record['navigation_boundaries']=summaries.get('api',{}).get('navigation_boundaries',[])
     payload=(json.dumps(record,indent=2,sort_keys=True)+'\n').encode();name='carddemo-slice-1-2026-10-18';(args.out/(name+'.json')).write_bytes(payload)
-    lines=['# CardDemo slice 1 â€” unsigned receipt','',f"Status: {record['status']}. Acceptance complete: {record['acceptance_complete']}.",'',f"Source head: {record['source_head']}; tested commit: {record['tested_commit']}.",'','| Gate | Passed | Evidence |','|---|---|---|']
+    lines=['# CardDemo slice 1 - unsigned receipt','',f"Status: {record['status']}. Acceptance complete: {record['acceptance_complete']}.",'',f"Source head: {record['source_head']}; tested commit: {record['tested_commit']}.",'','| Gate | Passed | Evidence |','|---|---|---|']
     for name,g in gates.items():lines.append('| '+name+' | '+str(g['passed'])+' | '+json.dumps({k:v for k,v in g.items() if k not in ('cases','results')})+' |')
     lines+=['','Remaining evidence gaps: '+', '.join(record['remaining_evidence_gaps']), '', 'Quirks:']+['- '+q for q in record['quirks']]+['','Out of scope:']+['- '+q for q in record['not_covered']]+['','Prepared as an unsigned Factory review request for Howard. No signature, import, activation or Phase 2 authority.','', 'JSON SHA-256: '+sha256(payload).hexdigest()]
     (args.out/'carddemo-slice-1-2026-10-18.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')

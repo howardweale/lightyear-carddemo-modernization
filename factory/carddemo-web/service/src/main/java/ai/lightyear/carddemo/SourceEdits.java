@@ -296,8 +296,60 @@ public final class SourceEdits {
             put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
         }
     }
+    private void runAccountTextRule(String paragraph) {
+        String whole=get("WS-EDIT-ALPHANUM-ONLY");
+        int length=Integer.parseInt(get("WS-EDIT-ALPHANUM-LENGTH"));
+        String value=whole.substring(0,length);
+        var result=switch(paragraph) {
+            case "1225-EDIT-ALPHA-REQD" -> AccountTextRules.requiredName(value);
+            case "1230-EDIT-ALPHANUM-REQD" -> AccountTextRules.requiredText(value);
+            case "1235-EDIT-ALPHA-OPT" -> AccountTextRules.optionalName(value);
+            case "1240-EDIT-ALPHANUM-OPT" -> AccountTextRules.optionalText(value);
+            case "1245-EDIT-NUM-REQD" -> AccountTextRules.requiredNonzeroDigits(value);
+            default -> throw new IllegalArgumentException("untranslated-text-rule:"+paragraph);
+        };
+        boolean alpha=paragraph.equals("1225-EDIT-ALPHA-REQD") || paragraph.equals("1235-EDIT-ALPHA-OPT");
+        String flag=alpha?"WS-EDIT-ALPHA-ONLY-FLAGS":"WS-EDIT-ALPHANUM-ONLY-FLAGS";
+        put(flag,switch(result.status()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; });
+        if(result.converted()) {
+            String table=alpha?"LIT-ALL-ALPHA-FROM":"LIT-ALL-ALPHANUM-FROM";
+            put(table,get(table+"-X"));
+            // INSPECT mutates only the declared prefix, including on invalid input.
+            put("WS-EDIT-ALPHANUM-ONLY",result.scratch()+whole.substring(length));
+        }
+        int line=switch(paragraph) { case "1225-EDIT-ALPHA-REQD" -> 1898; case "1230-EDIT-ALPHANUM-REQD" -> 1955;
+            case "1235-EDIT-ALPHA-OPT" -> 2012; case "1240-EDIT-ALPHANUM-OPT" -> 2061; default -> 2109; };
+        trace.add(new Location("app/cbl/COACTUPC.cbl",line));
+        if(result.status()==AccountTextRules.Status.VALID)return;
+        String suffix=switch(result.status()) {
+            case MISSING -> " must be supplied.";
+            case ZERO -> " must not be zero.";
+            default -> paragraph.equals("1245-EDIT-NUM-REQD")?" must be all numeric.":
+                alpha?" can have alphabets only.":" can have numbers or alphabets only.";
+        };
+        nativeInputError(suffix);
+    }
+    private void runAccountMoneyRule() {
+        var result=AccountMoneyRule.validate(get("WS-EDIT-SIGNED-NUMBER-9V2-X"));
+        put("WS-FLG-SIGNED-NUMBER-EDIT",switch(result.outcome()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; });
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2180));
+        if(result.outcome()!=AccountInputRules.Outcome.VALID)
+            nativeInputError(result.outcome()==AccountInputRules.Outcome.MISSING?" must be supplied.":" is not valid");
+    }
+    private void nativeInputError(String suffix) {
+        setCondition("INPUT-ERROR");
+        if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
+    }
     public void run(String paragraph){
-        if(model.path("native_paragraphs").has(paragraph)){runAccountInputRule(paragraph);return;}
+        if(model.path("native_paragraphs").has(paragraph)) {
+            switch(model.path("native_paragraphs").path(paragraph).asText()) {
+                case "AccountInputRules" -> runAccountInputRule(paragraph);
+                case "AccountTextRules" -> runAccountTextRule(paragraph);
+                case "AccountMoneyRule" -> runAccountMoneyRule();
+                default -> throw new IllegalArgumentException("untranslated-native-class");
+            }
+            return;
+        }
         JsonNode statements=model.path("paragraphs").path(paragraph);
         if(statements.isMissingNode())throw new IllegalArgumentException("untranslated-edit-paragraph:"+paragraph);
         Map<String,Integer> labels=new HashMap<>();for(int i=0;i<statements.size();i++){

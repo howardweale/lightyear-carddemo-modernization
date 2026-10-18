@@ -31,7 +31,7 @@ class AccountInputRulesTest {
             assertEquals("AccountInputRules",m.path("native_paragraphs").path(p).asText());
             assertTrue(model().path("generic_edits").path("paragraphs").has(p));
         }
-        assertTrue(m.path("paragraphs").has("1250-EDIT-SIGNED-9V2"));
+        assertTrue(m.path("paragraphs").has("1260-EDIT-US-PHONE-NUM"));
     }
     private void compareRule(String paragraph,String value,int length,String priorError) throws Exception {
         var m=model();var oracle=new SourceEdits(m.path("generic_edits"));

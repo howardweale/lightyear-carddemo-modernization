@@ -81,6 +81,10 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
     # from the production validation model. generic_edits remains a CI oracle.
     native_paragraphs = {name: 'AccountInputRules' for name in
                          ('1215-EDIT-MANDATORY', '1220-EDIT-YESNO')}
+    native_paragraphs.update({name: 'AccountTextRules' for name in
+        ('1225-EDIT-ALPHA-REQD', '1230-EDIT-ALPHANUM-REQD', '1235-EDIT-ALPHA-OPT',
+         '1240-EDIT-ALPHANUM-OPT', '1245-EDIT-NUM-REQD')})
+    native_paragraphs['1250-EDIT-SIGNED-9V2'] = 'AccountMoneyRule'
     for name in native_paragraphs:
         del paragraphs[name]
     return dict(paragraphs=paragraphs,native_paragraphs=native_paragraphs,

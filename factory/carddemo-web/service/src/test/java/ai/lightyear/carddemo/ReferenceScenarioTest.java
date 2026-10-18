@@ -52,6 +52,26 @@ class ReferenceScenarioTest {
         return json.readTree(bytes);
     }
     List<String> multiset(List<?> values){return values.stream().map(json::writeValueAsString).sorted().toList();}
+    @Test void keyedAuthorizationPagesIgnoreInsertionOrderAndStayWithinParent()throws Exception{
+        Path root=Path.of(System.getProperty("carddemo.root"));
+        Bindings b=new Bindings(root.resolve("work/carddemo-web-bindings/bindings.json"),root.resolve("work/carddemo-web-data/plan.json"),json,Clock.systemUTC());
+        var records=new AuthorizationRecords(b);var typed=new TypedRecords(b);
+        try(Connection db=DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/carddemo","carddemo","disposable-public-demo")){
+            // Seed inserts identifiers 1..7, but their DBD sequence keys decrease.
+            var parent=records.summary(db,"00000000050");assertNotNull(parent);
+            var first=records.page(db,parent,null,false,5);
+            assertEquals(List.of("7","6","5","4","3"),first.stream().map(r->typed.text("pautdtl1",r,"PA-TRANSACTION-ID").stripTrailing()).toList());
+            byte[] boundary=AuthorizationRecords.key(first.get(4));
+            var next=records.page(db,parent,boundary,false,5);
+            assertEquals(List.of("2","1"),next.stream().map(r->typed.text("pautdtl1",r,"PA-TRANSACTION-ID").stripTrailing()).toList());
+            var inclusive=records.page(db,parent,boundary,true,5);
+            assertEquals(List.of("3","2","1"),inclusive.stream().map(r->typed.text("pautdtl1",r,"PA-TRANSACTION-ID").stripTrailing()).toList());
+            assertTrue(records.page(db,parent,AuthorizationRecords.key(next.get(1)),false,5).isEmpty());
+            var other=new HashMap<String,Object>(parent);other.put("path_key",new byte[]{0});
+            assertTrue(records.page(db,other,null,false,5).isEmpty());
+            assertTrue(records.page(db,other,boundary,true,5).isEmpty());
+        }
+    }
     @Test void everyRawReferenceInteractionMatchesAllFieldsAttributesCursorMessageAndDatabase()throws Exception{
         Path root=Path.of(System.getProperty("carddemo.root"));Clock clock=Clock.fixed(Instant.parse("2026-10-17T12:34:56Z"),ZoneOffset.UTC);
         Bindings b=new Bindings(root.resolve("work/carddemo-web-bindings/bindings.json"),root.resolve("work/carddemo-web-data/plan.json"),json,clock);

@@ -22,7 +22,9 @@ public final class AuthorizationRecords {
     public List<Map<String,Object>> page(Connection db,Map<String,Object> parent,byte[] start,boolean inclusive,int limit)throws SQLException{
         if(limit<1||limit>6)throw new IllegalArgumentException("authorization-page-limit");
         if(parent==null)return List.of();
-        String sql="SELECT * FROM pautdtl1 WHERE parent_path_key=?"+(start==null?"":" AND (twin_seq,path_key)"+(inclusive?">=":">")+"(SELECT twin_seq,path_key FROM pautdtl1 WHERE parent_path_key=? AND ebcdic_key=?)")+" ORDER BY twin_seq,path_key LIMIT ?";
+        // DBPAUTP0 declares PAUT9CTS as SEQ,U (TYPE=C). GNP follows its
+        // ascending byte key within the established parent, not import ordinal.
+        String sql="SELECT * FROM pautdtl1 WHERE parent_path_key=?"+(start==null?"":" AND (ebcdic_key,path_key)"+(inclusive?">=":">")+"(SELECT ebcdic_key,path_key FROM pautdtl1 WHERE parent_path_key=? AND ebcdic_key=?)")+" ORDER BY ebcdic_key,path_key LIMIT ?";
         try(var q=db.prepareStatement(sql)){int i=1;q.setBytes(i++,(byte[])parent.get("path_key"));if(start!=null){q.setBytes(i++,(byte[])parent.get("path_key"));q.setBytes(i++,path(parent,start));}q.setInt(i,limit);
             try(var rs=q.executeQuery()){List<Map<String,Object>> rows=new ArrayList<>();while(rs.next())rows.add(row(rs));return rows;}}
     }

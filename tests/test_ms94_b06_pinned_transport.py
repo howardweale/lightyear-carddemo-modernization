@@ -118,7 +118,7 @@ exit 0
     @unittest.skipUnless(sys.platform=='win32','Windows parser/compiler checks')
     def test_real_powershell_parser_and_wfp_struct_layout(self):
         root=Path(__file__).resolve().parents[1]
-        command="""$ErrorActionPreference='Stop';foreach($f in @('tools/ms94_b06_pinned_exec.ps1','tools/ms94_b06_pinned_probe.ps1')){$t=$null;$e=$null;[Management.Automation.Language.Parser]::ParseFile((Resolve-Path $f),[ref]$t,[ref]$e)|Out-Null;if($e){throw ($e|Out-String)}};Add-Type -Path tools/b06-account-egress.cs;if(([B06AccountEgress]::LayoutSizes() -join ',') -ne '16,40,200,72'){throw 'WFP SDK layout mismatch'}"""
+        command="""$ErrorActionPreference='Stop';foreach($f in @('tools/ms94_b06_pinned_exec.ps1','tools/ms94_b06_pinned_probe.ps1','tools/inventory_b06_oct13_evidence.ps1')){$t=$null;$e=$null;[Management.Automation.Language.Parser]::ParseFile((Resolve-Path $f),[ref]$t,[ref]$e)|Out-Null;if($e){throw ($e|Out-String)}};Add-Type -Path tools/b06-account-egress.cs;if(([B06AccountEgress]::LayoutSizes() -join ',') -ne '16,40,200,72'){throw 'WFP SDK layout mismatch'}"""
         result=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',command],cwd=root,capture_output=True,text=True,timeout=30)
         self.assertEqual(0,result.returncode,result.stderr)
 

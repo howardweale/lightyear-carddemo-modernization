@@ -4,6 +4,10 @@ on:
     paths:
       - 'tools/build_intcalc_current_releasability.py'
       - 'tests/test_intcalc_current_releasability.py'
+      - 'tools/release_status_records.py'
+      - 'tools/build_release_packet.py'
+      - 'tools/build_factory_current_status.py'
+      - 'tests/test_derived_factory_status.py'
       - 'tools/verify_public_retention.py'
       - 'src/lightyear_factory/release_grade.py'
       - 'docs/factory/evidence-retention-2026-10-18-intcalc.json'
@@ -43,6 +47,16 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
         run: python -B -m tools.build_intcalc_current_releasability --archives work/intcalc-original --run work/intcalc-retained-run.json --output work/intcalc-current-verdict
+      - name: Render status and decision packet from the new measured verdict
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          cp -R work/intcalc-current-verdict/docs/. docs/
+          python -B -m tools.build_factory_current_status
+          python -B -m tools.build_release_packet
+          python -B -m unittest test_derived_factory_status -v
+          cp docs/factory/current-status.* work/intcalc-current-verdict/docs/factory/
+          cp docs/factory/howard-decision-packet-2026-10-18-handoff-refresh.md work/intcalc-current-verdict/docs/factory/
       - uses: actions/upload-artifact@v4
         if: always()
         with:

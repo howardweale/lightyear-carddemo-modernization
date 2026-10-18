@@ -181,3 +181,39 @@ class DerivedStatusTests(unittest.TestCase):
         self.assertIn('10 unresolved twin mutants; 9 raw campaign gaps',verdict(report))
         report['evidence_gaps'].pop();report['projected_thresholds']['twin']['unresolved_survivors'].pop()
         self.assertIn('9 unresolved twin mutants; 8 raw campaign gaps',verdict(report))
+
+    def test_projection_date_precedes_current_head_check_but_seals_still_apply(self):
+        from tools.release_status_records import review_projection_applies
+        from lightyear_control_tower.decisions import digest
+        record = dict(prepared_on='2026-10-16', measurement_head='old')
+        record['content_sha256'] = digest(record)
+        release = dict(prepared_on='2026-10-18')
+        self.assertFalse(review_projection_applies('INTCALC', record, release, 'new'))
+        self.assertTrue(review_projection_applies('POSTTRAN', record, release, 'old'))
+        record['prepared_on'] = '2026-10-18'
+        record['content_sha256'] = digest({k:v for k,v in record.items() if k != 'content_sha256'})
+        with self.assertRaisesRegex(ValueError, 'evidence-head'):
+            review_projection_applies('INTCALC', record, release, 'new')
+        record['measurement_head'] = 'new'
+        with self.assertRaisesRegex(ValueError, 'seal'):
+            review_projection_applies('INTCALC', record, release, 'new')
+
+    def test_new_measurement_date_changes_headline_and_packet_link(self):
+        model = load()
+        model['projections'].pop('INTCALC', None)
+        model['release'].update(schema='intcalc-releasability/3', prepared_on='2026-10-18')
+        model['release_path'] = 'docs/factory/intcalc-releasability-2026-10-18.json'
+        value, text = render(model)
+        self.assertTrue(text.startswith('# Factory current status — 2026-10-18'))
+        self.assertIn('[Measured verdict](intcalc-releasability-2026-10-18.md)', text)
+        changed = copy.deepcopy(model)
+        changed['release']['prepared_on'] = '2026-10-19'
+        changed['release_path'] = 'docs/factory/intcalc-releasability-2026-10-19.json'
+        self.assertNotEqual(text, render(changed)[1])
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root/'docs/factory').mkdir(parents=True)
+            with patch('tools.build_release_packet.load', return_value=changed):
+                build(root=root)
+            packet = next((root/'docs/factory').glob('howard-decision-packet-*.md')).read_text()
+            self.assertIn('intcalc-releasability-2026-10-19.md', packet)
+            self.assertIn('As of 2026-10-19', packet)

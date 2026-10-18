@@ -51,11 +51,26 @@ def inputs(root=ROOT):
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
+    prior_path = 'docs/factory/release-evidence-2026-10-15/index.json'
+    if (root/prior_path).is_file():
+        prior = json.loads((root/prior_path).read_bytes())
+        additional += [prior_path, *[name for archive in prior['sources'] + prior.get('crosscheck_sources', []) for name in archive['files']]]
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
         *additional,
         release_path.relative_to(root).as_posix(), index_path,
         *[path for archive in index["sources"] + index.get("crosscheck_sources", []) for path in archive["files"]],
         *[row["path"] for row in historical["sources"]]]))
+
+
+def review_projection_applies(program, record, release, measurement_head):
+    if digest({k:v for k,v in record.items() if k != 'content_sha256'}) != record['content_sha256']:
+        raise ValueError('review-projection-seal')
+    # An older INTCALC projection must not replace a newer measured verdict.
+    if program == 'INTCALC' and record['prepared_on'] < release['prepared_on']:
+        return False
+    if record['measurement_head'] != measurement_head:
+        raise ValueError('review-projection-evidence-head')
+    return True
 
 
 def load(root=ROOT):
@@ -91,10 +106,17 @@ def load(root=ROOT):
         candidates=sorted((root/'docs/factory').glob(program.lower()+'-review-verdict-*.json'))
         if candidates:
             record=json.loads(candidates[-1].read_bytes())
-            if digest({k:v for k,v in record.items() if k!='content_sha256'})!=record['content_sha256']:
-                raise ValueError('review-projection-seal')
-            if record['measurement_head']!=index['head']:raise ValueError('review-projection-evidence-head')
-            if program != 'INTCALC' or record['prepared_on'] >= release['prepared_on']:
+            projection_head = index['head']
+            if program == 'POSTTRAN' and record['prepared_on'] < release['prepared_on']:
+                # POSTTRAN's independent historical review remains bound to its own campaign.
+                prior_path = 'docs/factory/release-evidence-2026-10-15/index.json'
+                prior = read(prior_path)
+                for archive in prior['sources'] + prior.get('crosscheck_sources', []):
+                    for filename, expected in archive['files'].items():
+                        if sha256((root/filename).read_bytes()).hexdigest() != expected:
+                            raise ValueError('review-projection-historical-evidence-hash')
+                projection_head = prior['head']
+            if review_projection_applies(program, record, release, projection_head):
                 projections[program]=record
                 projection_paths[program]=candidates[-1].relative_to(root).as_posix()
     readiness_path=root/'docs/factory/posttran-phase2-readiness-2026-10-16.json'
@@ -192,7 +214,7 @@ def render(model):
     current["carddemo_web"] = model.get("carddemo_web")
     current["verdict_path"] = verdict_path
     current["delivery"] = delivery
-    snapshot_date = delivery["checked_at"][:10] if delivery else current["as_of"]
+    snapshot_date = current["as_of"] if release.get('schema') == 'intcalc-releasability/3' else (delivery["checked_at"][:10] if delivery else current["as_of"])
     factory = "activated locally (signed-only)" if current["factory_activated"] else "local signed-only activation not recorded"
     policy = "effective" if current["effective_policy"] else "not effective"
     text = ["# Factory current status — " + snapshot_date, "",
@@ -222,7 +244,10 @@ def render(model):
         text+=['',review['scope_explanation'],f"Hypothetical z/OS rate after confirmation: {review['hypothetical_zos_after_confirmation']['kill_rate']}; not applied."]
     if 'POSTTRAN' in projections:
         review=projections['POSTTRAN'];current['posttran']=review
-        text+=['','## POSTTRAN','',review['verdict'],
+        label = '## POSTTRAN'
+        if release.get('schema') == 'intcalc-releasability/3' and review['prepared_on'] < release['prepared_on']:
+            label += ' (review as of '+review['prepared_on']+')'
+        text+=['',label,'',review['verdict'],
             f"Business {review['business']['fraction']}; I/O {review['io']['fraction']}; diversity deficit {len(review['below_two_values'])} fields.",
             *[scope+': '+row['kill_rate']+' projected; '+str(len(row['unresolved_survivors']))+' unresolved.' for scope,row in review['projected_thresholds'].items()]]
     phase2=model.get('phase2')

@@ -15,6 +15,7 @@ def build(commit=None, root=ROOT, prepared_on=None):
     lines = ['# Howard decision packet — '+date, '',
              'Decisions only. The measured status and failure inventories are in the current status and program verdicts.', '',
              '| Order | Decision | Consequence of signing |', '| --- | --- | --- |']
+    lines[3:3] = ['Measured verdict: ['+Path(value['verdict_path']).with_suffix('.md').name+']('+Path(value['verdict_path']).with_suffix('.md').name+'). As of '+value['as_of']+'.', '']
     candidates=sorted((root/'docs/factory').glob('intcalc-signing-order-*.json'))
     index=candidates[-1] if candidates else root/'docs/factory/missing-signing-order.json'
     consequences=['Accept only the pinned twin loader-domain exclusion; no kill credit.',

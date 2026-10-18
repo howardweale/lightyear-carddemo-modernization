@@ -54,3 +54,19 @@ class CampaignProvenanceTests(unittest.TestCase):
    self.assertFalse((Path(t)/'equivalence-followup').exists());compiler.assert_not_called()
 
 if __name__=='__main__':unittest.main()
+
+
+class ReviewProjectionSealTests(unittest.TestCase):
+ def test_aggregate_output_is_readable_by_the_rehearsal_and_rejects_tampering(self):
+  from tools.check_equivalence_followup import write_review_projection
+  from lightyear_mainframe.loader_domain import verify_seal
+  value=dict(schema='intcalc-loader-domain-review-projection/1',head='a'*40,
+             projected_thresholds={'twin':{'killed':311,'eligible':311}},
+             effective=False,release_authorized=False)
+  with tempfile.TemporaryDirectory() as folder:
+   path=Path(folder)/'projection.json'
+   write_review_projection(path,value)
+   saved=json.loads(path.read_bytes())
+   self.assertEqual(value,{k:v for k,v in verify_seal(saved).items() if k!='content_sha256'})
+   saved['projected_thresholds']['twin']['killed']=312
+   with self.assertRaisesRegex(ValueError,'loader-domain-seal'):verify_seal(saved)

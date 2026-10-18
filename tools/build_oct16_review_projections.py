@@ -32,7 +32,20 @@ def sources():
     return {'INTCALC':intcalc,'POSTTRAN':posttran}
 
 
-def build(output):
+def verdict(report):
+    twin=report['projected_thresholds']['twin']
+    parts=[f"{len(twin['unresolved_survivors'])} unresolved twin mutants",
+           f"{len(report.get('evidence_gaps', []))} raw campaign gaps"]
+    if report['program']=='INTCALC':
+        parts += [f"{len(report['below_two_values'])} fields below two values; verify threshold/3 constant evidence",
+                  f"{len(report['pending_effective_acceptances'])} pending effective individual acceptances"]
+    parts += [f"business {report['business']['fraction']}; I/O {report['io']['fraction']}"]
+    if not report['effective']:parts.append('effective policy not recorded')
+    if not report['release_authorized']:parts.append('release authority absent')
+    return 'Not releasable: '+ '; '.join(parts)+'. No new z/OS acceptances.'
+
+
+def build(output, prepared_on='2026-10-17'):
     if os.environ.get('GITHUB_ACTIONS')!='true': raise ValueError('CI-only-review-projection')
     from lightyear_mainframe.equivalence_evidence import mutation_threshold_report,seal
     from lightyear_mainframe.release_projection import review_projection,supplemental_acceptances
@@ -51,7 +64,7 @@ def build(output):
     for program in fresh:
         reviews=json.loads((folder/f'aggregate/{program}/results.json').read_bytes())
         report=review_projection(fresh[program],reviews,accepted,program,register)
-        report.update(prepared_on='2026-10-16',measurement_head=HEAD,measurement_run=38763552148,
+        report.update(prepared_on=prepared_on,measurement_head=HEAD,measurement_run=38763552148,
             analysis_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
         if program=='INTCALC':
             overlay=verify_seal(json.loads((folder/'intcalc-0/factory-review-INTCALC/loader-domain-overlay.json').read_bytes()))
@@ -64,19 +77,18 @@ def build(output):
             for item in hypothetical['excluded_equivalents']: groups[item['basis']].append(item['id'])
             report['hypothetical_zos_exclusions_by_basis']=dict(groups)
             report['zos_loader_blocked_ids']=sorted(r['id'] for r in fresh[program] if r['status']=='evidence-gap')
-            report['scope_explanation']='The loader overlay is twin-scoped. Without signed and confirmed z/OS loader-domain evidence, all 113 raw gaps remain and no z/OS-facing exclusion is applied.'
-            report['verdict']='Not releasable: exact threshold/3 comparison and mutation bindings, ordered effective signatures and non-provisional release evidence remain required.'
+            report['scope_explanation']=f"The loader overlay is twin-scoped. Without signed and confirmed z/OS loader-domain evidence, all {len(report['zos_loader_blocked_ids'])} raw gaps remain and no z/OS-facing exclusion is applied."
             report['pending_effective_acceptances']=pending
             proposal=read('docs/factory/intcalc-duplicate-category-proposal-2026-10-12.json')
-            new=dict(schema='factory-scoped-domain-decision-proposal/2',prepared_on='2026-10-16',program='INTCALC',
+            new=dict(schema='factory-scoped-domain-decision-proposal/2',prepared_on=prepared_on,program='INTCALC',
                 claim_scope='zos-facing',scenario_id=proposal['scenario_id'],bound_sources=proposal['bound_sources'],
                 original_proposal_sha256=proposal['content_sha256'],approved=False,effective=False,needs_zos_confirmation=True,
                 argument='Duplicate primary KSDS keys are outside the valid data domain. Confirm the actual IDCAMS REPRO loader rejection before applying this argument on z/OS.',
                 required_capture=['Exact input hashes and duplicate keys','IDCAMS command, SYSIN and complete SYSPRINT','Loader return code and dataset definition','Proof that CBACT04C did not start','Ordinary valid-domain control load'],
                 no_kill_or_comparison_credit=True,blocked_ids=report['zos_loader_blocked_ids'])
-            new['content_sha256']=seal(new); save(output/'intcalc-zos-loader-domain-proposal-2026-10-16.json',new)
+            new['content_sha256']=seal(new); save(output/f'intcalc-zos-loader-domain-proposal-{prepared_on}.json',new)
             # Capture-kit addendum: explicitly a loader negative test, not an IMS/application comparison.
-            save(output/'capture-kit-intcalc-duplicate-category-2026-10-16.json',dict(schema='zos-loader-capture-case/1',
+            save(output/f'capture-kit-intcalc-duplicate-category-{prepared_on}.json',dict(schema='zos-loader-capture-case/1',
                 scenario_id=new['scenario_id'],proposal_sha256=new['content_sha256'],bound_sources=new['bound_sources'],
                 expected_application_execution=False,required_capture=new['required_capture'],execute_authorized=False))
         else:
@@ -96,12 +108,13 @@ def build(output):
                 gaps.append(dict(id=row['id'],line=row['line'],raw_record_sha256=seal(row),cases=[g['case'] for g in failures],
                     failure_types=dict(errors),cause=reason,minimal_next_step=remedy))
             report['evidence_gaps']=gaps
-            report['verdict']='Not releasable: nine fresh-campaign gaps remain after the effective twin-only October 12 supplement; no new z/OS acceptances.'
         measured=json.loads((folder/f'aggregate/{program}/threshold-2-by-scope.json').read_bytes())['twin']
         report.update(business=measured['business'],io=measured['io'],below_two_values=measured['below_two_values'])
+        report['verdict']=verdict(report)
+        report.update(authorized_by='Howard',performed_by='Codex',supersedes=f'{program.lower()}-review-verdict-2026-10-16.json')
         report['content_sha256']=seal(report); reports[program]=report
-        save(output/f'{program.lower()}-review-verdict-2026-10-16.json',report)
-        lines=[f'# {program} review verdict — 2026-10-16','',report['verdict'],'',
+        save(output/f'{program.lower()}-review-verdict-{prepared_on}.json',report)
+        lines=[f'# {program} review verdict — {prepared_on}','',report['verdict'],'',
             f'Measured head `{HEAD}`, run 38763552148. This is a new analysis of retained evidence, not a new campaign.','',
             '| Scope | Before supplement | Projected | Unresolved |','| --- | --- | --- | --- |']
         for scope,value in report['projected_thresholds'].items():
@@ -110,11 +123,11 @@ def build(output):
         lines+=['- '+name for name in report['below_two_values']]
         if program=='INTCALC':
             lines+=['',report['scope_explanation'],'',f"Hypothetical z/OS rate after confirmation and signing: {hypothetical['kill_rate']}. Not applied.",'',
-                'All 113 blocked IDs and the hypothetical exclusions by explicit basis are in the JSON.']
+                f"All {len(report['zos_loader_blocked_ids'])} blocked IDs and the hypothetical exclusions by explicit basis are in the JSON."]
         else:
             for row in report['evidence_gaps']:
                 lines+=['',f"## {row['id']}",'',row['cause'],'',row['minimal_next_step'],'','Scenarios: '+', '.join(row['cases'])]
-        (output/f'{program.lower()}-review-verdict-2026-10-16.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+        (output/f'{program.lower()}-review-verdict-{prepared_on}.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     # Source argument, with the same exact line and hash rules as INTCALC's request.
     argument=next(g for g in read('docs/factory/io-gap-arguments.json')['gaps'] if g['program']=='CBTRN02C')
     source=(ROOT/'spec/mainframe/public-source/CBTRN02C.cbl').read_bytes().replace(b'\r\n',b'\n')
@@ -122,7 +135,7 @@ def build(output):
     lines=source.decode().splitlines()
     if any(lines[r['line']-1].strip()!=r['source'] for r in argument['supporting_source']): raise ValueError('POSTTRAN-IO-lines')
     path='docs/factory/io-gap-arguments.json'
-    save(output/'posttran-io-exception-request-2026-10-16.json',dict(schema='factory-contract/1',kind='io-exception-acceptance',program='POSTTRAN',
+    save(output/f'posttran-io-exception-request-{prepared_on}.json',dict(schema='factory-contract/1',kind='io-exception-acceptance',program='POSTTRAN',
         sources=[dict(path=path,sha256=sha256((ROOT/path).read_bytes()).hexdigest(),commit=reports['POSTTRAN']['analysis_head'])],
         details=dict(source_sha256=argument['source_sha256'],outcome_id=argument['outcome_id'],outcome='false',line=203,basis='structurally-unreachable',argument_sha256=seal(argument))))
     return reports

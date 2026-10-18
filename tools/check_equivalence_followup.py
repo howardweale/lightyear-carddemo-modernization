@@ -16,6 +16,12 @@ from tools.check_factory_review import attempt
 from lightyear_mainframe.campaign_provenance import validate as validate_campaign
 
 
+def write_review_projection(path, value):
+    # Same canonical seal required by the downstream real-evidence rehearsal.
+    # The measured payload is not changed or made effective by sealing it.
+    write_json(path, sealed(value))
+
+
 def population(job):
     old=json.loads((ROOT/f'docs/factory/systematic-{job.lower()}-review311.json').read_text())['mutants']
     rows={r['id']:r for r in old if r['status']=='equivalent (argued, listed)'}
@@ -162,6 +168,7 @@ def check(campaign,job,shard=0,shards=1):
 
 def finalize(output,job,head,results,fresh,current,diversity,census,shard_records):
     old=population(job);counts=Counter(r['status'] for r in results)
+    write_json(output/'fresh-mutants.json',list(fresh.values()))
     differences=[dict(id=r['id'],historical=r.get('status'),fresh=fresh[r['id']]['status'])
         for r in json.loads((ROOT/f'docs/factory/systematic-{job.lower()}-review311.json').read_text())['mutants']
         if r['id'] in fresh and r['status']!=fresh[r['id']]['status']]
@@ -170,6 +177,15 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
     scoped={scope:mutation_threshold_report(list(fresh.values()),results,acceptance['accepted_mutants'],scope,register) for scope in ('twin','zos-facing')}
     complete={scope:amended_threshold_report(assessment,current['after_faults'],diversity,list(diversity),head)
               for scope,assessment in scoped.items()}
+    from lightyear_mainframe.constant_evidence import build as constant_evidence
+    source_text=(ROOT/f'spec/mainframe/public-source/{PROGRAMS[job]}.cbl').read_text()
+    inventory=generate(source_text,PROGRAMS[job])
+    constants=constant_evidence(ROOT,PROGRAMS[job],list(fresh.values()),inventory,list(diversity))
+    for assessment in complete.values():
+        assessment.pop('content_sha256')
+        assessment['constant_field_evidence']=constants
+        assessment['content_sha256']=sha(json.dumps(assessment,sort_keys=True,separators=(',',':')).encode())
+    write_json(output/'constant-field-evidence.json',constants)
     write_json(output/'threshold-2-by-scope.json',complete)
     if job=='POSTTRAN':
         from lightyear_mainframe.release_projection import review_projection
@@ -186,7 +202,7 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
         projected={scope:mutation_threshold_report(projections[0],results,supplemented,scope,register) if scope=='twin' else scoped[scope] for scope in ('twin','zos-facing')}
         from tools.crosscheck_release_threshold import check as crosscheck
         independent={scope:crosscheck(projections[0] if scope=='twin' else list(fresh.values()),results,supplemented if scope=='twin' else acceptance['accepted_mutants'],scope,projected[scope]) for scope in ('twin','zos-facing')}
-        write_json(output/'loader-domain-review-projection.json',dict(schema='intcalc-loader-domain-review-projection/1',head=head,
+        write_review_projection(output/'loader-domain-review-projection.json',dict(schema='intcalc-loader-domain-review-projection/1',head=head,
             raw_thresholds=scoped,projected_thresholds=projected,independent_crosscheck=independent,overlays=[r['loader_domain_overlay'] for r in shard_records],
             effective=False,release_authorized=False,pending_effective_acceptances=pending,supplement_sha256=supplement_sha,limitation='Unsigned review projection only, conditional on explicit effectiveness signatures; no new z/OS-facing acceptance or active-policy change.'))
     accepted_ids={r['id'] for r in acceptance['accepted_mutants']}
@@ -197,12 +213,13 @@ def finalize(output,job,head,results,fresh,current,diversity,census,shard_record
     evidence_gaps=sorted({r['id'] for r in results if fresh[r['id']]['status']=='evidence-gap' or ('targeted_cases' in r and not r['targeted_evidence_complete'])})
     dispositions=dict(compiler_proven=counts['equivalent (compiler-proven)'],class_proof=counts['equivalent (class-proof)'],individually_argued=len(review),refuted=sum(r['refuted'] for r in results),evidence_gap=len(evidence_gaps),evidence_gap_ids=evidence_gaps,evidence_gap_overlaps_proof_categories=True)
     result=receipt(output/'summary.json',phase='B1-equivalence-followup',job=job,population=len(old),counts=dict(counts),disposition_counts=dispositions,
-        class_census=census['content_sha256'],fresh_sites=current['mutant_count'],expected_sites={'INTCALC':421,'POSTTRAN':483}[job],
+        class_census=census['content_sha256'],fresh_sites=current['mutant_count'],expected_sites=len(inventory),
         fresh_refusals=current['not_compiled'],retained_disposition_differences=differences,
         target_cases=sum(r.get('targeted_cases',0) for r in results),target_valid_comparisons=sum(r.get('targeted_valid_comparisons',0) for r in results),
         target_evidence_gap_ids=[r['id'] for r in results if r.get('targeted_cases') and not r['targeted_evidence_complete']],
         target_refutations=sum(r['refuted'] for r in results),
         individually_reviewable=len(review),threshold_by_scope=complete,acceptance_decision=acceptance['decision_content_sha256'],compiler_scope='pinned GnuCOBOL twin, never a z/OS compiler proof',
+        pending_individual_ids=sorted(r['id'] for r in review if r['id'] not in accepted_ids),
         current_head=head,campaign_manifest_sha256=[r['provenance_sha256'] for r in shard_records],resource_usage=[r['usage'] for r in shard_records],model_calls=0)
     print(json.dumps(result,indent=2))
     if current['mutant_count']!=result['expected_sites']:raise AssertionError('B1-fresh-site-count')

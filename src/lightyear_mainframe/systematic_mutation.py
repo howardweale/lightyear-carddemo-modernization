@@ -3,7 +3,7 @@ import re
 from hashlib import sha256
 from .scenario_coverage import code, VERBS
 
-OPERATORS=('relational','arithmetic','constant','rounded','receiving-scale','receiving-size','delete-MOVE','delete-ADD','delete-COMPUTE','delete-WRITE','delete-REWRITE','negate-condition','skip-PERFORM')
+OPERATORS=('constant-output','relational','arithmetic','constant','rounded','receiving-scale','receiving-size','delete-MOVE','delete-ADD','delete-COMPUTE','delete-WRITE','delete-REWRITE','negate-condition','skip-PERFORM')
 TOKEN=re.compile(r"'[^']*'|\"[^\"]*\"|[0-9]+-[A-Z][A-Z0-9-]*|[A-Z][A-Z0-9-]*|[0-9]+(?:\.[0-9]+)?|>=|<=|<>|[=><+*/-]|[^\s]",re.I)
 
 
@@ -101,6 +101,14 @@ def candidates(text,program):
         path=ROOT/'spec/mainframe/copybooks'/f'{book}.cpy'
         for row in _source_sites(path.read_text(),program+'-'+book):
             row['source_path']=f'{book}.cpy';rows.append(row)
+    if program == 'CBACT04C':
+        for line, original in enumerate(text.splitlines(), 1):
+            match = re.fullmatch(r'\s*MOVE SPACES\s+TO (TRAN-MERCHANT-(?:NAME|CITY|ZIP))\s*', code(original))
+            if match:
+                rows.append(dict(id=f'{program}-constant-output-{line}', operator='constant-output',
+                    field=match[1], line=line, end_line=line, original=original,
+                    replacement="           MOVE 'X' TO " + match[1],
+                    source_sha256=sha256(text.encode()).hexdigest()))
     return rows
 
 

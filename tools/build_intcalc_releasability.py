@@ -16,7 +16,7 @@ def digest(value):
     return sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
-def build(root, date):
+def build(root, date, *, prepared_on=None):
     root = Path(root)
     relative = f"docs/factory/release-evidence-{date}"
     folder = root / relative
@@ -82,7 +82,10 @@ def build(root, date):
             targets=[{k:r[k] for k in ("id", "targeted_cases", "targeted_valid_comparisons", "targeted_evidence_complete")}
                      for r in reviews if "targeted_cases" in r], threshold_by_scope=scopes)
     supplement_path = root / "docs/factory/equivalence-operator-acceptance-2026-10-12.json"
-    supplement = json.loads(supplement_path.read_bytes())
+    supplement_bytes = supplement_path.read_bytes()
+    if sha256(supplement_bytes).hexdigest() != "9a852931a3a95a7fa5997d96cbde713f415bfd6641b76d873313baf6046264a8":
+        raise ValueError("operator-acceptance-file-hash")
+    supplement = json.loads(supplement_bytes)
     by_line = defaultdict(list)
     for row in raw["rows"]:
         by_line[row["line"]].append(dict(id=row["id"], status=row["status"]))
@@ -132,8 +135,46 @@ def build(root, date):
         loader_domain=dict(assessment_counts=dict(Counter(r["assessment"] for r in assessments.values())),
                            assessments=list(assessments.values()), effective=False, sites_removed=0),
         pr_head_crosscheck=crosscheck, blockers=blockers, six_request_path="stopped-policy-decision-required")
+    if prepared_on is not None:
+        if prepared_on <= date:
+            raise ValueError("supersession-must-be-later")
+        missing_caught = [r["field"] for r in constants if not any(
+            m["status"] in {"killed-failure", "killed-divergent"} for m in r["mutants"])]
+        blockers = []
+        if measured["business"]["covered"] != measured["business"]["total"]:
+            blockers.append("Incomplete business outcomes: " + measured["business"]["fraction"] + ".")
+        if pending:
+            blockers.append(f"{len(pending)} unresolved loader evidence gaps.")
+        if missing_caught:
+            blockers.append("Fresh complete caught-mutant evidence required for: " + ", ".join(missing_caught) + ".")
+        if not index.get("retention_complete"):
+            blockers.append("Retained campaign index does not certify complete durable retention.")
+        blockers += ["Ordered effective decisions are not recorded in these unsigned inputs.",
+                     "Non-provisional release evidence is not established by this retained engineering campaign."]
+        numerator, denominator = map(int, rate.split('/'))
+        criteria = [
+            dict(name="Business outcomes", measured=measured["business"]["fraction"],
+                 now="met" if measured["business"]["covered"] == measured["business"]["total"] else "incomplete",
+                 after_signatures="unchanged measured coverage"),
+            dict(name="I/O outcomes", measured=measured["io"]["fraction"],
+                 now="met" if measured["io"]["covered"] == measured["io"]["total"] else "incomplete; exact exception decision required",
+                 after_signatures="evaluate exact accepted edge; signatures add no measured outcomes"),
+            dict(name="Twin mutant kill rate", measured=rate,
+                 now="meets 95% numerical target" if denominator and numerator * 100 >= denominator * 95 else "below 95% numerical target",
+                 after_signatures=groups["twin"]["projected"]["kill_rate"] + " projected; evidence prerequisites still apply"),
+            dict(name="Output diversity", measured=f"{len(deficits)} fields: " + ", ".join(deficits),
+                 now="met" if not deficits else "constant exemption evidence incomplete" if missing_caught else "exemptions await effective policy",
+                 after_signatures="verify complete constant bindings and caught mutants under threshold/3"),
+            dict(name="Effective threshold policy", measured=False, now="not recorded",
+                 after_signatures="requires all typed evidence; provisional evidence cannot authorize release"),
+        ]
+        verdict = "Not releasable: " + " ".join(blockers)
+        result.update(prepared_on=prepared_on, supersedes=f"intcalc-releasability-{date}.json",
+                      authorized_by="Howard", performed_by="Codex", verdict=verdict, criteria=criteria,
+                      blockers=blockers, missing_caught_constant_fields=missing_caught,
+                      six_request_path="evidence-and-ordered-decisions-required")
     result["content_sha256"] = digest(result)
-    lines = ["# INTCALC releasability — " + date, "", "Twin-scoped engineering evidence only. No z/OS confirmation and no customer release.", "",
+    lines = ["# INTCALC releasability — " + result["prepared_on"], "", "Twin-scoped engineering evidence only. No z/OS confirmation and no customer release.", "",
              f"Green main campaign {index['run_id']} at `{index['head']}`. Raw records are preserved.", "",
              "| Criterion | Measured | State now | After signatures alone |", "| --- | --- | --- | --- |"]
     for row in criteria:
@@ -145,14 +186,20 @@ def build(root, date):
               "", "The JSON lists every exclusion by basis, every unresolved ID, targeted comparison counts, and every constant's source and mutant bindings.",
               "", "Howard's choices: individual constant exceptions with an explicit policy decision, or a threshold/3 constant exemption. Neither is effective merely by accepting the existing threshold/2 request.",
               "", "The six-request signing simulation is paused at this criterion, as required by the supplied stop rule.", "", verdict, ""]
+    if prepared_on is not None:
+        lines = [line for line in lines if not line.startswith(("Howard's choices:", "The six-request signing simulation"))]
+        lines.insert(-2, "This dated reassessment preserves the original campaign. New targeted mutants require fresh CI receipts; implementation alone supplies no evidence credit.")
     return result, "\n".join(lines)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", required=True)
+    parser.add_argument("--prepared-on")
     args = parser.parse_args()
-    value, text = build(ROOT, args.date)
-    base = ROOT / "docs/factory" / ("intcalc-releasability-" + args.date)
-    base.with_suffix(".json").write_text(json.dumps(value, indent=2)+"\n")
-    base.with_suffix(".md").write_text(text)
+    value, text = build(ROOT, args.date, prepared_on=args.prepared_on)
+    base = ROOT / "docs/factory" / ("intcalc-releasability-" + value["prepared_on"])
+    if base.with_suffix(".json").exists() or base.with_suffix(".md").exists():
+        raise ValueError("dated-report-already-exists")
+    base.with_suffix(".json").write_text(json.dumps(value, indent=2)+"\n", encoding="utf-8")
+    base.with_suffix(".md").write_text(text, encoding="utf-8")

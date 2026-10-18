@@ -15,7 +15,8 @@ def build(commit=None, root=ROOT, prepared_on=None):
     lines = ['# Howard decision packet — '+date, '',
              'Decisions only. The measured status and failure inventories are in the current status and program verdicts.', '',
              '| Order | Decision | Consequence of signing |', '| --- | --- | --- |']
-    index=root/'docs/factory/intcalc-signing-order-2026-10-16.json'
+    candidates=sorted((root/'docs/factory').glob('intcalc-signing-order-*.json'))
+    index=candidates[-1] if candidates else root/'docs/factory/missing-signing-order.json'
     consequences=['Accept only the pinned twin loader-domain exclusion; no kill credit.',
         'Accept the exact APPL-RESULT class arguments, twin-scoped.',
         'Accept the 30 individual and two compiler-proven items within twin scope.',
@@ -26,7 +27,7 @@ def build(commit=None, root=ROOT, prepared_on=None):
         for row,reason in zip(json.loads(index.read_bytes())['items'],consequences):
             lines.append(f"| {row['order']} | [{Path(row['path']).stem}]({Path(row['path']).name}) | {reason} |")
     else: lines.append('| Pending | INTCALC ordered packet | Missing request inventory; nothing to sign. |')
-    lines+=['| Separate | [POSTTRAN line 203](posttran-io-exception-request-2026-10-16.json) | Accept only the pinned structurally unreachable false edge. Nine campaign gaps remain. |',
+    lines+=['| Separate | [POSTTRAN line 203](posttran-io-exception-request-2026-10-16.json) | Accept only the pinned structurally unreachable false edge. The current POSTTRAN verdict lists campaign gaps and unresolved survivors separately. |',
             '| Separate | [z/OS loader-domain proposal](intcalc-zos-loader-domain-proposal-2026-10-16.json) | Requires real loader capture and confirmation before any z/OS-facing overlay. |',
             '| Separate | [POSTTRAN execution request]('+PHASE2_PUBLIC_ROOT+'posttran-phase2-authorization-request-2026-10-16.json) | One candidate/twin comparison, only after signed proof and exact variables; not release authority. |']
     if model.get('phase2'):

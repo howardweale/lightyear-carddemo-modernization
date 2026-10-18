@@ -1,0 +1,101 @@
+{
+  "details": {
+    "compiler_refusals": "listed-excluded-not-blockers",
+    "conditions": [
+      {
+        "condition_sha256": "3871cc1bd3eed1819181fcd0032303630e540f705dd93fe4783de86f2bdc01de",
+        "evidence": null,
+        "state": "not-met"
+      },
+      {
+        "condition_sha256": "545be2ad28a50b6ab9a45d4e989842ea81b537492fa2e6f2725a5b7f0ee8a887",
+        "evidence": null,
+        "state": "not-met"
+      },
+      {
+        "condition_sha256": "441763ef18f4593d4cc5bd534b37f23a9ca549d3cf9d9993e027db2c54621535",
+        "evidence": null,
+        "state": "not-met"
+      },
+      {
+        "condition_sha256": "45d2de740aab2effb4ab59888ee307697faeab4f9f98a325772ee5bbfae443f8",
+        "evidence": null,
+        "state": "not-met"
+      }
+    ],
+    "effective_condition": "conditions-pending",
+    "evidence_head": "f343925026bee705ed3c16a734dc5bae4b24c588",
+    "policy_sha256": "5f10ac8a1e4c926af8daa8bc4734cc700d85d42fb7f80b56c65cae56d0b72bf1",
+    "required_review_ids": [
+      "CBACT04C-CVACT03Y-receiving-scale-6-2",
+      "CBACT04C-CVACT03Y-receiving-scale-7-4",
+      "CBACT04C-CVACT03Y-receiving-size-6-1",
+      "CBACT04C-CVACT03Y-receiving-size-7-3",
+      "CBACT04C-constant-192-48",
+      "CBACT04C-constant-192-49",
+      "CBACT04C-constant-638-382",
+      "CBACT04C-constant-639-384",
+      "CBACT04C-constant-639-385",
+      "CBACT04C-delete-ADD-192-50",
+      "CBACT04C-delete-MOVE-491-264",
+      "CBACT04C-delete-MOVE-492-265",
+      "CBACT04C-delete-MOVE-493-266",
+      "CBACT04C-delete-MOVE-494-267",
+      "CBACT04C-delete-MOVE-630-373",
+      "CBACT04C-delete-MOVE-639-386",
+      "CBACT04C-delete-MOVE-644-389",
+      "CBACT04C-receiving-scale-133-20",
+      "CBACT04C-receiving-scale-139-24",
+      "CBACT04C-receiving-scale-164-26",
+      "CBACT04C-receiving-scale-169-30",
+      "CBACT04C-receiving-scale-172-32",
+      "CBACT04C-receiving-scale-173-34",
+      "CBACT04C-receiving-scale-72-6",
+      "CBACT04C-receiving-size-125-13",
+      "CBACT04C-receiving-size-133-19",
+      "CBACT04C-receiving-size-138-21",
+      "CBACT04C-receiving-size-139-23",
+      "CBACT04C-receiving-size-172-31",
+      "CBACT04C-receiving-size-177-35",
+      "CBACT04C-skip-PERFORM-216-74",
+      "CBACT04C-skip-PERFORM-220-75"
+    ],
+    "version": "scenario-threshold/3"
+  },
+  "kind": "scenario-threshold-approval",
+  "program": "INTCALC",
+  "schema": "factory-contract/1",
+  "signing_order": {
+    "packet_sha256": "eea7efe7884ec8949c18aa080ee759c9726a69e3855366595da6ed3a4961195f",
+    "position": 4,
+    "predecessor_contract_sha256": "1e508aa87347b7d3993aa2299718257a84ea38ee0075271a53321e4bcdf623a4",
+    "predecessor_decision_sha256": null
+  },
+  "sources": [
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+      "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/keep-or-fix-register.json",
+      "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+      "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+    },
+    {
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    }
+  ]
+}

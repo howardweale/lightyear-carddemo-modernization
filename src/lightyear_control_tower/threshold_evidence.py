@@ -45,7 +45,9 @@ def typed(condition, raw, contract, evidence):
                 for item in c['details']['items']:
                     require(event['payload']['validation']['items'][item]['outcome'] == 'accept')
                     covered.add(item)
-            require(set(ids) <= covered)
+            expected = contract['details'].get('required_review_ids')
+            require(isinstance(expected,list) and bool(expected) and len(set(expected))==len(expected))
+            require(set(ids) == set(expected) == covered)
         elif index == 2:
             require(value.get('schema') in ('release-evidence-index/1','release-evidence-index/2'))
             require(value.get('conclusion') == 'success' and value.get('head') == contract['details'].get('evidence_head'))

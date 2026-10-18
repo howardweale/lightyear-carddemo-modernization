@@ -85,3 +85,13 @@ class GateTests(unittest.TestCase):
     def test_root_markdown_and_negative_paths(self):
         self.assertFalse(selected({'on':{'pull_request':{'paths-ignore':['**/*.md']}}},['README.md']))
         self.assertFalse(selected({'on':{'pull_request':{'paths':['src/**','!src/excluded/**']}}},['src/excluded/a']))
+
+    def test_gate_checkout_contains_exact_pr_head_tree(self):
+        import yaml
+        from pathlib import Path
+        path=Path(__file__).resolve().parents[1]/'.github/workflows/required-ci.yml'
+        config=yaml.load(path.read_text(encoding='utf-8'),Loader=yaml.BaseLoader)
+        job=config['jobs']['required-ci']
+        checkout=next(step for step in job['steps'] if step.get('uses','').startswith('actions/checkout@'))
+        # The default depth-one synthetic merge omits its PR-head parent tree.
+        self.assertEqual('0',checkout.get('with',{}).get('fetch-depth'))

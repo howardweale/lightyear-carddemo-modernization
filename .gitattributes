@@ -252,3 +252,6 @@ docs/factory/factory-authority.public.pem text eol=lf
 
 # Preserve the original unsigned CI receipt bytes, including its empty-gap line.
 docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md.txt -text -whitespace
+
+# Preserve the original public sign-on proof bytes.
+docs/modernization/carddemo-cosgn00-evidence-2026-10-18/** -text -whitespace

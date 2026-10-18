@@ -318,6 +318,22 @@
         "3f1ddcfb340673b906cff77922bb217320f04eab"
       ],
       "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+    },
+    {
+      "record": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "reference": "615cfc3b9c1a117555631d5e4c425fc65f4b4f94",
+      "commit": "615cfc3b9c1a117555631d5e4c425fc65f4b4f94",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "source_sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8"
+    },
+    {
+      "record": "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+      "reference": "3c6f2b604268be320c3a5619b25a51405af51642",
+      "commit": "3c6f2b604268be320c3a5619b25a51405af51642",
+      "role": "source",
+      "source_path": "factory/copau/judge/mutation-policy.json",
+      "source_sha256": "7e6b5943507cf9268fa6693c09a7694006ba32a419c482b5168316d0704a1260"
     }
   ]
 }

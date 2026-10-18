@@ -99,6 +99,20 @@ class ReferenceStorageTests(unittest.TestCase):
         self.assertTrue(state.predicate(lex('TEXT-A = LOW-VALUES')))
         state.assign(lex('TEXT-A'),state.value(lex('ZEROS')));self.assertEqual('0000',m.read('TEXT-A'))
 
+    def test_numval_c_accepts_source_edited_amounts_without_accepting_embedded_digit_spaces(self):
+        from lightyear_data.carddemo.reference_values import Values
+        state=Values(self.memory())
+        def intrinsic(name,text):
+            return state.value(tokens(source("FUNCTION "+name+"('"+text+"')"),'numeric.cbl'))
+        for text,expected in [('+      6,169.00','6169.00'),('+           .00','0.00'),('-      1,234.56','-1234.56'),(' $ 12.50 CR','-12.50')]:
+            with self.subTest(text=text):
+                self.assertEqual(Decimal(0),intrinsic('TEST-NUMVAL-C',text))
+                self.assertEqual(Decimal(expected),intrinsic('NUMVAL-C',text))
+        for text in ['1 2.00','1.2,3','++1','+1-','', '!', '1e2']:
+            with self.subTest(text=text):
+                self.assertNotEqual(Decimal(0),intrinsic('TEST-NUMVAL-C',text))
+                with self.assertRaises(Unsupported):intrinsic('NUMVAL-C',text)
+
     def test_numeric_items_keep_numeric_order_but_invalid_display_reaches_source_validation(self):
         from lightyear_data.carddemo.reference_values import Values
         m=self.memory();state=Values(m);m.write('TEXT-A','0009');m.write('BINARY-A',11)
@@ -236,9 +250,24 @@ class RawRemainingScreenTests(unittest.TestCase):
                 reference=adapter(self.root);frame=reference.interact('INITIAL',commarea=transfer['commarea'])
                 self.assertEqual('ACCTSID',frame['screen']['cursor'])
                 for value in ('','00000000000','XXXXXXXXXXX','99999999999'):
-                    result=reference.interact('ENTER',{'ACCTSID':value},frame['commarea'])
+                    result=reference.interact('ENTER',{'ACCTSID':value},frame['commarea'],prior=frame['screen'])
                     self.assertTrue(result['screen']['message'])
                     self.assertFalse(any(e['operation']=='REWRITE' for e in result['events']))
+    def test_receive_retains_protected_fset_bytes_and_refuses_caller_override(self):
+        from lightyear_data.carddemo.reference_screens import AccountUpdateReference
+        from lightyear_data.carddemo.reference_values import Values
+        reference=AccountUpdateReference(self.root);reference.memory=reference.storage()
+        reference.input={};reference.prior=dict(values={f['name']:f.get('initial','').ljust(f['length']) for f in reference.model['fields'] if f['name']},attributes={})
+        retained={'ACCTSID':'00000000050','ACSTNUM':'000000050','ACSCTRY':'USA'}
+        reference.prior['values'].update(retained)
+        reference.prior['attributes'].update({name:dict(protected=True,modified=True) for name in retained})
+        values=Values(reference.memory)
+        operation=tokens(source("CICS RECEIVE MAP('CACTUPA')"),'receive.cbl')
+        reference.external(operation,values)
+        for name,text in retained.items():self.assertEqual(text,reference.memory.read(name+'I'))
+        reference.input={'ACSCTRY':'XXX'}
+        with self.assertRaisesRegex(Unsupported,'protected input'):reference.external(operation,values)
+
     def test_edited_decimal_receivers_use_source_width_and_suppression(self):
         from lightyear_data.carddemo.reference_declarations import layout
         from lightyear_data.carddemo.reference_storage import Memory

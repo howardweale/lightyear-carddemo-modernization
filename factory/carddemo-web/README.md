@@ -79,3 +79,12 @@ Compose CI alone fixes the business clock through `reference-ci`; normal Compose
 uses real time. Session expiration retains real time. The mutation-only Compose
 override publishes PostgreSQL on runner loopback, solely for disposable JVM tests.
 No local test, application, generator or Docker execution was used for this work.
+
+The independent reference NUMVAL-C adapter accepts the slice's default-dollar,
+decimal-point edited values, including spaces after a sign and leading-decimal
+zero amounts. It rejects embedded digit spaces and duplicate signs, and bounds
+precision to 15 digits. TEST-NUMVAL-C exposes only zero/nonzero validity because
+the pinned programs do not consume the invalid-character position. Grammar is
+based on [IBM NUMVAL-C](https://www.ibm.com/docs/en/cobol-zos/6.3.0?topic=functions-numval-c),
+not candidate Java results. Protected FSET input is reconstructed from the prior
+reference frame, with caller attempts to overwrite protected fields rejected.

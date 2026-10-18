@@ -121,7 +121,27 @@ class ScreenReference(SignonReference):
         if kind=='DLI':return self.dli(operation,o,values)
         if kind=='SQL':return self.sql(items,values)
         if kind!='CICS':raise Unsupported('reference external '+kind)
-        if operation=='READ':
+        if operation=='RECEIVE':
+            # RECEIVE uses the last physical screen's dynamic protection and
+            # modified-data tags, not the map's initial attributes. Protected
+            # FSET bytes come from that retained frame, never caller input.
+            known={f['name'] for f in self.model['fields'] if f['name']}
+            if set(self.input)-known:raise Unsupported('reference unknown input field')
+            for f in self.model['fields']:
+                name=f['name']
+                if not name:continue
+                previous=(self.prior or {}).get('attributes',{}).get(name)
+                attributes=previous or dict(protected=f['protected'],modified='FSET' in f['attributes'])
+                if attributes['protected']:
+                    if name in self.input:raise Unsupported('reference protected input field')
+                    if not attributes.get('modified'):continue
+                    if not self.prior:raise Unsupported('reference protected FSET without prior frame')
+                    text=self.prior['values'][name]
+                else:text=self.input.get(name,'')
+                if len(text)>f['length']:raise Unsupported('reference input too long')
+                m.write(name+'I',text);m.write(name+'L',len(text))
+            self.response(o,values)
+        elif operation=='READ':
             dataset=str(values.value(o.get('DATASET',o.get('FILE')))).strip();r=Reader(o['RIDFLD']);name,start,length=values.reference(r)
             key=m.raw(name)
             if start is not None:key=key[start:] if length is None else key[start:start+length]

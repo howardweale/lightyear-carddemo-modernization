@@ -70,9 +70,20 @@ class Values:
             if name in ('NUMVAL','NUMVAL-C','TEST-NUMVAL','TEST-NUMVAL-C'):
                 try:
                     candidate=text.strip(' ');currency=name.endswith('-C')
-                    if currency:candidate=candidate.replace('$','').replace(',','').strip(' ')
-                    if not re.fullmatch(r'[+-]?[0-9]+(?:\.[0-9]*)?',candidate):raise ValueError('number grammar')
-                    result=Decimal(candidate)
+                    if currency:
+                        # Independent IBM NUMVAL-C default-dollar/decimal-point
+                        # grammar. Spaces may separate sign/currency from digits,
+                        # but cannot split the digit sequence. TEST exposes only
+                        # zero/nonzero validity, as used by the pinned source.
+                        match=re.fullmatch(r'(?P<sign>[+-])? *(?:\$ *)?(?P<number>(?:[0-9]+(?:,[0-9]+)*(?:\.[0-9]*)?|\.[0-9]+)) *(?P<suffix>CR|DB|[+-])?',candidate)
+                        if not match or match['sign'] and match['suffix']:raise ValueError('currency grammar')
+                        number=match['number'].replace(',','')
+                        if len(number.replace('.',''))>15:raise Unsupported('reference NUMVAL-C precision outside slice')
+                        result=Decimal(number)
+                        if match['sign']=='-' or match['suffix'] in ('-','CR','DB'):result=-result
+                    else:
+                        if not re.fullmatch(r'[+-]?[0-9]+(?:\.[0-9]*)?',candidate):raise ValueError('number grammar')
+                        result=Decimal(candidate)
                 except (ValueError,InvalidOperation):
                     if name.startswith('TEST-'):return Decimal(1)
                     raise Unsupported('reference NUMVAL input')

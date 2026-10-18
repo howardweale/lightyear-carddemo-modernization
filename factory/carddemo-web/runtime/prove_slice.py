@@ -55,14 +55,23 @@ class Engine:
             if record['table']=='usrsec':
                 m=self.signon.storage();m.write('SEC-USER-DATA',record['raw'].decode('cp037'));self.signon.users[m.read('SEC-USR-ID')]=record['raw']
         self.common=self.signon.storage().descriptor('CARDDEMO-COMMAREA')[1]['length'];self.reset()
-    def reset(self):self.program='COSGN00C';self.area=None;self.frame=None
+    def reset(self):self.program='COSGN00C';self.area=None;self.frame=None;self.faulted=False
     def step(self,aid,fields):
+        if self.faulted:raise Unsupported('continuation after raw source fault is unproved')
         for depth in range(8):
             previous=self.program
             if previous=='COSGN00C':result=self.signon.interact(aid,fields)
-            elif previous=='COMEN01C':result=self.menu.interact(aid,fields,self.area)
+            elif previous=='COMEN01C':
+                try:result=self.menu.interact(aid,fields,self.area)
+                except Unsupported as failure:
+                    # The pinned source SENDs the validation error, then indexes an
+                    # invalid option. Retain the actual emitted image and trace;
+                    # this session MUST end at the source fault, without inventing
+                    # a next COMMAREA or a successful COBOL RETURN.
+                    if not str(failure).startswith(('reference storage absent/ambiguous: CDEMO-MENU-OPT-USRTYPE[','nonnumeric reference subscript: CDEMO-MENU-OPT-USRTYPE')) or self.menu.frame is None:raise
+                    result=dict(program=previous,screen=self.menu.frame,ended=False,trace=self.menu.trace,commarea=self.area,source_fault=str(failure))
             else:result=self.adapters[previous].interact(aid,fields,self.area)
-            self.area=result['commarea'];self.frame=result.get('screen')
+            self.faulted=bool(result.get('source_fault'));self.area=result['commarea'];self.frame=result.get('screen')
             if result['program']==previous or result['ended']:return result
             self.program=result['program']
             if self.program not in PROGRAMS:
@@ -84,8 +93,9 @@ class Proof:
         for record in self.engine.store.records:
             table=record['table'];layout,mapping=self.entries[table];ordinal=int(record['identity'].split(':')[1]);old=next(r for r in state[table] if r['source_ordinal']==ordinal)
             def raw(value):return bytes.fromhex(value[2:]) if value is not None else None
-            row,children=Store(None,mapping,layout).project_rows(record['raw'],ordinal,parent_path=raw(old.get('parent_path_key')),twin_seq=old.get('twin_seq'))
-            if children:raise Unsupported('slice reference child table projection')
+            row,children=Store(None,mapping,layout).project_rows(record['raw'],ordinal,parent_path=raw(old.get('parent_path_key')),twin_seq=old.get('twin_seq'),position=old.get('rba',old.get('slot')))
+            for (child_table,child_ordinal),child in children.items():
+                target=next(v for v in state[child_table] if v['source_ordinal']==ordinal and v['ordinal']==child_ordinal);target.update(child)
             old.update(row)
         state['authfrds']=deepcopy(self.engine.store.fraud)
         for row in state['authfrds']:
@@ -128,6 +138,11 @@ class Proof:
         for aid in ('PF1','PF24'):
             def body(aid=aid):self.start('menu-'+aid);self.step(aid,{'OPTION':'11'});self.step('PF3')
             self.case('menu-'+aid,body)
+        for label,value in [('blank',''),('zero','0'),('nonnumeric','XX'),('past-end','99')]:
+            def body(label=label,value=value):
+                self.start('menu-'+label);result=self.step('ENTER',{'OPTION':value})
+                assert result['screen']['message'],'invalid menu did not emit validation message'
+            self.case('menu-'+label,body)
         # Source-shaped invalid search fields, not-found and PF3 at each screen.
         for option,field in [('1','ACCTSID'),('2','ACCTSID'),('11','ACCTID')]:
             for label,value in [('blank',''),('zero','00000000000'),('nonnumeric','XXXXXXXXXXX'),('not-found','99999999999')]:
@@ -149,6 +164,11 @@ class Proof:
         def unchanged():
             self.start('update-no-change','2');self.step('ENTER',{'ACCTSID':self.fixture['account']});self.step('ENTER',self.inputs());self.step('PF3')
         self.case('update-no-change',unchanged)
+        for label,date_fields in [('leap-day-invalid',{'DOBYEAR':'1990','DOBMON':'02','DOBDAY':'29'}),('leap-day-valid',{'DOBYEAR':'2000','DOBMON':'02','DOBDAY':'29'})]:
+            def body(label=label,date_fields=date_fields):
+                self.start(label,'2');self.step('ENTER',{'ACCTSID':self.fixture['account']});edited=self.inputs()
+                assert set(date_fields)<=set(edited);edited.update(date_fields);self.step('ENTER',edited);self.step('PF3')
+            self.case(label,body)
         def authorizations():
             self.start('authorization-pages-and-fraud','11');self.step('ENTER',{'ACCTID':self.fixture['account']})
             self.step('PF7',self.inputs());self.step('PF8',self.inputs());self.step('PF8',self.inputs());self.step('PF7',self.inputs())
@@ -187,6 +207,8 @@ class Proof:
         (self.out/'summary.json').write_text(json.dumps(dict(schema='carddemo-six-screen-proof/1',passed=passed,
             head=__import__('os').environ.get('GITHUB_SHA'),programs_compared=sorted(self.seen),required_programs=PROGRAMS,
             cases=self.cases,interactions_compared=len(self.rows),validated_fields=sorted(self.validated_fields),
+            source_faults=[dict(case=r['case'],failure=r['expected']['source_fault'],trace=r['expected']['trace']) for r in self.rows if r['expected'].get('source_fault')],
+            bounded_date_cases=['leap-day-invalid','leap-day-valid'],
             shared_dependencies=['BMS parser','physical data plan and typed projection codec'],
             full_slice_screen_equivalence=passed,terminal_text_contract='SEND TEXT compares complete message and ended state; no BMS fields exist in that source response',remaining=self.failures),indent=2)+'\n')
 

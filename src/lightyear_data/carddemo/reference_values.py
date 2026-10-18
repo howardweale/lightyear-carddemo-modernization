@@ -33,7 +33,8 @@ class Values:
                 if r.peek()!=')':length=int(self.expression(r))
             else:
                 if index is not None:raise Unsupported('nested reference subscript not implemented')
-                index=int(first)
+                try:index=int(first)
+                except (ValueError,InvalidOperation):raise Unsupported('nonnumeric reference subscript: '+name)
             r.pop(')')
         name='.'.join(list(reversed(qualifiers))+[name])
         if index is not None:name+='['+str(index)+']'
@@ -45,6 +46,7 @@ class Values:
             r.pop();v=Decimal(self.atom(r));return v if t=='+' else -v
         if t=='(':
             r.pop();v=self.expression(r);r.pop(')');return v
+        if t.startswith("X'"):return bytes.fromhex(r.pop().text[2:-1]).decode('cp037')
         if t.startswith("'"):return r.pop().text[1:-1].replace("''","'")
         if re.fullmatch(r'[0-9]+(?:\.[0-9]+)?',t):return Decimal(r.pop().text)
         if t in self.memory.index_values:return Decimal(self.memory.index_values[r.pop().text])

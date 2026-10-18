@@ -51,7 +51,14 @@ class Memory:
         matches=[]
         for item in self.entries.values():
             path=item[1]['path'];candidate=re.sub(r'\[[0-9]+\]','',path)
-            if (candidate==plain or candidate.endswith('.'+plain)) and re.findall(r'\[([0-9]+)\]',path)==indexes:matches.append(item)
+            wanted=plain.split('.');actual=candidate.split('.')
+            # COBOL OF/IN may omit intervening groups. Each supplied qualifier
+            # must occur in ancestor order, with the exact elementary leaf.
+            qualified=actual[-1]==wanted[-1];cursor=0
+            for qualifier in wanted[:-1]:
+                try:cursor=actual[:-1].index(qualifier,cursor)+1
+                except ValueError:qualified=False;break
+            if qualified and re.findall(r'\[([0-9]+)\]',path)==indexes:matches.append(item)
         if len(matches)!=1:raise Unsupported('reference storage absent/ambiguous: '+name)
         return matches[0]
     def raw(self,name):

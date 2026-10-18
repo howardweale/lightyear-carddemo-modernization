@@ -39,11 +39,15 @@ def main():
         source_head=os.environ.get('SOURCE_HEAD'),tested_commit=os.environ.get('GITHUB_SHA'),run_id=os.environ.get('GITHUB_RUN_ID'),
         upstream_commit='59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e',gates=gates,hashes=manifests,artifacts=artifact_files,
         scope=dict(programs=PROGRAMS,linked_action='COPAUS2C',baseline='bounded deterministic raw COBOL interpreter',shared_dependencies=['BMS parser','physical data plan and typed projection codec'],data='public VSAM fixture and seven synthetic IMS authorization rows'),
-        quirks=['COACTUPC account rewrite omits ZIP, preserved as source behavior','COMEN01 invalid zero option sends an error before an out-of-range table access; complete equivalence for that source fault remains unproved','BMS external constants use private symbolic bytes, not a native 3270 wire encoding','CSUTLDTC valid-date port is bounded; native invalid-date feedback codes are not claimed','SEND TEXT terminal responses have no BMS fields; complete text and ended state are compared'],
+        quirks=['COACTUPC account rewrite omits ZIP, preserved as source behavior','COMEN01 invalid option emits an error then faults on a table subscript; compare the emitted frame and database, discard that session, and make no continuation claim','BMS external constants use private symbolic bytes, not a native 3270 wire encoding','CSUTLDTC executes from pinned source; its CEEDAYS port models documented Gregorian YYYYMMDD feedback and Lilian epoch; native LE execution remains absent','SEND TEXT terminal responses have no BMS fields; complete text and ended state are compared'],
         not_covered=['other fifteen maps and their services','native CICS, IMS and DB2 execution','production unloads or production data','release or z/OS acceptance','real signatures, import, activation or Phase 2'],
         factory_request=dict(status='unsigned-review-request',reviewer='Howard',action='review evidence and remaining gaps',signature=None,activation_authorized=False,phase2_authorized=False))
-    # Known source-fault and date-port gaps remain blockers until explicitly proved.
-    record['remaining_evidence_gaps']=['COMEN01 invalid-option source-fault contract','native date feedback boundary']
+    # Require measured source-fault and date-boundary cases; missing results never count as passed.
+    record['remaining_evidence_gaps']=[name for name,gate in gates.items() if not gate['passed']]
+    for mode,value in summaries.items():
+        if not value.get('source_faults'):record['remaining_evidence_gaps'].append(mode+': missing invalid-menu source-fault evidence')
+        required={'leap-day-valid','leap-day-invalid'}
+        if not required<={c['id'] for c in value.get('cases',[]) if c['status']=='passed'}:record['remaining_evidence_gaps'].append(mode+': missing bounded-date cases')
     record['acceptance_complete']=passed and not record['remaining_evidence_gaps']
     payload=(json.dumps(record,indent=2,sort_keys=True)+'\n').encode();name='carddemo-slice-1-2026-10-18';(args.out/(name+'.json')).write_bytes(payload)
     lines=['# CardDemo slice 1 — unsigned receipt','',f"Status: {record['status']}. Acceptance complete: {record['acceptance_complete']}.",'',f"Source head: {record['source_head']}; tested commit: {record['tested_commit']}.",'','| Gate | Passed | Evidence |','|---|---|---|']

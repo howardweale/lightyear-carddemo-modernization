@@ -199,11 +199,11 @@ class ScreenReference(SignonReference):
         if name!='CSUTLDTC':raise Unsupported('reference CALL target')
         r.pop('USING');args=values.operands(r.items[r.at:])
         if len(args)!=3 or str(values.value(args[1])).strip()!='YYYYMMDD':raise Unsupported('reference date library contract')
-        text=str(values.value(args[0])).strip()
-        try:datetime.strptime(text,'%Y%m%d')
-        except ValueError:raise Unsupported('invalid date reached CEEDAYS port; no native feedback-code claim')
-        # The source wrapper passes zero severity/message for a valid date.
-        values.assign(args[2],'0000'+' '*11+'0000'+' '+'Date is valid'.ljust(15)+' '+' '*9+text.ljust(10)+' '+' '*10+'YYYYMMDD'.ljust(10))
+        from .reference_date import DateReference
+        date_reference=DateReference(self.root)
+        result=date_reference.interact(str(values.value(args[0])),str(values.value(args[1])))
+        values.assign(args[2],result)
+
     def sql(self,items,values):raise Unsupported('SQL outside linked fraud adapter')
 
 class AccountViewReference(ScreenReference):program_name='COACTVWC';mapset='COACTVW'

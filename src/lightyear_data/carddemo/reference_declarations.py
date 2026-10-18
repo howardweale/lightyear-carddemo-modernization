@@ -84,8 +84,14 @@ def declarations(raw,source):
             elif word=='REDEFINES':node.redefines=words[k];k+=1
             elif word=='OCCURS':
                 node.occurs=int(words[k]);k+=1
+                variable=k<len(words) and words[k]=='TO'
+                if variable:k+=1;node.occurs=int(words[k]);k+=1
                 if not 1<=node.occurs<=32767:raise Unsupported('reference occurrence bound')
                 if k<len(words) and words[k]=='TIMES':k+=1
+                if variable:
+                    if words[k:k+2]!=['DEPENDING','ON']:raise Unsupported('reference variable table bound')
+                    k+=3
+                    if k<len(words) and words[k] in ('OF','IN'):k+=2
             elif word=='ASCENDING':
                 if words[k]=='KEY':k+=1
                 if words[k]=='IS':k+=1

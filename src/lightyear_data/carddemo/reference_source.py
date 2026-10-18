@@ -49,7 +49,7 @@ def expand(lines,root,stack=(),omit=()):
 
 
 def procedure_tokens(raw,source,root):
-    rows=list(logical(raw,source));start=next((i for i,(code,_,_) in enumerate(rows) if re.fullmatch(r'\s*PROCEDURE DIVISION\.\s*',code)),None)
+    rows=list(logical(raw,source));start=next((i for i,(code,_,_) in enumerate(rows) if re.fullmatch(r'\s*PROCEDURE DIVISION(?:\s+USING\s+[^.]+)?\.\s*',code)),None)
     if start is None:raise Unsupported('reference procedure absent')
     result=[]
     for code,path,line in expand(rows[start:],root):
@@ -57,6 +57,7 @@ def procedure_tokens(raw,source,root):
         for match in LEX.finditer(code):
             if code[position:match.start()].strip():raise Unsupported('reference expanded token '+code[position:match.start()])
             position=match.end();text=match[0]
+            if text.startswith(chr(34)):text=chr(39)+text[1:-1].replace(chr(34)*2,chr(34)).replace(chr(39),chr(39)*2)+chr(39)
             if not text.isspace() and text!=',':result.append(Token(text if text.startswith("'") else text.upper(),path,line))
         if code[position:].strip():raise Unsupported('reference expanded trailing token')
     return result

@@ -10,6 +10,8 @@ import re
 
 class Unsupported(ValueError):pass
 
+class ProgramExit(Exception):pass
+
 class Figurative(str):
     """A COBOL figurative constant repeats to the receiving/comparison width."""
     pass
@@ -20,7 +22,7 @@ class Token:
     source:str
     line:int
 
-LEX=re.compile(r"\s+|,|'(?:[^']|'')*'|[0-9]+(?:\.[0-9]+)?(?![A-Z0-9-])|[A-Z0-9][A-Z0-9_-]*|>=|<=|<>|[().:+*/=<>-]",re.I)
+LEX=re.compile(r"\s+|,|X'[0-9A-F]*'|\"(?:[^\"]|\"\")*\"|'(?:[^']|'')*'|[0-9]+(?:\.[0-9]+)?(?![A-Z0-9-])|[A-Z0-9][A-Z0-9_-]*|>=|<=|<>|[().:+*/=<>-]",re.I)
 
 def tokens(raw,source):
     result=[]
@@ -31,6 +33,7 @@ def tokens(raw,source):
         for match in LEX.finditer(code):
             if match.start()!=position:raise Unsupported(f'{source}:{line_number}: token {code[position:match.start()]}')
             position=match.end();text=match[0]
+            if text.startswith(chr(34)):text=chr(39)+text[1:-1].replace(chr(34)*2,chr(34)).replace(chr(39),chr(39)*2)+chr(39)
             if not text.isspace() and text!=',':result.append(Token(text if text.startswith("'") else text.upper(),source,line_number))
         if code[position:].strip():raise Unsupported(f'{source}:{line_number}: trailing syntax')
     return result
@@ -105,9 +108,12 @@ class Reader:
 class Program:
     def __init__(self,raw,source,items=None):
         items=tokens(raw,source) if items is None else items
-        start=next((i+3 for i in range(len(items)-2) if [x.text for x in items[i:i+3]]==['PROCEDURE','DIVISION','.']),None)
+        header=next((i+2 for i in range(len(items)-1) if [x.text for x in items[i:i+2]]==['PROCEDURE','DIVISION']),None)
+        start=next((i+1 for i in range(header or len(items),len(items)) if items[i].text=='.'),None)
         if start is None:raise Unsupported('PROCEDURE DIVISION absent')
-        items=items[start:];self.paragraphs={};self.order=[];reader=Reader(items)
+        items=items[start:]
+        if items and items[0].text in VERBS:items=[Token('REFERENCE-ENTRY',source,items[0].line),Token('.',source,items[0].line)]+items
+        self.paragraphs={};self.order=[];reader=Reader(items)
         while reader.peek():
             label=reader.pop();reader.pop('.')
             duplicate=label.text in self.paragraphs
@@ -227,6 +233,7 @@ class Machine:
                     before=tail[2:]
                 self.state.assign(target,''.join(parts),string=True)
             elif verb in ('CONTINUE','EXIT'):
+                if [t.text for t in args]==['PROGRAM']:raise ProgramExit()
                 if args:raise Unsupported('EXIT operands')
             elif verb=='LOOP':self.loop(stmt)
             elif verb in ('ADD','SUBTRACT'):

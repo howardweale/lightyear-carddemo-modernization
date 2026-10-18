@@ -205,7 +205,7 @@ class RawRemainingScreenTests(unittest.TestCase):
                 reference=adapter(self.root);memory=reference.storage()
                 self.assertTrue(reference.program.paragraphs)
                 self.assertGreater(len(memory.entries),100)
-                if adapter is FraudReference:self.assertGreater(memory.descriptor('DFHCOMMAREA')[1]['length'],300)
+                if adapter is FraudReference:self.assertEqual(11+9+200+52,memory.descriptor('DFHCOMMAREA')[1]['length'])
                 else:self.assertGreater(memory.descriptor('CARDDEMO-COMMAREA')[1]['length'],100)
     def test_raw_account_initial_receive_and_missing_account(self):
         from lightyear_data.carddemo.reference_screens import AccountViewReference,AccountUpdateReference
@@ -231,5 +231,14 @@ class RawRemainingScreenTests(unittest.TestCase):
         store=RecordStore([dict(identity='1',keys={'ACCTDAT':b'key'},raw=b'original')]);store.begin()
         store.read('ACCTDAT',b'key',True);store.rewrite('ACCTDAT',b'updated');store.rollback()
         self.assertEqual(b'original',store.read('ACCTDAT',b'key')['raw'])
+
+class RawDateReferenceTests(unittest.TestCase):
+    def test_pinned_wrapper_handles_documented_leap_date_feedback(self):
+        from lightyear_data.carddemo.reference_date import DateReference
+        root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'
+        reference=DateReference(root)
+        valid=reference.interact('20000229','YYYYMMDD');self.assertEqual('0000',valid[:4]);self.assertEqual('0000',valid[15:19])
+        invalid=reference.interact('19900229','YYYYMMDD');self.assertEqual('0003',invalid[:4]);self.assertEqual('2508',invalid[15:19])
+        self.assertTrue(reference.trace)
 
 if __name__=='__main__':unittest.main()

@@ -8117,6 +8117,26 @@
     "content_sha256": "fd46fd9849425f85d72bca17d0b845416dae9618b64a0bd076fcc3029d3ae319",
     "path": "docs/modernization/carddemo-slice-1-2026-10-17.json"
   },
+  "carddemo_web": {
+    "schema": "carddemo-web-status/1",
+    "run_id": "39127778944",
+    "status": "proved-in-ci",
+    "cases": 120,
+    "interactions": 678,
+    "bms_interactions": 666,
+    "killed": 701,
+    "total": 768,
+    "percent": 91.27604166666667,
+    "status_counts": {
+      "KILLED": 701,
+      "NO_COVERAGE": 17,
+      "SURVIVED": 49,
+      "TIMED_OUT": 1
+    },
+    "path": "docs/modernization/carddemo-slice-1-2026-10-18.json",
+    "unsigned": true,
+    "final_head_ci": "separate readiness gate"
+  },
   "delivery": {
     "schema": "factory-delivery-snapshot/1",
     "checked_at": "2026-10-17T13:10:22+00:00",

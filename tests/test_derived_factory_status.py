@@ -90,3 +90,38 @@ class DerivedStatusTests(unittest.TestCase):
             record['content_sha256']=sha256(json.dumps({k:v for k,v in record.items() if k!='content_sha256'},sort_keys=True,separators=(',',':')).encode()).hexdigest()
             path.write_text(json.dumps(record))
             with self.assertRaisesRegex(ValueError,'denominator'):records.load(root)
+
+    def test_web_receipt_coexists_with_earlier_data_and_retains_all_mutants(self):
+        model=load();value,text=render(model)
+        self.assertEqual(500000,value['carddemo']['volume']['records'])
+        self.assertEqual(701,value['carddemo_web']['killed'])
+        self.assertEqual(768,value['carddemo_web']['total'])
+        self.assertIn('701/768 KILLED (91.28%)',text)
+        self.assertIn('49 survivors, 17 uncovered and 1 timeout',text)
+        self.assertIn('Final publication-head CI and Howard merge approval are separate',text)
+
+    def test_web_receipt_tampering_and_timeout_credit_are_refused(self):
+        import json
+        from hashlib import sha256
+        from tools import carddemo_status_record as records
+        source=Path(__file__).resolve().parents[1]
+        receipt_path='docs/modernization/carddemo-slice-1-2026-10-18.json'
+        packet_path=records.web_packet_path(receipt_path)
+        original=json.loads((source/receipt_path).read_bytes())
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            for name in (receipt_path,packet_path):
+                target=root/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((source/name).read_bytes())
+            self.assertEqual(768,records.load_web(root)['total'])
+            bad=copy.deepcopy(original);bad['gates']['mutation']['killed']+=1
+            (root/receipt_path).write_text(json.dumps(bad))
+            with self.assertRaisesRegex(ValueError,'receipt-hash'):records.load_web(root)
+            packet=json.loads((root/packet_path).read_bytes())
+            packet['receipt']['sha256']=sha256((root/receipt_path).read_bytes()).hexdigest()
+            (root/packet_path).write_text(json.dumps(packet))
+            with self.assertRaisesRegex(ValueError,'denominator'):records.load_web(root)
+            bad=copy.deepcopy(original);bad['gates']['mutation']['total']-=17
+            (root/receipt_path).write_text(json.dumps(bad))
+            packet['receipt']['sha256']=sha256((root/receipt_path).read_bytes()).hexdigest()
+            (root/packet_path).write_text(json.dumps(packet))
+            with self.assertRaisesRegex(ValueError,'denominator'):records.load_web(root)

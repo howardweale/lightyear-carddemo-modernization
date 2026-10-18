@@ -196,4 +196,40 @@ class RawMenuTests(unittest.TestCase):
         with self.assertRaises(Unsupported):r.interact('ENTER',{'OPTION':'00'},initial['commarea'])
         self.assertIn('valid option number',r.frame['message'])
 
+class RawRemainingScreenTests(unittest.TestCase):
+    root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'
+    def test_all_four_raw_procedures_and_linked_action_have_storage(self):
+        from lightyear_data.carddemo.reference_screens import AccountViewReference,AccountUpdateReference,AuthorizationListReference,AuthorizationDetailReference,FraudReference
+        for adapter in (AccountViewReference,AccountUpdateReference,AuthorizationListReference,AuthorizationDetailReference,FraudReference):
+            with self.subTest(program=adapter.program_name):
+                reference=adapter(self.root);memory=reference.storage()
+                self.assertTrue(reference.program.paragraphs)
+                self.assertGreater(len(memory.entries),100)
+                if adapter is FraudReference:self.assertGreater(memory.descriptor('DFHCOMMAREA')[1]['length'],300)
+                else:self.assertGreater(memory.descriptor('CARDDEMO-COMMAREA')[1]['length'],100)
+    def test_raw_account_initial_receive_and_missing_account(self):
+        from lightyear_data.carddemo.reference_screens import AccountViewReference,AccountUpdateReference
+        from lightyear_data.carddemo.reference_menu import MenuReference
+        for option,adapter in [('1',AccountViewReference),('2',AccountUpdateReference)]:
+            with self.subTest(program=adapter.program_name):
+                menu=MenuReference(self.root);first=menu.interact('INITIAL')
+                transfer=menu.interact('ENTER',{'OPTION':option},first['commarea'])
+                reference=adapter(self.root);frame=reference.interact('INITIAL',commarea=transfer['commarea'])
+                self.assertEqual('ACCTSID',frame['screen']['cursor'])
+                for value in ('','00000000000','XXXXXXXXXXX','99999999999'):
+                    result=reference.interact('ENTER',{'ACCTSID':value},frame['commarea'])
+                    self.assertTrue(result['screen']['message'])
+                    self.assertFalse(any(e['operation']=='REWRITE' for e in result['events']))
+    def test_edited_decimal_receivers_use_source_width_and_suppression(self):
+        from lightyear_data.carddemo.reference_declarations import layout
+        from lightyear_data.carddemo.reference_storage import Memory
+        m=Memory();m.add(layout(source('01 A.\n 05 BAL PIC +ZZZ,ZZZ,ZZZ.99.\n 05 AMT PIC -zzzzzzz9.99.'),'edited'))
+        m.write('BAL',Decimal('-1234.56'));self.assertEqual('-      1,234.56',m.read('BAL'))
+        m.write('AMT',Decimal('0'));self.assertEqual('        0.00',m.read('AMT'))
+    def test_record_store_rollback_restores_all_locked_writes(self):
+        from lightyear_data.carddemo.reference_screens import RecordStore
+        store=RecordStore([dict(identity='1',keys={'ACCTDAT':b'key'},raw=b'original')]);store.begin()
+        store.read('ACCTDAT',b'key',True);store.rewrite('ACCTDAT',b'updated');store.rollback()
+        self.assertEqual(b'original',store.read('ACCTDAT',b'key')['raw'])
+
 if __name__=='__main__':unittest.main()

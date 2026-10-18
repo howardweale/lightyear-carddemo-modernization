@@ -16,7 +16,7 @@ def logical(raw,source):
         yield line[7:72],source,number
 
 
-def expand(lines,root,stack=()):
+def expand(lines,root,stack=(),omit=()):
     if len(stack)>16:raise Unsupported('reference COPY nesting bound')
     rows=list(lines);out=[];i=0
     while i<len(rows):
@@ -28,6 +28,7 @@ def expand(lines,root,stack=()):
         match=re.fullmatch(r"\s*COPY\s+('?)([A-Z0-9-]+)\1\s*(.*?)\.\s*",text,re.I|re.S)
         if not match:raise Unsupported('reference COPY grammar')
         name,tail=match[2].upper(),match[3].strip()
+        if name in omit:continue
         if name in stack:raise Unsupported('recursive reference COPY')
         found=[p for p in Path(root).rglob('*') if p.stem.upper()==name and p.suffix.lower()=='.cpy']
         if len(found)!=1:raise Unsupported('reference COPY source absent/ambiguous: '+name)
@@ -42,7 +43,7 @@ def expand(lines,root,stack=()):
         for old,new in replacements:
             if not any(old in code for code,_,_ in included):raise Unsupported('unused reference replacement')
             included=[(code.replace(old,new),path,line) for code,path,line in included]
-        out+=expand(included,root,stack+(name,))
+        out+=expand(included,root,stack+(name,),omit)
     if len(out)>50000:raise Unsupported('reference source bound')
     return out
 

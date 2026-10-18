@@ -20,7 +20,7 @@ class Token:
     source:str
     line:int
 
-LEX=re.compile(r"\s+|,|'(?:[^']|'')*'|[0-9]+(?:\.[0-9]+)?(?![A-Z0-9-])|[A-Z0-9][A-Z0-9-]*|>=|<=|<>|[().:+*/=<>-]",re.I)
+LEX=re.compile(r"\s+|,|'(?:[^']|'')*'|[0-9]+(?:\.[0-9]+)?(?![A-Z0-9-])|[A-Z0-9][A-Z0-9_-]*|>=|<=|<>|[().:+*/=<>-]",re.I)
 
 def tokens(raw,source):
     result=[]
@@ -36,7 +36,7 @@ def tokens(raw,source):
     return result
 
 VERBS={'MOVE','SET','IF','EVALUATE','PERFORM','GO','CONTINUE','EXIT','EXEC','CALL','INITIALIZE','INSPECT','STRING','COMPUTE','ADD','SUBTRACT','DIVIDE','SEARCH','DISPLAY'}
-STOPS={'ELSE','END-IF','WHEN','END-EVALUATE','END-PERFORM','END-SEARCH','.'}
+STOPS={'AT','ELSE','END-IF','WHEN','END-EVALUATE','END-PERFORM','END-SEARCH','.'}
 
 @dataclass
 class Statement:
@@ -91,9 +91,15 @@ class Reader:
                 operands=self.until(STOPS|{'END-STRING'},True)
                 if self.peek()=='END-STRING':self.pop()
                 statements.append(Statement(verb,operands,origin))
-            elif verb=='SEARCH':raise Unsupported('SEARCH adapter not implemented')
+            elif verb=='SEARCH':
+                header=self.until({'AT','WHEN'});otherwise=[]
+                if self.peek()=='AT':self.pop();self.pop('END');otherwise=self.block()
+                self.pop('WHEN');condition=self.until(STOPS,True);body=self.block();self.pop('END-SEARCH')
+                statements.append(Statement(verb,header,origin,[condition,body,otherwise]))
             else:
-                operands=self.until(STOPS,True);statements.append(Statement(verb,operands,origin))
+                operands=self.until(STOPS|{'END-COMPUTE','END-CALL','END-ADD','END-SUBTRACT'},True)
+                if self.peek() in ('END-COMPUTE','END-CALL','END-ADD','END-SUBTRACT'):self.pop()
+                statements.append(Statement(verb,operands,origin))
         return statements
 
 class Program:
@@ -104,7 +110,7 @@ class Program:
         items=items[start:];self.paragraphs={};self.order=[];reader=Reader(items)
         while reader.peek():
             label=reader.pop();reader.pop('.')
-            if label.text in self.paragraphs:raise Unsupported('duplicate paragraph')
+            duplicate=label.text in self.paragraphs
             body=[]
             while reader.peek():
                 # Paragraph labels begin a physical line and are followed by a period.
@@ -112,6 +118,11 @@ class Program:
                 body+=reader.block()
                 if reader.peek()=='.':reader.pop()
                 elif reader.peek():raise Unsupported('unconsumed paragraph scope')
+            if duplicate:
+                # The pinned COACTVWC repeats one adjacent EXIT-only paragraph.
+                previous=self.paragraphs[label.text]
+                if self.order[-1]!=label.text or any(s.verb!='EXIT' or s.operands for s in previous+body):raise Unsupported('duplicate executable paragraph')
+                continue
             self.paragraphs[label.text]=body;self.order.append(label.text)
 
 class Transfer(Exception):
@@ -188,6 +199,18 @@ class Machine:
                 numerator,tail=self.split(args,'BY');divisor,tail=self.split(tail,'GIVING');target,remainder=self.split(tail,'REMAINDER')
                 a=Decimal(self.state.value(numerator));b=Decimal(self.state.value(divisor));quotient=int(a/b)
                 self.state.assign(target,Decimal(quotient));self.state.assign(remainder,a-Decimal(quotient)*b)
+            elif verb=='SEARCH':
+                names=[t.text for t in args]
+                if len(names)!=2 or names[0]!='ALL':raise Unsupported('reference SEARCH mode')
+                candidates=[(index,count) for index,(table,count) in self.state.memory.indexes.items() if table.split('.')[-1]==names[1]]
+                if len(candidates)!=1:raise Unsupported('reference SEARCH index')
+                index,count=candidates[0]
+                for position in range(1,count+1):
+                    self.state.memory.index_values[index]=position
+                    if self.state.predicate(stmt.children[0]):self.execute(stmt.children[1]);break
+                else:self.execute(stmt.children[2])
+            elif verb=='DISPLAY':
+                self.state.operands(args)  # Evaluate source diagnostics without emitting fixture data.
             elif verb=='INITIALIZE':self.state.initialize(args)
             elif verb=='EXEC':self.state.external(args)
             elif verb=='CALL':self.state.call(args)

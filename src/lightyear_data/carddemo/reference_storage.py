@@ -9,7 +9,7 @@ import re
 from .reference_control import Unsupported,Figurative
 
 class Memory:
-    def __init__(self):self.regions=[];self.names={};self.conditions={};self.entries={}
+    def __init__(self):self.regions=[];self.names={};self.conditions={};self.entries={};self.indexes={};self.index_values={}
     def add(self,layout,source_text=''):
         region=bytearray(b'\x40'*layout['record_length']);index=len(self.regions);self.regions.append(region)
         fields=layout['fields'];groups={};seen=set()
@@ -29,7 +29,10 @@ class Memory:
             self._register(path,(index,f));name=path.split('.')[-1]
             if name!=path:self._register(name,(index,f))
         for name,value in layout.get("initials",[]):self.write(name,value)
-        self.conditions.update(layout.get("conditions",{}))
+        for name,item in layout.get('conditions',{}).items():
+            self.conditions[name]=None if name in self.conditions else item
+        self.indexes.update(layout.get('indexes',{}))
+        self.index_values.update({name:1 for name in layout.get('indexes',{})})
         lines=source_text.splitlines()
         for f in fields:
             line=f.get('line',0)
@@ -88,9 +91,12 @@ class Memory:
         return ('-' if v<0 else '')+digits
     def write(self,name,value):
         region,f=self.descriptor(name);width=f['length']
-        if isinstance(value,Figurative):value=str(value)*width
+        figurative=isinstance(value,Figurative)
+        if figurative:value=str(value)*width
         if not f['digits']:
             # Internal alphanumeric MOVE truncates at the receiving width.
+            if f.get('edited') and not figurative and str(value).strip(' \0'):
+                value=self.edit_number(value,f['expanded'])
             text=str(value).encode('cp037');raw=text[-width:].rjust(width,b'\x40') if f.get('justified') else text[:width].ljust(width,b'\x40')
         elif isinstance(value,str) and f['usage']=='DISPLAY' and not f['signed'] and not f['scale'] and not value.isdigit():
             raw=value.encode('cp037')[:width].ljust(width,b'\x40')
@@ -111,6 +117,23 @@ class Memory:
             else:raise Unsupported('reference numeric usage')
         if len(raw)!=width:raise Unsupported('reference receiving width')
         self.regions[region][f['offset']:f['offset']+width]=raw
+    @staticmethod
+    def edit_number(value,picture):
+        # Fixed +/-, Z suppression and decimal insertion in the pinned pictures.
+        number=Decimal(value);scale=len(picture.split('.')[1]) if '.' in picture else 0
+        slots=sum(c in 'Z9' for c in picture);digits=str(abs(int(number.scaleb(scale)))).zfill(slots)[-slots:]
+        out=[];at=0;significant=False
+        for c in picture:
+            if c in 'Z9':
+                digit=digits[at];at+=1
+                if c=='9' or digit!='0':significant=True
+                out.append(digit if significant else ' ')
+            elif c==',':out.append(',' if significant else ' ')
+            elif c=='+':out.append('-' if number<0 else '+')
+            elif c=='-':out.append('-' if number<0 else ' ')
+            elif c=='.':out.append('.');significant=True
+            else:raise Unsupported('reference edited picture symbol')
+        return ''.join(out)
     def write_slice(self,name,start,length,value):
         region,f=self.descriptor(name);n=f['length'];length=n-start if length is None else length
         if start<0 or length<1 or start+length>n:raise Unsupported('reference modification bounds')

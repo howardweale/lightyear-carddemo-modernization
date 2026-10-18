@@ -47,6 +47,7 @@ class Values:
             r.pop();v=self.expression(r);r.pop(')');return v
         if t.startswith("'"):return r.pop().text[1:-1].replace("''","'")
         if re.fullmatch(r'[0-9]+(?:\.[0-9]+)?',t):return Decimal(r.pop().text)
+        if t in self.memory.index_values:return Decimal(self.memory.index_values[r.pop().text])
         if t in FIGURES:return Figurative(FIGURES[r.pop().text])
         if t=='LENGTH':
             r.pop();r.pop('OF');name,start,length=self.reference(r);return Decimal(length or self.memory.descriptor(name)[1]['length'])
@@ -94,7 +95,7 @@ class Values:
                 previous=self.memory.raw(name).decode('cp037');text=str(value);self.memory.write(name,text[:len(previous)]+previous[min(len(text),len(previous)):])
             else:self.memory.write(name,value)
     def set_condition(self,name):
-        if name not in self.conditions:raise Unsupported('reference condition '+name)
+        if name not in self.conditions or self.conditions[name] is None:raise Unsupported('reference condition absent/ambiguous: '+name)
         parent,values=self.conditions[name];self.memory.write(parent,self.value(values[:1]))
     def initialize(self,items):
         for operand in self.operands(items):
@@ -110,7 +111,7 @@ class Values:
             except InvalidOperation:pass
         a=str(a);b=str(b);n=max(len(a),len(b));a=a.ljust(n).encode('cp037');b=b.ljust(n).encode('cp037');return (a>b)-(a<b)
     def condition(self,name):
-        if name not in self.conditions:raise Unsupported('reference condition '+name)
+        if name not in self.conditions or self.conditions[name] is None:raise Unsupported('reference condition absent/ambiguous: '+name)
         parent,items=self.conditions[name];actual=self.memory.display(parent);r=Reader(items)
         while r.peek():
             lower=self.atom(r)

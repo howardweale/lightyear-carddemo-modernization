@@ -22,6 +22,7 @@ class Declaration:
     justified:bool=False
     occurs:int=1
     redefines:str=''
+    indexes:list=field(default_factory=list)
     initial:object=None
     children:list=field(default_factory=list)
     conditions:list=field(default_factory=list)
@@ -29,7 +30,7 @@ class Declaration:
     width:int=0
     shape:dict=field(default_factory=dict)
 
-WORDS=re.compile(r"'(?:[^']|'')*'|X'[0-9A-F]*'|[+-]?[0-9]+(?:\.[0-9]+)?|[A-Z][A-Z0-9-]*|[().+*/$,:-]",re.I)
+WORDS=re.compile(r",|'(?:[^']|'')*'|X'[0-9A-F]*'|[+-]?[0-9]+(?:\.[0-9]+)?|[A-Z][A-Z0-9-]*|[().+*/$,:-]",re.I)
 
 def declarations(raw,source):
     # Period-delimited declarations; quoted periods do not terminate a sentence.
@@ -42,6 +43,10 @@ def declarations(raw,source):
     for match in WORDS.finditer(text):
         if text[position:match.start()].strip():raise Unsupported('reference declaration token '+text[position:match.start()])
         position=match.end();word=match[0];word=word if word.startswith("'") else word.upper()
+        if word==',':continue
+        # A decimal point embedded in PIC is not a declaration terminator.
+        if word=='.' and match.end()<len(text) and not text[match.end()].isspace() and any(t.text in ('PIC','PICTURE') for t in current):
+            current.append(Token(word,source,locations[match.start()]));continue
         if word=='.':
             if current:rows.append(current);current=[]
         else:current.append(Token(word,source,locations[match.start()]))
@@ -56,6 +61,7 @@ def declarations(raw,source):
             values=row[3:]
             if values and values[0].text in ('IS','ARE'):values=values[1:]
             last.conditions.append((name,values));continue
+        if level==77:level=1
         if not 1<=level<=49:raise Unsupported('reference data level '+str(level))
         filler+=name=='FILLER';node=Declaration(level,name if name!='FILLER' else 'FILLER-'+str(filler),row[0].line,source)
         k=2
@@ -64,7 +70,7 @@ def declarations(raw,source):
             if word in ('PIC','PICTURE'):
                 if k<len(words) and words[k]=='IS':k+=1
                 parts=[]
-                while k<len(words) and re.fullmatch(r'[SX9AVZB0-9]+|[(),+*/$-]',words[k]):parts.append(words[k]);k+=1
+                while k<len(words) and re.fullmatch(r'[+-]?[SX9AVZB0-9.]+|[().,+*/$-]',words[k]):parts.append(words[k]);k+=1
                 node.picture=''.join(parts)
                 if not node.picture:raise Unsupported('reference empty picture')
             elif word in ('USAGE','COMP','COMP-3','COMP-5','BINARY','DISPLAY'):
@@ -78,6 +84,13 @@ def declarations(raw,source):
                 node.occurs=int(words[k]);k+=1
                 if not 1<=node.occurs<=32767:raise Unsupported('reference occurrence bound')
                 if k<len(words) and words[k]=='TIMES':k+=1
+            elif word=='ASCENDING':
+                if words[k]=='KEY':k+=1
+                if words[k]=='IS':k+=1
+                k+=1  # SEARCH ALL validates equality through the interpreted predicate.
+            elif word=='INDEXED':
+                if words[k]!='BY':raise Unsupported('reference INDEXED clause')
+                k+=1;node.indexes.append(words[k]);k+=1
             elif word in ('JUST','JUSTIFIED'):
                 if words[k]=='RIGHT':k+=1
                 else:raise Unsupported('reference justification')
@@ -106,13 +119,13 @@ def declarations(raw,source):
     return roots
 
 def shape(node):
-    if not re.fullmatch(r'S?(?:[X9AVZB+*/$,-](?:\([0-9]+\))?)+',node.picture):raise Unsupported('reference picture '+node.picture)
-    expanded=''.join(symbol*int(count or 1) for symbol,count in re.findall(r'([SX9AVZB+*/$,-])(?:\(([0-9]+)\))?',node.picture))
+    if not re.fullmatch(r'S?(?:[X9AVZB+*/$.,-](?:\([0-9]+\))?)+',node.picture):raise Unsupported('reference picture '+node.picture)
+    expanded=''.join(symbol*int(count or 1) for symbol,count in re.findall(r'([SX9AVZB+*/$.,-])(?:\(([0-9]+)\))?',node.picture))
     numeric=bool(re.fullmatch(r'S?9+(?:V9*)?',expanded));digits=expanded.count('9') if numeric else 0
     scale=len(expanded.split('V')[1]) if numeric and 'V' in expanded else 0
     if not numeric and node.usage!='DISPLAY':raise Unsupported('reference nonnumeric usage')
     length=(2 if digits<=4 else 4 if digits<=9 else 8) if node.usage in ('BINARY','COMP-5') else (digits+2)//2 if node.usage=='COMP-3' else len(expanded.replace('S','').replace('V',''))+int(node.separate)
-    return dict(picture=node.picture,usage=node.usage,digits=digits,scale=scale,signed=expanded.startswith('S'),sign=node.sign,separate=node.separate,justified=node.justified,length=length)
+    return dict(edited=not numeric and bool(re.fullmatch(r'[+-]?[Z9,]+(?:[.]9+)?',expanded)),expanded=expanded,picture=node.picture,usage=node.usage,digits=digits,scale=scale,signed=expanded.startswith('S'),sign=node.sign,separate=node.separate,justified=node.justified,length=length)
 
 def layout(raw,source):
     roots=declarations(raw,source)
@@ -132,16 +145,17 @@ def layout(raw,source):
         return extent
     length=size(roots)
     if not 0<length<=1000000:raise Unsupported('reference storage bound')
-    fields=[];groups=[];initials=[];conditions={}
+    fields=[];groups=[];initials=[];conditions={};indexes={}
     def emit(nodes,prefix='',base=0):
         for node in nodes:
+            for index in node.indexes:indexes[index]=(prefix+node.name,node.occurs)
             for i in range(1,node.occurs+1):
                 name=node.name+('['+str(i)+']' if node.occurs>1 else '');path=prefix+name;offset=base+node.offset+(i-1)*node.width
                 if node.picture:fields.append(dict(node.shape,path=path,offset=offset,filler=node.name.startswith('FILLER-'),source=source,line=node.line))
                 else:groups.append(dict(path=path,offset=offset,length=node.width));emit(node.children,path+'.',offset)
                 if node.initial is not None:initials.append((path,node.initial))
                 for condition,values in node.conditions:
-                    if condition in conditions:raise Unsupported('reference condition ambiguity')
-                    conditions[condition]=(path,values)
+                    conditions[path+'.'+condition]=(path,values)
+                    conditions[condition]=None if condition in conditions else (path,values)
     emit(roots)
-    return dict(record_length=length,fields=fields,groups=groups,initials=initials,conditions=conditions)
+    return dict(record_length=length,fields=fields,groups=groups,initials=initials,conditions=conditions,indexes=indexes)

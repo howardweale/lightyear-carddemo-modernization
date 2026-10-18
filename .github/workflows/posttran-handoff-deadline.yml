@@ -8,6 +8,8 @@ on:
       - 'docs/factory/**'
       - 'tools/check_posttran_handoff.py'
       - 'tools/check_posttran_deadline.py'
+      - 'tools/check_posttran_runbook_constants.py'
+      - 'tests/test_posttran_deadline_lifecycle.py'
       - 'tools/check_runbook_variables.ps1'
       - 'tools/check_posttran_plan_artifact.py'
       - 'tests/test_posttran_handoff.py'
@@ -37,13 +39,18 @@ jobs:
         shell: pwsh
         env:
           PYTHONPATH: 'src;.;tests'
-        run: python -B -m unittest test_posttran_handoff test_posttran_handoff_followups test_phase2_authorization -v
+        run: python -B -m unittest test_posttran_handoff test_posttran_handoff_followups test_phase2_authorization test_posttran_deadline_lifecycle -v
       - name: Compare original CI plan with declared amendment
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
           PYTHONPATH: 'src;.'
         run: python -B -m tools.check_posttran_plan_artifact
+      - name: Verify every documented PowerShell evidence constant
+        shell: pwsh
+        env:
+          PYTHONPATH: 'src;.'
+        run: python -B -m tools.check_posttran_runbook_constants
       - name: Lint standalone current PowerShell runbook blocks
         shell: pwsh
         run: ./tools/check_runbook_variables.ps1

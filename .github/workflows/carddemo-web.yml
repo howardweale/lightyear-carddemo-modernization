@@ -1,10 +1,10 @@
 name: CardDemo web slice
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
 permissions:
   contents: read
 concurrency:
@@ -74,6 +74,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
+      - name: Acquire the pinned PostgreSQL digest through existing CI mirrors
+        run: |
+          image="$(python -B tools/ci_postgres_image.py)"
+          echo "CARDDEMO_POSTGRES_IMAGE=$image" >> "$GITHUB_ENV"
       - name: Build and start disposable six-screen application
         run: docker compose -f factory/carddemo-web/compose.yaml -f factory/carddemo-web/compose.ci.yaml up -d --build
       - name: Wait for generated public and synthetic fixture
@@ -134,6 +138,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
+      - name: Acquire the pinned PostgreSQL digest through existing CI mirrors
+        run: |
+          image="$(python -B tools/ci_postgres_image.py)"
+          echo "CARDDEMO_POSTGRES_IMAGE=$image" >> "$GITHUB_ENV"
       - name: Derive mappings and start an isolated disposable fixture
         env:
           PYTHONPATH: src

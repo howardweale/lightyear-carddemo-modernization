@@ -336,6 +336,39 @@ public final class SourceEdits {
         if(result.outcome()!=AccountInputRules.Outcome.VALID)
             nativeInputError(result.outcome()==AccountInputRules.Outcome.MISSING?" must be supplied.":" is not valid");
     }
+    private void runAccountSsnRule() {
+        var result=AccountSsnRule.validate(get("ACUP-NEW-CUST-SSN-1"),get("ACUP-NEW-CUST-SSN-2"),get("ACUP-NEW-CUST-SSN-3"));
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2431));
+        applySsnPart(1,"SSN: First 3 chars",result.first());
+        if(result.first().status()==AccountTextRules.Status.VALID) {
+            put("WS-EDIT-US-SSN-PART1",result.first().input());
+            if(result.restrictedFirst()) {
+                put("WS-EDIT-US-SSN-PART1-FLGS","0");
+                nativeInputError(": should not be 000, 666, or between 900 and 999");
+            }
+        }
+        String[] labels={"SSN 4th & 5th chars","SSN Last 4 chars"};
+        for(int i=0;i<result.remaining().size();i++)applySsnPart(i+2,labels[i],result.remaining().get(i));
+    }
+    private void applySsnPart(int number,String label,AccountSsnRule.Part part) {
+        put("WS-EDIT-VARIABLE-NAME",label);
+        put("WS-EDIT-ALPHANUM-ONLY",part.input());
+        put("WS-EDIT-ALPHANUM-LENGTH",Integer.toString(part.input().length()));
+        String flag=switch(part.status()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; };
+        put("WS-EDIT-ALPHANUM-ONLY-FLAGS",flag);
+        put("WS-EDIT-US-SSN-PART"+number+"-FLGS",flag);
+        if(part.status()!=AccountTextRules.Status.VALID)nativeInputError(switch(part.status()) {
+            case MISSING -> " must be supplied."; case ZERO -> " must not be zero."; default -> " must be all numeric.";
+        });
+    }
+    private void runAccountFicoRule() {
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2514));
+        // A successful range edit leaves the existing flag untouched.
+        if(!AccountFicoRule.validDisplay(get("ACUP-NEW-CUST-FICO-SCORE"))) {
+            setCondition("FLG-FICO-SCORE-NOT-OK");
+            nativeInputError(": should be between 300 and 850");
+        }
+    }
     private void nativeInputError(String suffix) {
         setCondition("INPUT-ERROR");
         if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
@@ -346,6 +379,8 @@ public final class SourceEdits {
                 case "AccountInputRules" -> runAccountInputRule(paragraph);
                 case "AccountTextRules" -> runAccountTextRule(paragraph);
                 case "AccountMoneyRule" -> runAccountMoneyRule();
+                case "AccountSsnRule" -> runAccountSsnRule();
+                case "AccountFicoRule" -> runAccountFicoRule();
                 default -> throw new IllegalArgumentException("untranslated-native-class");
             }
             return;

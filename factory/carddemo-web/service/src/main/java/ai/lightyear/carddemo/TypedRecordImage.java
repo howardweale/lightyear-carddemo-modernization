@@ -58,6 +58,10 @@ public final class TypedRecordImage {
             if(f.path("digits").asInt()>0){
                 BigDecimal number=new BigDecimal(decoded.get(path));values.put(column,number);
                 String usage=f.path("usage").asText();
+                // Preserve the migration codec's explicit no-sign representation on rewrite.
+                if(usage.equals("BINARY")||usage.equals("COMP-5")||(usage.equals("DISPLAY")&&!f.path("signed").asBoolean())){
+                    representation.put("sign_code",null);representation.put("negative_zero",false);
+                }
                 if(usage.equals("COMP-3")||(usage.equals("DISPLAY")&&f.path("signed").asBoolean()&&!f.path("separate").asBoolean())){
                     int sign=usage.equals("COMP-3")?bytes[len-1]&15:(bytes[f.path("sign").asText().equals("LEADING")?0:len-1]>>>4)&15;
                     representation.put("sign_code",sign);representation.put("negative_zero",number.signum()==0&&sign==13);

@@ -108,7 +108,11 @@ class AuthorizationTest {
             rep.putNull("sign_code");rep.put("negative_zero",false);
         }
         Map<String,Object> row=new LinkedHashMap<>(image.columns());row.put("encoding_meta",mapper.writeValueAsString(meta));row.put("source_sha256",image.sha256());
-        assertArrayEquals(area.bytes(),TypedRecordImage.reconstruct(mapping,row));
+        byte[] reconstructed=TypedRecordImage.reconstruct(mapping,row);
+        assertArrayEquals(area.bytes(),reconstructed);
+        var rewritten=TypedRecordImage.project(mapping,reconstructed);
+        assertEquals(meta,mapper.readTree(rewritten.metadata()),"rewrite must preserve the complete migration encoding metadata");
+        assertEquals(image.sha256(),rewritten.sha256());
         // A present invalid sign must still be rejected; this is not relaxed numeric validation.
         var signed=(tools.jackson.databind.node.ObjectNode)meta.path("representations").path(b.field("pautdtl1","PA-AUTH-DATE-9C").path("path").asText());
         signed.put("sign_code",0);row.put("encoding_meta",mapper.writeValueAsString(meta));

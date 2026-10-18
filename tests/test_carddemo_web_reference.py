@@ -99,6 +99,16 @@ class ReferenceStorageTests(unittest.TestCase):
         self.assertTrue(state.predicate(lex('TEXT-A = LOW-VALUES')))
         state.assign(lex('TEXT-A'),state.value(lex('ZEROS')));self.assertEqual('0000',m.read('TEXT-A'))
 
+    def test_numeric_items_keep_numeric_order_but_invalid_display_reaches_source_validation(self):
+        from lightyear_data.carddemo.reference_values import Values
+        m=self.memory();state=Values(m);m.write('TEXT-A','0009');m.write('BINARY-A',11)
+        lex=lambda text:tokens(source(text),'expression.cbl')
+        self.assertFalse(state.predicate(lex('NUMBER-A > BINARY-A')))
+        m.write('TEXT-A','0012');self.assertTrue(state.predicate(lex('NUMBER-A > BINARY-A')))
+        m.write('TEXT-A','XX00')
+        self.assertTrue(state.predicate(lex('NUMBER-A IS NOT NUMERIC OR NUMBER-A > BINARY-A')))
+        self.assertFalse(state.predicate(lex('NUMBER-A IS NUMERIC')))
+
 class ReferenceDeclarationTests(unittest.TestCase):
     def load(self,name):
         from lightyear_data.carddemo.reference_declarations import layout
@@ -144,6 +154,10 @@ class RawSignonTests(unittest.TestCase):
         missing_user=r.interact('ENTER',{'USERID':'MISSING','PASSWD':'PASSWORD'})
         self.assertEqual('User not found. Try again ...',missing_user['screen']['message'])
         self.assertGreater(len(missing_user['trace']),20)
+        invalid=r.interact('PF1',{'USERID':'IGNORED','PASSWD':'IGNORED'})
+        self.assertEqual('        ',invalid['screen']['values']['PASSWD'])
+        self.assertEqual('        ',invalid['screen']['values']['USERID'])
+        self.assertEqual('________',initial['screen']['values']['PASSWD'])
     def test_source_password_and_user_type_decide_transfer(self):
         r=self.reference();m=r.storage();m.write('SEC-USR-ID','TESTUSER');m.write('SEC-USR-PWD','PASSWORD');m.write('SEC-USR-TYPE','U')
         r.users={'TESTUSER':m.raw('SEC-USER-DATA')}
@@ -195,6 +209,11 @@ class RawMenuTests(unittest.TestCase):
         r=self.reference();initial=r.interact('INITIAL')
         with self.assertRaises(Unsupported):r.interact('ENTER',{'OPTION':'00'},initial['commarea'])
         self.assertIn('valid option number',r.frame['message'])
+        for value in ('XX','!'):
+            r=self.reference();initial=r.interact('INITIAL')
+            with self.assertRaisesRegex(Unsupported,'nonnumeric reference subscript'):
+                r.interact('ENTER',{'OPTION':value},initial['commarea'])
+            self.assertIn('valid option number',r.frame['message'])
 
 class RawRemainingScreenTests(unittest.TestCase):
     root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'

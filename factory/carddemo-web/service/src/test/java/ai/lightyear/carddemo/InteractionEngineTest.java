@@ -41,6 +41,12 @@ class InteractionEngineTest {
         var signon=new SignonService(b);var area=new Commarea(b.root.path("program_commareas").path("COSGN00C"),null);
         var missing=signon.interact(db,area,"ENTER",Map.of("USERID","USER0001","PASSWD",""));
         assertEquals("USER0001",missing.screen().values.get("USERID"));assertEquals("PASSWD",missing.screen().cursor);
+        var initial=signon.interact(db,area,"INITIAL",Map.of());
+        assertEquals("________",initial.screen().values.get("PASSWD"));
+        var invalidSignonKey=signon.interact(db,area,"PF1",Map.of("USERID","IGNORED","PASSWD","IGNORED"));
+        assertEquals("        ",invalidSignonKey.screen().values.get("PASSWD"));
+        assertEquals("        ",invalidSignonKey.screen().values.get("USERID"));
+        assertFalse(invalidSignonKey.screen().message.isEmpty());
         var menu=new MenuService(b);var invalid=menu.interact(db,area,"ENTER",Map.of("OPTION","XX"));
         assertEquals("XX",invalid.screen().values.get("OPTION"));assertFalse(invalid.screen().message.isEmpty());
         var zero=menu.interact(db,area,"ENTER",Map.of("OPTION","0"));assertEquals("00",zero.screen().values.get("OPTION"));

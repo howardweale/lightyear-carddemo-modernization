@@ -11,7 +11,14 @@ public final class SignonService implements TransactionService {
         ScreenFrame frame=new ScreenFrame(bindings,"COSGN00C");
         if(aid.equals("INITIAL"))return new Result("COSGN00C",frame,false); // lines 80â€“83
         if(aid.equals("PF3")){frame.message=bindings.root.path("common_constants").path("CCDA-MSG-THANK-YOU").asText().stripTrailing();return new Result("COSGN00C",frame,true);} // 88â€“90; caller renders bound CCDA-MSG-THANK-YOU
-        if(!aid.equals("ENTER")){frame.error(bindings.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText().stripTrailing(),frame.cursor);return new Result("COSGN00C",frame,false);}
+        if(!aid.equals("ENTER")){
+            // COSGN00C lines 91-94 SEND initialized output storage without
+            // RECEIVE or the initial-entry LOW-VALUES. Blanks replace the
+            // map's password underscores; input on this AID is not consumed.
+            frame.receive(Map.of()).forEach(frame::set);
+            frame.error(bindings.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText().stripTrailing(),frame.cursor);
+            return new Result("COSGN00C",frame,false);
+        }
         Map<String,String> received=frame.receive(input);
         // RECEIVE writes the shared BMS input/output area; error SEND preserves the received values.
         received.forEach(frame::set);

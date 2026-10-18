@@ -150,7 +150,13 @@ class Values:
                         q=Reader(tokens);name,start,length=self.reference(q)
                         return not q.peek() and start is None and self.memory.descriptor(name)[1]['digits']>0
                     except Unsupported:return False
-                if numeric_operand(left_tokens) and numeric_operand(items[right_begin:r.at]):left,right=Decimal(left),Decimal(right)
+                if numeric_operand(left_tokens) and numeric_operand(items[right_begin:r.at]):
+                    try:left,right=Decimal(left),Decimal(right)
+                    except InvalidOperation:
+                        # Invalid DISPLAY bytes retain the documented EBCDIC
+                        # comparison assumption. IS NUMERIC still rejects them;
+                        # do not turn invalid input into a Python decimal crash.
+                        pass
                 last[0]=(left,op)
             elif last[0] is not None and not negate:
                 right=left;left,op=last[0]

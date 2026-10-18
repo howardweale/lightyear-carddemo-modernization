@@ -206,6 +206,14 @@
       "role": "source",
       "source_path": "src/lightyear_data/carddemo/volume.py",
       "source_sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
+    },
+    {
+      "record": "docs/factory/carddemo-web-review-request-2026-10-18.json",
+      "reference": "e5b5489d8b613ac026101ef091d073639a093c59",
+      "commit": "e5b5489d8b613ac026101ef091d073639a093c59",
+      "role": "source",
+      "source_path": "docs/factory/carddemo-web-review-evidence-2026-10-18.json",
+      "source_sha256": "5012ae18309362857b122ce2af80f4267cfe8219bff0892272efc368a5ad2c2a"
     }
   ]
 }

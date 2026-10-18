@@ -14,7 +14,7 @@ public final class ScreenFrame {
     public String cursor="";
     public String endpoint="";
     public final List<SourceEdits.Location> trace=new ArrayList<>();
-    public ScreenFrame(Bindings bindings,String program){this(bindings,program,java.time.Clock.systemUTC());}
+    public ScreenFrame(Bindings bindings,String program){this(bindings,program,bindings.clock);}
     public ScreenFrame(Bindings bindings,String program,java.time.Clock clock){
         this.program=program;JsonNode screen=bindings.screen(program);transaction=screen.path("transaction").asText();
         model=screen.path("model").path("maps").get(0);

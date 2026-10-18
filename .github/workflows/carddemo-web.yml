@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: '24'
       - name: Build and start disposable six-screen application
-        run: docker compose -f factory/carddemo-web/compose.yaml up -d --build
+        run: docker compose -f factory/carddemo-web/compose.yaml -f factory/carddemo-web/compose.ci.yaml up -d --build
       - name: Wait for generated public and synthetic fixture
         run: |
           mkdir -p work/carddemo-compose
@@ -86,6 +86,10 @@ jobs:
           exit 1
       - name: Exercise six-screen API journey and atomic fraud toggle
         run: python -B factory/carddemo-web/runtime/smoke.py --fixture work/carddemo-compose/fixture.json --out work/carddemo-compose/api
+      - name: Compare sign-on with independently interpreted pinned COBOL
+        env:
+          PYTHONPATH: src
+        run: python -B factory/carddemo-web/runtime/prove_signon.py --out work/carddemo-compose/reference-signon
       - name: Install browser from the existing locked CI dependency
         run: |
           npm ci --prefix tests/browser --ignore-scripts --no-audit --no-fund
@@ -95,6 +99,7 @@ jobs:
         env:
           CARDDEMO_FIXTURE: work/carddemo-compose/fixture.json
           CARDDEMO_BROWSER_OUT: work/carddemo-compose/browser
+          CARDDEMO_REFERENCE_SIGNON: work/carddemo-compose/reference-signon/cases.json
         run: node tests/browser/carddemo-slice.mjs
       - name: Preserve runtime diagnostics
         if: always()

@@ -5,13 +5,13 @@ import java.util.*;
 
 /** COACTUPC transaction orchestration. Editing, messages and rendering execute
  * generated source statements; physical data columns always come from the plan.
- * Source ranges: main 903–1009, action 2561–2647, reads 3608–3797, write 3892–4106.
+ * Source ranges: main 903â€“1009, action 2561â€“2647, reads 3608â€“3797, write 3892â€“4106.
  */
 public final class AccountUpdateService implements TransactionService {
     private static final String PROGRAM="COACTUPC";
     private final Bindings bindings;private final TypedRecords records;private final AccountUpdateTransaction update;
     public AccountUpdateService(Bindings b){bindings=b;records=new TypedRecords(b);update=new AccountUpdateTransaction(b);}
-    private SourceEdits edits(Commarea area){SourceEdits e=new SourceEdits(bindings.root.path("account_update").path("validation"));e.loadArea(area);return e;}
+    private SourceEdits edits(Commarea area){SourceEdits e=new SourceEdits(bindings.root.path("account_update").path("validation"),bindings.clock);e.loadArea(area);return e;}
     private String literal(String value){return bindings.literal(PROGRAM,value);}
     private static boolean blank(String text){return text.chars().allMatch(c->c==0||c==' ');}
     private Result render(Commarea area,SourceEdits e){

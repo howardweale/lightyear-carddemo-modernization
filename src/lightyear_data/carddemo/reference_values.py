@@ -8,7 +8,7 @@ FIGURES={'SPACE':' ','SPACES':' ','LOW-VALUE':'\0','LOW-VALUES':'\0','ZERO':'0',
 
 class Values:
     def __init__(self,memory,conditions=None,clock=None,external=None,call=None):
-        self.memory=memory;self.conditions=conditions or {};self.clock=clock or datetime(2026,10,17,12,0,tzinfo=timezone.utc);self.external_port=external;self.call_port=call
+        self.memory=memory;self.conditions=memory.conditions if conditions is None else conditions;self.clock=clock or datetime(2026,10,17,12,0,tzinfo=timezone.utc);self.external_port=external;self.call_port=call
     def value(self,items):
         r=Reader(items);value=self.expression(r)
         if r.peek():raise Unsupported('unconsumed reference expression: '+r.peek())
@@ -22,16 +22,21 @@ class Values:
             value=a+b if op=='+' else a-b if op=='-' else a*b if op=='*' else a/b
         return value
     def reference(self,r):
-        name=r.pop().text;start=None;length=None
-        if r.peek()=='OF':r.pop();r.pop() # qualifiers are checked by unambiguous physical storage lookup
-        if r.peek()=='(':
+        name=r.pop().text;start=None;length=None;qualifiers=[];index=None
+        while r.peek() in ('OF','IN','('):
+            if r.peek() in ('OF','IN'):
+                r.pop();qualifiers.append(r.pop().text);continue
             r.pop();first=self.expression(r)
             if r.peek()==':':
+                if start is not None:raise Unsupported('duplicate reference modification')
                 r.pop();start=int(first)-1
                 if r.peek()!=')':length=int(self.expression(r))
-            else:name+='['+str(int(first))+']'
+            else:
+                if index is not None:raise Unsupported('nested reference subscript not implemented')
+                index=int(first)
             r.pop(')')
-        if r.peek()=='OF':r.pop();r.pop()
+        name='.'.join(list(reversed(qualifiers))+[name])
+        if index is not None:name+='['+str(index)+']'
         self.memory.descriptor(name)
         return name,start,length
     def atom(self,r):

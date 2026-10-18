@@ -13,8 +13,15 @@ import tools.jackson.databind.json.JsonMapper;
 @SpringBootApplication
 public class CardDemoApplication {
     public static void main(String[] args){SpringApplication.run(CardDemoApplication.class,args);}
-    @Bean Bindings bindings(@Value("${carddemo.bindings}") String path,@Value("${carddemo.plan}") String plan)throws Exception{
-        return new Bindings(Path.of(path),Path.of(plan),JsonMapper.builder().build());
+    @Bean Bindings bindings(@Value("${carddemo.bindings}") String path,@Value("${carddemo.plan}") String plan,
+                           @Value("${carddemo.reference-instant:}") String instant,org.springframework.core.env.Environment environment)throws Exception{
+        Clock clock=Clock.systemUTC();
+        if(!instant.isEmpty()){
+            if(!environment.acceptsProfiles(org.springframework.core.env.Profiles.of("reference-ci")))throw new IllegalArgumentException("fixed-clock-requires-reference-ci-profile");
+            clock=Clock.fixed(java.time.Instant.parse(instant),java.time.ZoneOffset.UTC);
+        }
+        // Session expiration still uses the real clock; only screen/business date ports are fixed in CI.
+        return new Bindings(Path.of(path),Path.of(plan),JsonMapper.builder().build(),clock);
     }
     @Bean SessionToken sessionToken(Bindings bindings,@Value("${carddemo.session-key}") String key){
         byte[] sessionKey;

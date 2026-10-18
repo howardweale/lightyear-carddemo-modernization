@@ -12,7 +12,12 @@ public final class Bindings {
     public final JsonNode root;
     public final JsonNode data;
     public final String hash;
+    public final java.time.Clock clock;
     public Bindings(Path path,Path plan,JsonMapper json)throws IOException {
+        this(path,plan,json,java.time.Clock.systemUTC());
+    }
+    public Bindings(Path path,Path plan,JsonMapper json,java.time.Clock clock)throws IOException {
+        this.clock=java.util.Objects.requireNonNull(clock);
         byte[] raw=Files.readAllBytes(path);byte[] mapping=Files.readAllBytes(plan);
         root=json.readTree(raw);data=json.readTree(mapping);
         if(!root.path("schema").asText().equals("carddemo-web-bindings/1") || root.path("screens").size()!=6

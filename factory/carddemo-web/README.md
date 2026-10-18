@@ -22,12 +22,19 @@ The loader checks the generated-source/fixture identity before reuse and refuses
 
 ## Retained quirks and evidence limits
 
-- Menu options 3–10 retain source labels and role checks and lead to one explicit `/not-in-this-slice` endpoint. Admin-menu sign-on is outside this six-screen slice.
+- Menu options 3â€“10 retain source labels and role checks and lead to one explicit `/not-in-this-slice` endpoint. Admin-menu sign-on is outside this six-screen slice.
 - COACTUP no-change and concurrency comparisons trim different operands. The source account rewrite places the group bytes where the master layout has ZIP bytes; the implementation preserves this discrepancy.
 - Missing-record condition literals differ from assembled messages, allowing subsequent reads. Deterministic initialized working storage is an explicit reference assumption, not observed CICS behavior.
 - The source phone predicate repeats the area-code condition; today's DOB is rejected. Invalid DISPLAY bytes use a documented EBCDIC comparison assumption until the source NUMERIC test.
 - Authorization PF7 page-counter behavior and short-page next flags are retained. More than twenty recorded pages is refused because the source history array has twenty entries.
-- The source's two-digit authorization year uses an explicit 2000–2099 reference window; native DB2 interpretation is unverified. Missing detail and SQL error-path screen equivalence are not yet established.
+- The source's two-digit authorization year uses an explicit 2000â€“2099 reference window; native DB2 interpretation is unverified. Missing detail and SQL error-path screen equivalence are not yet established.
 - Public IMS unload framing, native CICS/IMS/DB2 evidence, and native acceptance remain absent. The earlier data receipt's 500,000 records and 27/40 typed IMS cases do not establish screen equivalence.
 
 No release, z/OS, evidence acceptance, signing or Phase 2 authority follows from these changes or green CI.
+
+## Independent reference progress
+
+The raw-source interpreter now has its own declaration/overlay loader and byte storage, qualified references, bounded control flow, and a COSGN00C CICS adapter. It does not read the Java validation AST or candidate response values to compute its expected result. Its sign-on cases are compared through HTTP and Playwright, including every field/attribute, cursor, message and all PostgreSQL tables after each interaction. This currently covers one of the six required programs and is awaiting fresh CI validation; it is not full P5 acceptance or a screen-handler mutation result.
+
+Compose CI explicitly layers `compose.ci.yaml` over the ordinary configuration. Only this `reference-ci` profile permits a fixed business/screen clock for reproducible comparisons; session expiration retains the real clock. Normal `docker compose up` uses real time. Raw source line traces and incomplete denominators remain in the CI artifacts.
+

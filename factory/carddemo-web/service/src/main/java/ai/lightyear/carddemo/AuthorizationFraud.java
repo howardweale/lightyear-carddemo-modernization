@@ -8,7 +8,7 @@ import tools.jackson.databind.JsonNode;
 /** COPAUS2C LINK and COPAUS1C REPL share the caller's database transaction. */
 public final class AuthorizationFraud {
     private final Bindings b;private final TypedRecords records;private final Clock clock;
-    public AuthorizationFraud(Bindings b){this(b,Clock.systemUTC());}
+    public AuthorizationFraud(Bindings b){this(b,b.clock);}
     public AuthorizationFraud(Bindings b,Clock clock){this.b=b;this.clock=clock;records=new TypedRecords(b);}
     public Map<String,Object> apply(Connection db,Commarea area,Map<String,Object> detail)throws SQLException{
         if(db.getAutoCommit())throw new IllegalArgumentException("fraud-transaction-required");

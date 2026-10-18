@@ -154,7 +154,7 @@ class Machine:
             elif verb=='EVALUATE':
                 true=len(args)==1 and args[0].text=='TRUE';subject=None if true else self.state.value(args)
                 for choices,body in stmt.children:
-                    if any(len(c)==1 and c[0].text=='OTHER' or (self.state.predicate(c) if true else self.state.value(c)==subject) for c in choices):self.execute(body);break
+                    if any(len(c)==1 and c[0].text=='OTHER' or (self.state.predicate(c) if true else (self.state.compare(self.state.value(c),subject)==0 if hasattr(self.state,'compare') else self.state.value(c)==subject)) for c in choices):self.execute(body);break
             elif verb=='MOVE':
                 value,targets=self.split(args,'TO');self.state.assign(targets,self.state.value(value))
             elif verb=='COMPUTE':

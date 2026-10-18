@@ -9,7 +9,7 @@ import re
 from .reference_control import Unsupported,Figurative
 
 class Memory:
-    def __init__(self):self.regions=[];self.names={};self.conditions={}
+    def __init__(self):self.regions=[];self.names={};self.conditions={};self.entries={}
     def add(self,layout,source_text=''):
         region=bytearray(b'\x40'*layout['record_length']);index=len(self.regions);self.regions.append(region)
         fields=layout['fields'];groups={};seen=set()
@@ -23,10 +23,13 @@ class Memory:
             positions=set(range(f['offset'],f['offset']+f['length']))
             if not positions&seen:self.write(path,Decimal(0) if f['digits'] else '')
             seen|=positions
+        for group in layout.get("groups",[]):groups[group["path"]]=[group["offset"],group["offset"]+group["length"]]
         for path,(start,end) in groups.items():
             f=dict(path=path,offset=start,length=end-start,digits=0,scale=0,usage='DISPLAY',signed=False)
             self._register(path,(index,f));name=path.split('.')[-1]
             if name!=path:self._register(name,(index,f))
+        for name,value in layout.get("initials",[]):self.write(name,value)
+        self.conditions.update(layout.get("conditions",{}))
         lines=source_text.splitlines()
         for f in fields:
             line=f.get('line',0)
@@ -36,11 +39,18 @@ class Memory:
                 token=match[1];value=token[1:-1].replace("''","'") if token.startswith("'") else '' if token.upper().startswith('SPACE') else Decimal(0) if token.upper().startswith('ZERO') else Decimal(token)
                 self.write(f['path'],value)
     def _register(self,name,item):
+        self.entries[(item[0],item[1]["path"])]=item
         if name in self.names and self.names[name]!=item:self.names[name]=None
         else:self.names[name]=item
     def descriptor(self,name):
-        if name not in self.names or self.names[name] is None:raise Unsupported('reference storage absent/ambiguous: '+name)
-        return self.names[name]
+        if name in self.names and self.names[name] is not None:return self.names[name]
+        indexes=re.findall(r'\[([0-9]+)\]',name);plain=re.sub(r'\[[0-9]+\]','',name)
+        matches=[]
+        for item in self.entries.values():
+            path=item[1]['path'];candidate=re.sub(r'\[[0-9]+\]','',path)
+            if (candidate==plain or candidate.endswith('.'+plain)) and re.findall(r'\[([0-9]+)\]',path)==indexes:matches.append(item)
+        if len(matches)!=1:raise Unsupported('reference storage absent/ambiguous: '+name)
+        return matches[0]
     def raw(self,name):
         region,f=self.descriptor(name);return bytes(self.regions[region][f['offset']:f['offset']+f['length']])
     def read(self,name):
@@ -81,7 +91,7 @@ class Memory:
         if isinstance(value,Figurative):value=str(value)*width
         if not f['digits']:
             # Internal alphanumeric MOVE truncates at the receiving width.
-            raw=str(value).encode('cp037')[:width].ljust(width,b'\x40')
+            text=str(value).encode('cp037');raw=text[-width:].rjust(width,b'\x40') if f.get('justified') else text[:width].ljust(width,b'\x40')
         elif isinstance(value,str) and f['usage']=='DISPLAY' and not f['signed'] and not f['scale'] and not value.isdigit():
             raw=value.encode('cp037')[:width].ljust(width,b'\x40')
         else:

@@ -36,4 +36,15 @@ class InteractionEngineTest {
         assertEquals("10/17/26",frame.values.get("CURDATE"));assertEquals("12:34:56",frame.values.get("CURTIME"));
         assertEquals("COACTVWC",frame.values.get("PGMNAME"));assertEquals("CAVW",frame.values.get("TRNNAME"));
     }
+    @Test void errorSendsRetainTheSourceBmsReceiveArea()throws Exception{
+        var b=bindings();var db=mock(Connection.class);
+        var signon=new SignonService(b);var area=new Commarea(b.root.path("program_commareas").path("COSGN00C"),null);
+        var missing=signon.interact(db,area,"ENTER",Map.of("USERID","USER0001","PASSWD",""));
+        assertEquals("USER0001",missing.screen().values.get("USERID"));assertEquals("PASSWD",missing.screen().cursor);
+        var menu=new MenuService(b);var invalid=menu.interact(db,area,"ENTER",Map.of("OPTION","XX"));
+        assertEquals("XX",invalid.screen().values.get("OPTION"));assertFalse(invalid.screen().message.isEmpty());
+        var zero=menu.interact(db,area,"ENTER",Map.of("OPTION","0"));assertEquals("00",zero.screen().values.get("OPTION"));
+        verifyNoInteractions(db);
+    }
+
 }

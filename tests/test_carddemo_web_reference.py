@@ -99,4 +99,58 @@ class ReferenceStorageTests(unittest.TestCase):
         self.assertTrue(state.predicate(lex('TEXT-A = LOW-VALUES')))
         state.assign(lex('TEXT-A'),state.value(lex('ZEROS')));self.assertEqual('0000',m.read('TEXT-A'))
 
+class ReferenceDeclarationTests(unittest.TestCase):
+    def load(self,name):
+        from lightyear_data.carddemo.reference_declarations import layout
+        from lightyear_data.carddemo.reference_storage import Memory
+        root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'
+        paths=list(root.rglob(name+'.cpy'));self.assertEqual(1,len(paths),name)
+        raw=paths[0].read_bytes();m=Memory();m.add(layout(raw,str(paths[0])));return m
+    def test_pinned_bms_input_and_output_share_physical_bytes(self):
+        m=self.load('COSGN00');m.write('COSGN0AO.USERIDO','USER0001')
+        self.assertEqual('USER0001',m.read('COSGN0AI.USERIDI'))
+        m.write('COSGN0AI.USERIDL',-1);self.assertEqual(bytes.fromhex('ffff'),m.raw('USERIDL'))
+        self.assertEqual(m.descriptor('COSGN0AI')[1]['offset'],m.descriptor('COSGN0AO')[1]['offset'])
+    def test_menu_overlay_keeps_multiline_values_and_larger_extent(self):
+        m=self.load('COMEN02Y')
+        self.assertEqual(Decimal(11),m.read('CDEMO-MENU-OPT-COUNT'))
+        self.assertEqual('COACTVWC',m.read('CDEMO-MENU-OPT-PGMNAME[1]'))
+        self.assertEqual('COPAUS0C',m.read('CDEMO-MENU-OPT-PGMNAME[11]'))
+        self.assertEqual('Account Update',m.read('CDEMO-MENU-OPT-NAME[2]').strip())
+        self.assertEqual(46*12,m.descriptor('CDEMO-MENU-OPTIONS')[1]['length'])
+    def test_qualifiers_are_resolved_instead_of_discarded(self):
+        from lightyear_data.carddemo.reference_declarations import layout
+        from lightyear_data.carddemo.reference_storage import Memory
+        from lightyear_data.carddemo.reference_values import Values
+        m=Memory();m.add(layout(source("01 A.\n 05 SHARED PIC X(2) VALUE 'AA'.\n01 B.\n 05 SHARED PIC X(2) VALUE 'BB'."),'qualified.cpy'))
+        with self.assertRaises(Unsupported):m.read('SHARED')
+        self.assertEqual('AA',Values(m).value(tokens(source('SHARED OF A'),'expr')))
+        self.assertEqual('BB',Values(m).value(tokens(source('SHARED OF B'),'expr')))
+
+class RawSignonTests(unittest.TestCase):
+    def reference(self):
+        from lightyear_data.carddemo.reference_signon import SignonReference
+        return SignonReference(Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream')
+    def test_initial_and_invalid_fields_execute_pinned_program(self):
+        r=self.reference();initial=r.interact('INITIAL')
+        self.assertEqual('USERID',initial['screen']['cursor'])
+        self.assertEqual('10/17/26',initial['screen']['values']['CURDATE'])
+        self.assertEqual('12:34:56 ',initial['screen']['values']['CURTIME'])
+        blank=r.interact('ENTER',{})
+        self.assertEqual('Please enter User ID ...',blank['screen']['message'])
+        missing_password=r.interact('ENTER',{'USERID':'MISSING'})
+        self.assertEqual('PASSWD',missing_password['screen']['cursor'])
+        self.assertEqual('MISSING ',missing_password['screen']['values']['USERID'])
+        missing_user=r.interact('ENTER',{'USERID':'MISSING','PASSWD':'PASSWORD'})
+        self.assertEqual('User not found. Try again ...',missing_user['screen']['message'])
+        self.assertGreater(len(missing_user['trace']),20)
+    def test_source_password_and_user_type_decide_transfer(self):
+        r=self.reference();m=r.storage();m.write('SEC-USR-ID','TESTUSER');m.write('SEC-USR-PWD','PASSWORD');m.write('SEC-USR-TYPE','U')
+        r.users={'TESTUSER':m.raw('SEC-USER-DATA')}
+        self.assertEqual('COMEN01C',r.interact('ENTER',{'USERID':'testuser','PASSWD':'password'})['program'])
+        wrong=r.interact('ENTER',{'USERID':'TESTUSER','PASSWD':'WRONG'})
+        self.assertEqual('Wrong Password. Try again ...',wrong['screen']['message'])
+        self.assertEqual('WRONG   ',wrong['screen']['values']['PASSWD'])
+        self.assertTrue(r.interact('PF3')['ended'])
+
 if __name__=='__main__':unittest.main()

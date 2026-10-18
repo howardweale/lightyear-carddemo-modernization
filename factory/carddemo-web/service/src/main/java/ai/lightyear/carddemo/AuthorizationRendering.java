@@ -8,7 +8,7 @@ public final class AuthorizationRendering {
     private final Bindings b;private final AuthorizationRecords records;
     public AuthorizationRendering(Bindings bindings){b=bindings;records=new AuthorizationRecords(b);}
     public SourceEdits edits(String program,ScreenFrame frame){
-        SourceEdits e=new SourceEdits(b.root.path("authorization").path(program));e.attachScreen(frame);e.setCondition("ERR-FLG-OFF");return e;
+        SourceEdits e=new SourceEdits(b.root.path("authorization").path(program),b.clock);e.attachScreen(frame);e.setCondition("ERR-FLG-OFF");return e;
     }
     public String selectionField(int ordinal){
         for(JsonNode stmt:b.root.path("authorization").path("COPAUS0C").path("paragraphs").path("ROW-"+ordinal))

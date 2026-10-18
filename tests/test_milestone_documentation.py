@@ -31,14 +31,17 @@ class MilestoneDocumentationTests(unittest.TestCase):
         supplemental = manifest["supplemental_artifacts"]
         self.assertEqual([a["path"] for a in supplemental], [
             f"docs/milestones/MS-{number}/MS-{number}.{suffix}"
-            for number in range(73, 109) for suffix in ("md", "docx", "pdf")])
+            for number in range(73, 109) for suffix in ("md", "docx", "pdf")] + [
+                "docs/milestones/MS-109/MS-109.md",
+                "docs/milestones/MS-107/as-of-2026-10-17.md",
+                "docs/milestones/MS-108/as-of-2026-10-17.md"])
         for artifact in supplemental:
             data = (ROOT / artifact["path"]).read_bytes()
             self.assertEqual(len(data), artifact["bytes"])
             self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
-        self.assertEqual(manifest["supplemental_milestone_count"], 36)
-        self.assertEqual(manifest["searchable_milestone_count"], 106)
+        self.assertEqual(manifest["supplemental_milestone_count"], 37)
+        self.assertEqual(manifest["searchable_milestone_count"], 107)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
@@ -64,10 +67,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 213)
+        self.assertEqual(readme.count("https://github.com/"), 214)
         self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 106)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 106)
+        self.assertEqual(page.count('class="milestone"'), 107)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -77,6 +80,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertIn("sap ase", page.lower())
         self.assertIn("lightyear-reversed.svg", page)
         self.assertIn("#7d57ea", page.lower())
+        for number in (107,108):
+            self.assertIn(f"MS-{number}/as-of-2026-10-17.md", readme)
+            self.assertIn(f"MS-{number}/as-of-2026-10-17.md", page)
+        self.assertIn("/MS-109/MS-109.md", page)
         self.assertIn("Where context becomes trusted action", readme)
 
         github_paths = re.findall(
@@ -108,7 +115,13 @@ class MilestoneDocumentationTests(unittest.TestCase):
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         parsed = Rows(); parsed.feed(page)
         later = [row for row in parsed.rows if row["dataset"]["phase"] == "implementation"]
-        self.assertEqual(36, len(later))
+        # MS-109 is Markdown-only but belongs in the implementation index.
+        expected_later_urls = [
+            "https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/"
+            f"docs/milestones/MS-{number}/MS-{number}.md"
+            for number in range(73, 110)
+        ]
+        self.assertCountEqual(expected_later_urls, [row["url"] for row in later])
         script = re.search(r"<script>(.*?)</script>", page, re.DOTALL).group(1)
         harness = r'''const vm = require('node:vm');
 const fs = require('node:fs');
@@ -131,6 +144,7 @@ search.value='MCP recovery'; search.apply(); result.recovery=visible();
 search.value='Signed Factory'; search.apply(); result.authority=visible();
 search.value='Release safeguards'; search.apply(); result.releaseSafeguards=visible();
 search.value='CardDemo PostgreSQL'; search.apply(); result.carddemoData=visible();
+search.value='retained evidence'; search.apply(); result.retainedEvidence=visible();
 search.value=''; phase.value='implementation'; phase.apply(); result.later=visible();
 phase.value='foundation'; phase.apply(); result.foundation=visible();
 console.log(JSON.stringify(result));'''
@@ -138,9 +152,9 @@ console.log(JSON.stringify(result));'''
                                 capture_output=True, text=True, check=False)
         self.assertEqual(0, result.returncode, result.stderr)
         output = json.loads(result.stdout)
-        for key, number in [("initial",79),("decidability",80),("cancellation",78),("pr214",83),("pr215",84),("recovery",105),("authority",106),("releaseSafeguards",107),("carddemoData",108)]:
+        for key, number in [("initial",79),("decidability",80),("cancellation",78),("pr214",83),("pr215",84),("recovery",105),("authority",106),("releaseSafeguards",107),("carddemoData",108),("retainedEvidence",109)]:
             self.assertTrue(any(f"/MS-{number}/MS-{number}.md" in url for url in output[key]), (key, output))
-        self.assertEqual(36, len(output["later"]))
+        self.assertCountEqual(expected_later_urls, output["later"])
         self.assertEqual(10, len(output["foundation"]))
 
     def test_word_companions_bind_their_canonical_markdown(self) -> None:

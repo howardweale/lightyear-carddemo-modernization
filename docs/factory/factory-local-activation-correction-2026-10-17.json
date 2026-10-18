@@ -1,0 +1,30 @@
+{
+  "authorization": "Explicit user instruction in this chat; operation performed by Codex on Howard\u2019s behalf.",
+  "backfill_contract_sha256": "96d0043704ba1029328a1fe8e43cf82362328d3eff4dd57c377abd227d3243fd",
+  "backfill_record_count": 7,
+  "ci_run": 38666017164,
+  "decision_sha256": "b2553d8c1519e2376904c91c30c8dc476597f24ee795f2a59e6e30cf8d58315a",
+  "execution_authorized": false,
+  "operator": "howard",
+  "port": 8769,
+  "public_snapshot_commit": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+  "roles": [
+    "operator",
+    "qualification-approver",
+    "campaign-authorizer",
+    "business-owner"
+  ],
+  "runtime_commit": "5e36903a162c032179be2c97e6cc0cd88e6dcfb3",
+  "schema": "factory-local-activation-correction/1",
+  "scope": "factory",
+  "signed_only": true,
+  "trusted_head": "b2553d8c1519e2376904c91c30c8dc476597f24ee795f2a59e6e30cf8d58315a",
+  "recorded_on": "2026-10-17",
+  "supersedes_record": "docs/factory/factory-local-activation-2026-10-14.json",
+  "backfill_source_commit": "5e36903a162c032179be2c97e6cc0cd88e6dcfb3",
+  "authorized_by": "Howard",
+  "performed_by": "Codex",
+  "new_activation_performed": false,
+  "new_signature_created": false,
+  "clarification": "Historical activation metadata correction only. public_snapshot_commit is the publication snapshot; backfill_source_commit reproduces the signed contract. This does not activate or sign anything."
+}

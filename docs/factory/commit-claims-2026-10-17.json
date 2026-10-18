@@ -33,6 +33,163 @@
       "role": "source",
       "source_path": "docs/factory/equivalence-scale-2026-10-16/POSTTRAN-class-audit.json",
       "source_sha256": "831f53fed65123ad70b2870c7315bbc671a5b58fd023ef2a7180c630e4c06c0f"
+    },
+    {
+      "record": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+      "reference": "5e36903a162c032179be2c97e6cc0cd88e6dcfb3",
+      "commit": "5e36903a162c032179be2c97e6cc0cd88e6dcfb3",
+      "role": "source",
+      "source_path": "docs/factory/tower-backfill-request-2026-10-14.json",
+      "source_sha256": "cf7d6ce4c56345b62cb158f01aed4fc088cfbdfec16e267b0a4f97f0194d66df"
+    },
+    {
+      "record": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+      "reference": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+      "commit": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+      "role": "source",
+      "source_path": "docs/factory/tower-backfill-request-2026-10-14.json",
+      "source_sha256": "cf7d6ce4c56345b62cb158f01aed4fc088cfbdfec16e267b0a4f97f0194d66df"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "2d62f3652f5cc9d8c874834af88d98be7b92a83f",
+      "commit": "2d62f3652f5cc9d8c874834af88d98be7b92a83f",
+      "role": "ancestor",
+      "descendant": "78d2f80a1f33956dc1cffb6f876c7591da1a1692"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "78d2f80a1f33956dc1cffb6f876c7591da1a1692",
+      "commit": "78d2f80a1f33956dc1cffb6f876c7591da1a1692",
+      "role": "merge",
+      "parents": [
+        "46b7b4e3e8f6b629efefaa23efd0b9aa5f88d22a",
+        "2d62f3652f5cc9d8c874834af88d98be7b92a83f"
+      ],
+      "head_commit": "2d62f3652f5cc9d8c874834af88d98be7b92a83f",
+      "pr": 354
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "788fe2a885fad665d2f78a7a04872723d27c2061",
+      "commit": "788fe2a885fad665d2f78a7a04872723d27c2061",
+      "role": "ancestor",
+      "descendant": "e5db4321255eb50da2107b3e944abc3eb228d93c"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "e5db4321255eb50da2107b3e944abc3eb228d93c",
+      "commit": "e5db4321255eb50da2107b3e944abc3eb228d93c",
+      "role": "merge",
+      "parents": [
+        "b7c44d07e90b625616078a706bdb6f22972a202a",
+        "788fe2a885fad665d2f78a7a04872723d27c2061"
+      ],
+      "head_commit": "788fe2a885fad665d2f78a7a04872723d27c2061",
+      "pr": 355
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "96c2615399646794159bf6a8e399248e3d68b920",
+      "commit": "96c2615399646794159bf6a8e399248e3d68b920",
+      "role": "ancestor",
+      "descendant": "46b7b4e3e8f6b629efefaa23efd0b9aa5f88d22a"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "46b7b4e3e8f6b629efefaa23efd0b9aa5f88d22a",
+      "commit": "46b7b4e3e8f6b629efefaa23efd0b9aa5f88d22a",
+      "role": "merge",
+      "parents": [
+        "d03dd607624fef39b4dfe6c55ba8014f9df7fc1b",
+        "96c2615399646794159bf6a8e399248e3d68b920"
+      ],
+      "head_commit": "96c2615399646794159bf6a8e399248e3d68b920",
+      "pr": 356
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "89d70b463e372f81abb38da53eacd7e76d95bbc9",
+      "commit": "89d70b463e372f81abb38da53eacd7e76d95bbc9",
+      "role": "ancestor",
+      "descendant": "f0ac25c338e96309803655d7e6d09f5b29b4e3c1"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "f0ac25c338e96309803655d7e6d09f5b29b4e3c1",
+      "commit": "f0ac25c338e96309803655d7e6d09f5b29b4e3c1",
+      "role": "merge",
+      "parents": [
+        "0e5ea5f66fe42cd61205fcdce1810f5af0a64539",
+        "89d70b463e372f81abb38da53eacd7e76d95bbc9"
+      ],
+      "head_commit": "89d70b463e372f81abb38da53eacd7e76d95bbc9",
+      "pr": 357
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "4aaba04befef05d777b1edc4da17087222bde187",
+      "commit": "4aaba04befef05d777b1edc4da17087222bde187",
+      "role": "ancestor",
+      "descendant": "7bbdac9112143b283ed2ea376797d42a1b86954d"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "commit": "7bbdac9112143b283ed2ea376797d42a1b86954d",
+      "role": "merge",
+      "parents": [
+        "f0ac25c338e96309803655d7e6d09f5b29b4e3c1",
+        "4aaba04befef05d777b1edc4da17087222bde187"
+      ],
+      "head_commit": "4aaba04befef05d777b1edc4da17087222bde187",
+      "pr": 358
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "3d793dac626b2c16b983c027d84590b207a615be",
+      "commit": "3d793dac626b2c16b983c027d84590b207a615be",
+      "role": "ancestor",
+      "descendant": "b7c44d07e90b625616078a706bdb6f22972a202a"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "b7c44d07e90b625616078a706bdb6f22972a202a",
+      "commit": "b7c44d07e90b625616078a706bdb6f22972a202a",
+      "role": "merge",
+      "parents": [
+        "78d2f80a1f33956dc1cffb6f876c7591da1a1692",
+        "3d793dac626b2c16b983c027d84590b207a615be"
+      ],
+      "head_commit": "3d793dac626b2c16b983c027d84590b207a615be",
+      "pr": 359
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "70aa78b8743988445791d8633e9a23ea240500eb",
+      "commit": "70aa78b8743988445791d8633e9a23ea240500eb",
+      "role": "source",
+      "source_path": "tools/cms/f0_layout.py",
+      "source_sha256": "25bf7499a2a407d61565def7fcf08236fe1052ce1ad7bbe09a5b0bf480afa48b"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "74df8b632caec92b31997f637683690751badae7",
+      "commit": "74df8b632caec92b31997f637683690751badae7",
+      "role": "ancestor",
+      "descendant": "5f50acac88abe371c4a2a0b2e10b55d00ee6923f"
+    },
+    {
+      "record": "docs/milestones/MS-109/evidence-2026-10-17.json",
+      "reference": "5f50acac88abe371c4a2a0b2e10b55d00ee6923f",
+      "commit": "5f50acac88abe371c4a2a0b2e10b55d00ee6923f",
+      "role": "merge",
+      "parents": [
+        "e5db4321255eb50da2107b3e944abc3eb228d93c",
+        "74df8b632caec92b31997f637683690751badae7"
+      ],
+      "head_commit": "74df8b632caec92b31997f637683690751badae7",
+      "pr": 361
     }
   ]
 }

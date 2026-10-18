@@ -432,6 +432,20 @@
         "docx",
         "pdf"
       ]
+    },
+    {
+      "number": 109,
+      "path": "MS-109/MS-109.md",
+      "title": "Retained evidence, scoped equivalence and POSTTRAN handoff",
+      "customer_value": "Separate completed public-source implementation from outstanding evidence, signatures and execution authority.",
+      "status": "PRs 354\u2013359 and 361 merged; PR360 remains draft; release and execution remain gated",
+      "formats": [
+        "md"
+      ]
     }
+  ],
+  "addenda": [
+    "MS-107/as-of-2026-10-17.md",
+    "MS-108/as-of-2026-10-17.md"
   ]
 }

@@ -1,7 +1,7 @@
 """Verify newly quoted commit references against explicit, machine-checkable claims.
 
-Only changed lines in current/new records are checked. Preserved records dated
-before the policy start stay untouched. Git metadata and blobs are read only.
+Only added lines are checked; a filename date cannot exempt a new claim.
+Unchanged historical bytes stay untouched. Git metadata and blobs are read only.
 """
 import argparse
 from hashlib import sha256
@@ -10,7 +10,6 @@ from pathlib import Path
 import re
 import subprocess
 
-START = '2026-10-17'
 CLAIMS = 'docs/factory/commit-claims-2026-10-17.json'
 REF = re.compile(r'(?<![A-Za-z0-9])([0-9a-f]{7,40})(?![A-Za-z0-9])')
 
@@ -50,8 +49,25 @@ def validate_claim(root,claim):
     return commit
 
 
-def references(lines):
-    return {m[1] for line in lines for m in REF.finditer(line) if re.search('[a-f]',m[1])}
+def references(lines, *, record=''):
+    lines = list(lines)
+    hashes = set(re.findall(r'(?<![A-Za-z0-9])[0-9a-f]{64}(?![A-Za-z0-9])', record+'\n'+'\n'.join(lines)))
+    result = set()
+    for line in lines:
+        for match in REF.finditer(line):
+            ref = match[1]
+            if not re.search('[a-f]', ref):
+                continue
+            before = line[:match.start()]
+            # Explicit hash labels identify abbreviations without guessing from
+            # unrelated words elsewhere on a line containing several claims.
+            hash_label = re.search(r'(?:sha-?256|checksum|digest|content[ _-]hash)(?:[ _-]prefix)?["\'`:= \t]*$', before, re.I)
+            commit_label = re.search(r'(?:commit|revision|head|ancestor|parent)["\'`:= \t]*$', before, re.I)
+            known_hash_prefix = len(ref) <= 12 and any(h.startswith(ref) for h in hashes)
+            if hash_label or (known_hash_prefix and not commit_label):
+                continue
+            result.add(ref)
+    return result
 
 
 def check(root,base):
@@ -62,10 +78,10 @@ def check(root,base):
     rows=[]
     for name in names:
         if name==CLAIMS:continue
-        dates=re.findall(r'20\d\d-\d\d-\d\d',Path(name).name)
-        if dates and max(dates)<START:continue
         patch=git(root,'diff','--unified=0',base,'HEAD','--',name).decode('utf-8')
-        refs=references(line[1:] for line in patch.splitlines() if line.startswith('+') and not line.startswith('+++'))
+        added=[line[1:] for line in patch.splitlines() if line.startswith('+') and not line.startswith('+++')]
+        record=git(root,'show','HEAD:'+name).decode('utf-8',errors='replace') if added else ''
+        refs=references(added,record=record)
         for ref in sorted(refs):
             resolve(root,ref)
             matches=[c for c in claims if c['record']==name and c['reference']==ref]

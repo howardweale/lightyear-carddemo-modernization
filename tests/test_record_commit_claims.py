@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from tools.check_record_commit_claims import check,validate_claim,CLAIMS,resolve
+from tools.check_record_commit_claims import check,validate_claim,CLAIMS,resolve,references
 
 
 class RecordCommitTests(unittest.TestCase):
@@ -32,17 +32,46 @@ class RecordCommitTests(unittest.TestCase):
 
     def test_new_record_requires_specific_claim_and_historical_record_is_untouched(self):
         directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        (directory/'preserved-2026-10-16.md').write_text('Historical unresolved `ffffffff`.\n')
+        self.commit('preserved historical record')
+        baseline=self.git('rev-parse','HEAD').strip()
         name='docs/factory/receipt-2026-10-17.md'
         (self.root/name).write_text('Source revision `'+self.base+'`.\n')
-        (directory/'preserved-2026-10-16.md').write_text('Historical unresolved `ffffffff`.\n')
         self.commit('new records')
-        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,baseline)
         (self.root/CLAIMS).write_text(json.dumps(dict(claims=[dict(self.claim,record=name)])))
         self.commit('bound source claim')
-        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(1,len(check(self.root,baseline)))
 
     def test_resolving_wrong_commit_does_not_validate_claim(self):
         (self.root/'source.txt').write_bytes(b'different\n');self.commit('changed source')
         head=self.git('rev-parse','HEAD').strip()
         with self.assertRaisesRegex(ValueError,'source-mismatch'):
             validate_claim(self.root,dict(self.claim,reference=head,commit=head))
+
+    def test_full_content_hash_and_its_short_prefix_are_not_commit_claims(self):
+        content='abcdef12'+'3'*56
+        self.assertEqual(set(),references([content]))
+        self.assertEqual(set(),references(['Evidence digest `abcdef12`.']))
+        self.assertEqual(set(),references(['Archive `abcdef12`.'],record='SHA-256: '+content))
+        self.assertEqual({'abcdef12'},references(['Commit `abcdef12`.'],record='SHA-256: '+content))
+        self.assertEqual({'deadbeef'},references(['SHA-256: '+content+'; head `deadbeef`.']))
+        self.assertEqual({'abcdef12'},references(['Unlabelled revision `abcdef12`.']))
+
+    def test_new_past_dated_record_still_requires_a_claim(self):
+        name='docs/factory/new-record-2020-01-01.md'
+        (self.root/name).parent.mkdir(parents=True)
+        (self.root/name).write_text('Source commit `'+self.base+'`.\n')
+        self.commit('new record with old date')
+        with self.assertRaisesRegex(ValueError,'claim-required'):
+            check(self.root,self.base)
+        (self.root/CLAIMS).write_text(json.dumps(dict(claims=[dict(self.claim,record=name)])))
+        self.commit('bind source')
+        self.assertEqual(1,len(check(self.root,self.base)))
+
+    def test_hash_prefix_record_does_not_need_git_resolution(self):
+        name='docs/factory/hash-record-2020-01-01.json'
+        (self.root/name).parent.mkdir(parents=True)
+        (self.root/name).write_text(json.dumps({'sha256':'abcdef12'+'3'*56,'display':'abcdef12'}))
+        self.commit('content hash record')
+        self.assertEqual([],check(self.root,self.base))

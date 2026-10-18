@@ -6,6 +6,8 @@ on:
       - 'tools/*equivalence*'
       - 'tests/test_equivalence_automation.py'
       - 'tests/test_equivalence_projection.py'
+      - 'docs/factory/equivalence-scale-supersession-2026-10-17/**'
+      - 'src/lightyear_control_tower/factory_supersessions.py'
       - '.github/workflows/equivalence-automation.yml'
       - 'docs/factory/equivalence-automation*'
       - 'docs/factory/equivalence-scale-2026-10-16/**'

@@ -2,6 +2,9 @@ name: Equivalence byte storage
 on:
   pull_request:
     paths:
+      - 'spec/mainframe/public-source/**'
+      - 'spec/mainframe/copybooks/**'
+      - 'src/lightyear_mainframe/equivalence_automation.py'
       - 'src/lightyear_mainframe/equivalence_storage.py'
       - 'src/lightyear_mainframe/equivalence_dataflow.py'
       - 'src/lightyear_mainframe/source.py'
@@ -10,6 +13,8 @@ on:
       - 'tests/test_equivalence_storage.py'
       - 'tests/test_equivalence_dataflow.py'
       - '.github/workflows/equivalence-storage.yml'
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

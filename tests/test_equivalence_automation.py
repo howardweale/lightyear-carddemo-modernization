@@ -236,3 +236,13 @@ class NegativeZeroTests(unittest.TestCase):
         self.assertNotEqual(stored_bytes(0,field),stored_bytes(0,field,negative_zero=True))
         packed=dict(field,usage='COMP-3',length=3)
         self.assertEqual(13,stored_bytes(0,packed,negative_zero=True)[-1]&15)
+
+class HeldOutAccountingTests(unittest.TestCase):
+    def test_no_campaign_resolves_no_survivors(self):
+        from tools.run_equivalence_automation import route_counts
+        rows=[dict(id='held-out',route='S1',status='equivalent',individual_review=False,argued=False)]
+        held=route_counts(rows,held_out=True)
+        self.assertEqual(0,sum(r['survivors_resolved'] for r in held.values()))
+        self.assertEqual(0,sum(r['kills'] for r in held.values()))
+        self.assertEqual(1,held['S1']['resolved'])  # Compiler identity only.
+        self.assertEqual(1,route_counts(rows)['S1']['survivors_resolved'])

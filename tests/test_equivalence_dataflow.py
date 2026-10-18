@@ -53,3 +53,17 @@ class DataflowTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+class AreaKindLimitsTests(unittest.TestCase):
+    def test_large_working_storage_and_bounded_fd(self):
+        from lightyear_mainframe.equivalence_dataflow import cells
+        large=span(length=171156)
+        self.assertEqual(171156,len(cells([large],area_kinds={'WS':'WORKING-STORAGE'})))
+        with self.assertRaisesRegex(ValueError,'invalid-byte-span'):cells([large],area_kinds={'WS':'FD'})
+        with self.assertRaisesRegex(ValueError,'invalid-byte-span'):cells([span(32759,2)],area_kinds={'WS':'FD'})
+        with self.assertRaisesRegex(ValueError,'unbound-byte-area-kind'):cells([span()],area_kinds={})
+        graph=sealed(dict(complete=True,unsupported=[],area_kinds={'WS':'WORKING-STORAGE'},nodes=[node('overwrite',writes=[large])]))
+        certificate=dead_store(graph,['overwrite'],[large])
+        self.assertTrue(recheck_dead_store(graph,certificate))
+        changed=sealed(dict(graph,area_kinds={'WS':'FD'}))
+        with self.assertRaises(ValueError):recheck_dead_store(changed,certificate)

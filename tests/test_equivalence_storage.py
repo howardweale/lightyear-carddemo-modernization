@@ -95,3 +95,29 @@ class StorageBoundaryTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+class FileDescriptionAlternativesTests(unittest.TestCase):
+    def test_fd_records_overlay_at_zero_and_widest_wins(self):
+        declarations=[tokenize('       '+line) for line in
+            ('01 REC-A PIC X(10).','01 REC-B PIC X(10).','01 REC-C PIC X(12).')]
+        result=compile_area('FD:F',declarations,kind='FD')
+        self.assertEqual(12,result['length'])
+        self.assertEqual([0,0,0],[v['offset'] for v in result['views']])
+        memory=Memory([result]);memory.write('FD:F:REC-C',b'abcdefghijkl')
+        self.assertEqual(b'abcdefghij',memory.read('FD:F:REC-B'))
+        text='       DATA DIVISION.\n       FILE SECTION.\n       FD F.\n       01 REC-A PIC X(10).\n       01 REC-B PIC X(10).\n       PROCEDURE DIVISION.\n'
+        ir=storage_ir(bound('alternatives.cbl',text),{})
+        self.assertEqual([],ir['unsupported']);self.assertEqual(10,ir['areas'][0]['length'])
+        self.assertEqual([0,0],[v['offset'] for v in ir['areas'][0]['views']])
+
+    def test_public_program_storage_counts_are_golden(self):
+        from pathlib import Path
+        from tools.inspect_equivalence_storage import PROGRAM_PATHS
+        root=Path(__file__).resolve().parents[1]
+        books={p.stem:bound(p.relative_to(root).as_posix(),p.read_text(encoding='utf-8'))
+               for p in sorted((root/'spec/mainframe/copybooks').glob('*.cpy'))}
+        expected={'CBACT04C':(27,136,0),'CBTRN02C':(30,146,0),'CBTRN03C':(27,107,5),
+                  'CBSTM03A':(13,1811,8),'CBSTM03B':(9,33,0)}
+        for program,path in PROGRAM_PATHS.items():
+            result=storage_ir(bound(path,(root/path).read_text(encoding='utf-8')),books)
+            self.assertEqual(expected[program],(len(result['areas']),sum(len(a['views']) for a in result['areas']),len(result['unsupported'])),program)

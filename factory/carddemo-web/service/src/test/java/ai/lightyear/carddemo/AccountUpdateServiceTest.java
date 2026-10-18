@@ -25,6 +25,23 @@ class AccountUpdateServiceTest {
         assertEquals("Account Number if supplied must be a 11 digit Non-Zero Number",invalid.screen().message);
         assertEquals("RED",invalid.screen().attributes.get("ACCTSID").get("color"));verifyNoInteractions(db);
     }
+    @Test void missingCrossReferenceRetainsSearchKeyAndClearsOldDetailsBeforeEachRead()throws Exception{
+        var b=bindings();var service=new AccountUpdateService(b);Connection db=mock(Connection.class);
+        var query=mock(java.sql.PreparedStatement.class);var rows=mock(java.sql.ResultSet.class);
+        when(db.prepareStatement(anyString())).thenReturn(query);when(query.executeQuery()).thenReturn(rows);when(rows.next()).thenReturn(false);
+        var layout=b.root.path("program_commareas").path("COACTUPC");var area=new Commarea(layout,null);
+        var prior=service.interact(db,area,"INITIAL",Map.of()).screen();
+        for(String account:java.util.List.of("99999999999","88888888888")){
+            area.set("ACUP-OLD-ACCT-ID","12345678901");area.set("ACUP-OLD-GROUP-ID","STALE");
+            var result=service.interact(db,area,"ENTER",Map.of("ACCTSID",account),prior);
+            assertTrue(result.screen().message.contains("not found in Cross ref file"));
+            assertEquals(account,area.get("ACUP-OLD-ACCT-ID"));
+            assertEquals(" ".repeat(area.get("ACUP-OLD-GROUP-ID").length()),area.get("ACUP-OLD-GROUP-ID"));
+            verify(query).setBytes(1,Commarea.encode(account));prior=result.screen();
+        }
+        verify(db,times(2)).prepareStatement(startsWith("SELECT * FROM \"cardxref\""));
+        verify(db,never()).commit();verify(query,never()).executeUpdate();
+    }
     @Test void pf3ReturnsToCallerWithoutReceivingInvalidInput()throws Exception{
         var b=bindings();var service=new AccountUpdateService(b);Connection db=mock(Connection.class);
         var area=new Commarea(b.root.path("program_commareas").path("COACTUPC"),null);

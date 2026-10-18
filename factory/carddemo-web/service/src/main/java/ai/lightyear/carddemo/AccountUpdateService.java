@@ -71,6 +71,7 @@ public final class AccountUpdateService implements TransactionService {
     }
     private void fetch(Connection db,Commarea area,SourceEdits e)throws SQLException{
         String account=e.get("CC-ACCT-ID");area.initialize("ACUP-OLD-DETAILS");e.setCondition("WS-NO-INFO-MESSAGE");
+        area.move("ACUP-OLD-ACCT-ID",account); // COACTUPC 3614: retain search key even when the xref READ fails.
         Map<String,Object> cross=records.readByField(db,"cardxref","XREF-ACCT-ID",Commarea.encode(account));
         if(cross==null){missing(e,account," Cross ref file.  Resp:",false);e.loadArea(area);return;}
         String customer=records.text("cardxref",cross,"XREF-CUST-ID");

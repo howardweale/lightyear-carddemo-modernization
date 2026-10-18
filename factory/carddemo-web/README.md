@@ -110,3 +110,5 @@ API, browser and Java mutation replay also compare every returned COMMAREA byte 
 Run 39108067159 at source head 0517cbab passed the 120-case API proof and 678-interaction browser proof, but its strict PIT result was 607 KILLED / 763 generated (79.55%): 115 SURVIVED, 40 NO_COVERAGE and one TIMED_OUT. PIT's displayed killed count included that timeout; the unsigned receipt correctly excluded it and failed. These are historical results, not acceptance for the strengthened proof. All configured classes, mutants, scenarios and prior assertions remain mandatory; fresh CI must validate this change.
 
 The full returned-state gate also requires the menu first-entry SET CDEMO-PGM-REENTER before SEND/RETURN (COMEN01C lines 86-90). API failures retain both complete expected and observed COMMAREA byte strings for diagnosis; comparison remains exact.
+
+COACTUPC saves the requested account ID in its old-details area before reading the cross-reference (line 3614), including not-found returns. The exact session-state proof retains this search key and the initialized remainder of old details.

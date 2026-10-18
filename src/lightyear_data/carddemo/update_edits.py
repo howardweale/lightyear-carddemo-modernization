@@ -67,7 +67,11 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
     for item in storage['fields']:
         name=item['path'].split('.')[-1]
         if name in fields:fields[name]['storage_bound']=True
-    bound,flags=bind_fields(paragraphs,fields,conditions)
+    # The Java READ-miss path sets this source 88 outside compiled edit paragraphs.
+    # Retain its declaration and parent storage even though those paragraphs do
+    # not reference the NOT-OK sibling (COACTUPC 189, 3768 and 3787).
+    bound,flags=bind_fields(paragraphs,fields,conditions,
+        initial_flags=('INPUT-OK','WS-RETURN-MSG-OFF','FLG-CUSTFILTER-NOT-OK'))
     for name,definition in render_fields.items():
         if name in bound:
             for key in ('screen_field','screen_part','picture'):

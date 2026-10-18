@@ -213,6 +213,12 @@ class WebBindingsTests(unittest.TestCase):
 
     def test_validation_sequence_retains_no_change_confirmation_and_literal_periods(self):
         result=build(ROOT)['account_update']['validation']
+        customer_miss=result['conditions']['FLG-CUSTFILTER-NOT-OK']
+        self.assertEqual('WS-EDIT-CUST-FLAG',customer_miss['parent'])
+        self.assertEqual(["'0'"],customer_miss['values'])
+        self.assertEqual('app/cbl/COACTUPC.cbl',customer_miss['source'])
+        self.assertEqual(189,customer_miss['line'])
+        self.assertEqual(1,result['fields']['WS-EDIT-CUST-FLAG']['length'])
         self.assertIn('1200-EDIT-MAP-INPUTS',result['paragraphs'])
         self.assertIn('1250-EDIT-SIGNED-9V2',result['paragraphs'])
         self.assertEqual(["'No change detected with respect to values fetched.'"],result['conditions']['NO-CHANGES-DETECTED']['values'])

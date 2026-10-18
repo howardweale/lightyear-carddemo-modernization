@@ -39,7 +39,9 @@ class SourceEditsContractTest {
         for(String operator:List.of("=","EQUAL","<>",">","<",">=","<="))for(int n:new int[]{1,2,10}){
             boolean wanted=switch(operator){case "=","EQUAL"->n==2;case "<>"->n!=2;case ">"->n>2;case "<"->n<2;case ">="->n>=2;default->n<=2;};
             Object test=Map.of("op","compare","left",field("N"),"right",number(2),"operator",operator);
-            var e=edits(List.of(Map.of("op","if","test",test,"yes",List.of(move(literal("Y"),field("F"))),"no",List.of(move(literal("N"),field("F")))));
+            Object yes=move(literal("Y"),field("F"));
+            Object no=move(literal("N"),field("F"));
+            var e=edits(List.of(Map.of("op","if","test",test,"yes",List.of(yes),"no",List.of(no))));
             e.put("N",Integer.toString(n));e.run("P");assertEquals(wanted?"Y":"N",e.get("F"),operator+" "+n);
         }
         // Fixed text pads with spaces; numeric DISPLAY invalid-byte comparisons

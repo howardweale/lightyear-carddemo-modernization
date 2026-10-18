@@ -93,9 +93,9 @@ class ScreenReference(SignonReference):
         if self.program_name=='COPAUS2C':m.add(declarations_for(self.raw,self.source,self.root,'LINKAGE'))
         else:m.add(layout(b'       01 DFHCOMMAREA PIC X(32767).\n','reference linkage capacity'))
         return m
-    def interact(self,aid,fields=None,commarea=None):
+    def interact(self,aid,fields=None,commarea=None,prior=None):
         self.memory=self.storage();self.input=fields or {};self.frame=None;self.ended=False;self.next_program=self.program_name;self.returned_area=None
-        self.store.begin();m=self.memory
+        self.prior=deepcopy(prior);self.store.begin();m=self.memory
         if commarea is not None:
             raw=bytes.fromhex(commarea);m.write('DFHCOMMAREA',raw.decode('cp037'));m.write('EIBCALEN',len(raw))
         else:m.write('EIBCALEN',0)
@@ -164,12 +164,16 @@ class ScreenReference(SignonReference):
                 for f in self.model['fields']:
                     name=f['name']
                     if not name:continue
+                    if 'ERASE' not in flags and self.prior and 'values' in self.prior:
+                        if not any(m.raw(name+'O')):self.frame['values'][name]=self.prior['values'][name]
+                        self.frame['attributes'][name]=deepcopy(self.prior['attributes'][name])
                     for suffix in ('A','C'):
                         try:raw=m.raw(name+suffix).decode('cp037')
                         except Unsupported:continue
                         symbol=reverse.get(raw)
                         if suffix=='A' and symbol in BASIC:self.frame['attributes'][name].update(BASIC[symbol])
                         elif suffix=='C' and symbol in COLORS:self.frame['attributes'][name]['color']=COLORS[symbol] or f['color']
+                self.frame['message']=self.frame['values']['ERRMSG'].rstrip(' ')
         else:super().external(items,values)
     def dli(self,operation,o,values):
         m=self.memory;status='  '

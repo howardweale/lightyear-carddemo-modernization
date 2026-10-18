@@ -23,7 +23,7 @@ def main():
         value=json.loads(proof.read_bytes()) if proof.exists() else {};summaries[mode]=value
         ok=value.get('passed') is True and set(value.get('programs_compared',[]))==set(PROGRAMS) and value.get('head')==os.environ.get('GITHUB_SHA')
         gates[mode+'-reference']=dict(passed=ok,programs_compared=len(value.get('programs_compared',[])),programs_required=6,
-            interactions=value.get('interactions_compared',0),cases=value.get('cases',[]),validated_fields=value.get('validated_fields',[]))
+            interactions=value.get('interactions_compared',0),bms_interactions=value.get('bms_interactions_compared',0),completed_cases=value.get('completed_case_count',0),planned_cases=value.get('planned_case_count'),case_denominator_status=value.get('case_denominator_status','not measured'),cases=value.get('cases',[]),validated_fields=value.get('validated_fields',[]))
         if proof.exists():evidence.append(hashed(proof))
         if mode=='browser':
             f=root/'browser'/'summary.json';v=json.loads(f.read_bytes()) if f.exists() else {}
@@ -39,16 +39,19 @@ def main():
         source_head=os.environ.get('SOURCE_HEAD'),tested_commit=os.environ.get('GITHUB_SHA'),run_id=os.environ.get('GITHUB_RUN_ID'),
         upstream_commit='59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e',gates=gates,hashes=manifests,artifacts=artifact_files,
         scope=dict(programs=PROGRAMS,linked_action='COPAUS2C',baseline='bounded deterministic raw COBOL interpreter',shared_dependencies=['BMS parser','physical data plan and typed projection codec'],data='public VSAM fixture and seven synthetic IMS authorization rows'),
-        quirks=['COACTUPC account rewrite omits ZIP, preserved as source behavior','COMEN01 invalid option emits an error then faults on a table subscript; compare the emitted frame and database, discard that session, and make no continuation claim','BMS external constants use private symbolic bytes, not a native 3270 wire encoding','CSUTLDTC executes from pinned source; its CEEDAYS port models documented Gregorian YYYYMMDD feedback and Lilian epoch; native LE execution remains absent','SEND TEXT terminal responses have no BMS fields; complete text and ended state are compared'],
+        quirks=['COACTUPC account rewrite omits ZIP, preserved as source behavior','COMEN01 invalid option emits an error then faults on a table subscript; compare the emitted frame and database, discard that session, and make no continuation claim','BMS external constants use private symbolic bytes, not a native 3270 wire encoding','CSUTLDTC executes from pinned source; its CEEDAYS port models documented Gregorian YYYYMMDD feedback and Lilian epoch; native LE execution remains absent','SEND TEXT terminal responses have no BMS fields; complete text and ended state are compared','Menu options 3-10 route to one not-in-this-slice endpoint; those destination services and their screens are excluded, and boundary interactions are counted separately'],
         not_covered=['other fifteen maps and their services','native CICS, IMS and DB2 execution','production unloads or production data','release or z/OS acceptance','real signatures, import, activation or Phase 2'],
         factory_request=dict(status='unsigned-review-request',reviewer='Howard',action='review evidence and remaining gaps',signature=None,activation_authorized=False,phase2_authorized=False))
     # Require measured source-fault and date-boundary cases; missing results never count as passed.
     record['remaining_evidence_gaps']=[name for name,gate in gates.items() if not gate['passed']]
     for mode,value in summaries.items():
+        if len(value.get('navigation_boundaries',[]))!=8:record['remaining_evidence_gaps'].append(mode+': missing outside-menu boundaries')
         if not value.get('source_faults'):record['remaining_evidence_gaps'].append(mode+': missing invalid-menu source-fault evidence')
         required={'leap-day-valid','leap-day-invalid'}
         if not required<={c['id'] for c in value.get('cases',[]) if c['status']=='passed'}:record['remaining_evidence_gaps'].append(mode+': missing bounded-date cases')
     record['acceptance_complete']=passed and not record['remaining_evidence_gaps']
+    record['status']='proved-in-ci' if record['acceptance_complete'] else 'incomplete'
+    record['navigation_boundaries']=summaries.get('api',{}).get('navigation_boundaries',[])
     payload=(json.dumps(record,indent=2,sort_keys=True)+'\n').encode();name='carddemo-slice-1-2026-10-18';(args.out/(name+'.json')).write_bytes(payload)
     lines=['# CardDemo slice 1 — unsigned receipt','',f"Status: {record['status']}. Acceptance complete: {record['acceptance_complete']}.",'',f"Source head: {record['source_head']}; tested commit: {record['tested_commit']}.",'','| Gate | Passed | Evidence |','|---|---|---|']
     for name,g in gates.items():lines.append('| '+name+' | '+str(g['passed'])+' | '+json.dumps({k:v for k,v in g.items() if k not in ('cases','results')})+' |')

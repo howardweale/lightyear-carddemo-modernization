@@ -5,6 +5,7 @@ import {execFileSync} from 'node:child_process';
 const cases=JSON.parse(await readFile(process.env.CARDDEMO_CASES,'utf8'));
 const out=process.env.CARDDEMO_BROWSER_OUT;await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});const pages=new Map();const frames=[];
+const remaining=new Map();for(const row of cases)remaining.set(row.session,(remaining.get(row.session)||0)+1);
 let page,last,passed=false;
 function attrs(frame){return Object.fromEntries(Object.entries(frame.attributes).map(([k,a])=>[k,{...a,intensity:a.intensity??(a.basic.includes('BRT')?'BRIGHT':a.hidden?'DARK':'NORMAL'),autoskip:a.autoskip??a.basic.includes('ASKIP')}]))}
 function canonical(value){
@@ -57,7 +58,8 @@ try{
   }
   await page.waitForFunction(()=>!document.querySelector('#keys').hasAttribute('aria-busy'));
   assert.equal(last.ended,row.expected.ended);assert.equal(last.screen.program,row.expected.program);
-  if(row.terminal_text_only){assert.equal(last.screen.message,row.expected.screen.message);assert.equal(await page.locator('#status').textContent(),row.expected.screen.message);assert.equal(await page.locator('#screen').textContent(),'');}
+  if(row.navigation_boundary_only){assert.equal(last.screen.endpoint,'/not-in-this-slice');await compare();}
+  else if(row.terminal_text_only){assert.equal(last.screen.message,row.expected.screen.message);assert.equal(await page.locator('#status').textContent(),row.expected.screen.message);assert.equal(await page.locator('#screen').textContent(),'');}
   else{
    for(const part of ['values','cursor','message'])assert.deepEqual(last.screen[part],row.expected.screen[part],row.case+' '+part);
    assert.deepEqual(attrs(last.screen),attrs(row.expected.screen),row.case+' attributes');await compare();
@@ -70,6 +72,7 @@ try{
   assert.deepEqual(Object.keys(normalized).sort(),Object.keys(row.database).sort());
   for(const table of Object.keys(normalized))assert.deepEqual(normalized[table].map(JSON.stringify).sort(),row.database[table].map(v=>JSON.stringify(canonical(v))).sort(),row.case+' '+table);
   frames.push({case:row.case,session:row.session,aid:row.aid,screen:last.screen,database_after:meta});
+  remaining.set(row.session,remaining.get(row.session)-1);if(!remaining.get(row.session)){await page.close();pages.delete(row.session);}
  }
  passed=true;
 }finally{

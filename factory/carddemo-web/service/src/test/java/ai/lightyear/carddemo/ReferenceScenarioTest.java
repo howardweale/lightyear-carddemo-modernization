@@ -65,8 +65,9 @@ class ReferenceScenarioTest {
                 var response=engine.interact(new InteractionEngine.Request(tokens.get(session),row.path("aid").asText(),fields));tokens.put(session,response.token());
                 JsonNode expected=row.path("expected"),screen=json.valueToTree(response.screen());seen.add(response.screen().program);
                 assertEquals(expected.path("program").asText(),response.screen().program);assertEquals(expected.path("ended").asBoolean(),response.ended());
-                assertEquals(expected.path("screen").path("message").asText(),response.screen().message);
-                if(!row.path("terminal_text_only").asBoolean()){
+                if(row.path("navigation_boundary_only").asBoolean())assertEquals("/not-in-this-slice",response.screen().endpoint);
+                else assertEquals(expected.path("screen").path("message").asText(),response.screen().message);
+                if(!row.path("terminal_text_only").asBoolean()&&!row.path("navigation_boundary_only").asBoolean()){
                     for(String part:List.of("values","cursor"))assertEquals(expected.path("screen").path(part),screen.path(part),row.path("case").asText()+" "+part);
                     assertEquals(attrs(expected.path("screen").path("attributes")),attrs(screen.path("attributes")));
                 }

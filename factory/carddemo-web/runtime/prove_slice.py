@@ -39,6 +39,8 @@ def attributes(frame):
     return result
 def compare_frame(actual,expected):
     assert actual['program']==expected['program'],(actual['program'],expected['program'])
+    if expected.get('outside_slice'):
+        assert actual['endpoint']=='/not-in-this-slice';return
     if expected['ended']:
         assert actual['message']==expected['screen']['message'];return
     for part in ('values','cursor','message'):
@@ -70,13 +72,13 @@ class Engine:
                     # a next COMMAREA or a successful COBOL RETURN.
                     if not str(failure).startswith(('reference storage absent/ambiguous: CDEMO-MENU-OPT-USRTYPE[','nonnumeric reference subscript: CDEMO-MENU-OPT-USRTYPE')) or self.menu.frame is None:raise
                     result=dict(program=previous,screen=self.menu.frame,ended=False,trace=self.menu.trace,commarea=self.area,source_fault=str(failure))
-            else:result=self.adapters[previous].interact(aid,fields,self.area)
+            else:result=self.adapters[previous].interact(aid,fields,self.area,self.frame)
             self.faulted=bool(result.get('source_fault'));self.area=result['commarea'];self.frame=result.get('screen')
             if result['program']==previous or result['ended']:return result
             self.program=result['program']
             if self.program not in PROGRAMS:
                 # A documented slice boundary, never a claim to implement that program.
-                self.program=previous;result['program']=previous;result['outside_slice']=True;return result
+                result['outside_program']=self.program;self.program=previous;result['program']=previous;result['outside_slice']=True;return result
             if not {previous,self.program}<= {'COPAUS0C','COPAUS1C'}:self.area=self.area[:self.common*2]
             aid='INITIAL';fields={}
         raise Unsupported('reference XCTL depth')
@@ -108,6 +110,7 @@ class Proof:
         # SEND TEXT has no BMS map: compare its complete text and ended state,
         # and disclose that there are zero BMS fields in this terminal response.
         if expected['ended']:row['terminal_text_only']=True
+        if expected.get('outside_slice'):row['navigation_boundary_only']=True
         if not self.args.reference_only:
             body=json.dumps(dict(token=self.token,aid=aid,fields=fields)).encode()
             with urllib.request.urlopen(urllib.request.Request(self.args.url+'/api/interaction',body,{'Content-Type':'application/json'}),timeout=30) as response:actual=json.load(response)
@@ -127,6 +130,7 @@ class Proof:
         begin=len(self.rows);self.case_id=name
         try:body();self.cases.append(dict(id=name,status='passed',interactions=len(self.rows)-begin))
         except Exception as error:
+            self.failures.append(dict(case=name,error=type(error).__name__+': '+str(error)))
             self.cases.append(dict(id=name,status='failed',interactions=len(self.rows)-begin,error=type(error).__name__+': '+str(error),traceback=traceback.format_exc()))
             raise
     def run(self):
@@ -143,6 +147,11 @@ class Proof:
                 self.start('menu-'+label);result=self.step('ENTER',{'OPTION':value})
                 assert result['screen']['message'],'invalid menu did not emit validation message'
             self.case('menu-'+label,body)
+        for option in range(3,11):
+            def body(option=option):
+                self.start('menu-outside-'+str(option));result=self.step('ENTER',{'OPTION':str(option)})
+                assert result.get('outside_slice') and result.get('outside_program') not in PROGRAMS
+            self.case('menu-outside-'+str(option),body)
         # Source-shaped invalid search fields, not-found and PF3 at each screen.
         for option,field in [('1','ACCTSID'),('2','ACCTSID'),('11','ACCTID')]:
             for label,value in [('blank',''),('zero','00000000000'),('nonnumeric','XXXXXXXXXXX'),('not-found','99999999999')]:
@@ -195,7 +204,7 @@ class Proof:
             prepare('update-conflict-reader','PROOFGAMMA')
             saved=(self.session,self.token,self.engine.program,self.engine.area,deepcopy(self.current))
             prepare('update-conflict-writer','PROOFDELTA');self.step('PF5',self.inputs());self.step('PF3')
-            self.session,self.token,self.engine.program,self.engine.area,self.current=saved
+            self.session,self.token,self.engine.program,self.engine.area,self.current=saved;self.engine.frame=deepcopy(self.current)
             self.case_id='update-conflict-reader';self.step('PF5',self.inputs())
             assert self.engine.adapters['COACTUPC'].values.condition('DATA-WAS-CHANGED-BEFORE-UPDATE')
             assert not any(e['operation']=='REWRITE' for e in self.engine.store.events);self.step('PF3')
@@ -206,7 +215,8 @@ class Proof:
         (self.out/'cases.json').write_text(json.dumps(self.rows,indent=2,default=str)+'\n')
         (self.out/'summary.json').write_text(json.dumps(dict(schema='carddemo-six-screen-proof/1',passed=passed,
             head=__import__('os').environ.get('GITHUB_SHA'),programs_compared=sorted(self.seen),required_programs=PROGRAMS,
-            cases=self.cases,interactions_compared=len(self.rows),validated_fields=sorted(self.validated_fields),
+            cases=self.cases,interactions_compared=len(self.rows),bms_interactions_compared=sum(not r.get('terminal_text_only') and not r.get('navigation_boundary_only') for r in self.rows),navigation_boundaries=[dict(case=r['case'],destination=r['expected']['outside_program']) for r in self.rows if r.get('navigation_boundary_only')],
+            completed_case_count=len(self.cases),planned_case_count=len(self.cases) if passed else None,case_denominator_status='complete generated suite' if passed else 'not fully enumerated after failure; no completion claim',validated_fields=sorted(self.validated_fields),
             source_faults=[dict(case=r['case'],failure=r['expected']['source_fault'],trace=r['expected']['trace']) for r in self.rows if r['expected'].get('source_fault')],
             bounded_date_cases=['leap-day-invalid','leap-day-valid'],
             shared_dependencies=['BMS parser','physical data plan and typed projection codec'],

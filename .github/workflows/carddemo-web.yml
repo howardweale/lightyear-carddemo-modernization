@@ -184,7 +184,7 @@ jobs:
           if-no-files-found: error
 
   unsigned-receipt:
-    if: always()
+    if: ${{ !cancelled() }}
     needs: [source-and-service-foundation, compose-smoke, full-slice-proof]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -198,6 +198,7 @@ jobs:
           pattern: carddemo-proof-*
           path: work/carddemo-proof-artifacts
       - name: Collect exact-run unsigned receipt, including missing or failed gates
+        if: ${{ !cancelled() }}
         env:
           SOURCE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
           PROOF_JOB_RESULTS: ${{ toJSON(needs) }}

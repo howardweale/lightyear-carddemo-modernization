@@ -6,7 +6,7 @@ Scope: COSGN00, COMEN01, COACTVW, COACTUP, COPAU00 and COPAU01, plus linked COPA
 
 All six stateless Java handlers are registered. They share one PostgreSQL transaction per interaction and a server-verified application session token containing the source-bound COMMAREA and prior terminal state. This application token cannot sign or activate a Factory request. Date, phone, SSN, state/ZIP, FICO and monetary validation and account-update rendering execute source-compiled statements. Account writes acquire both records and retain source change/conflict comparisons. Authorization paging uses parent-qualified segment identity and captured twin order. The linked fraud action and detail replacement share the interaction transaction.
 
-These implementations are undergoing CI validation. Successful component tests are not a claim of full screen equivalence. The independent raw-COBOL reference interpreter, complete generated invalid-field and conflict sessions, every-field/attribute/cursor/message/database comparison through API and Playwright, and a measured screen-handler mutant kill rate of at least 90% remain required. The final dated receipt and Factory request must remain unsigned and must include actual denominators and all gaps.
+These implementations and the six raw-reference adapters are undergoing CI validation. Successful component tests are not a claim of full screen equivalence. The independent raw-COBOL reference interpreter, complete generated invalid-field and conflict sessions, every-field/attribute/cursor/message/database comparison through API and Playwright, and a measured screen-handler mutant kill rate of at least 90% remain required. The final dated receipt and Factory request must remain unsigned and must include actual denominators and all gaps.
 
 ## Disposable public demonstration
 
@@ -32,25 +32,50 @@ The loader checks the generated-source/fixture identity before reuse and refuses
 
 No release, z/OS, evidence acceptance, signing or Phase 2 authority follows from these changes or green CI.
 
-## Independent reference progress
+## Independent six-screen proof and unsigned receipt
 
-The raw-source interpreter has its own declaration/overlay loader and byte
-storage, qualified references, bounded control flow, and COSGN00C/COMEN01C CICS
-adapters. It does not read the Java validation AST or candidate response values
-to compute expected results. BMS model parsing remains a shared dependency.
-Sign-on and menu error cases are compared through HTTP and Playwright, including
-every field/attribute, cursor, message and all PostgreSQL tables after each
-interaction. CI confirmation is pending. This is two of six program adapters,
-not complete P5 acceptance or a screen-handler mutation result.
+The raw-source interpreter has independent declaration/overlay storage, qualified
+references, bounded control flow and CICS/DLI/SQL ports for all six screens,
+the linked COPAUS2C fraud action and CSUTLDTC date wrapper. It does not use the
+Java edit AST or candidate responses to calculate expected results. The BMS
+parser and physical data-plan/typed projection codec are disclosed shared
+dependencies. CI confirmation is required; implementation is not proof.
 
-Compose CI layers `compose.ci.yaml` over the ordinary configuration. Only the
-`reference-ci` profile permits a fixed business/screen clock; session expiration
-retains the real clock. Normal `docker compose up` uses real time. Raw source
-line traces and incomplete denominators remain in the CI artifacts.
+`prove_slice.py` builds source-shaped invalid-field, missing-record, page-boundary,
+no-change, committed/cancelled update, two-session conflict, fraud-toggle and PF3
+sessions. Each API and Playwright interaction compares every field and effective
+attribute, cursor, message and every PostgreSQL table against the raw reference.
+Browser replay uses independent pages for interleaved signed application sessions
+and exercises PF buttons and keyboard shortcuts. SEND TEXT is compared as a
+terminal text response with no BMS fields. Non-ERASE sends preserve terminal
+state according to the map's low-value fields.
 
-Four screen adapters, complete generated sessions and the screen-handler
-mutation denominator remain unfinished. The pinned menu attempts a table lookup
-after sending an invalid-option error; the bounded reference reports an invalid
-subscript instead of inventing a successful source continuation. Valid menu
-navigation is covered by source-level tests; cross-program success/update and
-conflict comparisons still require the remaining adapters.
+The pinned menu emits an invalid-option error and then accesses an invalid table
+subscript. Proof compares that emitted image and database state and records the
+source fault and physical trace; it discards that session without claiming a
+successful COBOL return or fabricating continuation. Options outside slice 1
+remain explicit navigation boundaries. Native CICS behavior remains unobserved.
+
+The CSUTLDTC wrapper executes from pinned source. The bounded CEEDAYS port models
+Gregorian YYYYMMDD and documented feedback numbers and Lilian epoch from
+[IBM CEEDAYS](https://www.ibm.com/docs/en/zos/2.5.0?topic=services-ceedaysconvert-date-lilian-format).
+Valid and invalid leap-day cases are required. This is not native LE execution.
+
+CI uses three separate disposable fixtures for API, browser and mutation proof.
+PIT mutates the six Java handlers and their validation/rendering/write helpers;
+the denominator includes every generated mutation in that configured scope.
+Only KILLED mutations count toward the required 90%; timeouts, uncovered code,
+survivors and errors remain in the denominator. A real-PostgreSQL JVM replay uses
+the same independent reference sessions, rolling back between mutant executions.
+Separate engine tests check commit/rollback calls.
+
+`receipt.py` creates dated Markdown/JSON artifacts with exact source/tested SHAs,
+every gate's result and denominators, source/data/mapping/generator/session hashes,
+quirks, scope and missing evidence. Missing or failed artifacts fail the gate.
+The receipt is an unsigned Factory review request for Howard; it is never signed,
+imported or activated. Final measured results remain pending until CI completes.
+
+Compose CI alone fixes the business clock through `reference-ci`; normal Compose
+uses real time. Session expiration retains real time. The mutation-only Compose
+override publishes PostgreSQL on runner loopback, solely for disposable JVM tests.
+No local test, application, generator or Docker execution was used for this work.

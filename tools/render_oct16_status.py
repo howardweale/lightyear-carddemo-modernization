@@ -9,6 +9,16 @@ from tools.release_status_records import ROOT, inputs, load, render
 from tools.build_release_packet import build
 
 
+def overlay_projections(output, root):
+    # Regenerated rehearsal templates rebind source commits. They are not the
+    # selected published signing contracts; preserve the committed packet here.
+    selected=(root/'docs/factory/appl-result-contract-selection-2026-10-18.json').exists()
+    for path in output.glob('*-2026-10-17.json'):
+        if selected and path.name.startswith('intcalc-') and ('-request-' in path.name or '-signing-order-' in path.name):
+            continue
+        shutil.copyfile(path,root/'docs/factory'/path.name)
+
+
 def main(output):
     output=Path(output)
     # A temporary public-document tree avoids changing the checkout or old status.
@@ -17,7 +27,7 @@ def main(output):
         shutil.copytree(ROOT/'docs',root/'docs')
         for path in ('src/lightyear_control_tower/threshold_evidence.py','src/lightyear_factory/threshold3.py'):
             target=root/path;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/path,target)
-        for path in output.glob('*-2026-10-17.json'):shutil.copyfile(path,root/'docs/factory'/path.name)
+        overlay_projections(output,root)
         value,text=render(load(root))
         value['input_sha256']={p:__import__('hashlib').sha256((root/p).read_bytes()).hexdigest() for p in inputs(root)}
         (output/'current-status-2026-10-17-handoff-refresh.json').write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8',newline='\n')

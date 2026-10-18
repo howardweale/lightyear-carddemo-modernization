@@ -134,3 +134,17 @@ class ContentSupersessionTests(unittest.TestCase):
             root=Path(temp);(root/'docs/factory').mkdir(parents=True)
             with patch('tools.build_release_packet.load',return_value=model):build(root=root)
             self.assertIn('Changed selection',next((root/'docs/factory').glob('howard-decision-packet-*.md')).read_text(encoding='utf-8'))
+
+    def test_status_overlay_preserves_selected_contract_and_packet_bytes(self):
+        from tools.render_oct16_status import overlay_projections
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)/'root';out=Path(temp)/'generated';out.mkdir()
+            folder=root/'docs/factory';folder.mkdir(parents=True)
+            (folder/'appl-result-contract-selection-2026-10-18.json').write_text('{}')
+            names=['intcalc-02-appl-result-class-request-2026-10-17.json','intcalc-signing-order-2026-10-17.json']
+            for name in names:
+                (folder/name).write_bytes(b'committed selected bytes');(out/name).write_bytes(b'rebound rehearsal bytes')
+            (out/'intcalc-review-verdict-2026-10-17.json').write_bytes(b'new measured projection')
+            overlay_projections(out,root)
+            for name in names:self.assertEqual(b'committed selected bytes',(folder/name).read_bytes())
+            self.assertEqual(b'new measured projection',(folder/'intcalc-review-verdict-2026-10-17.json').read_bytes())

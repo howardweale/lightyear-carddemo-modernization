@@ -198,9 +198,15 @@ class Proof:
             assert result['program']=='COPAUS1C','valid selection did not reach authorization detail'
             before=deepcopy(self.engine.store.fraud)
             self.step('PF5',self.inputs());assert self.current['message']=='AUTH MARKED FRAUD...'
-            assert len(self.engine.store.fraud)==len(before)+1
+            marked=deepcopy(self.engine.store.fraud)
+            assert len(marked)==len(before)+1 and marked[:-1]==before
+            assert marked[-1]['auth_fraud']=='F'
+            assert marked[-1]['fraud_rpt_date']==self.engine.adapters['COPAUS1C'].clock.date().isoformat()
             self.step('PF5',self.inputs());assert self.current['message']=='AUTH FRAUD REMOVED...'
-            assert self.engine.store.fraud==before
+            # COPAUS2C retries duplicate INSERT as UPDATE; removal retains the
+            # audit row with AUTH_FRAUD=R, preserving every other payload column.
+            removed=deepcopy(marked);removed[-1]['auth_fraud']='R'
+            assert self.engine.store.fraud==removed
             self.step('PF8',self.inputs());self.step('PF3');self.step('PF3')
         self.case('authorization-pages-and-fraud',authorizations)
         def prepare(name,new_name):

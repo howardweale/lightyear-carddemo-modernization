@@ -300,6 +300,22 @@ class RawRemainingScreenTests(unittest.TestCase):
         m=Memory();m.add(layout(source('01 A.\n 05 BAL PIC +ZZZ,ZZZ,ZZZ.99.\n 05 AMT PIC -zzzzzzz9.99.'),'edited'))
         m.write('BAL',Decimal('-1234.56'));self.assertEqual('-      1,234.56',m.read('BAL'))
         m.write('AMT',Decimal('0'));self.assertEqual('        0.00',m.read('AMT'))
+    def test_raw_no_change_distinguishes_blank_group_from_low_values(self):
+        from lightyear_data.carddemo.reference_screens import AccountUpdateReference
+        from lightyear_data.carddemo.reference_values import Values
+        reference=AccountUpdateReference(self.root);memory=reference.storage()
+        memory.write('ACUP-NEW-DETAILS',memory.read('ACUP-OLD-DETAILS'))
+        memory.write('ACUP-NEW-GROUP-ID','\0'*10)
+        state=Values(memory);machine=Machine(reference.program,state)
+        machine.run('1205-COMPARE-OLD-NEW','1205-COMPARE-OLD-NEW-EXIT')
+        self.assertTrue(state.condition('CHANGE-HAS-OCCURRED'))
+        self.assertFalse(state.condition('NO-CHANGES-DETECTED'))
+        memory.write('ACUP-OLD-GROUP-ID','PROOFGRP');memory.write('ACUP-NEW-GROUP-ID','PROOFGRP')
+        machine.run('1205-COMPARE-OLD-NEW','1205-COMPARE-OLD-NEW-EXIT')
+        self.assertTrue(state.condition('NO-CHANGES-FOUND'))
+        self.assertTrue(state.condition('NO-CHANGES-DETECTED'))
+        self.assertFalse(state.condition('INPUT-ERROR'))
+
     def test_record_store_rollback_restores_all_locked_writes(self):
         from lightyear_data.carddemo.reference_screens import RecordStore
         store=RecordStore([dict(identity='1',keys={'ACCTDAT':b'key'},raw=b'original')]);store.begin()

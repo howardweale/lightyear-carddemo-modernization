@@ -206,8 +206,17 @@ class Proof:
             assert {e['dataset'] for e in self.engine.store.events if e['operation']=='REWRITE'}=={'ACCTDAT','CUSTDAT'}
             self.step('PF3')
         self.case('update-committed',committed)
+        def blank_group_resubmit():
+            self.start('update-postcommit-blank-group','2');self.step('ENTER',{'ACCTSID':self.fixture['account']})
+            assert not self.current['values']['AADDGRP'].strip()
+            self.step('ENTER',self.inputs());state=self.engine.adapters['COACTUPC'].values
+            assert state.condition('ACUP-CHANGES-OK-NOT-CONFIRMED') and not state.condition('INPUT-ERROR')
+            assert not state.condition('NO-CHANGES-DETECTED')
+            assert not any(e['operation']=='REWRITE' for e in self.engine.store.events);self.step('PF3')
+        self.case('update-postcommit-blank-group',blank_group_resubmit)
         def valid_unchanged():
-            self.start('update-valid-no-change','2');self.step('ENTER',{'ACCTSID':self.fixture['account']})
+            self.start('update-valid-no-change','2');self.step('ENTER',{'ACCTSID':self.fixture['synthetic_no_change_account']['account']})
+            assert self.current['values']['AADDGRP'].rstrip()=='PROOFGRP'
             self.step('ENTER',self.inputs());state=self.engine.adapters['COACTUPC'].values
             assert state.condition('NO-CHANGES-DETECTED') and not state.condition('INPUT-ERROR')
             assert not any(e['operation']=='REWRITE' for e in self.engine.store.events);self.step('PF3')
@@ -235,6 +244,7 @@ class Proof:
             completed_case_count=len(self.cases),planned_case_count=len(self.cases) if passed else None,case_denominator_status='complete generated suite' if passed else 'not fully enumerated after failure; no completion claim',validated_fields=sorted(self.validated_fields),
             source_faults=[dict(case=r['case'],failure=r['expected']['source_fault'],trace=r['expected']['trace']) for r in self.rows if r['expected'].get('source_fault')],
             bounded_date_cases=['leap-day-invalid','leap-day-valid'],
+            synthetic_no_change_account=self.fixture['synthetic_no_change_account'],
             synthetic_positive_update_inputs=dict(ACTSSN1='123',ACTSSN2='45',ACTSSN3='6789',ACSSTTE='OR',ACSZIPC='97001',ACSPH2A='206',ACSPH2B='555',ACSPH2C='0102'),
             terminal_projection='Visible null cells are blank; exact symbolic output octets remain in each reference frame.',
             shared_dependencies=['BMS parser','physical data plan and typed projection codec'],

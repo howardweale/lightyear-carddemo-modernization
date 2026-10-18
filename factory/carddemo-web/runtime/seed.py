@@ -54,12 +54,30 @@ def main():
     account=str(value(xl,xm,xref,'XREF-ACCT-ID')).zfill(11)
     customer=str(value(xl,xm,xref,'XREF-CUST-ID')).zfill(9)
     card=str(value(xl,xm,xref,'XREF-CARD-NUM'))
+    # A separate, disclosed account exercises the genuine no-change path.
+    # Blank public group IDs become LOW-VALUES on RECEIVE and compare unequal.
+    # Keep every public record byte unchanged; clone only account/xref identities.
+    no_change_account='90000000001';no_change_card='9000000000000001'
+    al,am=lookup['acctdata']
+    original=next(raw for raw in public['acctdata'] if str(value(al,am,raw,'ACCT-ID')).zfill(11)==account)
+    def amended(mapping,raw,changes):
+        result=bytearray(raw)
+        for name,v in changes.items():
+            f=field(mapping,name)
+            if not f['digits']:v=str(v).ljust(f['length'])
+            result[f['offset']:f['offset']+f['length']]=encode_field(f,v,{},'cp037')
+        return bytes(result)
+    extra_account=amended(am,original,{'ACCT-ID':no_change_account,'ACCT-GROUP-ID':'PROOFGRP'})
+    extra_xref=amended(xm,xref,{'XREF-ACCT-ID':no_change_account,'XREF-CARD-NUM':no_change_card})
+    assert all(str(value(al,am,raw,'ACCT-ID')).zfill(11)!=no_change_account for raw in public['acctdata'])
+    assert all(str(value(xl,xm,raw,'XREF-CARD-NUM'))!=no_change_card for raw in public['cardxref'])
     ul,um=lookup['usrsec']
     user=next(r for r in public['usrsec'] if value(ul,um,r,'SEC-USR-TYPE')=='U')
     receipt=dict(schema='carddemo-compose-fixture/1',identity=identity,account=account,customer=customer,card=card,
         user=value(ul,um,user,'SEC-USR-ID').strip(),password=value(ul,um,user,'SEC-USR-PWD').strip(),
         public_records={k:len(v) for k,v in public.items()},synthetic_authorizations=7,
-        scope='Public VSAM records plus generated IMS fixtures; not an IMS unload or native execution',
+        synthetic_no_change_account=dict(account=no_change_account,card=no_change_card,customer=customer,group='PROOFGRP',records=['acctdata','cardxref']),
+        scope='Public VSAM records plus generated IMS fixtures and a disclosed synthetic no-change account/xref pair; not an IMS unload or native execution',
         screen_equivalence_verified=False)
     with psycopg.connect(dsn) as db:
         db.execute('CREATE TABLE IF NOT EXISTS slice_fixture_identity (identity text PRIMARY KEY)')
@@ -74,6 +92,9 @@ def main():
                 store=Store(db,m,layout)
                 for ordinal,raw in enumerate(public[m['table']],1):
                     store.load_one(raw,ordinal,quarantine=False);capture(m,raw,ordinal)
+            for table,layout,m,raw in [('acctdata',al,am,extra_account),('cardxref',xl,xm,extra_xref)]:
+                ordinal=len(public[table])+1
+                Store(db,m,layout).load_one(raw,ordinal,quarantine=False);capture(m,raw,ordinal)
             sl,sm=lookup['pautsum0'];dl,dm=lookup['pautdtl1']
             summary=fixture(sl,sm,{'PA-ACCT-ID':account,'PA-CUST-ID':customer,'PA-APPROVED-AUTH-CNT':7,'PA-APPROVED-AUTH-AMT':'86.38'})
             parent=Store(db,sm,sl).load_one(summary,1,twin_seq=1,quarantine=False)['path_key'];capture(sm,summary,1)

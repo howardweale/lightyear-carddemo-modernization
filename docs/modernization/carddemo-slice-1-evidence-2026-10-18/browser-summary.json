@@ -1,0 +1,16 @@
+{
+  "schema": "carddemo-browser-proof/1",
+  "head": "47c585cb0be676e965950d8bc570ba6aa82b269f",
+  "passed": true,
+  "interactions_compared": 678,
+  "interactions_required": 678,
+  "programs_compared": [
+    "COSGN00C",
+    "COMEN01C",
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "full_slice_screen_equivalence": true
+}

@@ -6,7 +6,7 @@ Scope: COSGN00, COMEN01, COACTVW, COACTUP, COPAU00 and COPAU01, plus linked COPA
 
 All six stateless Java handlers are registered. They share one PostgreSQL transaction per interaction and a server-verified application session token containing the source-bound COMMAREA and prior terminal state. This application token cannot sign or activate a Factory request. Date, phone, SSN, state/ZIP, FICO and monetary validation and account-update rendering execute source-compiled statements. Account writes acquire both records and retain source change/conflict comparisons. Authorization paging uses parent-qualified segment identity and the pinned DBD unique sequence key. The linked fraud action and detail replacement share the interaction transaction.
 
-These implementations and the six raw-reference adapters are undergoing CI validation. Successful component tests are not a claim of full screen equivalence. The independent raw-COBOL reference interpreter, complete generated invalid-field and conflict sessions, every-field/attribute/cursor/message/database comparison through API and Playwright, and a measured screen-handler mutant kill rate of at least 90% remain required. The final dated receipt and Factory request must remain unsigned and must include actual denominators and all gaps.
+The bounded six-screen proof passed CI run 39127778944: 120 cases and 678 API/browser interactions, with 701 of 768 mutants killed (91.28%) under the unchanged strict 90% rule. See the [unsigned October 18 receipt](../../docs/modernization/carddemo-slice-1-2026-10-18.md) for exact source/tested identities, full retained artifacts, quirks and limitations. Final PR readiness requires fresh checks on the evidence publication commit.
 
 ## Disposable public demonstration
 
@@ -73,7 +73,7 @@ Separate engine tests check commit/rollback calls.
 every gate's result and denominators, source/data/mapping/generator/session hashes,
 quirks, scope and missing evidence. Missing or failed artifacts fail the gate.
 The receipt is an unsigned Factory review request for Howard; it is never signed,
-imported or activated. Final measured results remain pending until CI completes.
+imported or activated. The measured result and full artifacts from run 39127778944 are retained in the October 18 receipt; final publication-head checks are separate.
 
 Compose CI alone fixes the business clock through `reference-ci`; normal Compose
 uses real time. Session expiration retains real time. The mutation-only Compose
@@ -115,4 +115,4 @@ COACTUPC saves the requested account ID in its old-details area before reading t
 
 COPAUS0C selected-detail XCTL occurs before GATHER-DETAILS resets the page counter. The transferred COMMAREA retains the current page and complete pagination history; invalid account entry and ordinary gathers still reset the page as the source does.
 
-Run 39119687084 at source head 1c508454 passed the complete API and browser replay, including returned COMMAREA, but strict mutation coverage was 647 KILLED / 768 generated (84.24%): 80 SURVIVED, 40 NO_COVERAGE and one TIMED_OUT. Its unsigned receipt remains incomplete. Added CI-only contract tests cover direct routing state before a following transfer can overwrite it, stale search/page resets, fifth-row selection, missing account/customer masters, reference-modification edges, numeric editing, interpreter returns, raw DISPLAY moves, initialization and bounded execution. Hand-specified language contracts and mocked READ-miss tests supplement the independent raw-source/real-PostgreSQL replay; they never generate its expected results. All existing scenarios, comparisons, target classes and the strict 90% denominator remain unchanged. No new mutation score is claimed until fresh CI completes.
+Run 39119687084 at source head 1c508454 passed the complete API and browser replay, including returned COMMAREA, but strict mutation coverage was 647 KILLED / 768 generated (84.24%): 80 SURVIVED, 40 NO_COVERAGE and one TIMED_OUT. Its unsigned receipt remains incomplete. Added CI-only contract tests cover direct routing state before a following transfer can overwrite it, stale search/page resets, fifth-row selection, missing account/customer masters, reference-modification edges, numeric editing, interpreter returns, raw DISPLAY moves, initialization and bounded execution. Hand-specified language contracts and mocked READ-miss tests supplement the independent raw-source/real-PostgreSQL replay; they never generate its expected results. All existing scenarios, comparisons, target classes and the strict 90% denominator remain unchanged. The subsequent run 39127778944 passed at 701 / 768 (91.28%); all 49 survivors, 17 uncovered mutants and one timeout remain explicitly disclosed in the October 18 review.

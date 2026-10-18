@@ -249,3 +249,6 @@ spec/modernization/carddemo-screens/upstream/** -text -whitespace
 
 # The handoff records this public PEM file hash; keep its Git bytes across hosts.
 docs/factory/factory-authority.public.pem text eol=lf
+
+# Preserve the original unsigned CI receipt bytes, including its empty-gap line.
+docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md -text -whitespace

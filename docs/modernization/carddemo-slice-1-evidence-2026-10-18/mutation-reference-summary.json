@@ -1,0 +1,2058 @@
+{
+  "schema": "carddemo-six-screen-proof/1",
+  "passed": true,
+  "head": "47c585cb0be676e965950d8bc570ba6aa82b269f",
+  "programs_compared": [
+    "COACTUPC",
+    "COACTVWC",
+    "COMEN01C",
+    "COPAUS0C",
+    "COPAUS1C",
+    "COSGN00C"
+  ],
+  "required_programs": [
+    "COSGN00C",
+    "COMEN01C",
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "cases": [
+    {
+      "id": "blank-user",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "blank-password",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "wrong-password",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "user-not-found",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-PF1",
+      "status": "passed",
+      "interactions": 4
+    },
+    {
+      "id": "menu-PF24",
+      "status": "passed",
+      "interactions": 4
+    },
+    {
+      "id": "menu-blank",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-zero",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-nonnumeric",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-past-end",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-3",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-4",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-5",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-6",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-7",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-8",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-9",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "menu-outside-10",
+      "status": "passed",
+      "interactions": 3
+    },
+    {
+      "id": "1-blank",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "1-zero",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "1-nonnumeric",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "1-not-found",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "2-blank",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "2-zero",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "2-nonnumeric",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "2-not-found",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "11-blank",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "11-zero",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "11-nonnumeric",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "11-not-found",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "account-view",
+      "status": "passed",
+      "interactions": 5
+    },
+    {
+      "id": "update-AADDGRP-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-AADDGRP-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRCYCR-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRCYCR-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRCYDB-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRCYDB-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRDLIM-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACRDLIM-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSADL1-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSADL1-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSADL2-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSADL2-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSCITY-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSCITY-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSEFTC-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSEFTC-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSFNAM-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSFNAM-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSGOVT-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSGOVT-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSHLIM-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSHLIM-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSLNAM-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSLNAM-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSMNAM-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSMNAM-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPFLG-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPFLG-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1A-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1A-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1B-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1B-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1C-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH1C-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2A-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2A-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2B-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2B-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2C-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSPH2C-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSSTTE-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSSTTE-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSTFCO-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSTFCO-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSTTUS-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSTTUS-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSZIPC-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACSZIPC-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN1-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN1-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN2-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN2-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN3-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACTSSN3-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACURBAL-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-ACURBAL-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBDAY-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBDAY-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBMON-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBMON-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBYEAR-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-DOBYEAR-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPDAY-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPDAY-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPMON-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPMON-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPYEAR-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-EXPYEAR-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNDAY-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNDAY-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNMON-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNMON-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNYEAR-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-OPNYEAR-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISDAY-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISDAY-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISMON-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISMON-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISYEAR-blank",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-RISYEAR-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-no-change",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "leap-day-invalid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "leap-day-valid",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "authorization-pages-and-fraud",
+      "status": "passed",
+      "interactions": 15
+    },
+    {
+      "id": "update-committed",
+      "status": "passed",
+      "interactions": 7
+    },
+    {
+      "id": "update-postcommit-blank-group",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-valid-no-change",
+      "status": "passed",
+      "interactions": 6
+    },
+    {
+      "id": "update-cancelled",
+      "status": "passed",
+      "interactions": 7
+    },
+    {
+      "id": "update-conflict",
+      "status": "passed",
+      "interactions": 14
+    }
+  ],
+  "interactions_compared": 678,
+  "bms_interactions_compared": 666,
+  "navigation_boundaries": [
+    {
+      "case": "menu-outside-3",
+      "destination": "COCRDLIC"
+    },
+    {
+      "case": "menu-outside-4",
+      "destination": "COCRDSLC"
+    },
+    {
+      "case": "menu-outside-5",
+      "destination": "COCRDUPC"
+    },
+    {
+      "case": "menu-outside-6",
+      "destination": "COTRN00C"
+    },
+    {
+      "case": "menu-outside-7",
+      "destination": "COTRN01C"
+    },
+    {
+      "case": "menu-outside-8",
+      "destination": "COTRN02C"
+    },
+    {
+      "case": "menu-outside-9",
+      "destination": "CORPT00C"
+    },
+    {
+      "case": "menu-outside-10",
+      "destination": "COBIL00C"
+    }
+  ],
+  "completed_case_count": 120,
+  "planned_case_count": 120,
+  "case_denominator_status": "complete generated suite",
+  "validated_fields": [
+    "AADDGRP",
+    "ACRCYCR",
+    "ACRCYDB",
+    "ACRDLIM",
+    "ACSADL1",
+    "ACSADL2",
+    "ACSCITY",
+    "ACSEFTC",
+    "ACSFNAM",
+    "ACSGOVT",
+    "ACSHLIM",
+    "ACSLNAM",
+    "ACSMNAM",
+    "ACSPFLG",
+    "ACSPH1A",
+    "ACSPH1B",
+    "ACSPH1C",
+    "ACSPH2A",
+    "ACSPH2B",
+    "ACSPH2C",
+    "ACSSTTE",
+    "ACSTFCO",
+    "ACSTTUS",
+    "ACSZIPC",
+    "ACTSSN1",
+    "ACTSSN2",
+    "ACTSSN3",
+    "ACURBAL",
+    "DOBDAY",
+    "DOBMON",
+    "DOBYEAR",
+    "EXPDAY",
+    "EXPMON",
+    "EXPYEAR",
+    "OPNDAY",
+    "OPNMON",
+    "OPNYEAR",
+    "RISDAY",
+    "RISMON",
+    "RISYEAR"
+  ],
+  "source_faults": [
+    {
+      "case": "menu-blank",
+      "failure": "reference storage absent/ambiguous: CDEMO-MENU-OPT-USRTYPE[0]",
+      "trace": [
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          77
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          79
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          82
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          86
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          87
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          92
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          227
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          93
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          95
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          117
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          122
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          123
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          124
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          125
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          127
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          130
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          131
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          133
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          210
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          240
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          242
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          243
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          244
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          245
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          247
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          248
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          249
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          251
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          253
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          254
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          255
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          257
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          211
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          264
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          276
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          278
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          280
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          282
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          284
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          286
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          288
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          290
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          292
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          294
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          296
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          213
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          215
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          136
+        ]
+      ]
+    },
+    {
+      "case": "menu-zero",
+      "failure": "reference storage absent/ambiguous: CDEMO-MENU-OPT-USRTYPE[0]",
+      "trace": [
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          77
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          79
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          82
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          86
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          87
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          92
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          227
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          93
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          95
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          117
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          122
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          123
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          124
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          125
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          127
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          130
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          131
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          133
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          210
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          240
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          242
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          243
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          244
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          245
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          247
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          248
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          249
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          251
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          253
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          254
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          255
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          257
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          211
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          264
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          276
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          278
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          280
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          282
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          284
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          286
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          288
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          290
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          292
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          294
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          296
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          213
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          215
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          136
+        ]
+      ]
+    },
+    {
+      "case": "menu-nonnumeric",
+      "failure": "nonnumeric reference subscript: CDEMO-MENU-OPT-USRTYPE",
+      "trace": [
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          77
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          79
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          82
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          86
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          87
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          92
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          227
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          93
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          95
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          117
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          122
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          123
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          124
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          125
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          127
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          130
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          131
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          133
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          210
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          240
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          242
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          243
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          244
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          245
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          247
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          248
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          249
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          251
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          253
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          254
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          255
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          257
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          211
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          264
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          276
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          278
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          280
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          282
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          284
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          286
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          288
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          290
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          292
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          294
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          296
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          213
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          215
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          136
+        ]
+      ]
+    },
+    {
+      "case": "menu-past-end",
+      "failure": "reference storage absent/ambiguous: CDEMO-MENU-OPT-USRTYPE[99]",
+      "trace": [
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          77
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          79
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          82
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          86
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          87
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          92
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          227
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          93
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          95
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          117
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          122
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          123
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          124
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          125
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          127
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          130
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          131
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          133
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          210
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          240
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          242
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          243
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          244
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          245
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          247
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          248
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          249
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          251
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          253
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          254
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          255
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          257
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          211
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          264
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          276
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          278
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          280
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          282
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          284
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          286
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          288
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          290
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          292
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          294
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          267
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          269
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          274
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          296
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          213
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          215
+        ],
+        [
+          "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+          136
+        ]
+      ]
+    }
+  ],
+  "bounded_date_cases": [
+    "leap-day-invalid",
+    "leap-day-valid"
+  ],
+  "synthetic_no_change_account": {
+    "account": "90000000001",
+    "card": "9000000000000001",
+    "customer": "000000050",
+    "group": "PROOFGRP",
+    "records": [
+      "acctdata",
+      "cardxref"
+    ]
+  },
+  "synthetic_positive_update_inputs": {
+    "ACTSSN1": "123",
+    "ACTSSN2": "45",
+    "ACTSSN3": "6789",
+    "ACSSTTE": "OR",
+    "ACSZIPC": "97001",
+    "ACSPH2A": "206",
+    "ACSPH2B": "555",
+    "ACSPH2C": "0102"
+  },
+  "terminal_projection": "Visible null cells are blank; exact symbolic output octets remain in each reference frame.",
+  "shared_dependencies": [
+    "BMS parser",
+    "physical data plan and typed projection codec"
+  ],
+  "full_slice_screen_equivalence": true,
+  "terminal_text_contract": "SEND TEXT compares complete message and ended state; no BMS fields exist in that source response",
+  "remaining": []
+}

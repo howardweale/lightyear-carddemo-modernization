@@ -1,0 +1,17 @@
+{
+  "api-summary.json": "aa4204d99be467dd199ae51de10672b36d1c46af91f97ecb0c0ce430e1ce349b",
+  "archives/carddemo-compose-smoke.zip": "5dc32a889a4cb2639434fb6e575009994ee9c30b66506dd4692791f8fb0c01e2",
+  "archives/carddemo-proof-api.zip": "6d63d20e88cb5779ba77f383333d0b3e8941c07f664782dc23a9e5d929dab2bc",
+  "archives/carddemo-proof-browser.zip": "9ce30851691e5e33687489c4fe5f7ee52b703f86af823f2608a9a732639988a4",
+  "archives/carddemo-proof-mutation.zip": "9e308d57dbd0c79186b7f8b98e772f5150bf63d0d62b3dc1c1421a7b7d3cd63b",
+  "archives/carddemo-status-render.zip": "6388a0a216fdd7bc41bec8a3178799c4834fd06597074e06935eb1a8d5b69830",
+  "archives/carddemo-unsigned-receipt.zip": "a42f9df7556e9fd5888caa020e1b591601bc8720af5f42582478a6ccf7408eaf",
+  "archives/carddemo-web-foundation.zip": "cd3bebed5a19c21e5c7f7b64f7c69a5ccb04236a2bbeaac0a2d8621bfe05eb88",
+  "browser-reference-summary.json": "aa4204d99be467dd199ae51de10672b36d1c46af91f97ecb0c0ce430e1ce349b",
+  "browser-summary.json": "81e6369b3a3921da0dae156211cfee09d9a335969fcade1a06454a584cedc51f",
+  "mutation-reference-summary.json": "aa4204d99be467dd199ae51de10672b36d1c46af91f97ecb0c0ce430e1ce349b",
+  "mutation-review.json": "810b1b9ddc728a51739c37aef8bc3567c4c56314b450d9e67094dee75b35e663",
+  "mutations.xml": "949c9a77a5d53b1b2f02b82424c0f18dbb106b387e2e448f0de530e1a60265b9",
+  "original-ci-receipt.md": "b196c3172bbd217cbd77f886f3c7d4ec20de10163ad20f5ae63739c7021ab3d9",
+  "provenance.json": "a8eb2c49b9b42d5405cbb7d7badd3e7b3ff4efc431b9593b47022f0ed49a71cf"
+}

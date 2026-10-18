@@ -1,8 +1,8 @@
 """Byte storage for the raw-source reference, independent of the Java codec.
 
-Physical layouts are independently compiled from pinned declarations by the
-repository copybook reader. No candidate edit AST or candidate values are read.
-The common layout reader remains a disclosed shared dependency of the proof.
+Screen adapters compile pinned declarations with reference_declarations,
+independently of the candidate binding generator. No candidate edit AST or
+candidate values are read. BMS model parsing is still a shared dependency.
 """
 from decimal import Decimal, ROUND_DOWN
 import re

@@ -86,7 +86,7 @@ jobs:
           exit 1
       - name: Exercise six-screen API journey and atomic fraud toggle
         run: python -B factory/carddemo-web/runtime/smoke.py --fixture work/carddemo-compose/fixture.json --out work/carddemo-compose/api
-      - name: Compare sign-on with independently interpreted pinned COBOL
+      - name: Compare sign-on and menu with independently interpreted pinned COBOL
         env:
           PYTHONPATH: src
         run: python -B factory/carddemo-web/runtime/prove_signon.py --out work/carddemo-compose/reference-signon

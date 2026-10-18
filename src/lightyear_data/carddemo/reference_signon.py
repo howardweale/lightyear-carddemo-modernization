@@ -19,10 +19,12 @@ class TransferScreen(Exception):
     def __init__(self,program):self.program=program
 
 class SignonReference:
+    program_name='COSGN00C'
+    mapset='COSGN00'
     def __init__(self,root,clock=None,users=None):
         self.root=Path(root);self.clock=clock or datetime(2026,10,17,12,34,56,tzinfo=timezone.utc);self.users=users or {}
-        self.source=self.find('COSGN00C','.cbl');self.raw=self.source.read_bytes();self.program=Program(self.raw,str(self.source));self.trace=[]
-        self.model=parse(self.find('COSGN00','.bms').read_bytes(),'COSGN00.bms')['maps'][0]
+        self.source=self.find(self.program_name,'.cbl');self.raw=self.source.read_bytes();self.program=Program(self.raw,str(self.source));self.trace=[]
+        self.model=parse(self.find(self.mapset,'.bms').read_bytes(),self.mapset+'.bms')['maps'][0]
     def find(self,name,suffix):
         found=[p for p in self.root.rglob('*') if p.stem==name and p.suffix.lower()==suffix]
         if len(found)!=1:raise Unsupported('reference source absent/ambiguous: '+name)
@@ -48,6 +50,7 @@ class SignonReference:
         protocol="""01 CICS-ENV.
   05 EIBCALEN PIC S9(4) COMP.
   05 EIBAID PIC X.
+  05 EIBRESP PIC S9(9) COMP.
   05 DFHENTER PIC X VALUE X'7D'.
   05 DFHPF3 PIC X VALUE X'F3'.
 """
@@ -64,7 +67,7 @@ class SignonReference:
         except Returned:pass
         except TransferScreen as transfer:self.next_program=transfer.program
         self.trace=machine.trace
-        return dict(program=self.next_program,screen=self.frame,ended=self.ended,trace=self.trace)
+        return dict(program=self.next_program,screen=self.frame,ended=self.ended,trace=self.trace,commarea=m.raw('CARDDEMO-COMMAREA').hex())
     def operands(self,items):
         r=Reader(items);kind=r.pop().text;operation=r.pop().text;options={};flags=[]
         while r.peek():

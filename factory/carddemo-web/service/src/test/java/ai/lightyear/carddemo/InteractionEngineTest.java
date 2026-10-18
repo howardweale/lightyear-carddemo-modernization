@@ -44,6 +44,8 @@ class InteractionEngineTest {
         var menu=new MenuService(b);var invalid=menu.interact(db,area,"ENTER",Map.of("OPTION","XX"));
         assertEquals("XX",invalid.screen().values.get("OPTION"));assertFalse(invalid.screen().message.isEmpty());
         var zero=menu.interact(db,area,"ENTER",Map.of("OPTION","0"));assertEquals("00",zero.screen().values.get("OPTION"));
+        var invalidKey=menu.interact(db,area,"PF1",Map.of("OPTION","11"));
+        assertEquals("OPTION",invalidKey.screen().cursor);assertEquals("11",invalidKey.screen().values.get("OPTION"));assertFalse(invalidKey.screen().message.isEmpty());
         verifyNoInteractions(db);
     }
 

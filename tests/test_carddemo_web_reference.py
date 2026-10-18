@@ -153,4 +153,47 @@ class RawSignonTests(unittest.TestCase):
         self.assertEqual('WRONG   ',wrong['screen']['values']['PASSWD'])
         self.assertTrue(r.interact('PF3')['ended'])
 
+class ReferenceExpandedSourceTests(unittest.TestCase):
+    def test_account_update_copies_keep_original_locations_and_replacements(self):
+        from lightyear_data.carddemo.reference_source import procedure_tokens
+        root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'
+        source_path=root/'app/cbl/COACTUPC.cbl';items=procedure_tokens(source_path.read_bytes(),str(source_path),root)
+        self.assertFalse(any(t.text=='COPY' for t in items))
+        copy_tokens=[t for t in items if t.source.endswith('CSSETATY.cpy')]
+        self.assertGreater(len(copy_tokens),100)
+        self.assertTrue(any(t.text=='FLG-CURR-BAL-NOT-OK' for t in copy_tokens))
+        self.assertTrue(all(t.line>0 for t in copy_tokens))
+        self.assertTrue(any(t.source.endswith('CSUTLDPY.cpy') for t in items))
+    def test_inspect_uses_parallel_character_conversion(self):
+        from lightyear_data.carddemo.reference_declarations import layout
+        from lightyear_data.carddemo.reference_storage import Memory
+        from lightyear_data.carddemo.reference_values import Values
+        m=Memory();m.add(layout(source("01 DATA-A.\n 05 TEXT-A PIC X(4) VALUE 'AB A'."),'fixture'))
+        state=Values(m)
+        raw=source("PROCEDURE DIVISION.\nMAIN.\n INSPECT TEXT-A CONVERTING 'AB' TO 'BA'\n INSPECT TEXT-A REPLACING ALL ' ' BY '0'.")
+        Machine(Program(raw,'inspect'),state).run('MAIN');self.assertEqual('BA0B',m.read('TEXT-A'))
+
+class RawMenuTests(unittest.TestCase):
+    def reference(self):
+        from lightyear_data.carddemo.reference_menu import MenuReference
+        return MenuReference(Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream')
+    def test_menu_rows_and_received_fields_come_from_source(self):
+        r=self.reference();initial=r.interact('INITIAL')
+        self.assertEqual('01. Account View',initial['screen']['values']['OPTN001'].rstrip())
+        self.assertEqual('11. Pending Authorization View',initial['screen']['values']['OPTN011'].rstrip())
+        error=r.interact('PF1',{'OPTION':'11'},initial['commarea'])
+        self.assertEqual('11',error['screen']['values']['OPTION'])
+        self.assertTrue(error['screen']['message'])
+    def test_source_menu_transfers_include_explicit_outside_slice_routes(self):
+        for option,program in [('1','COACTVWC'),('2','COACTUPC'),('11','COPAUS0C'),('3','COCRDLIC')]:
+            with self.subTest(option=option):
+                r=self.reference();initial=r.interact('INITIAL')
+                self.assertEqual(program,r.interact('ENTER',{'OPTION':option},initial['commarea'])['program'])
+        r=self.reference();initial=r.interact('INITIAL')
+        self.assertEqual('COSGN00C',r.interact('PF3',{},initial['commarea'])['program'])
+    def test_invalid_subscript_is_disclosed_instead_of_fabricated(self):
+        r=self.reference();initial=r.interact('INITIAL')
+        with self.assertRaises(Unsupported):r.interact('ENTER',{'OPTION':'00'},initial['commarea'])
+        self.assertIn('valid option number',r.frame['message'])
+
 if __name__=='__main__':unittest.main()

@@ -1,8 +1,9 @@
-"""CI-only API comparisons against raw COSGN00C; five other screens unproved."""
+"""CI-only raw sign-on/menu comparisons; the other four screens remain unproved."""
 import argparse,json,urllib.request
 from pathlib import Path
 from hashlib import sha256
 from lightyear_data.carddemo.reference_signon import SignonReference
+from lightyear_data.carddemo.reference_menu import MenuReference
 from snapshot import snapshot
 
 
@@ -39,11 +40,26 @@ def main():
             expected=reference.interact(case['aid'],case['fields']);actual=request(initial['token'],case['aid'],case['fields'])
             after=compare(actual,expected)
             rows.append(dict(case,initial=expected_initial,expected=expected,database_after=after,initial_database=initial_state))
-        summary=dict(schema='carddemo-screen-comparison/1',passed=True,baseline='raw pinned COSGN00C interpreter with explicit CICS adapter',
-            programs_compared=['COSGN00C'],required_programs=6,interactions_compared=2*len(rows),cases_compared=len(rows),
+        menu=MenuReference(source)
+        regular=None
+        for name,raw in users.items():
+            memory.write('SEC-USER-DATA',raw.decode('cp037'))
+            if memory.read('SEC-USR-TYPE')=='U':
+                regular=dict(USERID=name,PASSWD=memory.read('SEC-USR-PWD'));break
+        assert regular is not None,'Public regular-user fixture absent'
+        for aid,fields in [('PF1',{'OPTION':'11'}),('PF24',{})]:
+            expected_signon=reference.interact('INITIAL');initial=request(None,'INITIAL',{});initial_state=compare(initial,expected_signon)
+            transfer=reference.interact('ENTER',regular);assert transfer['program']=='COMEN01C'
+            expected_initial=menu.interact('INITIAL',commarea=transfer['commarea']);logged_in=request(initial['token'],'ENTER',regular)
+            login_state=compare(logged_in,expected_initial)
+            expected=menu.interact(aid,fields,expected_initial['commarea']);actual=request(logged_in['token'],aid,fields);after=compare(actual,expected)
+            rows.append(dict(id='menu-'+aid.lower(),aid=aid,fields=fields,login=regular,signon=expected_signon,
+                initial=expected_initial,expected=expected,database_after=after,initial_database=initial_state,login_database=login_state))
+        summary=dict(schema='carddemo-screen-comparison/1',passed=True,baseline='raw pinned COSGN00C and COMEN01C interpreter with explicit CICS adapters',
+            programs_compared=['COSGN00C','COMEN01C'],required_programs=6,interactions_compared=sum(3 if 'login' in row else 2 for row in rows),cases_compared=len(rows),
             all_fields_attributes_cursor_message=True,postgres_after_state='all tables unchanged after every interaction',
-            source_sha256=sha256(reference.raw).hexdigest(),fixture_sha256=sha256(data).hexdigest(),
-            full_slice_screen_equivalence=False,screen_handler_mutation_gate=False,remaining=['Five screen adapters','Complete success/update/conflict journeys','Screen-handler mutation denominator'])
+            source_sha256={reference.program_name:sha256(reference.raw).hexdigest(),menu.program_name:sha256(menu.raw).hexdigest()},fixture_sha256=sha256(data).hexdigest(),
+            full_slice_screen_equivalence=False,screen_handler_mutation_gate=False,remaining=['Four screen adapters','Complete success/update/conflict journeys','Screen-handler mutation denominator','Pinned menu indexes an invalid option after displaying the error; reference fails closed at the invalid subscript'])
         (args.out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     finally:
         (args.out/'cases.json').write_text(json.dumps(rows,indent=2)+'\n')

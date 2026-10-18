@@ -97,8 +97,8 @@ class Reader:
         return statements
 
 class Program:
-    def __init__(self,raw,source):
-        items=tokens(raw,source)
+    def __init__(self,raw,source,items=None):
+        items=tokens(raw,source) if items is None else items
         start=next((i+3 for i in range(len(items)-2) if [x.text for x in items[i:i+3]]==['PROCEDURE','DIVISION','.']),None)
         if start is None:raise Unsupported('PROCEDURE DIVISION absent')
         items=items[start:];self.paragraphs={};self.order=[];reader=Reader(items)
@@ -171,6 +171,23 @@ class Machine:
             elif verb=='GO':
                 if len(args)!=2 or args[0].text!='TO':raise Unsupported('GO syntax')
                 raise Transfer(args[1].text)
+            elif verb=='INSPECT':
+                if any(t.text=='CONVERTING' for t in args):
+                    target,tail=self.split(args,'CONVERTING');before,after=self.split(tail,'TO')
+                    before=str(self.state.value(before));after=str(self.state.value(after))
+                    if len(before)!=len(after) or len(set(before))!=len(before):raise Unsupported('reference conversion alphabet')
+                    value=str(self.state.value(target)).translate(str.maketrans(before,after))
+                else:
+                    target,tail=self.split(args,'REPLACING')
+                    if not tail or tail[0].text!='ALL':raise Unsupported('reference INSPECT mode')
+                    before,after=self.split(tail[1:],'BY');before=str(self.state.value(before));after=str(self.state.value(after))
+                    if not before or len(before)!=len(after):raise Unsupported('reference replacement width')
+                    value=str(self.state.value(target)).replace(before,after)
+                self.state.assign(target,value)
+            elif verb=='DIVIDE':
+                numerator,tail=self.split(args,'BY');divisor,tail=self.split(tail,'GIVING');target,remainder=self.split(tail,'REMAINDER')
+                a=Decimal(self.state.value(numerator));b=Decimal(self.state.value(divisor));quotient=int(a/b)
+                self.state.assign(target,Decimal(quotient));self.state.assign(remainder,a-Decimal(quotient)*b)
             elif verb=='INITIALIZE':self.state.initialize(args)
             elif verb=='EXEC':self.state.external(args)
             elif verb=='CALL':self.state.call(args)

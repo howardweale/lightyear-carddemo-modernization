@@ -34,7 +34,23 @@ No release, z/OS, evidence acceptance, signing or Phase 2 authority follows from
 
 ## Independent reference progress
 
-The raw-source interpreter now has its own declaration/overlay loader and byte storage, qualified references, bounded control flow, and a COSGN00C CICS adapter. It does not read the Java validation AST or candidate response values to compute its expected result. Its sign-on cases are compared through HTTP and Playwright, including every field/attribute, cursor, message and all PostgreSQL tables after each interaction. This currently covers one of the six required programs and is awaiting fresh CI validation; it is not full P5 acceptance or a screen-handler mutation result.
+The raw-source interpreter has its own declaration/overlay loader and byte
+storage, qualified references, bounded control flow, and COSGN00C/COMEN01C CICS
+adapters. It does not read the Java validation AST or candidate response values
+to compute expected results. BMS model parsing remains a shared dependency.
+Sign-on and menu error cases are compared through HTTP and Playwright, including
+every field/attribute, cursor, message and all PostgreSQL tables after each
+interaction. CI confirmation is pending. This is two of six program adapters,
+not complete P5 acceptance or a screen-handler mutation result.
 
-Compose CI explicitly layers `compose.ci.yaml` over the ordinary configuration. Only this `reference-ci` profile permits a fixed business/screen clock for reproducible comparisons; session expiration retains the real clock. Normal `docker compose up` uses real time. Raw source line traces and incomplete denominators remain in the CI artifacts.
+Compose CI layers `compose.ci.yaml` over the ordinary configuration. Only the
+`reference-ci` profile permits a fixed business/screen clock; session expiration
+retains the real clock. Normal `docker compose up` uses real time. Raw source
+line traces and incomplete denominators remain in the CI artifacts.
 
+Four screen adapters, complete generated sessions and the screen-handler
+mutation denominator remain unfinished. The pinned menu attempts a table lookup
+after sending an invalid-option error; the bounded reference reports an invalid
+subscript instead of inventing a successful source continuation. Valid menu
+navigation is covered by source-level tests; cross-program success/update and
+conflict comparisons still require the remaining adapters.

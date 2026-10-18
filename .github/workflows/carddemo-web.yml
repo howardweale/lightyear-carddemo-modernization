@@ -39,8 +39,9 @@ jobs:
         env:
           PYTHONPATH: src:tests:.
         run: |
-          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference test_carddemo_web_java_trace -v
+          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference test_carddemo_web_java_trace test_carddemo_web_account_input_trace -v
           python -B tools/check_carddemo_java_trace.py --out work/carddemo-web-bindings/java-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-input-scope.json --out work/carddemo-web-bindings/account-input-trace.json
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
       - uses: actions/setup-java@v5

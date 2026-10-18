@@ -11,8 +11,8 @@ METHOD=r'(?:public|private|protected)\s+(?:static\s+)?[\w<>., ?]+\s+(\w+)\s*\('
 ANNOTATION=re.compile(r'@CobolSource\(program="([^"]+)", paragraph="([^"]+)", lines="(\d+)-(\d+)"\)\s*'+METHOD)
 
 
-def check(root):
-    root=Path(root);scope=json.loads((root/SCOPE).read_bytes())
+def check(root, scope_path=SCOPE):
+    root=Path(root);scope=json.loads((root/scope_path).read_bytes())
     source=(root/scope['source']['path']).read_bytes().replace(b'\r\n',b'\n')
     if sha256(source).hexdigest()!=scope['source']['sha256']:raise ValueError('java-trace-source-hash')
     lines=source.decode().splitlines();mapped=set();methods=set();rows=[];loc=0
@@ -29,7 +29,7 @@ def check(root):
             markers=[i+1 for i,line in enumerate(lines) if line[6:7]!='*' and line[7:72].strip()==paragraph+'.']
             if len(markers)!=1 or start<markers[0]:raise ValueError('java-trace-paragraph')
             # A method cannot claim another paragraph's implementation range.
-            following=[i+1 for i,line in enumerate(lines) if i+1>markers[0] and line[7:8] not in {'',' '} and re.fullmatch(r'[A-Z][A-Z0-9-]*\.',line[7:72].strip()) and line[6:7]!='*']
+            following=[i+1 for i,line in enumerate(lines) if i+1>markers[0] and line[7:8] not in {'',' '} and re.fullmatch(r'[A-Z0-9][A-Z0-9-]*\.',line[7:72].strip()) and line[6:7]!='*']
             if following and end>=min(following):raise ValueError('java-trace-paragraph-range')
             mapped.add(paragraph);methods.add(method)
             rows.append(dict(file=filename,method=method,program=program,paragraph=paragraph,lines=[start,end]))
@@ -42,7 +42,8 @@ def check(root):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,default=Path('.'));p.add_argument('--out',type=Path)
-    args=p.parse_args();value=check(args.root);text=json.dumps(value,indent=2)+'\n'
+    p.add_argument('--scope',default=SCOPE)
+    args=p.parse_args();value=check(args.root,args.scope);text=json.dumps(value,indent=2)+'\n'
     if args.out:args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(text,encoding='utf-8')
     print(text)
 

@@ -270,7 +270,35 @@ public final class SourceEdits {
         put("WS-SEVERITY-N",Integer.toString(feedback.path("severity").asInt()));
         put("WS-MSG-NO-N",Integer.toString(feedback.path("message").asInt()));
     }
-    public void run(String paragraph){JsonNode statements=model.path("paragraphs").path(paragraph);
+    private void runAccountInputRule(String paragraph) {
+        AccountInputRules.Outcome outcome;
+        String flag;
+        if (paragraph.equals("1215-EDIT-MANDATORY")) {
+            String value=get("WS-EDIT-ALPHANUM-ONLY");
+            int length=Integer.parseInt(get("WS-EDIT-ALPHANUM-LENGTH"));
+            outcome=AccountInputRules.validateRequired(value.substring(0,length));
+            flag="WS-EDIT-MANDATORY-FLAGS";
+            put(flag,outcome==AccountInputRules.Outcome.VALID?"\u0000":"B");
+            trace.add(new Location("app/cbl/COACTUPC.cbl",1824));
+        } else if (paragraph.equals("1220-EDIT-YESNO")) {
+            outcome=AccountInputRules.validateYesNo(get("WS-EDIT-YES-NO").charAt(0));
+            flag="WS-EDIT-YES-NO";
+            // A valid Y/N is not overwritten; it is copied into account flags later.
+            if(outcome!=AccountInputRules.Outcome.VALID)
+                put(flag,outcome==AccountInputRules.Outcome.MISSING?"B":"0");
+            trace.add(new Location("app/cbl/COACTUPC.cbl",1856));
+        } else throw new IllegalArgumentException("untranslated-native-rule:"+paragraph);
+        if(outcome==AccountInputRules.Outcome.VALID)return;
+        setCondition("INPUT-ERROR");
+        // Quirk: retain the first error, fixed-width label truncation and space-only trim.
+        if(condition("WS-RETURN-MSG-OFF")) {
+            String suffix=outcome==AccountInputRules.Outcome.MISSING?" must be supplied.":" must be Y or N.";
+            put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
+        }
+    }
+    public void run(String paragraph){
+        if(model.path("native_paragraphs").has(paragraph)){runAccountInputRule(paragraph);return;}
+        JsonNode statements=model.path("paragraphs").path(paragraph);
         if(statements.isMissingNode())throw new IllegalArgumentException("untranslated-edit-paragraph:"+paragraph);
         Map<String,Integer> labels=new HashMap<>();for(int i=0;i<statements.size();i++){
             JsonNode s=statements.get(i);if(s.path("op").asText().equals("label")&&labels.put(s.path("name").asText(),i)!=null)throw new IllegalArgumentException("duplicate-edit-label");}

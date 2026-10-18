@@ -5,7 +5,7 @@ every PostgreSQL table. Expected record writes come from the reference store;
 the shared data-plan/codec projection is explicitly disclosed in the receipt.
 Unsupported reference semantics fail the gate and remain in its denominator.
 """
-import argparse,json,urllib.request,traceback
+import argparse,base64,json,urllib.request,traceback
 from copy import deepcopy
 from itertools import count
 from datetime import date,datetime
@@ -124,6 +124,13 @@ class Proof:
             body=json.dumps(dict(token=self.token,aid=aid,fields=fields)).encode()
             with urllib.request.urlopen(urllib.request.Request(self.args.url+'/api/interaction',body,{'Content-Type':'application/json'}),timeout=30) as response:actual=json.load(response)
             self.token=actual['token'];compare_frame(actual['screen'],expected);assert actual['ended']==expected['ended']
+            if not expected['ended'] and not expected.get('source_fault'):
+                # Inspect the server-issued envelope; authentication is tested separately.
+                # Do not invent a RETURN state at the raw source fault.
+                encoded=self.token.split('.')[0]
+                envelope=json.loads(base64.urlsafe_b64decode(encoded+'='*(-len(encoded)%4)))
+                assert envelope['program']==expected['program']
+                assert base64.b64decode(envelope['commarea']).hex()==expected['commarea'],dict(case=self.case_id,reason='returned COMMAREA differs')
             observed=snapshot(self.out/'database');data=json.loads((self.out/'database'/observed['path']).read_bytes())
             for item in data['authfrds']:item['auth_ts']=datetime.fromisoformat(item['auth_ts']).isoformat(timespec='microseconds').rstrip('0').rstrip('.')
             data={table:sorted([canonical(r) for r in rows],key=lambda r:json.dumps(r,sort_keys=True)) for table,rows in data.items()}

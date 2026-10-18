@@ -73,6 +73,11 @@ try{
    for(const part of ['values','cursor','message'])assert.deepEqual(last.screen[part],row.expected.screen[part],row.case+' '+part);
    assert.deepEqual(attrs(last.screen),attrs(row.expected.screen),row.case+' attributes');await compare();
   }
+  if(!last.ended&&!row.expected.source_fault){
+   const envelope=JSON.parse(Buffer.from(last.token.split('.')[0],'base64url').toString('utf8'));
+   assert.equal(envelope.program,row.expected.program);
+   assert.equal(Buffer.from(envelope.commarea,'base64').toString('hex'),row.expected.commarea,row.case+' returned COMMAREA');
+  }
   const meta=JSON.parse(execFileSync('python',['-B','factory/carddemo-web/runtime/snapshot.py','--out',out+'/database'],{encoding:'utf8'}));
   const state=JSON.parse(await readFile(out+'/database/'+meta.path,'utf8'));
   for(const item of state.authfrds)item.auth_ts=item.auth_ts.replace(' ','T');

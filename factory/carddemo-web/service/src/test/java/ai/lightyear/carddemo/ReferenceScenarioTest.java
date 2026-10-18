@@ -84,7 +84,8 @@ class ReferenceScenarioTest {
                 try{return method.invoke(actual,args);}catch(InvocationTargetException e){throw e.getCause();}
             });
             DataSource ds=mock(DataSource.class);when(ds.getConnection()).thenReturn(wrapped);
-            var engine=new InteractionEngine(b,new SessionToken(new byte[32],b.hash,clock,json),ds,Map.of(
+            var tokenCodec=new SessionToken(new byte[32],b.hash,clock,json);
+            var engine=new InteractionEngine(b,tokenCodec,ds,Map.of(
                 "COSGN00C",new SignonService(b),"COMEN01C",new MenuService(b),"COACTVWC",new AccountViewService(b),
                 "COACTUPC",new AccountUpdateService(b),"COPAUS0C",new AuthorizationListService(b),"COPAUS1C",new AuthorizationDetailService(b)));
             Map<Integer,String> tokens=new HashMap<>();Set<String> seen=new HashSet<>();
@@ -98,6 +99,14 @@ class ReferenceScenarioTest {
                 if(!row.path("terminal_text_only").asBoolean()&&!row.path("navigation_boundary_only").asBoolean()){
                     for(String part:List.of("values","cursor"))assertEquals(expected.path("screen").path(part),screen.path(part),row.path("case").asText()+" "+part);
                     assertEquals(attrs(expected.path("screen").path("attributes")),attrs(screen.path("attributes")));
+                }
+                // Compare raw returned state, including routing and private tails.
+                // A source fault has no proved RETURN; SEND TEXT has no token.
+                if(!response.ended()&&!expected.has("source_fault")){
+                    var returned=tokenCodec.verify(response.token());
+                    assertEquals(expected.path("program").asText(),returned.program());
+                    assertArrayEquals(HexFormat.of().parseHex(expected.path("commarea").asText()),
+                        Base64.getDecoder().decode(returned.commarea()),row.path("case").asText()+" returned COMMAREA");
                 }
                 JsonNode expectedState=expectedDatabase(row);var observed=state(actual);assertEquals(new TreeSet<>(expectedState.propertyNames()),observed.keySet());
                 for(String table:observed.keySet()){

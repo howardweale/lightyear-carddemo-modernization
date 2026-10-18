@@ -8,6 +8,8 @@ public final class SignonService implements TransactionService {
     private final Bindings bindings;private final TypedRecords records;
     public SignonService(Bindings bindings){this.bindings=bindings;this.records=new TypedRecords(bindings);}
     public Result interact(Connection db,Commarea area,String aid,Map<String,String> input)throws SQLException {
+        // COSGN00C owns fresh WORKING-STORAGE; it never copies LK-COMMAREA.
+        area.copyBytes(0,new Commarea(bindings.root.path("program_commareas").path("COSGN00C"),null).bytes());
         ScreenFrame frame=new ScreenFrame(bindings,"COSGN00C");
         if(aid.equals("INITIAL"))return new Result("COSGN00C",frame,false); // lines 80â€“83
         if(aid.equals("PF3")){frame.message=bindings.root.path("common_constants").path("CCDA-MSG-THANK-YOU").asText().stripTrailing();return new Result("COSGN00C",frame,true);} // 88â€“90; caller renders bound CCDA-MSG-THANK-YOU
@@ -24,6 +26,8 @@ public final class SignonService implements TransactionService {
         received.forEach(frame::set);
         String user=received.get("USERID"),password=received.get("PASSWD");
         // Lines 121â€“130: all spaces / all low-values, not trim/blank Unicode rules.
+        // Lines 137-139 execute after even an error SEND: retain submitted ID.
+        area.set("CDEMO-USER-ID",user.toUpperCase(Locale.ROOT));
         if(empty(user))return error(frame,"Please enter User ID ...","USERID");
         if(empty(password))return error(frame,"Please enter Password ...","PASSWD");
         user=user.toUpperCase(Locale.ROOT);password=password.toUpperCase(Locale.ROOT); // 137â€“142

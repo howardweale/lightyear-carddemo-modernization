@@ -36,6 +36,18 @@ class GeneratedBindingsTest {
         assertTrue(update.get("ACUP-OLD-CURR-BAL-N").startsWith("-"));assertEquals(2000,update.bytes().length);
         assertThrows(IllegalArgumentException.class,()->list.set("CDEMO-CPVS-PAGE-NUM","10000"));
     }
+    @Test void initialMenuReturnSetsReentryAndPreservesEveryOtherCommareaByte()throws Exception{
+        Bindings b=bindings();var layout=b.root.path("program_commareas").path("COMEN01C");
+        var area=new Commarea(layout,null);area.set("CDEMO-FROM-PROGRAM","COSGN00C");
+        area.set("CDEMO-FROM-TRANID","CC00");area.set("CDEMO-USER-ID","USER0001");
+        area.set("CDEMO-USER-TYPE","U");area.set("CDEMO-ACCT-ID","50");
+        var expected=new Commarea(layout,area.bytes());expected.set("CDEMO-PGM-CONTEXT","1");
+        var service=new MenuService(b);var first=service.interact(null,area,"INITIAL",Map.of());
+        assertEquals("COMEN01C",first.nextProgram());assertArrayEquals(expected.bytes(),area.bytes());
+        var invalid=service.interact(null,area,"PF1",Map.of("OPTION","11"));
+        assertArrayEquals(expected.bytes(),area.bytes());assertEquals("COMEN01C",invalid.nextProgram());
+        assertEquals(b.root.path("common_constants").path("CCDA-MSG-INVALID-KEY").asText().stripTrailing(),invalid.screen().message);
+    }
     @Test void menuJustificationAndEveryOutsideOptionAreSourceDerived()throws Exception{
         Bindings b=bindings();MenuService menu=new MenuService(b);
         for(int i=1;i<=11;i++){

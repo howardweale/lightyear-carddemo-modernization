@@ -130,7 +130,10 @@ class Proof:
                 encoded=self.token.split('.')[0]
                 envelope=json.loads(base64.urlsafe_b64decode(encoded+'='*(-len(encoded)%4)))
                 assert envelope['program']==expected['program']
-                assert base64.b64decode(envelope['commarea']).hex()==expected['commarea'],dict(case=self.case_id,reason='returned COMMAREA differs')
+                returned=base64.b64decode(envelope['commarea']).hex()
+                if returned!=expected['commarea']:
+                    (self.out/'commarea-mismatch.json').write_text(json.dumps(dict(case=self.case_id,aid=aid,program=expected['program'],expected=expected['commarea'],actual=returned),indent=2)+'\n',encoding='utf-8')
+                assert returned==expected['commarea'],dict(case=self.case_id,reason='returned COMMAREA differs')
             observed=snapshot(self.out/'database');data=json.loads((self.out/'database'/observed['path']).read_bytes())
             for item in data['authfrds']:item['auth_ts']=datetime.fromisoformat(item['auth_ts']).isoformat(timespec='microseconds').rstrip('0').rstrip('.')
             data={table:sorted([canonical(r) for r in rows],key=lambda r:json.dumps(r,sort_keys=True)) for table,rows in data.items()}

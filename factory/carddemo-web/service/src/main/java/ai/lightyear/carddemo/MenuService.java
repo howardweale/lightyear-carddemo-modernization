@@ -17,7 +17,10 @@ public final class MenuService implements TransactionService {
             if(field.isEmpty())throw new IllegalArgumentException("menu-output-unbound");
             frame.set(field,String.format(java.util.Locale.ROOT,"%02d. %s",number,option.path("label").asText()));
         }
-        if(aid.equals("INITIAL"))return new Result("COMEN01C",frame,false);
+        if(aid.equals("INITIAL")){
+            // COMEN01C 86-90 sets REENTER before the first SEND/RETURN.
+            area.set("CDEMO-PGM-CONTEXT","1");return new Result("COMEN01C",frame,false);
+        }
         // COMEN01C receives before EVALUATE EIBAID, even for an invalid PF key.
         String inputOption=frame.receive(input).get("OPTION");frame.set("OPTION",inputOption);
         if(aid.equals("PF3"))return new Result("COSGN00C",frame,false); // 94-95

@@ -49,4 +49,23 @@ class AuthorizationTest {
         assertArrayEquals(area.bytes(),TypedRecordImage.reconstruct(mapping,row));
         set(b,row,"PA-AUTH-FRAUD","F");assertThrows(IllegalArgumentException.class,()->TypedRecordImage.reconstruct(mapping,row));
     }
+    @Test void pythonProjectionNullSignDoesNotBecomeAnInvalidZeroNibble()throws Exception{
+        var b=bindings();var mapping=b.mapping("pautdtl1");Commarea area=new Commarea(mapping,null);
+        area.set("PA-PROCESSING-CODE","123456");area.set("PA-POS-ENTRY-MODE","12");
+        var image=TypedRecordImage.project(mapping,area.bytes());
+        var mapper=JsonMapper.builder().build();
+        var meta=(tools.jackson.databind.node.ObjectNode)mapper.readTree(image.metadata());
+        // Match lightyear_mainframe.records._number -> codec.project, not Java's own format.
+        for(var f:mapping.path("fields"))if(f.path("digits").asInt()>0 && !f.path("signed").asBoolean() && f.path("usage").asText().equals("DISPLAY")){
+            var rep=(tools.jackson.databind.node.ObjectNode)meta.path("representations").path(f.path("path").asText());
+            rep.putNull("sign_code");rep.put("negative_zero",false);
+        }
+        Map<String,Object> row=new LinkedHashMap<>(image.columns());row.put("encoding_meta",mapper.writeValueAsString(meta));row.put("source_sha256",image.sha256());
+        assertArrayEquals(area.bytes(),TypedRecordImage.reconstruct(mapping,row));
+        // A present invalid sign must still be rejected; this is not relaxed numeric validation.
+        var signed=(tools.jackson.databind.node.ObjectNode)meta.path("representations").path(b.field("pautdtl1","PA-AUTH-DATE-9C").path("path").asText());
+        signed.put("sign_code",0);row.put("encoding_meta",mapper.writeValueAsString(meta));
+        assertEquals("record-sign-code",assertThrows(IllegalArgumentException.class,()->TypedRecordImage.reconstruct(mapping,row)).getMessage());
+    }
+
 }

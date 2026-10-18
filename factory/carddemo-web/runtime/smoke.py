@@ -1,11 +1,12 @@
 """Compose API smoke, not the independent screen-equivalence gate."""
 import argparse,json,time,urllib.request,urllib.error
 from pathlib import Path
+from snapshot import snapshot
 
 parser=argparse.ArgumentParser();parser.add_argument('--fixture',type=Path,required=True);parser.add_argument('--url',default='http://127.0.0.1:8080');parser.add_argument('--out',type=Path,required=True);args=parser.parse_args()
-fixture=json.loads(args.fixture.read_bytes());token=None;current=None;frames=[]
+fixture=json.loads(args.fixture.read_bytes());token=None;current=None;frames=[];previous_state=None
 def step(aid,fields=None,program=None):
-    global token,current
+    global token,current,previous_state
     body=json.dumps(dict(token=token,aid=aid,fields=fields or {})).encode()
     request=urllib.request.Request(args.url+'/api/interaction',body,{'Content-Type':'application/json'})
     with urllib.request.urlopen(request,timeout=30) as response:result=json.load(response)
@@ -14,7 +15,13 @@ def step(aid,fields=None,program=None):
     assert set(current['values'])==set(current['attributes'])
     for field in current['model']['fields']:
         if field['name']:assert len(current['values'][field['name']])==field['length'],field['name']
-    frames.append(dict(aid=aid,screen=current,ended=result['ended'],source_hash=result['sourceHash']))
+    after=snapshot(args.out/'database')
+    if previous_state is not None:
+        changed={t for t,h in after['tables'].items() if h!=previous_state['tables'].get(t)}
+        expected={'pautdtl1','authfrds'} if aid=='PF5' and current['program']=='COPAUS1C' else set()
+        assert changed==expected,dict(aid=aid,changed=sorted(changed),expected=sorted(expected))
+    previous_state=after
+    frames.append(dict(aid=aid,screen=current,ended=result['ended'],source_hash=result['sourceHash'],database_after=after))
     return current
 
 def inputs():return {k:v.rstrip(' ') for k,v in current['values'].items() if not current['attributes'][k]['protected']}

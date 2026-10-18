@@ -67,4 +67,36 @@ MAIN.
         with self.assertRaises(Unsupported):Program(source('PROCEDURE DIVISION.\nMAIN.\n ALTER X TO PROCEED TO Y.'),'bad.cbl')
         with self.assertRaises(Unsupported):tokens(b'      -    CONTINUED\n','bad.cbl')
 
+class ReferenceStorageTests(unittest.TestCase):
+    def memory(self):
+        from lightyear_mainframe.records import compile_copybook
+        from lightyear_data.carddemo.reference_storage import Memory
+        raw=source("""01 RECORD-A.
+    05 TEXT-A PIC X(4).
+    05 NUMBER-A REDEFINES TEXT-A PIC 9(4).
+    05 PACKED-A PIC S9(5)V99 COMP-3.
+    05 BINARY-A PIC S9(9) COMP.
+    05 DATE-A.
+        10 YEAR-A PIC 9(4).
+        10 FILLER PIC X VALUE '/'.
+        10 MONTH-A PIC 9(2).
+""").decode()
+        memory=Memory();memory.add(compile_copybook(raw,storage_overlays=True).manifest(),raw);return memory
+    def test_overlay_numeric_encoding_and_source_filler(self):
+        m=self.memory();m.write('TEXT-A','1234');self.assertEqual(Decimal(1234),m.read('NUMBER-A'))
+        m.write('PACKED-A',Decimal('-12.34'));self.assertEqual(bytes.fromhex('0001234d'),m.raw('PACKED-A'))
+        m.write('BINARY-A',Decimal(-123));self.assertEqual(bytes.fromhex('ffffff85'),m.raw('BINARY-A'))
+        m.write('YEAR-A',2026);m.write('MONTH-A',10);self.assertEqual('2026/10',m.read('DATE-A'))
+        m.write_slice('TEXT-A',1,2,'ZZ');self.assertEqual('1ZZ4',m.read('NUMBER-A'))
+    def test_expression_predicate_and_figurative_moves_from_raw_tokens(self):
+        from lightyear_data.carddemo.reference_values import Values
+        m=self.memory();state=Values(m);m.write('TEXT-A','abcd')
+        lex=lambda text:tokens(source(text),'expression.cbl')
+        self.assertEqual('BC',state.value(lex('FUNCTION UPPER-CASE(TEXT-A(2:2))')))
+        self.assertTrue(state.predicate(lex("TEXT-A = 'abcd' OR 'efgh'")))
+        self.assertFalse(state.predicate(lex('TEXT-A IS NUMERIC')))
+        state.assign(lex('TEXT-A'),state.value(lex('LOW-VALUES')));self.assertEqual(b'\x00'*4,m.raw('TEXT-A'))
+        self.assertTrue(state.predicate(lex('TEXT-A = LOW-VALUES')))
+        state.assign(lex('TEXT-A'),state.value(lex('ZEROS')));self.assertEqual('0000',m.read('TEXT-A'))
+
 if __name__=='__main__':unittest.main()

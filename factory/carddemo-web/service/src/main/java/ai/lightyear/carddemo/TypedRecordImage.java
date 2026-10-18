@@ -29,7 +29,8 @@ public final class TypedRecordImage {
             if(value==null)throw new IllegalArgumentException("record-missing-column");
             buffer.set(path,value instanceof byte[] raw?new String(raw,Commarea.EBCDIC):value.toString());
             JsonNode rep=meta.path("representations").path(path);
-            if(rep.has("sign_code")){
+            // Python records null for unsigned DISPLAY and binary fields: no sign to restore.
+            if(rep.hasNonNull("sign_code")){
                 byte[] raw=buffer.bytes();boolean packed=f.path("usage").asText().equals("COMP-3");int index=packed?off+len-1:off+(f.path("sign").asText().equals("LEADING")?0:len-1);
                 int sign=rep.path("sign_code").asInt();if(sign!=12&&sign!=13&&sign!=15)throw new IllegalArgumentException("record-sign-code");
                 raw[index]=(byte)(packed?(raw[index]&240)|sign:(raw[index]&15)|(sign<<4));buffer.copyBytes(index,new byte[]{raw[index]});

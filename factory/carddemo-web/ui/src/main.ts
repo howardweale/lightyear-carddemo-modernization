@@ -33,11 +33,11 @@ function render(frame:Frame):void {
       let at=f.data_offset,remaining=value;
       while(remaining.length){const width=Math.min(remaining.length,frame.model.columns-at%frame.model.columns);
         const label=document.createElement('span');label.textContent=a.hidden?' '.repeat(width):remaining.slice(0,width);
-        if(f.name)label.dataset.field=f.name;label.dataset.hidden=String(a.hidden);label.dataset.value=remaining.slice(0,width);
+        if(f.name){label.dataset.field=f.name;if(frame.cursor===f.name)label.tabIndex=-1;}label.dataset.hidden=String(a.hidden);label.dataset.value=remaining.slice(0,width);
         style(label,f,a,at,width);form.append(label);at+=width;remaining=remaining.slice(width);}
     }
   }
-  if(frame.cursor){const field=Array.from(form.elements).find(e=>e instanceof HTMLInputElement&&e.name===frame.cursor) as HTMLInputElement|undefined;field?.focus();field?.setSelectionRange(0,0);}
+  if(frame.cursor){const field=Array.from(form.querySelectorAll<HTMLElement>('input,span')).find(e=>e instanceof HTMLInputElement?e.name===frame.cursor:e.dataset.field===frame.cursor);field?.focus();if(field instanceof HTMLInputElement)field.setSelectionRange(0,0);}
   status.textContent=frame.endpoint?'This option is not in slice 1.':frame.message;
 }
 async function interact(aid:string):Promise<void>{

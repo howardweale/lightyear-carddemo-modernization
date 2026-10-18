@@ -10,6 +10,10 @@ import re
 
 class Unsupported(ValueError):pass
 
+class Figurative(str):
+    """A COBOL figurative constant repeats to the receiving/comparison width."""
+    pass
+
 @dataclass(frozen=True)
 class Token:
     text:str

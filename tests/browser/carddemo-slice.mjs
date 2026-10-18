@@ -1,8 +1,10 @@
 import {chromium} from 'playwright';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 const fixture=JSON.parse(await readFile(process.env.CARDDEMO_FIXTURE,'utf8'));
 const out=process.env.CARDDEMO_BROWSER_OUT;await mkdir(out,{recursive:true});
+let previousState;
 const browser=await chromium.launch({headless:true});const page=await browser.newPage();let last;const frames=[];
 page.on('response',async response=>{if(response.url().endsWith('/api/interaction')&&response.ok())last=await response.json();});
 async function compare(){
@@ -14,8 +16,10 @@ async function compare(){
     if(!attr.protected){const input=page.locator(`input[name="${field.name}"]`);assert.equal(await input.inputValue(),frame.values[field.name].trimEnd());assert.equal(await input.getAttribute('maxlength'),String(field.length));assert.equal(await input.getAttribute('type'),attr.hidden?'password':'text');}
     else {const spans=page.locator(`[data-field="${field.name}"]`);assert.equal((await spans.evaluateAll(nodes=>nodes.map(n=>n.dataset.value))).join(''),frame.values[field.name]);}
   }
-  if(frame.cursor&&!frame.attributes[frame.cursor]?.protected)assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('name')),frame.cursor);
-  frames.push(frame);
+  if(frame.cursor)assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('name')||document.activeElement?.getAttribute('data-field')),frame.cursor);
+  const state=JSON.parse(execFileSync('python',['-B','factory/carddemo-web/runtime/snapshot.py','--out',out+'/database'],{encoding:'utf8'}));
+  if(previousState)assert.deepEqual(state.tables,previousState.tables,'Read-only browser journey changed database state');
+  previousState=state;frames.push({screen:frame,database_after:state});
 }
 async function aid(name){const response=page.waitForResponse(r=>r.url().endsWith('/api/interaction'));await page.locator(`[data-aid="${name}"]`).click();const r=await response;assert.equal(r.status(),200);last=await r.json();await compare();}
 try{

@@ -3,6 +3,15 @@ on:
   pull_request:
     paths:
       - 'tools/cms/**'
+      - 'tools/legacy_twin/install-pinned.sh'
+      - 'docs/cms/**'
+      - 'tests/test_cms*'
+      - '.github/workflows/cms-pricer-feasibility.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/cms/**'
+      - 'tools/legacy_twin/install-pinned.sh'
       - 'docs/cms/**'
       - 'tests/test_cms*'
       - '.github/workflows/cms-pricer-feasibility.yml'

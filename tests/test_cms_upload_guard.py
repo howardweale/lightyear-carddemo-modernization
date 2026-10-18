@@ -51,3 +51,23 @@ class UploadGuardTests(unittest.TestCase):
         root=Path(__file__).resolve().parents[1]
         value=json.loads((root/"docs/cms/feasibility-ipps-fy2021-ci-2026-10-17.json").read_bytes())
         self.assertEqual(render(value),(root/"docs/cms/diagnostic-audit-correction-2026-10-18.md").read_text(encoding="utf-8"))
+
+
+class CmsWorkflowTriggerTests(unittest.TestCase):
+    def test_main_and_compiler_installer_have_metadata_only_ci(self):
+        import yaml
+        from tools.ci_gate import selected
+        from pathlib import Path
+        root=Path(__file__).resolve().parents[1]
+        config=yaml.load((root/'.github/workflows/cms-pricer-feasibility.yml').read_text(),Loader=yaml.BaseLoader)
+        self.assertEqual(['main'],config['on']['push']['branches'])
+        for event in ('pull_request','push'):
+            rule={'on':{'pull_request':config['on'][event]}}
+            for path in ('tools/legacy_twin/install-pinned.sh','tools/cms/f0_probe.py'):
+                self.assertTrue(selected(rule,[path]),(event,path))
+            self.assertFalse(selected(rule,['unrelated/readme.md']))
+        steps=config['jobs']['compile']['steps']
+        uploads=[s for s in steps if s.get('uses','').startswith('actions/upload-artifact@')]
+        self.assertEqual(['work/cms/f0/public/receipt.json'],[s['with']['path'] for s in uploads])
+        self.assertEqual(['1'],[s['with']['retention-days'] for s in uploads])
+        self.assertFalse(any('--java' in s.get('run','') for s in steps))

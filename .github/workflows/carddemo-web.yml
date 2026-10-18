@@ -1,10 +1,10 @@
 name: CardDemo web slice
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_sql_order.py', 'tools/carddemo_web_gaps.py', 'docs/modernization/carddemo-slice-gaps-*.json', '.github/workflows/carddemo-web.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_sql_order.py', 'tools/carddemo_web_gaps.py', 'docs/modernization/carddemo-slice-gaps-*.json', '.github/workflows/carddemo-web.yml']
 permissions:
   contents: read
 concurrency:
@@ -33,9 +33,10 @@ jobs:
           if-no-files-found: error
       - name: Derive six-screen bindings and linked data dependencies
         env:
-          PYTHONPATH: src:tests
+          PYTHONPATH: src:tests:.
         run: |
-          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference -v
+          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference test_carddemo_web_gaps -v
+          python -B tools/check_carddemo_sql_order.py
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
       - uses: actions/setup-java@v5

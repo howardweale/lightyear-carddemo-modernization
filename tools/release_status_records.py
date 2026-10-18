@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_status_record
+from tools import carddemo_status_record, carddemo_web_gaps
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -44,6 +44,8 @@ def inputs(root=ROOT):
     if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
     web_path=carddemo_status_record.latest(root,'carddemo-slice-receipt/1')
     if web_path:additional.extend([web_path.relative_to(root).as_posix(),carddemo_status_record.web_packet_path(web_path)])
+    gaps=carddemo_web_gaps.latest(root)
+    if gaps:additional.append(gaps.relative_to(root).as_posix())
     carddemo = 'docs/factory/carddemo-data-review-evidence-2026-10-15.json'
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]

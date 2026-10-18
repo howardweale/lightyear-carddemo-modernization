@@ -4,6 +4,8 @@ import hashlib
 import json
 import re
 import subprocess
+import tempfile
+import zipfile
 from datetime import date
 from pathlib import Path
 import urllib.request
@@ -25,18 +27,43 @@ def verify(manifest, output, *, open_url=urllib.request.urlopen):
             raise ValueError('public-retention-url')
         count = 0
         digest = hashlib.sha256()
-        with open_url(asset['url'], timeout=120) as response:
-            for chunk in iter(lambda: response.read(1024*1024), b''):
-                count += len(chunk)
-                if count > asset['bytes']: raise ValueError('public-retention-size')
-                digest.update(chunk)
-        if count != asset['bytes'] or digest.hexdigest() != asset['sha256']:
-            raise ValueError('public-retention-content')
+        with tempfile.SpooledTemporaryFile(max_size=8*1024*1024) as retained:
+            with open_url(asset['url'], timeout=120) as response:
+                for chunk in iter(lambda: response.read(1024*1024), b''):
+                    count += len(chunk)
+                    if count > asset['bytes']: raise ValueError('public-retention-size')
+                    digest.update(chunk)
+                    if 'files' in asset: retained.write(chunk)
+            if count != asset['bytes'] or digest.hexdigest() != asset['sha256']:
+                raise ValueError('public-retention-content')
+            if 'files' in asset:
+                retained.seek(0)
+                verify_inventory(retained, asset['files'])
         rows.append(dict(url=asset['url'], bytes=count, sha256=digest.hexdigest(), verified=True))
     receipt = dict(schema='public-evidence-retention-verification/1',
                    manifest_sha256=hashlib.sha256(Path(manifest).read_bytes()).hexdigest(), assets=rows)
     Path(output).write_text(json.dumps(receipt, indent=2)+'\n', encoding='utf-8')
     return receipt
+
+
+def verify_inventory(archive, expected):
+    """Check every member without extracting or executing archive contents."""
+    names = [r['path'] for r in expected]
+    if len(names) != len(set(names)) or not names:
+        raise ValueError('public-retention-file-inventory')
+    with zipfile.ZipFile(archive) as package:
+        members = [r for r in package.infolist() if not r.is_dir()]
+        if sorted(r.filename for r in members) != sorted(names):
+            raise ValueError('public-retention-file-inventory')
+        by_name = {r['path']: r for r in expected}
+        for member in members:
+            row = by_name[member.filename]
+            digest = hashlib.sha256()
+            with package.open(member) as stream:
+                for block in iter(lambda: stream.read(1024*1024), b''):
+                    digest.update(block)
+            if member.file_size != row['bytes'] or digest.hexdigest() != row['sha256']:
+                raise ValueError('public-retention-file-content:' + member.filename)
 
 
 def verify_all(root, output):

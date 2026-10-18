@@ -47,6 +47,10 @@ try{
         await aid('ENTER');
       }
       for(const part of ['values','attributes','cursor','message'])assert.deepEqual(last.screen[part],scenario.initial.screen[part],scenario.id+' initial '+part);
+      // Reference API cases use blank RECEIVE data for omitted fields. Explicitly
+      // clear the browser fields too: the pinned sign-on map FSETs its password
+      // underscores, so leaving the initial value is a different input case.
+      for(const input of await page.locator('#screen input').all())await input.fill('');
       for(const [name,value] of Object.entries(scenario.fields))await page.locator(`[name="${name}"]`).fill(value.trimEnd());
       await aid(scenario.aid);
       for(const part of ['values','attributes','cursor','message'])assert.deepEqual(last.screen[part],scenario.expected.screen[part],scenario.id+' '+part);

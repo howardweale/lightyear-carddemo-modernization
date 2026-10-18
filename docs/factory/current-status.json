@@ -7740,7 +7740,7 @@
   "effective_policy": false,
   "factory_activated": true,
   "activation_receipt": {
-    "authorization": "Explicit user instruction in this chat; operation performed by Codex on Howard’s behalf.",
+    "authorization": "Explicit user instruction in this chat; operation performed by Codex on Howard\u2019s behalf.",
     "backfill_contract_sha256": "96d0043704ba1029328a1fe8e43cf82362328d3eff4dd57c377abd227d3243fd",
     "backfill_record_count": 7,
     "ci_run": 38666017164,
@@ -7874,6 +7874,44 @@
     "release_authorized": false,
     "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
     "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
+  },
+  "appl_contract_selection": {
+    "schema": "appl-result-contract-selection/1",
+    "prepared_on": "2026-10-18",
+    "records": [
+      {
+        "program": "INTCALC",
+        "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
+        "file_sha256": "2af2840e0a0da746ef6c68223fb455c67272cc93fb182f49c097f602b779bef8",
+        "template_queue_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
+        "normalized_contract_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
+        "item_set_sha256": "93204f61f4387d331f44173877517c1b289572c415627c7146af76287784d3d6",
+        "members": 81,
+        "class_proof_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "review_required": true,
+        "reason": "Ordered position 2 is the only class request that contributes to request 06; its retained reference census has a different binding from the October 16 human sample packet."
+      },
+      {
+        "program": "POSTTRAN",
+        "path": "docs/factory/appl-result-signing-2026-10-16/POSTTRAN/contract.json",
+        "file_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "template_queue_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "normalized_contract_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "item_set_sha256": "aba24ea42f9a7410e2b8b2352beed53cd9b7cea0c6310850e0c86e6dd4fd3e65",
+        "members": 96,
+        "class_proof_sha256": "13aca947966f508c373d9a1269e4729b744549c6e1fbb32f205a6543dd38a242",
+        "review_required": false,
+        "reason": "No ordered POSTTRAN APPL-RESULT request exists in the inspected committed signing inventories; retain the existing 96-member contract unchanged."
+      }
+    ],
+    "superseded_contracts": [
+      "docs/factory/appl-result-signing-2026-10-16/INTCALC/contract.json"
+    ],
+    "historical_guide": "docs/factory/appl-result-signing-2026-10-17.md",
+    "historical_guide_sha256": "ffc473c9bb7e16021dfdb758fbb0a5edc92178fdb1b0c659bf90344c578529fa",
+    "replacement_guide": "docs/factory/appl-result-signing-2026-10-18.md",
+    "signed": false,
+    "execution_authorized": false
   },
   "carddemo": {
     "schema": "carddemo-slice-evidence/2",
@@ -10789,43 +10827,5 @@
   "retention_manifests": [
     "docs/factory/evidence-retention-2026-10-16-posttran.json",
     "docs/factory/evidence-retention-2026-10-16.json"
-  ],
-  "appl_contract_selection": {
-    "schema": "appl-result-contract-selection/1",
-    "prepared_on": "2026-10-18",
-    "records": [
-      {
-        "program": "INTCALC",
-        "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
-        "file_sha256": "2af2840e0a0da746ef6c68223fb455c67272cc93fb182f49c097f602b779bef8",
-        "template_queue_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
-        "normalized_contract_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
-        "item_set_sha256": "93204f61f4387d331f44173877517c1b289572c415627c7146af76287784d3d6",
-        "members": 81,
-        "class_proof_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
-        "review_required": true,
-        "reason": "Ordered position 2 is the only class request that contributes to request 06; its retained reference census has a different binding from the October 16 human sample packet."
-      },
-      {
-        "program": "POSTTRAN",
-        "path": "docs/factory/appl-result-signing-2026-10-16/POSTTRAN/contract.json",
-        "file_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
-        "template_queue_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
-        "normalized_contract_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
-        "item_set_sha256": "aba24ea42f9a7410e2b8b2352beed53cd9b7cea0c6310850e0c86e6dd4fd3e65",
-        "members": 96,
-        "class_proof_sha256": "13aca947966f508c373d9a1269e4729b744549c6e1fbb32f205a6543dd38a242",
-        "review_required": false,
-        "reason": "No ordered POSTTRAN APPL-RESULT request exists in the inspected committed signing inventories; retain the existing 96-member contract unchanged."
-      }
-    ],
-    "superseded_contracts": [
-      "docs/factory/appl-result-signing-2026-10-16/INTCALC/contract.json"
-    ],
-    "historical_guide": "docs/factory/appl-result-signing-2026-10-17.md",
-    "historical_guide_sha256": "ffc473c9bb7e16021dfdb758fbb0a5edc92178fdb1b0c659bf90344c578529fa",
-    "replacement_guide": "docs/factory/appl-result-signing-2026-10-18.md",
-    "signed": false,
-    "execution_authorized": false
-  }
+  ]
 }

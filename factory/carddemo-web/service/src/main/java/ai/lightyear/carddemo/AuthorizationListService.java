@@ -39,7 +39,9 @@ public final class AuthorizationListService implements TransactionService {
             }
         }else if(aid.equals("PF7")){
             int page=Integer.parseInt(area.get(PREFIX+"PAGE-NUM"));
-            if(page<=1)message(f,"You are already at the top of the page...");
+            // RECEIVE replaces ACCTIDL with input length. The top-page branch
+            // (COPAUS0C 380-383) sends a message without restoring length -1.
+            if(page<=1)f.error(b.literal(PROGRAM,"You are already at the top of the page..."),"");
             else{int previous=page-1;String key=area.get(PREFIX+"PAUKEY-PREV-PG["+previous+"]");area.set(PREFIX+"PAGE-NUM",Integer.toString(previous));
                 area.set(PREFIX+"NEXT-PAGE-FLG","Y");
                 page(db,area,f,auth.summary(db,area.get("CDEMO-ACCT-ID")),Commarea.encode(key),true);}

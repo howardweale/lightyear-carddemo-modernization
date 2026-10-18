@@ -295,6 +295,19 @@ class RawRemainingScreenTests(unittest.TestCase):
         self.assertEqual(','+' '*24,frame['values']['ADDR001'])
         self.assertEqual('Customer:000000000 not found in CUST file. Resp:000000013 Reas:0000000000',frame['message'])
 
+    def test_raw_authorization_top_pf7_keeps_received_length_without_cursor(self):
+        from lightyear_data.carddemo.reference_screens import AuthorizationListReference
+        from lightyear_data.carddemo.reference_menu import MenuReference
+        menu=MenuReference(self.root);first=menu.interact('INITIAL')
+        transfer=menu.interact('ENTER',{'OPTION':'11'},first['commarea'])
+        reference=AuthorizationListReference(self.root)
+        first=reference.interact('INITIAL',commarea=transfer['commarea'])
+        result=reference.interact('PF7',{'ACCTID':'00000000050'},first['commarea'],prior=first['screen'])
+        self.assertEqual(11,reference.memory.read('ACCTIDL'))
+        self.assertEqual('',result['screen']['cursor'])
+        self.assertEqual('You are already at the top of the page...',result['screen']['message'])
+        self.assertEqual('00000000050',result['screen']['values']['ACCTID'])
+
     def test_raw_authorization_selection_transfers_to_detail(self):
         from lightyear_data.carddemo.reference_screens import AuthorizationListReference
         from lightyear_data.carddemo.reference_signon import TransferScreen

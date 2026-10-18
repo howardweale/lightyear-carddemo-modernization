@@ -53,6 +53,22 @@ class AuthorizationTest {
         assertEquals("Please enter Acct Id...",result.screen().message);verifyNoInteractions(db);
         assertThrows(IllegalArgumentException.class,()->service.interact(db,area,"ENTER",Map.of("CUSTID","OVERRIDE"),prior));
     }
+    @Test void topPagePf7DoesNotInventAnAccountCursorAfterReceive()throws Exception{
+        var b=bindings();Connection db=mock(Connection.class);var service=new AuthorizationListService(b);
+        for(String page:List.of("0","1")){
+            var prior=new ScreenFrame(b,"COPAUS0C");prior.cursor="ACCTID";
+            var area=new Commarea(b.root.path("program_commareas").path("COPAUS0C"),null);
+            area.set("CDEMO-CPVS-PAGE-NUM",page);area.set("CDEMO-CPVS-NEXT-PAGE-FLG","N");
+            var result=service.interact(db,area,"PF7",Map.of("ACCTID","00000000050"),prior);
+            assertEquals("",result.screen().cursor);
+            assertEquals("You are already at the top of the page...",result.screen().message);
+            assertEquals("00000000050",result.screen().values.get("ACCTID"));
+            var forward=service.interact(db,area,"PF8",Map.of("ACCTID","00000000050"),result.screen());
+            assertEquals("ACCTID",forward.screen().cursor);
+            assertEquals("You are already at the bottom of the page...",forward.screen().message);
+        }
+        verifyNoInteractions(db);
+    }
     @Test void consecutiveMissingReadStringsRetainThePreviousTail() {
         String buffer=" ".repeat(75);
         buffer=AuthorizationListService.stringOverlay(buffer,"Account:00000000000 not found in XREF file. Resp:000000013 Reas:000000000");

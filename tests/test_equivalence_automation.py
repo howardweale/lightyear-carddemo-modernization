@@ -24,6 +24,20 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(47,sum(r['individual_review'] for d in data for r in d['rows']))
         self.assertTrue(all(r['status']=='unresolved' for d in data for r in d['rows']))
         self.assertEqual(data,[triage(ROOT,p,'a'*40) for p in ('INTCALC','POSTTRAN')])
+        self.assertEqual(['CBACT04C-constant-output-492','CBACT04C-constant-output-493',
+                          'CBACT04C-constant-output-494'],data[0]['new_unmeasured_sites'])
+        self.assertEqual([],data[1]['new_unmeasured_sites'])
+        added=[r for r in data[0]['rows'] if r['id'] in data[0]['new_unmeasured_sites']]
+        self.assertTrue(all(r['current_basis']=='new-unmeasured' and not r['argued']
+                            and not r['individual_review'] and r['status']=='unresolved' for r in added))
+    def test_retained_inventory_cannot_lose_rename_or_duplicate_sites(self):
+        from lightyear_mainframe.equivalence_automation import added_sites
+        old=dict(id='old',line=12,operator='constant')
+        inventory={'old':old,'new':dict(id='new',line=13,operator='constant-output')}
+        self.assertEqual(['new'],added_sites([old],inventory))
+        for rows,sites in (([old,old],inventory),([old],{'new':inventory['new']}),
+                           ([old],{**inventory,'old':dict(old,line=99)})):
+            with self.assertRaisesRegex(ValueError,'baseline-'):added_sites(rows,sites)
     def test_comments_preserve_token_boundaries_and_literals(self):
         out,_=normalize({'x.c':'int/**/answer(void){return 1;} char *s="/*not a comment*/"; // gone\n'})
         self.assertIn('int answer',out['x.c']);self.assertIn('/*not a comment*/',out['x.c'])

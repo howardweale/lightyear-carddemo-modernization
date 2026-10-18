@@ -2,7 +2,7 @@
 
 ## Completed merges and main CI
 
-CI snapshot checked at 2026-10-17T13:10:22+00:00. Evidence measurements below retain their dated scope (2026-10-16).
+CI snapshot checked at 2026-10-17T13:10:22+00:00. Evidence measurements below retain their dated scope (2026-10-17).
 
 | PR | Merge commit | Merged at (UTC) |
 | --- | --- | --- |
@@ -65,9 +65,6 @@ Diversity deficit: 7 fields.
 - TRANSACT:TRAN-RECORD.TRAN-SOURCE
 - TRANSACT:TRAN-RECORD.TRAN-TYPE-CD
 
-The loader overlay is twin-scoped. Without signed and confirmed z/OS loader-domain evidence, all 113 raw gaps remain and no z/OS-facing exclusion is applied.
-Hypothetical z/OS rate after confirmation: 308/345; not applied.
-
 ## POSTTRAN
 
 Not releasable: nine fresh-campaign gaps remain after the effective twin-only October 12 supplement; no new z/OS acceptances.
@@ -91,15 +88,15 @@ Dated October 14/15 retention statements remain historical; use these manifests 
 
 ## CardDemo data slice
 
-210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.
+210/210 original records reconstructed; 1560/1560 browse comparisons. Overall indeterminate. logical/index relationship requires explicit target DBD resolution; public IMS utility unload framing is not verified; No z/OS capture or CICS baseline; no signed release authorization. Screen sessions compared: 0; indeterminate: data component only; screens not implemented.
 
 ## B06 access
 
-Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.
+Windows metadata accessible: True. Cleanup records verified: 2/2. Supported preregistered criteria: none. Public-key verification of signed terminal, cleanup and inventory metadata plus four report files. Raw execution artifacts were not reread; their full inventory-byte verification remains the October 13 record. No fresh process or container absence check performed.
 
 ## Equivalence evidence still outstanding
 
-The implementation PRs #341, #357 and #358 are merged as recorded above; their merge does not import acceptances or complete the evidence gates.
+#341: merged; #357: merged; #358: merged. Implementation delivery does not import acceptances or complete evidence gates.
 
 Resolved now: **8/227**. **185/227 (81.5%)** is conditional on the two pending class signatures, below the 95% target. Fresh E1 repeats reproduce the preserved totals; they do not add resolutions. [E1 evidence and remaining gates](equivalence-scale-2026-10-16/README.md).
 
@@ -117,8 +114,8 @@ The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout rea
 
 Typed condition support: True. Threshold/3 support: True. Presence of code is not effective policy approval.
 
-Not releasable: exact threshold/3 comparison and mutation bindings, ordered effective signatures and non-provisional release evidence remain required.
+Not releasable: Fresh complete caught-mutant evidence required for: TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP. Retained campaign index does not certify complete durable retention. Ordered effective decisions are not recorded in these unsigned inputs. Non-provisional release evidence is not established by this retained engineering campaign.
 
 This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.
 
-[Measured verdict](intcalc-releasability-2026-10-15.md) · [Decision packet](howard-decision-packet-2026-10-17-handoff-refresh.md)
+[Measured verdict](intcalc-releasability-2026-10-17.md) · [Decision packet](howard-decision-packet-2026-10-17-handoff-refresh.md)

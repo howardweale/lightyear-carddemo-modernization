@@ -75,6 +75,7 @@ jobs:
             work/factory-review-${{ matrix.job }}/resource-usage.json
             work/factory-review-${{ matrix.job }}/campaign-start.json
             work/factory-review-${{ matrix.job }}/campaign-manifest.json
+            work/factory-review-${{ matrix.job }}/constant-field-evidence.json
             work/factory-review-${{ matrix.job }}/review-summary.json
             work/factory-review-${{ matrix.job }}/mutation-results.json
             work/factory-review-${{ matrix.job }}/loader-domain-overlay.json
@@ -121,6 +122,10 @@ jobs:
         run: |
           python -B -m tools.aggregate_equivalence_shards work/shards INTCALC 2 work/aggregate/INTCALC
           python -B -m tools.aggregate_equivalence_shards work/shards POSTTRAN 4 work/aggregate/POSTTRAN
+      - name: Install disposable-signature rehearsal dependency
+        run: python -m pip install 'cryptography>=46,<47'
+      - name: Request 06 from complete measured evidence with CI-only disposable signatures
+        run: python -B -m tools.rehearse_intcalc_real_evidence work/aggregate/INTCALC work/aggregate/INTCALC/request-06-rehearsal.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -1,0 +1,55 @@
+{
+  "schema": "factory-unsigned-signing-order/1",
+  "prepared_on": "2026-10-17",
+  "program": "INTCALC",
+  "claim_scope": "twin",
+  "items": [
+    {
+      "order": 1,
+      "path": "docs/factory/intcalc-01-loader-domain-request-2026-10-17.json",
+      "sha256": "3c59803fa8f8150163f42237463202dcfaac4678144b2bb8fefe75425666f439",
+      "kind": "legacy-behaviour-disposition",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 2,
+      "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
+      "sha256": "2af2840e0a0da746ef6c68223fb455c67272cc93fb182f49c097f602b779bef8",
+      "kind": "equivalence-review",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 3,
+      "path": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-17.json",
+      "sha256": "240c95584878fcb2bdb53fe5d584ee5f3d0af8264ceb79b1cb7e4376aaadd039",
+      "kind": "equivalence-review",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 4,
+      "path": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
+      "sha256": "6ac9a909a1614c6e1c6228526692411ed765fe81767ec60c8cc9f5a952657468",
+      "kind": "scenario-threshold-approval",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 5,
+      "path": "docs/factory/intcalc-05-line189-io-request-2026-10-17.json",
+      "sha256": "b0aaacf819c83cf4f1277d08c39d088ee6685d6013bb16c2384292ce7d9fffee",
+      "kind": "io-exception-acceptance",
+      "signable_prerequisites_complete": null
+    },
+    {
+      "order": 6,
+      "path": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
+      "sha256": "860e5c5ba5d3d4667f320ce7d862346f82e8b3ed2a0baaf30a1ad97b44a07645",
+      "kind": "scenario-threshold-approval",
+      "signable_prerequisites_complete": false
+    }
+  ],
+  "effective": false,
+  "signed": false,
+  "release_authorized": false,
+  "blocker": "Final effective request intentionally refuses: all four typed conditions must be re-bound to real evidence, including trusted signed review proofs. The current evidence is provisional engineering evidence; signatures cannot change that scope.",
+  "next_step": "All six files are unsigned templates. Requests 02\u201306 are not importable until their predecessor decision hash is bound and verified against the externally trusted Factory journal. Rebuild typed conditions from real evidence; never mark missing proofs met by hand. No signing is authorized by this inventory."
+}

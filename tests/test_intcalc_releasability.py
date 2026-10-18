@@ -35,3 +35,20 @@ class ReleasabilityTests(unittest.TestCase):
             value, _ = build(ROOT, "2026-10-15")
         retained = json.loads((ROOT / "docs/factory/intcalc-releasability-2026-10-15.json").read_bytes())
         self.assertEqual(retained, value)
+
+    def test_acceptance_bytes_are_pinned_before_source_fields_are_trusted(self):
+        original=Path.read_bytes
+        def changed(path):
+            data=original(path)
+            return data+b' ' if path.name=='equivalence-operator-acceptance-2026-10-12.json' else data
+        with patch.object(Path,'read_bytes',changed),self.assertRaisesRegex(ValueError,'operator-acceptance-file-hash'):
+            build(ROOT,'2026-10-15')
+
+    def test_new_assessment_preserves_historical_evidence_and_names_missing_catches(self):
+        value,text=build(ROOT,'2026-10-15',prepared_on='2026-10-17')
+        self.assertEqual('2026-10-17',value['prepared_on'])
+        self.assertEqual('intcalc-releasability-2026-10-15.json',value['supersedes'])
+        self.assertEqual(3,len(value['missing_caught_constant_fields']))
+        self.assertNotIn('P1 must land',text)
+        self.assertIn('7 fields:',text)
+        self.assertFalse(value['release_authorized'])

@@ -37,14 +37,19 @@ class OrderedSigningTests(FactoryTests):
                 dest=self.root/source['path'];dest.parent.mkdir(parents=True,exist_ok=True)
                 shutil.copyfile(ROOT/source['path'],dest)
         proofs=[]
-        for contract in contracts[:5]:
+        from lightyear_control_tower.factory_order import bind_predecessor
+        with self.assertRaisesRegex(ValueError,'factory-signing-order-predecessor-required'):self.decide(contracts[4])
+        for position,contract in enumerate(contracts[:5]):
+            if position:
+                contract=bind_predecessor(contract,proofs[-1]);contracts[position]=contract
             proof,_,_=self.decide(contract)
             proofs.append(proof)
         # Refresh earlier proofs to the same trusted current journal.
         proofs=[self.service.proof(self.token,p['decision_sha256']) for p in proofs]
         authority=FactoryDecisions(self.service.public_key,proofs[-1]['journal']['journal_head_sha256'],evidence_root=self.root)
         verify_order(contracts[:5],proofs,authority,self.root)
-        with self.assertRaises(ValueError): verify_order(contracts[:5],list(reversed(proofs)),authority,self.root)
+        with self.assertRaisesRegex(ValueError,'signing-order'): verify_order(list(reversed(contracts[:5])),list(reversed(proofs)),authority,self.root)
+        contracts[5]=bind_predecessor(contracts[5],proofs[-1])
         with self.assertRaisesRegex(ValueError,'threshold-conditions-unmet'): self.decide(contracts[5])
         source=contracts[2]['sources'][0]
         (self.root/source['path']).write_bytes(b'changed after review')

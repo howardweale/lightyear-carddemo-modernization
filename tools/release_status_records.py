@@ -34,11 +34,14 @@ def inputs(root=ROOT):
     historical = json.loads((root/INDEX).read_bytes())
     public = json.loads((root/PUBLIC).read_bytes())
     additional = [p.relative_to(root).as_posix() for pattern in
-        ('*-review-verdict-2026-10-16.json', 'posttran-phase2-readiness-2026-10-16.json',
-         'b06-part6-reverification-2026-10-16.json', 'intcalc-signing-order-2026-10-16.json')
+        ('*-review-verdict-*.json', 'posttran-phase2-readiness-2026-10-16.json',
+         'b06-part6-reverification-2026-10-16.json', 'intcalc-signing-order-*.json')
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    carddemo = 'docs/factory/carddemo-data-review-evidence-2026-10-15.json'
+    if (root/carddemo).is_file():
+        additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
     additional += [p for p in ('docs/factory/posttran-phase2-readiness-2026-10-17.json', 'docs/factory/posttran-phase2-plan-amendment-2026-10-17.json', 'docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json', 'docs/factory/factory-authority.public.pem') if (root/p).is_file()]
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
@@ -78,6 +81,7 @@ def load(root=ROOT):
     if activation["schema"] != "factory-local-activation/1" or activation["scope"] != "factory":
         raise ValueError("status-activation-shape")
     projections={}
+    projection_paths={}
     for program in ('INTCALC','POSTTRAN'):
         candidates=sorted((root/'docs/factory').glob(program.lower()+'-review-verdict-*.json'))
         if candidates:
@@ -85,21 +89,65 @@ def load(root=ROOT):
             if digest({k:v for k,v in record.items() if k!='content_sha256'})!=record['content_sha256']:
                 raise ValueError('review-projection-seal')
             if record['measurement_head']!=index['head']:raise ValueError('review-projection-evidence-head')
-            projections[program]=record
+            if program != 'INTCALC' or record['prepared_on'] >= release['prepared_on']:
+                projections[program]=record
+                projection_paths[program]=candidates[-1].relative_to(root).as_posix()
     readiness_path=root/'docs/factory/posttran-phase2-readiness-2026-10-16.json'
     from tools.check_posttran_handoff import check
     phase2=check(root) if readiness_path.exists() else None
     clock_path=root/'docs/factory/status-snapshot-clock.json'
     clock=json.loads(clock_path.read_bytes())['evaluated_at'] if clock_path.exists() else datetime.now(timezone.utc).isoformat()
     retention=[p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
+    carddemo_path = root/'docs/factory/carddemo-data-review-evidence-2026-10-15.json'
+    carddemo = None
+    if carddemo_path.is_file():
+        source = json.loads(carddemo_path.read_bytes())['summary']
+        raw = (root/source['path']).read_bytes()
+        if sha256(raw).hexdigest() != source['sha256']:
+            raise ValueError('status-carddemo-evidence-hash')
+        carddemo = json.loads(raw)
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
     return dict(release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
-                historical_view=historical_view,projections=projections,
+                historical_view=historical_view,projections=projections,projection_paths=projection_paths,carddemo=carddemo,
                 phase2=phase2, evaluated_at=clock, retention=retention,
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
                 threshold3_implemented=(root/'src/lightyear_factory/threshold3.py').is_file())
+
+
+def carddemo_text(record):
+    if not record:
+        return 'Current CardDemo measurements are not recorded.'
+    measured=record['measured']; rows=measured['vsam']
+    fraction=lambda key: f"{sum(r[key]['matched'] for r in rows)}/{sum(r[key]['compared'] for r in rows)}"
+    reasons=[r['reason'] for r in measured.get('blockers', [])]
+    screens=measured['screen_gates']
+    return (fraction('round_trip')+' original records reconstructed; '+fraction('browse_order')+
+            ' browse comparisons. Overall '+measured['verdict']+'. '+
+            '; '.join(reasons)+'. Screen sessions compared: '+str(screens['sessions_compared'])+
+            '; '+screens['verdict']+': '+screens['reason']+'.')
+
+
+def b06_text(record):
+    if not record:
+        return 'Current Windows metadata verification is not available in this snapshot.'
+    attempts=record['attempts']
+    verified=sum(r['signed_cleanup_verified'] is True for r in attempts)
+    supported=[name for name in ('criterion_a','criterion_b') if record[name]['supported']]
+    return ('Windows metadata accessible: '+str(record['root_accessible'])+'. Cleanup records verified: '+
+            str(verified)+'/'+str(len(attempts))+'. Supported preregistered criteria: '+
+            (', '.join(supported) if supported else 'none')+'. '+record['limitation'])
+
+
+def implementation_text(delivery):
+    records={r['number']: r for r in (delivery or {}).get('merges', [])}
+    states=[]
+    for number in (341,357,358):
+        row=records.get(number, {})
+        state=row.get('state') or ('merged' if row.get('merge') and row.get('merged_at') else 'not recorded')
+        states.append(f'#{number}: {state.lower()}')
+    return '; '.join(states)+'. Implementation delivery does not import acceptances or complete evidence gates.'
 
 
 def render(model):
@@ -114,9 +162,11 @@ def render(model):
         effective_policy=release["effective"], factory_activated=activation["signed_only"],
         activation_receipt=activation, release_authorized=release["release_authorized"],
         historical_view=model["historical_view"])
+    verdict_path=model['release_path']
     projections=model.get('projections',{})
     if 'INTCALC' in projections:
         review=projections['INTCALC']
+        verdict_path=model['projection_paths']['INTCALC']
         current.update(as_of=review['prepared_on'],intcalc=review['verdict'],
             rates={scope:dict(raw=review['raw_thresholds'][scope]['kill_rate'],projected=row['kill_rate']) for scope,row in review['projected_thresholds'].items()})
     delivery = model.get("delivery")
@@ -129,6 +179,7 @@ def render(model):
             != {('required-ci', 15368), ('documentation-and-lint', 15368)}
     ):
         raise ValueError('delivery-snapshot-not-green')
+    current["verdict_path"] = verdict_path
     current["delivery"] = delivery
     snapshot_date = delivery["checked_at"][:10] if delivery else current["as_of"]
     factory = "activated locally (signed-only)" if current["factory_activated"] else "local signed-only activation not recorded"
@@ -177,11 +228,11 @@ def render(model):
     text+=['','## Durable public evidence','',
            *['Current retention manifest: ['+Path(p).name+']('+Path(p).name+'); scheduled download/hash verification applies. Local deletion remains unauthorized.' for p in model.get('retention',[])],
            'Dated October 14/15 retention statements remain historical; use these manifests for current storage status. [October 17 verification and deletion addendum](retention-inventory-2026-10-17.json); local deletion remains unauthorized.']
-    text+=['','## CardDemo data slice','','210/210 original records reconstructed; 1,560/1,560 browse comparisons. Overall indeterminate: public IMS framing, DL/I integration and screen/session evidence remain separate gates.',
+    text+=['','## CardDemo data slice','',carddemo_text(model.get('carddemo')),
            '','## B06 access','',
-           'Windows metadata is accessible. Both signed terminal/cleanup records and signed inventory metadata reverified; cause remains unidentified under both preregistered criteria. Raw captures were not reread.' if model.get('b06',{} ) else 'Current Windows metadata verification is not available in this snapshot.',
+           b06_text(model.get('b06')),
            '','## Equivalence evidence still outstanding','',
-           'The implementation PRs #341, #357 and #358 are merged as recorded above; their merge does not import acceptances or complete the evidence gates.' if delivery else 'Implementation delivery is not recorded in this snapshot; no new acceptances are inferred.',
+           implementation_text(delivery),
            '', 'Resolved now: **8/227**. **185/227 (81.5%)** is conditional on the two pending class signatures, below the 95% target. Fresh E1 repeats reproduce the preserved totals; they do not add resolutions. [E1 evidence and remaining gates](equivalence-scale-2026-10-16/README.md).',
            '', 'TRANREPT has two compiler identities in 413 sites and zero class matches; generality and reviewer person-minutes remain unmeasured.',
            '', 'Byte storage support is implemented, but whole-program acceptance remains incomplete: zero unsupported constructs, whole-program control/effects, and 1,000 byte-exact differential inputs per program are still required. Storage inspection alone earns no differential credit.',
@@ -192,5 +243,5 @@ def render(model):
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
-             f"[Measured verdict]({Path(model['release_path']).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-2026-10-17-handoff-refresh.md)", ""]
+             f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]
     return current, "\n".join(text)

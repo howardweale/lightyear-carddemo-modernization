@@ -104,7 +104,7 @@ class ReferenceDeclarationTests(unittest.TestCase):
         from lightyear_data.carddemo.reference_declarations import layout
         from lightyear_data.carddemo.reference_storage import Memory
         root=Path(__file__).resolve().parents[1]/'spec/modernization/carddemo-screens/upstream'
-        paths=list(root.rglob(name+'.cpy'));self.assertEqual(1,len(paths),name)
+        paths=[p for p in root.rglob('*') if p.name.lower()==(name+'.cpy').lower()];self.assertEqual(1,len(paths),name)
         raw=paths[0].read_bytes();m=Memory();m.add(layout(raw,str(paths[0])));return m
     def test_pinned_bms_input_and_output_share_physical_bytes(self):
         m=self.load('COSGN00');m.write('COSGN0AO.USERIDO','USER0001')

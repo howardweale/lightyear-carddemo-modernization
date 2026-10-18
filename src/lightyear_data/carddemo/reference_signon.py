@@ -89,7 +89,7 @@ class SignonReference:
             for f in self.model['fields']:
                 name=f['name']
                 if not name:continue
-                if not f['protected']:
+                if not f['protected'] or name in self.input:
                     text=self.input.get(name,'')
                     if len(text)>f['length']:raise Unsupported('reference input too long')
                     m.write(name+'I',text);m.write(name+'L',len(text))

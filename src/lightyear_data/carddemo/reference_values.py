@@ -131,7 +131,7 @@ class Values:
                 name=r.pop().text
                 if r.peek() in ('','AND','OR',')'):return self.condition(name)
                 r.at=begin
-            left=self.expression(r)
+            left=self.expression(r);left_tokens=items[begin:r.at]
             if r.peek()=='IS':r.pop()
             negate=r.peek()=='NOT'
             if negate:r.pop()
@@ -141,7 +141,15 @@ class Values:
             if op in ('EQUAL','=', '<>','>','<','>=','<='):
                 r.pop()
                 if r.peek()=='TO':r.pop()
-                right=self.expression(r);last[0]=(left,op)
+                right_begin=r.at;right=self.expression(r)
+                # Two numeric data items compare numerically, independent of their display widths.
+                def numeric_operand(tokens):
+                    try:
+                        q=Reader(tokens);name,start,length=self.reference(q)
+                        return not q.peek() and start is None and self.memory.descriptor(name)[1]['digits']>0
+                    except Unsupported:return False
+                if numeric_operand(left_tokens) and numeric_operand(items[right_begin:r.at]):left,right=Decimal(left),Decimal(right)
+                last[0]=(left,op)
             elif last[0] is not None and not negate:
                 right=left;left,op=last[0]
             else:raise Unsupported('reference predicate operator '+op)

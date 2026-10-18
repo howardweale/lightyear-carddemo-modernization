@@ -43,7 +43,7 @@ def declarations(raw,source):
     for match in WORDS.finditer(text):
         if text[position:match.start()].strip():raise Unsupported('reference declaration token '+text[position:match.start()])
         position=match.end();word=match[0];word=word if word.startswith("'") else word.upper()
-        if word==',':continue
+        if word==',' and not (match.start()>0 and match.end()<len(text) and not text[match.start()-1].isspace() and not text[match.end()].isspace() and any(t.text in ('PIC','PICTURE') for t in current)):continue
         # A decimal point embedded in PIC is not a declaration terminator.
         if word=='.' and match.end()<len(text) and not text[match.end()].isspace() and any(t.text in ('PIC','PICTURE') for t in current):
             current.append(Token(word,source,locations[match.start()]));continue
@@ -55,6 +55,8 @@ def declarations(raw,source):
     for row in rows:
         words=[t.text for t in row]
         if len(words)<2 or not words[0].isdigit():raise Unsupported('reference data declaration '+str(words[:3]))
+        if words[1] in ('PIC','PICTURE'):
+            row.insert(1,Token('FILLER',source,row[0].line));words.insert(1,'FILLER')
         level=int(words[0]);name=words[1]
         if level==88:
             if last is None or words[2] not in ('VALUE','VALUES'):raise Unsupported('reference condition declaration')

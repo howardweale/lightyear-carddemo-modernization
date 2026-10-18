@@ -1,0 +1,4 @@
+# Disposable runner-only PostgreSQL port for JVM mutation replay.
+services:
+  postgres:
+    ports: ['127.0.0.1:5432:5432']

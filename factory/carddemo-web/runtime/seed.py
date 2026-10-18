@@ -40,7 +40,11 @@ def main():
     if dsn!='postgresql://carddemo:disposable-public-demo@postgres/carddemo':raise ValueError('disposable Compose database only')
     plan,entries=build(ROOT);bindings=web_build(Path('spec/modernization/carddemo-screens'))
     identity=sha256((plan['content_sha256']+json.dumps(bindings,sort_keys=True)+Path(__file__).read_text()).encode()).hexdigest()
-    public={}
+    public={};reference_records=[]
+    def capture(m,raw,ordinal,parent=None):
+        reference_records.append(dict(table=m['table'],identity=m['table']+':'+str(ordinal),raw=raw.hex(),
+            keys=[dict(length=k['key_length'],offset=k['key_offset'],value=raw[k['key_offset']:k['key_offset']+k['key_length']].hex()) for k in m['keys']],
+            segment=m.get('segment',{}).get('name'),parent=parent))
     for item,layout,mapping in entries:
         if not item.get('synthetic'):
             raw=(ROOT/'upstream'/item['data']).read_bytes()
@@ -68,10 +72,11 @@ def main():
             for item,layout,m in entries:
                 if item.get('synthetic'):continue
                 store=Store(db,m,layout)
-                for ordinal,raw in enumerate(public[m['table']],1):store.load_one(raw,ordinal,quarantine=False)
+                for ordinal,raw in enumerate(public[m['table']],1):
+                    store.load_one(raw,ordinal,quarantine=False);capture(m,raw,ordinal)
             sl,sm=lookup['pautsum0'];dl,dm=lookup['pautdtl1']
             summary=fixture(sl,sm,{'PA-ACCT-ID':account,'PA-CUST-ID':customer,'PA-APPROVED-AUTH-CNT':7,'PA-APPROVED-AUTH-AMT':'86.38'})
-            parent=Store(db,sm,sl).load_one(summary,1,twin_seq=1,quarantine=False)['path_key']
+            parent=Store(db,sm,sl).load_one(summary,1,twin_seq=1,quarantine=False)['path_key'];capture(sm,summary,1)
             for i in range(1,8):
                 detail=fixture(dl,dm,{'PA-AUTH-DATE-9C':99999-26000-i,'PA-AUTH-TIME-9C':999999999-123456000-i,
                     'PA-AUTH-ORIG-DATE':'261017','PA-AUTH-ORIG-TIME':'123456','PA-CARD-NUM':card,
@@ -80,8 +85,9 @@ def main():
                     'PA-MERCHANT-CATAGORY-CODE':'1234','PA-ACQR-COUNTRY-CODE':'840','PA-MERCHANT-ID':str(i),
                     'PA-MERCHANT-NAME':'PUBLIC DEMO '+str(i),'PA-MERCHANT-CITY':'SEATTLE','PA-MERCHANT-STATE':'WA',
                     'PA-MERCHANT-ZIP':'981010000','PA-TRANSACTION-ID':str(i),'PA-MATCH-STATUS':'P','PA-AUTH-FRAUD':' '})
-                Store(db,dm,dl).load_one(detail,i,parent_path=parent,twin_seq=i,quarantine=False)
+                Store(db,dm,dl).load_one(detail,i,parent_path=parent,twin_seq=i,quarantine=False);capture(dm,detail,i,'pautsum0:1')
             db.execute('INSERT INTO slice_fixture_identity VALUES (%s)',(identity,))
+    if reference_records:Path('/fixture/reference-fixture.json').write_text(json.dumps(dict(schema='carddemo-raw-proof-fixture/1',records=reference_records,plan=plan),indent=2)+'\n')
     Path('/fixture/fixture.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps({k:v for k,v in receipt.items() if k not in ('password','user')}))
 

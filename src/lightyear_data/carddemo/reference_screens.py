@@ -40,7 +40,7 @@ def declarations_for(raw,path,root,section='WORKING-STORAGE'):
         if re.match(r'\s*EXEC SQL',code):
             while 'END-EXEC' not in code:
                 code+=' '+selected[i][0];i+=1
-            include=re.fullmatch(r'\s*EXEC SQL INCLUDE (SQLCA|AUTHFRDS)\s+END-EXEC[.]\s*',code)
+            include=re.fullmatch(r'\s*EXEC\s+SQL\s+INCLUDE\s+(SQLCA|AUTHFRDS)\s+END-EXEC[.]\s*',code)
             if not include:raise Unsupported('reference SQL declaration')
             if include[1]=='SQLCA':out += ['01 SQLCODE PIC S9(9) COMP.','01 SQLSTATE PIC X(5).']
             else:
@@ -219,7 +219,7 @@ class FraudReference(ScreenReference):
         def host(name):
             if name=='MERCHANT-NAME':return m.read('MERCHANT-NAME-TEXT')[:int(m.read('MERCHANT-NAME-LEN'))]
             value=m.read(name)
-            return str(value) if isinstance(value,Decimal) else value.rstrip(' ')
+            return value if isinstance(value,Decimal) else value.rstrip(' ')
         def timestamp(value):return datetime.strptime(value,'%y-%m-%d %H.%M.%S%f').isoformat(sep=' ')
         if text.startswith('SQL INSERT INTO CARDDEMO . AUTHFRDS'):
             columns=text.split('(',1)[1].split(')',1)[0].split();hosts=re.findall(r': ([A-Z][A-Z0-9-]*)',text)

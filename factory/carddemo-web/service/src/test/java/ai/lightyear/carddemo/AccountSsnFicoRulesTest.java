@@ -80,11 +80,41 @@ class AccountSsnFicoRulesTest {
             for(var item:values.entrySet())edits.put(item.getKey(),item.getValue());
             edits.run(paragraph);
         }
-        for(var field:model.path("validation").path("fields").properties())
-            assertEquals(oracle.get(field.getKey()),candidate.get(field.getKey()),paragraph+" "+field.getKey()+" "+values);
+        assertCompleteStorage(oracle,candidate,paragraph+" "+values);
         assertEquals(oracle.condition("INPUT-ERROR"),candidate.condition("INPUT-ERROR"));
         assertFalse(candidate.trace().isEmpty());
         return candidate;
+    }
+    private static void assertCompleteStorage(SourceEdits oracle,SourceEdits candidate,String context) {
+        // Numeric REDEFINES may intentionally contain invalid DISPLAY bytes.
+        // Compare every stored byte and every non-storage value without decoding.
+        // Reflection keeps this supplemental CI oracle out of production APIs.
+        try {
+            var storage=SourceEdits.class.getDeclaredField("storage");
+            var values=SourceEdits.class.getDeclaredField("values");
+            storage.setAccessible(true);values.setAccessible(true);
+            var expected=(Commarea)storage.get(oracle);
+            var actual=(Commarea)storage.get(candidate);
+            assertNotNull(expected);assertNotNull(actual);
+            assertArrayEquals(expected.bytes(),actual.bytes(),context);
+            assertEquals(values.get(oracle),values.get(candidate),context);
+        } catch(ReflectiveOperationException failure) {
+            throw new AssertionError("complete storage oracle unavailable",failure);
+        }
+    }
+    @Test void completeStorageComparisonRejectsChangedBytesAndScratchValues() throws Exception {
+        var oracle=new SourceEdits(original);var candidate=new SourceEdits(model.path("validation"));
+        assertCompleteStorage(oracle,candidate,"initial storage");
+        var storage=SourceEdits.class.getDeclaredField("storage");storage.setAccessible(true);
+        var actual=(Commarea)storage.get(candidate);byte saved=actual.bytes()[0];
+        actual.copyBytes(0,new byte[]{(byte)(saved ^ 1)});
+        assertThrows(AssertionError.class,()->assertCompleteStorage(oracle,candidate,"changed byte"));
+        actual.copyBytes(0,new byte[]{saved});
+        assertCompleteStorage(oracle,candidate,"restored storage");
+        var values=SourceEdits.class.getDeclaredField("values");values.setAccessible(true);
+        @SuppressWarnings("unchecked") var scratch=(Map<String,String>)values.get(candidate);
+        scratch.put("fixture-only-mismatch","different");
+        assertThrows(AssertionError.class,()->assertCompleteStorage(oracle,candidate,"changed scratch"));
     }
     private Map<String,String> ssn(String first,String second,String third) {
         return Map.of("ACUP-NEW-CUST-SSN-1",first,"ACUP-NEW-CUST-SSN-2",second,"ACUP-NEW-CUST-SSN-3",third);

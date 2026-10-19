@@ -3,6 +3,15 @@ on:
   pull_request:
     paths:
       - 'tools/cms/**'
+      - 'tools/legacy_twin/install-pinned.sh'
+      - 'docs/cms/**'
+      - 'tests/test_cms*'
+      - '.github/workflows/cms-pricer-feasibility.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/cms/**'
+      - 'tools/legacy_twin/install-pinned.sh'
       - 'docs/cms/**'
       - 'tests/test_cms*'
       - '.github/workflows/cms-pricer-feasibility.yml'
@@ -23,10 +32,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Install workflow parser for upload policy
+        run: python -m pip install 'PyYAML>=6,<7'
+      - name: Check every CMS artifact upload boundary
+        run: python -B -m tools.cms.upload_guard
       - name: Test archive and source inventory
         env:
           PYTHONPATH: .:tests
-        run: python -B -m unittest test_cms_inventory test_cms_f0_smoke test_cms_f0_policy -v
+        run: python -B -m unittest test_cms_inventory test_cms_f0_smoke test_cms_f0_policy test_cms_upload_guard -v
       - name: Install pinned GnuCOBOL 3.1.2
         run: bash tools/legacy_twin/install-pinned.sh
       - name: Compile byte-identical public CMS source
@@ -43,4 +56,4 @@ jobs:
           name: cms-f0-compile
           path: work/cms/f0/public/receipt.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1

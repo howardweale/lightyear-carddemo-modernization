@@ -27,9 +27,13 @@ def compile_outcome(rows, expected, inventory=None):
     for row in rows:last[(row['package'],row['program'])]=row
     expected_by_key={(e['package'],e['program']):e for e in expected}
     if len(expected_by_key)!=len(expected):raise ValueError('duplicate expected compile limitation')
-    unexpected=[];known=[]
+    unexpected=[];known=[];stale=[]
     for key,row in last.items():
-        if row['returncode']==0:continue
+        if row['returncode']==0:
+            if key in expected_by_key:
+                stale.append(dict(package=row['package'],program=row['program'],source_sha256=row['source_sha256'],
+                    dialect=row['dialect'],returncode=0))
+            continue
         binding=dict(package=row['package'],program=row['program'],source_sha256=row['source_sha256'],
             dialect=row['dialect'],returncode=row['returncode'],diagnostic_sha256=row['diagnostic_metadata']['normalized_sha256'])
         item=expected_by_key.get(key)
@@ -39,8 +43,8 @@ def compile_outcome(rows, expected, inventory=None):
     inventory_matched=inventory is None or observed=={(r['package'],r['program'],r['source_sha256']) for r in inventory}
     if not inventory_matched:unexpected.append({'reason':'pinned-program-inventory-mismatch'})
     return dict(programs=len(last),compiled=sum(r['returncode']==0 for r in last.values()),inventory_matched=inventory_matched,
-        expected_limitations=known,unexpected_failures=unexpected,
-        complete=bool(last) and not unexpected,all_programs_compiled=bool(last) and all(r['returncode']==0 for r in last.values()))
+        expected_limitations=known,unexpected_failures=unexpected,stale_expected_limitations=stale,
+        complete=bool(last) and not unexpected and not stale,all_programs_compiled=bool(last) and all(r['returncode']==0 for r in last.values()))
 
 
 def require_smoke(record):
@@ -74,7 +78,7 @@ def publish(root):
             outcome=value.get('outcome',{})
             result['compile']={k:outcome[k] for k in ('programs','compiled','complete','all_programs_compiled','inventory_matched') if k in outcome}
             result['compile'].setdefault('complete',False)
-            for group in ('expected_limitations','unexpected_failures'):
+            for group in ('expected_limitations','unexpected_failures','stale_expected_limitations'):
                 result['compile'][group]=[{k:r[k] for k in ('package','program','source_sha256','dialect','returncode','diagnostic_sha256') if k in r} for r in outcome.get(group,[])]
             result['compile']['attempts']=len(value['results'])
             result['compile']['diagnostic_audit']=[dict(program=r['program'],dialect=r['dialect'],**{k:r['diagnostic_metadata'][k] for k in ('sha256','normalized_sha256','bytes','possible_source_quote','raw_diagnostics_uploaded')}) for r in value['results']]

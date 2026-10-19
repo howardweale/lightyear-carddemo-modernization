@@ -85,3 +85,12 @@ class IdiomaticStatusTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'idiomatic-evidence-hash'):
                 load(target)
             self.assertEqual(group['scope']['sha256'], sha256((source/scope).read_bytes()).hexdigest())
+
+    def test_readme_has_one_receipt_derived_status_and_no_obsolete_pending_claim(self):
+        readme = (ROOT/'factory/carddemo-web/README.md').read_text(encoding='utf-8')
+        start, end = '<!-- idiomatic-group-status:start -->', '<!-- idiomatic-group-status:end -->'
+        self.assertEqual(1, readme.count(start)); self.assertEqual(1, readme.count(end))
+        block = readme.split(start, 1)[1].split(end, 1)[0].strip()
+        self.assertEqual(paragraph(load(ROOT)), block)
+        self.assertNotIn('CI proof pending', readme)
+        self.assertNotIn('No new score is claimed until that CI result exists', readme)

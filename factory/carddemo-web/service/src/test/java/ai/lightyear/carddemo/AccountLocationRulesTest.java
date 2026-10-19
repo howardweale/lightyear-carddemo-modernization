@@ -26,7 +26,7 @@ class AccountLocationRulesTest {
         for(var entry:update.path("generic_edits").path("paragraphs").properties())
             paragraphs.set(entry.getKey(),entry.getValue());
         original=copy;
-        production=AccountValidationModel.forProduction(update.path("validation"));
+        production=update.path("validation");
         states=literals("VALID-US-STATE-CODE");
         prefixes=literals("VALID-US-STATE-ZIP-CD2-COMBO");
     }
@@ -82,16 +82,17 @@ class AccountLocationRulesTest {
         assertTrue(AccountLocationRules.stateZip("AA","34000",prefixes).valid());
     }
 
-    @Test void productionSelectionRetiresOnlyLocationStatementsAndPreservesInput() {
-        JsonNode before=original.deepCopy();
-        JsonNode selected=AccountValidationModel.forProduction(original);
-        assertEquals(before,original);
+    @Test void generatedProductionRetiresLocationAndPreservesOracleStorage() {
         for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD")) {
-            assertFalse(selected.path("paragraphs").has(paragraph));
-            assertEquals("AccountLocationRules",selected.path("native_paragraphs").path(paragraph).asText());
+            assertTrue(original.path("paragraphs").path(paragraph).isArray());
+            assertFalse(original.path("paragraphs").path(paragraph).isEmpty());
+            assertFalse(production.path("paragraphs").has(paragraph));
+            assertEquals("AccountLocationRules",production.path("native_paragraphs").path(paragraph).asText());
         }
-        assertEquals(original.path("paragraphs").path("1275-EDIT-FICO-SCORE"),
-                     selected.path("paragraphs").path("1275-EDIT-FICO-SCORE"));
+        assertEquals("AccountFicoRule",production.path("native_paragraphs").path("1275-EDIT-FICO-SCORE").asText());
+        assertFalse(production.path("paragraphs").has("1275-EDIT-FICO-SCORE"));
+        for(String key:Set.of("fields","conditions","storage","area_offset","area_length"))
+            assertEquals(original.path(key),production.path(key),key);
     }
 
     private static void completeStorage(SourceEdits expected,SourceEdits actual) throws Exception {
@@ -150,64 +151,6 @@ class AccountLocationRulesTest {
         @SuppressWarnings("unchecked") var scratch=(Map<String,String>)values.get(candidate);
         scratch.put("fixture-only-mismatch","different");
         assertThrows(AssertionError.class,()->completeStorage(oracle,candidate));
-    }
-
-    @Test void selectionRejectsMalformedOrAlreadySelectedModelsWithoutMutatingInput() {
-        assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(null));
-        var mapper=JsonMapper.builder().build();
-        assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(mapper.createObjectNode()));
-        for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD")) {
-            ObjectNode missing=(ObjectNode)original.deepCopy();
-            ((ObjectNode)missing.path("paragraphs")).remove(paragraph);
-            JsonNode before=missing.deepCopy();
-            assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(missing));
-            assertEquals(before,missing);
-        }
-        ObjectNode malformed=(ObjectNode)original.deepCopy();malformed.put("native_paragraphs","bad");
-        assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(malformed));
-        ObjectNode dual=(ObjectNode)original.deepCopy();
-        dual.putObject("native_paragraphs").put("1270-EDIT-US-STATE-CD","OtherRule");
-        JsonNode before=dual.deepCopy();
-        assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(dual));
-        assertEquals(before,dual);
-    }
-
-    @Test void malformedParagraphBodiesAreNotSilentlyReplaced() {
-        for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD"))
-            for(String defect:Set.of("null","scalar","object","empty-array")) {
-                ObjectNode invalid=(ObjectNode)original.deepCopy();
-                ObjectNode paragraphs=(ObjectNode)invalid.path("paragraphs");
-                switch(defect) {
-                    case "null" -> paragraphs.putNull(paragraph);
-                    case "scalar" -> paragraphs.put(paragraph,"bad");
-                    case "object" -> paragraphs.putObject(paragraph);
-                    case "empty-array" -> paragraphs.putArray(paragraph);
-                    default -> throw new AssertionError(defect);
-                }
-                JsonNode before=invalid.deepCopy();
-                var failure=assertThrows(IllegalArgumentException.class,
-                    ()->AccountValidationModel.forProduction(invalid),paragraph+defect);
-                assertEquals("location-paragraph-shape:"+paragraph,failure.getMessage());
-                assertEquals(before,invalid);
-            }
-    }
-
-    @Test void existingNativeOwnersAndSecondParagraphConflictsArePreserved() {
-        ObjectNode source=(ObjectNode)original.deepCopy();
-        source.putObject("native_paragraphs").put("fixture-unrelated","ExistingOwner");
-        JsonNode before=source.deepCopy();
-        JsonNode selected=AccountValidationModel.forProduction(source);
-        assertEquals("ExistingOwner",selected.path("native_paragraphs").path("fixture-unrelated").asText());
-        assertEquals(before,source);
-        for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD")) {
-            ObjectNode conflict=source.deepCopy();
-            ((ObjectNode)conflict.path("native_paragraphs")).put(paragraph,"OtherOwner");
-            JsonNode untouched=conflict.deepCopy();
-            var failure=assertThrows(IllegalArgumentException.class,
-                ()->AccountValidationModel.forProduction(conflict));
-            assertEquals("location-already-native:"+paragraph,failure.getMessage());
-            assertEquals(untouched,conflict);
-        }
     }
 
     @Test void malformedLookupTablesFailClosed() {

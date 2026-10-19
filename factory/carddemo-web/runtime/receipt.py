@@ -17,7 +17,7 @@ def mutation(path):
     account_input=summarize(nodes,('AccountInputRules',))
     account_text_money=summarize(nodes,('AccountTextRules','AccountMoneyRule','CobolNumber'))
     account_ssn_fico=summarize(nodes,('AccountSsnRule','AccountFicoRule'))
-    account_location=summarize(nodes,('AccountLocationRules','AccountValidationModel'))
+    account_location=summarize(nodes,('AccountLocationRules',))
     return dict(passed=bool(total and 10*killed>=9*total and not missing and idiomatic['passed']
                            and account_input['AccountInputRules']['passed']
                            and all(row['passed'] for row in account_text_money.values())

@@ -243,3 +243,58 @@ class WebBindingsTests(unittest.TestCase):
     def test_header_scanner_does_not_treat_commarea_prefix_as_bms_output(self):
         raw=b"       IDENTIFICATION DIVISION.\n       PROGRAM-ID. EXAMPLE1.\n           MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM\n           MOVE WS-PGMNAME TO PGMNAMEO\n"
         self.assertEqual(['PGMNAME'],[h['target'] for h in program(raw,'example.cbl')['headers']])
+
+
+class GeneratedAccountLocationRetirementTests(unittest.TestCase):
+    def test_generated_retirement_preserves_other_paragraphs_storage_and_inputs(self):
+        from copy import deepcopy
+        from unittest.mock import patch
+        from lightyear_data.carddemo import update_edits
+        actual_build=update_edits.build; actual_bind=update_edits.bind_fields; captured={}
+        def bind(paragraphs, fields, conditions, **kwargs):
+            captured['paragraphs']=deepcopy(paragraphs)
+            value=actual_bind(paragraphs,fields,conditions,**kwargs)
+            captured['fields'],captured['conditions']=deepcopy(value)
+            return value
+        def compile(*args):
+            before=deepcopy(args)
+            result=actual_build(*args)
+            self.assertEqual(before,args)
+            return result
+        with patch.object(update_edits,'bind_fields',side_effect=bind), patch.object(update_edits,'build',side_effect=compile):
+            update=build(ROOT)['account_update']
+        production=update['validation']; oracle=update['generic_edits']['paragraphs']
+        native=production['native_paragraphs']
+        for name in ('1270-EDIT-US-STATE-CD','1280-EDIT-US-STATE-ZIP-CD'):
+            self.assertEqual('AccountLocationRules',native[name])
+            self.assertNotIn(name,production['paragraphs'])
+            self.assertTrue(oracle[name]); self.assertEqual(oracle[name],captured['paragraphs'][name])
+        expected_native={
+            '1215-EDIT-MANDATORY':'AccountInputRules', '1220-EDIT-YESNO':'AccountInputRules',
+            '1225-EDIT-ALPHA-REQD':'AccountTextRules', '1230-EDIT-ALPHANUM-REQD':'AccountTextRules',
+            '1235-EDIT-ALPHA-OPT':'AccountTextRules', '1240-EDIT-ALPHANUM-OPT':'AccountTextRules',
+            '1245-EDIT-NUM-REQD':'AccountTextRules', '1250-EDIT-SIGNED-9V2':'AccountMoneyRule',
+            '1265-EDIT-US-SSN':'AccountSsnRule', '1275-EDIT-FICO-SCORE':'AccountFicoRule',
+            '1270-EDIT-US-STATE-CD':'AccountLocationRules', '1280-EDIT-US-STATE-ZIP-CD':'AccountLocationRules'}
+        self.assertEqual(expected_native,native)
+        self.assertEqual({k:v for k,v in captured['paragraphs'].items() if k not in native},production['paragraphs'])
+        self.assertEqual(set(captured['fields']),set(production['fields']))
+        for name,bound in captured['fields'].items():
+            actual=production['fields'][name]
+            self.assertEqual(bound,{k:actual[k] for k in bound})
+            self.assertLessEqual(set(actual)-set(bound),{'screen_field','screen_part','picture'})
+        self.assertEqual(captured['conditions'],production['conditions'])
+
+    def test_missing_or_malformed_location_body_is_not_silently_retired(self):
+        from unittest.mock import patch
+        from lightyear_data.carddemo import update_edits
+        actual_bind=update_edits.bind_fields
+        for name in ('1270-EDIT-US-STATE-CD','1280-EDIT-US-STATE-ZIP-CD'):
+            for kind in ('missing','null','scalar','object','empty-array'):
+                def corrupt(paragraphs,fields,conditions,**kwargs):
+                    result=actual_bind(paragraphs,fields,conditions,**kwargs)
+                    if kind=='missing': del paragraphs[name]
+                    else: paragraphs[name]={'null':None,'scalar':'bad','object':{},'empty-array':[]}[kind]
+                    return result
+                with self.subTest(name=name,kind=kind), patch.object(update_edits,'bind_fields',side_effect=corrupt):
+                    with self.assertRaisesRegex(ValueError,'native-retirement-paragraph: '+name): build(ROOT)

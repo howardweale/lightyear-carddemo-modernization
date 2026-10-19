@@ -65,3 +65,23 @@ class IdiomaticStatusTests(unittest.TestCase):
                 if case=='hash':(root/group['receipt']['path']).write_text(json.dumps(value))
                 else:self.change_receipt(root,group,value)
                 with self.assertRaises(ValueError):load(root,INPUT)
+
+    def test_temporary_status_tree_keeps_bound_scope_and_rejects_tampering(self):
+        from tools.render_oct16_status import copy_status_inputs
+        with tempfile.TemporaryDirectory() as temp:
+            source, target = Path(temp)/'source', Path(temp)/'target'
+            group = self.fixture(source)
+            (source/PATH).write_text(json.dumps(group), encoding='utf-8')
+            for name in ('src/lightyear_control_tower/threshold_evidence.py',
+                         'src/lightyear_factory/threshold3.py'):
+                path = source/name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text('# fixture implementation marker\n', encoding='utf-8')
+            copy_status_inputs(source, target)
+            scope = group['scope']['path']
+            self.assertEqual((source/scope).read_bytes(), (target/scope).read_bytes())
+            self.assertEqual(load(source), load(target))
+            (target/scope).write_bytes((target/scope).read_bytes()+b'\n')
+            with self.assertRaisesRegex(ValueError, 'idiomatic-evidence-hash'):
+                load(target)
+            self.assertEqual(group['scope']['sha256'], sha256((source/scope).read_bytes()).hexdigest())

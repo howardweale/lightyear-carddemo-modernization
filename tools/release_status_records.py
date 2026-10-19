@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_status_record
+from tools import carddemo_status_record, carddemo_idiomatic_status
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -40,6 +40,7 @@ def inputs(root=ROOT):
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    additional += carddemo_idiomatic_status.inputs(root)
     carddemo_path=carddemo_status_record.latest(root)
     if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
     web_path=carddemo_status_record.latest(root,'carddemo-slice-receipt/1')
@@ -117,6 +118,7 @@ def load(root=ROOT):
                 phase2=phase2, evaluated_at=clock, retention=retention,
                 carddemo=carddemo_status_record.load(root) or carddemo,
                 carddemo_web=carddemo_status_record.load_web(root),
+                carddemo_idiomatic=carddemo_idiomatic_status.load(root),
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
@@ -253,6 +255,9 @@ def render(model):
            'CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.',
            '', 'The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.',
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
+    if model.get("carddemo_idiomatic"):
+        current["carddemo_idiomatic"] = model["carddemo_idiomatic"]
+        text += ["", "## Idiomatic Java screen groups", "", carddemo_idiomatic_status.paragraph(model["carddemo_idiomatic"])]
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
              f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]

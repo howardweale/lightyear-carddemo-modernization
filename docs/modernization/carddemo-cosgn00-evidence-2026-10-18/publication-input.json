@@ -1,0 +1,34 @@
+{
+  "schema": "carddemo-idiomatic-group/1",
+  "date": "2026-10-18",
+  "program": "COSGN00C",
+  "supersedes": "docs/modernization/carddemo-slice-1-2026-10-18.json",
+  "receipt": {
+    "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/receipt.json",
+    "sha256": "bc2527e9b76d0e7e64d78f752cbb4ac3953fe76ed5f54c2a688ed5c779a57e88"
+  },
+  "mutations": {
+    "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/mutations.xml",
+    "sha256": "a5371bd57eb4f9d683bb5c3b5161317037126bc0319246b4316887b56820b46e"
+  },
+  "manifest": {
+    "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/SHA256.json",
+    "sha256": "c98f791dc98f4865df0895ec9860e96e89a1822f2f4e4fb45c33a1fb779b082d"
+  },
+  "scope": {
+    "path": "spec/modernization/carddemo-screens/idiomatic-java-scope.json",
+    "sha256": "86c65fcccc9b9990db5012441c26716917be326e297393b3422470e65a11679c"
+  },
+  "baseline": {
+    "path": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/mutations.xml",
+    "sha256": "949c9a77a5d53b1b2f02b82424c0f18dbb106b387e2e448f0de530e1a60265b9"
+  },
+  "unsigned": true,
+  "remaining_evidence_gaps": [
+    "Missing-detail and SQL-error screen equivalence",
+    "Native CICS, IMS and DB2 behavior",
+    "Shared BMS parser and data-layout codec",
+    "Disclosed synthetic IMS rows and account pair",
+    "All surviving, uncovered and timed-out mutants remain in the denominator"
+  ]
+}

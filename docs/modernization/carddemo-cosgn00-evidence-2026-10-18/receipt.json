@@ -1,0 +1,3401 @@
+{
+  "acceptance_complete": true,
+  "artifacts": [
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-bindings/authfrds.sql",
+      "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-bindings/bindings.json",
+      "sha256": "2ff65910505f08ef289800ff085d3cc485903e2eb7567751855aeda14314dbb7"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/acctdata.json",
+      "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/acctdata.sql",
+      "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/carddata.json",
+      "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/carddata.sql",
+      "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/cardxref.json",
+      "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/cardxref.sql",
+      "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/custdata.json",
+      "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/custdata.sql",
+      "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/pautdtl1.json",
+      "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/pautdtl1.sql",
+      "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/pautsum0.json",
+      "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/pautsum0.sql",
+      "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/usrsec.json",
+      "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/mapping/usrsec.sql",
+      "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/plan.json",
+      "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/carddemo-web-data/schema.sql",
+      "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/fixture.json",
+      "sha256": "977586eace84157d92746a74d67ef95fb2addb8d06d7827a585883b9a1645ead"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/cases.json",
+      "sha256": "36beaf0cf7f0aa7b42fba7c2f3b8ea257908f1483cd0da05fc5c8e738d519bef"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/database/25502ba4adb7246d4eb26f327edbca805b83afc4843f41ba577ae8a8a217c662.json",
+      "sha256": "25502ba4adb7246d4eb26f327edbca805b83afc4843f41ba577ae8a8a217c662"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/database/3b994bef40da85a6685d15b09f34616215dce2ec3eedabe83afbba820b99f102.json",
+      "sha256": "3b994bef40da85a6685d15b09f34616215dce2ec3eedabe83afbba820b99f102"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/database/c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02.json",
+      "sha256": "c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/database/cc66c8649f6344fe9a1760cb951e212edfaccbf45e29a043494713c19184bc19.json",
+      "sha256": "cc66c8649f6344fe9a1760cb951e212edfaccbf45e29a043494713c19184bc19"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/database/e15ddb7bd2b2912d9ddb7e4f2d4d12844e6d2bbb1c6b27a89ff65f68f86ced79.json",
+      "sha256": "e15ddb7bd2b2912d9ddb7e4f2d4d12844e6d2bbb1c6b27a89ff65f68f86ced79"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference/summary.json",
+      "sha256": "d018d5bae5a3a8dea837884b373332c6280b77a2d28724a157daac9118137cc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/reference-fixture.json",
+      "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-api/runtime.log",
+      "sha256": "3df6d50d1f674a09338fd14cafa7a498969f5011551b9330ad1492efd61c1524"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/database/25502ba4adb7246d4eb26f327edbca805b83afc4843f41ba577ae8a8a217c662.json",
+      "sha256": "25502ba4adb7246d4eb26f327edbca805b83afc4843f41ba577ae8a8a217c662"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/database/3b994bef40da85a6685d15b09f34616215dce2ec3eedabe83afbba820b99f102.json",
+      "sha256": "3b994bef40da85a6685d15b09f34616215dce2ec3eedabe83afbba820b99f102"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/database/c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02.json",
+      "sha256": "c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/database/cc66c8649f6344fe9a1760cb951e212edfaccbf45e29a043494713c19184bc19.json",
+      "sha256": "cc66c8649f6344fe9a1760cb951e212edfaccbf45e29a043494713c19184bc19"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/database/e15ddb7bd2b2912d9ddb7e4f2d4d12844e6d2bbb1c6b27a89ff65f68f86ced79.json",
+      "sha256": "e15ddb7bd2b2912d9ddb7e4f2d4d12844e6d2bbb1c6b27a89ff65f68f86ced79"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/frames.json",
+      "sha256": "ef73d83b9806daa278dfe7df7648929ea22b21424097056ac0fc58e7a8239130"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/browser/summary.json",
+      "sha256": "c8328b4f6b66f9c21ae51b71a83c461046a20f19bc9ed379c04aff5b6fdafbaf"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-bindings/authfrds.sql",
+      "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-bindings/bindings.json",
+      "sha256": "2ff65910505f08ef289800ff085d3cc485903e2eb7567751855aeda14314dbb7"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/acctdata.json",
+      "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/acctdata.sql",
+      "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/carddata.json",
+      "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/carddata.sql",
+      "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/cardxref.json",
+      "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/cardxref.sql",
+      "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/custdata.json",
+      "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/custdata.sql",
+      "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/pautdtl1.json",
+      "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/pautdtl1.sql",
+      "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/pautsum0.json",
+      "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/pautsum0.sql",
+      "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/usrsec.json",
+      "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/mapping/usrsec.sql",
+      "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/plan.json",
+      "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/carddemo-web-data/schema.sql",
+      "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/fixture.json",
+      "sha256": "977586eace84157d92746a74d67ef95fb2addb8d06d7827a585883b9a1645ead"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/cases.json",
+      "sha256": "14907fe1e529d7090b76bf6dcdaf59df7780727a93b105e398cd72633b63ad2a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/database/c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02.json",
+      "sha256": "c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference/summary.json",
+      "sha256": "d018d5bae5a3a8dea837884b373332c6280b77a2d28724a157daac9118137cc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/reference-fixture.json",
+      "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-browser/runtime.log",
+      "sha256": "71be3fede20401cf6036e32a97c81ac6c7f979cd33c8789dbdf6941b470c7298"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-bindings/authfrds.sql",
+      "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-bindings/bindings.json",
+      "sha256": "2ff65910505f08ef289800ff085d3cc485903e2eb7567751855aeda14314dbb7"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/acctdata.json",
+      "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/acctdata.sql",
+      "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/carddata.json",
+      "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/carddata.sql",
+      "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/cardxref.json",
+      "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/cardxref.sql",
+      "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/custdata.json",
+      "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/custdata.sql",
+      "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/pautdtl1.json",
+      "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/pautdtl1.sql",
+      "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/pautsum0.json",
+      "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/pautsum0.sql",
+      "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/usrsec.json",
+      "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/mapping/usrsec.sql",
+      "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/plan.json",
+      "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/carddemo-web-data/schema.sql",
+      "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/fixture.json",
+      "sha256": "977586eace84157d92746a74d67ef95fb2addb8d06d7827a585883b9a1645ead"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AccountUpdateService.java.html",
+      "sha256": "432b0e5fe71e405973cf50464646d5d4e959f25eb7b6145fa4d85f095ae6b9c1"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AccountUpdateTransaction.java.html",
+      "sha256": "31d3f696c8896b96b1db61fda038df9d590b8e82d79e4182ffce601f6f3cf3d1"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AccountViewService.java.html",
+      "sha256": "c12769d4b2d616f17b2a9b2f968957de796748da03571c375701a40ec5c7a67f"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AuthorizationDetailService.java.html",
+      "sha256": "243dac5e30e45b470ffbebb1058ae284ad46f5409e03264aa093283de411e297"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AuthorizationFraud.java.html",
+      "sha256": "d0b03aa79baa6cb66adce80a3637cf5d8ba526395bbc8edc37e1d2296990ccf3"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AuthorizationListService.java.html",
+      "sha256": "247894d0355b414ca4757af40f048f4d28dd172830ce149a4301c9b101090ff3"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/AuthorizationRendering.java.html",
+      "sha256": "7a953c67b058276b1481ea1274d4b3a0501e2a7c53ec87cab82d08e4e6ab7f91"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/ChangeDetection.java.html",
+      "sha256": "6d02e80384074e9548728a2790f7a320c83da961707dba26bc680f29c0b8f7c4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/MenuService.java.html",
+      "sha256": "1018ab8010e9f385f17890aad187ffdcbead29776c892fc1149551402e86e585"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/ScreenProjection.java.html",
+      "sha256": "5a632da222810863db53b2fddf425fb9c639426d5560bb35f519fa8c326a05c2"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/SignonRules.java.html",
+      "sha256": "73f9fcf04d8478fcb724d36cd688362a7e613d0f907b3f971af5585fd803045c"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/SignonService.java.html",
+      "sha256": "d972c55fe5009c996986743fd50ce4dd6791561de7e33632d6316db20f92bed6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/SourceEdits.java.html",
+      "sha256": "7c603516c35f4180f1fbb92165862016935760a21827913a9f0a9bfaca3b6f83"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/TransactionService.java.html",
+      "sha256": "c63265533320dd4eafcb53016832faa37fa8a730175efbd027eb15417fdffc2c"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/ai.lightyear.carddemo/index.html",
+      "sha256": "ca92123dc59d1d670468c97e11637e55097fc60239b3dc194bce0ab6015cea20"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/index.html",
+      "sha256": "32256f48f74888efb496409bb9c998fec92222379cb451968ee4ff57e87d9d99"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/mutations.xml",
+      "sha256": "a5371bd57eb4f9d683bb5c3b5161317037126bc0319246b4316887b56820b46e"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/style.css",
+      "sha256": "78ea37fb78e124acd62b472b0dbdb1f80176d8b4c3353411668797fbf3db7976"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/cases.json",
+      "sha256": "14907fe1e529d7090b76bf6dcdaf59df7780727a93b105e398cd72633b63ad2a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/database/c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02.json",
+      "sha256": "c54bff4343f4361cd650968436723803e9a69fcd59aa645a89dea23bd8844d02"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference/summary.json",
+      "sha256": "d018d5bae5a3a8dea837884b373332c6280b77a2d28724a157daac9118137cc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/reference-fixture.json",
+      "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/runtime.log",
+      "sha256": "fd9e52cce7ee39c8193610416e5456e8d5ab9a8536161b82eeabe38866756def"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateServiceTest.xml",
+      "sha256": "03a8595957a4431101f1c7513c74711a377ca711b5c9698e0e4578d4e6df07e3"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateTransactionTest.xml",
+      "sha256": "3254e411f02dd2dd7fd1cd10b10bddf78f28069437507b7c38dee383cbed9412"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.AccountValidationTest.xml",
+      "sha256": "8b848658559c408536d91baf70d187b1dfced0195bea06cdcd5ea732cd19ea77"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.AccountViewTest.xml",
+      "sha256": "0145f10b7b15cf63914c7397342f28c4ed299771505162305306c9004cf4affb"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.AuthorizationTest.xml",
+      "sha256": "318379b6d44ff43fac9ea181e48f582b29059d7ffa52d5c208ab6b2d70185602"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.CobolNumberTest.xml",
+      "sha256": "e9857fe12bfc1f58bbeb6a1241558d171c9fd51aa7625cb19be050ac8d88ef1d"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.GeneratedBindingsTest.xml",
+      "sha256": "b911c37b0ea2c3403dea22e25c4a947d4a74747264cbb8a0ca725653b4849cb6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.InteractionEngineTest.xml",
+      "sha256": "ad37837c83c553ee3b171de1af10136448c8635d76efb428e8eb5b358fd6443a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.MasterReadFailureTest.xml",
+      "sha256": "c015e2ca52de104e1f50e54ff59713767e7fa2d9ce29e854953765857da0db45"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.NumericEncodingTest.xml",
+      "sha256": "36019a9ca3a83a9dc063825e78479165fe74480b16b1f9e2a780eedc2961b7c9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.ReferenceScenarioTest.xml",
+      "sha256": "e8424b1dca205708d22c33377984d20c5abd54a89a1a19aa35290b6805764967"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.RoutingStateTest.xml",
+      "sha256": "f2a8f91a87b5f4db27c68473e4fcbf5dc11985d691b4933820d5a30ba9badcd8"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SessionTokenTest.xml",
+      "sha256": "1e13645c469bd8dceb4c684e6f1ee78bd31b5e067e1a573f32a1bb7071f7bb89"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SignonCommareaTest.xml",
+      "sha256": "c6ac8b83d386093ebb163981976dad4a2d64948144a61488e869fb5528d4d49a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SignonRulesTest.xml",
+      "sha256": "27a07815a633d5e479ed74a57f83fa06d50a1e0aacfe67d41cb7f4a04f928d0e"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SourceDateEditsTest.xml",
+      "sha256": "ef4eb017f1ae7763688c1d27213a5d8b8387ab10f1be8bcac7e6a9b0d5a84e2b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsContractTest.xml",
+      "sha256": "5664f42c896eb18d402ef653dfa5a9381d0b543ac537499daafc0884d5f063c4"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsTest.xml",
+      "sha256": "1daeffe4ca996b09376188a60683bac7f964d66812da486f0ff1d4a2a39e6cc9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.AccountUpdateServiceTest.txt",
+      "sha256": "a3e8242b0c7bf89a897cf24c02e18d331950b307db303a9b80ce2641af5d98c2"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.AccountUpdateTransactionTest.txt",
+      "sha256": "608295ad0a643ecdd664bbf27cd186ea512fc4e788530726158ecdbbabb7394a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.AccountValidationTest.txt",
+      "sha256": "f152d4fca714fcdd920ee46727c986fd4a5219b94377769de7770c51dcd0bf40"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.AccountViewTest.txt",
+      "sha256": "de1b8ee15d337c35c8f1564f0da60d74a603a3f032ae38cedda3f9cd85940730"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.AuthorizationTest.txt",
+      "sha256": "28c780c5a75c4a5d8d0ff0b17968469b483f5aa06d45f1e48db288ecd39dd7ae"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.CobolNumberTest.txt",
+      "sha256": "e43afc36c42db3c4d08312e3fe1005286f47197502a37588a08581d14c77e926"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.GeneratedBindingsTest.txt",
+      "sha256": "654aeb047199f9fbb5850603c36f24eacda82c06dbddf5f469cc8b23923b4558"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.InteractionEngineTest.txt",
+      "sha256": "3f2d442c6876e6b80e07011419f2e00296941981f8f4ce4a4743af9689ee4f8a"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.MasterReadFailureTest.txt",
+      "sha256": "be08007f2d4f75f8fa8c397b75bfbc54ec3f4d9b2c2f44a39c03fa02644aa5a6"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.NumericEncodingTest.txt",
+      "sha256": "963abd07b9898f0c468b4ad20a06e02b5e2469c74af56b3e4a382c91f95a2f12"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.ReferenceScenarioTest.txt",
+      "sha256": "8c6d0b76c89309973962d12b6dfd28103708fd15ffa342a2bc9f7463eb2f9b98"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.RoutingStateTest.txt",
+      "sha256": "9a58d28ed192faa3df5708aaabb389cb2ba36af0bf30f87594e354f4227af5a9"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SessionTokenTest.txt",
+      "sha256": "d8766162039e3027dfcd443a54f3244c60bb4b77615cb23c53ae849d946f631b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SignonCommareaTest.txt",
+      "sha256": "ec5e7c9db0ebc7d4b80cacabd1aeef06fd2bb29ef85ca07b4d458d84e37edb9b"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SignonRulesTest.txt",
+      "sha256": "0949583324973bf196c0b314191d9dbc102a1d5246352718d6dc647d3ad8949d"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SourceDateEditsTest.txt",
+      "sha256": "c03930dcb2f1818d1b5d26e33ffadfe59be0a639ac9960f26d40b16374d0277e"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SourceEditsContractTest.txt",
+      "sha256": "49e8d773d7d69ef28d0e0ca5203f3e16c0d6e9fb065236caaf1662cf175d6c2d"
+    },
+    {
+      "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/surefire-reports/ai.lightyear.carddemo.SourceEditsTest.txt",
+      "sha256": "cd3ba395b667768b230e8345cca7eabad1559203cc2766b0b904087b5e87bf82"
+    }
+  ],
+  "date": "2026-10-18",
+  "factory_request": {
+    "action": "review evidence and remaining gaps",
+    "activation_authorized": false,
+    "phase2_authorized": false,
+    "reviewer": "Howard",
+    "signature": null,
+    "status": "unsigned-review-request"
+  },
+  "gates": {
+    "api-reference": {
+      "bms_interactions": 666,
+      "case_denominator_status": "complete generated suite",
+      "cases": [
+        {
+          "id": "blank-user",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "blank-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "wrong-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "user-not-found",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF1",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF24",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-blank",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-zero",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-nonnumeric",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-past-end",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-3",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-4",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-5",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-6",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-7",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-8",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-9",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-10",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "1-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "account-view",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-valid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "authorization-pages-and-fraud",
+          "interactions": 15,
+          "status": "passed"
+        },
+        {
+          "id": "update-committed",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-postcommit-blank-group",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-valid-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-cancelled",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-conflict",
+          "interactions": 14,
+          "status": "passed"
+        }
+      ],
+      "completed_cases": 120,
+      "interactions": 678,
+      "passed": true,
+      "planned_cases": 120,
+      "programs_compared": 6,
+      "programs_required": 6,
+      "validated_fields": [
+        "AADDGRP",
+        "ACRCYCR",
+        "ACRCYDB",
+        "ACRDLIM",
+        "ACSADL1",
+        "ACSADL2",
+        "ACSCITY",
+        "ACSEFTC",
+        "ACSFNAM",
+        "ACSGOVT",
+        "ACSHLIM",
+        "ACSLNAM",
+        "ACSMNAM",
+        "ACSPFLG",
+        "ACSPH1A",
+        "ACSPH1B",
+        "ACSPH1C",
+        "ACSPH2A",
+        "ACSPH2B",
+        "ACSPH2C",
+        "ACSSTTE",
+        "ACSTFCO",
+        "ACSTTUS",
+        "ACSZIPC",
+        "ACTSSN1",
+        "ACTSSN2",
+        "ACTSSN3",
+        "ACURBAL",
+        "DOBDAY",
+        "DOBMON",
+        "DOBYEAR",
+        "EXPDAY",
+        "EXPMON",
+        "EXPYEAR",
+        "OPNDAY",
+        "OPNMON",
+        "OPNYEAR",
+        "RISDAY",
+        "RISMON",
+        "RISYEAR"
+      ]
+    },
+    "browser": {
+      "interactions": 678,
+      "passed": true,
+      "required": 678
+    },
+    "browser-reference": {
+      "bms_interactions": 666,
+      "case_denominator_status": "complete generated suite",
+      "cases": [
+        {
+          "id": "blank-user",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "blank-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "wrong-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "user-not-found",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF1",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF24",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-blank",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-zero",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-nonnumeric",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-past-end",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-3",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-4",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-5",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-6",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-7",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-8",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-9",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-10",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "1-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "account-view",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-valid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "authorization-pages-and-fraud",
+          "interactions": 15,
+          "status": "passed"
+        },
+        {
+          "id": "update-committed",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-postcommit-blank-group",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-valid-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-cancelled",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-conflict",
+          "interactions": 14,
+          "status": "passed"
+        }
+      ],
+      "completed_cases": 120,
+      "interactions": 678,
+      "passed": true,
+      "planned_cases": 120,
+      "programs_compared": 6,
+      "programs_required": 6,
+      "validated_fields": [
+        "AADDGRP",
+        "ACRCYCR",
+        "ACRCYDB",
+        "ACRDLIM",
+        "ACSADL1",
+        "ACSADL2",
+        "ACSCITY",
+        "ACSEFTC",
+        "ACSFNAM",
+        "ACSGOVT",
+        "ACSHLIM",
+        "ACSLNAM",
+        "ACSMNAM",
+        "ACSPFLG",
+        "ACSPH1A",
+        "ACSPH1B",
+        "ACSPH1C",
+        "ACSPH2A",
+        "ACSPH2B",
+        "ACSPH2C",
+        "ACSSTTE",
+        "ACSTFCO",
+        "ACSTTUS",
+        "ACSZIPC",
+        "ACTSSN1",
+        "ACTSSN2",
+        "ACTSSN3",
+        "ACURBAL",
+        "DOBDAY",
+        "DOBMON",
+        "DOBYEAR",
+        "EXPDAY",
+        "EXPMON",
+        "EXPYEAR",
+        "OPNDAY",
+        "OPNMON",
+        "OPNYEAR",
+        "RISDAY",
+        "RISMON",
+        "RISYEAR"
+      ]
+    },
+    "ci-jobs": {
+      "passed": true,
+      "results": {
+        "compose-smoke": {
+          "outputs": {},
+          "result": "success"
+        },
+        "full-slice-proof": {
+          "outputs": {},
+          "result": "success"
+        },
+        "source-and-service-foundation": {
+          "outputs": {},
+          "result": "success"
+        }
+      }
+    },
+    "mutation": {
+      "denominator": "every PIT mutation in configured screen-handler/helper scope; timeout, no-coverage and errors are not counted killed",
+      "idiomatic_java": {
+        "current": {
+          "SignonRules": {
+            "killed": 15,
+            "non_killed": [],
+            "passed": true,
+            "percent": 100.0,
+            "status_counts": {
+              "KILLED": 15
+            },
+            "total": 15
+          },
+          "SignonService": {
+            "killed": 19,
+            "non_killed": [
+              {
+                "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+                "line": "76",
+                "method": "authenticate",
+                "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+                "status": "SURVIVED"
+              },
+              {
+                "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+                "line": "78",
+                "method": "authenticate",
+                "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+                "status": "SURVIVED"
+              }
+            ],
+            "passed": true,
+            "percent": 90.47619047619048,
+            "status_counts": {
+              "KILLED": 19,
+              "SURVIVED": 2
+            },
+            "total": 21
+          }
+        },
+        "denominator": "all generated mutants per required class; KILLED only",
+        "passed": true,
+        "previous": {
+          "classes": {
+            "SignonService": {
+              "killed": 33,
+              "non_killed": [
+                {
+                  "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+                  "line": "38",
+                  "method": "interact",
+                  "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+                  "status": "SURVIVED"
+                },
+                {
+                  "description": "removed call to ai/lightyear/carddemo/Commarea::set",
+                  "line": "38",
+                  "method": "interact",
+                  "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+                  "status": "SURVIVED"
+                }
+              ],
+              "passed": true,
+              "percent": 94.28571428571429,
+              "status_counts": {
+                "KILLED": 33,
+                "SURVIVED": 2
+              },
+              "total": 35
+            }
+          },
+          "report": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/mutations.xml",
+          "sha256": "949c9a77a5d53b1b2f02b82424c0f18dbb106b387e2e448f0de530e1a60265b9"
+        },
+        "program": "COSGN00C",
+        "remaining_statement_engine_programs": [
+          "COACTVWC",
+          "COACTUPC",
+          "COPAUS0C",
+          "COPAUS1C"
+        ],
+        "schema": "carddemo-idiomatic-mutation/1",
+        "threshold": 90
+      },
+      "killed": 702,
+      "missing_screen_handlers": [],
+      "passed": true,
+      "percent": 91.28738621586476,
+      "report": {
+        "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/mutations.xml",
+        "sha256": "a5371bd57eb4f9d683bb5c3b5161317037126bc0319246b4316887b56820b46e"
+      },
+      "status_counts": {
+        "KILLED": 702,
+        "NO_COVERAGE": 17,
+        "SURVIVED": 49,
+        "TIMED_OUT": 1
+      },
+      "threshold": 90,
+      "total": 769
+    },
+    "mutation-reference": {
+      "bms_interactions": 666,
+      "case_denominator_status": "complete generated suite",
+      "cases": [
+        {
+          "id": "blank-user",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "blank-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "wrong-password",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "user-not-found",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF1",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-PF24",
+          "interactions": 4,
+          "status": "passed"
+        },
+        {
+          "id": "menu-blank",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-zero",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-nonnumeric",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-past-end",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-3",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-4",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-5",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-6",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-7",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-8",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-9",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "menu-outside-10",
+          "interactions": 3,
+          "status": "passed"
+        },
+        {
+          "id": "1-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "1-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "2-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-blank",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-zero",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-nonnumeric",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "11-not-found",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "account-view",
+          "interactions": 5,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-AADDGRP-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYCR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRCYDB-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACRDLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSADL2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSCITY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSEFTC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSFNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSGOVT-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSHLIM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSLNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSMNAM-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPFLG-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH1C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2A-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2B-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSPH2C-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSSTTE-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTFCO-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSTTUS-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACSZIPC-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN1-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN2-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACTSSN3-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-ACURBAL-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-DOBYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-EXPYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-OPNYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISDAY-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISMON-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-blank",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-RISYEAR-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-invalid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "leap-day-valid",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "authorization-pages-and-fraud",
+          "interactions": 15,
+          "status": "passed"
+        },
+        {
+          "id": "update-committed",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-postcommit-blank-group",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-valid-no-change",
+          "interactions": 6,
+          "status": "passed"
+        },
+        {
+          "id": "update-cancelled",
+          "interactions": 7,
+          "status": "passed"
+        },
+        {
+          "id": "update-conflict",
+          "interactions": 14,
+          "status": "passed"
+        }
+      ],
+      "completed_cases": 120,
+      "interactions": 678,
+      "passed": true,
+      "planned_cases": 120,
+      "programs_compared": 6,
+      "programs_required": 6,
+      "validated_fields": [
+        "AADDGRP",
+        "ACRCYCR",
+        "ACRCYDB",
+        "ACRDLIM",
+        "ACSADL1",
+        "ACSADL2",
+        "ACSCITY",
+        "ACSEFTC",
+        "ACSFNAM",
+        "ACSGOVT",
+        "ACSHLIM",
+        "ACSLNAM",
+        "ACSMNAM",
+        "ACSPFLG",
+        "ACSPH1A",
+        "ACSPH1B",
+        "ACSPH1C",
+        "ACSPH2A",
+        "ACSPH2B",
+        "ACSPH2C",
+        "ACSSTTE",
+        "ACSTFCO",
+        "ACSTTUS",
+        "ACSZIPC",
+        "ACTSSN1",
+        "ACTSSN2",
+        "ACTSSN3",
+        "ACURBAL",
+        "DOBDAY",
+        "DOBMON",
+        "DOBYEAR",
+        "EXPDAY",
+        "EXPMON",
+        "EXPYEAR",
+        "OPNDAY",
+        "OPNMON",
+        "OPNYEAR",
+        "RISDAY",
+        "RISMON",
+        "RISYEAR"
+      ]
+    }
+  },
+  "hashes": {
+    "generators": [
+      {
+        "path": "src/lightyear_data/carddemo/__init__.py",
+        "sha256": "3fbfe626c20e9491ca0fe4b43b3a8833470141c3d8508acbb4d0903357e4b155"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/__main__.py",
+        "sha256": "775fc2875f62e56ed6da9996a74a5ae66a60e16fcf4b8439086910af1495c2b9"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/access.py",
+        "sha256": "b9f52a6ad9c746f4282d808cba2339a8fffd9d52f605fb60b0c2edf16e670814"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/auth_edits.py",
+        "sha256": "972f083425097b8cb21af4f543b3db252496400bb8e0a985679d08a59341c9b1"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/auth_fraud.py",
+        "sha256": "0398049d673948890070573b43f422cd14bc7871a6a1afe96ca9d81bec025a9f"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/codec.py",
+        "sha256": "7444dc7c0493621d283c24c260710fe2e5c479219a7b7cc2537a41be1036a6e4"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/date_edits.py",
+        "sha256": "3ea3490af784817eb8094a4487f2c72cb281630d78e4b8cc3a14fed9adfec2f8"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/ims_replay.py",
+        "sha256": "2d40f0acda6a93fdaea6dcf7a0a6660aa00c412f784e8375a37b74337e6a3425"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/plan.py",
+        "sha256": "93936f4470915d700801756f987256068196db1b46a078ef158345d8224e209a"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/proof.py",
+        "sha256": "aa008cc0afca1975b33dbc2e14151d757031008818b713a73f53933745727cbc"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_control.py",
+        "sha256": "0e4649e90480cd33f26fabd9363e923f94fbf7e58dd81e15d94171cc4ab43298"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_date.py",
+        "sha256": "f318c339401213fd20bfaae30c91447343ae366b6ef133f000f861c4e10de621"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_declarations.py",
+        "sha256": "b6a354ec24d22710bd01cf4adce7f15153902fb924435b77e120a0ee79636668"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_fixture.py",
+        "sha256": "2be0bcbd8b4b8f10874531d9a17eb9464dca39dd064f0ea86085a7d158104f81"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_menu.py",
+        "sha256": "128ecedc403fbfbee07eb8a7021bb17df53c807edf44ae1c1f76a3dc10f7bfef"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_screens.py",
+        "sha256": "6936586237129cd2a02ef6e978ca3cead580783f503522380ec9ecc043099793"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_signon.py",
+        "sha256": "5e066c6074d781744a830570996d4d7dbc31fd10e1d0162402c5193afd0532fd"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_source.py",
+        "sha256": "3554a42aa1008b7f7afcb11b4fb57aba158959a46924ead3dce3e72e62b8bb5e"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_storage.py",
+        "sha256": "06651e4b00beea76c44de867a8e89db05df961157870e7e5512d2406c2d3071d"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/reference_values.py",
+        "sha256": "20369adb33e7704704a7f887acec902c33321f438f986109b18ae6a13f74d520"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/render_edits.py",
+        "sha256": "53182c07f7e2f321a32d7301c39846d023486077bed9a5771f981ce40e9c784f"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/schema.py",
+        "sha256": "c862a1686ebf514d15a16be20eb3d4c1e045d1cdb35b2293331ff5aa0a86ce9c"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screen_commarea.py",
+        "sha256": "77624b7bee51c37067b275ef4eee02c4dbbeadd6c5571ff337cd98d054bb03cb"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screen_edits.py",
+        "sha256": "740ca5dc15df7c142ceee9387712a0774e2c203e40e6a8bbf1f85b759058b3c8"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screen_projection.py",
+        "sha256": "51d3a014fff481289062c8b04f5353667ef6ff3c07ca0d3a9fc858b5fb098981"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screen_rules.py",
+        "sha256": "76e61cec81a80d81da581691ddcd601c1b9b2636cdbcf97c955f5d74c87760d1"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screen_update.py",
+        "sha256": "a495efc3d069e54235446439dfcd5d5ec36591fb788a0d4a0bccf79004b0cb23"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/screens.py",
+        "sha256": "e7f9c756f9971ac0ef5dd9c44bf9c229de89830a54567da807cdc3aa035ccd38"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/session.py",
+        "sha256": "4013207445b65257e1ad3cc3b7344dba59be1b1d554a8870bb0fa88a6be79179"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/source_closure.py",
+        "sha256": "f83e23b07d808e17b488cc9f978fa2364d11f8ef168fa4ca7e6475baeab55749"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/store.py",
+        "sha256": "caeb16c615532c3286728dc4c73e8a47762d88db010d02f866d2682189e76c22"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/update_edits.py",
+        "sha256": "7631f44d33bea35d2406c0985f42be5ec71b299672d8702a21d81b87790f2c75"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/volume.py",
+        "sha256": "22024aaad485aaebd9b16d25e3814aad60c8a068285a29a7a5af104428e04f0e"
+      },
+      {
+        "path": "src/lightyear_data/carddemo/web_bindings.py",
+        "sha256": "63904bde122cb29663cba087adbda1290d2a65f164ec655f914033f6692740fc"
+      }
+    ],
+    "mappings": [
+      {
+        "path": "work/carddemo-web-bindings/bindings.json",
+        "sha256": "2ff65910505f08ef289800ff085d3cc485903e2eb7567751855aeda14314dbb7"
+      },
+      {
+        "path": "work/carddemo-web-data/plan.json",
+        "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de"
+      }
+    ],
+    "pinned_sources": [
+      {
+        "path": "spec/modernization/carddemo-data/upstream/LICENSE",
+        "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+        "sha256": "309468a5c4745f92c6dcf6ed28b396334b2f131ced78eb43eda962a63d2b174e"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+        "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+        "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/data/EBCDIC/AWS.M2.CARDDEMO.IMSDATA.DBPAUTP0.dat",
+        "sha256": "cce00a6c86b3e02ee6d3c99723d5d5c080f9c1e1ae779591e98ba873849d3569"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd",
+        "sha256": "ff82e8b3c1ab201db212047fdb271889e809d90f4fc47c68202c17572d485796"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd",
+        "sha256": "1d3b9ee54df4b19452b5efaa93bdf9554a05ee0b6f96d4f9d562a8a94d623969"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb",
+        "sha256": "d88a628f8d2c9491e9c7a2867235400411c4e1826150af8334a07b1a033d0210"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/cpy/CSUSR01Y.cpy",
+        "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT01Y.cpy",
+        "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT02Y.cpy",
+        "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT03Y.cpy",
+        "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVCUS01Y.cpy",
+        "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS",
+        "sha256": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS",
+        "sha256": "b5d968b6865bd48fb45928ef6cacce9b6aacdaec7b51cfcc9819b9fafcaed3e5"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CARDXREF.PS",
+        "sha256": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CUSTDATA.PS",
+        "sha256": "0435915cd35ea3077bad9d391fea1520bc7f30ec06d6e29fbe68290f3d6f27f3"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.USRSEC.PS",
+        "sha256": "8608d4b8a03f7587c1493282f9337ab24fdf527d0aadbdb85dc3713dccdc6fc8"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/ACCTFILE.jcl",
+        "sha256": "febba716137a3f59302ef1136c60dccce4d07d32e1d118b15d48f99266dea9e7"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/CARDFILE.jcl",
+        "sha256": "0240faee5aec80d976ce0b15a85f101fa0f901b09b72d64545daa09858ddcc0c"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/CUSTFILE.jcl",
+        "sha256": "3f222d940612015b0c3b532253e34e8e60f02a670dd780a10b9db1f90e8deea7"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/DUSRSECJ.jcl",
+        "sha256": "02b0b78847e722b133b23d8f6152471214ea65d4f4c08692a5f42425987ca3c4"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/ESDSRRDS.jcl",
+        "sha256": "9bec766029968057b831f539cc91b84e4e1d8ee22aa3de5ba6b509f8a698de77"
+      },
+      {
+        "path": "spec/modernization/carddemo-data/upstream/app/jcl/XREFFILE.jcl",
+        "sha256": "ae0edd90056cccacd26412fad2cf3d95656c2a2810b66d8c316cbaac9e81248f"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/LICENSE",
+        "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU00.bms",
+        "sha256": "402516c3203e3940df363ae7d84964f7b792bb107331223c9e6c7b0ddaf278bc"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU01.bms",
+        "sha256": "35b86cd8d764c831fa4d696802eef58c0f6c2654c54904569494123e2c93fd94"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+        "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl",
+        "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl",
+        "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+        "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+        "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU00.cpy",
+        "sha256": "7bd332d0966e4b0a289521716d5ef5f00c8f55e50f5992dce10e15dbbf04da7d"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU01.cpy",
+        "sha256": "bee60b3bfeb37d5df0d0ff3182f564bd1aa8cb1f36100c4f7ed4fc42108a7937"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl",
+        "sha256": "737c2bb757ef256976ac7658e071d1833fc2ea24d7010dbeff137e6c98fb66a6"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl",
+        "sha256": "1634f898360955f32872bd9c35533513e2879135018681b92caa51c787abaeaf"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/XAUTHFRD.ddl",
+        "sha256": "880bb53afed368bdcb858cd7e4ddb6252a47ac16d819df4ca58ca6bab90921b4"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-transaction-type-db2/bms/COTRTLI.bms",
+        "sha256": "5867235e382d6fc54da67ad8dfbcc7db7e1183e999068789b6e310c5c0d18abf"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/app-transaction-type-db2/bms/COTRTUP.bms",
+        "sha256": "1496a35f219e92b5339e2651a58dabeea97a0410d7cf465a8658b207dfd1706c"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COACTUP.bms",
+        "sha256": "60b261bd2d0c6c851cd78af963ce6c6e14444a9477ad6eb0f80f0e0d4f1f4f23"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COACTVW.bms",
+        "sha256": "e229c1b4c9d3f52a5b8ebbb5266c9e47502ac90577b46f5f146bdb34b05f7f46"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COADM01.bms",
+        "sha256": "44a3f209e7fa8445355ab7ba687b3ac6e32ef4dfec225e04f4eb2bd57e39386a"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COBIL00.bms",
+        "sha256": "f2101ff2143cd4746a5ffe0c4eeec977dfdad8410dee19236e0bdfb5ad58657f"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDLI.bms",
+        "sha256": "b73a1ebb2ec327db220a4df272a6766ddd809ebf0db378dcc9a3c83ec2506343"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDSL.bms",
+        "sha256": "93feec4d134e991a81320d8c2f19e1aba19937753a1972d7d07f8a24973c9af6"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDUP.bms",
+        "sha256": "e82235cab015fc38b4f3bf73546b095105462373280362780480d2f48a39017d"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COMEN01.bms",
+        "sha256": "f87af09e6f60ab198d5c05817e3007361a6d29ed957322ef25b11c5420c84b4c"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/CORPT00.bms",
+        "sha256": "3ae6f0a2db62f64ca45ac6d975efefcc0bf635295ce4f6bea202c09d93deefc7"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COSGN00.bms",
+        "sha256": "6747ba57e45fed7e52af728a1f8688ed8fab90b93e1234ab0a0bcae32fa39056"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN00.bms",
+        "sha256": "6f914caf567937cd91be8f11118324c4d4c7ec0f68c0309f831cad109a3f45b2"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN01.bms",
+        "sha256": "be0749c98ec7d60a37160ba85d6cbef674f9f7aa0de5760faa64ee951c146996"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN02.bms",
+        "sha256": "8b46b5ae879119b9d8395b712970ebc5b8d5043efd351a47f9a31a451e073042"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR00.bms",
+        "sha256": "82a453530e4457e45f8af028b68307f7049e24fa13fedb8644007f68a9738f88"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR01.bms",
+        "sha256": "f79efda027a728fad77ca163b1a85851e099df5d3ce6876309274dbb2b67dff9"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR02.bms",
+        "sha256": "324ff2e74f580d061a15963d394c9883eedf93dd7de95a04926f78bb78aecff1"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR03.bms",
+        "sha256": "95f557d76cb482753039cc60f62cbac4fe09c4c02f9057658ee1ee70429c6fc9"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTVWC.cbl",
+        "sha256": "4f1e55176f69edfb55b7af7a161aceb8c3bc3bd1b2924a704a76256e0e751b54"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+        "sha256": "c77747b4caaf00b45177a6449562b7f59ec336db832937595edef8b32fdce6fa"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COSGN00C.cbl",
+        "sha256": "4f901ae6b113eebae60ae1d94b30f8cb9906d031a4419770bf56980bdf97e377"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/CSUTLDTC.cbl",
+        "sha256": "58c165dcfc3927232c02c152c673e3dee551587b85e7fe56ca67325c980eebb6"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COCOM01Y.cpy",
+        "sha256": "77097557ee4c365f62138328d3e280ce7aba5f81d418c6f16434f0fbb2aafa6c"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COMEN02Y.cpy",
+        "sha256": "433f5b373c2a42c3c83d62eef1dfb5b101265a9db62e42857ba58acf8c50011d"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COTTL01Y.cpy",
+        "sha256": "5032bfa9428354bb4a62e8c82ba1efa7dcf6b80f27544ad99a81c8a8df8ed41b"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSDAT01Y.cpy",
+        "sha256": "61dd7b01d974c13cd47f71774c613dd67996418a22fae730d09b246c0b710ad7"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSLKPCDY.cpy",
+        "sha256": "098d384b9580abd5b4b77ae9c33b8cb65b28be45390130b22c48c3714200cca2"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG01Y.cpy",
+        "sha256": "ef8ce44572885d63e46a02516f992cabbbc57ea94235000fd376325750e26eda"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG02Y.cpy",
+        "sha256": "0238a3a75e723272e0c287b46a52d365de8549dada1a73d15df75660ad7bd2ea"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSSETATY.cpy",
+        "sha256": "45000f93a9be6e8132262e53faa1db03ab1f20fbee4063272b890837216d1fcb"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSSTRPFY.cpy",
+        "sha256": "751bc1a625114a8660ee2172b70cdea135c259652d2305a2bfda25ff4cf34853"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUSR01Y.cpy",
+        "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUTLDPY.cpy",
+        "sha256": "80f83e3d55ff84c0d9088e68399f30ebad4db763280d47bdec220eadc45ba2af"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUTLDWY.cpy",
+        "sha256": "ecba6f07ea9db7c6f58f7fc1c5227179e8b80299f79a04743c6adb9f08190a1a"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT01Y.cpy",
+        "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT02Y.cpy",
+        "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT03Y.cpy",
+        "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVCRD01Y.cpy",
+        "sha256": "52b6dbe09f7648f3fdbd7c00f4683d434fe6b631f6c8854466a24f42c1c92445"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVCUS01Y.cpy",
+        "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COACTUP.CPY",
+        "sha256": "2ae13a55cb35c63988c17e96744ce77dfda9663896e65061b818f47d9be983dc"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COACTVW.CPY",
+        "sha256": "f3bf70a636aecb5874518ccc53f9826bcc69070b8307bdc551b2c57b9dd61dce"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COMEN01.CPY",
+        "sha256": "21275363519e57f47c5c7842178344208f3ad773a551e74e5eeff285c775ad5c"
+      },
+      {
+        "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COSGN00.CPY",
+        "sha256": "e2a2f8f6e76e1613cbd8f0baaca87d571a49a7bc219d16a732e4e4ecd7485407"
+      }
+    ],
+    "services": [
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateService.java",
+        "sha256": "4712eeb62451efa7f6655abb55561d7224ec6cdb160c1391117ce110abed0855"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateTransaction.java",
+        "sha256": "5b0c7d6dc029e379cfd45a2fb8df3206f8c33c8bb99b94aa94349723f815c7ae"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountViewService.java",
+        "sha256": "dfd1f3ed6448f7cd1ce8dec879576537a78cf43667cfb457c433156cc679419c"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationDetailService.java",
+        "sha256": "f02bdbbcea8e21e1e079b43eecd32d7b9fa72101a75ca42c3ca52e83b1f2594d"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationFraud.java",
+        "sha256": "357c228ff89385bd456c24aa9c149f153d29fa72a15418be309601af0c7b5171"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationListService.java",
+        "sha256": "cdac72b00582826237199dc626bb92d6617ae37b661ed487f360981a0651e0f7"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+        "sha256": "89753f7eb40857c6a137f9c6f14e2010e468a3dd80ef75a6002b159fe3debdc2"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRendering.java",
+        "sha256": "ab15cae0be5cfa14a708836a7444b47ef6ad1a52da3041fb1c647095dc16b490"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+        "sha256": "21076bced2b3fe1bf82bab3388a9e8d1816d580fac338d394da2dcb4264eb5c6"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CardDemoApplication.java",
+        "sha256": "222073cb096d940bb7ce9ff33a0191a6a6fba8598198b4f5e25b9473c66e1964"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ChangeDetection.java",
+        "sha256": "b08a7d8364277dd737b88a64d7cdd6d0885367300e09d8945914dd8ed41ba2a0"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolNumber.java",
+        "sha256": "5cc3e2ef73e01227153b9995c08220ba0d944283b117943923541da4c3cee483"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java",
+        "sha256": "8ffcaa15f43c5d6f51e27c52864127ba2448830ef5d441a47a661ee0f840c5c4"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+        "sha256": "ef194ef18188a1b993195f3a722117e432832dcebcf0880637bd606fff640034"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/InteractionController.java",
+        "sha256": "cf532a6d13e318a6a7af4f7e28670b2795997b9025e48f1bf9fd5a50b0e13162"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/InteractionEngine.java",
+        "sha256": "4016bef1901cc8ca971eb51324036448a586e92e0f20850303e45f384b932caf"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/MenuService.java",
+        "sha256": "88597a27409813b1d44ef3fc0edd7066e58fcdeaf9d1d4644b09a05d53f4ba36"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+        "sha256": "8c472ca67aa8a3b9155763156d8e0acd795cc3cfa7d51d1be2b9ae92b9766b13"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenProjection.java",
+        "sha256": "ff32d06619c5d560b811fb66178f5c50361c065304c7ec9c32c9e19249358f42"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+        "sha256": "699c3962704338afca7da062b45e00d46229b24782ce5aceb1f39493213eaaa4"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonRules.java",
+        "sha256": "3ec1516b881fd4ae0951cc85103986bf17760f10d0bc7c99d89e3d0bb0ae0884"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java",
+        "sha256": "04e30114b488da9d74008d7efc69dbba802972919b52c2f9b22fc74987419dbc"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SourceEdits.java",
+        "sha256": "8fffa443ada413dff35fee70fa07dcdda07ff3935435d5a38bae539f72ce7c3b"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+        "sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+        "sha256": "659e5782e428abde119c857d1ac27c4fb19b63b7425b17def1e65875fbf2ffca"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+        "sha256": "b363369b4d807d1494dc2080d27d70af249a6ff60ecc05ffd942671c021baac0"
+      }
+    ],
+    "sessions": [
+      {
+        "path": "factory/carddemo-web/runtime/prove_slice.py",
+        "sha256": "03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1"
+      },
+      {
+        "path": "tests/browser/carddemo-proof.mjs",
+        "sha256": "4b2bd1f00eec93302c3944f70f184f4af6849a5b8bb3fce1c90ae9d7141607da"
+      }
+    ],
+    "ui": [
+      {
+        "path": "factory/carddemo-web/ui/src/main.ts",
+        "sha256": "24f28402fbb0086d27933dc358c705ea8f223d93db67f6184d97a8f04b576f09"
+      }
+    ]
+  },
+  "navigation_boundaries": [
+    {
+      "case": "menu-outside-3",
+      "destination": "COCRDLIC"
+    },
+    {
+      "case": "menu-outside-4",
+      "destination": "COCRDSLC"
+    },
+    {
+      "case": "menu-outside-5",
+      "destination": "COCRDUPC"
+    },
+    {
+      "case": "menu-outside-6",
+      "destination": "COTRN00C"
+    },
+    {
+      "case": "menu-outside-7",
+      "destination": "COTRN01C"
+    },
+    {
+      "case": "menu-outside-8",
+      "destination": "COTRN02C"
+    },
+    {
+      "case": "menu-outside-9",
+      "destination": "CORPT00C"
+    },
+    {
+      "case": "menu-outside-10",
+      "destination": "COBIL00C"
+    }
+  ],
+  "not_covered": [
+    "other fifteen maps and their services",
+    "native CICS, IMS and DB2 execution",
+    "production unloads or production data",
+    "release or z/OS acceptance",
+    "real signatures, import, activation or Phase 2"
+  ],
+  "quirks": [
+    "Additional hand-specified language/routing contracts and mocked master READ-miss tests supplement independent raw-source real-PostgreSQL replay; they do not generate scenario expectations",
+    "COPAUS0C selection XCTL preserves page count and pagination history before GATHER-DETAILS",
+    "COACTUPC retains the requested account key in old details before a failed cross-reference read",
+    "COMEN01C first entry sets reentry context before returning its menu screen",
+    "API, browser and Java replay compare complete returned COMMAREA bytes; SEND TEXT has no token and raw source faults have no proved RETURN state",
+    "COSGN00C uses fresh working storage and retains uppercase submitted user ID after error SENDs",
+    "Record rewrites preserve explicit no-sign and non-negative-zero encoding metadata for unsigned DISPLAY and binary numeric fields",
+    "AUTHFRDS fixed PIC X SQL hosts retain padding; VARCHAR follows its explicit length; PostgreSQL JSON timestamp spelling removes only fractional trailing zeros without losing microseconds",
+    "PAUTDTL1 uses the pinned DBD unique PAUT9CTS ascending byte-key sequence within each parent; synthetic insertion/twin ordinals remain provenance, not traversal order",
+    "Complete expected database states are content-addressed JSON files; browser and Java replay verify SHA-256 and compare every table and row after every interaction",
+    "Numeric DISPLAY condition names preserve invalid and LOW-VALUES bytes under the disclosed EBCDIC comparison bound until source validation",
+    "COPAUS2C fraud removal retains the AUTHFRDS audit row with AUTH_FRAUD=R through duplicate-insert UPDATE; it does not delete the row",
+    "Blank submitted group becomes LOW-VALUES and differs from stored spaces; post-commit resubmission preserves this behavior, while a separate synthetic PROOFGRP account retains strict no-change/no-error/no-write assertions",
+    "Visible terminal nulls project to blank cells; reference case artifacts retain exact symbolic-output hex and first-byte null selection",
+    "Positive update inputs explicitly use synthetic SSN 123-45-6789, OR/97001 and phone 2 (206)555-0102; original public fixture bytes and invalid cases remain preserved",
+    "COACTUPC account rewrite omits ZIP, preserved as source behavior",
+    "COMEN01 invalid option emits an error then faults on a table subscript; compare the emitted frame and database, discard that session, and make no continuation claim",
+    "BMS external constants use private symbolic bytes, not a native 3270 wire encoding",
+    "CSUTLDTC executes from pinned source; its CEEDAYS port models documented Gregorian YYYYMMDD feedback and Lilian epoch; native LE execution remains absent",
+    "SEND TEXT terminal responses have no BMS fields; complete text and ended state are compared",
+    "Menu options 3-10 route to one not-in-this-slice endpoint; those destination services and their screens are excluded, and boundary interactions are counted separately"
+  ],
+  "remaining_evidence_gaps": [],
+  "run_id": "39147604819",
+  "schema": "carddemo-slice-receipt/1",
+  "scope": {
+    "baseline": "bounded deterministic raw COBOL interpreter",
+    "data": "public VSAM fixture, seven synthetic IMS authorization rows, and one disclosed synthetic account/cross-reference pair for genuine no-change coverage",
+    "linked_action": "COPAUS2C",
+    "programs": [
+      "COSGN00C",
+      "COMEN01C",
+      "COACTVWC",
+      "COACTUPC",
+      "COPAUS0C",
+      "COPAUS1C"
+    ],
+    "shared_dependencies": [
+      "BMS parser",
+      "physical data plan and typed projection codec"
+    ]
+  },
+  "source_head": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+  "status": "proved-in-ci",
+  "tested_commit": "dba188ba166145808a59274240d0969e2783377a",
+  "unsigned": true,
+  "upstream_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
+}

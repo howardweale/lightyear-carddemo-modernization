@@ -85,6 +85,8 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
         ('1225-EDIT-ALPHA-REQD', '1230-EDIT-ALPHANUM-REQD', '1235-EDIT-ALPHA-OPT',
          '1240-EDIT-ALPHANUM-OPT', '1245-EDIT-NUM-REQD')})
     native_paragraphs['1250-EDIT-SIGNED-9V2'] = 'AccountMoneyRule'
+    native_paragraphs['1265-EDIT-US-SSN'] = 'AccountSsnRule'
+    native_paragraphs['1275-EDIT-FICO-SCORE'] = 'AccountFicoRule'
     for name in native_paragraphs:
         del paragraphs[name]
     return dict(paragraphs=paragraphs,native_paragraphs=native_paragraphs,

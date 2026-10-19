@@ -57,11 +57,13 @@ def references(lines):
 def check(root,base):
     root=Path(root)
     names=git(root,'diff','--name-only','--diff-filter=ACMR',base,'HEAD','--','docs/factory','docs/milestones').decode().splitlines()
-    manifest=root/CLAIMS
-    claims=json.loads(manifest.read_bytes())['claims'] if manifest.is_file() else []
+    manifests={p.as_posix():json.loads((root/p).read_bytes())['claims']
+               for p in sorted(path.relative_to(root) for path in (root/'docs/factory').glob('commit-claims-*.json'))
+               if re.fullmatch(r'commit-claims-20\d\d-\d\d-\d\d\.json',p.name)}
+    claims=[claim for rows in manifests.values() for claim in rows]
     rows=[]
     for name in names:
-        if name==CLAIMS:continue
+        if name in manifests:continue
         dates=re.findall(r'20\d\d-\d\d-\d\d',Path(name).name)
         if dates and max(dates)<START:continue
         patch=git(root,'diff','--unified=0',base,'HEAD','--',name).decode('utf-8')
@@ -73,8 +75,9 @@ def check(root,base):
             rows.append(dict(record=name,reference=ref,commit=validate_claim(root,matches[0])))
     # A modified claims file must not introduce an invalid assertion even when
     # the corresponding prose did not change in the same patch.
-    if CLAIMS in names:
-        for claim in claims:validate_claim(root,claim)
+    for name in names:
+        if name in manifests:
+            for claim in manifests[name]:validate_claim(root,claim)
     return rows
 
 

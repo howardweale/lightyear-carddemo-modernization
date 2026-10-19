@@ -25,7 +25,7 @@ jobs:
       - name: Fetch the recorded CardDemo measurement checkout
         # A historical refs/pull/*/merge object is not included by fetch-depth: 0.
         # Fetch its immutable ID; check_record_commit_claims still verifies identity and source bytes.
-        run: git fetch --no-tags origin cf43585fc4fb7ae4466f7414eb4ae5028bcccad8
+        run: git fetch --no-tags origin cf43585fc4fb7ae4466f7414eb4ae5028bcccad8 dba188ba166145808a59274240d0969e2783377a
       - name: Validate workflow policy and changed source syntax
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -45,6 +45,8 @@ jobs:
     timeout-minutes: 215
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'

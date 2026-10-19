@@ -1,0 +1,46 @@
+name: Retain public CardDemo proof
+on:
+  workflow_run:
+    workflows: ['CardDemo web slice']
+    types: [completed]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: carddemo-retention-event-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  retain-public-proof:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: carddemo-retention-source-${{ github.event.workflow_run.id }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Trusted default-branch implementation only, never the proof PR head.
+          ref: main
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify offline retention refusal and idempotence fixtures
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_carddemo_release_retention -v
+      - name: Retain original public archives and mutation XML
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ github.event.workflow_run.id }}
+        run: python -B tools/carddemo_release_retention.py "$SOURCE_RUN" work/carddemo-release-retention
+      - name: Publish only manifest and short summary for the receipt PR
+        uses: actions/upload-artifact@v7
+        with:
+          name: carddemo-retention-publication-${{ github.event.workflow_run.id }}
+          path: work/carddemo-release-retention/publication/*.json
+          if-no-files-found: error
+          retention-days: 90

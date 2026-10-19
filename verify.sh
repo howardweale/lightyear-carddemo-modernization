@@ -20,6 +20,9 @@ fi
 "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common receipt-claims --project-root "$project_dir"
 "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common scripts --project-root "$project_dir"
 "$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
+if [[ -n "${LIGHTYEAR_CI_STATUS_BASELINE:-}" ]]; then
+    "$LIGHTYEAR_PYTHON_BIN" -B "$project_dir/tools/ci_status_baseline.py" finish
+fi
 "$LIGHTYEAR_PYTHON_BIN" -m carddemo_oracle validate-normalizations \
   --ledger "$project_dir/spec/comparison-normalizations.json"
 "$project_dir/model-workcell.sh" validate

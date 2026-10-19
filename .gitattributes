@@ -255,3 +255,9 @@ docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md.t
 
 # Preserve the original README archive byte-for-byte.
 docs/history/README-history-2026-10-17.md -text -whitespace
+
+# Preserve the original public sign-on proof bytes.
+docs/modernization/carddemo-cosgn00-evidence-2026-10-18/** -text -whitespace
+
+# Keep the exact CI-published COSGN00 group receipt bytes on every platform.
+docs/modernization/carddemo-cosgn00-2026-10-18.json -text

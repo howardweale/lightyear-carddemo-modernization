@@ -48,6 +48,41 @@ class OutputGuardTests(unittest.TestCase):
             with self.assertRaises(ValueError):check({},paths,REPO)
 
 
+    def test_disposable_status_baseline_preserves_mutation_refusal(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+
+            def git(*args):
+                return subprocess.run(
+                    ['git', '-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid',
+                     '-c', 'commit.gpgsign=false', *args], cwd=root, capture_output=True)
+
+            def success(*args):
+                result = git(*args)
+                self.assertEqual(0, result.returncode, result.stderr.decode())
+                return result.stdout.decode().strip()
+
+            success('init')
+            protected = ('docs/factory/input.json', 'docs/milestones/preserved.json')
+            for path in (*STATUS_FILES, *protected):
+                dest = root / path; dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_text('committed input or historical evidence', encoding='utf-8')
+            success('add', '.'); success('commit', '-m', 'fixture input change')
+            for path in STATUS_FILES:
+                (root / path).write_text('fresh generated status for committed input', encoding='utf-8')
+            success('add', '--', *sorted(STATUS_FILES))
+            self.assertEqual(STATUS_FILES, set(success('diff', '--cached', '--name-only').splitlines()))
+            success('diff', '--exit-code')
+            # Tests must not alter either generated baseline or any protected input/evidence.
+            for path in (*STATUS_FILES, *protected):
+                with self.subTest(path=path):
+                    original = (root / path).read_bytes()
+                    (root / path).write_text('unexpected test mutation', encoding='utf-8')
+                    self.assertNotEqual(0, git('diff', '--exit-code').returncode)
+                    (root / path).write_bytes(original)
+            success('diff', '--exit-code')
+
+
 class RebuildTests(unittest.TestCase):
     def fixture(self, changed=True, advance=False, extra=False, deleted=False):
         calls=[]; renders=[]; pushes=[]; fetches=[]

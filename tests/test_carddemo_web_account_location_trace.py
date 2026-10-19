@@ -38,7 +38,9 @@ class AccountLocationTraceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);self.fixture(root);path=root/JAVA/'AccountLocationRules.java'
             original=path.read_text()
-            path.write_text(original.replace('2493-2513','2493-2514'))
-            with self.assertRaisesRegex(ValueError,'paragraph-range'):check(root,SCOPE)
+            for valid,crossing in [('2493-2510','2493-2511'),('2536-2557','2536-2558')]:
+                path.write_text(original.replace(valid,crossing))
+                with self.subTest(crossing=crossing):
+                    with self.assertRaisesRegex(ValueError,'paragraph-range'):check(root,SCOPE)
             path.write_text(original+'\nrecord Extra(int value) { public int untraced() { return value; } }\n')
             with self.assertRaisesRegex(ValueError,'unmapped-method'):check(root,SCOPE)

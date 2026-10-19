@@ -73,6 +73,8 @@ class FactoryOrchestrator:
         execution_context: Any | None = None,
         memory_store: SemanticMemoryStore | None = None,
         approved_projection=None,
+        workspace_read_manifest: dict[str, str] | None = None,
+        feedback_vocabulary: dict[str, list[str]] | None = None,
     ) -> None:
         self.source_root = source_root.resolve()
         self.runs_root = runs_root.resolve()
@@ -88,6 +90,8 @@ class FactoryOrchestrator:
         self.execution_context = execution_context
         self.memory_store = memory_store
         self.approved_projection = approved_projection
+        self.workspace_read_manifest = workspace_read_manifest
+        self.feedback_vocabulary = feedback_vocabulary
         self.memory_retrieval: dict[str, Any] | None = None
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
@@ -99,7 +103,8 @@ class FactoryOrchestrator:
         artifacts = ArtifactStore(run_dir / "artifacts", run_id)
         ledger = RunLedger(run_dir / "events.jsonl")
         workspace = IsolatedWorkspace(
-            self.source_root, run_dir / "workspace", order.allowed_paths
+            self.source_root, run_dir / "workspace", order.allowed_paths,
+            read_manifest=self.workspace_read_manifest
         )
         state = "ACCEPTED"
         references: list[dict[str, Any]] = []
@@ -128,6 +133,9 @@ class FactoryOrchestrator:
             workspace.create()
             if self.prepare_workspace:
                 self.prepare_workspace(workspace, order)
+            if self.workspace_read_manifest is not None:
+                manifest=workspace.verify_read_boundary()
+                ledger.append(state,'workspace_read_manifest',dict(files=manifest,sha256=canonical_hash(manifest)))
             initial_snapshot = workspace.snapshot()
             ledger.append(
                 state,
@@ -183,7 +191,8 @@ class FactoryOrchestrator:
                         ledger, references, initial_snapshot, workspace.snapshot(), latest_verification,
                         "The approved state already satisfied every deterministic gate.", context,
                     )
-                public_failure = builder_failure_view(latest_verification)
+                public_failure = builder_failure_view(latest_verification,self.feedback_vocabulary)
+                if self.feedback_vocabulary is not None:ledger.append(state,'verifier_gateway_feedback',public_failure)
                 self._authorize("failure_analyst", "factory:analyze-failure")
                 diagnosis = self.agents.analyze_failure(order, public_failure, 0)
                 self._record_agent_evidence(
@@ -194,7 +203,7 @@ class FactoryOrchestrator:
                 )
                 references.append(diagnosis_ref)
                 ledger.append(state, "failure_diagnosed", diagnosis_ref)
-                public_failure = self._failure_envelope(public_failure, diagnosis)
+                public_failure = self._failure_envelope(public_failure, diagnosis, include_diagnosis=self.feedback_vocabulary is None)
 
             while attempts < order.max_attempts:
                 if time.monotonic() - started_monotonic > order.max_elapsed_seconds:
@@ -253,7 +262,8 @@ class FactoryOrchestrator:
                     ledger.append(state, "acceptance_gates_passed", {"attempt": attempts})
                     break
                 self._authorize("failure_analyst", "factory:analyze-failure")
-                public_failure = builder_failure_view(latest_verification)
+                public_failure = builder_failure_view(latest_verification,self.feedback_vocabulary)
+                if self.feedback_vocabulary is not None:ledger.append(state,'verifier_gateway_feedback',public_failure)
                 diagnosis = self.agents.analyze_failure(order, public_failure, attempts)
                 self._record_agent_evidence(
                     artifacts, ledger, references, "failure_analyst", "verifier_private"
@@ -263,7 +273,7 @@ class FactoryOrchestrator:
                 )
                 references.append(diagnosis_ref)
                 ledger.append(state, "failure_diagnosed", diagnosis_ref)
-                public_failure = self._failure_envelope(public_failure, diagnosis)
+                public_failure = self._failure_envelope(public_failure, diagnosis, include_diagnosis=self.feedback_vocabulary is None)
             else:
                 state = "BLOCKED"
                 ledger.append(
@@ -313,11 +323,13 @@ class FactoryOrchestrator:
             )
 
     def _run_gates(self, workspace: IsolatedWorkspace, order: WorkOrder) -> dict[str, Any]:
+        if self.workspace_read_manifest is not None:workspace.verify_read_boundary()
         report = GateRunner(
             workspace.root,
             allow_network=order.allow_network,
             backend=self.execution_context.backend if self.execution_context else None,
         ).run(order.gates)
+        if self.workspace_read_manifest is not None:workspace.verify_read_boundary()
         if self.execution_context:
             self.execution_context.record_verification(report)
         return report
@@ -394,8 +406,9 @@ class FactoryOrchestrator:
 
     @staticmethod
     def _failure_envelope(
-        public_verification: dict[str, Any], diagnosis: dict[str, Any]
+        public_verification: dict[str, Any], diagnosis: dict[str, Any], include_diagnosis: bool = True
     ) -> dict[str, Any]:
+        if not include_diagnosis:return public_verification
         return {
             **public_verification,
             "diagnosis": {

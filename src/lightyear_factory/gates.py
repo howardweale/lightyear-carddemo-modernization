@@ -8,7 +8,7 @@ from typing import Any
 from lightyear_execution.backend import LocalProcessBackend
 from lightyear_execution.contracts import canonical_hash
 
-from .contracts import GateContract
+from .contracts import GateContract, ContractError
 
 
 MAX_CAPTURE_BYTES = 64 * 1024
@@ -78,9 +78,26 @@ class GateRunner:
         }
 
 
-def builder_failure_view(report: dict[str, Any]) -> dict[str, Any]:
+def builder_failure_view(report: dict[str, Any], vocabulary: dict[str, list[str]] | None = None) -> dict[str, Any]:
     """Remove holdout output before a verification report reaches a builder."""
 
+    if vocabulary is not None:
+        rows=[]
+        for item in report.get('differences',[]):
+            if type(item.get('interaction')) is not int or item['interaction']<0:
+                raise ContractError('feedback-interaction')
+            if item.get('screen') not in vocabulary['screens']:raise ContractError('feedback-screen')
+            if item.get('category') not in ('value','attribute','cursor','message','db-row','fault'):
+                raise ContractError('feedback-category')
+            row={key:item[key] for key in ('interaction','screen','category')}
+            for key in ('field','table'):
+                if key in item:
+                    if item[key] not in vocabulary[key+'s']:raise ContractError('feedback-name')
+                    row[key]=item[key]
+            rows.append(row)
+        status=report.get('status')
+        if status not in ('passed','failed','not_run'):raise ContractError('feedback-status')
+        return dict(status=status,differences=rows)
     gates = []
     for item in report.get("gates", []):
         public = {

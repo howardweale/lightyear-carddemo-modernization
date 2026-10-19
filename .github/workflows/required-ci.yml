@@ -33,6 +33,8 @@ jobs:
         run: |
           python -B -m unittest test_ci_gate -v
           python -B tools/ci_gate.py lint
+          python -B tools/check_status_pr.py
+          python -B -m unittest test_status_output_policy -v
           git fetch --no-tags origin 37332f3d9d694387960ca0595acf7fdb2918224a
           python -B tools/check_evidence_files.py
           python -B -m unittest test_evidence_file_policy test_carddemo_release_retention -v

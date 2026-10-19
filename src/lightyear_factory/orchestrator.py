@@ -59,6 +59,62 @@ class ArtifactStore:
         }
 
 
+    def write_encrypted(
+        self, artifact_type: str, role: str, content: bytes,
+        *, key: bytes, key_id: str,
+    ) -> dict[str, Any]:
+        """Retain exact controller-owned bytes in this run's artifact directory.
+
+        The caller supplies an external key; this store never persists it.
+        This primitive does not capture calls, authorize spend, or prove isolation.
+        A public ledger reference may be appended only after this method returns.
+        """
+        import base64
+        import hashlib
+        import json
+        import os
+        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+        tags = (self.run_id, artifact_type, role, key_id)
+        if any(not isinstance(tag, str) or not re.fullmatch(r'[A-Za-z0-9_.-]{1,128}', tag)
+               for tag in tags):
+            raise ContractError('encrypted-artifact-identifier')
+        if not isinstance(content, bytes):
+            raise ContractError('encrypted-artifact-bytes-required')
+        if not isinstance(key, bytes) or len(key) != 32:
+            raise ContractError('encrypted-artifact-key-required')
+        self.sequence += 1
+        context = {
+            'schema': 'factory-encrypted-artifact/1', 'algorithm': 'AES-256-GCM',
+            'run_id': self.run_id, 'sequence': self.sequence,
+            'artifact_type': artifact_type, 'role': role, 'key_id': key_id,
+            'plaintext_sha256': hashlib.sha256(content).hexdigest(),
+            'plaintext_bytes': len(content),
+        }
+        aad = json.dumps(context, sort_keys=True, separators=(',', ':')).encode('utf-8')
+        nonce = os.urandom(12)
+        ciphertext = AESGCM(key).encrypt(nonce, content, aad)
+        envelope = {
+            'context': context, 'nonce_base64': base64.b64encode(nonce).decode('ascii'),
+            'ciphertext_base64': base64.b64encode(ciphertext).decode('ascii'),
+        }
+        encoded = (json.dumps(envelope, sort_keys=True, separators=(',', ':')) + '\n').encode('utf-8')
+        name = f'{self.sequence:04d}-{artifact_type}.encrypted.json'
+        self.root.mkdir(parents=True, exist_ok=True)
+        # Exclusive creation prevents overwrite, including a pre-existing leaf link.
+        # Directory ownership/ACLs remain the controller's responsibility.
+        fd = os.open(self.root / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, 'wb') as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        return {
+            **context, 'path': f'artifacts/{name}', 'visibility': 'controller-encrypted',
+            'ciphertext_sha256': hashlib.sha256(ciphertext).hexdigest(),
+            'artifact_sha256': hashlib.sha256(encoded).hexdigest(),
+        }
+
+
 class FactoryOrchestrator:
     """Deterministic authority around replaceable workers and an independent verifier."""
 

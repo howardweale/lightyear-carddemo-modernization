@@ -88,17 +88,24 @@ class AccountEvidenceTests(unittest.TestCase):
             del self.manifest[extra]
 
     def test_links_reparse_points_and_nonregular_members_refused(self):
-        original = Path.lstat
+        # The loader resolves its root; Windows temp paths may use short aliases.
+        target = (self.root / 'docs/receipt.json').resolve(strict=True)
+        path_type = type(target)
+        original = path_type.lstat
         for mode, attributes, fragment in ((stat.S_IFLNK, 0, 'link'),
                                           (stat.S_IFREG, 0x400, 'link'),
                                           (stat.S_IFDIR, 0, 'file-type')):
+            inspected = []
+
             def inspection(path, *args, **kwargs):
-                if path == self.root / 'docs/receipt.json':
+                if path == target:
+                    inspected.append(path)
                     return SimpleNamespace(st_mode=mode, st_file_attributes=attributes)
                 return original(path, *args, **kwargs)
-            with self.subTest(mode=mode, attributes=attributes), patch.object(Path, 'lstat', inspection):
+            with self.subTest(mode=mode, attributes=attributes), patch.object(path_type, 'lstat', inspection):
                 with self.assertRaisesRegex(ValueError, fragment):
                     BoundEvidence(self.root, self.ref)
+                self.assertEqual(inspected, [target], 'refusal fixture must intercept the bound member')
 
 
     def test_rows_preserve_nested_evidence_and_order(self):

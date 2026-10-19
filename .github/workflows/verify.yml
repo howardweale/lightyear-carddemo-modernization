@@ -517,12 +517,26 @@ jobs:
 
       - name: Run unit and differential verification
         if: runner.os == 'Linux'
-        run: ./verify.sh
+        run: |
+          source ./python-runtime.sh
+          lightyear_resolve_python
+          PYTHONPATH=src:.:tests "$LIGHTYEAR_PYTHON_BIN" -B tools/build_factory_current_status.py
+          # Establish only generated outputs as the disposable CI baseline.
+          git add -- docs/factory/current-status.json docs/factory/current-status.md
+          ./verify.sh
 
       - name: Run unit and differential verification (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: .\verify.ps1
+        run: |
+          . .\python-runtime.ps1
+          $env:PYTHONPATH = "src;.;tests"
+          Invoke-FactoryDarkPython -B tools/build_factory_current_status.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          # Establish only generated outputs as the disposable CI baseline.
+          git add -- docs/factory/current-status.json docs/factory/current-status.md
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .\verify.ps1
 
       - name: Reject verification that mutates tracked evidence
         run: git diff --exit-code

@@ -1,0 +1,20 @@
+{
+  "schema": "record-commit-role-corrections/1",
+  "prepared_on": "2026-10-18",
+  "corrections": [
+    {
+      "record": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+      "reference": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+      "previous_claim_sha256": "e36eef7e2980759bba96d76030e22b7053fcd4366638155d93ec302c0332ca5e",
+      "replacement": {
+        "record": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+        "reference": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+        "commit": "b580b4f765fdd41eb505fc59bbc998136ba23024",
+        "role": "publication",
+        "publication_path": "docs/factory/tower-backfill-request-2026-10-14.json",
+        "publication_sha256": "cf7d6ce4c56345b62cb158f01aed4fc088cfbdfec16e267b0a4f97f0194d66df"
+      },
+      "reason": "The unchanged activation correction identifies this as the public snapshot, not the runtime or backfill source measurement."
+    }
+  ]
+}

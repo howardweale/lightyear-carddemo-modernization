@@ -75,3 +75,32 @@ class RecordCommitTests(unittest.TestCase):
         (self.root/name).write_text(json.dumps({'sha256':'abcdef12'+'3'*56,'display':'abcdef12'}))
         self.commit('content hash record')
         self.assertEqual([],check(self.root,self.base))
+
+
+    def test_publication_role_binds_snapshot_bytes_without_source_claim(self):
+        claim=dict(reference=self.base,commit=self.base,role='publication',publication_path='source.txt',
+                   publication_sha256=sha256(b'original\n').hexdigest())
+        self.assertEqual(self.base,validate_claim(self.root,claim))
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):
+            validate_claim(self.root,dict(claim,publication_sha256='0'*64))
+        with self.assertRaisesRegex(ValueError,'source-path'):
+            validate_claim(self.root,dict(claim,publication_path='../outside'))
+
+    def test_dated_role_correction_preserves_registry_and_cannot_change_evidence(self):
+        from tools.check_record_commit_claims import ROLE_CORRECTIONS,current_claims
+        old=dict(self.claim,record='docs/factory/old.json')
+        registry=self.root/CLAIMS;registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps({'claims':[old]}));before=registry.read_bytes()
+        new={k:v for k,v in old.items() if k not in ('role','source_path','source_sha256')}
+        new.update(role='publication',publication_path=old['source_path'],publication_sha256=old['source_sha256'])
+        correction=dict(record=old['record'],reference=old['reference'],
+                        previous_claim_sha256=sha256(json.dumps(old,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+                        replacement=new)
+        data=dict(schema='record-commit-role-corrections/1',prepared_on='2026-10-18',corrections=[correction])
+        path=self.root/ROLE_CORRECTIONS;path.write_text(json.dumps(data))
+        self.assertEqual([new],current_claims(self.root));self.assertEqual(before,registry.read_bytes())
+        new['publication_sha256']='0'*64;path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'changes-evidence'):current_claims(self.root)
+        new['publication_sha256']=old['source_sha256'];correction['previous_claim_sha256']='0'*64
+        path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'correction-binding'):current_claims(self.root)

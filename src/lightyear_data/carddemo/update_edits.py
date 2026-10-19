@@ -77,6 +77,13 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
             for key in ('screen_field','screen_part','picture'):
                 if key in definition:bound[name][key]=definition[key]
 
-    return dict(paragraphs=paragraphs,fields=bound,conditions=flags,storage=storage,
+    # Bind the original layout/flags first, then retire these statement bodies
+    # from the production validation model. generic_edits remains a CI oracle.
+    native_paragraphs = {name: 'AccountInputRules' for name in
+                         ('1215-EDIT-MANDATORY', '1220-EDIT-YESNO')}
+    for name in native_paragraphs:
+        del paragraphs[name]
+    return dict(paragraphs=paragraphs,native_paragraphs=native_paragraphs,
+        fields=bound,conditions=flags,storage=storage,
         service=dates['service'],area_offset=area_offset,area_length=commarea['record_length'],
         limitations=dates['limitations']+['Invalid unsigned DISPLAY bytes are retained for source NUMERIC checks and compared in EBCDIC byte order; this deterministic reference assumption needs a native baseline.', 'Source validation control flow; screen/database/browser equivalence is a separate gate.'])

@@ -11,8 +11,9 @@ public final class AccountFicoRule {
 
     @CobolSource(program="COACTUPC", paragraph="1275-EDIT-FICO-SCORE", lines="2514-2530")
     public static boolean validDisplay(String display) {
-        if(display.matches("[0-9]{3}"))return validScore(Integer.parseInt(display));
-        // Preserve the existing disclosed invalid-DISPLAY EBCDIC comparison bound.
+        // Three ASCII digits have the same numeric and IBM037 lexical order.
+        // One path preserves the disclosed invalid-DISPLAY bound and makes both
+        // inclusive endpoints reachable by the same comparison under test.
         byte[] bytes=Commarea.encode(display);
         return Arrays.compareUnsigned(bytes,Commarea.encode("300"))>=0
             && Arrays.compareUnsigned(bytes,Commarea.encode("850"))<=0;

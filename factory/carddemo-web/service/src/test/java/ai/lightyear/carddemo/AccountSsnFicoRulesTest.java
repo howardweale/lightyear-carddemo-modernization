@@ -43,6 +43,16 @@ class AccountSsnFicoRulesTest {
         }
         assertFalse(AccountFicoRule.validScore(-1));assertFalse(AccountFicoRule.validScore(1000));
     }
+    @Test void displayBoundsUseOneInclusiveEbcdicComparison() {
+        for(String value:new String[]{"300","301","849","850","4A0","8A0"})
+            assertTrue(AccountFicoRule.validDisplay(value),value);
+        for(String value:new String[]{"299","851","3A0","9A0"})
+            assertFalse(AccountFicoRule.validDisplay(value),value);
+        // The storage oracle independently executes the original COBOL statements.
+        for(String value:new String[]{"299","300","301","849","850","851","3A0","4A0","8A0","9A0"})
+            compare("1275-EDIT-FICO-SCORE",Map.of("ACUP-NEW-CUST-FICO-SCORE-X",value),"");
+        assertThrows(IllegalArgumentException.class,()->AccountFicoRule.validDisplay("\u20ac00"));
+    }
     @Test void invalidFirstSkipsFollowingPartsButRestrictedFirstDoesNot() {
         for(String first:new String[]{"000","   ","\0\0\0","a01","1 2","\0  "}) {
             var result=AccountSsnRule.validate(first,"00","0000");

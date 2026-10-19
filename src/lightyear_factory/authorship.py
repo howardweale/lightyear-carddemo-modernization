@@ -36,7 +36,8 @@ class CandidateHistory:
         self.start_commit = None
 
     def _git(self, *args: str, data: bytes | None = None,
-             identity: tuple[str, str] | None = None) -> bytes:
+             identity: tuple[str, str] | None = None,
+             work_tree: bool = True) -> bytes:
         # No inherited alternate object database, config injection, hooks or signer.
         env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
         env.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull,
@@ -46,7 +47,7 @@ class CandidateHistory:
                    GIT_COMMITTER_NAME=name, GIT_COMMITTER_EMAIL=email)
         return subprocess.check_output([
             "git", "--git-dir=" + str(self.history),
-            "--work-tree=" + str(self.workspace.root),
+            *(["--work-tree=" + str(self.workspace.root)] if work_tree else []),
             "-c", "core.hooksPath=" + os.devnull,
             "-c", "core.autocrlf=false", "-c", "commit.gpgSign=false",
             *args], env=env, input=data, stderr=subprocess.PIPE)
@@ -56,7 +57,10 @@ class CandidateHistory:
             raise ContractError("candidate-history-already-exists")
         self.workspace.verify_read_boundary()
         self.history.parent.mkdir(parents=True, exist_ok=True)
-        self._git("init", "--bare", "--object-format=sha1", str(self.history))
+        # Bare initialization must not receive --work-tree; later index and
+        # candidate operations explicitly bind the separate workspace.
+        self._git("init", "--bare", "--object-format=sha1", str(self.history),
+                  work_tree=False)
         self._git("read-tree", "--empty")
         tree = self._git("write-tree").decode().strip()
         start = self._git("commit-tree", "--no-gpg-sign", tree,

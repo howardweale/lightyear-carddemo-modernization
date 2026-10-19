@@ -39,6 +39,10 @@ class FactoryAuthorshipTests(unittest.TestCase):
     def test_factory_identity_trailers_history_exclusion_and_retained_diffs(self):
         with tempfile.TemporaryDirectory() as d:
             root, workspace, ledger, history, artifacts = self.setup_history(d)
+            self.assertEqual(b'true', history._git('config', '--get', 'core.bare').strip())
+            self.assertEqual(root / 'controller/history.git', history.history)
+            self.assertTrue((history.history / 'HEAD').is_file())
+            self.assertFalse((workspace.root / '.git').exists())
             first = history.commit(1)
             (workspace.root / 'candidate/toy.txt').write_text('known good throwaway fixture')
             final = history.commit(1)

@@ -1,0 +1,39 @@
+name: Repository map
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  navigation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check links and original README bytes
+        run: python -B tools/ci/check_repository_map.py
+      - name: Exercise missing-link and historical-mutation refusals
+        run: python -B -m unittest tests.test_repository_map tests.test_repo_metrics -v
+      - name: Measure a fresh clone and both Git revisions
+        shell: bash
+        env:
+          BEFORE: 9343791b0776a1a6b1636ab47c0c2443dad45217
+        run: |
+          git clone --bare --no-local "$GITHUB_WORKSPACE" "$RUNNER_TEMP/architecture-clone"
+          python -B tools/ci/repo_metrics.py --ref "$BEFORE" --output work/repository-map/before.json --clone-dir "$RUNNER_TEMP/architecture-clone"
+          python -B tools/ci/repo_metrics.py --ref HEAD --output work/repository-map/metrics.json --clone-dir "$RUNNER_TEMP/architecture-clone"
+      - name: Retain CI-generated measurements
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-map-metrics
+          path: work/repository-map/*.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Require unchanged tracked evidence
+        run: git diff --exit-code

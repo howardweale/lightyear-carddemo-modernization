@@ -369,6 +369,45 @@ public final class SourceEdits {
             nativeInputError(": should be between 300 and 850");
         }
     }
+    private Set<String> sourceLookupValues(String condition) {
+        JsonNode data=model.path("conditions").path(condition);
+        if(!data.isObject() || !data.path("values").isArray() || !data.path("ranges").isArray())
+            throw new IllegalArgumentException("location-condition-shape");
+        if(!data.path("ranges").isEmpty())throw new IllegalArgumentException("location-range-condition");
+        Set<String> literals=new HashSet<>();
+        for(JsonNode item:data.path("values")) {
+            String quoted=item.asText();
+            if(!item.isTextual() || quoted.length()<2 || !quoted.startsWith("'") || !quoted.endsWith("'"))
+                throw new IllegalArgumentException("location-literal-condition");
+            literals.add(quoted.substring(1,quoted.length()-1).replace("''","'"));
+        }
+        if(literals.isEmpty())throw new IllegalArgumentException("location-empty-condition");
+        return Set.copyOf(literals);
+    }
+    private void runAccountLocationRule(String paragraph) {
+        String state=get("ACUP-NEW-CUST-ADDR-STATE-CD");
+        if(paragraph.equals("1270-EDIT-US-STATE-CD")) {
+            var result=AccountLocationRules.state(state,sourceLookupValues("VALID-US-STATE-CODE"));
+            put("US-STATE-CODE-TO-EDIT",result.scratch());
+            trace.add(new Location("app/cbl/COACTUPC.cbl",2494));
+            if(!result.valid()) {
+                setCondition("FLG-STATE-NOT-OK");
+                nativeInputError(": is not a valid state code");
+            }
+        } else if(paragraph.equals("1280-EDIT-US-STATE-ZIP-CD")) {
+            var result=AccountLocationRules.stateZip(state,get("ACUP-NEW-CUST-ADDR-ZIP"),
+                sourceLookupValues("VALID-US-STATE-ZIP-CD2-COMBO"));
+            put("US-STATE-AND-FIRST-ZIP2",result.scratch());
+            trace.add(new Location("app/cbl/COACTUPC.cbl",2537));
+            if(!result.valid()) {
+                setCondition("INPUT-ERROR");
+                setCondition("FLG-STATE-NOT-OK");
+                setCondition("FLG-ZIPCODE-NOT-OK");
+                // This source message has no variable-name prefix; keep the first error.
+                if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG","Invalid zip code for state");
+            }
+        } else throw new IllegalArgumentException("untranslated-location-rule:"+paragraph);
+    }
     private void nativeInputError(String suffix) {
         setCondition("INPUT-ERROR");
         if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
@@ -381,6 +420,7 @@ public final class SourceEdits {
                 case "AccountMoneyRule" -> runAccountMoneyRule();
                 case "AccountSsnRule" -> runAccountSsnRule();
                 case "AccountFicoRule" -> runAccountFicoRule();
+                case "AccountLocationRules" -> runAccountLocationRule(paragraph);
                 default -> throw new IllegalArgumentException("untranslated-native-class");
             }
             return;

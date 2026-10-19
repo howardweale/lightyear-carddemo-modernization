@@ -17,12 +17,14 @@ def mutation(path):
     account_input=summarize(nodes,('AccountInputRules',))
     account_text_money=summarize(nodes,('AccountTextRules','AccountMoneyRule','CobolNumber'))
     account_ssn_fico=summarize(nodes,('AccountSsnRule','AccountFicoRule'))
+    account_location=summarize(nodes,('AccountLocationRules','AccountValidationModel'))
     return dict(passed=bool(total and 10*killed>=9*total and not missing and idiomatic['passed']
                            and account_input['AccountInputRules']['passed']
                            and all(row['passed'] for row in account_text_money.values())
-                           and all(row['passed'] for row in account_ssn_fico.values())),killed=killed,total=total,
+                           and all(row['passed'] for row in account_ssn_fico.values())
+                           and all(row['passed'] for row in account_location.values())),killed=killed,total=total,
         account_input_java=account_input,account_text_money_java=account_text_money,account_ssn_fico_java=account_ssn_fico,
-        idiomatic_java=idiomatic,
+        account_location_java=account_location,idiomatic_java=idiomatic,
         percent=100*killed/total if total else None,threshold=90,missing_screen_handlers=missing,status_counts=dict(counts),
         denominator='every PIT mutation in configured screen-handler/helper scope; timeout, no-coverage and errors are not counted killed',report=hashed(path))
 def main():

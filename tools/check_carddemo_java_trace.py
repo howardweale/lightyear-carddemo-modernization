@@ -7,7 +7,8 @@ import re
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-java-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo'
-METHOD=r'(?:public|private|protected)\s+(?:static\s+)?[\w<>., ?]+\s+(\w+)\s*\('
+# Record headers declare types; their explicitly declared methods still need annotations.
+METHOD=r'(?:public|private|protected)\s+(?!\s*(?:static\s+)?(?:record|class|interface|enum)\b)(?:static\s+)?[\w<>., ?]+\s+(\w+)\s*\('
 ANNOTATION=re.compile(r'@CobolSource\(program="([^"]+)", paragraph="([^"]+)", lines="(\d+)-(\d+)"\)\s*'+METHOD)
 
 

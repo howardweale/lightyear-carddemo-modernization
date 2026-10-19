@@ -27,3 +27,20 @@ class AccountTextMoneyTraceTests(unittest.TestCase):
             p=root/JAVA/'AccountTextRules.java'
             p.write_text(p.read_text().replace('1898-1950','1898-1955'))
             with self.assertRaisesRegex(ValueError,'paragraph-range'):check(root,SCOPE)
+
+    def test_record_headers_are_types_but_record_methods_require_annotations(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);scope=json.loads((ROOT/SCOPE).read_bytes())
+            for name in [SCOPE,scope['source']['path'],JAVA+'/AccountTextRules.java',JAVA+'/AccountMoneyRule.java']:
+                p=root/name;p.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,p)
+            p=root/JAVA/'AccountMoneyRule.java'
+            original=p.read_text()
+            for declaration in ('public record', 'public static record', 'public  record'):
+                with self.subTest(declaration=declaration):
+                    p.write_text(original.replace('public record',declaration))
+                    self.assertEqual(6,check(root,SCOPE)['rules'])
+            # A real method in the record body cannot disappear with the header.
+            p.write_text(original.replace('BigDecimal amount) {}',
+                'BigDecimal amount) { public boolean supplied() { return amount != null; } }'))
+            with self.assertRaisesRegex(ValueError,'java-trace-unmapped-method.*supplied'):
+                check(root,SCOPE)

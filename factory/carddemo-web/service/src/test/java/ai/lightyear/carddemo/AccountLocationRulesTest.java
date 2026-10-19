@@ -149,15 +149,15 @@ class AccountLocationRulesTest {
         var mapper=JsonMapper.builder().build();
         assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(mapper.createObjectNode()));
         for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD")) {
-            ObjectNode missing=original.deepCopy();
+            ObjectNode missing=(ObjectNode)original.deepCopy();
             ((ObjectNode)missing.path("paragraphs")).remove(paragraph);
             JsonNode before=missing.deepCopy();
             assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(missing));
             assertEquals(before,missing);
         }
-        ObjectNode malformed=original.deepCopy();malformed.put("native_paragraphs","bad");
+        ObjectNode malformed=(ObjectNode)original.deepCopy();malformed.put("native_paragraphs","bad");
         assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(malformed));
-        ObjectNode dual=original.deepCopy();
+        ObjectNode dual=(ObjectNode)original.deepCopy();
         dual.putObject("native_paragraphs").put("1270-EDIT-US-STATE-CD","OtherRule");
         JsonNode before=dual.deepCopy();
         assertThrows(IllegalArgumentException.class,()->AccountValidationModel.forProduction(dual));
@@ -167,7 +167,7 @@ class AccountLocationRulesTest {
     @Test void malformedParagraphBodiesAreNotSilentlyReplaced() {
         for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD"))
             for(String defect:Set.of("null","scalar","object","empty-array")) {
-                ObjectNode invalid=original.deepCopy();
+                ObjectNode invalid=(ObjectNode)original.deepCopy();
                 ObjectNode paragraphs=(ObjectNode)invalid.path("paragraphs");
                 switch(defect) {
                     case "null" -> paragraphs.putNull(paragraph);
@@ -185,7 +185,7 @@ class AccountLocationRulesTest {
     }
 
     @Test void existingNativeOwnersAndSecondParagraphConflictsArePreserved() {
-        ObjectNode source=original.deepCopy();
+        ObjectNode source=(ObjectNode)original.deepCopy();
         source.putObject("native_paragraphs").put("fixture-unrelated","ExistingOwner");
         JsonNode before=source.deepCopy();
         JsonNode selected=AccountValidationModel.forProduction(source);
@@ -205,7 +205,7 @@ class AccountLocationRulesTest {
     @Test void malformedLookupTablesFailClosed() {
         for(String condition:Set.of("VALID-US-STATE-CODE","VALID-US-STATE-ZIP-CD2-COMBO"))
             for(String defect:Set.of("missing","scalar","range","empty","unquoted","single-quote","numeric")) {
-                ObjectNode invalid=production.deepCopy();
+                ObjectNode invalid=(ObjectNode)production.deepCopy();
                 ObjectNode conditions=(ObjectNode)invalid.path("conditions");
                 ObjectNode data=(ObjectNode)conditions.path(condition);
                 switch(defect) {

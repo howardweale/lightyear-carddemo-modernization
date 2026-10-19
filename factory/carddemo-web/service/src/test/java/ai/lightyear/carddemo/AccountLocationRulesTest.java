@@ -102,13 +102,14 @@ class AccountLocationRulesTest {
     }
 
     @Test void rawStorageKeepsFirstErrorStaleFlagsAndScratch() throws Exception {
+        int comparisons=0;
         for(String paragraph:Set.of("1270-EDIT-US-STATE-CD","1280-EDIT-US-STATE-ZIP-CD"))
             for(String state:new String[]{"OR","or","AA","ZZ","  ","\0\0"})
                 for(String zip:new String[]{"97000","97ABC","34000","9 ABC","     ","\0\0ABC"})
                     for(String prior:new String[]{"","FIRST ERROR","\0"})
-                        for(String inputFlag:new String[]{"INPUT-OK","INPUT-ERROR","INPUT-PENDING"})
-                            for(String stateFlag:new String[]{"FLG-STATE-ISVALID","FLG-STATE-NOT-OK","FLG-STATE-BLANK"})
-                                for(String zipFlag:new String[]{"FLG-ZIPCODE-ISVALID","FLG-ZIPCODE-NOT-OK","FLG-ZIPCODE-BLANK"}) {
+                        for(String inputFlag:new String[]{"0","1","\0"})
+                            for(String stateFlag:new String[]{"\0","0","B"})
+                                for(String zipFlag:new String[]{"\0","0","B"}) {
                                     var oracle=new SourceEdits(original);var candidate=new SourceEdits(production);
                                     for(var edits:new SourceEdits[]{oracle,candidate}) {
                                         edits.put("ACUP-NEW-CUST-ADDR-STATE-CD",state);
@@ -118,16 +119,23 @@ class AccountLocationRulesTest {
                                         edits.put("US-STATE-CODE-TO-EDIT","ZZ");
                                         edits.put("US-STATE-AND-FIRST-ZIP2","ZZ00");
                                         // Exercise transitions and stale flags independently (COACTUPC 2495-2507, 2542-2554).
-                                        edits.setCondition(inputFlag);
-                                        edits.setCondition(stateFlag);
-                                        edits.setCondition(zipFlag);
+                                        // Pinned storage bytes: COACTUPC 171-174 and 303-310.
+                                        // The reduced model omits unreferenced 88-level names.
+                                        edits.put("WS-INPUT-FLAG",inputFlag);
+                                        edits.put("WS-EDIT-STATE-FLGS",stateFlag);
+                                        edits.put("WS-EDIT-ZIPCODE-FLGS",zipFlag);
+                                        assertEquals(inputFlag,edits.get("WS-INPUT-FLAG"));
+                                        assertEquals(stateFlag,edits.get("WS-EDIT-STATE-FLGS"));
+                                        assertEquals(zipFlag,edits.get("WS-EDIT-ZIPCODE-FLGS"));
                                         edits.run(paragraph);
                                     }
                                     completeStorage(oracle,candidate);
+                                    comparisons++;
                                     assertEquals(oracle.condition("INPUT-ERROR"),candidate.condition("INPUT-ERROR"));
                                     assertTrue(candidate.trace().contains(new SourceEdits.Location("app/cbl/COACTUPC.cbl",
                                         paragraph.equals("1270-EDIT-US-STATE-CD")?2494:2537)));
                                 }
+        assertEquals(5832,comparisons);
     }
 
     @Test void storageOracleRejectsByteAndScratchMismatches() throws Exception {

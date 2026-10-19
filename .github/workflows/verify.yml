@@ -521,8 +521,8 @@ jobs:
           source ./python-runtime.sh
           lightyear_resolve_python
           PYTHONPATH=src:.:tests "$LIGHTYEAR_PYTHON_BIN" -B tools/build_factory_current_status.py
-          # Establish only generated outputs as the disposable CI baseline.
-          git add -- docs/factory/current-status.json docs/factory/current-status.md
+          export LIGHTYEAR_CI_STATUS_BASELINE="$RUNNER_TEMP/lightyear-status-baseline.json"
+          "$LIGHTYEAR_PYTHON_BIN" -B tools/ci_status_baseline.py capture
           ./verify.sh
 
       - name: Run unit and differential verification (Windows)
@@ -533,8 +533,8 @@ jobs:
           $env:PYTHONPATH = "src;.;tests"
           Invoke-FactoryDarkPython -B tools/build_factory_current_status.py
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          # Establish only generated outputs as the disposable CI baseline.
-          git add -- docs/factory/current-status.json docs/factory/current-status.md
+          $env:LIGHTYEAR_CI_STATUS_BASELINE = Join-Path $env:RUNNER_TEMP "lightyear-status-baseline.json"
+          Invoke-FactoryDarkPython -B tools/ci_status_baseline.py capture
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           .\verify.ps1
 

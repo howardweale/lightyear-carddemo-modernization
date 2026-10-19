@@ -97,6 +97,9 @@ class AccountedModelProvider(BoundedModelProvider):
                     estimated_cost_usd=cost,
                     cost_estimate_available=True,
                 )
+                transport_record = getattr(self.provider, 'last_transport_record', None)
+                if transport_record is not None:
+                    evidence['transport_record'] = transport_record
                 evidence["content_sha256"] = canonical_hash(evidence)
                 self.calls.append(evidence)
             raise

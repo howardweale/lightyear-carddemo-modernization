@@ -33,6 +33,8 @@ jobs:
         run: |
           python -B -m unittest test_ci_gate -v
           python -B tools/ci_gate.py lint
+          python -B tools/check_status_pr.py
+          python -B -m unittest test_status_output_policy -v
           python -B tools/check_ci_test_collection.py
           python -B tools/check_record_commit_claims.py --base "$BASE_SHA"
           python -B -m unittest test_ci_test_collection test_phase2_image_verifier test_claim_scope test_record_commit_claims -v

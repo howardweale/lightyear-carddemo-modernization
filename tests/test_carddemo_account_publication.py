@@ -68,6 +68,18 @@ class AccountPublicationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'trace-scope'):
             verify_observations(self.archives, scopes, self.source)
 
+    def test_bound_text_helpers_are_preserved_and_unknown_methods_refused(self):
+        methods = self.record['observations']['trace_links']['account_text_money_java']['methods']
+        self.assertTrue({'empty', 'text'} <= {row['method'] for row in methods})
+        archives = {name: dict(files) for name, files in self.archives.items()}
+        for files in archives.values():
+            for path in list(files):
+                if path.endswith('/account-text-money-trace.json'):
+                    trace = json.loads(files[path]); trace['methods'][0]['method'] = 'unproved'
+                    files[path] = json.dumps(trace).encode()
+        with self.assertRaisesRegex(ValueError, 'trace-scope'):
+            verify_observations(archives, self.scopes, self.source)
+
     def test_ci_outputs_are_deterministic_and_never_overwrite(self):
         with tempfile.TemporaryDirectory() as folder:
             status.publish_ci(folder, ROOT)

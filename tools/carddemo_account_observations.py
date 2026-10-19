@@ -95,7 +95,7 @@ def verify_observations(archives, scopes, source):
         if (trace['schema'] != 'carddemo-java-trace/1' or trace['program'] != 'COACTUPC'
                 or trace['source'] != source or trace['remaining_statement_engine_programs'] != scope['remaining_statement_engine_programs']
                 or {row['paragraph'] for row in methods} != set(scope['validation_paragraphs'])
-                or {row['method'] for row in methods} != set(scope['rule_methods'])
+                or {row['method'] for row in methods} != set(scope['rule_methods']) | ({'empty', 'text'} if key == 'account_text_money_java' else set())
                 or {row['file'] for row in methods} != set(scope['java_files'])):
             raise ValueError('account-observation-trace-scope')
         traces[key] = {'path': path, 'sha256': sha256(captures[0]).hexdigest(),

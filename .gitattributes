@@ -258,3 +258,6 @@ docs/modernization/carddemo-cosgn00-evidence-2026-10-18/** -text -whitespace
 
 # Keep the exact CI-published COSGN00 group receipt bytes on every platform.
 docs/modernization/carddemo-cosgn00-2026-10-18.json -text
+/docs/modernization/carddemo-account-evidence-2026-10-19/** -text
+/docs/modernization/carddemo-account-*-2026-10-19.json -text
+/docs/modernization/carddemo-account-2026-10-19.* -text

@@ -46,3 +46,28 @@ class RecordCommitTests(unittest.TestCase):
         head=self.git('rev-parse','HEAD').strip()
         with self.assertRaisesRegex(ValueError,'source-mismatch'):
             validate_claim(self.root,dict(self.claim,reference=head,commit=head))
+
+    def test_new_dated_manifest_preserves_old_and_checks_changed_inputs(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        newer=directory/'commit-claims-2026-10-19.json'
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name)]}))
+        self.commit('new dated claims')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('wrong new claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+
+    def test_duplicate_claim_across_dated_manifests_is_refused(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        (self.root/CLAIMS).write_text(content)
+        (directory/'commit-claims-2026-10-19.json').write_text(content)
+        self.commit('ambiguous claim')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)

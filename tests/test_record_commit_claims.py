@@ -71,3 +71,22 @@ class RecordCommitTests(unittest.TestCase):
         (directory/'commit-claims-2026-10-19.json').write_text(content)
         self.commit('ambiguous claim')
         with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+    def test_named_dated_registry_preserves_existing_and_rejects_bad_or_duplicate_claim(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/l10-note.md'
+        (self.root/name).write_text('Source `'+self.base+'`.\n')
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        named=directory/'commit-claims-l10-2026-10-20.json'
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        named.write_text(content);self.commit('named dated registry')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        named.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('invalid named claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+        named.write_text(content)
+        (directory/'commit-claims-2026-10-20.json').write_text(content)
+        self.commit('duplicate across named and ordinary registry')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)

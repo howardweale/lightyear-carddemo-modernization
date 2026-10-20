@@ -29,7 +29,7 @@ manifests. Byte, path, mode, signature, or unbound-file mismatches produce an
 Howard must separately designate the factory public trust before a real package
 is submitted. The workflow reads repository variable
 `LIGHTYEAR_FACTORY_ALLOWED_SIGNERS`: one OpenSSH allowed-signers line for
-`factory@lightyear.invalid` with an `ssh-ed25519` public key. No value is provisioned
+`factory@lightyear.invalid` with an SSH public key using the Edwards-curve algorithm required by the verifier. No value is provisioned
 by this change. Missing trust fails closed when packages exist; a repository with
 no submitted packages reports `no-candidates`, not factory acceptance.
 

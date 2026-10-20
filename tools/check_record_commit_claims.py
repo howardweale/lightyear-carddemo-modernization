@@ -59,7 +59,7 @@ def check(root,base):
     names=git(root,'diff','--name-only','--diff-filter=ACMR',base,'HEAD','--','docs/factory','docs/milestones').decode().splitlines()
     manifests={p.as_posix():json.loads((root/p).read_bytes())['claims']
                for p in sorted(path.relative_to(root) for path in (root/'docs/factory').glob('commit-claims-*.json'))
-               if re.fullmatch(r'commit-claims-20\d\d-\d\d-\d\d\.json',p.name)}
+               if re.fullmatch(r'commit-claims-(?:[a-z0-9]+-)*20\d\d-\d\d-\d\d\.json',p.name)}
     claims=[claim for rows in manifests.values() for claim in rows]
     rows=[]
     for name in names:

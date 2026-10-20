@@ -34,7 +34,7 @@ class ControllerDryRunTests(unittest.TestCase):
     def scenario(self, mode):
         temp=self.enterContext(tempfile.TemporaryDirectory());root=Path(temp)
         source=root/'source';(source/'candidate').mkdir(parents=True)
-        (source/'candidate/toy.txt').write_text('wrong0\n')
+        (source/'candidate/toy.txt').write_bytes(b'wrong0\n')
         manifest={'candidate/toy.txt':hashlib.sha256(b'wrong0\n').hexdigest()}
         order=WorkOrder.from_dict(dict(schema_version='1.0',id='fixture-order',title='Toy fixture',goal='Repair toy text',
             scope={'allowed_paths':['candidate'],'graph_node_ids':[]},
@@ -90,7 +90,7 @@ class ControllerDryRunTests(unittest.TestCase):
         def sign(signer,history,tree,parent,message):
             return history._git('commit-tree','--no-gpg-sign',tree,'-p',parent,data=message).decode().strip()
         def human_commit(history, text):
-            target=history.workspace.root/'candidate/toy.txt';target.write_text(text)
+            target=history.workspace.root/'candidate/toy.txt';target.write_bytes(text.encode('utf-8'))
             parent=history._git('rev-parse',REF).decode().strip()
             history._git('add','--','candidate/toy.txt');tree=history._git('write-tree').decode().strip()
             commit=history._git('commit-tree','--no-gpg-sign',tree,'-p',parent,data=b'Human fixture edit\n').decode().strip()

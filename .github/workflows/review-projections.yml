@@ -6,6 +6,8 @@ on:
       - 'tools/build_intcalc_signing_requests.py'
       - 'tools/rehearse_intcalc_signing.py'
       - 'tools/render_oct16_status.py'
+      - 'tools/build_factory_current_status.py'
+      - 'tests/test_status_output_policy.py'
       - 'tools/release_status_records.py'
       - 'tools/check_posttran_handoff.py'
       - 'tests/test_posttran_handoff.py'

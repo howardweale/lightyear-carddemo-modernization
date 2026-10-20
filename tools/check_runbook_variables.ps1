@@ -2,11 +2,11 @@
 $ErrorActionPreference = 'Stop'
 $Files = @(Get-ChildItem -LiteralPath 'docs/factory' -Filter '*runbook*.md')
 $Files += Get-Item -LiteralPath 'docs/factory/appl-result-signing-2026-10-16/README.md'
-$Files += Get-Item -LiteralPath 'docs/factory/appl-result-signing-2026-10-17.md'
-$Supersessions = Get-Content -LiteralPath 'docs/factory/runbook-supersessions-2026-10-17.json' -Raw | ConvertFrom-Json
+$Files += Get-ChildItem -LiteralPath 'docs/factory' -Filter 'appl-result-signing-*.md'
+$SupersessionRecords = @(Get-ChildItem -LiteralPath 'docs/factory' -Filter 'runbook-supersessions-*.json' | ForEach-Object { (Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json).records })
 $Failures = @()
 foreach ($File in $Files) {
-    $Historical = @($Supersessions.records | Where-Object { (Resolve-Path -LiteralPath $_.historical_path).Path -eq $File.FullName })
+    $Historical = @($SupersessionRecords | Where-Object { (Resolve-Path -LiteralPath $_.historical_path).Path -eq $File.FullName })
     if ($Historical.Count) {
         if ($Historical.Count -ne 1 -or (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Historical[0].sha256 -or -not (Test-Path -LiteralPath $Historical[0].replacement_path)) { throw 'Historical runbook supersession mismatch' }
         Write-Output "Preserved historical runbook: $($File.Name); linting its replacement."

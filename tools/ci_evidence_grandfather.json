@@ -1,0 +1,45 @@
+{
+  "source_commit": "37332f3d9d694387960ca0595acf7fdb2918224a",
+  "files": [
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-compose-smoke.zip",
+      "blob": "b8984809c641236e4cdc0d10a98d97f0af5d72d5",
+      "bytes": 378651
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-proof-api.zip",
+      "blob": "762439041c0e961e4510081b1737425d62076a80",
+      "bytes": 3318496
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-proof-browser.zip",
+      "blob": "16614afdaed356c4614d687117dd2ef8bccfd2e5",
+      "bytes": 3937371
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-proof-mutation.zip",
+      "blob": "2f8e5e01018952f8ceadfd1b1b50bc52a36c398b",
+      "bytes": 1525206
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-status-render.zip",
+      "blob": "79d4024de1d567f90b56c7d61d4d63a6f4e82b5d",
+      "bytes": 38588
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-unsigned-receipt.zip",
+      "blob": "1e3832cf12dba1fab5019ae249aec0b9286353fb",
+      "bytes": 22047
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/archives/carddemo-web-foundation.zip",
+      "blob": "807a1bc99cdd2f5c7c32d522e24e31d3dd02ca00",
+      "bytes": 225523
+    },
+    {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/sources/docs/modernization/carddemo-slice-1-evidence-2026-10-18/mutations.xml",
+      "blob": "3ea2d281714e518ecea79511bac759e703754a64",
+      "bytes": 627333
+    }
+  ]
+}

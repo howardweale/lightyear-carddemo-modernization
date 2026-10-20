@@ -45,6 +45,9 @@ def import_request(repository, root, contract, *, journal=None, public_key=None,
     # Validate all files before writing any bytes. Fetch only exact public Git blobs.
     from .factory_policy import validate_contract
     from .factory_order import intake
+    from .factory_supersessions import reject_content_superseded
+    validate_contract(contract, check_evidence=False)
+    reject_content_superseded(contract,repository,root=root,journal=journal,public_key=public_key,trusted_head=trusted_head)
     intake(contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
     validate_contract(contract, repository)
     if contract["kind"] == "factory-decision-backfill":
@@ -63,7 +66,7 @@ def import_request(repository, root, contract, *, journal=None, public_key=None,
         if not target.exists():
             with target.open("xb") as stream:
                 stream.write(raw)
-    return write_request(root, contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
+    return write_request(root, contract,journal=journal,public_key=public_key,trusted_head=trusted_head,repository=repository)
 
 
 def main():

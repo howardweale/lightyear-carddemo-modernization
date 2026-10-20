@@ -1,0 +1,440 @@
+{
+  "activation_authorized": false,
+  "classes": {
+    "AccountFicoRule": {
+      "killed": 10,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 10
+      },
+      "total": 10
+    },
+    "AccountInputRules": {
+      "killed": 8,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 8
+      },
+      "total": 8
+    },
+    "AccountLocationRules": {
+      "killed": 2,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 2
+      },
+      "total": 2
+    },
+    "AccountMoneyRule": {
+      "killed": 9,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 9
+      },
+      "total": 9
+    },
+    "AccountSsnRule": {
+      "killed": 6,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 6
+      },
+      "total": 6
+    },
+    "AccountTextRules": {
+      "killed": 43,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 43
+      },
+      "total": 43
+    },
+    "CobolNumber": {
+      "killed": 19,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 19
+      },
+      "total": 19
+    }
+  },
+  "descriptor": {
+    "path": "docs/modernization/carddemo-account-evidence-2026-10-19/publication-input.json",
+    "sha256": "25745732f4fbcacee49a5d4841921bb956abedf5c02ad3818e6546a0a63d7096"
+  },
+  "group": "account_text_money_java",
+  "group_classes": {
+    "AccountMoneyRule": {
+      "killed": 9,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 9
+      },
+      "total": 9
+    },
+    "AccountTextRules": {
+      "killed": 43,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 43
+      },
+      "total": 43
+    },
+    "CobolNumber": {
+      "killed": 19,
+      "non_killed": [],
+      "passed": true,
+      "percent": 100.0,
+      "status_counts": {
+        "KILLED": 19
+      },
+      "total": 19
+    }
+  },
+  "group_scope": {
+    "java_files": [
+      "AccountTextRules.java",
+      "AccountMoneyRule.java"
+    ],
+    "rule_methods": [
+      "requiredName",
+      "requiredText",
+      "optionalName",
+      "optionalText",
+      "requiredNonzeroDigits",
+      "validate"
+    ],
+    "validation_paragraphs": [
+      "1225-EDIT-ALPHA-REQD",
+      "1230-EDIT-ALPHANUM-REQD",
+      "1235-EDIT-ALPHA-OPT",
+      "1240-EDIT-ALPHANUM-OPT",
+      "1245-EDIT-NUM-REQD",
+      "1250-EDIT-SIGNED-9V2"
+    ]
+  },
+  "groups": {
+    "account_input_java": {
+      "java_files": [
+        "AccountInputRules.java"
+      ],
+      "rule_methods": [
+        "validateRequired",
+        "validateYesNo"
+      ],
+      "validation_paragraphs": [
+        "1215-EDIT-MANDATORY",
+        "1220-EDIT-YESNO"
+      ]
+    },
+    "account_location_java": {
+      "java_files": [
+        "AccountLocationRules.java"
+      ],
+      "rule_methods": [
+        "state",
+        "stateZip"
+      ],
+      "validation_paragraphs": [
+        "1270-EDIT-US-STATE-CD",
+        "1280-EDIT-US-STATE-ZIP-CD"
+      ]
+    },
+    "account_ssn_fico_java": {
+      "java_files": [
+        "AccountSsnRule.java",
+        "AccountFicoRule.java"
+      ],
+      "rule_methods": [
+        "validate",
+        "validScore",
+        "validDisplay"
+      ],
+      "validation_paragraphs": [
+        "1265-EDIT-US-SSN",
+        "1275-EDIT-FICO-SCORE"
+      ]
+    },
+    "account_text_money_java": {
+      "java_files": [
+        "AccountTextRules.java",
+        "AccountMoneyRule.java"
+      ],
+      "rule_methods": [
+        "requiredName",
+        "requiredText",
+        "optionalName",
+        "optionalText",
+        "requiredNonzeroDigits",
+        "validate"
+      ],
+      "validation_paragraphs": [
+        "1225-EDIT-ALPHA-REQD",
+        "1230-EDIT-ALPHANUM-REQD",
+        "1235-EDIT-ALPHA-OPT",
+        "1240-EDIT-ALPHANUM-OPT",
+        "1245-EDIT-NUM-REQD",
+        "1250-EDIT-SIGNED-9V2"
+      ]
+    }
+  },
+  "hash_closure": {
+    "artifact_hashes": 176,
+    "source_and_mapping_hashes": 156
+  },
+  "measurement_base_note": "Run began before retargeting; tested tree equals the integrated source tree. Final current-main validation is a separate exact-head audit.",
+  "measurement_date": "2026-10-19",
+  "measurement_run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39293036087",
+  "merge_approved": false,
+  "mutation": {
+    "denominator": "every PIT mutation in configured screen-handler/helper scope; timeout, no-coverage and errors are not counted killed",
+    "killed": 882,
+    "percent": 92.84210526315789,
+    "status_counts": {
+      "KILLED": 882,
+      "NO_COVERAGE": 17,
+      "SURVIVED": 50,
+      "TIMED_OUT": 1
+    },
+    "total": 950
+  },
+  "observations": {
+    "commarea": "Exact returned COMMAREA comparisons are CI assertions in the bound Python/JavaScript proof sources; returned bytes are not separately retained for replay.",
+    "database": "Retained API and browser after-states reconciled against every expected table for all 678 rows.",
+    "retained_rows_verified": {
+      "api": 678,
+      "browser": 678,
+      "mutation": 678
+    },
+    "shared_dependencies": [
+      "BMS parser",
+      "physical data plan and typed projection codec"
+    ],
+    "trace_links": {
+      "account_input_java": {
+        "methods": [
+          {
+            "file": "AccountInputRules.java",
+            "lines": [
+              1824,
+              1850
+            ],
+            "method": "validateRequired",
+            "paragraph": "1215-EDIT-MANDATORY",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountInputRules.java",
+            "lines": [
+              1856,
+              1891
+            ],
+            "method": "validateYesNo",
+            "paragraph": "1220-EDIT-YESNO",
+            "program": "COACTUPC"
+          }
+        ],
+        "path": "carddemo-web-bindings/account-input-trace.json",
+        "sha256": "4ac02cf51223ff5fab8a7421e67de53305e40ef1a23ed27cfbef1a3ce29945d6"
+      },
+      "account_location_java": {
+        "methods": [
+          {
+            "file": "AccountLocationRules.java",
+            "lines": [
+              2493,
+              2510
+            ],
+            "method": "state",
+            "paragraph": "1270-EDIT-US-STATE-CD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountLocationRules.java",
+            "lines": [
+              2536,
+              2557
+            ],
+            "method": "stateZip",
+            "paragraph": "1280-EDIT-US-STATE-ZIP-CD",
+            "program": "COACTUPC"
+          }
+        ],
+        "path": "carddemo-web-bindings/account-location-trace.json",
+        "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d"
+      },
+      "account_ssn_fico_java": {
+        "methods": [
+          {
+            "file": "AccountSsnRule.java",
+            "lines": [
+              2431,
+              2488
+            ],
+            "method": "validate",
+            "paragraph": "1265-EDIT-US-SSN",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountFicoRule.java",
+            "lines": [
+              2514,
+              2530
+            ],
+            "method": "validScore",
+            "paragraph": "1275-EDIT-FICO-SCORE",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountFicoRule.java",
+            "lines": [
+              2514,
+              2530
+            ],
+            "method": "validDisplay",
+            "paragraph": "1275-EDIT-FICO-SCORE",
+            "program": "COACTUPC"
+          }
+        ],
+        "path": "carddemo-web-bindings/account-ssn-fico-trace.json",
+        "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125"
+      },
+      "account_text_money_java": {
+        "methods": [
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              1898,
+              1950
+            ],
+            "method": "requiredName",
+            "paragraph": "1225-EDIT-ALPHA-REQD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              1955,
+              2008
+            ],
+            "method": "requiredText",
+            "paragraph": "1230-EDIT-ALPHANUM-REQD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              2012,
+              2056
+            ],
+            "method": "optionalName",
+            "paragraph": "1235-EDIT-ALPHA-OPT",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              2061,
+              2104
+            ],
+            "method": "optionalText",
+            "paragraph": "1240-EDIT-ALPHANUM-OPT",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              2109,
+              2175
+            ],
+            "method": "requiredNonzeroDigits",
+            "paragraph": "1245-EDIT-NUM-REQD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              1902,
+              1908
+            ],
+            "method": "empty",
+            "paragraph": "1225-EDIT-ALPHA-REQD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountTextRules.java",
+            "lines": [
+              1923,
+              1949
+            ],
+            "method": "text",
+            "paragraph": "1225-EDIT-ALPHA-REQD",
+            "program": "COACTUPC"
+          },
+          {
+            "file": "AccountMoneyRule.java",
+            "lines": [
+              2180,
+              2220
+            ],
+            "method": "validate",
+            "paragraph": "1250-EDIT-SIGNED-9V2",
+            "program": "COACTUPC"
+          }
+        ],
+        "path": "carddemo-web-bindings/account-text-money-trace.json",
+        "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020"
+      }
+    }
+  },
+  "original_receipt_date": "2026-10-18",
+  "phase2_authorized": false,
+  "program": "COACTUPC",
+  "publication_date": "2026-10-19",
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "run_attempt": 1,
+  "run_id": 39293036087,
+  "scenarios": {
+    "conflict_reader_interactions": 7,
+    "conflict_writer_interactions": 7,
+    "interactions": 678,
+    "journeys": 120,
+    "named_case_interactions": 674,
+    "setup_interactions": 4
+  },
+  "schema": "carddemo-account-group-publication/1",
+  "scope_binding": "separate exact-source Git blobs; not claimed as original receipt inputs",
+  "source_head": "fb6154ae1568a0a67a69861f6ca8d51b1e010a72",
+  "tested_commit": "5ac28347d8fdceb3b50587f1316b46f353871c96",
+  "tested_parents": [
+    "9bc5224bdc72a2cd4ef2d59fb2909ca417a07c0d",
+    "fb6154ae1568a0a67a69861f6ca8d51b1e010a72"
+  ],
+  "tested_tree": "71e1590cf1f3d9fb2fc6314b0adb4b6cf32551ca",
+  "unsigned": true,
+  "validation_paragraph_count": 12,
+  "whole_screen_idiomatic": false
+}

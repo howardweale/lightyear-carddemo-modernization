@@ -1,7 +1,7 @@
 name: POSTTRAN independent plan
 on:
   pull_request:
-    paths: ['src/lightyear_factory/posttran_second_opinion.py', 'src/lightyear_factory/posttran_preflight.py', 'src/lightyear_factory/posttran_broker.py', 'tools/amend_posttran_oct11.py', 'tools/b07_prefreeze_power.py', 'tools/build_factory_current_status.py', 'tests/test_oct11_decision_amendments.py', 'docs/factory/current-status.*', 'docs/factory/keep-or-fix-register.json', 'docs/factory/posttran-decisions-unsigned-2026-10-11.json', 'docs/factory/b07-prefreeze-power-2026-10-11.json', 'docs/factory/ci-times-316-320-2026-10-11.json', 'docs/factory/howard-decisions-2026-10-11b*', 'tests/test_posttran_second_opinion.py', 'tests/test_posttran_preflight.py', 'docs/factory/posttran-second-opinion/**', '.github/workflows/posttran-second-opinion.yml']
+    paths: ['src/lightyear_factory/posttran_second_opinion.py', 'src/lightyear_factory/posttran_preflight.py', 'src/lightyear_factory/posttran_broker.py', 'tools/amend_posttran_oct11.py', 'tools/b07_prefreeze_power.py', 'tools/build_factory_current_status.py', 'tools/release_status_records.py', 'tools/ci_status_baseline.py', 'tests/test_ci_status_baseline.py', 'tests/test_oct11_decision_amendments.py', 'docs/factory/current-status.*', 'docs/factory/keep-or-fix-register.json', 'docs/factory/posttran-decisions-unsigned-2026-10-11.json', 'docs/factory/b07-prefreeze-power-2026-10-11.json', 'docs/factory/ci-times-316-320-2026-10-11.json', 'docs/factory/howard-decisions-2026-10-11b*', 'tests/test_posttran_second_opinion.py', 'tests/test_posttran_preflight.py', 'docs/factory/posttran-second-opinion/**', '.github/workflows/posttran-second-opinion.yml']
   push:
     branches: [main]
   workflow_dispatch:
@@ -14,16 +14,26 @@ jobs:
   no-call-plan:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    env:
+      LIGHTYEAR_CI_STATUS_BASELINE: ${{ runner.temp }}/lightyear-status-baseline.json
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - run: pip install cryptography
-      - run: python -B -m unittest test_posttran_second_opinion test_posttran_preflight test_factory_review_broker test_oct11_decision_amendments test_ci_push_latency
+      - name: Prepare disposable current-status baseline
+        env:
+          PYTHONPATH: src:tests:.
+        run: |
+          python -B tools/build_factory_current_status.py
+          python -B tools/ci_status_baseline.py capture
+      - run: python -B -m unittest test_posttran_second_opinion test_posttran_preflight test_factory_review_broker test_oct11_decision_amendments test_ci_push_latency test_ci_status_baseline
         env:
           PYTHONPATH: src:tests:.
 
       - run: python -B tools/build_factory_current_status.py --check
         env:
           PYTHONPATH: src:tests:.
+      - name: Verify unchanged baseline and restore clean checkout
+        run: python -B tools/ci_status_baseline.py finish

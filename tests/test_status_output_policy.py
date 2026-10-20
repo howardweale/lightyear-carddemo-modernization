@@ -1,15 +1,16 @@
-"""Offline CI fixtures for output guards and bounded main status publication."""
+"""Offline CI fixtures for output guards and protected-main status draft PRs."""
 import copy
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
 from tools.check_status_pr import STATUS_FILES, changed_paths, check
-from tools.rebuild_main_status import rebuild, STATUS_FILES as REBUILT_FILES
+from tools.rebuild_main_status import rebuild, BRANCH_PREFIX
 
 REPO = 'howardweale/lightyear-carddemo-modernization'
 BOT = {'user': {'id': 41898282, 'login': 'github-actions[bot]', 'type': 'Bot'},
-       'head': {'repo': {'full_name': REPO}}, 'title': 'status: rebuild after ' + 'a' * 40}
+       'head': {'repo': {'full_name': REPO}, 'ref': BRANCH_PREFIX + 'a' * 40},
+       'base': {'ref': 'main'}, 'title': 'status: rebuild after ' + 'a' * 40}
 
 
 class OutputGuardTests(unittest.TestCase):
@@ -26,6 +27,9 @@ class OutputGuardTests(unittest.TestCase):
             row = copy.deepcopy(BOT); row['user'][key] = value; variants.append(row)
         row = copy.deepcopy(BOT); row['head']['repo']['full_name'] = 'attacker/fork'; variants.append(row)
         row = copy.deepcopy(BOT); row['title'] = 'ordinary change'; variants.append(row)
+        row = copy.deepcopy(BOT); row['base']['ref'] = 'other'; variants.append(row)
+        row = copy.deepcopy(BOT); row['head']['ref'] = 'ordinary'; variants.append(row)
+        row = copy.deepcopy(BOT); row['title'] += ' extra'; variants.append(row)
         for row in variants:
             with self.assertRaises(ValueError): check(row, STATUS_FILES, REPO)
         with self.assertRaises(ValueError): check(BOT, [*STATUS_FILES, 'tools/example.py'], REPO)
@@ -84,50 +88,125 @@ class OutputGuardTests(unittest.TestCase):
 
 
 class RebuildTests(unittest.TestCase):
-    def fixture(self, changed=True, advance=False, extra=False, deleted=False):
-        calls=[]; renders=[]; pushes=[]; fetches=[]
+    def fixture(self, changed=True, extra=False, deleted=False, mode=False,
+                count=0, existing=None, branch_exists=False, advance=False,
+                post_error=False, bad_response=False, historical=False, grow_at=None):
+        calls=[]; renders=[]; requests=[]; writes=[]; pushes=[]; gates=[]
+        source='a'*40; commit='c'*40; branch=BRANCH_PREFIX+source
         def command(*args):
             calls.append(args)
-            if args[0]=='fetch':fetches.append(True)
-            if args==('rev-parse','FETCH_HEAD'):return ('b' if len(fetches)>1 else 'a')*40
-            if args==('rev-parse','HEAD'):return 'c'*40
+            if args==('rev-parse','FETCH_HEAD'):return source
+            if args==('rev-parse','HEAD'):return commit
+            if args==('show','-s','--format=%P',commit):return source
             if args==('diff','--name-only'):return '\n'.join(STATUS_FILES) if changed else ''
+            if args==('diff','--name-only',source,commit):return '\n'.join(STATUS_FILES)
             if args==('ls-files','--others','--exclude-standard'):return 'unexpected' if extra else ''
             if args==('diff','--name-only','--diff-filter=D'):return next(iter(STATUS_FILES)) if deleted else ''
-            if args==('ls-remote','origin','refs/heads/main'):return ('b' if advance else 'a')*40+'\trefs/heads/main'
+            if args==('diff','--summary'):return 'mode change 100644 => 100755' if mode else ''
+            if args==('ls-remote','origin','refs/heads/main'):
+                return ('b'*40 if advance else source)+'\trefs/heads/main'
+            if args==('ls-remote','origin','refs/heads/'+branch):
+                return commit+'\trefs/heads/'+branch if branch_exists or pushes else ''
+            if args[0]=='push':
+                # Reproduce the protected-main boundary from the original failure.
+                self.assertNotEqual('refs/heads/main',args[-1].split(':')[-1])
+                self.assertNotIn('--force',args);pushes.append(args)
             return ''
-        def push():
-            pushes.append(True)
-            return 1 if advance and len(pushes)==1 else 0
-        return command, lambda:renders.append(True), push, calls, renders, pushes
+        def api(route,payload=None):
+            requests.append((route,payload))
+            if payload is not None:
+                writes.append(payload)
+                if post_error:raise RuntimeError('ambiguous API failure')
+                return {'number':9,'state':'open','draft':True,'base':{'ref':'main'},
+                        'head':{'ref':branch,'sha':'d'*40 if bad_response else commit,
+                                'repo':{'full_name':REPO}},'html_url':'https://example.invalid/pull/9'}
+            if route.startswith('pulls?state=all'):return [{'number':8}] if historical else []
+            gates.append(True)
+            if existing:return [existing]
+            n=6 if grow_at is not None and len(gates)>=grow_at else count
+            return [{'head':{'ref':'feature-'+str(i)}} for i in range(n)]
+        options=dict(repository=REPO,command=command,render=lambda:renders.append(True),api=api)
+        return options,calls,renders,requests,writes,pushes
 
-    def test_input_change_produces_one_bot_commit(self):
-        command,render,push,calls,renders,pushes=self.fixture()
-        result=rebuild(command=command,render=render,push=push)
-        self.assertTrue(result['changed']);self.assertEqual(1,len(pushes));self.assertEqual(1,len(renders))
-        commits=[a for a in calls if 'commit' in a]
-        self.assertEqual(1,len(commits));self.assertEqual('status: rebuild after '+'a'*40,commits[0][-1])
-        self.assertIn(('add','--',*REBUILT_FILES),calls)
+    def test_protected_main_uses_one_branch_and_draft_without_approving_or_merging(self):
+        opts,calls,renders,requests,writes,pushes=self.fixture(count=5)
+        result=rebuild(**opts)
+        self.assertEqual('draft_created',result['state']);self.assertFalse(result['published_to_main'])
+        self.assertEqual(1,len(pushes));self.assertEqual(1,len(renders));self.assertEqual(1,len(writes))
+        self.assertTrue(writes[0]['draft']);self.assertEqual('main',writes[0]['base'])
+        self.assertIn('approve',writes[0]['body'])
+        self.assertEqual(1,len([a for a in calls if 'commit' in a]))
+        self.assertTrue(all(route.startswith('pulls') for route,_ in requests))
+        check(BOT,STATUS_FILES,REPO)
 
-    def test_no_change_produces_no_commit_or_push(self):
-        command,render,push,calls,_,pushes=self.fixture(changed=False)
-        self.assertFalse(rebuild(command=command,render=render,push=push)['changed'])
-        self.assertFalse(pushes);self.assertFalse(any('commit' in a for a in calls))
+    def test_unchanged_render_has_no_commit_push_or_api_calls(self):
+        opts,calls,_,requests,writes,pushes=self.fixture(changed=False)
+        self.assertEqual('unchanged',rebuild(**opts)['state'])
+        self.assertFalse(requests or writes or pushes);self.assertFalse(any('commit' in a for a in calls))
 
-    def test_concurrent_advance_rebuilds_before_retry(self):
-        command,render,push,calls,renders,pushes=self.fixture(advance=True)
-        self.assertEqual('b'*40,rebuild(command=command,render=render,push=push)['source'])
-        self.assertEqual(2,len(renders));self.assertEqual(2,len(pushes))
-        self.assertFalse(any('--force' in a for a in calls))
+    def test_capacity_and_newly_filled_slot_defer_without_pr_creation(self):
+        for kwargs in ({'count':6},{'count':7},{'grow_at':2},{'grow_at':3}):
+            with self.subTest(kwargs=kwargs):
+                opts,_,_,_,writes,pushes=self.fixture(**kwargs)
+                result=rebuild(**opts)
+                self.assertEqual('awaiting_pr_slot',result['state']);self.assertFalse(writes)
+                self.assertEqual(1 if kwargs.get('grow_at')==3 else 0,len(pushes))
 
-    def test_unrelated_output_or_deletion_refused(self):
-        for kwargs in [{'extra':True},{'deleted':True}]:
-            command,render,push,_,_,pushes=self.fixture(**kwargs)
-            with self.assertRaises(ValueError):rebuild(command=command,render=render,push=push)
-            self.assertFalse(pushes)
+    def test_existing_status_pr_preserves_branch_and_human_edits(self):
+        pr=copy.deepcopy(BOT);pr.update(number=8,html_url='https://example.invalid/pull/8')
+        opts,calls,_,_,writes,pushes=self.fixture(existing=pr)
+        self.assertEqual('awaiting_existing_pr',rebuild(**opts)['state'])
+        self.assertFalse(writes or pushes);self.assertFalse(any('commit' in a for a in calls))
+        pr['user']['id']=7
+        opts,_,_,_,writes,pushes=self.fixture(existing=pr)
+        with self.assertRaisesRegex(ValueError,'ownership'):rebuild(**opts)
+        self.assertFalse(writes or pushes)
 
-    def test_permission_failure_is_not_retried_as_concurrency(self):
-        command,render,_,_,renders,_=self.fixture()
-        with self.assertRaisesRegex(RuntimeError,'permissions'):
-            rebuild(command=command,render=render,push=lambda:1)
-        self.assertEqual(1,len(renders))
+    def test_extra_files_deletion_and_mode_changes_refused_before_network_writes(self):
+        for kwargs in ({'extra':True},{'deleted':True},{'mode':True}):
+            opts,_,_,_,writes,pushes=self.fixture(**kwargs)
+            with self.assertRaises(ValueError):rebuild(**opts)
+            self.assertFalse(writes or pushes)
+
+    def test_stale_main_existing_branch_and_closed_source_pr_are_not_reused(self):
+        for kwargs in ({'advance':True},{'branch_exists':True},{'historical':True}):
+            opts,_,renders,_,writes,pushes=self.fixture(**kwargs)
+            with self.assertRaises(ValueError):rebuild(**opts)
+            self.assertFalse(writes or pushes);self.assertEqual(1,len(renders))
+
+    def test_ambiguous_creation_and_wrong_response_never_repeat_post_or_push(self):
+        for kwargs,error in (({'post_error':True},RuntimeError),({'bad_response':True},ValueError)):
+            opts,_,_,_,writes,pushes=self.fixture(**kwargs)
+            with self.assertRaises(error):rebuild(**opts)
+            self.assertEqual(1,len(writes));self.assertEqual(1,len(pushes))
+
+    def test_real_git_status_branch_leaves_main_and_input_bytes_unchanged(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);remote=root/'remote.git';repo=root/'checkout'
+            subprocess.check_call(['git','init','--bare',str(remote)],stdout=subprocess.DEVNULL)
+            subprocess.check_call(['git','init','-b','main',str(repo)],stdout=subprocess.DEVNULL)
+            def command(*args):
+                return subprocess.check_output(
+                    ['git','-c','user.name=fixture','-c','user.email=fixture@example.invalid',
+                     '-c','commit.gpgsign=false',*args],cwd=repo,stderr=subprocess.DEVNULL).decode().strip()
+            for name in (*STATUS_FILES,'input.json'):
+                p=repo/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('original\n')
+            command('add','.');command('commit','-m','input change')
+            source=command('rev-parse','HEAD')
+            command('remote','add','origin',str(remote));command('push','origin','main')
+            def render():
+                for name in STATUS_FILES:(repo/name).write_text('fresh render\n')
+            writes=[]
+            def api(route,payload=None):
+                if payload is None:return []
+                writes.append(payload)
+                return {'number':1,'draft':True,'state':'open','base':{'ref':'main'},
+                        'head':{'sha':command('rev-parse','HEAD'),'ref':payload['head'],
+                                'repo':{'full_name':REPO}},'html_url':'https://example.invalid/pull/1'}
+            result=rebuild(repository=REPO,command=command,render=render,api=api)
+            self.assertEqual('draft_created',result['state']);self.assertEqual(1,len(writes))
+            self.assertEqual(source,command('ls-remote','origin','refs/heads/main').split()[0])
+            self.assertEqual(source,command('show','-s','--format=%P',result['commit']))
+            self.assertEqual(STATUS_FILES,set(command('diff','--name-only',source,result['commit']).splitlines()))
+            self.assertEqual('original\n',(repo/'input.json').read_text())
+            self.assertFalse(command('status','--porcelain'))

@@ -7,6 +7,7 @@ import shutil
 
 from tools.release_status_records import ROOT, inputs, load, render
 from tools.build_release_packet import build
+from tools import appl_contract_selection
 from tools.carddemo_idiomatic_status import inputs as idiomatic_inputs
 from tools.carddemo_account_status import inputs as account_inputs
 
@@ -27,13 +28,23 @@ def copy_status_inputs(source, root):
         shutil.copyfile(source/relative, target)
 
 
+def overlay_projections(output, root):
+    # Regenerated rehearsal templates rebind source commits. They are not the
+    # selected published signing contracts; preserve the committed packet here.
+    selected=appl_contract_selection.selection_path(root) is not None
+    for path in output.glob('*-2026-10-17.json'):
+        if selected and path.name.startswith('intcalc-') and ('-request-' in path.name or '-signing-order-' in path.name):
+            continue
+        shutil.copyfile(path,root/'docs/factory'/path.name)
+
+
 def main(output):
     output=Path(output)
     # A temporary public-document tree avoids changing the checkout or old status.
     with tempfile.TemporaryDirectory() as folder:
         root=Path(folder)
         copy_status_inputs(ROOT, root)
-        for path in output.glob('*-2026-10-17.json'):shutil.copyfile(path,root/'docs/factory'/path.name)
+        overlay_projections(output,root)
         value,text=render(load(root))
         value['input_sha256']={p:__import__('hashlib').sha256((root/p).read_bytes()).hexdigest() for p in inputs(root)}
         (output/'current-status-2026-10-17-handoff-refresh.json').write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8',newline='\n')

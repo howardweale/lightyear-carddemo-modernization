@@ -8,6 +8,7 @@ import shutil
 from tools.release_status_records import ROOT, inputs, load, render
 from tools.build_release_packet import build
 from tools.carddemo_idiomatic_status import inputs as idiomatic_inputs
+from tools.carddemo_account_status import inputs as account_inputs
 
 
 def copy_status_inputs(source, root):
@@ -16,7 +17,7 @@ def copy_status_inputs(source, root):
     # Published group receipts can bind evidence outside the public docs tree.
     # Use their verified input list; do not drop the group or bypass its hashes.
     paths = ('src/lightyear_control_tower/threshold_evidence.py',
-             'src/lightyear_factory/threshold3.py', *idiomatic_inputs(source))
+             'src/lightyear_factory/threshold3.py', *idiomatic_inputs(source), *account_inputs(source))
     for path in dict.fromkeys(paths):
         relative = Path(path)
         if relative.is_absolute() or '..' in relative.parts:

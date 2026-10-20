@@ -87,7 +87,11 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
     native_paragraphs['1250-EDIT-SIGNED-9V2'] = 'AccountMoneyRule'
     native_paragraphs['1265-EDIT-US-SSN'] = 'AccountSsnRule'
     native_paragraphs['1275-EDIT-FICO-SCORE'] = 'AccountFicoRule'
+    native_paragraphs.update({name: 'AccountLocationRules' for name in
+        ('1270-EDIT-US-STATE-CD', '1280-EDIT-US-STATE-ZIP-CD')})
     for name in native_paragraphs:
+        if not isinstance(paragraphs.get(name),list) or not paragraphs[name]:
+            raise ValueError('native-retirement-paragraph: '+name)
         del paragraphs[name]
     return dict(paragraphs=paragraphs,native_paragraphs=native_paragraphs,
         fields=bound,conditions=flags,storage=storage,

@@ -62,7 +62,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
                 workspace = IsolatedWorkspace(source, root/'worker', ('candidate',), manifest)
                 def bounded_stat(path, *args, **kwargs):
                     info = original_stat(path, *args, **kwargs)
-                    if path.parent == source and size is not None:
+                    if path.parent == workspace.source_root and size is not None:
                         return SimpleNamespace(st_mode=info.st_mode, st_nlink=1, st_size=size)
                     return info
                 with patch.object(Path, 'stat', bounded_stat), patch.object(Path, 'open') as opened:

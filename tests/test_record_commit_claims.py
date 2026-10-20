@@ -72,6 +72,33 @@ class RecordCommitTests(unittest.TestCase):
         self.commit('ambiguous claim')
         with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
 
+    def test_named_dated_manifest_preserves_both_existing_dated_files(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/retention-summary-2026-10-19.md'
+        (self.root/name).write_text('Source revision `'+self.base+'`.\n')
+        frozen={self.root/CLAIMS:b'{"claims": []}\n',
+                directory/'commit-claims-2026-10-19.json':b'{"claims":[]}\n'}
+        for path,raw in frozen.items():path.write_bytes(raw)
+        newer=directory/'commit-claims-intcalc-retention-2026-10-19.json'
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name)]}))
+        self.commit('named dated claims')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        for path,raw in frozen.items():self.assertEqual(raw,path.read_bytes())
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('invalid named claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+        for path,raw in frozen.items():self.assertEqual(raw,path.read_bytes())
+
+    def test_named_and_bare_dated_duplicate_claims_remain_ambiguous(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        for filename in ('commit-claims-2026-10-19.json','commit-claims-intcalc-retention-2026-10-19.json'):
+            (directory/filename).write_text(content)
+        self.commit('duplicate across named and bare dated manifests')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
     def test_named_dated_registry_preserves_existing_and_rejects_bad_or_duplicate_claim(self):
         directory=self.root/'docs/factory';directory.mkdir(parents=True)
         name='docs/factory/l10-note.md'

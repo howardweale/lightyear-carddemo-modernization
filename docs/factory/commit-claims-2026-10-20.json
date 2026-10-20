@@ -1,0 +1,22 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/appl-result-ordered-review-2026-10-20/INTCALC/unsigned-review.json",
+      "reference": "0c531bf448c82df4c7acdc61d1e1a7731f73f1e1",
+      "commit": "0c531bf448c82df4c7acdc61d1e1a7731f73f1e1",
+      "role": "source",
+      "source_path": "docs/factory/appl-result-contract-selection-2026-10-18.json",
+      "source_sha256": "ebd9732196e38dba6b411c702388d030385d5f2b9aba68ccc9f17853c3232d63"
+    },
+    {
+      "record": "docs/factory/appl-result-ordered-review-2026-10-20/INTCALC/unsigned-review.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+      "source_sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+    }
+  ]
+}

@@ -47,7 +47,7 @@ class FactoryTests(unittest.TestCase):
             sources=[dict(path="docs/factory/public.json",sha256=hashlib.sha256(self.source.read_bytes()).hexdigest(),commit="b"*40)],details=d)
 
     def decide(self, contract, outcome=None):
-        journal=self.service.export_session(self.token) if "signing_order" in contract else None
+        journal=self.service.export_session(self.token)
         request = write_request(self.root, contract,journal=journal,public_key=self.service.public_key,
             trusted_head=journal["journal_head_sha256"] if journal else None)
         item = self.service.review(self.token, request["id"])
@@ -96,7 +96,9 @@ class FactoryTests(unittest.TestCase):
 
     def test_per_item_review_required(self):
         contract=self.contract("equivalence-review")
-        request=write_request(self.root,contract);item=self.service.review(self.token,request["id"])
+        journal=self.service.export_session(self.token)
+        request=write_request(self.root,contract,journal=journal,public_key=self.service.public_key,
+            trusted_head=journal["journal_head_sha256"]);item=self.service.review(self.token,request["id"])
         with self.assertRaises(ValueError):
             self.service.decide(self.token,dict(item_id=item["id"],bound=item["bound"],outcome="accept",reason="No item decisions",request_id=str(uuid.uuid4())))
 

@@ -51,8 +51,18 @@ failure logs and job metadata before repair.
 
 ## Documentation checks
 
-The repository-map workflow checks local Markdown links in the README,
+The repository-map workflow checks local Markdown links and named repository paths in the README,
 architecture, contribution guide and [documentation index](docs/index.md).
-Use Markdown links for repository paths in those guides so CI can validate them.
+Paths in prose, inline code and command blocks are checked too. Named paths are
+relative to the repository root; paths with an explicit dot-directory prefix
+are relative to the document. Globs must match an existing path and cannot escape the checkout.
 Keep the README at most 150 lines and the architecture compact enough for two
 pages. CI also proves that the archive equals the original source Git blob.
+
+Repository measurements are produced by the same CI job with the measured Git
+commit, tree, run and file hashes in its retained provenance. The committed
+[metrics snapshot](docs/architecture/metrics.json) describes its recorded commit;
+it does not claim to measure the current checkout. After this PR merges, retain
+its successful main-push metrics artifact and use those exact bytes in a reviewed
+refresh PR. Keep the measured commit and tree unchanged in that refresh; do not
+relabel the snapshot as measuring the later receipt commit.

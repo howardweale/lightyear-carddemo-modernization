@@ -1,10 +1,10 @@
 name: CardDemo web slice
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_java_trace.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_idiomatic_status.py', 'docs/modernization/carddemo-cosgn00*', 'docs/modernization/carddemo-cosgn00-evidence-2026-10-18/**', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_java_trace.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_idiomatic_status.py', 'tools/carddemo_account_*.py', 'tests/test_carddemo_account_*.py', 'docs/modernization/carddemo-account*', 'docs/modernization/carddemo-account-evidence-2026-10-19/**', 'docs/modernization/carddemo-cosgn00*', 'docs/modernization/carddemo-cosgn00-evidence-2026-10-18/**', '.github/workflows/carddemo-web.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_java_trace.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_idiomatic_status.py', 'docs/modernization/carddemo-cosgn00*', 'docs/modernization/carddemo-cosgn00-evidence-2026-10-18/**', '.github/workflows/carddemo-web.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'spec/modernization/carddemo-screens/**', 'spec/modernization/carddemo-data/**', 'tests/test_carddemo_web*', 'tests/browser/carddemo-*.mjs', 'tools/ci_postgres_image.py', 'tools/check_carddemo_java_trace.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_idiomatic_status.py', 'tools/carddemo_account_*.py', 'tests/test_carddemo_account_*.py', 'docs/modernization/carddemo-account*', 'docs/modernization/carddemo-account-evidence-2026-10-19/**', 'docs/modernization/carddemo-cosgn00*', 'docs/modernization/carddemo-cosgn00-evidence-2026-10-18/**', '.github/workflows/carddemo-web.yml']
 permissions:
   contents: read
 concurrency:
@@ -23,6 +23,8 @@ jobs:
         env:
           PYTHONPATH: src:.
         run: |
+          PYTHONPATH=src:.:tests python -B -m unittest discover -s tests -p "test_carddemo_account_*.py" -v
+          python -B -m tools.carddemo_account_status --out work/carddemo-account-publication
           python -B -m tools.carddemo_idiomatic_status
           python -B tools/build_factory_current_status.py
           PYTHONPATH=src:.:tests python -B -m unittest test_carddemo_web_idiomatic_status -v
@@ -30,6 +32,7 @@ jobs:
           cp docs/factory/current-status.json docs/factory/current-status.md work/carddemo-status-render/
           cp docs/modernization/carddemo-cosgn00-2026-10-18.* work/carddemo-status-render/
           cp factory/carddemo-web/README.md work/carddemo-status-render/README.md
+          cp -r work/carddemo-account-publication/docs work/carddemo-status-render/
       - uses: actions/upload-artifact@v7
         with:
           name: carddemo-status-render
@@ -39,8 +42,12 @@ jobs:
         env:
           PYTHONPATH: src:tests:.
         run: |
-          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference test_carddemo_web_java_trace -v
+          python -B -m unittest test_carddemo_web_bindings test_carddemo_web_reference test_carddemo_web_java_trace test_carddemo_web_account_input_trace test_carddemo_web_account_text_money_trace test_carddemo_web_account_ssn_fico_trace test_carddemo_web_account_location_trace test_carddemo_web_account_location_receipt -v
           python -B tools/check_carddemo_java_trace.py --out work/carddemo-web-bindings/java-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-input-scope.json --out work/carddemo-web-bindings/account-input-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-text-money-scope.json --out work/carddemo-web-bindings/account-text-money-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-ssn-fico-scope.json --out work/carddemo-web-bindings/account-ssn-fico-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-location-scope.json --out work/carddemo-web-bindings/account-location-trace.json
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
       - uses: actions/setup-java@v5
@@ -151,6 +158,9 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-text-money-scope.json --out work/carddemo-web-bindings/account-text-money-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-ssn-fico-scope.json --out work/carddemo-web-bindings/account-ssn-fico-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-location-scope.json --out work/carddemo-web-bindings/account-location-trace.json
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
           docker compose -f factory/carddemo-web/compose.yaml -f factory/carddemo-web/compose.ci.yaml -f factory/carddemo-web/compose.mutation-ci.yaml up -d --build
@@ -217,6 +227,9 @@ jobs:
           PROOF_JOB_RESULTS: ${{ toJSON(needs) }}
           PYTHONPATH: src:.
         run: |
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-text-money-scope.json --out work/carddemo-web-bindings/account-text-money-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-ssn-fico-scope.json --out work/carddemo-web-bindings/account-ssn-fico-trace.json
+          python -B tools/check_carddemo_java_trace.py --scope spec/modernization/carddemo-screens/idiomatic-account-location-scope.json --out work/carddemo-web-bindings/account-location-trace.json
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
           python -B factory/carddemo-web/runtime/receipt.py --artifacts work/carddemo-proof-artifacts --out work/carddemo-unsigned-receipt

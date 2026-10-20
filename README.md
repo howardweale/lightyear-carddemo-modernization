@@ -2,6 +2,8 @@
 
 # LIGHTYEAR modernization factory
 
+Contributors and coding agents: read [AGENTS.md](AGENTS.md) before making changes.
+
 LIGHTYEAR combines a dark factory that builds modernization candidates, a
 deterministic verifier that compares behavior, and receipts binding each result
 to its inputs. Human approvals and signatures are recorded in the Factory Tower.

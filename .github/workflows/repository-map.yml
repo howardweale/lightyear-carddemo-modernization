@@ -19,9 +19,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-      - name: Check links and original README bytes
+      - name: Check links, named paths and original README bytes
         run: python -B tools/ci/check_repository_map.py
-      - name: Exercise missing-link and historical-mutation refusals
+      - name: Exercise path-confinement and historical-mutation refusals
         run: python -B -m unittest tests.test_repository_map tests.test_repo_metrics -v
       - name: Measure a fresh clone and both Git revisions
         shell: bash
@@ -31,6 +31,22 @@ jobs:
           git clone --bare --no-local "$GITHUB_WORKSPACE" "$RUNNER_TEMP/architecture-clone"
           python -B tools/ci/repo_metrics.py --ref "$BEFORE" --output work/repository-map/before.json --clone-dir "$RUNNER_TEMP/architecture-clone"
           python -B tools/ci/repo_metrics.py --ref HEAD --output work/repository-map/metrics.json --clone-dir "$RUNNER_TEMP/architecture-clone"
+      - name: Bind measurement provenance for a later reviewed refresh
+        shell: bash
+        run: |
+          python -B - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          root = pathlib.Path('work/repository-map')
+          commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          tree = subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip()
+          metrics = json.loads((root / 'metrics.json').read_bytes())
+          assert (metrics['commit'], metrics['tree']) == (commit, tree)
+          value = dict(schema='repository-metrics-provenance/1', measured_commit=commit, measured_tree=tree,
+                       event=os.environ['GITHUB_EVENT_NAME'], ref=os.environ['GITHUB_REF'],
+                       run_id=os.environ['GITHUB_RUN_ID'], run_attempt=os.environ['GITHUB_RUN_ATTEMPT'],
+                       files={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ('before.json','metrics.json')})
+          (root/'provenance.json').write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8')
+          PY
       - name: Retain CI-generated measurements
         uses: actions/upload-artifact@v4
         with:

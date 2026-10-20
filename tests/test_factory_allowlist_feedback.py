@@ -411,7 +411,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             controller._record_agent_evidence(artifacts,ledger,[],'builder','implementer')
         artifacts.write.assert_not_called();ledger.append.assert_not_called()
 
-    def test_receipt_package_recheck_occurs_after_memory_before_persistence(self):
+    def test_receipt_package_refusal_follows_memory_preparation_without_publication(self):
         from unittest.mock import Mock
         from types import SimpleNamespace
         from lightyear_factory.ledger import RunLedger
@@ -422,7 +422,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             controller.memory_store=Mock()
             order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture')
             ledger=RunLedger(root/'events.jsonl');order_events=[]
-            controller.memory_store.observe_run.side_effect=lambda *args: order_events.append('memory') or {}
+            controller.memory_store.prepare_run.side_effect=lambda *args: order_events.append('prepare-memory') or {}
             def refuse():
                 order_events.append('package-recheck')
                 raise ContractError('candidate-package-finalization-refused')
@@ -431,4 +431,100 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
                     controller._finish(root,'fixture',order,'PASSED',1,'fixture',ledger,[],{}, {},
                         {'status':'passed','gates':[]},'fixture',{},candidate_package_check=refuse)
                 write.assert_not_called()
-            self.assertEqual(['memory','package-recheck'],order_events)
+            self.assertEqual(['prepare-memory','package-recheck'],order_events)
+            controller.memory_store.observe_run.assert_not_called()
+            controller.memory_store.publish_finalized_run.assert_not_called()
+
+    @staticmethod
+    def _memory_publication_fixture(root):
+        from types import SimpleNamespace
+        from lightyear_factory.memory import SemanticMemoryStore
+        from lightyear_factory.contracts import canonical_hash
+        order = SimpleNamespace(order_id='fixture', content_sha256='a'*64, metadata={},
+            title='fixture', goal='safe fixture', graph_node_ids=(), allowed_paths=('candidate',))
+        receipt = dict(run_id='fixture', work_order_sha256=order.content_sha256,
+            status='passed', verification={'status':'passed','gates':[]}, attempts=1,
+            changed_paths=[], ledger_head_sha256='b'*64,
+            initial_snapshot_sha256='c'*64, final_snapshot_sha256='c'*64,
+            factory_build_receipt={'qualifies_for_factory_receipt':True})
+        # Synthetic qualification is a component boundary fixture, not signing proof.
+        receipt['content_sha256'] = canonical_hash(receipt)
+        store = SemanticMemoryStore(root/'memory')
+        prepared = store.prepare_run(root, order, receipt, {}, [])
+        return order, receipt, store, prepared
+
+    def test_memory_preparation_is_readonly_and_final_publication_binds_receipt(self):
+        from lightyear_factory.contracts import write_json, canonical_hash
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);order,receipt,store,prepared=self._memory_publication_fixture(root)
+            self.assertFalse(store.root.exists());self.assertFalse((root/'receipt.json').exists())
+            write_json(receipt,root/'receipt.json');scanned=[]
+            decision=store.publish_finalized_run(prepared,root,order,receipt,scanned.append)
+            record=json.loads(next(store.experiences_root.glob('*.json')).read_text())
+            self.assertEqual('promoted-positive',decision['disposition'])
+            self.assertEqual(receipt['content_sha256'],record['run_binding']['receipt_sha256'])
+            self.assertEqual(receipt['ledger_head_sha256'],record['run_binding']['ledger_head_sha256'])
+            self.assertEqual(canonical_hash(record,{'content_sha256'}),record['content_sha256'])
+            self.assertEqual([record],scanned);self.assertTrue(store.snapshot_path.exists())
+            self.assertEqual(receipt,json.loads((root/'receipt.json').read_text()))
+            with self.assertRaisesRegex(ContractError,'memory-finalized-controller-publication-required'):
+                store.observe_run(root,order,receipt,{},[])
+
+    def test_memory_final_publication_refusals_write_no_experience_or_snapshot(self):
+        from lightyear_factory.contracts import write_json, canonical_hash
+        from unittest.mock import Mock
+        for case in ('missing-receipt','blocked','unqualified','prepared-tamper','scanner-refusal','receipt-replacement'):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as d:
+                root=Path(d);order,receipt,store,prepared=self._memory_publication_fixture(root)
+                if case=='blocked':receipt['status']='blocked'
+                if case=='unqualified':receipt['factory_build_receipt']['qualifies_for_factory_receipt']=False
+                receipt['content_sha256']=canonical_hash(receipt,{'content_sha256'})
+                if case!='missing-receipt':write_json(receipt,root/'receipt.json')
+                if case=='prepared-tamper':prepared['record']['knowledge']['summary']='changed'
+                scanner=Mock()
+                if case=='scanner-refusal':scanner.side_effect=ContractError('fixture refusal')
+                if case=='receipt-replacement':scanner.side_effect=lambda record: (root/'receipt.json').write_text('{}')
+                with self.assertRaises((ContractError,FileNotFoundError)):
+                    store.publish_finalized_run(prepared,root,order,receipt,scanner)
+                self.assertFalse(store.experiences_root.exists());self.assertFalse(store.snapshot_path.exists())
+
+    def test_deferred_memory_publication_follows_persisted_final_receipt(self):
+        from unittest.mock import Mock
+        from types import SimpleNamespace
+        from lightyear_factory.ledger import RunLedger
+        from lightyear_factory.contracts import write_json as actual_write
+        for failure in (None,'receipt-scan','receipt-write','summary-write','delivery-write'):
+            with self.subTest(failure=failure),tempfile.TemporaryDirectory() as d:
+                root=Path(d);agents=Mock();agents.name='fixture'
+                agents.intelligence_summary.return_value={'mode':'fixture','calls':0}
+                controller=FactoryOrchestrator(root,root,agents);controller.memory_store=Mock()
+                events=[];controller.memory_store.prepare_run.side_effect=lambda *a: events.append('prepare') or {}
+                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture')
+                ledger=RunLedger(root/'events.jsonl')
+                def package_check():events.append('package');return {'fixture':True}
+                def publish(prepared,run_dir,order,receipt,scan_record,**kwargs):
+                    self.assertEqual(receipt,json.loads((root/'receipt.json').read_text()))
+                    self.assertTrue((root/'summary.json').exists());events.append('publish')
+                    return {'disposition':'promoted-positive'}
+                controller.memory_store.publish_finalized_run.side_effect=publish
+                def write(value,path):
+                    if (failure,path.name) in {('receipt-write','receipt.json'),('summary-write','summary.json'),
+                                               ('delivery-write','semantic-memory-publication.json')}:
+                        raise OSError('fixture write refusal')
+                    events.append(path.name);actual_write(value,path)
+                def scan(label,value):
+                    if failure=='receipt-scan' and label=='run-receipt':raise ContractError('fixture scan refusal')
+                with patch('lightyear_factory.orchestrator.write_json',side_effect=write), \
+                     patch.object(controller,'_scan_controller_value',side_effect=scan):
+                    args=(root,'fixture',order,'PASSED',1,'fixture',ledger,[],{}, {},
+                          {'status':'passed','gates':[]},'fixture',{})
+                    if failure in ('receipt-scan','receipt-write','summary-write'):
+                        with self.assertRaises((ContractError,OSError)):
+                            controller._finish(*args,candidate_package_check=package_check)
+                        controller.memory_store.publish_finalized_run.assert_not_called()
+                    else:
+                        result=controller._finish(*args,candidate_package_check=package_check)
+                        self.assertEqual('passed',result['status'])
+                        self.assertEqual(['prepare','package','receipt.json','summary.json','publish'],events[:5])
+                        self.assertEqual(result,json.loads((root/'receipt.json').read_text()))
+                controller.memory_store.observe_run.assert_not_called()

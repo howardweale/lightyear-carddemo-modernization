@@ -784,13 +784,26 @@ class FactoryOrchestrator:
                 context_sha256=context["content_sha256"], context_projection_sha256=context["context_projection_sha256"])
         if intelligence.get("routing"):
             receipt["routing"] = intelligence["routing"]
+        deferred_memory = self.memory_store is not None and (
+            candidate_package_check is not None or candidate_authorship is not None
+            or self.candidate_signing_paths is not None)
+        prepared_memory = None
         self._scan_controller_value('run-receipt-before-memory', receipt)
         if self.memory_store:
             try:
-                memory_decision = self.memory_store.observe_run(
-                    run_dir, order, receipt, context, artifacts
-                )
+                if deferred_memory:
+                    prepared_memory = self.memory_store.prepare_run(
+                        run_dir, order, receipt, context, artifacts)
+                    self._scan_controller_value('prepared-semantic-memory', prepared_memory)
+                    memory_decision = dict(schema_version="1.0", run_id=run_id,
+                        disposition="deferred", reason="awaiting-final-receipt-publication",
+                        experience_sha256=None)
+                    memory_decision["content_sha256"] = canonical_hash(memory_decision)
+                else:
+                    memory_decision = self.memory_store.observe_run(
+                        run_dir, order, receipt, context, artifacts)
             except (ContractError, OSError, ValueError) as exc:
+                prepared_memory = None
                 memory_decision = {
                     "schema_version": "1.0",
                     "memory_type": "lightyear-semantic-memory-decision",
@@ -855,6 +868,27 @@ class FactoryOrchestrator:
         self._scan_controller_value('run-summary', summary)
         write_json(receipt, run_dir / "receipt.json")
         write_json(summary, run_dir / "summary.json")
+        if deferred_memory and prepared_memory is not None:
+            # Qualification and both receipt files are committed before optional memory
+            # delivery. Delivery failures cannot downgrade that immutable final result.
+            try:
+                memory_decision = self.memory_store.publish_finalized_run(
+                    prepared_memory, run_dir, order, receipt,
+                    lambda record: self._scan_controller_value('semantic-memory-record', record),
+                    require_factory_receipt=self.candidate_signing_paths is not None)
+            except Exception as exc:
+                memory_decision = dict(schema_version="1.0", run_id=run_id,
+                    disposition="quarantined", reason=f"memory-controller-error:{type(exc).__name__}",
+                    experience_sha256=None)
+            publication = dict(schema_version="1.0", run_id=run_id,
+                receipt_sha256=receipt["content_sha256"], decision=memory_decision)
+            try:
+                publication["content_sha256"] = canonical_hash(publication)
+                self._scan_controller_value('semantic-memory-publication', publication)
+                write_json(publication, run_dir / "semantic-memory-publication.json")
+            except Exception:
+                # Receipt still truthfully says deferred; a delivery receipt is optional.
+                pass
         return receipt
 
 

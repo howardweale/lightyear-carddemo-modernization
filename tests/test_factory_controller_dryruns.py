@@ -11,6 +11,7 @@ from io import BytesIO
 import json
 from pathlib import Path
 import tempfile
+import traceback
 import unittest
 from unittest.mock import patch
 
@@ -120,13 +121,27 @@ class ControllerDryRunTests(unittest.TestCase):
                     controller.run(order,'fixture-run')
                 result=json.loads((root/'runs/fixture-run/receipt.json').read_text())
             else:
-                result=controller.run(order,'fixture-run')
+                try:
+                    result=controller.run(order,'fixture-run')
+                except ContractError as error:
+                    # CI diagnostics contain code locations and types only. Never
+                    # reveal exception messages, source lines, locals or payloads.
+                    locations=[];seen=set();cause=error
+                    while cause is not None and id(cause) not in seen:
+                        seen.add(id(cause))
+                        locations.append({'type':type(cause).__name__, 'frames':[
+                            {'file':Path(frame.filename).name,'function':frame.name,'line':frame.lineno}
+                            for frame in traceback.extract_tb(cause.__traceback__)]})
+                        cause=cause.__cause__ or cause.__context__
+                    raise AssertionError(json.dumps({'fixture':mode,'builds':builds,
+                        'exception_locations':locations},sort_keys=True)) from None
         run=root/'runs/fixture-run'
         events=[json.loads(line) for line in (run/'events.jsonl').read_text().splitlines()]
         return result,events,builds,run
 
     def test_leak_blocks_before_candidate_commit_and_redacts_public_evidence(self):
         receipt,events,builds,run=self.scenario('leak')
+        self.assertEqual([1],builds, 'Leak case must reach the builder response, not fail during setup')
         self.assertEqual('blocked',receipt['status'])
         self.assertFalse(receipt['qualifies_for_factory_receipt'])
         self.assertFalse(any(e['kind']=='candidate_committed' for e in events))

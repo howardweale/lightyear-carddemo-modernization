@@ -1,0 +1,84 @@
+{
+  "schema": "carddemo-generated-mapping-baseline/1",
+  "prepared_on": "2026-10-18",
+  "workflow_run": 39147604902,
+  "workflow_head": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+  "artifact_id": 12144133813,
+  "artifact_name": "carddemo-data-plan",
+  "archive_sha256": "46387c7f195c7f3cabc8108567be518eb0c945335304b050d79b190e7237cb66",
+  "source_comparison": {
+    "base": "32bde7bc2357d3cac06b3e625ba7132978679423",
+    "paths": [
+      "src/lightyear_data",
+      "spec/modernization/carddemo-data"
+    ],
+    "git_diff_empty": true
+  },
+  "files": {
+    "mapping/acctdata.json": {
+      "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c",
+      "bytes": 7790
+    },
+    "mapping/acctdata.sql": {
+      "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2",
+      "bytes": 1231
+    },
+    "mapping/carddata.json": {
+      "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042",
+      "bytes": 4856
+    },
+    "mapping/carddata.sql": {
+      "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6",
+      "bytes": 826
+    },
+    "mapping/cardxref.json": {
+      "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f",
+      "bytes": 3327
+    },
+    "mapping/cardxref.sql": {
+      "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927",
+      "bytes": 635
+    },
+    "mapping/custdata.json": {
+      "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9",
+      "bytes": 10961
+    },
+    "mapping/custdata.sql": {
+      "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4",
+      "bytes": 1426
+    },
+    "mapping/pautdtl1.json": {
+      "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63",
+      "bytes": 16878
+    },
+    "mapping/pautdtl1.sql": {
+      "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd",
+      "bytes": 1990
+    },
+    "mapping/pautsum0.json": {
+      "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae",
+      "bytes": 11170
+    },
+    "mapping/pautsum0.sql": {
+      "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848",
+      "bytes": 1400
+    },
+    "mapping/usrsec.json": {
+      "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b",
+      "bytes": 3964
+    },
+    "mapping/usrsec.sql": {
+      "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84",
+      "bytes": 660
+    },
+    "plan.json": {
+      "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de",
+      "bytes": 73253
+    },
+    "schema.sql": {
+      "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770",
+      "bytes": 8174
+    }
+  },
+  "scope": "Exact plan, all seven JSON mappings and DDL, and combined schema from successful public CI. A regression baseline, not native or release evidence."
+}

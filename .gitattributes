@@ -265,5 +265,8 @@ docs/modernization/carddemo-cosgn00-2026-10-18.json -text
 /docs/modernization/carddemo-account-*-2026-10-19.json -text
 /docs/modernization/carddemo-account-2026-10-19.* -text
 
+# Preserve the current CI-generated mapping baseline bytes.
+docs/modernization/carddemo-mapping-baseline-2026-10-18/** -text -whitespace
+
 # Preserve the exact dated COPAU freeze amendment bytes across checkouts.
 /docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

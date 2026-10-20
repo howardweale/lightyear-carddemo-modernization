@@ -13,3 +13,10 @@
 /tools/*retention* @howardweale
 /tools/release/ @howardweale
 /tools/retention/ @howardweale
+
+# Frozen judge control changes require Howard's review.
+/docs/factory/copau-factory-judge-freeze-*.json @howardweale
+/tools/check_copau_judge_freeze.py @howardweale
+/.github/workflows/copau-factory-judge.yml @howardweale
+/tests/test_copau_judge_freeze.py @howardweale
+/.github/CODEOWNERS @howardweale

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -354,6 +355,7 @@ class ModelAgentSet:
         self.pending_evidence: list[dict[str, Any]] = []
         self.implementer_context: dict[str, Any] | None = None
         self.context_projections: dict[str, dict[str, Any]] = {}
+        self.isolation_scan = None
 
     def plan(self, order: WorkOrder, context: dict[str, Any]) -> dict[str, Any]:
         self.implementer_context = context
@@ -452,15 +454,38 @@ class ModelAgentSet:
         schema: dict[str, Any],
     ) -> dict[str, Any]:
         bounded = self._provider_for(order)
+        if self.isolation_scan is not None:
+            self.isolation_scan(role + "-prompt", json.dumps(
+                dict(instruction=instruction, payload=payload, schema=schema),
+                sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
         calls = bounded.calls
         start = len(calls)
         try:
             result = bounded.complete(role, instruction, payload, schema)
+            if self.isolation_scan is not None:
+                self.isolation_scan(role + "-response", json.dumps(
+                    result.content, sort_keys=True, separators=(",", ":"),
+                    ensure_ascii=False).encode("utf-8"))
         finally:
             self.pending_evidence.extend(calls[start:])
         return result.content
 
     def _provider_for(self, order: WorkOrder) -> BoundedModelProvider:
+        from .providers import ScriptedModelProvider
+        from .budgeted_providers import AccountedModelProvider
+        from .routing import TaskRouter, RoutedBudget
+        if type(self.provider) is not ScriptedModelProvider:
+            # Non-stub agents must arrive through the existing trusted controller.
+            # A generic bounded wrapper or a provider's custom bind_order is not admission.
+            bound = self.bounded_provider
+            if type(self.provider) is TaskRouter:
+                if type(bound) is not RoutedBudget or bound.router is not self.provider:
+                    raise ContractError("factory-model-controller-binding-required")
+                bound = bound.budget
+            elif type(bound) is not AccountedModelProvider or bound.provider is not self.provider:
+                raise ContractError("factory-model-controller-binding-required")
+            if type(bound) is not AccountedModelProvider or bound.order is not order:
+                raise ContractError("factory-model-controller-binding-required")
         if self.bounded_provider is None:
             from .budgeted_providers import AccountedModelProvider
             budget_class = AccountedModelProvider if getattr(self.provider, "manage_failure_budget", False) else BoundedModelProvider

@@ -18,7 +18,7 @@ from lightyear_factory.routing_policy import compile_policy
 from lightyear_knowledge_graph.hybrid import build_index, search
 from lightyear_knowledge_graph.local_onnx import LocalOnnxEmbedding
 from lightyear_knowledge_graph.search_benchmark import evaluate
-from test_graph_memory_routing import FakeProvider, SCHEMA, hashed
+from test_graph_memory_routing import FakeProvider, SCHEMA, hashed, offline_model_admission
 
 
 class ComponentTests(unittest.TestCase):
@@ -104,6 +104,7 @@ class ComponentTests(unittest.TestCase):
         matrix=hashed({k:v for k,v in matrix.items() if k!='content_sha256'})
         with self.assertRaisesRegex(ValueError,'false'):compile_policy(matrix,margin=.1)
 
+    @offline_model_admission()
     def test_ladder_budget_closed_failure_versions_and_replay(self):
         providers={m:FakeProvider(m+'-v1') for m in ('cheap','strong')}
         declaration=dict(schema='factory-escalation-arm/1',first='cheap',repair='strong',

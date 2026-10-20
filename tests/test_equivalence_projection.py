@@ -75,14 +75,30 @@ class ProjectionTests(unittest.TestCase):
                     import_request(ROOT,root,wrapper)
                 self.assertEqual([],list(root.iterdir()))
                 contract=json.loads((ROOT/f'docs/factory/appl-result-signing-2026-10-16/{p}/contract.json').read_bytes())
-                item = import_request(ROOT, root, contract)
-                self.assertEqual(wrapper['replacement_request_id'],item['id'])
-                if p=='INTCALC':self.assertTrue(item['id'].startswith('factory-50bbd415'))
-                verified = FactoryInbox(root, 'factory', factory_registry()).item(item['id'])
-                self.assertEqual(item['id'], verified['id'])
-                self.assertEqual(count, len(req['contract']['details']['items']))
-                from lightyear_control_tower.decisions import digest as contract_digest
-                self.assertEqual('factory-' + contract_digest(contract), item['id'])
+                if p=='INTCALC':
+                    from tests import test_decision_console_factory as fixtures
+                    fixture=fixtures.FactoryTests('runTest');fixture.setUp()
+                    try:
+                        journal=fixture.service.export_session(fixture.token)
+                        with self.assertRaisesRegex(ValueError,'superseded-content'):
+                            import_request(ROOT,root,contract,journal=journal,public_key=fixture.service.public_key,
+                                trusted_head=journal['journal_head_sha256'])
+                    finally:fixture.doCleanups()
+                    self.assertEqual([],list(root.iterdir()))
+                else:
+                    from tests import test_decision_console_factory as fixtures
+                    fixture=fixtures.FactoryTests('runTest');fixture.setUp()
+                    try:
+                        journal=fixture.service.export_session(fixture.token)
+                        item=import_request(ROOT,root,contract,journal=journal,public_key=fixture.service.public_key,
+                            trusted_head=journal['journal_head_sha256'])
+                        self.assertEqual(wrapper['replacement_request_id'],item['id'])
+                        verified=FactoryInbox(root,'factory',factory_registry()).item(item['id'])
+                        self.assertEqual(item['id'],verified['id'])
+                        from lightyear_control_tower.decisions import digest as contract_digest
+                        self.assertEqual('factory-'+contract_digest(contract),item['id'])
+                    finally:fixture.doCleanups()
+                self.assertEqual(count,len(req['contract']['details']['items']))
                 audit = json.loads((NEW / (p + '-class-audit.json')).read_text())
                 self.assertEqual(30, len({r['id'] for r in audit['sample']}))
                 self.assertEqual(count, len(audit['members']))

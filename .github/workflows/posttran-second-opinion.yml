@@ -14,9 +14,9 @@ jobs:
   no-call-plan:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
-    env:
-      LIGHTYEAR_CI_STATUS_BASELINE: ${{ runner.temp }}/lightyear-status-baseline.json
     steps:
+      - name: Set disposable current-status baseline path
+        run: echo "LIGHTYEAR_CI_STATUS_BASELINE=$RUNNER_TEMP/lightyear-status-baseline.json" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:

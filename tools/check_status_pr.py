@@ -14,7 +14,9 @@ def permitted_bot(pr, repository):
     return (type(user.get('id')) is int and user['id'] == BOT_ID
             and user.get('login') == 'github-actions[bot]' and user.get('type') == 'Bot'
             and pr.get('head', {}).get('repo', {}).get('full_name') == repository
-            and pr.get('title', '').startswith('status: rebuild after '))
+            and pr.get('base', {}).get('ref') == 'main'
+            and re.fullmatch(r'codex/status-rebuild-[0-9a-f]{40}', pr.get('head', {}).get('ref', ''))
+            and pr.get('title') == 'status: rebuild after ' + pr['head']['ref'].removeprefix('codex/status-rebuild-'))
 
 
 def check(pr, paths, repository):

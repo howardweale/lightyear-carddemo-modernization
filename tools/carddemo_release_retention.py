@@ -125,11 +125,26 @@ class Github:
         remote=subprocess.check_output(['git','ls-remote','--tags','origin','refs/tags/'+tag],text=True).split()
         if remote and remote[0]!=head:raise ValueError('Existing tag points elsewhere')
         if not remote:subprocess.run(['git','-c','push.gpgSign=false','push','origin',head+':refs/tags/'+tag],check=True)
-        subprocess.run(['gh','release','create',tag,'--repo',REPO,'--verify-tag','--draft','--prerelease',
-                        '--title','Public CardDemo proof '+tag,'--notes','Original public CI proof bytes; unsigned retention only. No merge or activation approval.'],check=True)
+        # Use the create response's identity; a fresh list may omit a new draft.
+        # Ambiguous transport failures propagate: never repeat creation here.
+        created=self.api('releases',method='POST',tag_name=tag,draft=True,prerelease=True,
+                         name='Public CardDemo proof '+tag,
+                         body='Original public CI proof bytes; unsigned retention only. No merge or activation approval.')
+        validate_release(created,tag,draft=True)
+        fresh=self.api(f"releases/{created['id']}")
+        validate_release(fresh,tag,draft=True)
+        if fresh['id']!=created['id']:raise ValueError('Created release identity changed')
+        return fresh
 
     def upload(self,tag,path):
         subprocess.run(['gh','release','upload',tag,str(path),'--repo',REPO],check=True)
+
+
+def validate_release(release,tag,draft=None):
+    if (not isinstance(release,dict) or type(release.get('id')) is not int or release['id']<=0 or
+            release.get('tag_name')!=tag or type(release.get('draft')) is not bool or
+            (draft is not None and release['draft'] is not draft)):
+        raise ValueError('Release identity or draft state invalid')
 
 
 def match_asset(asset,raw):
@@ -171,7 +186,8 @@ def retain(client,run_id,root):
     validate_run(run,jobs,artifacts)
     tag='evidence-'+run['run_started_at'][:10]+f'-carddemo-run{run_id}'
     release=client.release(tag)
-    if release:
+    if release is not None:
+        validate_release(release,tag)
         ref=client.api('git/ref/tags/'+tag)
         if ref['object']['sha']!=run['head_sha'] or ref['object']['type']!='commit':raise ValueError('Release tag identity changed')
     if release and not release['draft']:
@@ -192,8 +208,11 @@ def retain(client,run_id,root):
         staging=root/'release-assets';staging.mkdir(parents=True,exist_ok=True)
         for name,raw in files.items():(staging/name).write_bytes(raw)
         if release is None:
-            client.create(tag,run['head_sha']);release=client.release(tag)
-            if release is None:raise ValueError('Release creation outcome unresolved; rerun only after inspection')
+            release=client.create(tag,run['head_sha'])
+            validate_release(release,tag,draft=True)
+            ref=client.api('git/ref/tags/'+tag)
+            if ref['object']['sha']!=run['head_sha'] or ref['object']['type']!='commit':
+                raise ValueError('Created release tag identity changed')
         current=client.pages(f'releases/{release["id"]}/assets')
         indexed={a['name']:a for a in current}
         if len(indexed)!=len(current) or set(indexed)-set(files):raise ValueError('Unexpected release asset')

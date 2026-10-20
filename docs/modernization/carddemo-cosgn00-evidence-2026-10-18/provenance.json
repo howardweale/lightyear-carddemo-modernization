@@ -1,0 +1,58 @@
+{
+  "schema": "carddemo-group-provenance/1",
+  "source_head": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+  "tested_commit": "dba188ba166145808a59274240d0969e2783377a",
+  "tested_tree": "f218111c88f5f12cc0dd4412ac466a6428011f9f",
+  "parents": [
+    "32bde7bc2357d3cac06b3e625ba7132978679423",
+    "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5"
+  ],
+  "run_id": 39147604819,
+  "archives": [
+    {
+      "id": 12149721429,
+      "name": "carddemo-unsigned-receipt",
+      "sha256": "4687e241fd24fc6258add1c4f6ce9f739491b1401c70e83c977bf0e2599471b5",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-unsigned-receipt.zip"
+    },
+    {
+      "id": 12147715762,
+      "name": "carddemo-proof-mutation",
+      "sha256": "20db92208db39c37aaff7cb49d0e1aabaae387974f9f8652de2b2508d81f81aa",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-proof-mutation.zip"
+    },
+    {
+      "id": 12146020034,
+      "name": "carddemo-proof-api",
+      "sha256": "76df366c977f9978278eb5719522d2cdc06d08be8b05ed359f7fdf58d4247dda",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-proof-api.zip"
+    },
+    {
+      "id": 12145508888,
+      "name": "carddemo-proof-browser",
+      "sha256": "1aa08477c2d6cd59128c01ebc0eba40ef10e908cd192ec19a98c28b7768aaccb",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-proof-browser.zip"
+    },
+    {
+      "id": 12145411428,
+      "name": "carddemo-compose-smoke",
+      "sha256": "6159d91813e76cd973db817ab1fb8e9d6967074e5460f66dcc3ad07e531e434a",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-compose-smoke.zip"
+    },
+    {
+      "id": 12144905566,
+      "name": "carddemo-web-foundation",
+      "sha256": "13c6f3e9c93d8d764200c855ecc0f5cbc8ae0875dab62d2a3d114fc4fa6fdc3c",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-web-foundation.zip"
+    },
+    {
+      "id": 12144496483,
+      "name": "carddemo-status-render",
+      "sha256": "6fa56b25e66f1938963fa6c2e08392582f14bd25fda12860fc58e70fd94177cd",
+      "path": "docs/modernization/carddemo-cosgn00-evidence-2026-10-18/carddemo-status-render.zip"
+    }
+  ],
+  "source_hashes_verified": 147,
+  "artifact_hashes_verified": 152,
+  "unsigned": true
+}

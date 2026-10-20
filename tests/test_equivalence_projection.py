@@ -76,8 +76,14 @@ class ProjectionTests(unittest.TestCase):
                 self.assertEqual([],list(root.iterdir()))
                 contract=json.loads((ROOT/f'docs/factory/appl-result-signing-2026-10-16/{p}/contract.json').read_bytes())
                 if p=='INTCALC':
-                    with self.assertRaisesRegex(ValueError,'superseded-content'):
-                        import_request(ROOT,root,contract)
+                    from tests import test_decision_console_factory as fixtures
+                    fixture=fixtures.FactoryTests('runTest');fixture.setUp()
+                    try:
+                        journal=fixture.service.export_session(fixture.token)
+                        with self.assertRaisesRegex(ValueError,'superseded-content'):
+                            import_request(ROOT,root,contract,journal=journal,public_key=fixture.service.public_key,
+                                trusted_head=journal['journal_head_sha256'])
+                    finally:fixture.doCleanups()
                     self.assertEqual([],list(root.iterdir()))
                 else:
                     from tests import test_decision_console_factory as fixtures

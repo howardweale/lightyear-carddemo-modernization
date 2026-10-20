@@ -118,21 +118,9 @@ The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout rea
 
 Typed condition support: True. Threshold/3 support: True. Presence of code is not effective policy approval.
 
-## Selected APPL-RESULT contracts
+## Idiomatic Java screen groups
 
-APPL-RESULT selection as of 2026-10-18. Unsigned; no authority inferred.
-
-| Program | Selected contract | Members | Template queue ID | Class proof | Re-review required |
-|---|---|---:|---|---|---|
-| INTCALC | [intcalc-02-appl-result-class-request-2026-10-17.json](intcalc-02-appl-result-class-request-2026-10-17.json) | 81 | `factory-550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e` | `e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8` | True |
-| POSTTRAN | [contract.json](appl-result-signing-2026-10-16/POSTTRAN/contract.json) | 96 | `factory-92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1` | `13aca947966f508c373d9a1269e4729b744549c6e1fbb32f205a6543dd38a242` | False |
-
-INTCALC position 2 is a template: binding the verified position-1 decision changes its final queue hash. The final bound hash must be checked before import.
-
-INTCALC: Ordered position 2 is the only class request that contributes to request 06; its retained reference census has a different binding from the October 16 human sample packet.
-POSTTRAN: No ordered POSTTRAN APPL-RESULT request exists in the inspected committed signing inventories; retain the existing 96-member contract unchanged.
-
-[Current signing guide](appl-result-signing-2026-10-18.md) · [Contract decision addendum](howard-decision-packet-2026-10-18-appl-selection.md)
+As of 2026-10-18, COSGN00C idiomatic Java passed CI run 39147604819: 120 journeys and 678/678 API/browser interactions. Strict full-scope KILLED/all-generated: 702/769 (91.29%); historical baseline 701/768 (91.28%). SignonService: 19/21 (90.48%); SignonRules: 15/15 (100.00%). Remaining statement-engine programs: COACTVWC, COACTUPC, COPAUS0C, COPAUS1C. Other existing hand-written orchestration: COMEN01C. Open gaps: Missing-detail and SQL-error screen equivalence; Native CICS, IMS and DB2 behavior; Shared BMS parser and data-layout codec; Disclosed synthetic IMS rows and account pair; All surviving, uncovered and timed-out mutants remain in the denominator. No survivor, uncovered mutant or timeout is waived. Final publication CI and merge approval are separate. Unsigned; no signing, import, activation, Phase 2 or release authority.
 
 Not releasable: Fresh complete caught-mutant evidence required for: TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP. Retained campaign index does not certify complete durable retention. Ordered effective decisions are not recorded in these unsigned inputs. Non-provisional release evidence is not established by this retained engineering campaign.
 

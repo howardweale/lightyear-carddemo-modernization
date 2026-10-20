@@ -4,6 +4,8 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+Contributors and coding agents: read [AGENTS.md](AGENTS.md) before making changes.
+
 [Lightyear Verify MCP](docs/verify/README.md) exposes the INTCALC judge to agent
 harnesses through a separate-user service, bounded submissions, closed diagnostics
 and signed receipts. Includes zero-model acceptance and Control Tower status.

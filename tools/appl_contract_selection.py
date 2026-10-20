@@ -2,27 +2,13 @@
 from hashlib import sha256
 import json
 from pathlib import Path
-from lightyear_control_tower.decisions import digest
-from lightyear_control_tower.factory_supersessions import CURRENT, identity, normalized_hash
+from lightyear_control_tower.factory_selection import load_selection, selection_path
 
+# Historical compatibility name; current selection is resolved from dated data.
 PATH = 'docs/factory/appl-result-contract-selection-2026-10-18.json'
 
 def load(root):
-    path=Path(root)/PATH
-    if not path.exists():return None
-    value=json.loads(path.read_bytes())
-    if value['schema']!='appl-result-contract-selection/1':raise ValueError('appl-selection-schema')
-    if {r['program'] for r in value['records']}!={'INTCALC','POSTTRAN'} or len(value['records'])!=2:
-        raise ValueError('appl-selection-programs')
-    for row in value['records']:
-        raw=(Path(root)/row['path']).read_bytes();contract=json.loads(raw)
-        actual=dict(file_sha256=sha256(raw).hexdigest(),template_queue_sha256=digest(contract),
-                    normalized_contract_sha256=normalized_hash(contract),item_set_sha256=identity(contract),
-                    members=len(contract['details']['items']),class_proof_sha256=contract['details']['class_proof_sha256'],
-                    program=contract['program'])
-        if any(row[k]!=v for k,v in actual.items()):raise ValueError('appl-selection-binding')
-        if CURRENT[identity(contract)]['selected']!=normalized_hash(contract):raise ValueError('appl-selection-importer')
-    return value
+    return load_selection(root)
 
 
 def markdown(value):

@@ -151,12 +151,16 @@ class FactoryInbox(RequestInbox):
         return item
 
 
-def write_request(root, contract, *, proposer="factory-engine", journal=None, public_key=None, trusted_head=None):
+def write_request(root, contract, *, proposer="factory-engine", journal=None, public_key=None, trusted_head=None, repository=None):
     """Only prepares unsigned requests. Sources must already be imported public bytes."""
     from .status_export import atomic_new
     from .factory_order import intake
     intake(contract,journal=journal,public_key=public_key,trusted_head=trusted_head)
     value = validate_contract(contract, root)
+    from .factory_supersessions import reject_superseded, reject_content_superseded
+    reject_superseded(value)
+    reject_content_superseded(value, repository if repository is not None else root,
+                             root=root, journal=journal, public_key=public_key, trusted_head=trusted_head)
     raw = canonical(value)
     fingerprint = sha256(raw).hexdigest()
     relative = "docs/factory/tower-requests/" + fingerprint + ".json"

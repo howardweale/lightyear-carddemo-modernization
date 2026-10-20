@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_status_record, appl_contract_selection
+from tools import carddemo_status_record, appl_contract_selection, carddemo_idiomatic_status, carddemo_account_status
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -40,6 +40,8 @@ def inputs(root=ROOT):
         for p in (root/'docs/factory').glob(pattern)]
     additional += [p.relative_to(root).as_posix() for p in sorted((root/'docs/factory').glob('evidence-retention-*.json'))]
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
+    additional += carddemo_idiomatic_status.inputs(root)
+    additional += carddemo_account_status.inputs(root)
     carddemo_path=carddemo_status_record.latest(root)
     if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
     web_path=carddemo_status_record.latest(root,'carddemo-slice-receipt/1')
@@ -48,9 +50,9 @@ def inputs(root=ROOT):
     if (root/carddemo).is_file():
         additional += [carddemo, json.loads((root/carddemo).read_bytes())['summary']['path']]
     additional += [p for p in ('docs/factory/posttran-phase2-readiness-2026-10-17.json', 'docs/factory/posttran-phase2-plan-amendment-2026-10-17.json', 'docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json', 'docs/factory/factory-authority.public.pem') if (root/p).is_file()]
-    if (root/appl_contract_selection.PATH).is_file():
+    if appl_contract_selection.selection_path(root) is not None:
         selection=appl_contract_selection.load(root)
-        additional += [appl_contract_selection.PATH,*[row['path'] for row in selection['records']]]
+        additional += [appl_contract_selection.selection_path(root),*[row['path'] for row in selection['records']]]
     additional += [DELIVERY] if (root/DELIVERY).is_file() else []
     additional += [p for p in ('src/lightyear_control_tower/threshold_evidence.py',
                               'src/lightyear_factory/threshold3.py') if (root/p).is_file()]
@@ -120,6 +122,8 @@ def load(root=ROOT):
                 phase2=phase2, evaluated_at=clock, retention=retention,
                 carddemo=carddemo_status_record.load(root) or carddemo,
                 carddemo_web=carddemo_status_record.load_web(root),
+                carddemo_idiomatic=carddemo_idiomatic_status.load(root),
+                carddemo_account=carddemo_account_status.load(root),
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
@@ -258,7 +262,14 @@ def render(model):
            '', 'The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.',
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
     if model.get("appl_contract_selection"):
-        text += ["", "## Selected APPL-RESULT contracts", "", appl_contract_selection.markdown(model["appl_contract_selection"]), "", "[Current signing guide](appl-result-signing-2026-10-18.md) · [Contract decision addendum](howard-decision-packet-2026-10-18-appl-selection.md)"]
+        selected_day = model["appl_contract_selection"]["prepared_on"]
+        text += ["", "## Selected APPL-RESULT contracts", "", appl_contract_selection.markdown(model["appl_contract_selection"]), "", f"[Current signing guide](appl-result-signing-{selected_day}.md) · [Contract decision addendum](howard-decision-packet-{selected_day}-appl-selection.md)"]
+    if model.get("carddemo_idiomatic"):
+        current["carddemo_idiomatic"] = model["carddemo_idiomatic"]
+        text += ["", "## Idiomatic Java screen groups", "", carddemo_idiomatic_status.paragraph(model["carddemo_idiomatic"])]
+    if model.get("carddemo_account"):
+        current["carddemo_account"] = model["carddemo_account"]
+        text += ["", "## Account validation groups", "", carddemo_account_status.paragraph(model["carddemo_account"])]
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
              f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]

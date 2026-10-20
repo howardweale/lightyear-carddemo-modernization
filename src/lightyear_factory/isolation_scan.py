@@ -9,6 +9,7 @@ from .contracts import ContractError
 
 MAX_BYTES = 8 * 1024 * 1024
 MAX_VIEWS = 128
+MAX_JSON_NODES = 8192
 MAX_DEPTH = 4
 CLASSES = {'expected-state', 'reference-output', 'session-answer'}
 
@@ -26,17 +27,22 @@ def _decoded_views(text):
         value = None
     pending = [value]
     visited = 0
+    strings = set()
     while pending:
         visited += 1
-        if visited > MAX_VIEWS:
+        if visited > MAX_JSON_NODES:
             raise ContractError('isolation-scan-limit')
         item = pending.pop()
         if isinstance(item, str):
-            yield item
+            if item not in strings:
+                strings.add(item)
+                yield item
         elif isinstance(item, list):
             pending.extend(item)
         elif isinstance(item, dict):
             pending.extend(item); pending.extend(item.values())
+        if len(pending) > MAX_JSON_NODES:
+            raise ContractError('isolation-scan-limit')
     # Whole whitespace-split encodings and encoded tokens embedded in prose/JSON.
     compact = ''.join(text.split())
     candidates = {compact}
@@ -84,7 +90,7 @@ def scan(artifacts, canaries, expected_values):
         if len(raw) > MAX_BYTES:
             raise ContractError('isolation-scan-limit')
         text = raw.decode('utf-8', errors='replace')
-        pending = [(text, 0)]; seen = set(); total = 0
+        pending = [(text, 0)]; seen = set(); queued = {text}; total = 0
         while pending:
             view, depth = pending.pop()
             if view in seen:
@@ -97,11 +103,12 @@ def scan(artifacts, canaries, expected_values):
                 raise ContractError('isolation-breach')
             try:
                 for decoded in _decoded_views(view):
-                    if decoded != view and decoded not in seen:
+                    if decoded != view and decoded not in queued:
                         if depth >= MAX_DEPTH:
                             raise ContractError('isolation-scan-limit')
+                        queued.add(decoded)
                         pending.append((decoded, depth + 1))
-                        if len(pending) > MAX_VIEWS:
+                        if len(queued) > MAX_VIEWS:
                             raise ContractError('isolation-scan-limit')
             except UnicodeError:
                 raise ContractError('isolation-scan-encoding') from None

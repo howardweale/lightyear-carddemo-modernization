@@ -103,6 +103,27 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             with self.assertRaisesRegex(ContractError, '^isolation-scan-limit$'):
                 scan([('response', base64.b64encode(b'benign fixture data'))], canaries, [])
 
+    def test_structured_prompt_counts_nodes_separately_from_unique_decoded_views(self):
+        from lightyear_factory.agents import PLANNER_SCHEMA
+        from lightyear_factory.isolation_scan import MAX_JSON_NODES
+        canaries = {k: k + '-PRIVATE-abcdefgh0123456789ABCDEFGHIJ9876543210' for k in
+                    ('expected-state', 'reference-output', 'session-answer')}
+        expected = 'PrivateReferenceResult-AbCdEf0123456789-ReceiptValue-9876543210'
+        payload = {'schema': PLANNER_SCHEMA,
+                   'catalog': [{'id': 'public', 'paths': ['candidate'], 'kind': 'fixture'} for _ in range(200)]}
+        raw = json.dumps(payload).encode()
+        result = scan([('planner-prompt', raw)], canaries, [expected])
+        self.assertEqual('passed', result['status'])
+        self.assertEqual(sha256(raw).hexdigest(), result['scanned'][0]['sha256'])
+        payload['catalog'][-1]['id'] = base64.b64encode(expected.encode()).decode()
+        with self.assertRaisesRegex(ContractError, '^isolation-breach$'):
+            scan([('planner-prompt', json.dumps(payload))], canaries, [expected])
+        with self.assertRaisesRegex(ContractError, '^isolation-scan-limit$'):
+            scan([('oversized-structure', json.dumps([0] * MAX_JSON_NODES))], canaries, [])
+        with patch('lightyear_factory.isolation_scan.MAX_VIEWS', 4):
+            with self.assertRaisesRegex(ContractError, '^isolation-scan-limit$'):
+                scan([('distinct-views', json.dumps(['one', 'two', 'three', 'four']))], canaries, [])
+
     def test_allowlist_creation_plants_private_canaries_without_source_changes(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d); source = root/'source'; source.mkdir()

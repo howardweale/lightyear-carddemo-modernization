@@ -32,16 +32,18 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertEqual([a["path"] for a in supplemental], [
             f"docs/milestones/MS-{number}/MS-{number}.{suffix}"
             for number in range(73, 109) for suffix in ("md", "docx", "pdf")] + [
-                "docs/milestones/MS-109/MS-109.md",
+                "docs/milestones/MS-109/MS-109.md"] + [
+                f"docs/milestones/MS-{number}/MS-{number}.md" for number in range(110, 115)] + [
                 "docs/milestones/MS-107/as-of-2026-10-17.md",
-                "docs/milestones/MS-108/as-of-2026-10-17.md"])
+                "docs/milestones/MS-108/as-of-2026-10-17.md",
+                "docs/milestones/MS-108/as-of-2026-10-20.md"])
         for artifact in supplemental:
             data = (ROOT / artifact["path"]).read_bytes()
             self.assertEqual(len(data), artifact["bytes"])
             self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
-        self.assertEqual(manifest["supplemental_milestone_count"], 37)
-        self.assertEqual(manifest["searchable_milestone_count"], 107)
+        self.assertEqual(manifest["supplemental_milestone_count"], 42)
+        self.assertEqual(manifest["searchable_milestone_count"], 112)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
@@ -67,10 +69,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 214)
+        self.assertEqual(readme.count("https://github.com/"), 219)
         self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 106)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 107)
+        self.assertEqual(page.count('class="milestone"'), 112)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -115,11 +117,11 @@ class MilestoneDocumentationTests(unittest.TestCase):
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         parsed = Rows(); parsed.feed(page)
         later = [row for row in parsed.rows if row["dataset"]["phase"] == "implementation"]
-        # MS-109 is Markdown-only but belongs in the implementation index.
+        # MS-109 to MS-114 are Markdown-only but belong in the implementation index.
         expected_later_urls = [
             "https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/"
             f"docs/milestones/MS-{number}/MS-{number}.md"
-            for number in range(73, 110)
+            for number in range(73, 115)
         ]
         self.assertCountEqual(expected_later_urls, [row["url"] for row in later])
         script = re.search(r"<script>(.*?)</script>", page, re.DOTALL).group(1)

@@ -1,0 +1,47 @@
+name: COPAU factory frozen judge
+on:
+  pull_request_target:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  frozen-judge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out trusted target code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          path: trusted
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out candidate as data only
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: candidate
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify with the trusted target checker
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git -C candidate rev-parse HEAD)" = "$HEAD_SHA"
+          git -C candidate fetch --no-tags "https://github.com/${GITHUB_REPOSITORY}.git" "$BASE_SHA"
+          test -f trusted/tools/check_copau_judge_freeze.py
+          bootstrap=()
+          if [ "$GITHUB_EVENT_NAME" = push ] && ! git -C candidate cat-file -e "$BASE_SHA:docs/factory/copau-factory-judge-freeze-2026-10-18.json" 2>/dev/null; then
+            bootstrap=(--bootstrap-reviewed-main)
+          fi
+          python -I -B "$GITHUB_WORKSPACE/trusted/tools/check_copau_judge_freeze.py" --root "$GITHUB_WORKSPACE/candidate" --base "$BASE_SHA" "${bootstrap[@]}"

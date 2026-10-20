@@ -4,7 +4,8 @@ import json
 import unittest
 from dataclasses import replace
 from datetime import timedelta
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+from contextlib import contextmanager
 import test_graph_memory as fixtures
 from lightyear_control_tower.decisions import digest
 from lightyear_factory.benchmark import benchmark_work_order
@@ -37,7 +38,29 @@ def hashed(body):
     return {**body, "content_sha256": canonical_hash(body)}
 
 
+@contextmanager
+def offline_model_admission():
+    """Isolate existing transport/routing unit tests from the new approval boundary.
+
+    This mock cannot qualify a factory run or prove approval/signature validity.
+    Production code still requires the real verifier and runtime binding.
+    """
+    from lightyear_factory.model_admission import FactoryModelAdmission
+    original = BoundedModelProvider.__init__
+    def initialize(budget, provider, order, **kwargs):
+        original(budget, provider, order, **kwargs)
+        budget.model_admission = object.__new__(FactoryModelAdmission)
+        budget.runtime_admission = Mock()
+    with patch.object(BoundedModelProvider, '__init__', initialize), patch.object(
+        FactoryModelAdmission, 'verify', return_value={'offline_component_fixture': True}
+    ):
+        yield
+
+
 class ProviderTests(unittest.TestCase):
+    def setUp(self):
+        self.enterContext(offline_model_admission())
+
     def test_configuration_refuses_nonfinite_openai_prices_without_call(self):
         from lightyear_factory.model_config import configured_models
 
@@ -174,7 +197,9 @@ class FakeProvider:
 
 
 class RoutingTests(unittest.TestCase):
-    setUp = fixtures.MemoryTests.setUp
+    def setUp(self):
+        fixtures.MemoryTests.setUp(self)
+        self.enterContext(offline_model_admission())
     proof = fixtures.MemoryTests.proof
 
     def router(self, providers, *, approved=True, clock=None):
@@ -253,7 +278,10 @@ class RoutingTests(unittest.TestCase):
         providers = {m: FakeProvider(m) for m in ("default", "primary", "fallback")}
         providers["primary"].error = ProviderError("planner", "network")
         agents = ModelAgentSet(self.router(providers))
-        agents._call(benchmark_work_order("rounding-mode"), "planner", "", {}, SCHEMA)
+        order = benchmark_work_order("rounding-mode")
+        agents.bounded_provider = agents.provider.bind_order(order)
+        agents.order_sha256 = order.content_sha256
+        agents._call(order, "planner", "", {}, SCHEMA)
         self.assertEqual(len(agents.drain_evidence()), 2)
         self.assertEqual(agents.intelligence_summary()["calls"], 2)
 

@@ -57,6 +57,7 @@ class FakeGithub:
     def create(self,tag,head):
         if self.release_row:raise AssertionError('duplicate creation')
         self.release_row=dict(id=42,tag_name=tag,draft=True)
+        return copy.deepcopy(self.release_row)
     def upload(self,tag,path):
         if path.name in self.assets:raise AssertionError('overwrite')
         self.assets[path.name]=path.read_bytes();self.uploads.append(path.name)
@@ -105,7 +106,7 @@ class RetentionTests(unittest.TestCase):
             self.assertEqual(before,c.uploads)
 
     def test_changed_draft_asset_refused_without_overwrite(self):
-        c=FakeGithub();c.release_row=dict(id=42,tag_name='fixture',draft=True);c.assets['carddemo-proof-api.zip']=b'changed'
+        c=FakeGithub();c.release_row=dict(id=42,tag_name='evidence-2026-10-19-carddemo-run123',draft=True);c.assets['carddemo-proof-api.zip']=b'changed'
         with tempfile.TemporaryDirectory() as td:
             with self.assertRaises(ValueError):retain(c,123,Path(td))
         self.assertNotIn('carddemo-proof-api.zip',c.uploads)
@@ -151,3 +152,82 @@ class GithubDownloadTests(unittest.TestCase):
             with self.assertRaises(subprocess.CalledProcessError):
                 Github().download('actions/artifacts/123/zip')
             self.assertEqual(1,call.call_count)
+
+
+class ReleaseIdentityTests(unittest.TestCase):
+    TAG='evidence-2026-10-19-carddemo-run123'
+
+    def test_new_draft_not_visible_in_list_still_retained_once_by_create_identity(self):
+        client=FakeGithub()
+        # Reproduce the failed boundary: a list cannot see the new draft.
+        with tempfile.TemporaryDirectory() as td, patch.object(client,'release',return_value=None) as lookup, \
+                patch.object(client,'create',wraps=client.create) as create:
+            retain(client,123,Path(td))
+            self.assertEqual(1,lookup.call_count)
+            self.assertEqual(1,create.call_count)
+            self.assertEqual(7,client.zip_reads)
+            self.assertEqual(10,len(client.uploads))
+            self.assertFalse(client.release_row['draft'])
+
+    def test_adapter_returns_verified_id_without_list_or_second_create(self):
+        row=dict(id=42,tag_name=self.TAG,draft=True)
+        for existing_tag in (False,True):
+            with self.subTest(existing_tag=existing_tag), \
+                    patch('tools.carddemo_release_retention.subprocess.run') as git_run, \
+                    patch('tools.carddemo_release_retention.subprocess.check_output',return_value=('a'*40+' refs/tags/'+self.TAG+'\n') if existing_tag else ''):
+                client=Github()
+                with patch.object(client,'api',side_effect=[row,dict(row)]) as api, patch.object(client,'pages') as pages:
+                    self.assertEqual(row,client.create(self.TAG,'a'*40))
+                    self.assertEqual(2,api.call_count)
+                    self.assertEqual(('releases',),api.call_args_list[0].args)
+                    self.assertEqual('POST',api.call_args_list[0].kwargs['method'])
+                    self.assertEqual(self.TAG,api.call_args_list[0].kwargs['tag_name'])
+                    self.assertTrue(api.call_args_list[0].kwargs['draft'])
+                    self.assertEqual(('releases/42',),api.call_args_list[1].args)
+                    pages.assert_not_called()
+                    commands=[c.args[0] for c in git_run.call_args_list]
+                    self.assertTrue(all(c[0]=='git' for c in commands))
+                    self.assertEqual(0 if existing_tag else 1,sum('push' in c for c in commands))
+
+    def test_bad_creation_or_id_read_refused_without_fallback(self):
+        good=dict(id=42,tag_name=self.TAG,draft=True)
+        bad_rows=[None,{},dict(good,id=True),dict(good,id=0),dict(good,id='42'),
+                  dict(good,tag_name='other'),dict(good,draft=False),dict(good,draft='true')]
+        for bad in bad_rows:
+            with self.subTest(bad=bad), patch('tools.carddemo_release_retention.subprocess.run'), \
+                    patch('tools.carddemo_release_retention.subprocess.check_output',return_value=''):
+                client=Github()
+                with patch.object(client,'api',return_value=bad) as api:
+                    with self.assertRaises(ValueError):client.create(self.TAG,'a'*40)
+                    self.assertEqual(1,api.call_count)
+        for fresh in [dict(good,id=43),dict(good,tag_name='other'),dict(good,draft=False)]:
+            with self.subTest(fresh=fresh), patch('tools.carddemo_release_retention.subprocess.run'), \
+                    patch('tools.carddemo_release_retention.subprocess.check_output',return_value=''):
+                client=Github()
+                with patch.object(client,'api',side_effect=[good,fresh]) as api:
+                    with self.assertRaises(ValueError):client.create(self.TAG,'a'*40)
+                    self.assertEqual(2,api.call_count)
+
+    def test_create_or_read_transport_failure_never_recreates(self):
+        good=dict(id=42,tag_name=self.TAG,draft=True)
+        error=subprocess.CalledProcessError(1,['gh','api'],stderr=b'ambiguous response')
+        for responses in ([error],[good,error]):
+            with self.subTest(calls=len(responses)), patch('tools.carddemo_release_retention.subprocess.run'), \
+                    patch('tools.carddemo_release_retention.subprocess.check_output',return_value=''):
+                client=Github()
+                with patch.object(client,'api',side_effect=responses) as api, patch.object(client,'release') as lookup:
+                    with self.assertRaises(subprocess.CalledProcessError):client.create(self.TAG,'a'*40)
+                    self.assertEqual(len(responses),api.call_count)
+                    self.assertEqual(1,sum(c.kwargs.get('method')=='POST' for c in api.call_args_list))
+                    lookup.assert_not_called()
+
+    def test_changed_created_tag_refused_before_any_upload(self):
+        client=FakeGithub();original=client.api
+        def api(path,method='GET',**fields):
+            if path.startswith('git/ref/tags/'):
+                return dict(object=dict(sha='b'*40,type='commit'))
+            return original(path,method,**fields)
+        with tempfile.TemporaryDirectory() as td, patch.object(client,'api',side_effect=api):
+            with self.assertRaisesRegex(ValueError,'tag identity changed'):retain(client,123,Path(td))
+        self.assertEqual([],client.uploads)
+        self.assertTrue(client.release_row['draft'])

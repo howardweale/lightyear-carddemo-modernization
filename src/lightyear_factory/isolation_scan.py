@@ -8,7 +8,9 @@ from urllib.parse import unquote
 from .contracts import ContractError
 
 MAX_BYTES = 8 * 1024 * 1024
-MAX_VIEWS = 128
+# Final receipts contain hundreds of distinct JSON strings and evidence hashes.
+# Bound their decoded views independently of the aggregate byte and depth limits.
+MAX_VIEWS = 4096
 MAX_JSON_NODES = 8192
 MAX_DEPTH = 4
 CLASSES = {'expected-state', 'reference-output', 'session-answer'}

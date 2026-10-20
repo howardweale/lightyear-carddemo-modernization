@@ -124,6 +124,25 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             with self.assertRaisesRegex(ContractError, '^isolation-scan-limit$'):
                 scan([('distinct-views', json.dumps(['one', 'two', 'three', 'four']))], canaries, [])
 
+    def test_receipt_sized_unique_views_still_scan_encoded_leaks_and_refuse_overflow(self):
+        from lightyear_factory.isolation_scan import MAX_VIEWS
+        canaries = {k: k + '-PRIVATE-abcdefgh0123456789ABCDEFGHIJ9876543210' for k in
+                    ('expected-state', 'reference-output', 'session-answer')}
+        expected = 'PrivateReferenceResult-AbCdEf0123456789-ReceiptValue-9876543210'
+        receipt = {'schema_version': 'fixture-receipt/1', 'evidence': [
+            {'artifact': 'event-' + str(i), 'sha256': sha256(str(i).encode()).hexdigest()}
+            for i in range(256)]}
+        raw = json.dumps(receipt).encode()
+        result = scan([('run-receipt-before-memory', raw)], canaries, [expected])
+        self.assertEqual('passed', result['status'])
+        self.assertEqual(sha256(raw).hexdigest(), result['scanned'][0]['sha256'])
+        receipt['evidence'][-1]['artifact'] = base64.b64encode(expected.encode().hex().encode()).decode()
+        with self.assertRaisesRegex(ContractError, '^isolation-breach$'):
+            scan([('run-receipt-before-memory', json.dumps(receipt))], canaries, [expected])
+        # Root view plus MAX_VIEWS distinct, short JSON strings exceeds the cap.
+        with self.assertRaisesRegex(ContractError, '^isolation-scan-limit$'):
+            scan([('too-many-views', json.dumps(['v%05d' % i for i in range(MAX_VIEWS)]))], canaries, [])
+
     def test_allowlist_creation_plants_private_canaries_without_source_changes(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d); source = root/'source'; source.mkdir()

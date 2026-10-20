@@ -1,0 +1,7 @@
+tree 71e1590cf1f3d9fb2fc6314b0adb4b6cf32551ca
+parent 2a350ed495246c4856e8acf80a334cd8307cc706
+parent 364bb10bed259d6602fdcd476d43f6f9a194539a
+author Howard Weale <howard.weale@gmail.com> 1792430260 -0700
+committer Howard Weale <howard.weale@gmail.com> 1792430260 -0700
+
+Integrate current main and retire account state/ZIP paragraphs in generator

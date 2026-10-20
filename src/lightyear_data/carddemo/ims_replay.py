@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 import uuid
 
-from lightyear_readiness.ims_qualification import execute_conformance_case
+from lightyear_readiness.ims_qualification import execute_conformance_case, execute_hierarchical_navigation
 from .access import DliRepository
 from .plan import build
 from .proof import synthetic_segment
@@ -50,11 +50,9 @@ def dispatch(repo,request,roots,children,rm,cm,replacement):
     raise NotImplementedError('No migrated implementation for '+op)
 
 
-# The fixture hierarchy is explicit and independent of the adapter's traversal.
-PREORDER=(('R001',None),('R001','D001'),('R001','D002'),('R002',None),('R002','D003'))
 CHILD_CASES=(
-    dict(id='41-gn-second-child',request=dict(operation='GN',position=2),reference_scope='explicit-two-level-fixture'),
-    dict(id='42-ghn-other-parent-child',request=dict(operation='GHN',position=4),reference_scope='explicit-two-level-fixture'),
+    dict(id='41-gn-second-child',request=dict(operation='GN',position=2),reference_scope='logical-two-level-hierarchy'),
+    dict(id='42-ghn-other-parent-child',request=dict(operation='GHN',position=4),reference_scope='logical-two-level-hierarchy'),
 )
 
 
@@ -91,8 +89,9 @@ def replay(connection,source,corpus_path):
     records=[]
     for case in [*corpus['cases'],*CHILD_CASES]:
         q=case['request'];op=q['operation']
-        if case.get('reference_scope')=='explicit-two-level-fixture':
-            reference=dict(ims_status='  ',scope=case['reference_scope'])
+        navigation = execute_hierarchical_navigation(q) if op in ('GN','GHN') else None
+        if case.get('reference_scope')=='logical-two-level-hierarchy':
+            reference=navigation
         else:
             reference=execute_conformance_case(case)
         result=dict(id=case['id'],operation=op,reference=reference,execution_scope=execution_scope(q))
@@ -113,11 +112,11 @@ def replay(connection,source,corpus_path):
             except NotImplementedError as error:
                 result.update(verdict='unsupported',reason=str(error));records.append(result);continue
             expected_segment=None
+            if navigation is not None and navigation['ims_status']=='  ':
+                er,ec=navigation['segment_root'],navigation['segment_child']
+                expected_segment=roots[er] if ec is None else children[ec]
             if status=='  ':
                 if op in ('GU','GHU','SSA'):expected_segment=children[cn] if q.get('child') else roots[rn]
-                elif op in ('GN','GHN'):
-                    er,ec=PREORDER[int(q.get('position',0))]
-                    expected_segment=roots[er] if ec is None else children[ec]
                 elif op in ('GNP','GHNP'):expected_segment=children[cn]
                 elif op=='ISRT_ROOT':expected[('pautsum0',rk)]=roots[rn]
                 elif op=='ISRT_CHILD':expected[('pautdtl1',rk+ck)]=children[cn]
@@ -127,9 +126,9 @@ def replay(connection,source,corpus_path):
                     if target[0]=='pautsum0':expected={k:v for k,v in expected.items() if not(k[0]=='pautdtl1' and k[1].startswith(rk))}
             actual={(store.table,row['path_key']):store.bytes(row) for store in (repo.root,repo.child) for row in store.rows()}
             correction={'07-gnp-without-parent':'GP','28-procopt-g-denies-update':'AM'}.get(case['id'])
-            wanted=correction or reference['ims_status']
+            wanted=correction or (navigation['ims_status'] if navigation is not None else reference['ims_status'])
             result.update(verdict='matched' if status==wanted and segment==expected_segment and actual==expected else 'divergent',
-                adapter_status=status,status_equal_to_historical=status==reference['ims_status'],status_correction=correction,
+                navigation_reference=navigation,adapter_status=status,status_equal_to_historical=status==reference['ims_status'],status_correction=correction,
                 segment_compared=expected_segment is not None,segment_equal=segment==expected_segment,
                 expected_segment_sha256=sha256(expected_segment).hexdigest() if expected_segment else None,
                 actual_segment_sha256=sha256(segment).hexdigest() if segment else None,

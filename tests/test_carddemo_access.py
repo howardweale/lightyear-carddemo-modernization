@@ -91,6 +91,28 @@ class AccessTests(unittest.TestCase):
         self.assertGreater(result['segment_comparisons'],0)
         self.assertFalse(result['release_authorized'])
 
+    def test_independent_child_oracle_detects_root_only_and_corrupt_adapter_results(self):
+        from lightyear_data.carddemo.ims_replay import replay
+        from unittest.mock import patch
+        original = DliRepository.gn
+        for mutation in ('root-only', 'corrupt-bytes'):
+            def broken(repository, hold=False, **kwargs):
+                if mutation == 'root-only':
+                    return original(repository, hold=hold, roots_only=True)
+                status, segment = original(repository, hold=hold, **kwargs)
+                if segment is not None:
+                    segment = segment[:-1]+bytes([segment[-1] ^ 1])
+                return status, segment
+            with self.subTest(mutation=mutation), patch.object(DliRepository, 'gn', broken):
+                result = replay(self.c, ROOT/'spec/modernization/carddemo-data',
+                                ROOT/'readiness/ims-expiry/conformance/cases.json')
+            children = result['cases'][-2:]
+            self.assertEqual(['divergent', 'divergent'], [row['verdict'] for row in children])
+            self.assertEqual(['D002', 'D003'], [row['reference']['segment_child'] for row in children])
+            self.assertTrue(all(row['after_state_equal'] for row in children))
+            self.assertTrue(all(not row['segment_equal'] for row in children))
+
+
 
 class ReplayScopeTests(unittest.TestCase):
     def test_replay_local_answers_do_not_earn_adapter_credit(self):

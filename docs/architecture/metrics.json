@@ -1,0 +1,2391 @@
+{
+  "schema": "repository-metrics/1",
+  "commit": "85d948d8df8c86404391ba6b8ce836c99d9affda",
+  "tree": "e6b84fdaa0e58af54991f121faa3148bc21f3cd5",
+  "as_of": "2026-10-19T03:52:07.071789+00:00",
+  "method": "Tracked Git blobs; Python physical lines and AST import statements in src; dynamic imports excluded.",
+  "top_level": {
+    ".": {
+      "files": 139,
+      "bytes": 478278
+    },
+    ".github": {
+      "files": 44,
+      "bytes": 143209
+    },
+    "LICENSES": {
+      "files": 5,
+      "bytes": 28584
+    },
+    "audit": {
+      "files": 39,
+      "bytes": 230704
+    },
+    "brand": {
+      "files": 16,
+      "bytes": 44840357
+    },
+    "candidate-java": {
+      "files": 22,
+      "bytes": 75881
+    },
+    "control-tower": {
+      "files": 15,
+      "bytes": 2300889
+    },
+    "data-modernization": {
+      "files": 1506,
+      "bytes": 6960560
+    },
+    "deploy": {
+      "files": 2,
+      "bytes": 630
+    },
+    "docs": {
+      "files": 3079,
+      "bytes": 644180584
+    },
+    "examples": {
+      "files": 1,
+      "bytes": 140
+    },
+    "extensions": {
+      "files": 126,
+      "bytes": 468913
+    },
+    "factory": {
+      "files": 529,
+      "bytes": 68474682
+    },
+    "infra": {
+      "files": 13,
+      "bytes": 29597
+    },
+    "knowledge": {
+      "files": 69,
+      "bytes": 10180507
+    },
+    "pilot": {
+      "files": 52,
+      "bytes": 244461
+    },
+    "readiness": {
+      "files": 77,
+      "bytes": 340422
+    },
+    "reference-estates": {
+      "files": 72,
+      "bytes": 358210
+    },
+    "skills": {
+      "files": 1,
+      "bytes": 2593
+    },
+    "spec": {
+      "files": 159,
+      "bytes": 1620806
+    },
+    "src": {
+      "files": 549,
+      "bytes": 6249880
+    },
+    "tests": {
+      "files": 560,
+      "bytes": 6187091
+    },
+    "tools": {
+      "files": 486,
+      "bytes": 3253856
+    },
+    "verify": {
+      "files": 1,
+      "bytes": 5967
+    }
+  },
+  "tracked_files": 7562,
+  "tracked_bytes": 796656801,
+  "python_lines_by_package": {
+    "carddemo_oracle": 897,
+    "lightyear_agent": 651,
+    "lightyear_audit": 1506,
+    "lightyear_business_rules": 1484,
+    "lightyear_calibration": 12300,
+    "lightyear_cloud_runner": 294,
+    "lightyear_common": 344,
+    "lightyear_control_tower": 8578,
+    "lightyear_data": 44847,
+    "lightyear_evidence": 290,
+    "lightyear_execution": 1306,
+    "lightyear_factory": 12107,
+    "lightyear_judge": 2240,
+    "lightyear_knowledge_graph": 8906,
+    "lightyear_mainframe": 7498,
+    "lightyear_pilot": 3853,
+    "lightyear_qualification": 1156,
+    "lightyear_readiness": 3795,
+    "lightyear_runtime": 1262,
+    "lightyear_toolkit": 885,
+    "lightyear_workflow": 5205
+  },
+  "mutual_package_pairs": [
+    [
+      "lightyear_business_rules",
+      "lightyear_control_tower"
+    ],
+    [
+      "lightyear_business_rules",
+      "lightyear_knowledge_graph"
+    ],
+    [
+      "lightyear_business_rules",
+      "lightyear_mainframe"
+    ],
+    [
+      "lightyear_control_tower",
+      "lightyear_factory"
+    ],
+    [
+      "lightyear_control_tower",
+      "lightyear_knowledge_graph"
+    ],
+    [
+      "lightyear_control_tower",
+      "lightyear_mainframe"
+    ],
+    [
+      "lightyear_control_tower",
+      "lightyear_workflow"
+    ],
+    [
+      "lightyear_data",
+      "lightyear_readiness"
+    ],
+    [
+      "lightyear_data",
+      "lightyear_workflow"
+    ],
+    [
+      "lightyear_execution",
+      "lightyear_factory"
+    ],
+    [
+      "lightyear_factory",
+      "lightyear_judge"
+    ],
+    [
+      "lightyear_factory",
+      "lightyear_knowledge_graph"
+    ],
+    [
+      "lightyear_factory",
+      "lightyear_mainframe"
+    ],
+    [
+      "lightyear_knowledge_graph",
+      "lightyear_runtime"
+    ]
+  ],
+  "mutual_package_pair_count": 14,
+  "layer_violations": [
+    {
+      "from": "lightyear_business_rules",
+      "to": "carddemo_oracle",
+      "path": "src/lightyear_business_rules/carddemo.py",
+      "line": 11
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/catalogue.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/catalogue.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_business_rules/cli.py",
+      "line": 31
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/engine.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/engine_v1.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/engine_v2.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/mutation.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_business_rules/mutation.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_business_rules/mutation.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/scoped_mutation.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_business_rules/scoped_mutation.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_business_rules/scoped_mutation.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/strength.py",
+      "line": 2
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/strength_v2.py",
+      "line": 2
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/tower.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_business_rules",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_business_rules/tower.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_qualification",
+      "path": "src/lightyear_calibration/adapters.py",
+      "line": 12
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/declared_campaign.py",
+      "line": 17
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/declared_judge.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/declared_native.py",
+      "line": 16
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_campaign.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_contracts.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_runtime.py",
+      "line": 26
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_verify.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_verify.py",
+      "line": 133
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/journey_verify.py",
+      "line": 144
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/measured_campaign.py",
+      "line": 18
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/measured_judge.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/measured_native.py",
+      "line": 17
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/ms94_v3_combined.py",
+      "line": 20
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/ms94_v3_journey_verify.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/ms94_v3_journey_verify.py",
+      "line": 133
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/ms94_v3_journey_verify.py",
+      "line": 144
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/ms94_v4_combined.py",
+      "line": 20
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/partial_invoicing.py",
+      "line": 130
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/partial_invoicing.py",
+      "line": 145
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/partial_invoicing.py",
+      "line": 169
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/partial_invoicing.py",
+      "line": 237
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/qualification_combined.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/qualification_combined_v2.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_calibration",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_calibration/repeatability.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_factory/annotation_cli.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_cli.py",
+      "line": 112
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_migration.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_tools.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_tools.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_tools.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotation_tools.py",
+      "line": 37
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/annotations.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_factory/context.py",
+      "line": 172
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_factory/context.py",
+      "line": 173
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_factory/context.py",
+      "line": 182
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/evaluation_matrix.py",
+      "line": 11
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/knowledge_service.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/knowledge_trust.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/knowledge_trust.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/knowledge_trust.py",
+      "line": 38
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/outcome_producer.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_factory/outcome_producer.py",
+      "line": 56
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/outcome_producer.py",
+      "line": 57
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_factory/posttran_broker.py",
+      "line": 11
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/posttran_broker.py",
+      "line": 104
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/posttran_preflight.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/posttran_revision.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/posttran_second_opinion.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_factory/posttran_second_opinion.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_factory/posttran_second_opinion.py",
+      "line": 26
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/revocations.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/routing.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/routing_policy.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/scenario_policy.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/scenario_policy.py",
+      "line": 110
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/scenario_policy.py",
+      "line": 117
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/scenario_policy.py",
+      "line": 149
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/threshold3.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/tower_authority.py",
+      "line": 2
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/tower_authority.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_factory",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_factory/tower_authority.py",
+      "line": 56
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 40
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 65
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 79
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 16
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 86
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 45
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_knowledge_graph",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 52
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 55
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 47
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 48
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 207
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 215
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_knowledge_graph",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 219
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 176
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/http.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 130
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/policy.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/review.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/review.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 107
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 16
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 17
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 18
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/service.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/service.py",
+      "line": 25
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 681
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 682
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 404
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/explorer.py",
+      "line": 20
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/explorer.py",
+      "line": 40
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/hybrid.py",
+      "line": 12
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_calibration",
+      "path": "src/lightyear_knowledge_graph/journey_view.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_calibration",
+      "path": "src/lightyear_knowledge_graph/journey_view.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/journey_view.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_calibration",
+      "path": "src/lightyear_knowledge_graph/journey_view.py",
+      "line": 93
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_calibration",
+      "path": "src/lightyear_knowledge_graph/journey_view.py",
+      "line": 42
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/local_onnx.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_knowledge_graph",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_knowledge_graph/search_benchmark.py",
+      "line": 2
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/claim_scope.py",
+      "line": 54
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/equivalence_classes.py",
+      "line": 48
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/posttran_review.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/posttran_review.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_bridge.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_bridge.py",
+      "line": 11
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_bridge.py",
+      "line": 185
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_bridge.py",
+      "line": 368
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_cli.py",
+      "line": 73
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_compare.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_compare.py",
+      "line": 210
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_evidence.py",
+      "line": 11
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_intake.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_intake.py",
+      "line": 538
+    },
+    {
+      "from": "lightyear_mainframe",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_mainframe/zos_logs.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_runtime",
+      "to": "carddemo_oracle",
+      "path": "src/lightyear_runtime/adapters.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_runtime",
+      "to": "carddemo_oracle",
+      "path": "src/lightyear_runtime/adapters.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/campaign_engine.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/campaign_journals.py",
+      "line": 3
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/campaign_service.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/ledger_gate.py",
+      "line": 10
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/paired_number.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/paired_types.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_workflow",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_workflow/paired_types260.py",
+      "line": 10
+    }
+  ],
+  "layer_violation_count": 164,
+  "unclassified_packages": [
+    "lightyear_data"
+  ],
+  "layer_policy": "Proposed four-layer map; lightyear_data remains unclassified pending A3. Same-layer edges allowed. Not an enforcement receipt.",
+  "judge_non_core_imports": [
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 40
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 65
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/cli.py",
+      "line": 79
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/evaluation.py",
+      "line": 16
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 4
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 86
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 45
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_knowledge_graph",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 52
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_cli.py",
+      "line": 55
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 47
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 48
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 207
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_factory",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 215
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_knowledge_graph",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 219
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_business_rules",
+      "path": "src/lightyear_judge/graph_projection.py",
+      "line": 176
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/http.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/ledger.py",
+      "line": 130
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/policy.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 7
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/review.py",
+      "line": 8
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/review.py",
+      "line": 9
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/review.py",
+      "line": 107
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 14
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 15
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 16
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 17
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 18
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/service.py",
+      "line": 19
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_toolkit",
+      "path": "src/lightyear_judge/service.py",
+      "line": 25
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/service.py",
+      "line": 681
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 682
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/service.py",
+      "line": 404
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 5
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_control_tower",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 6
+    },
+    {
+      "from": "lightyear_judge",
+      "to": "lightyear_mainframe",
+      "path": "src/lightyear_judge/worker.py",
+      "line": 7
+    }
+  ],
+  "judge_non_core_import_count": 51,
+  "functions_over_150_lines": [
+    {
+      "path": "src/lightyear_audit/builder.py",
+      "name": "build_canonical_audit",
+      "line": 19,
+      "lines": 266
+    },
+    {
+      "path": "src/lightyear_audit/dossier.py",
+      "name": "build_dossier",
+      "line": 12,
+      "lines": 155
+    },
+    {
+      "path": "src/lightyear_calibration/ms94_v3_operations.py",
+      "name": "verify_lane",
+      "line": 23,
+      "lines": 161
+    },
+    {
+      "path": "src/lightyear_calibration/operations_journey.py",
+      "name": "verify_lane",
+      "line": 23,
+      "lines": 161
+    },
+    {
+      "path": "src/lightyear_control_tower/campaign_observer.py",
+      "name": "_project",
+      "line": 288,
+      "lines": 442
+    },
+    {
+      "path": "src/lightyear_control_tower/cli.py",
+      "name": "main",
+      "line": 133,
+      "lines": 239
+    },
+    {
+      "path": "src/lightyear_control_tower/console.py",
+      "name": "decide",
+      "line": 421,
+      "lines": 199
+    },
+    {
+      "path": "src/lightyear_control_tower/kinds.py",
+      "name": "default_registry",
+      "line": 49,
+      "lines": 200
+    },
+    {
+      "path": "src/lightyear_data/cli.py",
+      "name": "main",
+      "line": 162,
+      "lines": 445
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_alloydb_deploy.py",
+      "name": "deploy",
+      "line": 145,
+      "lines": 151
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_ms65_rehearsal_gke.py",
+      "name": "inspect_controls",
+      "line": 326,
+      "lines": 209
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_ms66_dual_lane_gke.py",
+      "name": "isolated_lane_resources",
+      "line": 341,
+      "lines": 184
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_ms66_dual_lane_gke.py",
+      "name": "execute_dual_lane",
+      "line": 859,
+      "lines": 238
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_native_wave.py",
+      "name": "_native_wave_lane",
+      "line": 429,
+      "lines": 291
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_platform_qualification.py",
+      "name": "gke_addons_template",
+      "line": 280,
+      "lines": 183
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_production_oauth.py",
+      "name": "_native_oauth_lane",
+      "line": 937,
+      "lines": 468
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_production_oauth.py",
+      "name": "production_oauth_failure_diagnostic",
+      "line": 1428,
+      "lines": 185
+    },
+    {
+      "path": "src/lightyear_data/idempiere_sql.py",
+      "name": "parse_statement",
+      "line": 432,
+      "lines": 197
+    },
+    {
+      "path": "src/lightyear_data/idempiere_triage.py",
+      "name": "build_stage3_artifacts",
+      "line": 325,
+      "lines": 171
+    },
+    {
+      "path": "src/lightyear_data/oracle_native_gate.py",
+      "name": "validate_native_execution_receipt",
+      "line": 427,
+      "lines": 182
+    },
+    {
+      "path": "src/lightyear_data/oracle_schema_structured.py",
+      "name": "_canonical_observed",
+      "line": 39,
+      "lines": 184
+    },
+    {
+      "path": "src/lightyear_data/rehearsal.py",
+      "name": "run_rehearsal",
+      "line": 553,
+      "lines": 232
+    },
+    {
+      "path": "src/lightyear_data/tsql_procedures/comparison_v8.py",
+      "name": "compare",
+      "line": 8,
+      "lines": 166
+    },
+    {
+      "path": "src/lightyear_data/tsql_procedures/comparison_v9.py",
+      "name": "compare",
+      "line": 8,
+      "lines": 171
+    },
+    {
+      "path": "src/lightyear_data/tsql_procedures/corpus.py",
+      "name": "corpus",
+      "line": 18,
+      "lines": 231
+    },
+    {
+      "path": "src/lightyear_factory/budgeted_providers.py",
+      "name": "complete",
+      "line": 12,
+      "lines": 157
+    },
+    {
+      "path": "src/lightyear_factory/cli.py",
+      "name": "build_parser",
+      "line": 46,
+      "lines": 280
+    },
+    {
+      "path": "src/lightyear_factory/cli.py",
+      "name": "main",
+      "line": 328,
+      "lines": 349
+    },
+    {
+      "path": "src/lightyear_factory/evals.py",
+      "name": "run_model_evaluation",
+      "line": 220,
+      "lines": 246
+    },
+    {
+      "path": "src/lightyear_factory/evaluation_matrix.py",
+      "name": "run_matrix",
+      "line": 152,
+      "lines": 166
+    },
+    {
+      "path": "src/lightyear_factory/legacy_evidence.py",
+      "name": "verify_legacy_model_archive",
+      "line": 342,
+      "lines": 209
+    },
+    {
+      "path": "src/lightyear_factory/orchestrator.py",
+      "name": "run",
+      "line": 93,
+      "lines": 215
+    },
+    {
+      "path": "src/lightyear_factory/providers.py",
+      "name": "complete",
+      "line": 107,
+      "lines": 194
+    },
+    {
+      "path": "src/lightyear_factory/qualification.py",
+      "name": "qualify_factory",
+      "line": 267,
+      "lines": 168
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/capability.py",
+      "name": "analyze_capabilities",
+      "line": 307,
+      "lines": 353
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/cli.py",
+      "name": "build_parser",
+      "line": 47,
+      "lines": 353
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/cli.py",
+      "name": "main",
+      "line": 402,
+      "lines": 324
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/cloudbank_reference.py",
+      "name": "build_cloudbank_reference_fragment",
+      "line": 26,
+      "lines": 260
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/explorer.py",
+      "name": "operator_context",
+      "line": 633,
+      "lines": 165
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/explorer.py",
+      "name": "_api",
+      "line": 1620,
+      "lines": 222
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/oracle_reference.py",
+      "name": "build_oracle_reference_fragment",
+      "line": 33,
+      "lines": 225
+    },
+    {
+      "path": "src/lightyear_mainframe/records.py",
+      "name": "compile_copybook",
+      "line": 92,
+      "lines": 198
+    },
+    {
+      "path": "src/lightyear_mainframe/zos_cli.py",
+      "name": "main",
+      "line": 26,
+      "lines": 179
+    },
+    {
+      "path": "src/lightyear_mainframe/zos_intake.py",
+      "name": "inspect_run",
+      "line": 94,
+      "lines": 377
+    },
+    {
+      "path": "src/lightyear_pilot/analysis.py",
+      "name": "build_source_analysis",
+      "line": 231,
+      "lines": 521
+    },
+    {
+      "path": "src/lightyear_pilot/cli.py",
+      "name": "main",
+      "line": 247,
+      "lines": 151
+    },
+    {
+      "path": "src/lightyear_pilot/pilot.py",
+      "name": "build_dossier",
+      "line": 427,
+      "lines": 152
+    },
+    {
+      "path": "src/lightyear_pilot/planner.py",
+      "name": "build_estate_assessment",
+      "line": 143,
+      "lines": 160
+    },
+    {
+      "path": "src/lightyear_pilot/work_package.py",
+      "name": "build_work_package",
+      "line": 381,
+      "lines": 208
+    },
+    {
+      "path": "src/lightyear_readiness/jcl.py",
+      "name": "parse_jcl_source",
+      "line": 51,
+      "lines": 170
+    },
+    {
+      "path": "src/lightyear_toolkit/mcp.py",
+      "name": "create_server",
+      "line": 14,
+      "lines": 152
+    },
+    {
+      "path": "src/lightyear_workflow/service_pack.py",
+      "name": "_validate_pack",
+      "line": 177,
+      "lines": 185
+    }
+  ],
+  "files_over_800_lines": [
+    {
+      "path": "src/lightyear_control_tower/campaign_observer.py",
+      "lines": 925
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_dark_factory.py",
+      "lines": 1061
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_ms66_dual_lane_gke.py",
+      "lines": 1096
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_ms67_drills.py",
+      "lines": 1189
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_native_wave.py",
+      "lines": 878
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_oracle_equivalence.py",
+      "lines": 1067
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_platform_qualification.py",
+      "lines": 1015
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_production_oauth.py",
+      "lines": 1805
+    },
+    {
+      "path": "src/lightyear_data/cloudbank_production_qualification.py",
+      "lines": 996
+    },
+    {
+      "path": "src/lightyear_data/rehearsal.py",
+      "lines": 864
+    },
+    {
+      "path": "src/lightyear_factory/durable.py",
+      "lines": 937
+    },
+    {
+      "path": "src/lightyear_judge/service.py",
+      "lines": 839
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/chat.py",
+      "lines": 1083
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/explorer.py",
+      "lines": 2059
+    },
+    {
+      "path": "src/lightyear_knowledge_graph/extractors.py",
+      "lines": 1366
+    },
+    {
+      "path": "src/lightyear_pilot/analysis.py",
+      "lines": 807
+    }
+  ],
+  "root_files": [
+    ".gitattributes",
+    ".gitignore",
+    "ARCHITECTURE.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LIGHTYEAR-ROADMAP.md",
+    "README.md",
+    "SCRIPTS.md",
+    "THIRD_PARTY_NOTICES.md",
+    "asm-readiness.ps1",
+    "asm-readiness.sh",
+    "audit-control-tower.ps1",
+    "audit-control-tower.sh",
+    "cics-vsam-readiness.ps1",
+    "cics-vsam-readiness.sh",
+    "cloudbank-alert-drill.ps1",
+    "cloudbank-alert-drill.sh",
+    "cloudbank-checks-messaging.ps1",
+    "cloudbank-checks-messaging.sh",
+    "cloudbank-customer-postgresql.ps1",
+    "cloudbank-customer-postgresql.sh",
+    "cloudbank-dark-factory.ps1",
+    "cloudbank-dark-factory.sh",
+    "cloudbank-edge-ai.ps1",
+    "cloudbank-edge-ai.sh",
+    "cloudbank-executable-baseline.ps1",
+    "cloudbank-executable-baseline.sh",
+    "cloudbank-journeys.ps1",
+    "cloudbank-journeys.sh",
+    "cloudbank-ms65-rehearsal.ps1",
+    "cloudbank-ms65-rehearsal.sh",
+    "cloudbank-ms66-dual-lane.ps1",
+    "cloudbank-ms66-dual-lane.sh",
+    "cloudbank-ms71.ps1",
+    "cloudbank-ms71.sh",
+    "cloudbank-native-wave.ps1",
+    "cloudbank-native-wave.sh",
+    "cloudbank-operational-baseline.ps1",
+    "cloudbank-operational-baseline.sh",
+    "cloudbank-oracle-equivalence.ps1",
+    "cloudbank-oracle-equivalence.sh",
+    "cloudbank-platform-qualification.ps1",
+    "cloudbank-platform-qualification.sh",
+    "cloudbank-production-oauth.ps1",
+    "cloudbank-production-oauth.sh",
+    "cloudbank-production-qualification.ps1",
+    "cloudbank-production-qualification.sh",
+    "cloudbank-production-readiness.ps1",
+    "cloudbank-production-readiness.sh",
+    "cloudbank-reference-estate.ps1",
+    "cloudbank-reference-estate.sh",
+    "cloudbank-secret-rotation.ps1",
+    "cloudbank-secret-rotation.sh",
+    "cloudbank-sql-ha.ps1",
+    "cloudbank-sql-ha.sh",
+    "cloudbank-sql-recovery.ps1",
+    "cloudbank-sql-recovery.sh",
+    "cloudbank-transaction-core.ps1",
+    "cloudbank-transaction-core.sh",
+    "cloudbank-transaction-wave.ps1",
+    "cloudbank-transaction-wave.sh",
+    "cloudbank-whole-application-equivalence.ps1",
+    "cloudbank-whole-application-equivalence.sh",
+    "cobol-qualification.ps1",
+    "cobol-qualification.sh",
+    "collection-appliance.ps1",
+    "collection-appliance.sh",
+    "composite-estate.ps1",
+    "composite-estate.sh",
+    "data-modernization.ps1",
+    "data-modernization.sh",
+    "durable-factory.ps1",
+    "durable-factory.sh",
+    "extension-foundation.ps1",
+    "extension-foundation.sh",
+    "factory-benchmark.ps1",
+    "factory-benchmark.sh",
+    "factory-qualification.ps1",
+    "factory-qualification.sh",
+    "graph-explorer.ps1",
+    "graph-explorer.sh",
+    "hardened-execution.ps1",
+    "hardened-execution.sh",
+    "idempiere-divergence-audit.ps1",
+    "idempiere-divergence-audit.sh",
+    "ims-readiness.ps1",
+    "ims-readiness.sh",
+    "integrated-pilot-qualification.ps1",
+    "integrated-pilot-qualification.sh",
+    "jcl-qualification.ps1",
+    "jcl-qualification.sh",
+    "knowledge-graph.ps1",
+    "knowledge-graph.sh",
+    "lightyear.ps1",
+    "lightyear.sh",
+    "live-control-tower.ps1",
+    "live-control-tower.sh",
+    "mainframe-access.ps1",
+    "mainframe-access.sh",
+    "migration-rehearsal.ps1",
+    "migration-rehearsal.sh",
+    "milestone-documentation.ps1",
+    "milestone-documentation.sh",
+    "model-workcell.ps1",
+    "model-workcell.sh",
+    "oracle-reference-estate.ps1",
+    "oracle-reference-estate.sh",
+    "oracle.ps1",
+    "oracle.sh",
+    "pli-build-attestation.ps1",
+    "pli-build-attestation.sh",
+    "pli-conformance.ps1",
+    "pli-conformance.sh",
+    "pli-modernization.ps1",
+    "pli-modernization.sh",
+    "pli-qualification.ps1",
+    "pli-qualification.sh",
+    "portfolio-factory.ps1",
+    "portfolio-factory.sh",
+    "pyproject.toml",
+    "python-runtime.ps1",
+    "python-runtime.sh",
+    "quality-gate.ps1",
+    "quality-gate.sh",
+    "runtime-evidence.ps1",
+    "runtime-evidence.sh",
+    "scripts.catalog.json",
+    "semantic-memory.ps1",
+    "semantic-memory.sh",
+    "source-only-pilot.ps1",
+    "source-only-pilot.sh",
+    "test.ps1",
+    "test.sh",
+    "verifier-gauntlet.ps1",
+    "verifier-gauntlet.sh",
+    "verify.ps1",
+    "verify.sh",
+    "zosmf-adapter.ps1",
+    "zosmf-adapter.sh"
+  ],
+  "flat_tools_files": [
+    "tools/B06RuntimeCatalogAgent.java",
+    "tools/B06RuntimeCatalogTest.java",
+    "tools/acquire_oracle_dialect_corpus.py",
+    "tools/aggregate_equivalence_shards.py",
+    "tools/amend_posttran_oct11.py",
+    "tools/apply_equivalence_reviews.py",
+    "tools/audit_journey_attempts.py",
+    "tools/author_business_rules.py",
+    "tools/b06-account-egress.cs",
+    "tools/b06-builder-appcontainer.cs",
+    "tools/b07_prefreeze_power.py",
+    "tools/build_carddemo_zos_bindings.py",
+    "tools/build_discriminating_intcalc.py",
+    "tools/build_duplicate_loader_capture.py",
+    "tools/build_factory_current_status.py",
+    "tools/build_factory_decision_review.py",
+    "tools/build_intcalc_releasability.py",
+    "tools/build_intcalc_signing_requests.py",
+    "tools/build_oct16_review_projections.py",
+    "tools/build_public_consumer_fixture.py",
+    "tools/build_release_packet.py",
+    "tools/build_tower_manual_docx.py",
+    "tools/build_zos_rehearsal.py",
+    "tools/business_rules_demo.py",
+    "tools/carddemo_status_record.py",
+    "tools/catalogue_publish.py",
+    "tools/check_carddemo_search_mining.py",
+    "tools/check_ci_test_collection.py",
+    "tools/check_cloud_image_bundle.py",
+    "tools/check_cp037_twin.py",
+    "tools/check_equivalence_followup.py",
+    "tools/check_factory_review.py",
+    "tools/check_generated_scenarios.py",
+    "tools/check_intcalc_loader_domain.py",
+    "tools/check_legacy_twin.py",
+    "tools/check_ms67_customer_startup.py",
+    "tools/check_oct12_operator_review.py",
+    "tools/check_posttran_attempt1_phase1.py",
+    "tools/check_posttran_deadline.py",
+    "tools/check_posttran_handoff.py",
+    "tools/check_posttran_phase1_retained.py",
+    "tools/check_posttran_plan_artifact.py",
+    "tools/check_posttran_retained_plan.py",
+    "tools/check_posttran_runbook_constants.py",
+    "tools/check_record_commit_claims.py",
+    "tools/check_retention_margin.py",
+    "tools/check_runbook_variables.ps1",
+    "tools/check_scenario_coverage.py",
+    "tools/check_source_lf.py",
+    "tools/check_tower_manual.py",
+    "tools/check_verify_graph_boundary.py",
+    "tools/ci_changed_paths.py",
+    "tools/ci_gate.py",
+    "tools/ci_postgres_image.py",
+    "tools/ci_push_latency.py",
+    "tools/cloud_runner_dispatch_bundle.py",
+    "tools/cloudbank_alert_drill.py",
+    "tools/cloudbank_alloydb_control.py",
+    "tools/cloudbank_alloydb_drills.py",
+    "tools/cloudbank_alloydb_platform.py",
+    "tools/cloudbank_alloydb_recovery.py",
+    "tools/cloudbank_checks_messaging.py",
+    "tools/cloudbank_customer_postgresql.py",
+    "tools/cloudbank_dark_factory.py",
+    "tools/cloudbank_edge_ai.py",
+    "tools/cloudbank_executable_baseline.py",
+    "tools/cloudbank_image_security.py",
+    "tools/cloudbank_journeys.py",
+    "tools/cloudbank_log_correlation.py",
+    "tools/cloudbank_ms65_rehearsal.py",
+    "tools/cloudbank_ms66_dual_lane.py",
+    "tools/cloudbank_ms71.py",
+    "tools/cloudbank_native_wave.py",
+    "tools/cloudbank_network_enforcement.py",
+    "tools/cloudbank_operational_baseline.py",
+    "tools/cloudbank_oracle_equivalence.py",
+    "tools/cloudbank_platform_qualification.py",
+    "tools/cloudbank_production_oauth.py",
+    "tools/cloudbank_production_qualification.py",
+    "tools/cloudbank_production_readiness.py",
+    "tools/cloudbank_runtime_identity.py",
+    "tools/cloudbank_secret_rotation.py",
+    "tools/cloudbank_sql_ha.py",
+    "tools/cloudbank_sql_recovery.py",
+    "tools/cloudbank_sustained_load.py",
+    "tools/cloudbank_transaction_core.py",
+    "tools/cloudbank_transaction_wave.py",
+    "tools/cloudbank_whole_application_equivalence.py",
+    "tools/compare_equivalence_runs.py",
+    "tools/crosscheck_release_threshold.py",
+    "tools/equivalence-requirements.txt",
+    "tools/evaluate_journey_judge_v2.py",
+    "tools/finalize_posttran_phase2.py",
+    "tools/generate_brand_deck.mjs",
+    "tools/generate_milestone_documentation.py",
+    "tools/generate_supplemental_milestone_formats.py",
+    "tools/idempiere_divergence_audit.py",
+    "tools/import_factory_tower_snapshot.py",
+    "tools/inspect_equivalence_storage.py",
+    "tools/inventory_b06_oct13_evidence.ps1",
+    "tools/inventory_cloudbank_reference.py",
+    "tools/inventory_idempiere_reference.py",
+    "tools/journey_builder_mcp.py",
+    "tools/journey_development_tools.py",
+    "tools/measure_campaign_resources.py",
+    "tools/migrate_graph_annotations.py",
+    "tools/ms67_accept_sql_recovery.py",
+    "tools/ms67_final_controls.py",
+    "tools/ms67_final_images.py",
+    "tools/ms67_finish.py",
+    "tools/ms67_reconcile_closeout.py",
+    "tools/ms67_resume_ms65.py",
+    "tools/ms94_a3_checkpoint_prepare.py",
+    "tools/ms94_a3_checkpoint_prepare_v2.py",
+    "tools/ms94_a3_controls.py",
+    "tools/ms94_a3_dated_qualification.py",
+    "tools/ms94_a3_dated_snapshot.py",
+    "tools/ms94_a3_entry.py",
+    "tools/ms94_a3_entry_v2.py",
+    "tools/ms94_a3_native.py",
+    "tools/ms94_a3_native_v2.py",
+    "tools/ms94_a3_private_runner.py",
+    "tools/ms94_a3_publication.py",
+    "tools/ms94_a3_qualification.py",
+    "tools/ms94_a3_qualification_v2.py",
+    "tools/ms94_a3_snapshot.py",
+    "tools/ms94_a3_snapshot_v2.py",
+    "tools/ms94_b04_admission.py",
+    "tools/ms94_b04_controller.py",
+    "tools/ms94_b04_evidence.py",
+    "tools/ms94_b04_feedback_route.py",
+    "tools/ms94_b04_inputs.py",
+    "tools/ms94_b04_measure.py",
+    "tools/ms94_b04_native.py",
+    "tools/ms94_b04_publication.py",
+    "tools/ms94_b04_snapshot.py",
+    "tools/ms94_b04_transport.py",
+    "tools/ms94_b05_admission.py",
+    "tools/ms94_b05_controller.py",
+    "tools/ms94_b05_evidence.py",
+    "tools/ms94_b05_measure.py",
+    "tools/ms94_b05_native.py",
+    "tools/ms94_b05_plan.py",
+    "tools/ms94_b05_preflight.py",
+    "tools/ms94_b05_publication.py",
+    "tools/ms94_b05_review.py",
+    "tools/ms94_b05_snapshot.py",
+    "tools/ms94_b05_stops.py",
+    "tools/ms94_b05_supervisor.py",
+    "tools/ms94_b05_transport.py",
+    "tools/ms94_b06_admission.py",
+    "tools/ms94_b06_attribution.py",
+    "tools/ms94_b06_builder_boundary.py",
+    "tools/ms94_b06_builder_login.ps1",
+    "tools/ms94_b06_built_runtime.py",
+    "tools/ms94_b06_built_worker.py",
+    "tools/ms94_b06_bytecode_policy.py",
+    "tools/ms94_b06_candidate_result.py",
+    "tools/ms94_b06_catalog.py",
+    "tools/ms94_b06_catalog_worker.py",
+    "tools/ms94_b06_classfile.py",
+    "tools/ms94_b06_classpath_audit.py",
+    "tools/ms94_b06_codex_account_probe.ps1",
+    "tools/ms94_b06_codex_probe_child.ps1",
+    "tools/ms94_b06_codex_probe_record.py",
+    "tools/ms94_b06_codex_transport.py",
+    "tools/ms94_b06_compile_catalog_worker.py",
+    "tools/ms94_b06_control_sources.py",
+    "tools/ms94_b06_controller.py",
+    "tools/ms94_b06_design.py",
+    "tools/ms94_b06_engineering.py",
+    "tools/ms94_b06_engineering_boundary.py",
+    "tools/ms94_b06_engineering_evidence.py",
+    "tools/ms94_b06_engineering_key.py",
+    "tools/ms94_b06_engineering_native.py",
+    "tools/ms94_b06_engineering_run.py",
+    "tools/ms94_b06_engineering_worker.py",
+    "tools/ms94_b06_executable.py",
+    "tools/ms94_b06_expectations.py",
+    "tools/ms94_b06_fault_hook.py",
+    "tools/ms94_b06_footprint.py",
+    "tools/ms94_b06_forwarding_stub.py",
+    "tools/ms94_b06_frame_census.py",
+    "tools/ms94_b06_generation_catch.py",
+    "tools/ms94_b06_generation_inputs.py",
+    "tools/ms94_b06_group_decision.py",
+    "tools/ms94_b06_host_jar_probe.py",
+    "tools/ms94_b06_http_broker.py",
+    "tools/ms94_b06_http_transport.py",
+    "tools/ms94_b06_http_transport_draft.py",
+    "tools/ms94_b06_j1_bridge.py",
+    "tools/ms94_b06_key_access_probe.ps1",
+    "tools/ms94_b06_lock_sql.py",
+    "tools/ms94_b06_login_status_child.ps1",
+    "tools/ms94_b06_login_status_probe.ps1",
+    "tools/ms94_b06_materials.py",
+    "tools/ms94_b06_measurement_admission.py",
+    "tools/ms94_b06_native.py",
+    "tools/ms94_b06_native_gate.py",
+    "tools/ms94_b06_observed_runner.py",
+    "tools/ms94_b06_observed_worker.py",
+    "tools/ms94_b06_observer_audit.py",
+    "tools/ms94_b06_observer_diagnostics.py",
+    "tools/ms94_b06_observer_format.py",
+    "tools/ms94_b06_observer_v2.py",
+    "tools/ms94_b06_oct13_authorization.py",
+    "tools/ms94_b06_oct13_report.py",
+    "tools/ms94_b06_oct13_run.py",
+    "tools/ms94_b06_os_probe.py",
+    "tools/ms94_b06_pinned_exec.ps1",
+    "tools/ms94_b06_pinned_probe.ps1",
+    "tools/ms94_b06_pinned_transport.py",
+    "tools/ms94_b06_posting_broker.py",
+    "tools/ms94_b06_posting_cause.py",
+    "tools/ms94_b06_posting_delivery.py",
+    "tools/ms94_b06_posting_listener.py",
+    "tools/ms94_b06_posting_replay.py",
+    "tools/ms94_b06_private_assembly.py",
+    "tools/ms94_b06_procurement.py",
+    "tools/ms94_b06_prompt.py",
+    "tools/ms94_b06_qualification_controls.py",
+    "tools/ms94_b06_qualification_driver.py",
+    "tools/ms94_b06_qualification_plan.py",
+    "tools/ms94_b06_qualification_replay.py",
+    "tools/ms94_b06_qualification_worker.py",
+    "tools/ms94_b06_reconciliation.py",
+    "tools/ms94_b06_register_inputs.py",
+    "tools/ms94_b06_revision_r5.py",
+    "tools/ms94_b06_revision_r6.py",
+    "tools/ms94_b06_runtime_catalog_worker.py",
+    "tools/ms94_b06_runtime_contract.py",
+    "tools/ms94_b06_runtime_delivery.py",
+    "tools/ms94_b06_runtime_files_probe.py",
+    "tools/ms94_b06_smoke_request.py",
+    "tools/ms94_b06_tower_builder_denial.ps1",
+    "tools/ms94_b06_tower_provision.py",
+    "tools/ms94_b06_tower_setup.ps1",
+    "tools/ms94_b06_tower_start.ps1",
+    "tools/ms94_b06_unmatched_return.py",
+    "tools/ms94_b06_windows_acl_probe.ps1",
+    "tools/ms94_b06_windows_probe_commands.ps1",
+    "tools/ms94_b06_windows_probe_record.py",
+    "tools/ms94_broker_v4.py",
+    "tools/ms94_builder_mcp.py",
+    "tools/ms94_builder_mcp_v4.py",
+    "tools/ms94_builder_mcp_v5.py",
+    "tools/ms94_calendar.py",
+    "tools/ms94_calendar_application_worker.py",
+    "tools/ms94_calendar_delivery.py",
+    "tools/ms94_calendar_evidence.py",
+    "tools/ms94_calendar_native.py",
+    "tools/ms94_calendar_publication.py",
+    "tools/ms94_calendar_qualification.py",
+    "tools/ms94_calendar_runner.py",
+    "tools/ms94_calendar_snapshot.py",
+    "tools/ms94_calendar_sources.py",
+    "tools/ms94_controller.py",
+    "tools/ms94_controller_v4.py",
+    "tools/ms94_controller_v5.py",
+    "tools/ms94_dated_controls.py",
+    "tools/ms94_dated_native.py",
+    "tools/ms94_dated_qualification.py",
+    "tools/ms94_dated_snapshot.py",
+    "tools/ms94_diagnostic_controls_v6.py",
+    "tools/ms94_diagnostic_controls_v7.py",
+    "tools/ms94_diagnostic_native_v6.py",
+    "tools/ms94_diagnostic_native_v7.py",
+    "tools/ms94_diagnostic_publication_v6.py",
+    "tools/ms94_diagnostic_publication_v7.py",
+    "tools/ms94_diagnostic_qualification_v6.py",
+    "tools/ms94_diagnostic_qualification_v7.py",
+    "tools/ms94_diagnostic_snapshot_v6.py",
+    "tools/ms94_diagnostic_snapshot_v7.py",
+    "tools/ms94_equipment.py",
+    "tools/ms94_equipment_v2.py",
+    "tools/ms94_equipment_v3.py",
+    "tools/ms94_equipment_v4.py",
+    "tools/ms94_equipment_v5.py",
+    "tools/ms94_execution_snapshot.py",
+    "tools/ms94_invoice_type_v5.py",
+    "tools/ms94_judge.py",
+    "tools/ms94_measure.py",
+    "tools/ms94_measure_v4.py",
+    "tools/ms94_measure_v5.py",
+    "tools/ms94_native.py",
+    "tools/ms94_native_b.py",
+    "tools/ms94_native_b_v4.py",
+    "tools/ms94_native_b_v5.py",
+    "tools/ms94_native_v2.py",
+    "tools/ms94_native_v3.py",
+    "tools/ms94_native_v4.py",
+    "tools/ms94_native_v5.py",
+    "tools/ms94_native_v6.py",
+    "tools/ms94_negative_checks.py",
+    "tools/ms94_negative_checks_v2.py",
+    "tools/ms94_public_api_v4.py",
+    "tools/ms94_publication.py",
+    "tools/ms94_publication_b.py",
+    "tools/ms94_publication_b_v4.py",
+    "tools/ms94_publication_b_v5.py",
+    "tools/ms94_publication_v3.py",
+    "tools/ms94_publication_v4.py",
+    "tools/ms94_publication_v5.py",
+    "tools/ms94_publication_v6.py",
+    "tools/ms94_recheck_v6.py",
+    "tools/ms94_review.py",
+    "tools/ms94_signer_v5.py",
+    "tools/ms94_snapshot_v5.py",
+    "tools/ms94_snapshot_v6.py",
+    "tools/ms94_stage_b_admission_v5.py",
+    "tools/ms94_stage_b_evidence.py",
+    "tools/ms94_stage_b_snapshot.py",
+    "tools/ms94_tool_policy.py",
+    "tools/ms94_tool_policy_v4.py",
+    "tools/ms94_tool_policy_v5.py",
+    "tools/ms94_transport.py",
+    "tools/ms94_transport_v4.py",
+    "tools/ms94_transport_v5.py",
+    "tools/ms94_v3_development.py",
+    "tools/ms94_v3_effects.py",
+    "tools/ms94_v3_gate.py",
+    "tools/ms94_v3_mutations.py",
+    "tools/ms94_v3_negative_checks.py",
+    "tools/ms94_v3_purchasing.py",
+    "tools/ms94_v3_register.py",
+    "tools/ms94_v3_scope.py",
+    "tools/ms94_v3_scope_base.py",
+    "tools/ms94_v3_source_policy.py",
+    "tools/ms94_v4_gate.py",
+    "tools/ms94_v5_gate.py",
+    "tools/ms94_v6_gate.py",
+    "tools/ms94_watch_v5.py",
+    "tools/posttran_phase2_authorization.py",
+    "tools/prepare_equivalence_signing.py",
+    "tools/prepare_idempiere_runtime.py",
+    "tools/prepare_posttran_phase2.py",
+    "tools/publish_cloudbank_receipts.py",
+    "tools/publish_declared_evidence.py",
+    "tools/publish_equivalence_automation.py",
+    "tools/publish_frozen_campaign.py",
+    "tools/publish_journey_campaign.py",
+    "tools/publish_measured_campaign.py",
+    "tools/publish_native_journeys.py",
+    "tools/publish_observer_qualification.py",
+    "tools/qualification_application_worker.py",
+    "tools/qualification_feedback.py",
+    "tools/qualification_feedback_v4.py",
+    "tools/qualification_private_runner.py",
+    "tools/qualification_procurement_effects.py",
+    "tools/qualification_procurement_scope.py",
+    "tools/qualification_purchasing_comparison.py",
+    "tools/qualification_transport_policy.py",
+    "tools/qualify_journey_judge.py",
+    "tools/qualify_transaction_observer.py",
+    "tools/recheck_equivalence_automation.py",
+    "tools/rehearse_intcalc_real_evidence.py",
+    "tools/rehearse_intcalc_signing.py",
+    "tools/release_status_records.py",
+    "tools/render_oct16_status.py",
+    "tools/replay_business_rules_demo.py",
+    "tools/replay_qualification_controls.py",
+    "tools/replay_tsql_native.py",
+    "tools/report_judge_qualification.py",
+    "tools/report_qualification_status.py",
+    "tools/rules_evidence_v2.py",
+    "tools/run_equivalence_automation.py",
+    "tools/run_posttran_phase2.py",
+    "tools/run_tsql_native.py",
+    "tools/run_verify_acceptance.py",
+    "tools/search_equivalence_survivors.py",
+    "tools/test_cloudbank_network_api.py",
+    "tools/test_cloudbank_network_probe.py",
+    "tools/test_cloudbank_request_logging.py",
+    "tools/test_cloudbank_sustained_load.py",
+    "tools/test_cloudbank_transfer_framing.py",
+    "tools/verify_graph_activation_check.py",
+    "tools/verify_public_retention.py"
+  ],
+  "clone_pack_bytes": 382639104,
+  "clone_measurement": "Fresh bare clone --no-local, packed object bytes"
+}

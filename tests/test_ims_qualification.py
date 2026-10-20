@@ -27,6 +27,24 @@ CASES = json.loads((ROOT / "readiness/ims-expiry/conformance/cases.json").read_t
 
 
 class ImsQualificationTests(unittest.TestCase):
+    def test_full_hierarchy_navigation_is_independent_and_historical_vectors_stay_root_only(self):
+        from lightyear_readiness.ims_qualification import execute_hierarchical_navigation
+        from unittest.mock import patch
+        for position, root, child in ((0, 'R001', None), (1, 'R001', 'D001'),
+                                      (2, 'R001', 'D002'), (3, 'R002', None), (4, 'R002', 'D003')):
+            result = execute_hierarchical_navigation({'operation': 'GHN', 'position': position})
+            self.assertEqual(('  ', root, child, True),
+                             (result['ims_status'], result['segment_root'], result['segment_child'], result['held']))
+        end = execute_hierarchical_navigation({'operation': 'GN', 'position': 5})
+        self.assertEqual(('GB', None, False), (end['ims_status'], end['segment_root'], end['held']))
+        self.assertEqual('GB', execute_conformance_case({'request': {'operation': 'GN', 'position': 2}})['ims_status'])
+        with patch('lightyear_readiness.ims_qualification._reference_hierarchy',
+                   return_value={'R001': ['D002'], 'R002': ['D003']}):
+            result = execute_hierarchical_navigation({'operation': 'GN', 'position': 2})
+            self.assertEqual(('R002', None), (result['segment_root'], result['segment_child']))
+        with self.assertRaises(ValueError):
+            execute_hierarchical_navigation({'operation': 'GN', 'position': -1})
+
     def test_inventory_is_bound_to_meaningful_native_graph_entities(self) -> None:
         result = build_ims_qualification(ROOT)
         inventory = result["inventory"]

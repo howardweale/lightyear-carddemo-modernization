@@ -32,6 +32,8 @@ jobs:
       - name: Install checksum-pinned solver
         run: |
           python -m pip install --require-hashes --only-binary=:all: -r tools/equivalence-requirements.txt
+      - name: Install disposable-journal verification support
+        run: python -m pip install 'cryptography>=46,<47'
       - name: Adversarial accounting, proof and IR tests
         env:
           PYTHONPATH: src:.:tests

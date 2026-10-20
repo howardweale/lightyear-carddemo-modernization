@@ -77,6 +77,23 @@ def build(raw,source,generic,dates,commarea,lookup,date_work,common,card_work,sc
             for key in ('screen_field','screen_part','picture'):
                 if key in definition:bound[name][key]=definition[key]
 
-    return dict(paragraphs=paragraphs,fields=bound,conditions=flags,storage=storage,
+    # Bind the original layout/flags first, then retire these statement bodies
+    # from the production validation model. generic_edits remains a CI oracle.
+    native_paragraphs = {name: 'AccountInputRules' for name in
+                         ('1215-EDIT-MANDATORY', '1220-EDIT-YESNO')}
+    native_paragraphs.update({name: 'AccountTextRules' for name in
+        ('1225-EDIT-ALPHA-REQD', '1230-EDIT-ALPHANUM-REQD', '1235-EDIT-ALPHA-OPT',
+         '1240-EDIT-ALPHANUM-OPT', '1245-EDIT-NUM-REQD')})
+    native_paragraphs['1250-EDIT-SIGNED-9V2'] = 'AccountMoneyRule'
+    native_paragraphs['1265-EDIT-US-SSN'] = 'AccountSsnRule'
+    native_paragraphs['1275-EDIT-FICO-SCORE'] = 'AccountFicoRule'
+    native_paragraphs.update({name: 'AccountLocationRules' for name in
+        ('1270-EDIT-US-STATE-CD', '1280-EDIT-US-STATE-ZIP-CD')})
+    for name in native_paragraphs:
+        if not isinstance(paragraphs.get(name),list) or not paragraphs[name]:
+            raise ValueError('native-retirement-paragraph: '+name)
+        del paragraphs[name]
+    return dict(paragraphs=paragraphs,native_paragraphs=native_paragraphs,
+        fields=bound,conditions=flags,storage=storage,
         service=dates['service'],area_offset=area_offset,area_length=commarea['record_length'],
         limitations=dates['limitations']+['Invalid unsigned DISPLAY bytes are retained for source NUMERIC checks and compared in EBCDIC byte order; this deterministic reference assumption needs a native baseline.', 'Source validation control flow; screen/database/browser equivalence is a separate gate.'])

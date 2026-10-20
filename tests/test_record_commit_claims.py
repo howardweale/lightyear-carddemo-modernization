@@ -104,3 +104,86 @@ class RecordCommitTests(unittest.TestCase):
         new['publication_sha256']=old['source_sha256'];correction['previous_claim_sha256']='0'*64
         path.write_text(json.dumps(data))
         with self.assertRaisesRegex(ValueError,'correction-binding'):current_claims(self.root)
+
+    def test_new_dated_manifest_preserves_old_and_checks_changed_inputs(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        newer=directory/'commit-claims-2026-10-19.json'
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name)]}))
+        self.commit('new dated claims')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('wrong new claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+
+
+    def test_duplicate_claim_across_dated_manifests_is_refused(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        (self.root/CLAIMS).write_text(content)
+        (directory/'commit-claims-2026-10-19.json').write_text(content)
+        self.commit('ambiguous claim')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+
+    def test_non_dated_registry_is_read_and_checked_without_prose_change(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        registry=directory/'commit-claims-additional.json'
+        registry.write_text(json.dumps({'claims':[dict(self.claim,record='docs/factory/old.md')]}))
+        self.commit('additional registry')
+        self.assertEqual([],check(self.root,self.base))
+        baseline=self.git('rev-parse','HEAD').strip()
+        registry.write_text(json.dumps({'claims':[dict(self.claim,record='docs/factory/old.md',source_sha256='0'*64)]}))
+        self.commit('bad assertion without prose edit')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,baseline)
+
+    def test_later_correction_uses_filename_date_and_later_registry(self):
+        from tools.check_record_commit_claims import current_claims
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        old=dict(self.claim,record='docs/factory/prior.md')
+        registry=directory/'commit-claims-2026-11-03.json'
+        registry.write_text(json.dumps({'claims':[old]}));before=registry.read_bytes()
+        new={k:v for k,v in old.items() if k not in ('role','source_path','source_sha256')}
+        new.update(role='publication',publication_path=old['source_path'],publication_sha256=old['source_sha256'])
+        row=dict(record=old['record'],reference=old['reference'],
+                 previous_claim_sha256=sha256(json.dumps(old,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+                 replacement=new)
+        data=dict(schema='record-commit-role-corrections/1',prepared_on='2026-11-04',corrections=[row])
+        correction=directory/'commit-claim-role-corrections-2026-11-04.json'
+        correction.write_text(json.dumps(data))
+        self.assertEqual([new],current_claims(self.root));self.assertEqual(before,registry.read_bytes())
+        self.commit('later correction and registry')
+        self.assertEqual([],check(self.root,self.base))
+        data['prepared_on']='2026-10-18';correction.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'correction-schema'):current_claims(self.root)
+        data['prepared_on']='2026-11-04';correction.write_text(json.dumps(data))
+        data['prepared_on']='2026-11-05'
+        (directory/'commit-claim-role-corrections-2026-11-05.json').write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'correction-duplicate'):current_claims(self.root)
+
+    def test_malformed_registry_and_correction_metadata_fail_closed(self):
+        from tools.check_record_commit_claims import current_claims
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        registry=directory/'commit-claims-future.json'
+        for data in ([],{}, {'claims':{}}, {'claims':[1]}):
+            with self.subTest(registry=data):
+                registry.write_text(json.dumps(data))
+                with self.assertRaisesRegex(ValueError,'claims-schema'):current_claims(self.root)
+        registry.write_text(json.dumps({'claims':[]}))
+        for filename,prepared in (('bad','2026-11-04'),('2026-02-30','2026-02-30')):
+            correction=directory/('commit-claim-role-corrections-'+filename+'.json')
+            correction.write_text(json.dumps(dict(schema='record-commit-role-corrections/1',prepared_on=prepared,corrections=[])))
+            with self.assertRaisesRegex(ValueError,'correction-date'):current_claims(self.root)
+            correction.unlink()
+        correction=directory/'commit-claim-role-corrections-2026-11-04.json'
+        for data in ([],{},dict(schema='record-commit-role-corrections/1',prepared_on='2026-11-04',corrections={}),
+                     dict(schema='record-commit-role-corrections/1',prepared_on='2026-11-04',corrections=[1])):
+            with self.subTest(correction=data):
+                correction.write_text(json.dumps(data))
+                with self.assertRaisesRegex(ValueError,'correction-schema'):current_claims(self.root)

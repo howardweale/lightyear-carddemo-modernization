@@ -206,10 +206,11 @@ class CandidateHistory:
         return self.commit(attempt, response_events=mapping)
 
     def _candidate_tree(self, revision):
-        result = {}
-        for row in self._git('ls-tree', '-rz', revision).split(b'\0'):
-            if not row:
-                continue
+        result = {}; entries = []; total = 0; seen = set()
+        rows = [row for row in self._git('ls-tree', '-rz', revision).split(b'\0') if row]
+        if len(rows) > 4096:
+            raise ContractError('candidate-history-tree-limit')
+        for row in rows:
             metadata, raw_path = row.split(b'\t', 1)
             mode, kind, oid = metadata.decode('ascii').split()
             path = raw_path.decode('utf-8')
@@ -218,7 +219,17 @@ class CandidateHistory:
                     or not any(path == p or path.startswith(p.rstrip('/')+'/')
                                for p in self.workspace.allowed_paths)):
                 raise ContractError('candidate-history-tree-boundary')
-            result[path] = dict(mode=mode, sha256=hashlib.sha256(self._git('cat-file', 'blob', oid)).hexdigest())
+            size = int(self._git('cat-file', '-s', oid))
+            total += size
+            if path in seen or not 0 <= size <= 8*1024*1024 or total > 32*1024*1024:
+                raise ContractError('candidate-history-tree-limit')
+            seen.add(path); entries.append((path, mode, oid, size))
+        # Refuse the whole tree's advertised sizes before materializing any blob.
+        for path, mode, oid, size in entries:
+            raw = self._git('cat-file', 'blob', oid)
+            if len(raw) != size:
+                raise ContractError('candidate-history-tree-size-mismatch')
+            result[path] = dict(mode=mode, sha256=hashlib.sha256(raw).hexdigest())
         return result
 
     def _changed_tree_files(self, parent, tree):

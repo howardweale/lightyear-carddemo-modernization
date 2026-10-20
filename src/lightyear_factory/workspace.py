@@ -57,18 +57,47 @@ class IsolatedWorkspace:
 
     def _create_allowlisted(self) -> None:
         # Validate every byte before creating a destination; never copy a directory.
-        selected=[]
-        for relative,expected in self.read_manifest.items():
-            path=self.source_root/relative
-            cursor=path
-            while cursor!=self.source_root:
-                if cursor.is_symlink() or getattr(cursor,'is_junction',lambda:False)():raise ContractError('workspace-read-symlink')
-                cursor=cursor.parent
-            if not path.is_file() or self.source_root not in path.resolve().parents:
+        if len(self.read_manifest) > 4096:
+            raise ContractError('workspace-read-limit')
+        identity = lambda info: (info.st_dev, info.st_ino, info.st_size,
+                                 info.st_mtime_ns, info.st_nlink)
+        planned = []; total = 0
+        for relative, expected in self.read_manifest.items():
+            path = self.source_root/relative
+            cursor = path
+            while cursor != self.source_root:
+                if cursor.is_symlink() or getattr(cursor, 'is_junction', lambda: False)():
+                    raise ContractError('workspace-read-symlink')
+                cursor = cursor.parent
+            if self.source_root not in path.resolve().parents:
                 raise ContractError('workspace-read-file')
-            data=path.read_bytes()
-            if hashlib.sha256(data).hexdigest()!=expected:raise ContractError('workspace-read-hash-mismatch')
-            selected.append((relative,data))
+            info = path.stat()
+            if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+                raise ContractError('workspace-read-file')
+            total += info.st_size
+            if not 0 <= info.st_size <= 8*1024*1024 or total > 32*1024*1024:
+                raise ContractError('workspace-read-limit')
+            planned.append((relative, path, expected, info))
+        # Preflight every size before allocating any file contents or private decoys.
+        selected = []
+        for relative, path, expected, info in planned:
+            with path.open('rb') as handle:
+                if identity(os.fstat(handle.fileno())) != identity(info):
+                    raise ContractError('workspace-read-replaced')
+                data = handle.read(info.st_size+1)
+                if identity(os.fstat(handle.fileno())) != identity(info):
+                    raise ContractError('workspace-read-replaced')
+            cursor = path
+            while cursor != self.source_root:
+                if cursor.is_symlink() or getattr(cursor, 'is_junction', lambda: False)():
+                    raise ContractError('workspace-read-symlink')
+                cursor = cursor.parent
+            if (len(data) != info.st_size or identity(path.stat()) != identity(info)
+                    or self.source_root not in path.resolve().parents):
+                raise ContractError('workspace-read-replaced')
+            if hashlib.sha256(data).hexdigest() != expected:
+                raise ContractError('workspace-read-hash-mismatch')
+            selected.append((relative, data))
         if self.canary_root.exists() or self.canary_root.is_symlink():
             raise ContractError('workspace-canary-store-exists')
         self.canary_root.mkdir(mode=0o700, parents=True)

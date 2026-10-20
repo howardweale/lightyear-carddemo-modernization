@@ -53,8 +53,46 @@ class FactoryModelAdmissionTests(unittest.TestCase):
     def test_uncommitted_evidence_is_rejected_before_trust_verification(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);a,*_=self.fixtures(root);(root/'plan.json').write_bytes(b'{}')
-            with patch('lightyear_factory.model_admission.subprocess.check_output',return_value=b'{"changed":true}'):
+            with patch('lightyear_factory.model_admission.subprocess.check_output',side_effect=[b'a'*40,b'2',b'[]']):
                 with self.assertRaisesRegex(ContractError,'not-committed'):a._committed_json('plan.json')
+
+    def test_metadata_size_and_descriptor_replacement_refused_before_read(self):
+        from lightyear_factory.model_admission import _bounded_regular_bytes
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d)/'fixture'; path.write_bytes(b'{}')
+            info = path.stat()
+            original = Path.stat
+            def oversized(candidate, *args, **kwargs):
+                value = original(candidate, *args, **kwargs)
+                if candidate == path:
+                    return SimpleNamespace(st_mode=value.st_mode, st_nlink=1, st_size=65537)
+                return value
+            with patch.object(Path, 'stat', oversized), patch.object(Path, 'open') as opened:
+                with self.assertRaisesRegex(ContractError, '^fixture-bounded-refusal$'):
+                    _bounded_regular_bytes(path, 65536, 'fixture-bounded-refusal')
+                opened.assert_not_called()
+            changed = SimpleNamespace(st_dev=info.st_dev, st_ino=info.st_ino,
+                                      st_size=info.st_size+1, st_mtime_ns=info.st_mtime_ns,
+                                      st_nlink=info.st_nlink)
+            with patch('lightyear_factory.model_admission.os.fstat', return_value=changed):
+                with self.assertRaisesRegex(ContractError, '^fixture-bounded-refusal$'):
+                    _bounded_regular_bytes(path, 65536, 'fixture-bounded-refusal')
+            self.assertEqual(b'{}', _bounded_regular_bytes(path, 65536, 'fixture-bounded-refusal'))
+
+    def test_committed_blob_size_is_checked_before_blob_materialization(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); admission, *_ = self.fixtures(root)
+            (root/'plan.json').write_bytes(b'{}')
+            for size, error in ((8*1024*1024+1, 'evidence-size'), (3, 'not-committed')):
+                with patch('lightyear_factory.model_admission.subprocess.check_output',
+                           side_effect=[b'a'*40, str(size).encode()]) as git:
+                    with self.assertRaisesRegex(ContractError, error):
+                        admission._committed_json('plan.json')
+                    self.assertEqual(2, git.call_count)
+                    self.assertFalse(any('blob' in call.args[0] for call in git.call_args_list))
+            with patch('lightyear_factory.model_admission.subprocess.check_output',
+                       side_effect=[b'a'*40, b'2', b'{}']):
+                self.assertEqual({}, admission._committed_json('plan.json'))
 
     def test_dirty_expired_and_advancing_trust_fail_closed(self):
         with tempfile.TemporaryDirectory() as d:

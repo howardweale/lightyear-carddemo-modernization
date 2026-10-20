@@ -48,6 +48,50 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             (workspace.root/'unlisted').unlink();(workspace.root/'.git').mkdir()
             with self.assertRaisesRegex(ContractError,'history'):workspace.verify_read_boundary()
 
+    def test_allowlist_copy_preflights_count_and_all_sizes_before_reads(self):
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); source = root/'source'; source.mkdir()
+            for index in range(5):
+                (source/str(index)).write_bytes(b'fixture')
+            cases = [({str(i): 'a'*64 for i in range(4097)}, None),
+                     ({'0': 'a'*64}, 8*1024*1024+1),
+                     ({str(i): 'a'*64 for i in range(5)}, 8*1024*1024)]
+            original_stat = Path.stat
+            for manifest, size in cases:
+                workspace = IsolatedWorkspace(source, root/'worker', ('candidate',), manifest)
+                def bounded_stat(path, *args, **kwargs):
+                    info = original_stat(path, *args, **kwargs)
+                    if path.parent == source and size is not None:
+                        return SimpleNamespace(st_mode=info.st_mode, st_nlink=1, st_size=size)
+                    return info
+                with patch.object(Path, 'stat', bounded_stat), patch.object(Path, 'open') as opened:
+                    with self.assertRaisesRegex(ContractError, '^workspace-read-limit$'):
+                        workspace.create()
+                    opened.assert_not_called()
+                self.assertFalse(workspace.root.exists())
+                self.assertFalse(workspace.canary_root.exists())
+
+    def test_allowlist_copy_rejects_changed_open_file_before_publication(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); source = root/'source'; source.mkdir()
+            target = source/'input'; target.write_bytes(b'fixture')
+            workspace = IsolatedWorkspace(source, root/'worker', ('candidate',),
+                                          {'input': sha256(b'fixture').hexdigest()})
+            info = target.stat()
+            changed = SimpleNamespace(st_dev=info.st_dev, st_ino=info.st_ino,
+                                      st_size=info.st_size+1, st_mtime_ns=info.st_mtime_ns,
+                                      st_nlink=info.st_nlink)
+            with patch('lightyear_factory.workspace.os.fstat', return_value=changed):
+                with self.assertRaisesRegex(ContractError, '^workspace-read-replaced$'):
+                    workspace.create()
+            self.assertFalse(workspace.root.exists())
+            self.assertFalse(workspace.canary_root.exists())
+            workspace.create()
+            self.assertEqual(b'fixture', (workspace.root/'input').read_bytes())
+
     def test_gateway_never_forwards_values_trace_output_or_analyst_prose(self):
         vocabulary=dict(screens=['FIXTURE'],fields=['FIELD'],tables=['TABLE'])
         private='expected-private-value-012345678901234567890123456789'
@@ -400,6 +444,71 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             self.assertEqual('blocked',receipt['status'])
             self.assertFalse(receipt['qualifies_for_factory_receipt'])
             self.assertEqual(0,receipt['repair_loops'])
+
+    def test_allowlist_early_setup_errors_are_redacted_before_agent_calls(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        private = 'PRIVATE-FIXTURE-' + ('x' * 60)
+        targets = ('_run_id', 'Path.mkdir', 'ArtifactStore', 'RunLedger', 'IsolatedWorkspace')
+        for target in targets:
+            with self.subTest(target=target), tempfile.TemporaryDirectory() as d:
+                root = Path(d); source = root/'source'; source.mkdir()
+                agents = Mock(); agents.name = 'fixture-agent'
+                order = SimpleNamespace(max_attempts=1, allowed_paths=('candidate',),
+                    content_sha256='a'*64, to_dict=Mock())
+                controller = FactoryOrchestrator(source, root/'runs', agents,
+                    workspace_read_manifest={})
+                with patch('lightyear_factory.orchestrator.'+target,
+                           side_effect=OSError(private)):
+                    with self.assertRaisesRegex(ContractError, '^factory-isolation-run-refused$') as caught:
+                        controller.run(order, 'fixture')
+                self.assertTrue(caught.exception.__suppress_context__)
+                agents.assert_not_called(); self.assertEqual([], agents.mock_calls)
+                order.to_dict.assert_not_called()
+                self.assertFalse((root/'runs'/'fixture'/'work-order.json').exists())
+                for path in (root/'runs').rglob('*'):
+                    if path.is_file(): self.assertNotIn(private.encode(), path.read_bytes())
+
+    def test_allowlist_failure_recording_error_is_redacted_without_fallback_publication(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        private = 'PRIVATE-FIXTURE-' + ('x' * 60)
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); source = root/'source'; source.mkdir()
+            agents = Mock(); agents.name = 'fixture-agent'
+            order = SimpleNamespace(max_attempts=1, allowed_paths=('candidate',),
+                content_sha256='a'*64, to_dict=Mock())
+            controller = FactoryOrchestrator(source, root/'runs', agents,
+                workspace_read_manifest={}, prepare_workspace=Mock(side_effect=RuntimeError(private)))
+            with patch('lightyear_factory.orchestrator.write_json', side_effect=OSError(private)) as write:
+                with self.assertRaisesRegex(ContractError, '^factory-isolation-run-refused$') as caught:
+                    controller.run(order, 'fixture')
+            self.assertTrue(caught.exception.__suppress_context__)
+            self.assertEqual(1, write.call_count)
+            attempted = write.call_args.args[0]
+            self.assertEqual('blocked', attempted['status'])
+            self.assertFalse(attempted['qualifies_for_factory_receipt'])
+            self.assertNotIn(private, json.dumps(attempted))
+            self.assertEqual([], agents.mock_calls); order.to_dict.assert_not_called()
+            run = root/'runs'/'fixture'
+            self.assertFalse((run/'receipt.json').exists())
+            self.assertFalse((run/'summary.json').exists())
+            self.assertFalse((run/'work-order.json').exists())
+            self.assertNotIn(private, (run/'events.jsonl').read_text())
+
+    def test_run_boundary_preserves_success_and_legacy_exception(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        controller = FactoryOrchestrator(Path('.'), Path('unused'), Mock())
+        order = SimpleNamespace(max_attempts=1)
+        result = {'status': 'fixture-result'}
+        with patch.object(controller, '_run', return_value=result) as execute:
+            self.assertIs(result, controller.run(order, 'fixture'))
+            execute.assert_called_once_with(order, 'fixture')
+        error = OSError('legacy diagnostic')
+        with patch.object(controller, '_run', side_effect=error):
+            with self.assertRaises(OSError) as caught: controller.run(order, 'fixture')
+        self.assertIs(error, caught.exception)
 
     def test_model_evidence_scan_refuses_before_artifact_write(self):
         from unittest.mock import Mock

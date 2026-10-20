@@ -1,6 +1,8 @@
 """F2 proof admission; no signing, reservation, key discovery or network calls."""
 from datetime import datetime, timezone
 import json
+import os
+import stat
 from hashlib import sha256
 import re
 from pathlib import Path
@@ -8,6 +10,36 @@ import subprocess
 from lightyear_control_tower.factory_policy import FactoryDecisions
 from .contracts import ContractError, canonical_hash
 from .model_versions import require_snapshot
+
+
+def _bounded_regular_bytes(path, limit, error):
+    """Bound allocation and reject observed replacement; no OS isolation claim."""
+    try:
+        def metadata():
+            cursor = path
+            while cursor != cursor.parent:
+                if cursor.is_symlink() or getattr(cursor, 'is_junction', lambda: False)():
+                    raise ValueError('link')
+                cursor = cursor.parent
+            info = path.stat()
+            if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                    or not 0 <= info.st_size <= limit):
+                raise ValueError('file')
+            return info
+        identity = lambda info: (info.st_dev, info.st_ino, info.st_size,
+                                 info.st_mtime_ns, info.st_nlink)
+        info = metadata()
+        with path.open('rb') as handle:
+            if identity(os.fstat(handle.fileno())) != identity(info):
+                raise ValueError('replacement')
+            raw = handle.read(info.st_size+1)
+            if identity(os.fstat(handle.fileno())) != identity(info):
+                raise ValueError('replacement')
+        if len(raw) != info.st_size or identity(metadata()) != identity(info):
+            raise ValueError('replacement')
+        return raw
+    except Exception:
+        raise ContractError(error) from None
 
 
 class FactoryModelAdmission:
@@ -31,9 +63,7 @@ class FactoryModelAdmission:
             resolved=path.resolve()
             if resolved==root or root in resolved.parents or not resolved.is_file():
                 raise ContractError('factory-model-external-trust-required')
-            raw=resolved.read_bytes()
-            if len(raw)>65536:raise ContractError('factory-model-trust-size')
-            return raw
+            return _bounded_regular_bytes(resolved, 65536, 'factory-model-trust-size')
         initial=json.loads(external(config))
         if initial.get('scope')!='factory':raise ContractError('factory-model-trust-scope')
         key_path=config.parent/initial['public_key']; public=external(key_path)
@@ -55,14 +85,23 @@ class FactoryModelAdmission:
             if cursor.is_symlink() or getattr(cursor, 'is_junction', lambda: False)():
                 raise ContractError('factory-model-evidence-link')
             cursor = cursor.parent
-        raw = path.read_bytes()
-        if len(raw)>8*1024*1024:
+        raw = _bounded_regular_bytes(path, 8*1024*1024, 'factory-model-evidence-size')
+        command = ['git', '--no-optional-locks', '-C', str(self.root)]
+        oid = subprocess.check_output(command+['rev-parse', '--verify', 'HEAD:'+relative]).decode().strip()
+        if not re.fullmatch(r'[0-9a-f]{40}|[0-9a-f]{64}', oid):
+            raise ContractError('factory-model-evidence-object')
+        size = int(subprocess.check_output(command+['cat-file', '-s', oid]))
+        if not 0 <= size <= 8*1024*1024:
             raise ContractError('factory-model-evidence-size')
-        committed = subprocess.check_output(['git', '--no-optional-locks', '-C', str(self.root),
-                                            'show', 'HEAD:'+relative])
-        if raw != committed:
+        if size != len(raw):
             raise ContractError('factory-model-evidence-not-committed')
-        return json.loads(raw)
+        committed = subprocess.check_output(command+['cat-file', 'blob', oid])
+        if len(committed) != size or raw != committed:
+            raise ContractError('factory-model-evidence-not-committed')
+        try:
+            return json.loads(raw)
+        except (ValueError, UnicodeError):
+            raise ContractError('factory-model-evidence-json') from None
 
     def verify_runtime(self, order, *, source_root, input_paths, policy, read_manifest=None, now=None):
         """Bind the actual controller inputs; no nonce, credential or model use."""
@@ -87,7 +126,7 @@ class FactoryModelAdmission:
             if relative!=bound['path']:
                 raise ContractError('factory-model-runtime-path')
             loaded[name]=self._committed_json(relative)
-            if sha256((self.root/relative).read_bytes()).hexdigest()!=bound['sha256']:
+            if sha256(_bounded_regular_bytes(self.root/relative, 8*1024*1024, 'factory-model-evidence-size')).hexdigest()!=bound['sha256']:
                 raise ContractError('factory-model-runtime-bytes')
         manifest=loaded['workspace']
         if not isinstance(manifest,dict) or not manifest:

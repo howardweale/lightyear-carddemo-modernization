@@ -368,6 +368,39 @@ class FactoryAuthorshipTests(unittest.TestCase):
             with self.assertRaisesRegex(ContractError, 'builder-response-required'):
                 controller._candidate_response_ids(ledger, 0, 'fixture-run', 1)
 
+    def test_candidate_tree_refuses_counts_and_sizes_before_blob_materialization(self):
+        history = CandidateHistory.__new__(CandidateHistory)
+        history.workspace = SimpleNamespace(allowed_paths=('candidate',))
+        def listing(count):
+            return b''.join(('100644 blob '+format(i+1, '040x')+'\tcandidate/'+str(i)+'\0').encode()
+                            for i in range(count))
+        for count, size in ((4097, 1), (1, 8*1024*1024+1), (5, 8*1024*1024)):
+            with self.subTest(count=count, size=size):
+                def metadata_only(*args):
+                    if args == ('ls-tree', '-rz', 'fixture'): return listing(count)
+                    if args[:2] == ('cat-file', '-s'): return str(size).encode()
+                    self.fail('oversized tree read a blob before rejection')
+                history._git = Mock(side_effect=metadata_only)
+                with self.assertRaisesRegex(ContractError, '^candidate-history-tree-limit$'):
+                    history._candidate_tree('fixture')
+                self.assertFalse(any(call.args[:2] == ('cat-file', 'blob')
+                                     for call in history._git.call_args_list))
+
+    def test_candidate_tree_checks_blob_size_and_preserves_exact_digest(self):
+        history = CandidateHistory.__new__(CandidateHistory)
+        history.workspace = SimpleNamespace(allowed_paths=('candidate',))
+        oid = '1'*40
+        row = ('100644 blob '+oid+'\tcandidate/toy.txt\0').encode()
+        def response(*args):
+            return {('ls-tree', '-rz', 'fixture'): row,
+                    ('cat-file', '-s', oid): b'4', ('cat-file', 'blob', oid): b'safe'}[args]
+        history._git = Mock(side_effect=response)
+        self.assertEqual({'candidate/toy.txt': {'mode': '100644', 'sha256': sha256(b'safe').hexdigest()}},
+                         history._candidate_tree('fixture'))
+        history._git = Mock(side_effect=[row, b'5', b'safe'])
+        with self.assertRaisesRegex(ContractError, '^candidate-history-tree-size-mismatch$'):
+            history._candidate_tree('fixture')
+
     def test_exported_package_binds_exact_signed_tree_and_refuses_tampering(self):
         with tempfile.TemporaryDirectory() as d:
             root, workspace, ledger, history, artifacts = self.setup_history(d)

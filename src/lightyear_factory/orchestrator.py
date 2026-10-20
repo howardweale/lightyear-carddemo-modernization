@@ -167,6 +167,16 @@ class FactoryOrchestrator:
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         self._validate_attempt_budget(order)
+        try:
+            return self._run(order, run_id)
+        except Exception:
+            # Cover allocation/constructor failures and errors writing a blocked receipt.
+            # No new persistence is attempted when the failure recorder itself failed.
+            if self.workspace_read_manifest is not None:
+                raise ContractError('factory-isolation-run-refused') from None
+            raise
+
+    def _run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         run_id = _run_id(run_id)
         run_dir = self.runs_root / run_id
         if run_dir.exists():

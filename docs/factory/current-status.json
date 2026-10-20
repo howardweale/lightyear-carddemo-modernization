@@ -10788,7 +10788,109 @@
   },
   "retention_manifests": [
     "docs/factory/evidence-retention-2026-10-16-posttran.json",
-    "docs/factory/evidence-retention-2026-10-16.json",
-    "docs/factory/evidence-retention-2026-10-18-intcalc.json"
-  ]
+    "docs/factory/evidence-retention-2026-10-16.json"
+  ],
+  "carddemo_idiomatic": {
+    "date": "2026-10-18",
+    "program": "COSGN00C",
+    "run_id": "39147604819",
+    "source_head": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+    "tested_commit": "dba188ba166145808a59274240d0969e2783377a",
+    "cases": 120,
+    "interactions": 678,
+    "total": 769,
+    "killed": 702,
+    "status_counts": {
+      "KILLED": 702,
+      "SURVIVED": 49,
+      "NO_COVERAGE": 17,
+      "TIMED_OUT": 1
+    },
+    "previous_total": 768,
+    "previous_killed": 701,
+    "current": {
+      "SignonService": {
+        "total": 21,
+        "killed": 19,
+        "percent": 90.47619047619048,
+        "status_counts": {
+          "KILLED": 19,
+          "SURVIVED": 2
+        },
+        "passed": true,
+        "non_killed": [
+          {
+            "status": "SURVIVED",
+            "method": "authenticate",
+            "line": "76",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          },
+          {
+            "status": "SURVIVED",
+            "method": "authenticate",
+            "line": "78",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          }
+        ]
+      },
+      "SignonRules": {
+        "total": 15,
+        "killed": 15,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 15
+        },
+        "passed": true,
+        "non_killed": []
+      }
+    },
+    "previous": {
+      "SignonService": {
+        "total": 35,
+        "killed": 33,
+        "percent": 94.28571428571429,
+        "status_counts": {
+          "KILLED": 33,
+          "SURVIVED": 2
+        },
+        "passed": true,
+        "non_killed": [
+          {
+            "status": "SURVIVED",
+            "method": "interact",
+            "line": "38",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          },
+          {
+            "status": "SURVIVED",
+            "method": "interact",
+            "line": "38",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          }
+        ]
+      }
+    },
+    "remaining_statement_engine_programs": [
+      "COACTVWC",
+      "COACTUPC",
+      "COPAUS0C",
+      "COPAUS1C"
+    ],
+    "other_handwritten_programs": [
+      "COMEN01C"
+    ],
+    "remaining_evidence_gaps": [
+      "Missing-detail and SQL-error screen equivalence",
+      "Native CICS, IMS and DB2 behavior",
+      "Shared BMS parser and data-layout codec",
+      "Disclosed synthetic IMS rows and account pair",
+      "All surviving, uncovered and timed-out mutants remain in the denominator"
+    ],
+    "path": "docs/modernization/carddemo-cosgn00-2026-10-18.json",
+    "unsigned": true
+  }
 }

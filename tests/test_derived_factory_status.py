@@ -22,6 +22,7 @@ class DerivedStatusTests(unittest.TestCase):
         self.assertNotIn(Path(path).name, new_text)
         self.assertNotEqual(text, new_text)
 
+
     def test_changed_measurements_change_status_and_packet_model(self):
         model = load()
         changed = copy.deepcopy(model)

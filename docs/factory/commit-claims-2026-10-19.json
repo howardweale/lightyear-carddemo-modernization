@@ -1,0 +1,23 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-19",
+  "scope": "Additional exact source-byte bindings for the published COSGN00 CI receipt; original dated claims are unchanged. The tested pull merge and measured source have identical trees.",
+  "claims": [
+    {
+      "record": "docs/factory/current-status.json",
+      "reference": "dba188ba166145808a59274240d0969e2783377a",
+      "commit": "dba188ba166145808a59274240d0969e2783377a",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonRules.java",
+      "source_sha256": "3ec1516b881fd4ae0951cc85103986bf17760f10d0bc7c99d89e3d0bb0ae0884"
+    },
+    {
+      "record": "docs/factory/current-status.json",
+      "reference": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+      "commit": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonRules.java",
+      "source_sha256": "3ec1516b881fd4ae0951cc85103986bf17760f10d0bc7c99d89e3d0bb0ae0884"
+    }
+  ]
+}

@@ -318,18 +318,6 @@
         "3f1ddcfb340673b906cff77922bb217320f04eab"
       ],
       "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
-    },
-    {
-      "record": "docs/factory/evidence-retention-2026-10-18-intcalc.json",
-      "reference": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
-      "commit": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
-      "role": "merge",
-      "pr": 364,
-      "parents": [
-        "5c1852cc36fc28fc34f16ed91a2243023acdc657",
-        "7129dfd8e3633e6940e6e82620f6144cdde23871"
-      ],
-      "head_commit": "7129dfd8e3633e6940e6e82620f6144cdde23871"
     }
   ]
 }

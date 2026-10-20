@@ -84,7 +84,6 @@ More than five days remain before sign-and-launch deadline at snapshot time.
 
 Current retention manifest: [evidence-retention-2026-10-16-posttran.json](evidence-retention-2026-10-16-posttran.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
 Current retention manifest: [evidence-retention-2026-10-16.json](evidence-retention-2026-10-16.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
-Current retention manifest: [evidence-retention-2026-10-18-intcalc.json](evidence-retention-2026-10-18-intcalc.json); scheduled download/hash verification applies. Local deletion remains unauthorized.
 Dated October 14/15 retention statements remain historical; use these manifests for current storage status. [October 17 verification and deletion addendum](retention-inventory-2026-10-17.json); local deletion remains unauthorized.
 
 ## CardDemo data slice
@@ -118,6 +117,10 @@ CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pu
 The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.
 
 Typed condition support: True. Threshold/3 support: True. Presence of code is not effective policy approval.
+
+## Idiomatic Java screen groups
+
+As of 2026-10-18, COSGN00C idiomatic Java passed CI run 39147604819: 120 journeys and 678/678 API/browser interactions. Strict full-scope KILLED/all-generated: 702/769 (91.29%); historical baseline 701/768 (91.28%). SignonService: 19/21 (90.48%); SignonRules: 15/15 (100.00%). Remaining statement-engine programs: COACTVWC, COACTUPC, COPAUS0C, COPAUS1C. Other existing hand-written orchestration: COMEN01C. Open gaps: Missing-detail and SQL-error screen equivalence; Native CICS, IMS and DB2 behavior; Shared BMS parser and data-layout codec; Disclosed synthetic IMS rows and account pair; All surviving, uncovered and timed-out mutants remain in the denominator. No survivor, uncovered mutant or timeout is waived. Final publication CI and merge approval are separate. Unsigned; no signing, import, activation, Phase 2 or release authority.
 
 Not releasable: Fresh complete caught-mutant evidence required for: TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP. Retained campaign index does not certify complete durable retention. Ordered effective decisions are not recorded in these unsigned inputs. Non-provisional release evidence is not established by this retained engineering campaign.
 

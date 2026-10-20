@@ -119,21 +119,30 @@ class ContentSupersessionTests(unittest.TestCase):
     def test_direct_writer_cannot_bypass_live_overlap_or_journal_guard(self):
         from lightyear_control_tower.factory_policy import write_request
         contract=self.fixture.contract('equivalence-review')
-        before={p.relative_to(self.fixture.root).as_posix():p.read_bytes()
-                for p in self.fixture.root.rglob('*') if p.is_file()}
+        # Keep the intake destination separate from the active journal service.
+        # Snapshot every destination file; do not skip unreadable files.
+        target=self.base/'direct-writer'
+        source=target/'docs/factory/public.json'
+        source.parent.mkdir(parents=True)
+        source.write_bytes(self.fixture.source.read_bytes())
+        def snapshot():
+            return {p.relative_to(target).as_posix():p.read_bytes()
+                    for p in target.rglob('*') if p.is_file()}
+        journal_before=self.trust()['journal']
+        before=snapshot()
         with self.assertRaisesRegex(ValueError,'trusted-journal-required'):
-            write_request(self.fixture.root,contract)
-        self.assertEqual(before,{p.relative_to(self.fixture.root).as_posix():p.read_bytes()
-                                 for p in self.fixture.root.rglob('*') if p.is_file()})
-        request=write_request(self.fixture.root,contract,**self.trust())
-        self.assertEqual(request,write_request(self.fixture.root,contract,**self.trust()))
-        before={p.relative_to(self.fixture.root).as_posix():p.read_bytes()
-                for p in self.fixture.root.rglob('*') if p.is_file()}
+            write_request(target,contract)
+        self.assertEqual(before,snapshot())
+        request=write_request(target,contract,**self.trust())
+        self.assertEqual(request,write_request(target,contract,**self.trust()))
+        before=snapshot()
         successor=copy.deepcopy(contract);successor['details']['items']=['mutant-2','new']
         with self.assertRaisesRegex(ValueError,'live-overlap'):
-            write_request(self.fixture.root,successor,**self.trust())
-        self.assertEqual(before,{p.relative_to(self.fixture.root).as_posix():p.read_bytes()
-                                 for p in self.fixture.root.rglob('*') if p.is_file()})
+            write_request(target,successor,**self.trust())
+        self.assertEqual(before,snapshot())
+        journal_after=self.trust()['journal']
+        self.assertEqual(journal_before['journal_head_sha256'],journal_after['journal_head_sha256'])
+        self.assertEqual(journal_before['events'],journal_after['events'])
 
     def test_live_subset_superset_and_partial_overlap_refused_before_writes(self):
         repo, contract, _ = self.repo_contract()

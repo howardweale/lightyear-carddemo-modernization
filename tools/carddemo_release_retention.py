@@ -104,7 +104,15 @@ class Github:
         raise ValueError('Pagination bound exceeded')
 
     def download(self,path):
-        return subprocess.check_output(['gh','api','repos/'+REPO+'/'+path,'-H','Accept: application/octet-stream'])
+        # Actions returns a ZIP redirect through its JSON API; Release assets
+        # require the binary media type. Never apply one header to both routes.
+        if re.fullmatch(r'actions/artifacts/[1-9][0-9]*/zip',path):
+            accept='application/json'
+        elif re.fullmatch(r'releases/assets/[1-9][0-9]*',path):
+            accept='application/octet-stream'
+        else:
+            raise ValueError('Unsupported public proof download route')
+        return subprocess.check_output(['gh','api','repos/'+REPO+'/'+path,'-H','Accept: '+accept])
 
     def release(self,tag):
         rows=[r for r in self.pages('releases') if r['tag_name']==tag]

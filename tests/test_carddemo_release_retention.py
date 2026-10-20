@@ -5,8 +5,10 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import subprocess
 import zipfile
-from tools.carddemo_release_retention import (ARCHIVES,JOBS,REPO,digest,inspect_archive,
+from tools.carddemo_release_retention import (ARCHIVES,JOBS,REPO,Github,digest,inspect_archive,
     metadata,mutation_counts,retain,validate_run)
 
 XML=b'<mutations><mutation status="KILLED"/><mutation status="TIMED_OUT"/></mutations>'
@@ -111,3 +113,41 @@ class RetentionTests(unittest.TestCase):
     def test_xml_entity_and_unknown_status_refused(self):
         for raw in [b'<!DOCTYPE x><mutations/>',b'<mutations><mutation status="UNKNOWN"/></mutations>',b'<mutations/>']:
             with self.assertRaises(ValueError):mutation_counts(raw)
+
+
+class GithubDownloadTests(unittest.TestCase):
+    def test_endpoint_media_types_and_original_binary_bytes(self):
+        archive=b'PK\x03\x04\x00\xfforiginal ZIP bytes'
+        metadata_bytes=b'{"public":"retained"}\n'
+        def transport(command):
+            route=command[2]
+            if route.endswith('actions/artifacts/123/zip'):
+                if command[-2:]!=['-H','Accept: application/json']:
+                    raise subprocess.CalledProcessError(1,command,stderr=b'HTTP 415')
+                return archive
+            if route.endswith('releases/assets/456'):
+                if command[-2:]!=['-H','Accept: application/octet-stream']:
+                    raise subprocess.CalledProcessError(1,command,stderr=b'binary media type required')
+                return metadata_bytes
+            raise AssertionError(command)
+        with patch('tools.carddemo_release_retention.subprocess.check_output',side_effect=transport) as call:
+            client=Github()
+            self.assertEqual(archive,client.download('actions/artifacts/123/zip'))
+            self.assertEqual(metadata_bytes,client.download('releases/assets/456'))
+            self.assertEqual(2,call.call_count)
+
+    def test_unsupported_routes_refused_before_network(self):
+        with patch('tools.carddemo_release_retention.subprocess.check_output') as call:
+            for route in ('actions/artifacts/123','actions/artifacts/0/zip',
+                          'actions/artifacts/123/zip?redirect=other','releases/assets/../123',
+                          'releases/assets/123/extra','https://example.invalid/archive'):
+                with self.subTest(route=route),self.assertRaises(ValueError):
+                    Github().download(route)
+            call.assert_not_called()
+
+    def test_failed_download_propagates_without_retry_or_fallback(self):
+        failure=subprocess.CalledProcessError(1,['gh','api'],stderr=b'HTTP 403')
+        with patch('tools.carddemo_release_retention.subprocess.check_output',side_effect=failure) as call:
+            with self.assertRaises(subprocess.CalledProcessError):
+                Github().download('actions/artifacts/123/zip')
+            self.assertEqual(1,call.call_count)

@@ -27,8 +27,12 @@ class ThresholdConditionTests(unittest.TestCase):
 
     def threshold(self):
         c = self.contract("scenario-threshold-approval")
-        review=self.contract('equivalence-review')
-        proof,_,_=self.decide(review)
+        # Reuse the same accepted review in independent condition-refusal cases.
+        # Recreating it would correctly trigger the duplicate-decision guard.
+        if not hasattr(self, '_threshold_review_proof'):
+            review = self.contract('equivalence-review')
+            self._threshold_review_proof, _, _ = self.decide(review)
+        proof = copy.deepcopy(self._threshold_review_proof)
         values=[
             ('docs/factory/b1.json',dict(schema='factory-legacy-twin/1',phase='B1-equivalence-followup',job='POSTTRAN',current_head='b'*40,
                 counts={'equivalent (argued, individual review pending)':2},population=2,target_cases=400,target_valid_comparisons=400,target_evidence_gap_ids=[],fresh_sites=483,expected_sites=483)),
@@ -113,3 +117,20 @@ class ThresholdConditionTests(unittest.TestCase):
             c = json.loads((REPOSITORY / f"docs/factory/scenario-threshold-effective-request-{date}.json").read_bytes())
             with self.assertRaisesRegex(ValueError, "threshold-conditions-unmet"):
                 validate_contract(c)
+
+    def test_repeated_condition_fixture_reuses_proof_and_duplicate_review_is_refused(self):
+        first = self.threshold()
+        journal = self.service.export_session(self.token)
+        first_proofs = json.loads((self.root / 'docs/factory/reviews.json').read_bytes())['proofs']
+        second = self.threshold()
+        second_proofs = json.loads((self.root / 'docs/factory/reviews.json').read_bytes())['proofs']
+        self.assertEqual(first, second)
+        self.assertEqual(first_proofs, second_proofs)
+        after = self.service.export_session(self.token)
+        self.assertEqual(journal['journal_head_sha256'], after['journal_head_sha256'])
+        self.assertEqual(journal['events'], after['events'])
+        with self.assertRaisesRegex(ValueError, 'factory-review-content-already-decided'):
+            self.decide(self.contract('equivalence-review'))
+        after = self.service.export_session(self.token)
+        self.assertEqual(journal['journal_head_sha256'], after['journal_head_sha256'])
+        self.assertEqual(journal['events'], after['events'])

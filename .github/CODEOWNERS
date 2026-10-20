@@ -1,0 +1,15 @@
+# Review ownership; branch rules determine enforcement.
+* @howardweale
+/src/lightyear_control_tower/ @howardweale
+/src/lightyear_trust/ @howardweale
+/src/lightyear_judge/ @howardweale
+/docs/factory/ @howardweale
+/.github/workflows/ @howardweale
+**/*.pem @howardweale
+**/*.key @howardweale
+/tools/*sign* @howardweale
+/tools/*release* @howardweale
+/tools/*retain* @howardweale
+/tools/*retention* @howardweale
+/tools/release/ @howardweale
+/tools/retention/ @howardweale

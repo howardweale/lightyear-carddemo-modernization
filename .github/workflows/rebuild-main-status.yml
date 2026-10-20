@@ -5,6 +5,7 @@ on:
     paths-ignore:
       - 'docs/factory/current-status.json'
       - 'docs/factory/current-status.md'
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
@@ -16,6 +17,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
+      pull-requests: write
     concurrency:
       group: factory-generated-status-main
       cancel-in-progress: false
@@ -28,7 +30,8 @@ jobs:
         with:
           python-version: '3.13'
       - run: python -m pip install 'cryptography>=46,<47'
-      - name: Rebuild and publish only changed status outputs
+      - name: Rebuild and propose status-only draft PR
         env:
           PYTHONPATH: src:.
+          GH_TOKEN: ${{ github.token }}
         run: python -B tools/rebuild_main_status.py

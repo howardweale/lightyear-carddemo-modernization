@@ -35,23 +35,73 @@ def selected(config, files):
         return any(included(path) for path in files)
     return any(not any(matches(p,q) for q in rule.get('paths-ignore',[])) for p in files)
 
-def expected_workflows(files, directory=Path('.github/workflows')):
+def expected_workflows(files, directory=Path('.github/workflows'), *, head=None):
+    if head is not None:
+        names = subprocess.check_output(['git','ls-tree','-r','--name-only',head,'--','.github/workflows'],text=True).splitlines()
+        return {name for name in names if name.endswith('.yml') and Path(name).name != 'required-ci.yml'
+                and selected(yaml.load(subprocess.check_output(['git','show',head+':'+name],text=True),Loader=yaml.BaseLoader),files)}
     return {p.as_posix() for p in directory.glob('*.yml') if p.name != 'required-ci.yml'
             and selected(yaml.load(p.read_text(),Loader=yaml.BaseLoader),files)}
 
-def evaluate(expected,runs,head,pr_number):
-    latest={}
+def latest_runs(expected, runs, head, pr_number):
+    """Actions lists one run with its latest attempt, not one row per attempt."""
+    latest = {}
     for run in runs:
         if run['head_sha'] != head or run['event'] != 'pull_request':
             continue
-        if not any(p['number']==pr_number for p in run.get('pull_requests',[])):
+        if not any(p['number'] == pr_number for p in run.get('pull_requests', [])):
             continue
-        path=run['path'].split('@')[0]
-        if path in expected and (run['id'],run.get('run_attempt',1)) > (latest.get(path,{}).get('id',-1),latest.get(path,{}).get('run_attempt',0)):
-            latest[path]=run
-    failed=sorted(p for p,r in latest.items() if r['status']=='completed' and r['conclusion']!='success')
-    waiting=sorted(p for p in expected if p not in latest or latest[p]['status']!='completed')
-    return failed,waiting
+        path = run['path'].split('@')[0]
+        previous = latest.get(path)
+        if path in expected and (previous is None or (run['id'], run.get('run_attempt', 1)) >
+                                 (previous['id'], previous.get('run_attempt', 1))):
+            latest[path] = run
+    return latest
+
+
+def evaluate(expected, runs, head, pr_number):
+    latest = latest_runs(expected, runs, head, pr_number)
+    failed = sorted(p for p,r in latest.items() if r['status'] == 'completed' and r['conclusion'] != 'success')
+    waiting = sorted(p for p in expected if p not in latest or latest[p]['status'] != 'completed')
+    return failed, waiting
+
+
+class TerminalStability:
+    """Give a requested but not yet registered rerun a bounded observation window.
+
+    This cannot predict a rerun requested after acceptance. The final decision
+    uses freshly read run IDs/attempts, then requires a stable terminal window.
+    """
+    def __init__(self, seconds=60):
+        self.seconds = seconds
+        self.snapshot = None
+        self.since = None
+
+    def ready(self, selected, waiting, now):
+        if waiting:
+            self.snapshot = self.since = None
+            return False
+        snapshot = tuple(sorted((path, r['id'], r.get('run_attempt',1), r['status'], r['conclusion'])
+                                for path,r in selected.items()))
+        if snapshot != self.snapshot:
+            self.snapshot, self.since = snapshot, now
+            return False
+        return now-self.since >= self.seconds
+
+
+def current_files(prefix, number, head):
+    """Bind paginated files to live head/base/count; webhook counts can be stale."""
+    before = api(f'{prefix}/pulls/{number}')
+    rows = pages(f'{prefix}/pulls/{number}/files')
+    after = api(f'{prefix}/pulls/{number}')
+    identity = lambda p:(p['head']['sha'],p['base']['sha'],p['base']['ref'],p['changed_files'])
+    if before['head']['sha'] != head or identity(before) != identity(after):
+        raise SystemExit('PR head/base changed during file inventory; obsolete snapshot refused')
+    files = [row['filename'] for row in rows]
+    if len(files) != before['changed_files'] or len(set(files)) != len(files):
+        raise SystemExit('Incomplete GitHub changed-file inventory; refuse gate')
+    return files, identity(after)
+
 
 def api(endpoint):
     return json.loads(subprocess.check_output(['gh','api',endpoint],text=True))
@@ -75,20 +125,36 @@ def gate():
         return
     pr=event['pull_request']; number=pr['number']; head=pr['head']['sha']
     prefix='repos/'+os.environ['GITHUB_REPOSITORY']
-    files=[f['filename'] for f in pages(f'{prefix}/pulls/{number}/files')]
-    if len(files)!=pr['changed_files']:
-        raise SystemExit('Incomplete GitHub changed-file inventory; refuse gate')
-    expected=expected_workflows(files)
+    files, identity = current_files(prefix, number, head)
+    expected=expected_workflows(files, head=head)
     print('Required workflows:',sorted(expected),flush=True)
+    stability = TerminalStability()
     deadline=time.monotonic()+12600
     while time.monotonic()<deadline:
-        if api(f'{prefix}/pulls/{number}')['head']['sha']!=head:
-            raise SystemExit('PR head changed; obsolete gate refused')
+        current = api(f'{prefix}/pulls/{number}')
+        if (current['head']['sha'],current['base']['sha'],current['base']['ref'],current['changed_files']) != identity:
+            raise SystemExit('PR head/base changed; obsolete gate refused')
         runs=pages(f'{prefix}/actions/runs?head_sha={head}&event=pull_request','workflow_runs')
-        failed,waiting=evaluate(expected,runs,head,number)
-        if failed and not waiting:
+        selected_runs = latest_runs(expected, runs, head, number)
+        failed,waiting=evaluate(expected,list(selected_runs.values()),head,number)
+        if not waiting:
+            # A list response can lag registration of a rerun. Read each run's
+            # latest attempt directly before either green or terminal failure.
+            fresh = [api(f"{prefix}/actions/runs/{run['id']}") for run in selected_runs.values()]
+            selected_runs = latest_runs(expected, fresh, head, number)
+            failed,waiting=evaluate(expected,fresh,head,number)
+        terminal = stability.ready(selected_runs, waiting, time.monotonic())
+        if terminal and failed:
             raise SystemExit('Required workflow failed/cancelled/skipped: '+', '.join(failed))
-        if not waiting and not failed:
+        if terminal and not failed:
+            # A new run ID can also arrive while direct reads were in flight.
+            final = latest_runs(expected, pages(f'{prefix}/actions/runs?head_sha={head}&event=pull_request','workflow_runs'), head, number)
+            _, final_waiting = evaluate(expected,list(final.values()),head,number)
+            if not stability.ready(final, final_waiting, time.monotonic()):
+                continue
+            current = api(f'{prefix}/pulls/{number}')
+            if (current['head']['sha'],current['base']['sha'],current['base']['ref'],current['changed_files']) != identity:
+                raise SystemExit('PR head/base changed before acceptance; obsolete gate refused')
             print('All selected final-head workflows completed green.',flush=True)
             return
         print('Waiting:',', '.join(waiting),'Completed failures:',', '.join(failed),flush=True)

@@ -62,6 +62,14 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--model-config",type=Path)
     run.add_argument("--approved-projection",type=Path,help="Host-owned JSON with directory, proof and trust")
     run.add_argument("--run-id")
+    run.add_argument("--factory-scope")
+    run.add_argument("--factory-freeze")
+    run.add_argument("--factory-workspace")
+    run.add_argument("--factory-plan")
+    run.add_argument("--factory-approval")
+    run.add_argument("--factory-contract")
+    run.add_argument("--factory-trust", type=Path)
+    run.add_argument("--factory-private-expected-values", type=Path)
     run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
     run.add_argument("--execution-runtime", choices=["docker", "podman"])
     run.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
@@ -599,6 +607,20 @@ def main(argv: list[str] | None = None) -> int:
             result = memory.validate()
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result.get("status", "passed") == "passed" else 1
+    model_admission=None
+    factory_input_paths=None
+    factory_read_manifest=None
+    if args.provider != 'local':
+        if not all((args.factory_plan,args.factory_approval,args.factory_contract,args.factory_trust,
+                    args.factory_scope,args.factory_freeze,args.factory_workspace,args.factory_private_expected_values)):
+            raise ContractError('factory-model-approval-required')
+        from .model_admission import FactoryModelAdmission
+        model_admission=FactoryModelAdmission.from_external_trust(args.source_root,args.factory_plan,
+                           args.factory_approval,args.factory_contract,args.factory_trust)
+        if not args.execution_runtime:
+            raise ContractError('factory-model-runtime-required')
+        factory_input_paths=dict(scope=args.factory_scope,freeze=args.factory_freeze,
+                                 workspace=args.factory_workspace,execution_policy=args.execution_policy)
     execution_context = None
     if args.execution_runtime:
         if not args.signed_work_order or args.work_order:
@@ -614,8 +636,17 @@ def main(argv: list[str] | None = None) -> int:
             policy,
             {key_id: admission_key},
             datetime.now(timezone.utc).isoformat(),
-            AdmissionNonceStore(args.runs_root / "admission-nonces.sha256"),
+            None,
         )
+        # Validate the existing signed envelope without consuming its nonce.
+        # F2 proof must also pass before any reservation or credential lease.
+        if model_admission is not None:
+            runtime_admission=model_admission.verify_runtime(order,source_root=args.source_root,
+                input_paths=factory_input_paths,policy=policy)
+            factory_read_manifest=runtime_admission['workspace_read_manifest']
+            model_admission.private_expected_values(order,args.factory_private_expected_values,
+                excluded_roots=(args.runs_root,))
+        AdmissionNonceStore(args.runs_root / "admission-nonces.sha256").consume(envelope["nonce"])
         identity_key = os.environ.get("LIGHTYEAR_IDENTITY_SIGNING_KEY", "").encode()
         execution_context = HardenedExecutionContext(
             policy,
@@ -632,6 +663,8 @@ def main(argv: list[str] | None = None) -> int:
                 "Host compatibility mode requires exactly one unsigned --work-order"
             )
         order = WorkOrder.load(args.work_order)
+        if model_admission is not None:
+            model_admission.verify_plan(order)
     if args.provider == "local":
         agents = LocalAgentSet()
     elif args.provider == "configured":
@@ -671,6 +704,10 @@ def main(argv: list[str] | None = None) -> int:
         execution_context=execution_context,
         memory_store=memory_store,
         approved_projection=approved_projection,
+        model_admission=model_admission,
+        factory_input_paths=factory_input_paths,
+        private_expected_values_path=args.factory_private_expected_values,
+        workspace_read_manifest=factory_read_manifest,
     ).run(order, args.run_id)
     print(json.dumps(receipt, indent=2, sort_keys=True))
     return 0 if receipt["status"] == "passed" else 1

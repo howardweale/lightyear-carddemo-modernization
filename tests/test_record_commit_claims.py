@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 from tools.check_record_commit_claims import check,validate_claim,CLAIMS,resolve,references
 
 
@@ -107,7 +108,7 @@ class RecordCommitTests(unittest.TestCase):
 
     def test_new_dated_manifest_preserves_old_and_checks_changed_inputs(self):
         directory=self.root/'docs/factory';directory.mkdir(parents=True)
-        name='docs/factory/current-status.json'
+        name='docs/factory/authored-status-claim.json'
         (self.root/name).write_text(json.dumps({'source':self.base}))
         original=json.dumps({'claims':[]}).encode()
         (self.root/CLAIMS).write_bytes(original)
@@ -123,7 +124,7 @@ class RecordCommitTests(unittest.TestCase):
 
     def test_duplicate_claim_across_dated_manifests_is_refused(self):
         directory=self.root/'docs/factory';directory.mkdir(parents=True)
-        name='docs/factory/current-status.json'
+        name='docs/factory/authored-status-claim.json'
         (self.root/name).write_text(json.dumps({'source':self.base}))
         content=json.dumps({'claims':[dict(self.claim,record=name)]})
         (self.root/CLAIMS).write_text(content)
@@ -207,10 +208,141 @@ class RecordCommitTests(unittest.TestCase):
 
     def test_named_and_bare_dated_duplicate_claims_remain_ambiguous(self):
         directory=self.root/'docs/factory';directory.mkdir(parents=True)
-        name='docs/factory/current-status.json'
+        name='docs/factory/authored-status-claim.json'
         (self.root/name).write_text(json.dumps({'source':self.base}))
         content=json.dumps({'claims':[dict(self.claim,record=name)]})
         for filename in ('commit-claims-2026-10-19.json','commit-claims-intcalc-retention-2026-10-19.json'):
             (directory/filename).write_text(content)
         self.commit('duplicate across named and bare dated manifests')
         with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+
+    def test_named_dated_registry_preserves_existing_and_rejects_bad_or_duplicate_claim(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/l10-note.md'
+        (self.root/name).write_text('Source `'+self.base+'`.\n')
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        named=directory/'commit-claims-l10-2026-10-20.json'
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        named.write_text(content);self.commit('named dated registry')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        named.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('invalid named claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+        named.write_text(content)
+        (directory/'commit-claims-2026-10-20.json').write_text(content)
+        self.commit('duplicate across named and ordinary registry')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+
+class GeneratedStatusClaimTests(unittest.TestCase):
+    """Real Git output guard fixtures; renderer boundary mocked explicitly."""
+    setUp = RecordCommitTests.setUp
+    git = RecordCommitTests.git
+    commit = RecordCommitTests.commit
+    def generated(self):
+        from tools.check_record_commit_claims import GENERATED_STATUS
+        # A historical commit and a tree identifier are not authored claims.
+        view = {'tested_commit': 'f'*40, 'tested_tree': 'e'*40}
+        outputs = {GENERATED_STATUS[0]: (json.dumps(view, indent=2)+'\n').encode(),
+                   GENERATED_STATUS[1]: b'Captured source '+b'd'*40+b'\n'}
+        for name, raw in outputs.items():
+            target=self.root/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+        self.commit('generated status fixture')
+        return outputs
+
+    def test_exact_generated_identifiers_need_no_authored_claim(self):
+        outputs=self.generated()
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs) as render:
+            self.assertEqual([],check(self.root,self.base))
+            render.assert_called_once_with(self.root)
+
+    def test_both_outputs_are_verified_even_when_only_one_changed(self):
+        outputs=self.generated();baseline=self.git('rev-parse','HEAD').strip()
+        json_name,md_name=outputs
+        changed=dict(outputs);changed[json_name]+=b' '
+        (self.root/json_name).write_bytes(changed[json_name]);self.commit('one output changed')
+        changed[md_name]+=b'forged sibling'
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=changed):
+            with self.assertRaisesRegex(ValueError,'output-mismatch'):check(self.root,baseline)
+
+    def test_forged_generated_output_and_authored_prose_fail(self):
+        outputs=self.generated();name=next(iter(outputs))
+        (self.root/name).write_bytes(outputs[name]+b' ');self.commit('forged output')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'output-mismatch'):check(self.root,self.base)
+        (self.root/name).write_bytes(outputs[name])
+        (self.root/'docs/factory/authored.md').write_text('Commit '+self.base+'\n')
+        self.commit('valid output does not exempt prose')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+    def test_deleted_renamed_or_executable_output_is_refused(self):
+        outputs=self.generated();baseline=self.git('rev-parse','HEAD').strip();name=next(iter(outputs))
+        self.git('mv',name,name+'.renamed');self.commit('rename output')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'output-mode'):check(self.root,baseline)
+        self.git('mv',name+'.renamed',name);self.commit('restore output')
+        (self.root/name).unlink();self.commit('delete output')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'output-mode'):check(self.root,baseline)
+        (self.root/name).write_bytes(outputs[name]);self.commit('restore output')
+        self.git('update-index','--chmod=+x',name);self.git('commit','-qm','executable output')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'output-mode|dirty-inputs'):check(self.root,baseline)
+
+    def test_renderer_failure_and_dirty_or_changed_sources_are_refused(self):
+        outputs=self.generated()
+        with patch('tools.check_record_commit_claims.render_generated_status',side_effect=ValueError('source-evidence-invalid')):
+            with self.assertRaisesRegex(ValueError,'source-evidence-invalid'):check(self.root,self.base)
+        (self.root/'source.txt').write_bytes(b'changed')
+        with patch('tools.check_record_commit_claims.render_generated_status') as render:
+            with self.assertRaisesRegex(ValueError,'dirty-inputs'):check(self.root,self.base)
+            render.assert_not_called()
+        (self.root/'source.txt').write_bytes(b'original\n')
+        def changing(root):
+            (root/'source.txt').write_bytes(b'changed during render')
+            return outputs
+        with patch('tools.check_record_commit_claims.render_generated_status',side_effect=changing):
+            with self.assertRaisesRegex(ValueError,'input-changed'):check(self.root,self.base)
+
+    def test_declared_inputs_must_be_committed_exact_bytes(self):
+        from tools.check_record_commit_claims import generated_input_blobs
+        self.assertEqual({'source.txt':sha256(b'original\n').hexdigest()},generated_input_blobs(self.root,['source.txt']))
+        (self.root/'source.txt').write_bytes(b'changed')
+        with self.assertRaisesRegex(ValueError,'input-uncommitted'):generated_input_blobs(self.root,['source.txt'])
+        (self.root/'new.json').write_bytes(b'{}')
+        with self.assertRaisesRegex(ValueError,'input-uncommitted'):generated_input_blobs(self.root,['new.json'])
+        with self.assertRaisesRegex(ValueError,'input-path'):generated_input_blobs(self.root,['../outside'])
+
+    def test_renderer_wrapper_uses_validated_inputs_and_exact_encoding(self):
+        import sys
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from tools.check_record_commit_claims import render_generated_status, GENERATED_STATUS
+        model=object();view={'tested_tree':'e'*40};text='Verified projection\n'
+        records=SimpleNamespace(inputs=Mock(return_value=('source.txt',)),
+            load=Mock(return_value=model),render=Mock(return_value=(view,text)))
+        with patch.dict(sys.modules,{'tools.release_status_records':records}):
+            actual=render_generated_status(self.root)
+        self.assertEqual({GENERATED_STATUS[0]:(json.dumps(view,indent=2)+'\n').encode(),
+                          GENERATED_STATUS[1]:text.encode()},actual)
+        records.load.assert_called_once_with(self.root);records.render.assert_called_once_with(model)
+        self.assertEqual(2,records.inputs.call_count)
+        records.inputs.side_effect=[('source.txt',),('source.txt','untracked.json')]
+        with patch.dict(sys.modules,{'tools.release_status_records':records}):
+            with self.assertRaisesRegex(ValueError,'input-changed'):render_generated_status(self.root)
+        records.inputs.side_effect=None
+        def mutate(model):
+            (self.root/'source.txt').write_bytes(b'mutated during rendering')
+            return view,text
+        records.render.side_effect=mutate
+        with patch.dict(sys.modules,{'tools.release_status_records':records}):
+            with self.assertRaisesRegex(ValueError,'input-uncommitted'):render_generated_status(self.root)
+
+    def test_renderer_cannot_omit_sibling_output(self):
+        outputs=self.generated();outputs.pop('docs/factory/current-status.md')
+        with patch('tools.check_record_commit_claims.render_generated_status',return_value=outputs):
+            with self.assertRaisesRegex(ValueError,'output-set'):check(self.root,self.base)

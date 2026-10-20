@@ -10,9 +10,14 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 CLAIMS = 'docs/factory/commit-claims-2026-10-17.json'
 ROLE_CORRECTIONS = 'docs/factory/commit-claim-role-corrections-2026-10-18.json'
+GENERATED_STATUS = ('docs/factory/current-status.json', 'docs/factory/current-status.md')
 REF = re.compile(r'(?<![A-Za-z0-9])([0-9a-f]{7,40})(?![A-Za-z0-9])')
 
 
@@ -130,14 +135,80 @@ def current_claims(root):
     return claims
 
 
+def render_generated_status(root):
+    """Use the existing evidence-verifying renderer, without writing outputs."""
+    from tools.release_status_records import inputs, load, render
+    paths = tuple(inputs(root))
+    before = generated_input_blobs(root, paths)
+    view, text = render(load(root))
+    if tuple(inputs(root)) != paths or generated_input_blobs(root, paths) != before:
+        raise ValueError('record-generated-input-changed')
+    return {
+        GENERATED_STATUS[0]: (json.dumps(view, indent=2)+'\n').encode('utf-8'),
+        GENERATED_STATUS[1]: text.encode('utf-8'),
+    }
+
+
+def generated_input_blobs(root, paths):
+    """Bind discovered renderer inputs to committed regular files."""
+    blobs = {}
+    for name in paths:
+        if not isinstance(name, str):
+            raise ValueError('record-generated-input-path')
+        path = Path(name)
+        if (path.is_absolute() or ':' in name
+                or '\\' in name or '..' in path.parts or path.as_posix() != name):
+            raise ValueError('record-generated-input-path')
+        entry = git(root, 'ls-tree', '-z', 'HEAD', '--', name).split(b'\0')
+        if len(entry) != 2 or not entry[0].startswith((b'100644 blob ', b'100755 blob ')):
+            raise ValueError('record-generated-input-uncommitted')
+        if entry[0].split(b'\t', 1)[1].decode() != name:
+            raise ValueError('record-generated-input-path')
+        file = root/path
+        if any(p.is_symlink() for p in [file, *file.parents] if p != root.parent):
+            raise ValueError('record-generated-input-link')
+        blob = git(root, 'show', 'HEAD:'+name)
+        if file.read_bytes() != blob:
+            raise ValueError('record-generated-input-uncommitted')
+        blobs[name] = sha256(blob).hexdigest()
+    return blobs
+
+
+def validate_generated_status(root):
+    """Generated identifiers are valid only within the exact verified projection.
+
+    This does not authorize a status PR: check_status_pr independently enforces
+    the bot identity, source branch and two-output-only policy.
+    """
+    head = git(root, 'rev-parse', 'HEAD')
+    if git(root, 'status', '--porcelain=v1', '--untracked-files=no').strip():
+        raise ValueError('record-generated-dirty-inputs')
+    expected = render_generated_status(root)
+    if set(expected) != set(GENERATED_STATUS):
+        raise ValueError('record-generated-output-set')
+    for name in GENERATED_STATUS:
+        entry = git(root, 'ls-tree', '-z', 'HEAD', '--', name)
+        if not entry.startswith(b'100644 blob ') or entry.count(b'\0') != 1:
+            raise ValueError('record-generated-output-mode')
+        if entry.split(b'\t', 1)[1][:-1].decode() != name:
+            raise ValueError('record-generated-output-path')
+        if git(root, 'show', 'HEAD:'+name) != expected[name]:
+            raise ValueError('record-generated-output-mismatch:'+name)
+    if (git(root, 'rev-parse', 'HEAD') != head
+            or git(root, 'status', '--porcelain=v1', '--untracked-files=no').strip()):
+        raise ValueError('record-generated-input-changed')
+
+
 def check(root,base):
     root=Path(root)
     names=git(root,'diff','--name-only','--diff-filter=ACMR',base,'HEAD','--','docs/factory','docs/milestones').decode().splitlines()
+    changed=git(root,'diff','--no-renames','--name-only','-z',base,'HEAD','--',*GENERATED_STATUS).split(b'\0')
+    if any(changed):validate_generated_status(root)
     manifests=set(claim_manifests(root)) | set(correction_manifests(root))
     claims=current_claims(root)
     rows=[]
     for name in names:
-        if name in manifests:continue
+        if name in manifests or name in GENERATED_STATUS:continue
         patch=git(root,'diff','--unified=0',base,'HEAD','--',name).decode('utf-8')
         added=[line[1:] for line in patch.splitlines() if line.startswith('+') and not line.startswith('+++')]
         record=git(root,'show','HEAD:'+name).decode('utf-8',errors='replace') if added else ''

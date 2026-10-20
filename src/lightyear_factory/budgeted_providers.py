@@ -9,6 +9,11 @@ from .providers import BoundedModelProvider, ProviderError, ProviderResult
 class AccountedModelProvider(BoundedModelProvider):
     """Keep failed/fallback attempts in the existing shared budget and evidence."""
 
+    def __init__(self, provider, order, *, model_admission=None, runtime_admission=None):
+        super().__init__(provider, order)
+        self.model_admission=model_admission
+        self.runtime_admission=runtime_admission
+
     def complete(
         self,
         role: str,
@@ -16,6 +21,22 @@ class AccountedModelProvider(BoundedModelProvider):
         payload: dict[str, Any],
         schema: dict[str, Any],
     ) -> ProviderResult:
+        from .providers import ScriptedModelProvider
+        from .model_admission import FactoryModelAdmission
+        if type(self.provider) is not ScriptedModelProvider:
+            if type(self.model_admission) is not FactoryModelAdmission:
+                raise ContractError('factory-model-approval-required')
+            if not callable(self.runtime_admission):
+                raise ContractError('factory-model-runtime-required')
+            runtime_proof = self.runtime_admission()
+            approval = self.model_admission.verify(self.order, self.provider, role)
+            recorder = getattr(self.provider, 'transport_recorder', None)
+            if recorder is not None and recorder.require_model_admission:
+                from .model_transport_records import ModelTransportRecorder
+                if type(recorder) is not ModelTransportRecorder:
+                    raise ContractError('factory-model-recorder-required')
+                recorder.bind_model_admission(runtime_proof, approval, role,
+                                              self.provider.provider_id, self.provider.model)
         if not getattr(self.provider, "manage_failure_budget", False):
             return super().complete(role, instruction, payload, schema)
         self._check_elapsed()
@@ -97,6 +118,9 @@ class AccountedModelProvider(BoundedModelProvider):
                     estimated_cost_usd=cost,
                     cost_estimate_available=True,
                 )
+                transport_record = getattr(self.provider, 'last_transport_record', None)
+                if transport_record is not None:
+                    evidence['transport_record'] = transport_record
                 evidence["content_sha256"] = canonical_hash(evidence)
                 self.calls.append(evidence)
             raise

@@ -1,0 +1,19 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-20",
+  "scope": "Additional exact merge binding for retained INTCALC evidence. Existing dated commit-claim records remain byte-identical; this record creates no signing, activation or execution authority.",
+  "claims": [
+    {
+      "record": "docs/factory/evidence-retention-2026-10-18-intcalc.json",
+      "reference": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
+      "commit": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
+      "role": "merge",
+      "pr": 364,
+      "parents": [
+        "5c1852cc36fc28fc34f16ed91a2243023acdc657",
+        "7129dfd8e3633e6940e6e82620f6144cdde23871"
+      ],
+      "head_commit": "7129dfd8e3633e6940e6e82620f6144cdde23871"
+    }
+  ]
+}

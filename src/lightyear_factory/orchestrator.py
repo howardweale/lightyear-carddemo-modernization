@@ -252,7 +252,21 @@ class FactoryOrchestrator:
                 },
             )
 
+            from .graph_tools import graph_policy, FactoryGraphSession
+            policy = graph_policy(order)
+            if policy["mode"] == "on-demand" and (
+                    type(self.agents) is not ModelAgentSet or self.workspace_read_manifest is None):
+                raise ContractError("factory-graph-controller-boundary-required")
             context = self._context(order, workspace.root)
+            if policy["mode"] == "on-demand":
+                if self.agents.graph_session is not None:
+                    raise ContractError("factory-graph-agent-reuse")
+                self.agents.graph_session = FactoryGraphSession(order, run_id, ledger, context,
+                    self.approved_projection, self.workspace_read_manifest,
+                    self._isolation_scanner(), workspace.root)
+            else:
+                ledger.append("PLANNED", "graph_policy_bound",
+                    dict(policy, run_id=run_id, work_order_sha256=order.content_sha256))
             context_ref = artifacts.write(
                 "implementer-context", "controller", "implementer", context
             )
@@ -264,6 +278,11 @@ class FactoryOrchestrator:
                 artifacts, ledger, references, "planner", "implementer"
             )
             self._validate_plan(order, plan, context)
+            plan["graph"] = dict(policy)
+            # Query expansion is controller-validated and retained for Builder citations.
+            if policy["mode"] == "on-demand":
+                references.append(artifacts.write(
+                    "queried-implementer-context", "controller", "implementer", context))
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
             references.append(plan_ref)
             ledger.append(state, "plan_created", plan_ref)
@@ -783,6 +802,8 @@ class FactoryOrchestrator:
                 *security_limitations,
             ],
         }
+        from .graph_tools import graph_summary
+        receipt["graph"] = graph_summary(order, ledger, run_id)
         if candidate_authorship is not None:
             receipt['candidate_authorship'] = dict(
                 candidate_commit=candidate_authorship['candidate_commit'],

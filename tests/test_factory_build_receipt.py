@@ -16,7 +16,7 @@ from lightyear_factory.ledger import RunLedger
 class ComputedBuildReceiptTests(unittest.TestCase):
     def fixture(self, root):
         ledger=RunLedger(root/'events.jsonl');run_id='fixture-run'
-        order=SimpleNamespace(content_sha256='a'*64,max_attempts=3,max_model_calls=4,
+        order=SimpleNamespace(content_sha256='a'*64,metadata={},max_attempts=3,max_model_calls=4,
             max_model_input_bytes=10000,max_model_output_bytes=10000,max_model_tokens=1000,
             max_model_cost_usd=1,max_elapsed_seconds=60)
         runtime=dict(schema='factory-model-admission/1',work_order_sha256=order.content_sha256,

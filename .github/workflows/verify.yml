@@ -164,6 +164,7 @@ jobs:
           python-version: "3.12"
       - name: Exercise recovery fingerprints against real PostgreSQL 16
         env:
+          GH_TOKEN: ${{ github.token }}
           PYTHONPATH: src
           LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER: lightyear-sql-recovery-test
         run: |

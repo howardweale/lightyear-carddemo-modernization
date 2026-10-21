@@ -1,0 +1,80 @@
+{
+  "schema": "f8-offline-worker-build-input-proposal/2",
+  "state": "not-a-WorkOrder-or-admitted-policy",
+  "source_commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+  "packaging": {
+    "path": "docs/factory/copau-f8-worker-packaging-r2-2026-10-20.json",
+    "sha256": "7003b354709adf6dd5fd154e7fda740beb3a58e3ab9d67762bcd3cdc2e1c9cda",
+    "size_bytes": 14520
+  },
+  "proposed_execution_policy_delta": {
+    "runtime": {
+      "image": "docker.io/library/maven",
+      "image_digest": "80034909d9a9f0b89d3d2c583f07f3b7650309bc4e6b886ad5b860b9e1bfa439",
+      "allowed_commands": [
+        "mvn"
+      ],
+      "allowed_environment": [
+        "LIGHTYEAR_FACTORY_WORKSPACE",
+        "LIGHTYEAR_NETWORK_POLICY"
+      ]
+    },
+    "isolation": "Retain none network, readonly source/root, nonroot UID, drop-all capabilities, no-new-privileges and bounded resources from the first policy proposal.",
+    "admission": "Existing operator-supplied work-order trust identifiers remain required; no keys are provisioned or designated."
+  },
+  "worker_build_command": [
+    "mvn",
+    "-o",
+    "-B",
+    "-ntp",
+    "-C",
+    "-s",
+    "work/f8-public-worker-capsule/settings.xml",
+    "-gs",
+    "work/f8-public-worker-capsule/settings.xml",
+    "-f",
+    "work/f8-public-worker-capsule/pom.xml",
+    "-Dmaven.repo.local=/tmp/factory-build/work/f8-public-worker-capsule/m2",
+    "-Duser.home=/tmp/factory-build/work/f8-public-worker-capsule/home",
+    "test"
+  ],
+  "command_scope": "This is data for the future sealed gate, not an executable command issued by this session. Set gate timeout from the human wall-clock allowance, not a default approval.",
+  "known_capsule_source_files": [
+    {
+      "proposal_path": "docs/factory/copau-f8-worker-pom-proposal-r2-2026-10-20.xml",
+      "staged_path": "work/f8-public-worker-capsule/pom.xml",
+      "sha256": "9c6f40c1889151de11421a08ad93bb931c42e3617f17b706c14f39b46459572e",
+      "size_bytes": 2657
+    },
+    {
+      "proposal_path": "docs/factory/copau-f8-worker-settings-proposal-r2-2026-10-20.xml",
+      "staged_path": "work/f8-public-worker-capsule/settings.xml",
+      "sha256": "66ed159625a2a6738c8a776fe4e4a4ce5bea0dff64287de67599464f1d43231d",
+      "size_bytes": 400
+    }
+  ],
+  "source_of_dependency_versions": "Only the BOM coordinate 4.1.0 is inherited from the committed service POM. CI must retain the exact resolved Jackson/JUnit/plugin/transitive artifact bytes and dependency inventory. This is not a completed SHA lock.",
+  "plugin_versions": {
+    "resources": "3.3.1",
+    "compiler": "3.16.0",
+    "surefire": "3.5.4"
+  },
+  "input_controls": [
+    "POM and settings are scaffold inputs bound by read_manifest and outside candidate write scope.",
+    "Candidate writes stay in the existing authorization package; own tests/resources are under worker-tests there.",
+    "The fresh workspace contains no root .mvn config/extensions; candidate cannot write root or scaffold paths.",
+    "No annotation processors are loaded by compilation (proc=none).",
+    "Do not invoke the original service POM or controller PIT POM in the worker.",
+    "No provider key or private bundle is forwarded through the OCI environment."
+  ],
+  "required_packaging_outputs": {
+    "release_url": null,
+    "archive_sha256": null,
+    "archive_size_bytes": null,
+    "per_file_manifest_sha256": null,
+    "projected_support_jar_sha256": null,
+    "dependency_inventory_sha256": null,
+    "offline_conformance_receipt_sha256": null
+  },
+  "readiness": "Outputs remain null until actual CI packaging. Do not fill them with source/POM/plan hashes. Retain release artifacts and commit real per-file raw workspace map before request approval."
+}

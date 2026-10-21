@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ai.lightyear.worker</groupId><artifactId>copau-worker</artifactId><version>0.1.0-f8</version>
+  <!-- Proposal only. Stage at work/f8-public-worker-capsule/pom.xml after CI assembly. -->
+  <properties><maven.compiler.release>21</maven.compiler.release><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></properties>
+  <dependencyManagement><dependencies>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>4.1.0</version><type>pom</type><scope>import</scope></dependency>
+  </dependencies></dependencyManagement>
+  <dependencies>
+    <dependency><groupId>ai.lightyear.worker</groupId><artifactId>carddemo-shared-support</artifactId><version>0.1.0-f8</version></dependency>
+    <dependency><groupId>tools.jackson.core</groupId><artifactId>jackson-databind</artifactId></dependency>
+    <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><scope>test</scope></dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>${project.basedir}/../../factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/../../factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization/worker-tests</testSourceDirectory>
+    <testResources><testResource><directory>${project.basedir}/../../factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization/worker-tests/resources</directory></testResource></testResources>
+    <directory>${project.basedir}/output</directory>
+    <plugins>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-resources-plugin</artifactId><version>3.3.1</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.16.0</version>
+        <configuration><release>21</release><proc>none</proc><excludes><exclude>worker-tests/**</exclude></excludes></configuration>
+      </plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.4</version>
+        <configuration><failIfNoTests>true</failIfNoTests><useModulePath>false</useModulePath><argLine>-Duser.home=${project.basedir}/home -Djava.io.tmpdir=${project.basedir}/tmp</argLine></configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

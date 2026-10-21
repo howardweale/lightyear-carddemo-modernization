@@ -1,0 +1,70 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/copau-f8-freeze-input-proposal-2026-10-20.json",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-java-policy-proposal-2026-10-20.json",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-public-evidence-proposal-2026-10-20.json",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-public-evidence-proposal-2026-10-20.json",
+      "reference": "7197d36159fc0bf585caf5045abc841c0e96c93e",
+      "commit": "7197d36159fc0bf585caf5045abc841c0e96c93e",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-public-evidence-proposal-2026-10-20.json",
+      "reference": "a4287165ed1e2c02243c4d17f71ff8031b493334",
+      "commit": "a4287165ed1e2c02243c4d17f71ff8031b493334",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-runtime-proposals-2026-10-20.md",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-runtime-proposals-2026-10-20.md",
+      "reference": "a4287165ed1e2c02243c4d17f71ff8031b493334",
+      "commit": "a4287165ed1e2c02243c4d17f71ff8031b493334",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "record": "docs/factory/copau-f8-workspace-compatibility-proposal-2026-10-20.json",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "source_sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    }
+  ]
+}

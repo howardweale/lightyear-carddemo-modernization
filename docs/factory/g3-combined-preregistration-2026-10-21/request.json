@@ -1,0 +1,162 @@
+{
+  "schema": "g3-combined-request-preparation/1",
+  "state": "unsigned-unsealed-not-importable-not-signable",
+  "execution_authorized": false,
+  "merge_is_not_execution_approval": true,
+  "scope": {
+    "copau": "First COPAU00/COPAU01 with linked COPAUS2C factory run; twin/public and labeled synthetic IMS only",
+    "comparison": "B07 J1/J2/J3; O on-demand, P packed, S plain search; proposed234trials"
+  },
+  "basis_commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+  "source_bindings": [
+    {
+      "path": "docs/factory/b07-primary-comparison-plan.md",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "056313e246ae0d9f9262fb92ef18575df407184a",
+      "sha256": "34e3a79125bca1a266961ebf984e01bb5394248bfd5fa2ce8dc9d001bd4e6170",
+      "bytes": 2674
+    },
+    {
+      "path": "docs/factory/b07-search-arm-amendment.md",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "2dd4fb222558eaee6d41cf2b3c1e4692f8a6d701",
+      "sha256": "37fce91a963dba64e1c99826cdc95840e1f36c6033dec6d63fa8aebb74facefb",
+      "bytes": 7707
+    },
+    {
+      "path": "docs/factory/b07-prefreeze-power-2026-10-11.json",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "3688880108bcab22e477437e40605fe3c50a0f94",
+      "sha256": "fb0af41a345b7e40738b1368d2451a82b5e46379da27c223e80563aaf2c44f1c",
+      "bytes": 6757
+    },
+    {
+      "path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "0250a6cc710ac9afd9245a5f48575fd9266d9b10",
+      "sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82",
+      "bytes": 6028
+    },
+    {
+      "path": "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "c7f0fe9c4dbd4e4469f390c25dbfbc4f93eaaec4",
+      "sha256": "f7f68623af3773c0a71f0d3dc82da4932a5d61993feb01595957179c9cff49ee",
+      "bytes": 29261
+    },
+    {
+      "path": "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "50ffc293d179221c75f061d05a664e94ebe6b846",
+      "sha256": "d226935e37a19b611cff5d05f383d7d37f1835449b36c600abfe913cee3bfe22",
+      "bytes": 5920
+    },
+    {
+      "path": "docs/engineering/factory-graph-tools.md",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "blob": "0cf240fd77ec84737e3af5d3d93e62f52d13c603",
+      "sha256": "4c3adc54418f08926aec27edc8f6c17d58f5c448eaba523116a730582b634127",
+      "bytes": 2692
+    }
+  ],
+  "analysis_plan": {
+    "path": "docs/factory/g3-combined-preregistration-2026-10-21/analysis-plan.md",
+    "sha256": "cbbd9d551a0c9d556ba79498d81188720ad7bb2e4aaa664ee5ddaab65112d4cc",
+    "status": "proposed preregistration; exact executable and schedule bindings pending"
+  },
+  "cost_estimate": {
+    "path": "docs/factory/g3-combined-preregistration-2026-10-21/cost-estimate.json",
+    "sha256": "d34237db1515495e81fd53568009bacda70458ba77a66f47bc452640eff9dafd"
+  },
+  "roles": {
+    "planner": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05",
+      "reasoning_effort": null
+    },
+    "builder": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05",
+      "reasoning_effort": null
+    },
+    "analyst": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05",
+      "reasoning_effort": null
+    }
+  },
+  "existing_copau_decisions": {
+    "model_selection_answered": true,
+    "spending_cap_usd": 10,
+    "max_attempts": 3,
+    "max_repair_loops": 2,
+    "comparison_spend_not_included": true
+  },
+  "proposed_comparison": {
+    "arms": [
+      "on-demand",
+      "packed",
+      "plain-search"
+    ],
+    "journeys": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "analysis_slots_per_journey_per_arm": 24,
+    "excluded_pilots_per_journey_per_arm": 2,
+    "cost_scope_and_time_approval": false,
+    "per_trial": {
+      "max_attempts": 3,
+      "max_repair_loops": 2,
+      "max_model_calls": 14,
+      "max_input_tokens": 600000,
+      "max_billed_output_tokens": 100000,
+      "max_single_prompt_input_tokens": 272000,
+      "max_compilations": 3,
+      "max_elapsed_seconds": 7190,
+      "max_retrieval_calls": 8,
+      "max_result_bytes": 8192,
+      "max_total_evidence_bytes": 65536
+    }
+  },
+  "howard_approval": {
+    "combined_cost_cap_usd": null,
+    "comparison_cost_cap_usd": null,
+    "wall_clock_cap_seconds": null,
+    "window_start": null,
+    "window_end": null,
+    "arms_and_sample_accepted": null,
+    "concurrency_approved": null,
+    "signature": null
+  },
+  "final_bindings": {
+    "executable_commit": null,
+    "work_order_sha256": null,
+    "judge_freeze_sha256": null,
+    "private_expected_bundle_digest_size_count": null,
+    "workspace_manifest_sha256": null,
+    "execution_policy_sha256": null,
+    "operator_approved_projection_sha256": null,
+    "operator_approval_proof_sha256": null,
+    "leak_scan_sha256": null,
+    "current_trusted_journal_sha256": null,
+    "operator_key_id": null,
+    "work_order_key_id": null,
+    "schedule_sha256": null,
+    "runner_parity_sha256": null,
+    "analysis_implementation_sha256": null,
+    "request_seal": null
+  },
+  "gates": [
+    "S literal-search/bounded-read adapter and CI refusals/scan/budget parity not yet demonstrated",
+    "Zero-model controller parity and full prompt/token measurement required",
+    "B07 Part1.5 graph coverage and Part2 audit; no inferred B06 completion",
+    "Freeze analysis implementation, deterministic allocation manifest and hashes before spend",
+    "COPAU runtime/observer/freeze/workspace final bindings; no private-value reads in preparation",
+    "G1 public synthetic CI approval does not substitute for operator trust or VM acceptance",
+    "Live snapshot availability and explicit reasoning configuration not proved",
+    "Howard must approve expanded scope/cost/time and verify signed final request before any model call"
+  ],
+  "results": null
+}

@@ -53,7 +53,7 @@ class R9ExportTests(unittest.TestCase):
     def test_exact_closure_package_hashes_and_siblings_excluded(self):
         sibling=self.root/'credential-sibling';sibling.mkdir();(sibling/'private.pem').write_text('PRIVATE')
         with self.guard():
-            self.assertEqual(self.run,export.locate(self.root))
+            self.assertEqual(self.run.resolve(strict=True),export.locate(self.root))
             review=export.inspect(self.run);out=self.root/'out';out.mkdir()
             (out/'inspection.json').write_bytes(export.canonical(review))
             export.package(self.run,out,review['identifiers_sha256'])

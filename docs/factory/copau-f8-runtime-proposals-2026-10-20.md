@@ -1,0 +1,19 @@
+# F8 runtime input proposals
+
+Prepared from main `0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7` for the unsigned F2 request. Preparation only; F3 remains gated.
+
+The raw workspace manifest proposes 32 exact public file bindings: the three COBOL programs, two BMS maps and copybooks, IMS segment and shared copybooks, SQL declaration, DBD/PSB definitions, nine shared Java support sources, and the existing scope. Its only proposed write directory is the scope's authorization package, writable by the factory after approval. It copies no existing authorization implementation, interpreter, expected data, prior receipt, PIT configuration or history.
+
+The manifest is not yet a compilable worker. `ScreenFrame` refers to `SourceEdits.Location`; `AuthorizationRecords` takes `SourceEdits`, the existing execution engine. Adding that engine to the allow-list would defeat the intended separation. `Bindings` also requires six-screen generated bindings/data to run. A safe shared API package and worker test data projection need a separate reviewed implementation. The existing service POM contains excluded PIT configuration; no suitable worker POM is committed. No candidate Java or algorithm has been authored or suggested.
+
+The Java proposal uses the existing `CandidateBuildBackend`: a read-only `/workspace` copy is built in `/tmp/factory-build`, with no network, a non-root UID, read-only root, dropped capabilities and bounded resources. JDK 21 and the Maven/Temurin lineage come from the existing Dockerfile. A derived offline dependency image must be pinned by a real registry SHA-256, exact JDK/Maven versions and dependency inventory. Those public build artifacts are unavailable in the committed sources; no digest is fabricated. The Python fixture policy is not Java tooling approval. The policy proposal envelope intentionally cannot be admitted as `ExecutionPolicy`.
+
+The evidence proposal binds the existing independent `prove_slice.py` observer and six existing engineering classes to exact committed source-file hashes. These are explicitly source-file identities, not candidate class bytecode or successful run evidence. It retains the exact original freeze and approved October 20 amendment; the compact freeze descriptor records the deterministic effective-manifest hash without rewriting either original.
+
+The historical prerequisite binding cites PR410 head `a4287165ed1e2c02243c4d17f71ff8031b493334`, CI run 39501721188, 107 offline fixtures, four controller dry runs and the Python OCI probe. Provider/admission/signature boundaries were mocked. `factory_run_acceptance` remains false; this is not Java build, real provider or final-head acceptance.
+
+The operator still supplies the existing Tower public fingerprint/current trusted journal, existing work-order trust identifiers, private expected bundle digest/size/count, wall-clock cap and a timezone-aware window. No private contents have been read and no keys designated. Engineering must supply the worker/API packaging, immutable offline Java image and conformance, finalized WorkOrder/call/token estimate, finalized concrete policy and executable-head bindings before an importable request can be made.
+
+Planner, Builder and Analyst remain `openai-responses` / `gpt-5.4-2026-03-05`; the approved total cost cap is USD10.00 across all billed calls/failures/retries/reasoning output. No new reasoning effort is selected. Three builds permit seven role invocations without a baseline failure, eight with one; this is not an HTTP-request bound. Prior dollar examples remain illustrations.
+
+This change is metadata only. Static JSON/AST/Git/hash checks are local; execution and request validation belong to CI. No tests, compiler, container, model, import, signing, proof export, activation or attempt consumption ran here. The proof GET on port 8769 signs a journal export and must not be called as a read-only check.

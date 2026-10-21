@@ -1,0 +1,619 @@
+{
+  "schema": "copau-factory-judge-freeze/1",
+  "as_of": "2026-10-18",
+  "source_commit": "3c6f2b604268be320c3a5619b25a51405af51642",
+  "state": "frozen; F1 verifier installation and dry-run acceptance pending",
+  "files": [
+    {
+      "path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    {
+      "path": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "sha256": "6d63d20e88cb5779ba77f383333d0b3e8941c07f664782dc23a9e5d929dab2bc"
+    },
+    {
+      "path": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "sha256": "9ce30851691e5e33687489c4fe5f7ee52b703f86af823f2608a9a732639988a4"
+    },
+    {
+      "path": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "sha256": "9e308d57dbd0c79186b7f8b98e772f5150bf63d0d62b3dc1c1421a7b7d3cd63b"
+    },
+    {
+      "path": "factory/carddemo-web/compose.ci.yaml",
+      "sha256": "c95ec49b407a49819f3f170148f1f59d8f07a9fe9edf541ab8d84ecbb2b6d2d0"
+    },
+    {
+      "path": "factory/carddemo-web/compose.yaml",
+      "sha256": "d676a8346416f1e98198c3c6086df8d90b27a28630d21dc95264994732e51b66"
+    },
+    {
+      "path": "factory/carddemo-web/runtime/prove_slice.py",
+      "sha256": "03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1"
+    },
+    {
+      "path": "factory/carddemo-web/runtime/seed.py",
+      "sha256": "9429b67dfc868cd64dbf2f1ed156e8259ed00561741968dc2b23d68a27c3cccc"
+    },
+    {
+      "path": "factory/carddemo-web/runtime/snapshot.py",
+      "sha256": "ccdf7d92d19e1e0a3744106506ce281e062cdec6af3c34dc8d89f3a72545c07b"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/ReferenceScenarioTest.java",
+      "sha256": "4f2411ebc9bde581a0a22656781918e4ae5b0e11ca1c0eb53a12dedbded93796"
+    },
+    {
+      "path": "factory/copau/judge/mutation-policy.json",
+      "sha256": "7e6b5943507cf9268fa6693c09a7694006ba32a419c482b5168316d0704a1260"
+    },
+    {
+      "path": "factory/copau/judge/service-pom.xml",
+      "sha256": "054cbf6cb3d5a10e71cb5156330f62eb3a1d90d9d40f7e6cb8cb995aedfb9b84"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/field-policy.json",
+      "sha256": "75e171f27a12520b3a39e18c83aa36921292a7bacda441e1c0fe86f61e928a12"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/provenance.json",
+      "sha256": "70559aa49b1cb7f4be67415f5f1621061dbba5ae225509e1bac5d9f515b4305a"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/slice.json",
+      "sha256": "cc973b2aebab0e30259a3453568d3d3e19863916f31e51c65ef78e0d760b20cb"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/LICENSE",
+      "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+      "sha256": "309468a5c4745f92c6dcf6ed28b396334b2f131ced78eb43eda962a63d2b174e"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+      "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+      "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/data/EBCDIC/AWS.M2.CARDDEMO.IMSDATA.DBPAUTP0.dat",
+      "sha256": "cce00a6c86b3e02ee6d3c99723d5d5c080f9c1e1ae779591e98ba873849d3569"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd",
+      "sha256": "ff82e8b3c1ab201db212047fdb271889e809d90f4fc47c68202c17572d485796"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd",
+      "sha256": "1d3b9ee54df4b19452b5efaa93bdf9554a05ee0b6f96d4f9d562a8a94d623969"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb",
+      "sha256": "d88a628f8d2c9491e9c7a2867235400411c4e1826150af8334a07b1a033d0210"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/cpy/CSUSR01Y.cpy",
+      "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT01Y.cpy",
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT02Y.cpy",
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVACT03Y.cpy",
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/cpy/CVCUS01Y.cpy",
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS",
+      "sha256": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS",
+      "sha256": "b5d968b6865bd48fb45928ef6cacce9b6aacdaec7b51cfcc9819b9fafcaed3e5"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CARDXREF.PS",
+      "sha256": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.CUSTDATA.PS",
+      "sha256": "0435915cd35ea3077bad9d391fea1520bc7f30ec06d6e29fbe68290f3d6f27f3"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/data/EBCDIC/AWS.M2.CARDDEMO.USRSEC.PS",
+      "sha256": "8608d4b8a03f7587c1493282f9337ab24fdf527d0aadbdb85dc3713dccdc6fc8"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/ACCTFILE.jcl",
+      "sha256": "febba716137a3f59302ef1136c60dccce4d07d32e1d118b15d48f99266dea9e7"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/CARDFILE.jcl",
+      "sha256": "0240faee5aec80d976ce0b15a85f101fa0f901b09b72d64545daa09858ddcc0c"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/CUSTFILE.jcl",
+      "sha256": "3f222d940612015b0c3b532253e34e8e60f02a670dd780a10b9db1f90e8deea7"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/DUSRSECJ.jcl",
+      "sha256": "02b0b78847e722b133b23d8f6152471214ea65d4f4c08692a5f42425987ca3c4"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/ESDSRRDS.jcl",
+      "sha256": "9bec766029968057b831f539cc91b84e4e1d8ee22aa3de5ba6b509f8a698de77"
+    },
+    {
+      "path": "spec/modernization/carddemo-data/upstream/app/jcl/XREFFILE.jcl",
+      "sha256": "ae0edd90056cccacd26412fad2cf3d95656c2a2810b66d8c316cbaac9e81248f"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/provenance.json",
+      "sha256": "78cc1363f90eb174960defb9eba85ad72aa29937c0bb3760e079c7411ae10fb9"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/slice-1.json",
+      "sha256": "010a90e370e7f56a8594af5c646e3d587ec6f0dda6584634d62bbf5196572cdf"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/LICENSE",
+      "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU00.bms",
+      "sha256": "402516c3203e3940df363ae7d84964f7b792bb107331223c9e6c7b0ddaf278bc"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU01.bms",
+      "sha256": "35b86cd8d764c831fa4d696802eef58c0f6c2654c54904569494123e2c93fd94"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+      "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl",
+      "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl",
+      "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU00.cpy",
+      "sha256": "7bd332d0966e4b0a289521716d5ef5f00c8f55e50f5992dce10e15dbbf04da7d"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU01.cpy",
+      "sha256": "bee60b3bfeb37d5df0d0ff3182f564bd1aa8cb1f36100c4f7ed4fc42108a7937"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+      "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+      "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl",
+      "sha256": "737c2bb757ef256976ac7658e071d1833fc2ea24d7010dbeff137e6c98fb66a6"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl",
+      "sha256": "1634f898360955f32872bd9c35533513e2879135018681b92caa51c787abaeaf"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/XAUTHFRD.ddl",
+      "sha256": "880bb53afed368bdcb858cd7e4ddb6252a47ac16d819df4ca58ca6bab90921b4"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-transaction-type-db2/bms/COTRTLI.bms",
+      "sha256": "5867235e382d6fc54da67ad8dfbcc7db7e1183e999068789b6e310c5c0d18abf"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-transaction-type-db2/bms/COTRTUP.bms",
+      "sha256": "1496a35f219e92b5339e2651a58dabeea97a0410d7cf465a8658b207dfd1706c"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COACTUP.bms",
+      "sha256": "60b261bd2d0c6c851cd78af963ce6c6e14444a9477ad6eb0f80f0e0d4f1f4f23"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COACTVW.bms",
+      "sha256": "e229c1b4c9d3f52a5b8ebbb5266c9e47502ac90577b46f5f146bdb34b05f7f46"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COADM01.bms",
+      "sha256": "44a3f209e7fa8445355ab7ba687b3ac6e32ef4dfec225e04f4eb2bd57e39386a"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COBIL00.bms",
+      "sha256": "f2101ff2143cd4746a5ffe0c4eeec977dfdad8410dee19236e0bdfb5ad58657f"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDLI.bms",
+      "sha256": "b73a1ebb2ec327db220a4df272a6766ddd809ebf0db378dcc9a3c83ec2506343"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDSL.bms",
+      "sha256": "93feec4d134e991a81320d8c2f19e1aba19937753a1972d7d07f8a24973c9af6"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COCRDUP.bms",
+      "sha256": "e82235cab015fc38b4f3bf73546b095105462373280362780480d2f48a39017d"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COMEN01.bms",
+      "sha256": "f87af09e6f60ab198d5c05817e3007361a6d29ed957322ef25b11c5420c84b4c"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/CORPT00.bms",
+      "sha256": "3ae6f0a2db62f64ca45ac6d975efefcc0bf635295ce4f6bea202c09d93deefc7"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COSGN00.bms",
+      "sha256": "6747ba57e45fed7e52af728a1f8688ed8fab90b93e1234ab0a0bcae32fa39056"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN00.bms",
+      "sha256": "6f914caf567937cd91be8f11118324c4d4c7ec0f68c0309f831cad109a3f45b2"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN01.bms",
+      "sha256": "be0749c98ec7d60a37160ba85d6cbef674f9f7aa0de5760faa64ee951c146996"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COTRN02.bms",
+      "sha256": "8b46b5ae879119b9d8395b712970ebc5b8d5043efd351a47f9a31a451e073042"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR00.bms",
+      "sha256": "82a453530e4457e45f8af028b68307f7049e24fa13fedb8644007f68a9738f88"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR01.bms",
+      "sha256": "f79efda027a728fad77ca163b1a85851e099df5d3ce6876309274dbb2b67dff9"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR02.bms",
+      "sha256": "324ff2e74f580d061a15963d394c9883eedf93dd7de95a04926f78bb78aecff1"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/bms/COUSR03.bms",
+      "sha256": "95f557d76cb482753039cc60f62cbac4fe09c4c02f9057658ee1ee70429c6fc9"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+      "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTVWC.cbl",
+      "sha256": "4f1e55176f69edfb55b7af7a161aceb8c3bc3bd1b2924a704a76256e0e751b54"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COMEN01C.cbl",
+      "sha256": "c77747b4caaf00b45177a6449562b7f59ec336db832937595edef8b32fdce6fa"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COSGN00C.cbl",
+      "sha256": "4f901ae6b113eebae60ae1d94b30f8cb9906d031a4419770bf56980bdf97e377"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/CSUTLDTC.cbl",
+      "sha256": "58c165dcfc3927232c02c152c673e3dee551587b85e7fe56ca67325c980eebb6"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COACTUP.CPY",
+      "sha256": "2ae13a55cb35c63988c17e96744ce77dfda9663896e65061b818f47d9be983dc"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COACTVW.CPY",
+      "sha256": "f3bf70a636aecb5874518ccc53f9826bcc69070b8307bdc551b2c57b9dd61dce"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COMEN01.CPY",
+      "sha256": "21275363519e57f47c5c7842178344208f3ad773a551e74e5eeff285c775ad5c"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy-bms/COSGN00.CPY",
+      "sha256": "e2a2f8f6e76e1613cbd8f0baaca87d571a49a7bc219d16a732e4e4ecd7485407"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COCOM01Y.cpy",
+      "sha256": "77097557ee4c365f62138328d3e280ce7aba5f81d418c6f16434f0fbb2aafa6c"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COMEN02Y.cpy",
+      "sha256": "433f5b373c2a42c3c83d62eef1dfb5b101265a9db62e42857ba58acf8c50011d"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/COTTL01Y.cpy",
+      "sha256": "5032bfa9428354bb4a62e8c82ba1efa7dcf6b80f27544ad99a81c8a8df8ed41b"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSDAT01Y.cpy",
+      "sha256": "61dd7b01d974c13cd47f71774c613dd67996418a22fae730d09b246c0b710ad7"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSLKPCDY.cpy",
+      "sha256": "098d384b9580abd5b4b77ae9c33b8cb65b28be45390130b22c48c3714200cca2"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG01Y.cpy",
+      "sha256": "ef8ce44572885d63e46a02516f992cabbbc57ea94235000fd376325750e26eda"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG02Y.cpy",
+      "sha256": "0238a3a75e723272e0c287b46a52d365de8549dada1a73d15df75660ad7bd2ea"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSSETATY.cpy",
+      "sha256": "45000f93a9be6e8132262e53faa1db03ab1f20fbee4063272b890837216d1fcb"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSSTRPFY.cpy",
+      "sha256": "751bc1a625114a8660ee2172b70cdea135c259652d2305a2bfda25ff4cf34853"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUSR01Y.cpy",
+      "sha256": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUTLDPY.cpy",
+      "sha256": "80f83e3d55ff84c0d9088e68399f30ebad4db763280d47bdec220eadc45ba2af"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUTLDWY.cpy",
+      "sha256": "ecba6f07ea9db7c6f58f7fc1c5227179e8b80299f79a04743c6adb9f08190a1a"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT01Y.cpy",
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT02Y.cpy",
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT03Y.cpy",
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVCRD01Y.cpy",
+      "sha256": "52b6dbe09f7648f3fdbd7c00f4683d434fe6b631f6c8854466a24f42c1c92445"
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CVCUS01Y.cpy",
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/auth_edits.py",
+      "sha256": "972f083425097b8cb21af4f543b3db252496400bb8e0a985679d08a59341c9b1"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/auth_fraud.py",
+      "sha256": "0398049d673948890070573b43f422cd14bc7871a6a1afe96ca9d81bec025a9f"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/codec.py",
+      "sha256": "7444dc7c0493621d283c24c260710fe2e5c479219a7b7cc2537a41be1036a6e4"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/date_edits.py",
+      "sha256": "3ea3490af784817eb8094a4487f2c72cb281630d78e4b8cc3a14fed9adfec2f8"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/plan.py",
+      "sha256": "93936f4470915d700801756f987256068196db1b46a078ef158345d8224e209a"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_control.py",
+      "sha256": "0e4649e90480cd33f26fabd9363e923f94fbf7e58dd81e15d94171cc4ab43298"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_date.py",
+      "sha256": "f318c339401213fd20bfaae30c91447343ae366b6ef133f000f861c4e10de621"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_declarations.py",
+      "sha256": "b6a354ec24d22710bd01cf4adce7f15153902fb924435b77e120a0ee79636668"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_fixture.py",
+      "sha256": "2be0bcbd8b4b8f10874531d9a17eb9464dca39dd064f0ea86085a7d158104f81"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_menu.py",
+      "sha256": "128ecedc403fbfbee07eb8a7021bb17df53c807edf44ae1c1f76a3dc10f7bfef"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_screens.py",
+      "sha256": "6936586237129cd2a02ef6e978ca3cead580783f503522380ec9ecc043099793"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_signon.py",
+      "sha256": "5e066c6074d781744a830570996d4d7dbc31fd10e1d0162402c5193afd0532fd"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_source.py",
+      "sha256": "3554a42aa1008b7f7afcb11b4fb57aba158959a46924ead3dce3e72e62b8bb5e"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_storage.py",
+      "sha256": "06651e4b00beea76c44de867a8e89db05df961157870e7e5512d2406c2d3071d"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/reference_values.py",
+      "sha256": "20369adb33e7704704a7f887acec902c33321f438f986109b18ae6a13f74d520"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/render_edits.py",
+      "sha256": "53182c07f7e2f321a32d7301c39846d023486077bed9a5771f981ce40e9c784f"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/schema.py",
+      "sha256": "c862a1686ebf514d15a16be20eb3d4c1e045d1cdb35b2293331ff5aa0a86ce9c"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screen_commarea.py",
+      "sha256": "77624b7bee51c37067b275ef4eee02c4dbbeadd6c5571ff337cd98d054bb03cb"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screen_edits.py",
+      "sha256": "740ca5dc15df7c142ceee9387712a0774e2c203e40e6a8bbf1f85b759058b3c8"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screen_projection.py",
+      "sha256": "51d3a014fff481289062c8b04f5353667ef6ff3c07ca0d3a9fc858b5fb098981"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screen_rules.py",
+      "sha256": "76e61cec81a80d81da581691ddcd601c1b9b2636cdbcf97c955f5d74c87760d1"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screen_update.py",
+      "sha256": "a495efc3d069e54235446439dfcd5d5ec36591fb788a0d4a0bccf79004b0cb23"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/screens.py",
+      "sha256": "e7f9c756f9971ac0ef5dd9c44bf9c229de89830a54567da807cdc3aa035ccd38"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/source_closure.py",
+      "sha256": "f83e23b07d808e17b488cc9f978fa2364d11f8ef168fa4ca7e6475baeab55749"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/store.py",
+      "sha256": "caeb16c615532c3286728dc4c73e8a47762d88db010d02f866d2682189e76c22"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/update_edits.py",
+      "sha256": "7631f44d33bea35d2406c0985f42be5ec71b299672d8702a21d81b87790f2c75"
+    },
+    {
+      "path": "src/lightyear_data/carddemo/web_bindings.py",
+      "sha256": "63904bde122cb29663cba087adbda1290d2a65f164ec655f914033f6692740fc"
+    },
+    {
+      "path": "src/lightyear_mainframe/records.py",
+      "sha256": "69d3719ccb9d25af86fd1d79d1da160416663cd92c192e15738b1755414752ff"
+    },
+    {
+      "path": "src/lightyear_mainframe/source.py",
+      "sha256": "5cc8826b7b99839eef1f120e0d4b8dac00b48afee7143fe23158907d78cd5ad0"
+    },
+    {
+      "path": "tests/browser/carddemo-proof.mjs",
+      "sha256": "4b2bd1f00eec93302c3944f70f184f4af6849a5b8bb3fce1c90ae9d7141607da"
+    }
+  ],
+  "expected_state_members": [
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/cases.json",
+      "sha256": "36beaf0cf7f0aa7b42fba7c2f3b8ea257908f1483cd0da05fc5c8e738d519bef"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-api.zip",
+      "path": "reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/cases.json",
+      "sha256": "14907fe1e529d7090b76bf6dcdaf59df7780727a93b105e398cd72633b63ad2a"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-browser.zip",
+      "path": "reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/cases.json",
+      "sha256": "14907fe1e529d7090b76bf6dcdaf59df7780727a93b105e398cd72633b63ad2a"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/expected-database/34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4.json",
+      "sha256": "34965d67cd3eaf30d0ff0ad5a1d53f4bcc88acaaef2cc17dd78785ea499786e4"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/expected-database/53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6.json",
+      "sha256": "53b395c849c9bae988ce1cc6d03e1a4fc81b13f2d7ad6a1a0b2bc6b4d0dd59b6"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/expected-database/5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19.json",
+      "sha256": "5ce6cf125cd3775b791988b550c31114d7fdc2ec27d08dc405fa726a155f6d19"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/expected-database/7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838.json",
+      "sha256": "7d006c60fe2ef81db7a8f8e698187e10ca0b6773e97ab9fb149b5e38e24f4838"
+    },
+    {
+      "archive": "docs/modernization/carddemo-slice-1-evidence-2026-10-18/archives/carddemo-proof-mutation.zip",
+      "path": "reference/expected-database/f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67.json",
+      "sha256": "f63cdbd82f4b47b84df038d29c0b5c9e8dfa10d8850ab1f6c58950b0e5552f67"
+    }
+  ],
+  "verification": "Exact Git blob bytes, not platform newline-normalized working files. Expected frames and database states are retained archive members; the archive and each member are hash-bound.",
+  "lifecycle": "No release by presence of an arbitrary receipt file. A dated Howard-approved unfreeze or verified F4 receipt requires trusted-journal validation before this guard can accept an exception.",
+  "candidate_access": "None of the judge, expected state, session answers, PIT configuration or prior receipts may enter candidate context or workspace."
+}

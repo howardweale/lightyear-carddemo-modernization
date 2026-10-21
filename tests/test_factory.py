@@ -201,7 +201,25 @@ class FactoryTests(unittest.TestCase):
             }]}]})
 
         agents = OpenAIAgentSet("secret", "test-model", opener=opener)
-        result = agents.plan(benchmark_work_order("rounding-mode"), {"nodes": []})
+        # This transport-format fixture mocks approval only; it cannot qualify
+        # a factory run or prove a real provider/signature admission.
+        from unittest.mock import Mock, patch
+        from lightyear_factory.budgeted_providers import AccountedModelProvider
+        from lightyear_factory.model_admission import FactoryModelAdmission
+        order = benchmark_work_order("rounding-mode")
+        runtime = Mock(return_value={"offline_component_fixture": True})
+        agents.bounded_provider = AccountedModelProvider(
+            agents.provider, order,
+            model_admission=object.__new__(FactoryModelAdmission),
+            runtime_admission=runtime,
+        )
+        agents.order_sha256 = order.content_sha256
+        with patch.object(FactoryModelAdmission, "verify", return_value={
+            "offline_component_fixture": True,
+        }) as verify:
+            result = agents.plan(order, {"nodes": []})
+        runtime.assert_called_once_with()
+        verify.assert_called_once_with(order, agents.provider, "planner")
         self.assertEqual("Plan", result["summary"])
         self.assertFalse(captured["payload"]["store"])
         self.assertTrue(captured["payload"]["text"]["format"]["strict"])

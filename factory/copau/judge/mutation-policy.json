@@ -1,0 +1,22 @@
+{
+  "schema": "copau-factory-mutation-policy/1",
+  "pit_version": "1.19.4",
+  "junit5_plugin": "1.2.3",
+  "candidate_package": "ai.lightyear.carddemo.authorization",
+  "required_candidate_programs": [
+    "COPAUS0C",
+    "COPAUS1C",
+    "COPAUS2C"
+  ],
+  "threshold_percent": 90,
+  "numerator": [
+    "KILLED"
+  ],
+  "denominator": "all generated mutations for every candidate class; no exclusions or timeout/uncovered credit",
+  "survivors_required": true,
+  "full_existing_suite_required": true,
+  "journeys": 120,
+  "interactions": 678,
+  "pom": "factory/copau/judge/service-pom.xml",
+  "installation": "Controller copies this frozen POM to the evaluation service root; never into the candidate workspace. F1 must verify this before F2 readiness."
+}

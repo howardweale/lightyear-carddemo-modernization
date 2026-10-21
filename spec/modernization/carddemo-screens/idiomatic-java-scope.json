@@ -1,0 +1,32 @@
+{
+  "schema": "carddemo-idiomatic-java-scope/1",
+  "program": "COSGN00C",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COSGN00C.cbl",
+    "sha256": "4f901ae6b113eebae60ae1d94b30f8cb9906d031a4419770bf56980bdf97e377"
+  },
+  "java_files": [
+    "SignonService.java",
+    "SignonRules.java"
+  ],
+  "validation_paragraphs": [
+    "PROCESS-ENTER-KEY",
+    "READ-USER-SEC-FILE"
+  ],
+  "rule_methods": [
+    "validateCredentials",
+    "isSourceEmpty",
+    "normalizeCredential",
+    "authenticatedDestination"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "other_handwritten_programs": [
+    "COMEN01C"
+  ],
+  "proof_status": "fresh CI required; scope is not a proof receipt"
+}

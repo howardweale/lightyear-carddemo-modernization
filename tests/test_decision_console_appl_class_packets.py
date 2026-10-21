@@ -59,7 +59,12 @@ class ApplClassPackets(unittest.TestCase):
     def test_importer_real_git_blobs_and_hash_refusal_without_signing(self):
         # A local temporary CI Git repo avoids relying on shallow-checkout
         # ancestors. The above test checks every actual publication binding.
-        # Commit the identical packet bytes here, then exercise git-show import.
+        # Historical byte qualification is above. These new synthetic item sets
+        # exercise git-show/hash refusal without impersonating the selected classes.
+        from tests import test_decision_console_factory as fixtures
+        fixture=fixtures.FactoryTests('runTest');fixture.setUp();self.addCleanup(fixture.doCleanups)
+        journal=fixture.service.export_session(fixture.token)
+        trust=dict(journal=journal,public_key=fixture.service.public_key,trusted_head=journal['journal_head_sha256'])
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory); repo = base/'repo'; repo.mkdir()
             def git(*args):
@@ -79,15 +84,17 @@ class ApplClassPackets(unittest.TestCase):
             for program, original in zip(('INTCALC','POSTTRAN'),contracts):
                 contract = copy.deepcopy(original)
                 for source in contract['sources']: source['commit'] = commit
+                contract['details']['items']=['synthetic-ci-'+program+'-1','synthetic-ci-'+program+'-2']
+                contract['details']['class_proof_sha256']=None
                 tower = base/program
-                item = import_request(repo,tower,contract)
+                item = import_request(repo,tower,contract,**trust)
                 self.assertEqual('factory-'+sha(canonical(contract)),item['id'])
                 FactoryInbox(tower,'factory',factory_registry()).item(item['id'])
                 # A second identical import is idempotent; no signature is made.
-                self.assertEqual(item,import_request(repo,tower,contract))
+                self.assertEqual(item,import_request(repo,tower,contract,**trust))
                 bad = copy.deepcopy(contract);bad['sources'][0]['sha256']='0'*64
                 with self.assertRaisesRegex(ValueError,'public-commit-byte-mismatch'):
-                    import_request(repo,base/('bad-'+program),bad)
+                    import_request(repo,base/('bad-'+program),bad,**trust)
                 self.assertFalse((base/('bad-'+program)).exists())
 
 

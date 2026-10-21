@@ -1,0 +1,35 @@
+{
+  "schema": "carddemo-idiomatic-java-scope/1",
+  "program": "COACTUPC",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+    "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+  },
+  "java_files": [
+    "AccountTextRules.java",
+    "AccountMoneyRule.java"
+  ],
+  "validation_paragraphs": [
+    "1225-EDIT-ALPHA-REQD",
+    "1230-EDIT-ALPHANUM-REQD",
+    "1235-EDIT-ALPHA-OPT",
+    "1240-EDIT-ALPHANUM-OPT",
+    "1245-EDIT-NUM-REQD",
+    "1250-EDIT-SIGNED-9V2"
+  ],
+  "rule_methods": [
+    "requiredName",
+    "requiredText",
+    "optionalName",
+    "optionalText",
+    "requiredNonzeroDigits",
+    "validate"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "proof_status": "Fresh CI required; shared text and amount edits migrated; whole account screen still incomplete"
+}

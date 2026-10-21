@@ -46,3 +46,74 @@ class RecordCommitTests(unittest.TestCase):
         head=self.git('rev-parse','HEAD').strip()
         with self.assertRaisesRegex(ValueError,'source-mismatch'):
             validate_claim(self.root,dict(self.claim,reference=head,commit=head))
+
+    def test_new_dated_manifest_preserves_old_and_checks_changed_inputs(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        newer=directory/'commit-claims-2026-10-19.json'
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name)]}))
+        self.commit('new dated claims')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('wrong new claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+
+    def test_duplicate_claim_across_dated_manifests_is_refused(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        (self.root/CLAIMS).write_text(content)
+        (directory/'commit-claims-2026-10-19.json').write_text(content)
+        self.commit('ambiguous claim')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+    def test_named_dated_manifest_preserves_both_existing_dated_files(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/retention-summary-2026-10-19.md'
+        (self.root/name).write_text('Source revision `'+self.base+'`.\n')
+        frozen={self.root/CLAIMS:b'{"claims": []}\n',
+                directory/'commit-claims-2026-10-19.json':b'{"claims":[]}\n'}
+        for path,raw in frozen.items():path.write_bytes(raw)
+        newer=directory/'commit-claims-intcalc-retention-2026-10-19.json'
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name)]}))
+        self.commit('named dated claims')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        for path,raw in frozen.items():self.assertEqual(raw,path.read_bytes())
+        newer.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('invalid named claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+        for path,raw in frozen.items():self.assertEqual(raw,path.read_bytes())
+
+    def test_named_and_bare_dated_duplicate_claims_remain_ambiguous(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/current-status.json'
+        (self.root/name).write_text(json.dumps({'source':self.base}))
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        for filename in ('commit-claims-2026-10-19.json','commit-claims-intcalc-retention-2026-10-19.json'):
+            (directory/filename).write_text(content)
+        self.commit('duplicate across named and bare dated manifests')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
+
+    def test_named_dated_registry_preserves_existing_and_rejects_bad_or_duplicate_claim(self):
+        directory=self.root/'docs/factory';directory.mkdir(parents=True)
+        name='docs/factory/l10-note.md'
+        (self.root/name).write_text('Source `'+self.base+'`.\n')
+        original=json.dumps({'claims':[]}).encode()
+        (self.root/CLAIMS).write_bytes(original)
+        named=directory/'commit-claims-l10-2026-10-20.json'
+        content=json.dumps({'claims':[dict(self.claim,record=name)]})
+        named.write_text(content);self.commit('named dated registry')
+        self.assertEqual(1,len(check(self.root,self.base)))
+        self.assertEqual(original,(self.root/CLAIMS).read_bytes())
+        named.write_text(json.dumps({'claims':[dict(self.claim,record=name,source_sha256='0'*64)]}))
+        self.commit('invalid named claim')
+        with self.assertRaisesRegex(ValueError,'source-mismatch'):check(self.root,self.base)
+        named.write_text(content)
+        (directory/'commit-claims-2026-10-20.json').write_text(content)
+        self.commit('duplicate across named and ordinary registry')
+        with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)

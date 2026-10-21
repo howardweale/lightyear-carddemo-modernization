@@ -1,0 +1,26 @@
+{
+  "schema": "carddemo-idiomatic-java-scope/1",
+  "program": "COACTUPC",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+    "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+  },
+  "java_files": [
+    "AccountInputRules.java"
+  ],
+  "validation_paragraphs": [
+    "1215-EDIT-MANDATORY",
+    "1220-EDIT-YESNO"
+  ],
+  "rule_methods": [
+    "validateRequired",
+    "validateYesNo"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "proof_status": "Fresh CI required; only two validation paragraphs migrated, not the whole account screen"
+}

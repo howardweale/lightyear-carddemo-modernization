@@ -9,6 +9,20 @@ from tools.build_release_packet import build
 
 
 class DerivedStatusTests(unittest.TestCase):
+    def test_retention_inventory_changes_status_text(self):
+        model = load()
+        value, text = render(model)
+        path = 'docs/factory/evidence-retention-2026-10-18-intcalc.json'
+        self.assertIn(path, value['retention_manifests'])
+        self.assertIn(Path(path).name, text)
+        changed = copy.deepcopy(model)
+        changed['retention'].remove(path)
+        new_value, new_text = render(changed)
+        self.assertNotIn(path, new_value['retention_manifests'])
+        self.assertNotIn(Path(path).name, new_text)
+        self.assertNotEqual(text, new_text)
+
+
     def test_changed_measurements_change_status_and_packet_model(self):
         model = load()
         changed = copy.deepcopy(model)

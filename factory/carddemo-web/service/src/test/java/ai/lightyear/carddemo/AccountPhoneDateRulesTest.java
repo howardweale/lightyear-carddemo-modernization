@@ -138,4 +138,27 @@ class AccountPhoneDateRulesTest {
         expected.put("WS-EDIT-DATE-CCYYMMDD","20000229");sameStorage(expected,actual);
         actual.put("WS-RETURN-MSG","different");assertThrows(AssertionError.class,()->sameStorage(expected,actual));
     }
+
+    @Test void dateServiceReplacesStaleMaskAndClearsCompleteResultStorage() throws Exception {
+        // CSUTLDPY 290-296 initializes the complete result group and moves the
+        // date mask before the service overwrites severity/message. Nondefault
+        // trailing fields make omission of INITIALIZE observable.
+        for(String date:new String[]{"20000229","20261021"})
+            for(String prior:new String[]{"","FIRST ERROR"}) {
+                var input=new HashMap<String,String>();
+                input.put("WS-EDIT-DATE-CCYYMMDD",date);
+                input.put("WS-RETURN-MSG",prior);
+                input.put("WS-INPUT-FLAG",prior.isEmpty()?"0":"1");
+                input.put("WS-DATE-FORMAT","BADMASK!");
+                input.put("WS-SEVERITY","9999");input.put("WS-MSG-NO","8888");
+                input.put("WS-RESULT","STALE RESULT");
+                input.put("WS-DATE","1999-12-31");
+                input.put("WS-DATE-FMT","STALE MASK");
+                var result=compare("EDIT-DATE-CCYYMMDD",input);
+                assertEquals("YYYYMMDD",result.get("WS-DATE-FORMAT"));
+                assertFalse(result.get("WS-RESULT").contains("STALE"));
+                assertFalse(result.get("WS-DATE").contains("1999"));
+                assertFalse(result.get("WS-DATE-FMT").contains("STALE"));
+            }
+    }
 }

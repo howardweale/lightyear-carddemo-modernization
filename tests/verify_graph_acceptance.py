@@ -58,6 +58,10 @@ class GraphOnAcceptance(VerifyAcceptance):
         self.proof_hash = hashlib.sha256(self.graph_proof.read_bytes()).hexdigest()
         self.inventory_report["evaluation_inventory_sha256"] = digest(inventory(self.eval))
         self.inventory_report["authority"] = "ephemeral-CI-fixture"
+        # Only the informational query log is agent-writable; public inputs stay read-only.
+        query_log = self.public / "graph-queries.jsonl"
+        query_log.touch(mode=0o600)
+        os.chown(query_log, self.agent, self.agent)
         self.graph_calls = set()
         return {"context_projection_sha256": self.projection_hash, "disclosure_mode": "field",
                 "graph_context": {"directory": str(self.graph_dir),
@@ -72,6 +76,7 @@ class GraphOnAcceptance(VerifyAcceptance):
     async def exercise_graph(self, call):
         before = await call("get_budget")
         search = await call("graph_search", query="ACCT-CURR-BAL", kind="cobol_field")
+        self.assertNotIn("error", search, search)
         self.assertTrue(search["items"])
         node = search["items"][0]["id"]
         for name, args in (

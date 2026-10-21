@@ -1,0 +1,42 @@
+name: Retain F8 offline worker
+on:
+  workflow_run:
+    workflows: ['F8 offline worker bundle']
+    types: [completed]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: f8-retention-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  retain:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: f8-retention-source-${{ github.event.workflow_run.id }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Retain verified bytes using trusted main code only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ github.event.workflow_run.id }}
+          PYTHONPATH: src:.
+        run: python -B -m tools.ci.f8_worker_retention "$SOURCE_RUN" work/f8-worker-retention
+      - uses: actions/upload-artifact@v7
+        with:
+          name: f8-retention-publication-${{ github.event.workflow_run.id }}
+          path: work/f8-worker-retention/publication/*.json
+          if-no-files-found: error
+          retention-days: 90

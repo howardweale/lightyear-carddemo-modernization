@@ -1,0 +1,44 @@
+name: Factory first installation review
+on:
+  pull_request:
+    paths:
+      - 'tools/factory_install/**'
+      - 'docs/factory/first-install-2026-10-21/**'
+      - '.github/workflows/factory-first-install.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/factory_install/**'
+      - 'docs/factory/first-install-2026-10-21/**'
+      - '.github/workflows/factory-first-install.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-installation-review:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.10'
+      - name: Assemble public runtime and byte manifest
+        shell: pwsh
+        run: |
+          python -B tools/factory_install/build_bundle.py --repository . --output "$env:RUNNER_TEMP/factory-bundle"
+          if ($LASTEXITCODE -ne 0) { throw 'Bundle failed' }
+      - name: Verify installation-only boundaries on disposable CI host
+        shell: powershell
+        run: |
+          $commit=(git rev-parse HEAD).Trim()
+          & tools/factory_install/Test-FactoryInstall.ps1 -Stage "$env:RUNNER_TEMP/factory-bundle" -Commit $commit
+      - name: Retain reviewed runtime, manifest and source binding
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-first-install-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/factory-bundle
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,25 @@
+{
+  "schema": "factory-installation-correction/1",
+  "recorded_on": "2026-10-21",
+  "status": "unverified-prior-installation-first-install-proposed",
+  "supersedes_claims_in": [
+    "docs/milestones/MS-106/MS-106.md",
+    "docs/factory/factory-local-activation-2026-10-14.json",
+    "docs/factory/factory-local-activation-correction-2026-10-17.json"
+  ],
+  "claims": {
+    "installed_login_service": "unverified",
+    "seven_record_signed_backfill": "unverified",
+    "signed_only_consumer_activation": "unverified"
+  },
+  "original_records_preserved": true,
+  "old_public_key_sha256": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61",
+  "old_private_half_exists": "unknown; no verified custody/generation/location or recovery evidence",
+  "dependencies": "dependency-inventory.json",
+  "review": "dependency-review.md",
+  "installation_performed": false,
+  "identity_or_key_created": false,
+  "signature_created": false,
+  "signed_only_activated": false,
+  "execution_authorized": false
+}

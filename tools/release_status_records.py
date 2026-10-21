@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_status_record, appl_contract_selection, carddemo_idiomatic_status, carddemo_account_status
+from tools import carddemo_status_record, appl_contract_selection, carddemo_idiomatic_status, carddemo_account_status, retained_intcalc
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -30,8 +30,13 @@ def inputs(root=ROOT):
     root = Path(root)
     release_path = latest(root)
     release = json.loads(release_path.read_bytes())
+    retained = retained_intcalc.read(root, release) if release.get('schema') == retained_intcalc.SCHEMA else None
+    if retained:
+        release = retained['release']
     index_path = release["evidence_index"]["path"]
-    index = json.loads((root/index_path).read_bytes())
+    index = retained['index'] if retained else json.loads((root/index_path).read_bytes())
+    evidence_inputs = retained['local_inputs'] if retained else [index_path,
+        *[path for archive in index["sources"] + index.get("crosscheck_sources", []) for path in archive["files"]]]
     historical = json.loads((root/INDEX).read_bytes())
     public = json.loads((root/PUBLIC).read_bytes())
     additional = [p.relative_to(root).as_posix() for pattern in
@@ -62,8 +67,7 @@ def inputs(root=ROOT):
         additional += [prior_path, *[name for archive in prior['sources'] + prior.get('crosscheck_sources', []) for name in archive['files']]]
     return tuple(dict.fromkeys([HISTORY, INDEX, PUBLIC, public["activation"]["path"],
         *additional,
-        release_path.relative_to(root).as_posix(), index_path,
-        *[path for archive in index["sources"] + index.get("crosscheck_sources", []) for path in archive["files"]],
+        release_path.relative_to(root).as_posix(), *evidence_inputs,
         *[row["path"] for row in historical["sources"]]]))
 
 
@@ -88,15 +92,19 @@ def load(root=ROOT):
     historical_view = status(FactoryEvidence(root, digest(historical_index), index=historical_index))
     path = latest(root)
     release = json.loads(path.read_bytes())
+    retained = retained_intcalc.read(root, release) if release.get('schema') == retained_intcalc.SCHEMA else None
+    if retained:
+        release = retained['release']
+    evidence_bytes = lambda name: retained['files'][name] if retained else (root/name).read_bytes()
     if digest({k:v for k,v in release.items() if k != "content_sha256"}) != release["content_sha256"]:
         raise ValueError("release-status-seal")
     index_path = release["evidence_index"]["path"]
-    if sha256((root/index_path).read_bytes()).hexdigest() != release["evidence_index"]["sha256"]:
+    if sha256(evidence_bytes(index_path)).hexdigest() != release["evidence_index"]["sha256"]:
         raise ValueError("release-status-index-hash")
-    index = read(index_path)
+    index = json.loads(evidence_bytes(index_path))
     for archive in index["sources"] + index.get("crosscheck_sources", []):
         for filename, expected in archive["files"].items():
-            if sha256((root/filename).read_bytes()).hexdigest() != expected:
+            if sha256(evidence_bytes(filename)).hexdigest() != expected:
                 raise ValueError("release-status-evidence-hash")
     public = read(PUBLIC)
     source = public["activation"]
@@ -139,7 +147,7 @@ def load(root=ROOT):
             raise ValueError('status-carddemo-evidence-hash')
         carddemo = json.loads(raw)
     b06_path=root/'docs/factory/b06-part6-reverification-2026-10-16.json'
-    return dict(appl_contract_selection=appl_contract_selection.load(root), release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
+    return dict(retained_publication=retained['publication'] if retained else None, appl_contract_selection=appl_contract_selection.load(root), release=release, release_path=path.relative_to(root).as_posix(), activation=activation,
                 historical_view=historical_view,projections=projections,projection_paths=projection_paths,carddemo_historical=carddemo,
                 phase2=phase2, evaluated_at=clock, retention=retention,
                 carddemo=carddemo_status_record.load(root) or carddemo,
@@ -221,6 +229,9 @@ def render(model):
     current["carddemo"] = model.get("carddemo")
     current["carddemo_web"] = model.get("carddemo_web")
     current["verdict_path"] = verdict_path
+    publication = model.get('retained_publication')
+    current['packet_url'] = (publication['packet_url'] if publication and publication['prepared_on'] == current['as_of']
+                             else 'howard-decision-packet-' + current['as_of'] + '-handoff-refresh.md')
     current["delivery"] = delivery
     snapshot_date = current["as_of"] if release.get('schema') == 'intcalc-releasability/3' else (delivery["checked_at"][:10] if delivery else current["as_of"])
     factory = "activated locally (signed-only)" if current["factory_activated"] else "local signed-only activation not recorded"
@@ -297,5 +308,5 @@ def render(model):
         text += ["", "## Account validation groups", "", carddemo_account_status.paragraph(model["carddemo_account"])]
     text += ["", current["intcalc"], "",
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
-             f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet](howard-decision-packet-{current['as_of']}-handoff-refresh.md)", ""]
+             f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet]({current['packet_url']})", ""]
     return current, "\n".join(text)

@@ -270,7 +270,162 @@ public final class SourceEdits {
         put("WS-SEVERITY-N",Integer.toString(feedback.path("severity").asInt()));
         put("WS-MSG-NO-N",Integer.toString(feedback.path("message").asInt()));
     }
-    public void run(String paragraph){JsonNode statements=model.path("paragraphs").path(paragraph);
+    private void runAccountInputRule(String paragraph) {
+        AccountInputRules.Outcome outcome;
+        String flag;
+        if (paragraph.equals("1215-EDIT-MANDATORY")) {
+            String value=get("WS-EDIT-ALPHANUM-ONLY");
+            int length=Integer.parseInt(get("WS-EDIT-ALPHANUM-LENGTH"));
+            outcome=AccountInputRules.validateRequired(value.substring(0,length));
+            flag="WS-EDIT-MANDATORY-FLAGS";
+            put(flag,outcome==AccountInputRules.Outcome.VALID?"\u0000":"B");
+            trace.add(new Location("app/cbl/COACTUPC.cbl",1824));
+        } else if (paragraph.equals("1220-EDIT-YESNO")) {
+            outcome=AccountInputRules.validateYesNo(get("WS-EDIT-YES-NO").charAt(0));
+            flag="WS-EDIT-YES-NO";
+            // A valid Y/N is not overwritten; it is copied into account flags later.
+            if(outcome!=AccountInputRules.Outcome.VALID)
+                put(flag,outcome==AccountInputRules.Outcome.MISSING?"B":"0");
+            trace.add(new Location("app/cbl/COACTUPC.cbl",1856));
+        } else throw new IllegalArgumentException("untranslated-native-rule:"+paragraph);
+        if(outcome==AccountInputRules.Outcome.VALID)return;
+        setCondition("INPUT-ERROR");
+        // Quirk: retain the first error, fixed-width label truncation and space-only trim.
+        if(condition("WS-RETURN-MSG-OFF")) {
+            String suffix=outcome==AccountInputRules.Outcome.MISSING?" must be supplied.":" must be Y or N.";
+            put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
+        }
+    }
+    private void runAccountTextRule(String paragraph) {
+        String whole=get("WS-EDIT-ALPHANUM-ONLY");
+        int length=Integer.parseInt(get("WS-EDIT-ALPHANUM-LENGTH"));
+        String value=whole.substring(0,length);
+        var result=switch(paragraph) {
+            case "1225-EDIT-ALPHA-REQD" -> AccountTextRules.requiredName(value);
+            case "1230-EDIT-ALPHANUM-REQD" -> AccountTextRules.requiredText(value);
+            case "1235-EDIT-ALPHA-OPT" -> AccountTextRules.optionalName(value);
+            case "1240-EDIT-ALPHANUM-OPT" -> AccountTextRules.optionalText(value);
+            case "1245-EDIT-NUM-REQD" -> AccountTextRules.requiredNonzeroDigits(value);
+            default -> throw new IllegalArgumentException("untranslated-text-rule:"+paragraph);
+        };
+        boolean alpha=paragraph.equals("1225-EDIT-ALPHA-REQD") || paragraph.equals("1235-EDIT-ALPHA-OPT");
+        String flag=alpha?"WS-EDIT-ALPHA-ONLY-FLAGS":"WS-EDIT-ALPHANUM-ONLY-FLAGS";
+        put(flag,switch(result.status()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; });
+        if(result.converted()) {
+            String table=alpha?"LIT-ALL-ALPHA-FROM":"LIT-ALL-ALPHANUM-FROM";
+            put(table,get(table+"-X"));
+            // INSPECT mutates only the declared prefix, including on invalid input.
+            put("WS-EDIT-ALPHANUM-ONLY",result.scratch()+whole.substring(length));
+        }
+        int line=switch(paragraph) { case "1225-EDIT-ALPHA-REQD" -> 1898; case "1230-EDIT-ALPHANUM-REQD" -> 1955;
+            case "1235-EDIT-ALPHA-OPT" -> 2012; case "1240-EDIT-ALPHANUM-OPT" -> 2061; default -> 2109; };
+        trace.add(new Location("app/cbl/COACTUPC.cbl",line));
+        if(result.status()==AccountTextRules.Status.VALID)return;
+        String suffix=switch(result.status()) {
+            case MISSING -> " must be supplied.";
+            case ZERO -> " must not be zero.";
+            default -> paragraph.equals("1245-EDIT-NUM-REQD")?" must be all numeric.":
+                alpha?" can have alphabets only.":" can have numbers or alphabets only.";
+        };
+        nativeInputError(suffix);
+    }
+    private void runAccountMoneyRule() {
+        var result=AccountMoneyRule.validate(get("WS-EDIT-SIGNED-NUMBER-9V2-X"));
+        put("WS-FLG-SIGNED-NUMBER-EDIT",switch(result.outcome()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; });
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2180));
+        if(result.outcome()!=AccountInputRules.Outcome.VALID)
+            nativeInputError(result.outcome()==AccountInputRules.Outcome.MISSING?" must be supplied.":" is not valid");
+    }
+    private void runAccountSsnRule() {
+        var result=AccountSsnRule.validate(get("ACUP-NEW-CUST-SSN-1"),get("ACUP-NEW-CUST-SSN-2"),get("ACUP-NEW-CUST-SSN-3"));
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2431));
+        applySsnPart(1,"SSN: First 3 chars",result.first());
+        if(result.first().status()==AccountTextRules.Status.VALID) {
+            put("WS-EDIT-US-SSN-PART1",result.first().input());
+            if(result.restrictedFirst()) {
+                put("WS-EDIT-US-SSN-PART1-FLGS","0");
+                nativeInputError(": should not be 000, 666, or between 900 and 999");
+            }
+        }
+        String[] labels={"SSN 4th & 5th chars","SSN Last 4 chars"};
+        for(int i=0;i<result.remaining().size();i++)applySsnPart(i+2,labels[i],result.remaining().get(i));
+    }
+    private void applySsnPart(int number,String label,AccountSsnRule.Part part) {
+        put("WS-EDIT-VARIABLE-NAME",label);
+        put("WS-EDIT-ALPHANUM-ONLY",part.input());
+        put("WS-EDIT-ALPHANUM-LENGTH",Integer.toString(part.input().length()));
+        String flag=switch(part.status()) { case VALID -> "\u0000"; case MISSING -> "B"; default -> "0"; };
+        put("WS-EDIT-ALPHANUM-ONLY-FLAGS",flag);
+        put("WS-EDIT-US-SSN-PART"+number+"-FLGS",flag);
+        if(part.status()!=AccountTextRules.Status.VALID)nativeInputError(switch(part.status()) {
+            case MISSING -> " must be supplied."; case ZERO -> " must not be zero."; default -> " must be all numeric.";
+        });
+    }
+    private void runAccountFicoRule() {
+        trace.add(new Location("app/cbl/COACTUPC.cbl",2514));
+        // A successful range edit leaves the existing flag untouched.
+        if(!AccountFicoRule.validDisplay(get("ACUP-NEW-CUST-FICO-SCORE"))) {
+            setCondition("FLG-FICO-SCORE-NOT-OK");
+            nativeInputError(": should be between 300 and 850");
+        }
+    }
+    private Set<String> sourceLookupValues(String condition) {
+        JsonNode data=model.path("conditions").path(condition);
+        if(!data.isObject() || !data.path("values").isArray() || !data.path("ranges").isArray())
+            throw new IllegalArgumentException("location-condition-shape");
+        if(!data.path("ranges").isEmpty())throw new IllegalArgumentException("location-range-condition");
+        Set<String> literals=new HashSet<>();
+        for(JsonNode item:data.path("values")) {
+            String quoted=item.asText();
+            if(!item.isTextual() || quoted.length()<2 || !quoted.startsWith("'") || !quoted.endsWith("'"))
+                throw new IllegalArgumentException("location-literal-condition");
+            literals.add(quoted.substring(1,quoted.length()-1).replace("''","'"));
+        }
+        if(literals.isEmpty())throw new IllegalArgumentException("location-empty-condition");
+        return Set.copyOf(literals);
+    }
+    private void runAccountLocationRule(String paragraph) {
+        String state=get("ACUP-NEW-CUST-ADDR-STATE-CD");
+        if(paragraph.equals("1270-EDIT-US-STATE-CD")) {
+            var result=AccountLocationRules.state(state,sourceLookupValues("VALID-US-STATE-CODE"));
+            put("US-STATE-CODE-TO-EDIT",result.scratch());
+            trace.add(new Location("app/cbl/COACTUPC.cbl",2494));
+            if(!result.valid()) {
+                setCondition("FLG-STATE-NOT-OK");
+                nativeInputError(": is not a valid state code");
+            }
+        } else if(paragraph.equals("1280-EDIT-US-STATE-ZIP-CD")) {
+            var result=AccountLocationRules.stateZip(state,get("ACUP-NEW-CUST-ADDR-ZIP"),
+                sourceLookupValues("VALID-US-STATE-ZIP-CD2-COMBO"));
+            put("US-STATE-AND-FIRST-ZIP2",result.scratch());
+            trace.add(new Location("app/cbl/COACTUPC.cbl",2537));
+            if(!result.valid()) {
+                setCondition("INPUT-ERROR");
+                setCondition("FLG-STATE-NOT-OK");
+                setCondition("FLG-ZIPCODE-NOT-OK");
+                // This source message has no variable-name prefix; keep the first error.
+                if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG","Invalid zip code for state");
+            }
+        } else throw new IllegalArgumentException("untranslated-location-rule:"+paragraph);
+    }
+    private void nativeInputError(String suffix) {
+        setCondition("INPUT-ERROR");
+        if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
+    }
+    public void run(String paragraph){
+        if(model.path("native_paragraphs").has(paragraph)) {
+            switch(model.path("native_paragraphs").path(paragraph).asText()) {
+                case "AccountInputRules" -> runAccountInputRule(paragraph);
+                case "AccountTextRules" -> runAccountTextRule(paragraph);
+                case "AccountMoneyRule" -> runAccountMoneyRule();
+                case "AccountSsnRule" -> runAccountSsnRule();
+                case "AccountFicoRule" -> runAccountFicoRule();
+                case "AccountLocationRules" -> runAccountLocationRule(paragraph);
+                default -> throw new IllegalArgumentException("untranslated-native-class");
+            }
+            return;
+        }
+        JsonNode statements=model.path("paragraphs").path(paragraph);
         if(statements.isMissingNode())throw new IllegalArgumentException("untranslated-edit-paragraph:"+paragraph);
         Map<String,Integer> labels=new HashMap<>();for(int i=0;i<statements.size();i++){
             JsonNode s=statements.get(i);if(s.path("op").asText().equals("label")&&labels.put(s.path("name").asText(),i)!=null)throw new IllegalArgumentException("duplicate-edit-label");}

@@ -252,3 +252,21 @@ docs/factory/factory-authority.public.pem text eol=lf
 
 # Preserve the original unsigned CI receipt bytes, including its empty-gap line.
 docs/modernization/carddemo-slice-1-evidence-2026-10-18/original-ci-receipt.md.txt -text -whitespace
+
+# Preserve the original README archive byte-for-byte.
+docs/history/README-history-2026-10-17.md -text -whitespace
+
+# Preserve the original public sign-on proof bytes.
+docs/modernization/carddemo-cosgn00-evidence-2026-10-18/** -text -whitespace
+
+# Keep the exact CI-published COSGN00 group receipt bytes on every platform.
+docs/modernization/carddemo-cosgn00-2026-10-18.json -text
+/docs/modernization/carddemo-account-evidence-2026-10-19/** -text
+/docs/modernization/carddemo-account-*-2026-10-19.json -text
+/docs/modernization/carddemo-account-2026-10-19.* -text
+
+# Preserve the current CI-generated mapping baseline bytes.
+docs/modernization/carddemo-mapping-baseline-2026-10-18/** -text -whitespace
+
+# Preserve the exact dated COPAU freeze amendment bytes across checkouts.
+/docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

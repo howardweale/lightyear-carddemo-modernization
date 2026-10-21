@@ -1,0 +1,214 @@
+{
+  "schema": "f8-safe-worker-packaging-proposal/2",
+  "state": "concrete-static-design-artifacts-not-materialized",
+  "source_commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+  "image_pin": {
+    "path": "docs/factory/copau-f8-java-image-pin-r2-2026-10-20.json",
+    "sha256": "a82cecf452cd7802ccde36155dfc770149c71b282ee22c7c1e9a0cf69099c99a",
+    "size_bytes": 4091
+  },
+  "supersedes": [
+    "Shared-source copying and derived-image requirement in the original F8 workspace/Java proposals; originals remain preserved."
+  ],
+  "selection": {
+    "worker_support": "Binary projection of exactly nine committed shared support sources and their declared nested records; 13 class entries.",
+    "source_bindings": [
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8",
+        "size_bytes": 543
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "ef194ef18188a1b993195f3a722117e432832dcebcf0880637bd606fff640034",
+        "size_bytes": 10440
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "b363369b4d807d1494dc2080d27d70af249a6ff60ecc05ffd942671c021baac0",
+        "size_bytes": 6258
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "659e5782e428abde119c857d1ac27c4fb19b63b7425b17def1e65875fbf2ffca",
+        "size_bytes": 7393
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "89753f7eb40857c6a137f9c6f14e2010e468a3dd80ef75a6002b159fe3debdc2",
+        "size_bytes": 3711
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "699c3962704338afca7da062b45e00d46229b24782ce5aceb1f39493213eaaa4",
+        "size_bytes": 3808
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "8c472ca67aa8a3b9155763156d8e0acd795cc3cfa7d51d1be2b9ae92b9766b13",
+        "size_bytes": 4915
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "21076bced2b3fe1bf82bab3388a9e8d1816d580fac338d394da2dcb4264eb5c6",
+        "size_bytes": 2741
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "8ffcaa15f43c5d6f51e27c52864127ba2448830ef5d441a47a661ee0f840c5c4",
+        "size_bytes": 424
+      }
+    ],
+    "allowed_jar_class_entries": [
+      "ai/lightyear/carddemo/TransactionService.class",
+      "ai/lightyear/carddemo/TransactionService$Result.class",
+      "ai/lightyear/carddemo/Commarea.class",
+      "ai/lightyear/carddemo/TypedRecords.class",
+      "ai/lightyear/carddemo/TypedRecordImage.class",
+      "ai/lightyear/carddemo/TypedRecordImage$Image.class",
+      "ai/lightyear/carddemo/AuthorizationRecords.class",
+      "ai/lightyear/carddemo/SessionToken.class",
+      "ai/lightyear/carddemo/SessionToken$Terminal.class",
+      "ai/lightyear/carddemo/SessionToken$State.class",
+      "ai/lightyear/carddemo/ScreenFrame.class",
+      "ai/lightyear/carddemo/Bindings.class",
+      "ai/lightyear/carddemo/CobolSource.class"
+    ],
+    "candidate_classes_in_capsule": false,
+    "service_or_boot_jar_copied": false,
+    "raw_shared_java_sources_in_worker": false
+  },
+  "projection": {
+    "owner": "Trusted controller CI packaging step; no candidate authorship",
+    "input": "Existing CI-compiled shared classes from the exact bound service sources. Full service/compiler context stays controller-only.",
+    "rewrite_rules": [
+      {
+        "class_name": "ai.lightyear.carddemo.ScreenFrame",
+        "member": "trace",
+        "descriptor": "Ljava/util/List;",
+        "operation": "Keep the field and its existing erased List descriptor and constructor initialization. Drop only the field Signature attribute containing SourceEdits$Location.",
+        "why": "Removing the whole field would leave constructor putfield instructions and break ScreenFrame. Generic erasure removes the engine type while preserving JVM field compatibility."
+      },
+      {
+        "class_name": "ai.lightyear.carddemo.AuthorizationRecords",
+        "member": "load",
+        "descriptor": "(Lai/lightyear/carddemo/SourceEdits;Ltools/jackson/databind/JsonNode;Ljava/lang/String;Ljava/util/Map;)V",
+        "operation": "Omit this engine adapter method from the worker projection only.",
+        "why": "The method binds directly to SourceEdits.put. Remaining shared record access methods are retained unchanged."
+      },
+      {
+        "class_name": "Any retained support class",
+        "member": "InnerClasses attribute entries",
+        "operation": "Omit only entries whose inner/outer name refers to SourceEdits or SourceEdits$Location; retain all allowed nested-record entries.",
+        "why": "The compiler can retain the generic-only nested type in class metadata even after dropping its field Signature. A fresh constant pool alone does not remove a retained InnerClasses entry."
+      }
+    ],
+    "constant_pool": "Re-emit classes into fresh constant pools, not a writer seeded with original constant pools. Reject retained descriptors, signatures, annotation values, method handles, bootstrap arguments or UTF-8 constants naming SourceEdits or excluded classes.",
+    "retained_behavior": "Preserve every other field, method descriptor and method body from the nine sources. No stubbed business behavior, rewritten algorithm or new Java source.",
+    "class_entry_limit": "Exact 13-entry allow-list; reject additional class files, nested jars, sources, generated bindings, data, service resources or receipts. Only declared license/provenance text may accompany classes.",
+    "source_level_engine_references": [
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+        "line": 36,
+        "text": "public void load(SourceEdits edits,JsonNode model,String table,Map<String,Object> row){"
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+        "line": 16,
+        "text": "public final List<SourceEdits.Location> trace=new ArrayList<>();"
+      }
+    ],
+    "linkage": "Worker compiles against a subset of the real shared API with identical retained JVM descriptors. Controller evaluation links candidate output against the unchanged complete service; reject candidate class/member references outside the exposed support inventory."
+  },
+  "unit_test_strategy": {
+    "support_runtime": "Use the projected utility implementation jar, not an ABI-only all-throwing stub jar. That preserves Commarea, ScreenFrame, record codec and session behavior for factory-authored unit tests.",
+    "bindings": "Factory tests create their own synthetic six-screen schema/plan objects when Bindings construction is needed. No precomputed service binding output, session answer or expected proof state is copied.",
+    "write_root": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization",
+    "tests_subdirectory": "worker-tests",
+    "test_data_subdirectory": "worker-tests/resources",
+    "authority": "All authorization Java and own tests are authored only by the factory after signed F2; this proposal contains none."
+  },
+  "offline_capsule": {
+    "release_asset_name": "copau-f8-public-worker-capsule.tar.gz",
+    "release_url": null,
+    "archive_sha256": null,
+    "archive_size_bytes": null,
+    "file_manifest_sha256": null,
+    "stage_relative_root": "work/f8-public-worker-capsule",
+    "contents": [
+      "Projected ai.lightyear.worker:carddemo-shared-support:0.1.0-f8 jar and its POM in m2/.",
+      "Worker POM and settings from the bound proposal, staged as pom.xml and settings.xml.",
+      "Only public Maven dependencies/plugins and their exact required POMs/resources for worker test lifecycle.",
+      "Small class/member/entry inventory and source/public-artifact provenance.",
+      "Zero-byte home/.keep and tmp/.keep ensure declared scratch directories exist after regular-file-only staging; hash these entries too."
+    ],
+    "dependencies": [
+      "tools.jackson.core:jackson-databind; version constrained by existing Spring Boot 4.1.0 BOM, resolved and SHA-locked by CI.",
+      "org.junit.jupiter:junit-jupiter, test scope; version from the same BOM, resolved and SHA-locked by CI.",
+      "Exact plugin versions in worker POM and their transitive dependencies, plus explicitly resolved Surefire test provider/engine."
+    ],
+    "no_starers": "No Spring Boot runtime/starters, application jar, reference engine, current authorization implementation, proof tests or expected data.",
+    "offline_preseed": "Resolve only the worker project in a clean controller CI Maven repository. go-offline alone is insufficient acceptance; execute the full worker test lifecycle with networking disabled to discover lazy plugins/providers, then lock each byte.",
+    "retention": "Publish binary bundle as Release asset with size/SHA inventory. Commit only manifests and the raw workspace map; no archive or jar in git.",
+    "materialization": "Controller validates archive path names and limits, no duplicate entries, traversal, symlink/junction/hardlink, nested archive or unlisted files. Extract regular files only; verify every file SHA/size before any copy or worker creation.",
+    "limits": "Existing allow-list caps: each file <=8 MiB, aggregate <=32 MiB, <=4096 files. Fail closed if Maven closure exceeds any limit; do not use compression to evade uncompressed limits."
+  },
+  "workspace_revision": {
+    "retain": "The 23 non-Java entries in the original 32-file manifest, including source/BMS/copybooks/DBD/PSB/scope.",
+    "remove": [
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java"
+    ],
+    "add": "Every actual extracted public capsule file as a strict relative path mapped to its real SHA-256; no directory prefix or archive-only hash.",
+    "existing_support": "Root .gitignore ignores work/. Explicit _create_allowlisted copies exact regular files listed by read_manifest and does not apply EXCLUDED_NAMES tree-copy filtering. Committed runtime JSON manifests still must match their actual bytes.",
+    "staging_safety": "Use only an approved clean CI source_root. Staged ignored public files are hash-bound by the committed workspace map. Ignore status never substitutes for content validation. Never stage private expected bundles here.",
+    "ready_manifest_emitted": false,
+    "why_not": "Capsule bytes do not exist yet; real per-file hashes and retained artifact metadata must be produced by CI. No fake raw manifest with null entries is emitted."
+  },
+  "ci_acceptance": {
+    "executed_here": false,
+    "requirements": [
+      "Compare the pinned registry manifest digest and native architecture; record actual Maven/JDK versions and entrypoint behavior.",
+      "Prove the projected jar contains exactly 13 allowed classes; only the declared field Signature, engine adapter method and stale excluded InnerClasses entries change; no excluded constant-pool references/resources or candidate classes remain.",
+      "Exercise retained utilities with public synthetic fixtures in controller CI and compare retained method descriptors to the unchanged complete service. No real authorization candidate is required.",
+      "Run the worker test lifecycle and lazy Surefire provider under the exact CandidateBuildBackend flags, no network, readonly source/root, numeric nonroot user and noexec bounded tmpfs. Use a neutral packaging fixture outside authorization candidate scope.",
+      "Verify a missing dependency fails offline and source/root writes/egress are refused. Scan decompressed capsule entries and all worker surfaces; jar compressed bytes alone are insufficient isolation inspection.",
+      "Verify the final extracted capsule fits file/aggregate limits; bind actual release/per-file hashes into a new committed raw manifest before approval."
+    ]
+  },
+  "remaining": {
+    "engineering": [
+      "Implement and run binary projection/capsule assembly in CI; retain actual output and conformance receipts.",
+      "Finalize the concrete ExecutionPolicy using the selected exact image digest and externally supplied work-order trust ids.",
+      "Bind final executable head, real capsule manifest, WorkOrder, caps/window and request seal."
+    ],
+    "operator": [
+      "Existing Tower fingerprint/current trusted journal and work-order trust ids.",
+      "Private expected bundle digest/size/count only.",
+      "Wall-clock cap and timezone-aware window."
+    ]
+  },
+  "authority": {
+    "packaging_approved": false,
+    "request_ready": false,
+    "candidate_java_authored": false,
+    "local_execution": false,
+    "signing": false
+  }
+}

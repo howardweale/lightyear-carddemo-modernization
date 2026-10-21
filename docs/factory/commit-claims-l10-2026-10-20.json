@@ -1,0 +1,38 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "reference": "615cfc3b9c1a117555631d5e4c425fc65f4b4f94",
+      "commit": "615cfc3b9c1a117555631d5e4c425fc65f4b4f94",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "source_sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8"
+    },
+    {
+      "record": "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+      "reference": "3c6f2b604268be320c3a5619b25a51405af51642",
+      "commit": "3c6f2b604268be320c3a5619b25a51405af51642",
+      "role": "source",
+      "source_path": "factory/copau/judge/mutation-policy.json",
+      "source_sha256": "7e6b5943507cf9268fa6693c09a7694006ba32a419c482b5168316d0704a1260"
+    },
+    {
+      "record": "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+      "reference": "a12485f88eff38853a03716eca136bd7d13c527a",
+      "commit": "a12485f88eff38853a03716eca136bd7d13c527a",
+      "role": "source",
+      "source_path": "factory/carddemo-web/runtime/receipt.py",
+      "source_sha256": "78aeefa18f7078d4766ef532e9c61f29caada873b477d607e11e02a973bac889"
+    },
+    {
+      "record": "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+      "reference": "b6fe569169588f42027a2854a268dbd400f11c60",
+      "commit": "b6fe569169588f42027a2854a268dbd400f11c60",
+      "role": "source",
+      "source_path": "src/lightyear_data/carddemo/update_edits.py",
+      "source_sha256": "4c762114ba17dc936f9b08c491ba63a41915c4a0978e6499ebda8e9d25ea1292"
+    }
+  ]
+}

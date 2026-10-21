@@ -442,10 +442,61 @@
       "formats": [
         "md"
       ]
+    },
+    {
+      "number": 110,
+      "path": "MS-110/MS-110.md",
+      "title": "CardDemo six-screen web slice",
+      "customer_value": "See six CardDemo screens running as a web application, proven interaction by interaction against the original COBOL.",
+      "status": "Six screens: 120 journeys and 678 interactions matched through API and browser; 91.3% mutation score; twin and public data only",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 111,
+      "path": "MS-111/MS-111.md",
+      "title": "Hand-written Java for sign-on and account-update rules",
+      "customer_value": "Read the migrated business rules as ordinary, traceable Java instead of engine-executed COBOL.",
+      "status": "Sign-on and twelve account-update paragraphs in Java; full proof still green; 882 of 950 mutants killed; remaining screens on the engine",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 112,
+      "path": "MS-112/MS-112.md",
+      "title": "POSTTRAN deadline and provenance audit",
+      "customer_value": "Know exactly when POSTTRAN must be signed and what its result can honestly claim.",
+      "status": "Sign-and-launch deadline enforced for 29 October 14:46 UTC; attempt 1 was operator-run, not factory-built; Phase 2 not run",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 113,
+      "path": "MS-113/MS-113.md",
+      "title": "INTCALC release evidence and ordered signing",
+      "customer_value": "Trust that INTCALC can only be released on campaign evidence and signatures given in order.",
+      "status": "Constant evidence, one APPL-RESULT contract and ordered signing tools merged; current verdict not releasable; review and signatures pending",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 114,
+      "path": "MS-114/MS-114.md",
+      "title": "Engineering operations: agent rules, automatic status and retained evidence",
+      "customer_value": "Keep a fast-moving AI-built codebase reviewable, with status and evidence that stay correct by themselves.",
+      "status": "Agent rules, repository map, post-merge status rebuild and Release-based evidence merged; stranded-work audit outstanding",
+      "formats": [
+        "md"
+      ]
     }
   ],
   "addenda": [
     "MS-107/as-of-2026-10-17.md",
-    "MS-108/as-of-2026-10-17.md"
+    "MS-108/as-of-2026-10-17.md",
+    "MS-108/as-of-2026-10-20.md"
   ]
 }

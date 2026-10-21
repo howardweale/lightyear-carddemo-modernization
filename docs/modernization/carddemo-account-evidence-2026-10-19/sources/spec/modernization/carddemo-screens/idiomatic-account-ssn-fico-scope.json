@@ -1,0 +1,28 @@
+{
+  "schema": "carddemo-idiomatic-java-scope/1",
+  "program": "COACTUPC",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+    "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+  },
+  "java_files": [
+    "AccountSsnRule.java",
+    "AccountFicoRule.java"
+  ],
+  "validation_paragraphs": [
+    "1265-EDIT-US-SSN",
+    "1275-EDIT-FICO-SCORE"
+  ],
+  "rule_methods": [
+    "validate",
+    "validScore",
+    "validDisplay"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "proof_status": "Fresh CI required; SSN and FICO edits migrated; whole account screen still incomplete"
+}

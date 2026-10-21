@@ -7,7 +7,9 @@ class ScenarioPolicyTests(unittest.TestCase):
     def test_signature_binding_approval_and_actual_fields(self):
         with tempfile.TemporaryDirectory() as d:
             key=Path(d)/'test.pem';initialize_key(key);s=Signer(key)
-            v=s.sign(dict(verdict='equivalent'))
+            from tests.test_release_grade import release_fixture
+            from hashlib import sha256
+            v=s.sign(release_fixture(Path(d)))
             a=dict(instrumented=True,decision_outcomes='4/4',legacy_mutants_killed='50/50',
                    coverage_by_class={'business-logic':{'fraction':'4/4'}},
                    systematic_mutation=dict(counts={'killed-divergent':45,'killed-failure':5,'survived':0,'not-compiled':0,'equivalent (argued, listed)':0},eligible_count=50,excluded_equivalents=0,equivalent_dispositions=[],unresolved_survivors=[],not_compiled=[]),
@@ -15,7 +17,8 @@ class ScenarioPolicyTests(unittest.TestCase):
             r=issue(v,a,['amount'],s)
             self.assertFalse(release(v,r,s.public)['releasable'])
             p=s.sign(dict(schema='scenario-policy-approval/1',verdict_sha256=v['content_sha256'],assessment_sha256=r['content_sha256'],threshold=PROPOSAL))
-            self.assertTrue(release(v,r,s.public,p,s.public)['releasable'])
+            self.assertTrue(release(v,r,s.public,p,s.public,release_evidence_root=Path(d),production_review_key_sha256=sha256(s.public).hexdigest())['releasable'])
+            self.assertIn('production-review-proofs-required', release(v,r,s.public,p,s.public,release_evidence_root=Path(d))['reasons'])
             changed=copy.deepcopy(r);changed['scenario_adequacy']['decision_outcomes']='3/4'
             with self.assertRaisesRegex(ValueError,'binding'):release(v,changed,s.public,p,s.public)
             self.assertIn('compared-field-inventory-incomplete',assess(a,PROPOSAL,['another']))

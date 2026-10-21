@@ -1,0 +1,27 @@
+{
+  "schema": "f8-effective-freeze-input-proposal/1",
+  "state": "proposal-only-controller-private-not-a-new-unfreeze",
+  "source_commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+  "original": {
+    "path": "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+    "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+    "sha256": "f7f68623af3773c0a71f0d3dc82da4932a5d61993feb01595957179c9cff49ee",
+    "size_bytes": 29261
+  },
+  "amendment": {
+    "path": "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+    "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+    "sha256": "d226935e37a19b611cff5d05f383d7d37f1835449b36c600abfe913cee3bfe22",
+    "size_bytes": 5920
+  },
+  "resolution": {
+    "method": "Deep copy original; replace only the amendment existing_authorized_change SHA; append exact amendment files if absent; existing duplicate hashes must agree.",
+    "effective_canonical_sha256": "c401a6e4cb0f02048a47748a5f2560024a2d25845311518df062542d4c1650bc",
+    "effective_files": 153,
+    "original_files": 129,
+    "canonicalization": "UTF-8 json.dumps(sort_keys=True,separators=(comma,colon)); no excluded keys",
+    "current_committed_hashes_match": true
+  },
+  "authority": "Preserves both original manifests. Only already approved L2 exception; no new unfreeze or candidate permission.",
+  "compatibility": "verify_runtime treats freeze input as committed JSON bytes; it does not apply or verify a freeze. Existing check_copau_judge_freeze must validate original and amendment in CI; bind this descriptor and both components in eventual contract sources."
+}

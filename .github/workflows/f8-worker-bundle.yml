@@ -1,0 +1,41 @@
+name: F8 offline worker bundle
+on:
+  pull_request:
+    paths: ['tools/ci/f8_worker*', 'tools/ci/f8_worker_fixture/**', 'tests/test_f8_worker_bundle.py', 'docs/factory/copau-f8-*', 'src/lightyear_factory/gates.py', 'src/lightyear_factory/workspace.py', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'factory/carddemo-web/service/src/main/java/**', 'spec/modernization/carddemo-*/**', '.github/workflows/f8-worker-*.yml']
+  push:
+    branches: [main]
+    paths: ['tools/ci/f8_worker*', 'tools/ci/f8_worker_fixture/**', 'tests/test_f8_worker_bundle.py', 'docs/factory/copau-f8-*', 'src/lightyear_factory/gates.py', 'src/lightyear_factory/workspace.py', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'factory/carddemo-web/service/src/main/java/**', 'spec/modernization/carddemo-*/**', '.github/workflows/f8-worker-*.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  assemble-offline-worker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: src:.:tests
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify projection and retention refusals with offline fixtures
+        run: python -B -m unittest test_f8_worker_bundle -v
+      - name: Assemble real public bundle and prove offline isolation
+        run: python -B -m tools.ci.f8_worker_bundle work/f8-worker-offline
+      - name: Retain a pre-assembly failure record
+        if: failure()
+        run: >-
+          python -B -c "import json,pathlib; p=pathlib.Path('work/f8-worker-offline/failure.json'); p.parent.mkdir(parents=True,exist_ok=True); p.exists() or p.write_text(json.dumps({'schema':'f8-worker-failure/1','stage':'pre-assembly','factory_run_acceptance':False})+'\n')"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: f8-worker-offline-${{ github.run_attempt }}
+          path: work/f8-worker-offline
+          if-no-files-found: error
+          retention-days: 90

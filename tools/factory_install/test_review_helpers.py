@@ -8,6 +8,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
 from types import SimpleNamespace
@@ -35,7 +36,7 @@ class ReviewHelpers(unittest.TestCase):
             with self.assertRaises(sqlite3.OperationalError):
                 verified_head(root, public)
             self.assertFalse(database.exists())
-            with sqlite3.connect(database) as connection:
+            with closing(sqlite3.connect(database)) as connection, connection:
                 connection.execute("CREATE TABLE events(sequence INTEGER PRIMARY KEY,envelope TEXT)")
             with self.assertRaises(ValueError):
                 verified_head(root, public)
@@ -49,7 +50,7 @@ class ReviewHelpers(unittest.TestCase):
                 event.update(content_sha256=previous, signature=dict(algorithm="Ed25519", key_id=key_id,
                              value=base64.b64encode(key.sign(raw)).decode()))
                 events.append(event)
-            with sqlite3.connect(database) as connection:
+            with closing(sqlite3.connect(database)) as connection, connection:
                 connection.executemany("INSERT INTO events VALUES(?,?)", [(e["sequence"], json.dumps(e)) for e in events])
             before = database.read_bytes()
             self.assertEqual(verified_head(root, public), previous)
@@ -60,11 +61,11 @@ class ReviewHelpers(unittest.TestCase):
             public.write_bytes(pem)
             for altered in (dict(events[1], previous_sha256="f" * 64), dict(events[1], payload={"tampered": True}),
                             dict(events[1], signature=dict(events[1]["signature"], value=base64.b64encode(b"x" * 64).decode()))):
-                with sqlite3.connect(database) as connection:
+                with closing(sqlite3.connect(database)) as connection, connection:
                     connection.execute("UPDATE events SET envelope=? WHERE sequence=2", (json.dumps(altered),))
                 with self.assertRaises(Exception):
                     verified_head(root, public)
-            with sqlite3.connect(database) as connection:
+            with closing(sqlite3.connect(database)) as connection, connection:
                 connection.execute("DELETE FROM events WHERE sequence=1")
             with self.assertRaises(ValueError):
                 verified_head(root, public)

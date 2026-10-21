@@ -72,6 +72,15 @@ class AccountPhoneDateRulesTest {
                     compare("EDIT-DATE-CCYYMMDD",input);
                 }
     }
+    @Test void invalidFebruaryYearStillWritesDivisorBeforeDivisionFailure() throws Exception {
+        for(String year:new String[]{"    ","\0\0\0\0","ABCD"}) {
+            var result=compare("EDIT-DATE-CCYYMMDD",Map.of("WS-EDIT-DATE-CCYYMMDD",year+"0229",
+                "WS-DIV-BY","7","WS-DIVIDEND","9","WS-REMAINDER","3"));
+            assertEquals("4",result.get("WS-DIV-BY").replaceFirst("^0+(?!$)",""));
+            assertEquals("9",result.get("WS-DIVIDEND").replaceFirst("^0+(?!$)",""));
+            assertEquals("3",result.get("WS-REMAINDER").replaceFirst("^0+(?!$)",""));
+        }
+    }
     @Test void datesPreserveExistingErrorFlagsAndFeedbackStorage() throws Exception {
         for(String date:new String[]{"19000229","20000229","20260431","20261021","        ","2026A132"})
             for(String prior:new String[]{"","FIRST ERROR","\0"})

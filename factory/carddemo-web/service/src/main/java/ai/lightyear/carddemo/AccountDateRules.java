@@ -58,7 +58,11 @@ public final class AccountDateRules {
             error(state,":Cannot have 30 days in this month.",AccountEditState.Flag.FLG_DAY_NOT_OK,AccountEditState.Flag.FLG_MONTH_NOT_OK);return;
         }
         if(state.test(AccountEditState.Flag.WS_FEBRUARY) && state.test(AccountEditState.Flag.WS_DAY_29)) {
-            int divisor=new BigDecimal(state.get(AccountEditState.Field.WS_EDIT_DATE_YY_N)).signum()==0?400:4;
+            String yearSuffix=state.get(AccountEditState.Field.WS_EDIT_DATE_YY_N);
+            // Invalid DISPLAY bytes compare unequal to zero before DIVIDE rejects the year.
+            boolean zeroSuffix=yearSuffix.matches("[+-]?[0-9]+(?:[.][0-9]+)?")
+                && new BigDecimal(yearSuffix).signum()==0;
+            int divisor=zeroSuffix?400:4;
             state.put(AccountEditState.Field.WS_DIV_BY,Integer.toString(divisor));
             BigDecimal[] parts=new BigDecimal(state.get(AccountEditState.Field.WS_EDIT_DATE_CCYY_N)).divideAndRemainder(BigDecimal.valueOf(divisor));
             state.put(AccountEditState.Field.WS_DIVIDEND,parts[0].toPlainString());state.put(AccountEditState.Field.WS_REMAINDER,parts[1].toPlainString());

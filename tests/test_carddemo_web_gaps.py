@@ -14,7 +14,7 @@ ADDENDUM='docs/modernization/carddemo-slice-gaps-2026-10-18.json'
 
 class CardDemoGapTests(unittest.TestCase):
     def fixture(self,root):
-        for name in (RECEIPT,ADDENDUM,records.web_packet_path(RECEIPT)):
+        for name in (RECEIPT,ADDENDUM,str(Path(ADDENDUM).with_suffix('.md')),records.web_packet_path(RECEIPT)):
             path=root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((ROOT/name).read_bytes())
 
     def test_dated_text_and_live_status_are_bound_to_original_measurement(self):

@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-parent</artifactId><version>4.1.0</version><relativePath/></parent>
+  <groupId>ai.lightyear</groupId><artifactId>carddemo-web-slice</artifactId><version>0.1.0-SNAPSHOT</version>
+  <properties><java.version>21</java.version></properties>
+  <dependencies>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc</artifactId></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-jdbc</artifactId></dependency>
+    <dependency><groupId>org.postgresql</groupId><artifactId>postgresql</artifactId><scope>runtime</scope></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+  </dependencies>
+  <build><plugins><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin><plugin><groupId>org.pitest</groupId><artifactId>pitest-maven</artifactId><version>1.19.4</version>
+    <dependencies><dependency><groupId>org.pitest</groupId><artifactId>pitest-junit5-plugin</artifactId><version>1.2.3</version></dependency></dependencies>
+    <configuration>
+      <targetClasses><param>ai.lightyear.carddemo.AccountValidationFeedback*</param><param>ai.lightyear.carddemo.AccountFeedbackState*</param></targetClasses>
+      <targetTests><param>ai.lightyear.carddemo.AccountFeedbackTest</param></targetTests>
+      <outputFormats><param>XML</param><param>HTML</param></outputFormats><timestampedReports>false</timestampedReports>
+      <threads>1</threads><mutationThreshold>90</mutationThreshold><failWhenNoMutations>true</failWhenNoMutations>
+      <jvmArgs><param>-Dcarddemo.root=${carddemo.root}</param><param>-Dcarddemo.cases=${carddemo.cases}</param><param>-Dcarddemo.proof=true</param></jvmArgs>
+    </configuration></plugin></plugins></build>
+</project>

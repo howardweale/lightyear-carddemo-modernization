@@ -114,6 +114,16 @@ class GraphOnAcceptance(VerifyAcceptance):
         artifacts = [("mcp-response-" + str(i), canonical(response))
                      for i, response in enumerate(self.responses)]
         self.assertTrue(artifacts)
+        # Identify bounded scan failures without exporting response contents.
+        for name, data in artifacts:
+            try:
+                scan([(name, data)], self.scan_canaries, self.protected_values)
+            except ContractError:
+                print("GRAPH_RESPONSE_SCAN_FAILED " + json.dumps({
+                    "artifact": name, "bytes": len(data),
+                    "sha256": hashlib.sha256(data).hexdigest(),
+                }), flush=True)
+                raise
         # A leak after all real responses must still be detected, with no truncation.
         leak = base64.b64encode(self.scan_canaries["session-answer"].encode()).decode()
         with self.assertRaisesRegex(ContractError, "isolation-breach"):

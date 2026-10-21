@@ -223,3 +223,18 @@ class PlainSearchTests(unittest.TestCase):
         receipt = json.loads((self.root / "runs/overrun/receipt.json").read_text())
         self.assertEqual("blocked", receipt["status"])
         self.assertFalse(receipt["qualifies_for_factory_receipt"])
+
+    def test_graph_derived_files_outside_the_bound_corpus_are_unreachable(self):
+        derived = ("graph/index.json", "graph/summary.txt", "graph/packed-context.json")
+        for path in derived:
+            target = self.source / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text("DERIVED_GRAPH_HINT_ONLY", encoding="utf-8")
+        session, _, _ = self.session()
+        result = session.call("planner", 0, "search_code", dict(query="DERIVED_GRAPH_HINT_ONLY"))
+        self.assertEqual([], result["items"])
+        self.assertEqual(set(self.manifest), set(session.corpus))
+        for path in derived:
+            session, _, _ = self.session()
+            with self.assertRaisesRegex(ContractError, "factory-plain-query-refused"):
+                session.call("planner", 0, "read_file", dict(path=path, line_start=1, line_end=1))

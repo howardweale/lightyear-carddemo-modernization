@@ -3,6 +3,7 @@
 This is CI compatibility evidence, never a comparison result or spend approval.
 """
 import copy
+from contextlib import ExitStack
 import hashlib
 import json
 import os
@@ -108,7 +109,7 @@ def audit(trials, approved_sources, projection, corpus):
                     packed_evidence["semantic_memory"] is None)
         output[mode] = dict(prompt_inventory=prompts, complete_prompt_bytes=sum(p["bytes"] for p in prompts),
             retrieval_calls=len(calls), retrieval_bytes=total, builder_evidence_bytes=evidence_bytes,
-            persisted_summary=summary, captured_requests_sha256=canonical_hash(provider.requests))
+            persisted_summary=summary, captured_requests_sha256=hashlib.sha256(encoded(provider.requests)).hexdigest())
     return dict(schema="g3-zero-model-parity/1", fixture_only=True, paid_model_calls=0,
         production_ready=False, corpus_sha256=canonical_hash(manifest), source_files=len(manifest),
         projection_excerpts_checked=source_count, non_context_order_sha256=canonical_hash(common_order),
@@ -116,7 +117,23 @@ def audit(trials, approved_sources, projection, corpus):
 
 
 class RetrievalParityTests(GraphFixture):
-    setUp = g2.FactoryGraphTests.setUp
+    def setUp(self):
+        super().setUp()
+        self.manifest = self.build()
+        # Create the real public-fixture scan before requesting fixture approval.
+        leak_report = g2.leak_check(self.out, g2.digest(self.lane), set(g2.CANARIES.values()),
+            self.signer, evaluation_inventory_sha256=canonical_hash(g2.CANARIES))
+        self.assertTrue(leak_report["passed"])
+        proof, trust = self.approve(self.manifest)
+        self.approved = (self.out, proof, trust)
+        self.projection = json.loads(g2.gzip.decompress((self.out / "projection.json.gz").read_bytes()))
+        self.node = next(n for n in self.projection["nodes"]
+                         if n["kind"] == "cobol_field" and len(encoded(n)) < 2500
+                         and any(s.get("text") for s in n["source"]))
+        self.source = self.root / "source"
+        (self.source / "candidate").mkdir(parents=True)
+        (self.source / "candidate/toy.txt").write_bytes(b"wrong\n")
+        self.read_manifest = {"candidate/toy.txt": hashlib.sha256(b"wrong\n").hexdigest()}
     graph_order = g2.FactoryGraphTests.order
     graph_plan = g2.FactoryGraphTests.plan
     edit = staticmethod(g2.FactoryGraphTests.edit)
@@ -166,8 +183,37 @@ class RetrievalParityTests(GraphFixture):
             provider = ScriptedModelProvider(outputs)
             controller = FactoryOrchestrator(self.source, self.root / "runs", ModelAgentSet(provider),
                 workspace_read_manifest=manifest, approved_projection=self.approved)
-            with patch.object(controller, "_run_gates", side_effect=[gate(False), gate(True)]):
+            # Plain search must work with every graph loading/assembly entry point
+            # poisoned. Supplying a real approved graph to the controller is deliberate:
+            # it must remain inaccessible, rather than being assembled then redacted.
+            with ExitStack() as guards:
+                forbidden = []
+                if mode == "plain-search":
+                    for target in (
+                        "lightyear_factory.orchestrator.FactoryOrchestrator._context",
+                        "lightyear_factory.context.GraphContextAssembler.assemble",
+                        "lightyear_factory.context.GraphContextAssembler._assemble_annotated",
+                        "lightyear_factory.context.GraphExplorerIndex",
+                        "lightyear_toolkit.graph_approval.load_approved",
+                        "lightyear_factory.graph_tools.FactoryGraphSession",
+                    ):
+                        forbidden.append(guards.enter_context(patch(target,
+                            side_effect=AssertionError("plain-search-graph-access"))))
+                guards.enter_context(patch.object(controller, "_run_gates",
+                    side_effect=[gate(False), gate(True)]))
                 receipt = controller.run(order, mode)
+                for entry in forbidden:
+                    entry.assert_not_called()
+                if mode == "plain-search":
+                    self.assertEqual(set(manifest), set(controller.agents.graph_session.corpus))
+                    for req in provider.requests:
+                        context = req["payload"].get("graph_context", {})
+                        self.assertFalse(context.get("nodes"))
+                        self.assertFalse(context.get("edges"))
+                        self.assertFalse(context.get("semantic_memory"))
+                        for excerpt in context.get("source_excerpts", []):
+                            self.assertIn(excerpt["path"], manifest)
+                            self.assertEqual([], excerpt["supports"])
             trials[mode] = dict(order=order, manifest=manifest.copy(), provider=provider, receipt=receipt,
                 ledger=RunLedger(self.root / "runs" / mode / "events.jsonl"), run_id=mode)
         return trials, corpus

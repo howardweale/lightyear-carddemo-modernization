@@ -79,8 +79,8 @@ def load_corpus(workspace, manifest, scanner):
             source = raw.decode("utf-8")
         except UnicodeError:
             raise ContractError("factory-plain-utf8") from None
-        scanner("plain-source-" + canonical_hash(relative), raw)
-        scanner("plain-path-" + canonical_hash(relative), encoded(relative))
+        scanner("plain-source-" + canonical_hash(dict(path=relative)), raw)
+        scanner("plain-path-" + canonical_hash(dict(path=relative)), encoded(relative))
         if PRIVATE.search(source) or PRIVATE.search(relative):
             raise ContractError("factory-plain-private-material")
         corpus[relative] = source

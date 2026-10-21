@@ -148,9 +148,9 @@ def compute_build_receipt(order, ledger, run_receipt, calls, runtime, run_dir):
         graph = graph_summary(order, ledger, run_id)
         require(run_receipt.get('graph', graph if graph['mode']=='packed' else None)==graph,
                 'graph-receipt-binding')
-        if graph['mode']=='on-demand':
+        if graph['mode'] in ('on-demand', 'plain-search'):
             require(graph['refused_tool_calls']==0, 'graph-refused-call')
-            for event in rows('graph_tool_finished'):
+            for event in rows('plain_tool_finished' if graph['mode']=='plain-search' else 'graph_tool_finished'):
                 row=event['payload']
                 require((row.get('scan_artifact'),row.get('result_sha256')) in scanned,
                         'graph-result-scan-binding')

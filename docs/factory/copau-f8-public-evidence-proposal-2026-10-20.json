@@ -1,0 +1,255 @@
+{
+  "schema": "f8-public-evidence-binding-proposal/1",
+  "state": "proposal-not-a-run-receipt-or-approval",
+  "source_commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+  "observer": {
+    "role": "Existing independent full-slice reference session and frame comparison observer; controller-only",
+    "binding": {
+      "path": "factory/carddemo-web/runtime/prove_slice.py",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1",
+      "size_bytes": 23370
+    },
+    "proposed_observer_sha256": "03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1",
+    "interpretation": "Whole committed source-file SHA-256, not a run output or candidate hash; existing browser/database and mutation proof remain separate required evidence."
+  },
+  "engineering_classes": {
+    "hash_basis": "Whole committed UTF-8 source-file bytes containing the named existing Python engineering class; not compiled Java class bytes, candidate implementation, or a proof verdict.",
+    "proposed_class_hashes": {
+      "FactoryOrchestrator": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622",
+      "IsolatedWorkspace": "a4c54ecaa2954a4066f174740a18b54a9d20c1cdf488acd266b8831b0c4d5aa7",
+      "CandidateBuildBackend": "cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51",
+      "FactoryModelAdmission": "b4b06ffa4439b9fd7623b8eb4ee906ea56db975d4d0ebdb0a9b2001602154dad",
+      "AccountedModelProvider": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+      "RunLedger": "b66f98a2634b87420421da9ccab3b18671c8da1b92b509259332dcd69cce8dc3"
+    },
+    "bindings": [
+      {
+        "class_name": "FactoryOrchestrator",
+        "path": "src/lightyear_factory/orchestrator.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622",
+        "size_bytes": 45497
+      },
+      {
+        "class_name": "IsolatedWorkspace",
+        "path": "src/lightyear_factory/workspace.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "a4c54ecaa2954a4066f174740a18b54a9d20c1cdf488acd266b8831b0c4d5aa7",
+        "size_bytes": 10825
+      },
+      {
+        "class_name": "CandidateBuildBackend",
+        "path": "src/lightyear_factory/gates.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51",
+        "size_bytes": 8310
+      },
+      {
+        "class_name": "FactoryModelAdmission",
+        "path": "src/lightyear_factory/model_admission.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "b4b06ffa4439b9fd7623b8eb4ee906ea56db975d4d0ebdb0a9b2001602154dad",
+        "size_bytes": 17352
+      },
+      {
+        "class_name": "AccountedModelProvider",
+        "path": "src/lightyear_factory/budgeted_providers.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+        "size_bytes": 9164
+      },
+      {
+        "class_name": "RunLedger",
+        "path": "src/lightyear_factory/ledger.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "b66f98a2634b87420421da9ccab3b18671c8da1b92b509259332dcd69cce8dc3",
+        "size_bytes": 2038
+      }
+    ],
+    "semantic_limit": "factory_policy validates class key/digest shapes only. It does not verify class or observer provenance against these values; this explicit manifest provides that review binding, and the executable-commit admission protects code bytes. A future request must retain this source-file interpretation."
+  },
+  "public_prerequisites": {
+    "reviewed_pr": 410,
+    "reviewed_head": "a4287165ed1e2c02243c4d17f71ff8031b493334",
+    "main_with_equal_tree": "7197d36159fc0bf585caf5045abc841c0e96c93e",
+    "run_id": 39501721188,
+    "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39501721188",
+    "job_id": 118900599824,
+    "job_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39501721188/job/118900599824",
+    "retained_local_record_hashes": [
+      {
+        "record": "final-audit.json",
+        "sha256": "0e05097ec00a176f97d392324983ca84af4b8d73de6a08b9986c886f2aa83823",
+        "size_bytes": 3105
+      },
+      {
+        "record": "l10-fixtures-log-binding.json",
+        "sha256": "424bb592c5c1c66313263d4f9814e95d4ca01a8104da2863e266f1033bb3b1a3",
+        "size_bytes": 2608
+      },
+      {
+        "record": "whole-tree-review.json",
+        "sha256": "90de15d8d26f4132a4e67d3fdcd2b733c8a4386b76bd3747a04e7e16af4a49cc",
+        "size_bytes": 2264
+      }
+    ],
+    "offline_fixture_count": 107,
+    "four_controller_dryruns": true,
+    "python_OCI_probe": true,
+    "provider_admission_signature_boundaries_mocked": true,
+    "factory_run_acceptance": false,
+    "limit": "Historical prerequisite fixture evidence only; not final F8 head CI, real models, Java OCI conformance, live trust or signed admission.",
+    "committed_sources": [
+      {
+        "path": "tests/test_factory_controller_dryruns.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "28b272fd0b8eed07e0f2dbe3bf003212e0df6005d1897846519eb67358485bf2",
+        "size_bytes": 11891
+      },
+      {
+        "path": "tests/test_factory_model_admission.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "14fa3e3528f31521b00b6b0b5e258e9bb02bd8649fc0d083aa2028d5bd6716f2",
+        "size_bytes": 24502
+      },
+      {
+        "path": "tests/test_factory_allowlist_feedback.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "87f7486c5bbf60728e2a16a836163089efc48def0d824ffaf30309d97a87e4b9",
+        "size_bytes": 43914
+      },
+      {
+        "path": "tests/test_factory_authorship.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "0912ad4809574e0f34d62935c8d25d081f45b6694732985fe1791b427d479d2c",
+        "size_bytes": 33390
+      },
+      {
+        "path": "tests/test_factory_build_receipt.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "f87b6684958650417ccd9f1d77931487fb561331809a7e00d068aa01435b3b3f",
+        "size_bytes": 7150
+      },
+      {
+        "path": "tests/test_factory_transport_records.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "64685cf5303591287f2c643585608664c08b948ae63048f9a4e68253f88fcc23",
+        "size_bytes": 31667
+      },
+      {
+        "path": "tools/ci/factory_container_probe.py",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "c8950474b8d82ad18bec4729dbcc3c8c72cb1f89b3a5d2b532a7b856e59c3c97",
+        "size_bytes": 2851
+      },
+      {
+        "path": ".github/workflows/factory-allowlist-feedback.yml",
+        "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+        "sha256": "484c8b6e2e73fdc8b9c9fb1ee31c448317dbe5da39cb5589404b679f42836228",
+        "size_bytes": 2967
+      }
+    ],
+    "source_bytes_equal_reviewed_head": true
+  },
+  "freeze": {
+    "input_proposal": {
+      "path": "docs/factory/copau-f8-freeze-input-proposal-2026-10-20.json",
+      "sha256": "da11effc0670df6390b2620402baf242c4a9be8dc8f4bbb2c52f814746a651cd",
+      "size_bytes": 1605
+    },
+    "original": {
+      "path": "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "f7f68623af3773c0a71f0d3dc82da4932a5d61993feb01595957179c9cff49ee",
+      "size_bytes": 29261
+    },
+    "amendment": {
+      "path": "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "d226935e37a19b611cff5d05f383d7d37f1835449b36c600abfe913cee3bfe22",
+      "size_bytes": 5920
+    },
+    "unchanged": true
+  },
+  "runtime_binding_proposal": {
+    "scope": {
+      "path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    "freeze": {
+      "path": "docs/factory/copau-f8-freeze-input-proposal-2026-10-20.json",
+      "sha256": "da11effc0670df6390b2620402baf242c4a9be8dc8f4bbb2c52f814746a651cd"
+    },
+    "workspace": {
+      "path": "docs/factory/copau-f8-workspace-manifest-proposal-2026-10-20.json",
+      "sha256": "109f704f6f1e6d442232cde5b7ee4b7d8e6c619dd1a7d230f111974cea48c354"
+    },
+    "execution_policy": null,
+    "policy_proposal_only": {
+      "path": "docs/factory/copau-f8-java-policy-proposal-2026-10-20.json",
+      "sha256": "4a94e42d3e3fdfc238a474c46f21416ca3d367f7679e698dbcec071a14bd9184",
+      "size_bytes": 8147
+    }
+  },
+  "eventual_contract_sources": {
+    "required_shape": "Every source is exactly path, sha256, commit; unique path under docs/factory. Final publication commit must actually contain those bytes.",
+    "source_records": [
+      "docs/factory/copau-factory-scope-2026-10-18.json",
+      "docs/factory/copau-factory-judge-freeze-2026-10-18.json",
+      "docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json",
+      "docs/factory/copau-f8-freeze-input-proposal-2026-10-20.json",
+      "docs/factory/copau-f8-workspace-manifest-proposal-2026-10-20.json",
+      "docs/factory/copau-f8-java-policy-proposal-2026-10-20.json",
+      "docs/factory/copau-f8-public-evidence-proposal-2026-10-20.json"
+    ],
+    "warning": "Do not use the policy proposal as executable execution_policy. Replace with finalized concrete policy. Do not stamp the preparation base as commit for newly proposed files. No importable factory-contract or plan is emitted."
+  },
+  "external_inputs": {
+    "private_expected_values": {
+      "sha256": null,
+      "size_bytes": null,
+      "count": null,
+      "owner": "operator/controller",
+      "constraints": "Only digest/size/count; no private values read, generated or disclosed. Actual bundle must remain outside source/worker/excluded exposed roots; schema requires bounded regular file.",
+      "private_file_read": false
+    },
+    "tower": {
+      "port": 8769,
+      "public_fingerprint": null,
+      "current_trusted_journal_head": null,
+      "owner": "existing operator trust channel",
+      "keys_created": false,
+      "proof_export_called": false
+    },
+    "wall_clock_seconds": null,
+    "timezone_aware_window": null
+  },
+  "approved": {
+    "roles": {
+      "planner": {
+        "provider": "openai-responses",
+        "model": "gpt-5.4-2026-03-05"
+      },
+      "builder": {
+        "provider": "openai-responses",
+        "model": "gpt-5.4-2026-03-05"
+      },
+      "analyst": {
+        "provider": "openai-responses",
+        "model": "gpt-5.4-2026-03-05"
+      }
+    },
+    "reasoning_effort": "No explicit reasoning effort set by existing source provider; proposal does not add one.",
+    "cost_cap_microusd": 10000000,
+    "cost_scope": "All billed calls, failures, retries and reasoning output; prior USD1.340/1.465 examples remain illustrations, not final estimate."
+  },
+  "readiness": {
+    "request_ready": false,
+    "run_authorized": false,
+    "model_calls": false,
+    "signing": false,
+    "activation": false,
+    "attempt_consumed": false
+  }
+}

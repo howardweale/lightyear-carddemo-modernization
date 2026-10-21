@@ -1,0 +1,122 @@
+{
+  "schema": "f8-workspace-compatibility-proposal/1",
+  "source_commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+  "manifest": {
+    "path": "docs/factory/copau-f8-workspace-manifest-proposal-2026-10-20.json",
+    "sha256": "109f704f6f1e6d442232cde5b7ee4b7d8e6c619dd1a7d230f111974cea48c354",
+    "size_bytes": 4967
+  },
+  "manifest_is_raw_path_sha256_map": true,
+  "paths": 32,
+  "total_source_bytes": 318127,
+  "groups": {
+    "programs": [
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl",
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl"
+    ],
+    "screen_definitions": [
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU00.bms",
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU01.bms"
+    ],
+    "screen_copybooks": [
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU00.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU01.cpy"
+    ],
+    "ims_segment_copybooks": [
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy"
+    ],
+    "shared_copybooks": [
+      "spec/modernization/carddemo-screens/upstream/app/cpy/COCOM01Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/COTTL01Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CSDAT01Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG01Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG02Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT01Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT02Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT03Y.cpy",
+      "spec/modernization/carddemo-screens/upstream/app/cpy/CVCUS01Y.cpy"
+    ],
+    "sql_declaration": [
+      "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl"
+    ],
+    "ims_definitions": [
+      "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd",
+      "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd",
+      "spec/modernization/carddemo-data/upstream/app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb"
+    ],
+    "shared_java": [
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+      "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java"
+    ],
+    "scope": [
+      "docs/factory/copau-factory-scope-2026-10-18.json"
+    ]
+  },
+  "write_scope": [
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization"
+  ],
+  "writes_by": "Factory only after signed F2; no developer-session candidate authorship",
+  "excluded": [
+    ".git and history",
+    "reference interpreters and outputs",
+    "expected frames, database states and session answers",
+    "PIT POM/configuration",
+    "prior receipts",
+    "AuthorizationListService.java",
+    "AuthorizationDetailService.java",
+    "AuthorizationFraud.java",
+    "AuthorizationRendering.java",
+    "SourceEdits.java",
+    "controller/private bundles",
+    "provider credentials"
+  ],
+  "copybook_resolution": {
+    "public_COPY_INCLUDE_refs": "All public COPY/SQL INCLUDE names in the three committed programs resolve to selected source files except IBM platform DFHAID, DFHBMSCA and SQLCA.",
+    "vendor_only_refs": [
+      "DFHAID",
+      "DFHBMSCA",
+      "SQLCA"
+    ],
+    "vendor_sources_imported": false,
+    "notes": "These are source-reading inputs; proposal does not compile COBOL or fetch licensed vendor copybooks. Safe publicly documented interface facts, if needed, require separately reviewed provenance."
+  },
+  "shared_java_blockers": [
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+      "dependency": "SourceEdits.Location",
+      "reason": "Current public signature reaches the existing execution engine; SourceEdits is excluded."
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+      "dependency": "SourceEdits load(...)",
+      "reason": "Current method signature/body depends on existing execution engine. Do not add SourceEdits.java or its implementation bytecode to close compilation."
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+      "dependency": "Constructor requires six-screen bindings and generated data plan at runtime.",
+      "reason": "No generated binding/plan/session/expected files are allow-listed; a worker-safe public API/data projection and own-test strategy need a separately reviewed implementation."
+    }
+  ],
+  "build_file": {
+    "selected": null,
+    "current_service_pom_excluded": true,
+    "reason": "Existing service POM contains PIT and compiles current authorization implementation. Frozen judge POM is explicitly controller-only.",
+    "proposed_new_worker_pom": "factory/copau/worker/pom.xml",
+    "needed": "A CI-validated worker POM and safe shared API packaging, with no authorization candidate or engine implementation authored here."
+  },
+  "graph_tool": {
+    "selected_endpoint": null,
+    "requirement": "Controller-mediated read-only graph tool with approved projection; no worker network and no invented URL or trust."
+  },
+  "compatibility": "Hash/path shape is suitable for raw runtime workspace input; content set is a review proposal, not a compilable or approved workspace. Do not complete it by adding excluded engine/judge files.",
+  "ready": false
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "g3-cost-planning/1",
+  "status": "illustrative-not-forecast-not-approved-cap",
+  "rates": {
+    "input_usd_per_million": 2.5,
+    "billed_output_usd_per_million": 15,
+    "cache_discount_assumed": false,
+    "source": "https://developers.openai.com/api/docs/models/gpt-5.4",
+    "checked_date": "2026-10-21",
+    "scope": "Standard non-regional text requests at <=272000 input tokens per prompt; no hosted tools; account access unproved"
+  },
+  "arms": [
+    {
+      "arm": "on-demand",
+      "trials": 78,
+      "analyzed": 72,
+      "pilots": 6,
+      "assumed_model_calls_per_trial": 14,
+      "assumed_input_tokens_per_trial": 556000,
+      "assumed_billed_output_tokens_per_trial": 59000,
+      "illustrative_usd_per_trial": 2.275,
+      "illustrative_usd_per_arm": 177.45,
+      "proposed_token_ceiling_usd_per_arm": 234.0
+    },
+    {
+      "arm": "packed",
+      "trials": 78,
+      "analyzed": 72,
+      "pilots": 6,
+      "assumed_model_calls_per_trial": 6,
+      "assumed_input_tokens_per_trial": 204000,
+      "assumed_billed_output_tokens_per_trial": 51000,
+      "illustrative_usd_per_trial": 1.275,
+      "illustrative_usd_per_arm": 99.45,
+      "proposed_token_ceiling_usd_per_arm": 234.0
+    },
+    {
+      "arm": "plain-search",
+      "trials": 78,
+      "analyzed": 72,
+      "pilots": 6,
+      "assumed_model_calls_per_trial": 14,
+      "assumed_input_tokens_per_trial": 556000,
+      "assumed_billed_output_tokens_per_trial": 59000,
+      "illustrative_usd_per_trial": 2.275,
+      "illustrative_usd_per_arm": 177.45,
+      "proposed_token_ceiling_usd_per_arm": 234.0
+    }
+  ],
+  "comparison_illustrative_usd": 454.35,
+  "copau_illustrative_usd": 1.215,
+  "comparison_token_ceiling_usd": 702,
+  "combined_reservation_scenario_usd": 712,
+  "combined_illustrative_usd": 455.565,
+  "assumptions": [
+    "Base COPAU illustration: 1 planner x20k/5k, 3 builders x40k/12k, 2 analysts x20k/5k input/output. Applying this mix to B07 journeys is unmeasured and must be replaced by zero-model measured prompt sizes.",
+    "O/S add 8 retrieval-followup model turns at40k input/1k billed output; all calls add4k uncached evidence/history input. P adds4k input for each of6calls. These are sensitivity assumptions, not measured arm differences.",
+    "All repeated history/schema/context must fit total token ceilings; fail closed rather than assume a free extra turn. Output includes reasoning.",
+    "No retries or cache savings assumed. Failed/retried requests consume caps. Longer-context or regional pricing requires re-estimation.",
+    "Proposed equal 600k input/100k output ceilings imply USD3 per trial at these rates; 234trials imply702. Add separately approved COPAU10 reservation =>712, neither a new approval nor a forecast.",
+    "Compute/hosting/egress/operator labor excluded and must be budgeted separately."
+  ],
+  "calendar": {
+    "trials": 234,
+    "serial_trial_seconds": 1682460,
+    "serial_trial_hours": 467.35,
+    "ideal_two_runner_hours": 233.675,
+    "ideal_days_at_12h_per_runner": 19.472917,
+    "prior_14_days_not_transferred": true
+  },
+  "model_calls_executed": 0
+}

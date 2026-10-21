@@ -1,10 +1,10 @@
 name: CardDemo data component
 on:
   pull_request:
-    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
+    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
   push:
     branches: [main]
-    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
+    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
 permissions:
   contents: read
   packages: read
@@ -30,6 +30,18 @@ jobs:
         env:
           PYTHONPATH: src:tests
         run: python -B -m unittest test_carddemo_data_delivery -v
+      - name: Independently check BMS layouts and approved public/synthetic records
+        env:
+          PYTHONPATH: src:tests
+          CARDDEMO_INDEPENDENT_REPORT: work/carddemo-independent-layout
+        run: python -B -m unittest test_carddemo_independent_layout -v
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-independent-layout
+          path: work/carddemo-independent-layout
+          if-no-files-found: error
+          retention-days: 90
       - name: Generate mappings and PostgreSQL DDL
         env:
           PYTHONPATH: src

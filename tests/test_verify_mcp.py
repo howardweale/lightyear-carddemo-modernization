@@ -88,6 +88,11 @@ class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
     async def exercise_graph(self, call):
         pass
 
+    async def exercise_public_decode(self, call):
+        self.assertTrue(
+            (await call("decode_records", path="accounts.bin", copybook="account.cpy"))["records"]
+        )
+
     async def inspect_graph_verdict(self, call, attempt):
         pass
 
@@ -555,13 +560,7 @@ public class Probe {
                 300,
                 (await call("describe_copybook", path="account.cpy"))["record_length"],
             )
-            self.assertTrue(
-                (
-                    await call(
-                        "decode_records", path="accounts.bin", copybook="account.cpy"
-                    )
-                )["records"]
-            )
+            await self.exercise_public_decode(call)
             self.assertEqual(
                 "zos-run-observation/1",
                 (await call("read_job_log", path="job.txt"))["schema"],

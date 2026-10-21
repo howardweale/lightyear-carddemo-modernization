@@ -100,6 +100,28 @@ class GraphOnAcceptance(VerifyAcceptance):
                 self.assertFalse(result.get("items"))
         self.assertEqual(before, await call("get_budget"))
 
+    async def exercise_public_decode(self, call):
+        # Request every public record through the existing graph-on pagination API.
+        # Each complete page is retained by call() and receives the full leak scan.
+        raw = (self.public / "accounts.bin").read_bytes()
+        self.assertEqual(0, len(raw) % 300)
+        total = len(raw) // 300
+        self.assertGreater(total, 0)
+        source_hash = hashlib.sha256(raw).hexdigest()
+        received = 0
+        for offset in range(0, total, 5):
+            page = await call("decode_records", path="accounts.bin", copybook="account.cpy",
+                              offset=offset, limit=5)
+            self.assertNotIn("error", page)
+            self.assertEqual(source_hash, page["sha256"])
+            self.assertEqual(total, page["total_records"])
+            self.assertEqual(offset, page["offset"])
+            self.assertEqual(5, page["limit"])
+            self.assertEqual(min(5, total - offset), len(page["records"]))
+            received += len(page["records"])
+            self.assertEqual(received if received < total else None, page["next_offset"])
+        self.assertEqual(total, received)
+
     async def inspect_graph_verdict(self, call, attempt):
         result = await call("explain_divergence", attempt_id=attempt)
         self.assertNotIn("error", result)

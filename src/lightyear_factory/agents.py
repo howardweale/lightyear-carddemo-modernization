@@ -356,6 +356,7 @@ class ModelAgentSet:
         self.implementer_context: dict[str, Any] | None = None
         self.context_projections: dict[str, dict[str, Any]] = {}
         self.isolation_scan = None
+        self.graph_session = None
 
     def plan(self, order: WorkOrder, context: dict[str, Any]) -> dict[str, Any]:
         self.implementer_context = context
@@ -453,6 +454,58 @@ class ModelAgentSet:
         payload: dict[str, Any],
         schema: dict[str, Any],
     ) -> dict[str, Any]:
+        from .graph_tools import graph_policy
+        if graph_policy(order)["mode"] == "on-demand" and role in ("planner", "failure_analyst"):
+            if self.graph_session is None or self.graph_session.order is not order:
+                raise ContractError("factory-graph-controller-binding-required")
+            return self._graph_call(order, role, instruction, payload, schema)
+        return self._call_once(order, role, instruction, payload, schema)
+
+    def _graph_call(self, order, role, instruction, payload, schema):
+        from .graph_tools import TOOLS, encoded
+        envelope = dict(type="object", properties=dict(
+            graph_calls=dict(type="array", items=dict(type="object",
+                properties=dict(tool=dict(type="string", enum=list(TOOLS)),
+                                arguments_json=dict(type="string")),
+                required=["tool", "arguments_json"], additionalProperties=False)),
+            answer=dict(schema, type=["object", "null"])),
+            required=["graph_calls", "answer"], additionalProperties=False)
+        instruction += (
+            " You may request ONE read-only graph tool per turn using graph_calls and answer=null."
+            " To finish, use graph_calls=[] and answer with the original response."
+            " Arguments are a JSON object: graph_search(query,kind='',limit=10,cursor='',mode='lexical');"
+            " graph_neighbors(node_id,relations=[],direction='both',depth=1,limit=25,cursor='');"
+            " graph_node(node_id,include_source=false); graph_references(node_id,cursor='');"
+            " graph_guidance(node_id). Search is lexical only; no private state or verdict access."
+            " Cite only returned/packed node IDs and evidence_catalog capsule IDs."
+            " Every model turn uses the existing run budget; graph call_budget is shared across roles.")
+        next_payload = dict(payload, graph_policy=dict(self.graph_session.policy))
+        # One final model answer is allowed after the last admitted graph query.
+        remaining = self.graph_session.policy["call_budget"] - self.graph_session.count
+        for _ in range(remaining + 1):
+            response = self._call_once(order, role, instruction, next_payload, envelope)
+            requests, answer = response["graph_calls"], response["answer"]
+            if not requests and answer is not None:
+                return answer
+            if len(requests) != 1 or answer is not None:
+                raise ContractError("factory-graph-response-shape")
+            request = requests[0]
+            if len(request["arguments_json"].encode("utf-8")) > 8192:
+                raise ContractError("factory-graph-arguments-cap")
+            try:
+                arguments = json.loads(request["arguments_json"])
+            except (ValueError, TypeError):
+                raise ContractError("factory-graph-arguments-json") from None
+            result = self.graph_session.call(role, payload.get("attempt", 0),
+                                             request["tool"], arguments)
+            next_payload = dict(payload, graph_policy=dict(self.graph_session.policy),
+                graph_calls_remaining=self.graph_session.policy["call_budget"]-self.graph_session.count,
+                graph_result=dict(tool=request["tool"], result=result))
+            if len(encoded(next_payload)) > order.max_context_bytes:
+                raise ContractError("factory-graph-model-context-cap")
+        raise ContractError("factory-graph-call-budget")
+
+    def _call_once(self, order, role, instruction, payload, schema):
         bounded = self._provider_for(order)
         if self.isolation_scan is not None:
             self.isolation_scan(role + "-prompt", json.dumps(

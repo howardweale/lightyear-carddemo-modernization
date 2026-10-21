@@ -1,0 +1,121 @@
+{
+  "activation": false,
+  "assets": [
+    {
+      "bytes": 52742,
+      "name": "capsule-files.json",
+      "sha256": "2f7d0d53a90c2eb4184e937570ec3c993779ece00abd629bedfd626403148640",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/capsule-files.json"
+    },
+    {
+      "bytes": 12709631,
+      "name": "capsule.tar.gz",
+      "sha256": "34f22aca2b289221a2cae2809053a788baf24c13fe65567c2000937f64f31a12",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/capsule.tar.gz"
+    },
+    {
+      "bytes": 15187,
+      "name": "conformance.json",
+      "sha256": "a98f2615e25b1e23de118206e694ad24e916058a04f812afb8ef9e31908336df",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/conformance.json"
+    },
+    {
+      "bytes": 2405,
+      "name": "retention-manifest.json",
+      "sha256": "155188504ac125cfb3a67b438fd95924faf096a1a691e991c50e50e320ee47f2",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/retention-manifest.json"
+    },
+    {
+      "bytes": 1268,
+      "name": "summary.json",
+      "sha256": "a11f8366b2d5cbdec45a45215ba389b8e98f0188ce1a4154dfa813346de576f3",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/summary.json"
+    },
+    {
+      "bytes": 67694,
+      "name": "workspace-manifest.json",
+      "sha256": "bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/workspace-manifest.json"
+    }
+  ],
+  "attempt_consumed": false,
+  "candidate_java_authored": false,
+  "capsule_files": 380,
+  "committed_bindings": [
+    {
+      "bytes": 2405,
+      "path": "docs/factory/copau-f8-release-retention-2026-10-21.json",
+      "release_asset": "retention-manifest.json",
+      "release_sha256": "155188504ac125cfb3a67b438fd95924faf096a1a691e991c50e50e320ee47f2",
+      "sha256": "155188504ac125cfb3a67b438fd95924faf096a1a691e991c50e50e320ee47f2"
+    },
+    {
+      "bytes": 67694,
+      "path": "docs/factory/copau-f8-workspace-manifest-2026-10-21.json",
+      "release_asset": "workspace-manifest.json",
+      "release_sha256": "bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771",
+      "sha256": "bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771"
+    }
+  ],
+  "f2_remaining": [
+    "Finalize concrete ExecutionPolicy with the existing operator work-order trust identifiers.",
+    "Finalize WorkOrder, call/token/cost estimate and unsigned request/executable-head bindings.",
+    "Obtain existing Tower fingerprint/current trusted journal and private bundle digest/size/count.",
+    "Obtain human wall-clock cap and timezone-aware window; approved models and USD10 cap stay unchanged."
+  ],
+  "factory_run_acceptance": false,
+  "local_execution": false,
+  "model_calls": false,
+  "prepared_on": "2026-10-21",
+  "prerelease": true,
+  "projected_support_jar": {
+    "path": "work/f8-public-worker-capsule/m2/ai/lightyear/worker/carddemo-shared-support/0.1.0-f8/carddemo-shared-support-0.1.0-f8.jar",
+    "sha256": "f59969142cf4af585abfcfcca354d2defe58200ccce7b87f1b43e7c03b392975"
+  },
+  "publisher": {
+    "attempt": 1,
+    "head": "302c83f7650281040a48a24ab90b73ee7bab816e",
+    "receipt_artifact": {
+      "bytes": 1778,
+      "id": 12318206683,
+      "sha256": "f7649a9efd69e2635e2eca1cd45a5060ff4358ce6e13d14dd2d7d2dc6c2f8234"
+    },
+    "run": 39536789314
+  },
+  "release_id": 419103575,
+  "release_tag": "f8-worker-run39536105114-attempt1",
+  "release_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/f8-worker-run39536105114-attempt1",
+  "request_ready": false,
+  "run_authorized": false,
+  "schema": "f8-release-receipt/1",
+  "signing": false,
+  "source_artifact": {
+    "bytes": 12754458,
+    "id": 12317831062,
+    "sha256": "878f7ed92d5e07c8733e4a496cca5f0ee96292bc0bcfb446703602726623437a"
+  },
+  "source_attempt": 1,
+  "source_head": "302c83f7650281040a48a24ab90b73ee7bab816e",
+  "source_pr": 413,
+  "source_run": 39536105114,
+  "source_summary": {
+    "bytes": 1268,
+    "raw_summary_preserved_in_release": true,
+    "release_asset": "summary.json",
+    "sha256": "a11f8366b2d5cbdec45a45215ba389b8e98f0188ce1a4154dfa813346de576f3"
+  },
+  "state": "CI-verified-public-packaging-evidence-only",
+  "unsigned_lightweight_tag": true,
+  "verification": {
+    "attempt": 1,
+    "canonical_workspace_closure_verified": true,
+    "missing_dependency_gate": "failed",
+    "positive_gate": "passed",
+    "raw_committed_files_byte_identical": true,
+    "retained_assets_downloaded_and_verified": 6,
+    "run": 39550906982,
+    "source_zip_verified": true,
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39550906982"
+  },
+  "workspace_files": 403
+}

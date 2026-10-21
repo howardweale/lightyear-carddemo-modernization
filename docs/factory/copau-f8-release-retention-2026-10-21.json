@@ -1,0 +1,50 @@
+{
+  "assets": [
+    {
+      "bytes": 52742,
+      "name": "capsule-files.json",
+      "release": "f8-worker-run39536105114-attempt1",
+      "sha256": "2f7d0d53a90c2eb4184e937570ec3c993779ece00abd629bedfd626403148640",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/capsule-files.json"
+    },
+    {
+      "bytes": 12709631,
+      "name": "capsule.tar.gz",
+      "release": "f8-worker-run39536105114-attempt1",
+      "sha256": "34f22aca2b289221a2cae2809053a788baf24c13fe65567c2000937f64f31a12",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/capsule.tar.gz"
+    },
+    {
+      "bytes": 15187,
+      "name": "conformance.json",
+      "release": "f8-worker-run39536105114-attempt1",
+      "sha256": "a98f2615e25b1e23de118206e694ad24e916058a04f812afb8ef9e31908336df",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/conformance.json"
+    },
+    {
+      "bytes": 1268,
+      "name": "summary.json",
+      "release": "f8-worker-run39536105114-attempt1",
+      "sha256": "a11f8366b2d5cbdec45a45215ba389b8e98f0188ce1a4154dfa813346de576f3",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/summary.json"
+    },
+    {
+      "bytes": 67694,
+      "name": "workspace-manifest.json",
+      "release": "f8-worker-run39536105114-attempt1",
+      "sha256": "bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/f8-worker-run39536105114-attempt1/workspace-manifest.json"
+    }
+  ],
+  "prepared_on": "2026-10-21",
+  "release_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/f8-worker-run39536105114-attempt1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "schema": "public-evidence-retention/1",
+  "scope": "public F8 packaging fixture only",
+  "source_artifact_sha256": "878f7ed92d5e07c8733e4a496cca5f0ee96292bc0bcfb446703602726623437a",
+  "source_attempt": 1,
+  "source_evidence_date": "2026-10-21",
+  "source_head": "302c83f7650281040a48a24ab90b73ee7bab816e",
+  "source_run": 39536105114,
+  "store": "GitHub Release assets"
+}

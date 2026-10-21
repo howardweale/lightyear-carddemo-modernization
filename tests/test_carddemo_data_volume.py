@@ -1,4 +1,5 @@
 import unittest
+from lightyear_data.carddemo.volume import check_reconstruction, reconstruction_text
 from lightyear_data.carddemo.volume import generated, generated_mapped, boundary_cases, check_browse
 
 
@@ -40,3 +41,27 @@ class VolumeTests(unittest.TestCase):
         self.assertIn((b'\xff\xff',None),cases)
         self.assertIn((None,b''),cases)
         self.assertLess(len(cases),60)
+
+
+class ReconstructionCountTests(unittest.TestCase):
+    class Store:
+        def bytes(self,row):return row['typed_bytes']
+
+    def test_single_typed_comparison_changes_report_on_corruption(self):
+        rows=[dict(source_ordinal=1,typed_bytes=b'first'),dict(source_ordinal=2,typed_bytes=b'second')]
+        original=[b'first',b'second']
+        good=check_reconstruction(self.Store(),rows,original)
+        self.assertEqual(dict(compared=2,matched=2,expected=2,complete=True,equal=True),good)
+        rows[1]['typed_bytes']=b'corrupt'
+        bad=check_reconstruction(self.Store(),rows,original)
+        self.assertFalse(bad['equal']);self.assertEqual(1,bad['matched'])
+        self.assertNotEqual(reconstruction_text(good),reconstruction_text(bad))
+        self.assertIn('One check; no separate raw replay.',reconstruction_text(good))
+
+    def test_missing_duplicate_and_invalid_ordinals_never_pass(self):
+        row=dict(source_ordinal=1,typed_bytes=b'first')
+        for rows in ([row],[row,row],[dict(source_ordinal=0,typed_bytes=b'first')],
+                     [dict(source_ordinal=True,typed_bytes=b'first')]):
+            with self.subTest(rows=rows):
+                result=check_reconstruction(self.Store(),rows,[b'first',b'second'])
+                self.assertFalse(result['equal']);self.assertFalse(result['complete'])

@@ -1,0 +1,456 @@
+{
+  "schema": "carddemo-phone-date-scope/1",
+  "program": "COACTUPC",
+  "sources": [
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+      "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+      "paragraphs": [
+        {
+          "name": "PROGRAM-ID",
+          "line": 22
+        },
+        {
+          "name": "DATE-WRITTEN",
+          "line": 24
+        },
+        {
+          "name": "DATE-COMPILED",
+          "line": 26
+        },
+        {
+          "name": "0000-MAIN",
+          "line": 859
+        },
+        {
+          "name": "COMMON-RETURN",
+          "line": 1007
+        },
+        {
+          "name": "0000-MAIN-EXIT",
+          "line": 1021
+        },
+        {
+          "name": "1000-PROCESS-INPUTS",
+          "line": 1025
+        },
+        {
+          "name": "1000-PROCESS-INPUTS-EXIT",
+          "line": 1036
+        },
+        {
+          "name": "1100-RECEIVE-MAP",
+          "line": 1039
+        },
+        {
+          "name": "1100-RECEIVE-MAP-EXIT",
+          "line": 1426
+        },
+        {
+          "name": "1200-EDIT-MAP-INPUTS",
+          "line": 1429
+        },
+        {
+          "name": "1200-EDIT-MAP-INPUTS-EXIT",
+          "line": 1678
+        },
+        {
+          "name": "1205-COMPARE-OLD-NEW",
+          "line": 1681
+        },
+        {
+          "name": "1205-COMPARE-OLD-NEW-EXIT",
+          "line": 1777
+        },
+        {
+          "name": "1210-EDIT-ACCOUNT",
+          "line": 1783
+        },
+        {
+          "name": "1210-EDIT-ACCOUNT-EXIT",
+          "line": 1820
+        },
+        {
+          "name": "1215-EDIT-MANDATORY",
+          "line": 1824
+        },
+        {
+          "name": "1215-EDIT-MANDATORY-EXIT",
+          "line": 1852
+        },
+        {
+          "name": "1220-EDIT-YESNO",
+          "line": 1856
+        },
+        {
+          "name": "1220-EDIT-YESNO-EXIT",
+          "line": 1894
+        },
+        {
+          "name": "1225-EDIT-ALPHA-REQD",
+          "line": 1898
+        },
+        {
+          "name": "1225-EDIT-ALPHA-REQD-EXIT",
+          "line": 1951
+        },
+        {
+          "name": "1230-EDIT-ALPHANUM-REQD",
+          "line": 1955
+        },
+        {
+          "name": "1230-EDIT-ALPHANUM-REQD-EXIT",
+          "line": 2009
+        },
+        {
+          "name": "1235-EDIT-ALPHA-OPT",
+          "line": 2012
+        },
+        {
+          "name": "1235-EDIT-ALPHA-OPT-EXIT",
+          "line": 2057
+        },
+        {
+          "name": "1240-EDIT-ALPHANUM-OPT",
+          "line": 2061
+        },
+        {
+          "name": "1240-EDIT-ALPHANUM-OPT-EXIT",
+          "line": 2105
+        },
+        {
+          "name": "1245-EDIT-NUM-REQD",
+          "line": 2109
+        },
+        {
+          "name": "1245-EDIT-NUM-REQD-EXIT",
+          "line": 2176
+        },
+        {
+          "name": "1250-EDIT-SIGNED-9V2",
+          "line": 2180
+        },
+        {
+          "name": "1250-EDIT-SIGNED-9V2-EXIT",
+          "line": 2221
+        },
+        {
+          "name": "1260-EDIT-US-PHONE-NUM",
+          "line": 2225
+        },
+        {
+          "name": "EDIT-AREA-CODE",
+          "line": 2246
+        },
+        {
+          "name": "EDIT-US-PHONE-PREFIX",
+          "line": 2316
+        },
+        {
+          "name": "EDIT-US-PHONE-LINENUM",
+          "line": 2370
+        },
+        {
+          "name": "EDIT-US-PHONE-EXIT",
+          "line": 2424
+        },
+        {
+          "name": "1260-EDIT-US-PHONE-NUM-EXIT",
+          "line": 2427
+        },
+        {
+          "name": "1265-EDIT-US-SSN",
+          "line": 2431
+        },
+        {
+          "name": "1265-EDIT-US-SSN-EXIT",
+          "line": 2489
+        },
+        {
+          "name": "1270-EDIT-US-STATE-CD",
+          "line": 2493
+        },
+        {
+          "name": "1270-EDIT-US-STATE-CD-EXIT",
+          "line": 2511
+        },
+        {
+          "name": "1275-EDIT-FICO-SCORE",
+          "line": 2514
+        },
+        {
+          "name": "1275-EDIT-FICO-SCORE-EXIT",
+          "line": 2531
+        },
+        {
+          "name": "1280-EDIT-US-STATE-ZIP-CD",
+          "line": 2536
+        },
+        {
+          "name": "1280-EDIT-US-STATE-ZIP-CD-EXIT",
+          "line": 2558
+        },
+        {
+          "name": "2000-DECIDE-ACTION",
+          "line": 2562
+        },
+        {
+          "name": "2000-DECIDE-ACTION-EXIT",
+          "line": 2643
+        },
+        {
+          "name": "3000-SEND-MAP",
+          "line": 2649
+        },
+        {
+          "name": "3000-SEND-MAP-EXIT",
+          "line": 2664
+        },
+        {
+          "name": "3100-SCREEN-INIT",
+          "line": 2668
+        },
+        {
+          "name": "3100-SCREEN-INIT-EXIT",
+          "line": 2694
+        },
+        {
+          "name": "3200-SETUP-SCREEN-VARS",
+          "line": 2698
+        },
+        {
+          "name": "3200-SETUP-SCREEN-VARS-EXIT",
+          "line": 2727
+        },
+        {
+          "name": "3201-SHOW-INITIAL-VALUES",
+          "line": 2731
+        },
+        {
+          "name": "3201-SHOW-INITIAL-VALUES-EXIT",
+          "line": 2783
+        },
+        {
+          "name": "3202-SHOW-ORIGINAL-VALUES",
+          "line": 2787
+        },
+        {
+          "name": "3202-SHOW-ORIGINAL-VALUES-EXIT",
+          "line": 2867
+        },
+        {
+          "name": "3203-SHOW-UPDATED-VALUES",
+          "line": 2870
+        },
+        {
+          "name": "3203-SHOW-UPDATED-VALUES-EXIT",
+          "line": 2951
+        },
+        {
+          "name": "3250-SETUP-INFOMSG",
+          "line": 2955
+        },
+        {
+          "name": "3250-SETUP-INFOMSG-EXIT",
+          "line": 2983
+        },
+        {
+          "name": "3300-SETUP-SCREEN-ATTRS",
+          "line": 2986
+        },
+        {
+          "name": "3300-SETUP-SCREEN-ATTRS-EXIT",
+          "line": 3437
+        },
+        {
+          "name": "3310-PROTECT-ALL-ATTRS",
+          "line": 3441
+        },
+        {
+          "name": "3310-PROTECT-ALL-ATTRS-EXIT",
+          "line": 3496
+        },
+        {
+          "name": "3320-UNPROTECT-FEW-ATTRS",
+          "line": 3500
+        },
+        {
+          "name": "3320-UNPROTECT-FEW-ATTRS-EXIT",
+          "line": 3562
+        },
+        {
+          "name": "3390-SETUP-INFOMSG-ATTRS",
+          "line": 3566
+        },
+        {
+          "name": "3390-SETUP-INFOMSG-ATTRS-EXIT",
+          "line": 3584
+        },
+        {
+          "name": "3400-SEND-SCREEN",
+          "line": 3589
+        },
+        {
+          "name": "3400-SEND-SCREEN-EXIT",
+          "line": 3603
+        },
+        {
+          "name": "9000-READ-ACCT",
+          "line": 3608
+        },
+        {
+          "name": "9000-READ-ACCT-EXIT",
+          "line": 3647
+        },
+        {
+          "name": "9200-GETCARDXREF-BYACCT",
+          "line": 3650
+        },
+        {
+          "name": "9200-GETCARDXREF-BYACCT-EXIT",
+          "line": 3698
+        },
+        {
+          "name": "9300-GETACCTDATA-BYACCT",
+          "line": 3701
+        },
+        {
+          "name": "9300-GETACCTDATA-BYACCT-EXIT",
+          "line": 3748
+        },
+        {
+          "name": "9400-GETCUSTDATA-BYCUST",
+          "line": 3752
+        },
+        {
+          "name": "9400-GETCUSTDATA-BYCUST-EXIT",
+          "line": 3797
+        },
+        {
+          "name": "9500-STORE-FETCHED-DATA",
+          "line": 3801
+        },
+        {
+          "name": "9500-STORE-FETCHED-DATA-EXIT",
+          "line": 3885
+        },
+        {
+          "name": "9600-WRITE-PROCESSING",
+          "line": 3888
+        },
+        {
+          "name": "9600-WRITE-PROCESSING-EXIT",
+          "line": 4105
+        },
+        {
+          "name": "9700-CHECK-CHANGE-IN-REC",
+          "line": 4109
+        },
+        {
+          "name": "9700-CHECK-CHANGE-IN-REC-EXIT",
+          "line": 4193
+        },
+        {
+          "name": "ABEND-ROUTINE",
+          "line": 4203
+        },
+        {
+          "name": "ABEND-ROUTINE-EXIT",
+          "line": 4226
+        }
+      ]
+    },
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cpy/CSUTLDPY.cpy",
+      "sha256": "80f83e3d55ff84c0d9088e68399f30ebad4db763280d47bdec220eadc45ba2af",
+      "paragraphs": [
+        {
+          "name": "EDIT-DATE-CCYYMMDD",
+          "line": 18
+        },
+        {
+          "name": "EDIT-YEAR-CCYY",
+          "line": 25
+        },
+        {
+          "name": "EDIT-YEAR-CCYY-EXIT",
+          "line": 88
+        },
+        {
+          "name": "EDIT-MONTH",
+          "line": 91
+        },
+        {
+          "name": "EDIT-MONTH-EXIT",
+          "line": 145
+        },
+        {
+          "name": "EDIT-DAY",
+          "line": 150
+        },
+        {
+          "name": "EDIT-DAY-EXIT",
+          "line": 205
+        },
+        {
+          "name": "EDIT-DAY-MONTH-YEAR",
+          "line": 209
+        },
+        {
+          "name": "EDIT-DAY-MONTH-YEAR-EXIT",
+          "line": 280
+        },
+        {
+          "name": "EDIT-DATE-LE",
+          "line": 284
+        },
+        {
+          "name": "EDIT-DATE-LE-EXIT",
+          "line": 323
+        },
+        {
+          "name": "EDIT-DATE-CCYYMMDD-EXIT",
+          "line": 329
+        },
+        {
+          "name": "EDIT-DATE-OF-BIRTH",
+          "line": 341
+        },
+        {
+          "name": "EDIT-DATE-OF-BIRTH-EXIT",
+          "line": 370
+        }
+      ]
+    }
+  ],
+  "retired_ranges": {
+    "1260-EDIT-US-PHONE-NUM": "AccountPhoneRules",
+    "EDIT-DATE-CCYYMMDD": "AccountDateRules",
+    "EDIT-DATE-OF-BIRTH": "AccountDateRules"
+  },
+  "required_mutation_classes": [
+    "AccountPhoneRules",
+    "AccountDateRules",
+    "AccountEditState",
+    "AccountPhoneDateModel"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "whole_screen_idiomatic": false,
+  "proof_status": "Fresh CI required; no completion, native LE, release or activation claim",
+  "frozen_bindings_preserved": [
+    "src/lightyear_data/carddemo/update_edits.py",
+    ".github/workflows/carddemo-web.yml",
+    "factory/carddemo-web/runtime/receipt.py",
+    "factory/carddemo-web/service/pom.xml"
+  ],
+  "proof": [
+    "Existing frozen full-slice API/browser/mutation workflow compares independent raw-COBOL interactions",
+    "Supplemental original-statement whole-storage comparison includes exceptional outcomes and seeded mismatch refusal",
+    "Separate per-class all-mutant denominator at least 90 percent KILLED; no timeout or no-coverage credit"
+  ]
+}

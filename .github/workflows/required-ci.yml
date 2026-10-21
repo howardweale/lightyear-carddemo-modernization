@@ -32,6 +32,7 @@ jobs:
           PYTHONPATH: .:src:tests
         run: |
           python -B -m unittest test_ci_gate -v
+          python -B -m unittest test_stranded_work -v
           python -B tools/ci_gate.py lint
           python -B tools/check_status_pr.py
           python -B -m unittest test_status_output_policy -v
@@ -47,7 +48,7 @@ jobs:
     needs: documentation-and-lint
     if: always()
     runs-on: ubuntu-24.04
-    timeout-minutes: 215
+    timeout-minutes: 225
     steps:
       - uses: actions/checkout@v7
         with:
@@ -56,6 +57,11 @@ jobs:
         with:
           python-version: '3.13'
       - run: python -m pip install PyYAML==6.0.3
+      - name: Report stranded merged work without issue writes
+        timeout-minutes: 10
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -B tools/ci/stranded_work.py --output work/ci/stranded-work.json
       - name: Require completed green final-head workflows
         env:
           GH_TOKEN: ${{ github.token }}

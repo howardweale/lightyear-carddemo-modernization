@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from tests.verify_graph_support import GraphFixture
+from tests.verify_graph_support import GraphFixture, digest, leak_check
 from lightyear_factory.agents import ModelAgentSet
 from lightyear_factory.context import GraphContextAssembler
 from lightyear_factory.contracts import ContractError, WorkOrder, canonical_hash
@@ -44,6 +44,10 @@ class FactoryGraphTests(GraphFixture):
     def setUp(self):
         super().setUp()
         self.manifest = self.build()
+        # Create the real public-fixture scan before requesting fixture approval.
+        leak_report = leak_check(self.out, digest(self.lane), set(CANARIES.values()),
+            self.signer, evaluation_inventory_sha256=canonical_hash(CANARIES))
+        self.assertTrue(leak_report["passed"])
         proof, trust = self.approve(self.manifest)
         self.approved = (self.out, proof, trust)
         self.projection = json.loads(gzip.decompress((self.out / "projection.json.gz").read_bytes()))

@@ -263,7 +263,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
         token='CANARY-'+'X'*50
         canaries={'expected-state':token,'reference-output':'R'*60,'session-answer':'S'*60}
         agent=ModelAgentSet(ScriptedModelProvider([]))
-        order=SimpleNamespace(content_sha256='a'*64)
+        order=SimpleNamespace(content_sha256='a'*64,metadata={})
         bounded=Mock();bounded.calls=[]
         agent.isolation_scan=lambda name,raw:scan([(name,raw)],canaries,())
         with patch.object(agent,'_provider_for',return_value=bounded):
@@ -529,7 +529,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             agents.intelligence_summary.return_value={'mode':'fixture','calls':1}
             controller=FactoryOrchestrator(root,root,agents)
             controller.memory_store=Mock()
-            order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture')
+            order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',metadata={})
             ledger=RunLedger(root/'events.jsonl');order_events=[]
             controller.memory_store.prepare_run.side_effect=lambda *args: order_events.append('prepare-memory') or {}
             def refuse():
@@ -608,7 +608,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
                 agents.intelligence_summary.return_value={'mode':'fixture','calls':0}
                 controller=FactoryOrchestrator(root,root,agents);controller.memory_store=Mock()
                 events=[];controller.memory_store.prepare_run.side_effect=lambda *a: events.append('prepare') or {}
-                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture')
+                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',metadata={})
                 ledger=RunLedger(root/'events.jsonl')
                 def package_check():events.append('package');return {'fixture':True}
                 def publish(prepared,run_dir,order,receipt,scan_record,**kwargs):

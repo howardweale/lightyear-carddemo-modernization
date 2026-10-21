@@ -83,7 +83,7 @@ class TransportRecordTests(unittest.TestCase):
                                   BytesIO(b'private analyst error')) if fails else None
                 p, recorder, ledger, calls = self.setup_provider(root, raw=raw, failure=error)
                 agents = ModelAgentSet(p.provider)
-                order = SimpleNamespace(to_dict=lambda: {'fixture': True})
+                order = SimpleNamespace(to_dict=lambda: {'fixture': True}, metadata={})
                 # Use the existing role path and real accounted wrapper; only
                 # work-order binding is supplied by this component fixture.
                 with patch.object(agents, '_provider_for', return_value=p):

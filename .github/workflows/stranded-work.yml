@@ -1,0 +1,45 @@
+name: Stranded merged work audit
+on:
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  stranded-work:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: write
+    concurrency:
+      group: stranded-merged-work-issue
+      cancel-in-progress: false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Test stranded merge and issue fixtures
+        env:
+          PYTHONPATH: .:src:tests
+        run: python -B -m unittest test_stranded_work -v
+      - name: Report unreachable merged commits and maintain one issue
+        timeout-minutes: 10
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -B tools/ci/stranded_work.py --output work/ci/stranded-work.json --issue
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stranded-work-audit
+          path: work/ci/stranded-work.json
+          if-no-files-found: error
+          retention-days: 14

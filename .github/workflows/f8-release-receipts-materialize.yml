@@ -1,0 +1,255 @@
+name: Materialize F8 Release receipts
+on:
+  push:
+    branches: ['codex/f8-receipt-materializer-20261021']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: f8-receipt-materializer-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  prepare-receipts:
+    if: github.repository == 'howardweale/lightyear-carddemo-modernization' && github.event_name == 'push' && github.ref == 'refs/heads/codex/f8-receipt-materializer-20261021'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    env:
+      PYTHONPATH: src:.
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 302c83f7650281040a48a24ab90b73ee7bab816e
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Fetch historical objects required by record policy
+        run: git fetch --no-tags origin cf43585fc4fb7ae4466f7414eb4ae5028bcccad8 dba188ba166145808a59274240d0969e2783377a 37332f3d9d694387960ca0595acf7fdb2918224a
+      - name: Verify retained bytes and prepare an unsigned receipt-only commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          from tools.carddemo_release_retention import Github, REPO, match_asset
+          from tools.ci.f8_worker_retention import retain, payload
+          from tools.ci.f8_worker_bundle import sha
+          
+          SOURCE = "302c83f7650281040a48a24ab90b73ee7bab816e"
+          BASE = "b7c53a32719e0a139ffadc7f4f4c60289b371e2c"
+          BRANCH = "codex/f8-release-receipts-20261021"
+          DAY = "2026-10-21"
+          SOURCE_RUN = 39536105114
+          PUBLISHER_RUN = 39536789314
+          TAG = "f8-worker-run39536105114-attempt1"
+          EXPECTED = {"capsule-files.json":[52742,"sha256:2f7d0d53a90c2eb4184e937570ec3c993779ece00abd629bedfd626403148640"],"capsule.tar.gz":[12709631,"sha256:34f22aca2b289221a2cae2809053a788baf24c13fe65567c2000937f64f31a12"],"conformance.json":[15187,"sha256:a98f2615e25b1e23de118206e694ad24e916058a04f812afb8ef9e31908336df"],"retention-manifest.json":[2405,"sha256:155188504ac125cfb3a67b438fd95924faf096a1a691e991c50e50e320ee47f2"],"summary.json":[1268,"sha256:a11f8366b2d5cbdec45a45215ba389b8e98f0188ce1a4154dfa813346de576f3"],"workspace-manifest.json":[67694,"sha256:bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771"]}
+          PREFIX = "docs/factory/copau-f8-"
+          NAMES = {
+              "retention": PREFIX + "release-retention-" + DAY + ".json",
+              "workspace": PREFIX + "workspace-manifest-" + DAY + ".json",
+              "receipt": PREFIX + "release-receipt-" + DAY + ".json",
+              "note": PREFIX + "release-receipt-" + DAY + ".md",
+              "claims": "docs/factory/commit-claims-f8-release-receipts-" + DAY + ".json",
+          }
+          out = Path("work/f8-receipts")
+          out.mkdir(parents=True, exist_ok=True)
+          
+          def check(value, message):
+              if not value:
+                  raise ValueError(message)
+          
+          def encoded(value):
+              return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
+          
+          def git(*args, raw=None, extra=None):
+              env = dict(os.environ)
+              if extra:
+                  env.update(extra)
+              return subprocess.check_output(["git", *args], input=raw, env=env).decode().strip()
+          
+          class ReadOnlyGithub(Github):
+              def __init__(self):
+                  self.downloads = {}
+              def api(self, path, method="GET", **fields):
+                  check(method == "GET" and not fields, "Release mutation refused")
+                  return super().api(path, method=method)
+              def upload(self, *args):
+                  raise ValueError("Release upload refused")
+              def download(self, path):
+                  raw = super().download(path)
+                  self.downloads[path] = raw
+                  return raw
+          
+          check(os.environ.get("GITHUB_ACTIONS") == "true", "CI only")
+          check(git("rev-parse", "HEAD") == SOURCE, "Trusted source checkout drift")
+          client = ReadOnlyGithub()
+          source = client.api(f"actions/runs/{SOURCE_RUN}")
+          check((source["head_sha"], source["run_attempt"], source["event"], source["head_branch"]) == (SOURCE, 1, "push", "main"), "Source run drift")
+          publisher = client.api(f"actions/runs/{PUBLISHER_RUN}")
+          check((publisher["path"], publisher["status"], publisher["conclusion"], publisher["head_sha"], publisher["run_attempt"]) ==
+                (".github/workflows/f8-worker-retention.yml", "completed", "success", SOURCE, 1), "Publisher drift")
+          manifest = retain(client, SOURCE_RUN, out / "audit")
+          check(manifest["source_artifact_sha256"] == "878f7ed92d5e07c8733e4a496cca5f0ee96292bc0bcfb446703602726623437a", "Source ZIP digest drift")
+          artifacts = client.pages(f"actions/runs/{SOURCE_RUN}/artifacts", "artifacts")
+          artifact = next(a for a in artifacts if a["id"] == 12317831062)
+          check(artifact["size_in_bytes"] == 12754458 and not artifact["expired"], "Source ZIP metadata drift")
+          source_payload = payload(client.downloads[f'actions/artifacts/{artifact["id"]}/zip'], artifact, source)
+          source_payload["retention-manifest.json"] = (out / "audit/retention-manifest.json").read_bytes()
+          release = client.release(TAG)
+          check(release["id"] == 419103575 and release["draft"] is False and release["prerelease"] is True, "Release identity drift")
+          assets = client.pages(f'releases/{release["id"]}/assets')
+          check(len(assets) == len(EXPECTED) and {a["name"] for a in assets} == set(EXPECTED), "Release closure")
+          released = {}
+          for asset in assets:
+              name = asset["name"]
+              check([asset["size"], asset["digest"]] == EXPECTED[name], "Retained digest drift: " + name)
+              raw = client.download(f'releases/assets/{asset["id"]}')
+              check(match_asset(asset, raw) and raw == source_payload[name], "Retained bytes differ: " + name)
+              released[name] = raw
+          workspace = json.loads(released["workspace-manifest.json"])
+          capsule = json.loads(released["capsule-files.json"])
+          summary = json.loads(released["summary.json"])
+          conformance = json.loads(released["conformance.json"])
+          check(summary["fixture_only"] is True and summary["factory_run_acceptance"] is False, "Fixture authority")
+          support = [p for p in workspace if p.endswith("/carddemo-shared-support-0.1.0-f8.jar")]
+          check(len(support) == 1 and len(workspace) == len(capsule) + 23, "Workspace closure")
+          check(all(not p.endswith(".java") for p in workspace), "Candidate/source Java exposed")
+          published = client.pages(f"actions/runs/{PUBLISHER_RUN}/artifacts", "artifacts")
+          publication = [a for a in published if a["name"] == f"f8-retention-publication-{SOURCE_RUN}"]
+          check(len(publication) == 1 and not publication[0]["expired"] and
+                publication[0]["digest"] == "sha256:f7649a9efd69e2635e2eca1cd45a5060ff4358ce6e13d14dd2d7d2dc6c2f8234" and
+                publication[0]["size_in_bytes"] == 1778, "Publication receipt drift")
+          raw_files = {
+              NAMES["retention"]: released["retention-manifest.json"],
+              NAMES["workspace"]: released["workspace-manifest.json"],
+          }
+          binding = lambda path, asset: dict(path=path, sha256=sha(raw_files[path]), bytes=len(raw_files[path]),
+                                            release_asset=asset, release_sha256=EXPECTED[asset][1][7:])
+          receipt = dict(
+              schema="f8-release-receipt/1", prepared_on=DAY,
+              state="CI-verified-public-packaging-evidence-only",
+              source_pr=413, source_head=SOURCE, source_run=SOURCE_RUN, source_attempt=1,
+              release_url=release["html_url"], release_tag=TAG, release_id=release["id"],
+              unsigned_lightweight_tag=True, prerelease=True,
+              source_artifact=dict(id=artifact["id"], bytes=artifact["size_in_bytes"], sha256=artifact["digest"][7:]),
+              publisher=dict(run=PUBLISHER_RUN, attempt=1, head=publisher["head_sha"],
+                             receipt_artifact=dict(id=publication[0]["id"], bytes=publication[0]["size_in_bytes"],
+                                                   sha256=publication[0]["digest"][7:])),
+              assets=[dict(name=a["name"], bytes=a["size"], sha256=a["digest"][7:], url=a["browser_download_url"])
+                      for a in sorted(assets, key=lambda a: a["name"])],
+              committed_bindings=[binding(NAMES["retention"], "retention-manifest.json"),
+                                  binding(NAMES["workspace"], "workspace-manifest.json")],
+              source_summary=dict(release_asset="summary.json", bytes=len(released["summary.json"]),
+                                  sha256=sha(released["summary.json"]), raw_summary_preserved_in_release=True),
+              workspace_files=len(workspace), capsule_files=len(capsule),
+              projected_support_jar=dict(path=support[0], sha256=workspace[support[0]]),
+              verification=dict(run=int(os.environ["GITHUB_RUN_ID"]), attempt=int(os.environ["GITHUB_RUN_ATTEMPT"]),
+                                url=f'https://github.com/{REPO}/actions/runs/{os.environ["GITHUB_RUN_ID"]}',
+                                source_zip_verified=True, retained_assets_downloaded_and_verified=6,
+                                raw_committed_files_byte_identical=True, canonical_workspace_closure_verified=True,
+                                positive_gate=conformance["positive"]["gates"][0]["status"],
+                                missing_dependency_gate=conformance["missing_dependency"]["gates"][0]["status"]),
+              factory_run_acceptance=False, request_ready=False, run_authorized=False,
+              candidate_java_authored=False, local_execution=False, model_calls=False,
+              signing=False, activation=False, attempt_consumed=False,
+              f2_remaining=[
+                  "Finalize concrete ExecutionPolicy with the existing operator work-order trust identifiers.",
+                  "Finalize WorkOrder, call/token/cost estimate and unsigned request/executable-head bindings.",
+                  "Obtain existing Tower fingerprint/current trusted journal and private bundle digest/size/count.",
+                  "Obtain human wall-clock cap and timezone-aware window; approved models and USD10 cap stay unchanged."
+              ])
+          raw_files[NAMES["receipt"]] = encoded(receipt)
+          raw_files[NAMES["note"]] = (
+              "# F8 retained Release receipts - " + DAY + "\n\n"
+              "These new records retain public packaging evidence from #413 at source head " + SOURCE + ".\n"
+              "The Release retention manifest and raw per-file workspace map are copied byte-for-byte under dated names; their SHA-256s are bound in the receipt JSON.\n"
+              "CI revalidated the original Actions ZIP, downloaded all six Release assets, checked every digest/size and compared the retained bytes with the validated source payload. The original summary remains unmodified in the Release and is hash-bound here.\n\n"
+              "The workspace map contains the 23 original public non-Java inputs plus every capsule file. It is an actual raw path/SHA map, not an envelope or archive-only hash.\n\n"
+              "Earlier proposals, frozen sources and generated status files remain unchanged. This is unsigned packaging-fixture evidence with factory_run_acceptance false and request_ready false.\n"
+              "F2 still needs the final concrete policy, WorkOrder/estimate and request bindings, existing operator trust/private-bundle metadata, and human wall-clock/window. Approved models and USD10 cap are unchanged.\n"
+          ).encode()
+          source_path = "tools/ci/f8_worker_bundle.py"
+          source_hash = sha(Path(source_path).read_bytes())
+          raw_files[NAMES["claims"]] = encoded(dict(schema="record-commit-claims/1", policy_start="2026-10-17", claims=[
+              dict(record=NAMES[key], reference=SOURCE, commit=SOURCE, role="source",
+                   source_path=source_path, source_sha256=source_hash) for key in ("retention", "receipt", "note")
+          ]))
+          check(all(len(raw) < 50000 for path, raw in raw_files.items() if path != NAMES["workspace"]), "Small receipt bound")
+          check(sum(raw.count(b"\n") for raw in raw_files.values()) <= 1500, "PR line limit")
+          check(all(b"\r" not in raw and raw.endswith(b"\n") for raw in raw_files.values()), "LF-only records")
+          existing = {a["path"] for a in client.api(f"contents/docs/factory?ref={BASE}")}
+          check(not existing.intersection(raw_files), "Dated record already exists")
+          for path, raw in raw_files.items():
+              target = Path(path)
+              check(not target.exists(), "Refusing existing file: " + path)
+              target.write_bytes(raw)
+              copy = out / "records" / target.name
+              copy.parent.mkdir(parents=True, exist_ok=True)
+              copy.write_bytes(raw)
+          index = str(Path(os.environ["RUNNER_TEMP"]) / "f8-receipt-only.index")
+          env = {"GIT_INDEX_FILE": index}
+          git("read-tree", BASE, extra=env)
+          for path, raw in sorted(raw_files.items()):
+              blob = git("hash-object", "--no-filters", "-w", "--stdin", raw=raw)
+              git("update-index", "--add", "--cacheinfo", "100644," + blob + "," + path, extra=env)
+          tree = git("write-tree", extra=env)
+          identity = dict(GIT_AUTHOR_NAME="github-actions[bot]", GIT_COMMITTER_NAME="github-actions[bot]",
+                          GIT_AUTHOR_EMAIL="41898282+github-actions[bot]@users.noreply.github.com",
+                          GIT_COMMITTER_EMAIL="41898282+github-actions[bot]@users.noreply.github.com")
+          commit = git("-c", "commit.gpgSign=false", "commit-tree", tree, "-p", BASE,
+                       raw=b"docs: retain verified F8 Release receipts (2026-10-21)\n", extra=identity)
+          check("gpgsig " not in git("cat-file", "-p", commit).split("\n\n", 1)[0], "Signed commit refused")
+          changes = git("diff-tree", "--no-commit-id", "--name-status", "-r", BASE, commit).splitlines()
+          check(sorted(changes) == sorted("A\t" + path for path in raw_files), "Receipt-only additive scope")
+          git("checkout", "--detach", "--force", commit)
+          git("diff", "--check", BASE, "HEAD")
+          subprocess.run(["python", "-B", "tools/check_record_commit_claims.py", "--base", BASE], check=True)
+          check(all(Path(path).read_bytes() == raw for path, raw in raw_files.items()), "Committed byte drift")
+          fresh = client.api(f"actions/runs/{SOURCE_RUN}")
+          check((fresh["head_sha"], fresh["run_attempt"], fresh["conclusion"]) == (SOURCE, 1, "success"), "Source advanced")
+          ref = client.api("git/ref/tags/" + TAG)
+          check(ref["object"]["type"] == "commit" and ref["object"]["sha"] == SOURCE, "Retained tag moved")
+          result = dict(branch=BRANCH, head=commit, base=BASE, source=SOURCE, source_run=SOURCE_RUN,
+                        verification_run=int(os.environ["GITHUB_RUN_ID"]),
+                        workspace_files=len(workspace), capsule_files=len(capsule),
+                        additions=sum(raw.count(b"\n") for raw in raw_files.values()),
+                        files=[dict(path=p, bytes=len(b), sha256=sha(b)) for p, b in sorted(raw_files.items())])
+          (out / "result.json").write_bytes(encoded(result))
+          print("F8_RECEIPT_PREPARED " + json.dumps(result, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: f8-release-receipts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            work/f8-receipts/records
+            work/f8-receipts/result.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Push the new receipt branch without signing or merging
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -B - <<'PY'
+          import json
+          from pathlib import Path
+          import re
+          import subprocess
+          from tools.carddemo_release_retention import Github
+          result = json.loads(Path("work/f8-receipts/result.json").read_bytes())
+          branch = "codex/f8-release-receipts-20261021"
+          commit = result["head"]
+          assert result["branch"] == branch and re.fullmatch("[0-9a-f]{40}", commit)
+          assert subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip() == commit
+          refs = Github().api("git/matching-refs/heads/" + branch)
+          assert not any(r["ref"] == "refs/heads/" + branch for r in refs), "Target branch exists"
+          subprocess.run(["gh", "auth", "setup-git", "--hostname", "github.com"], check=True)
+          subprocess.run(["git", "-c", "push.gpgSign=false", "push", "origin", commit + ":refs/heads/" + branch], check=True)
+          print("F8_RECEIPT_RESULT " + json.dumps(result, sort_keys=True))
+          PY

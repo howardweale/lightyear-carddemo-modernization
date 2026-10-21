@@ -107,10 +107,20 @@ class GraphOnAcceptance(VerifyAcceptance):
 
     def finish_graph_acceptance(self):
         self.assertEqual(GRAPH_TOOLS, self.graph_calls)
-        # Complete response stream, including successful candidate verdicts/receipts,
-        # is also scanned; the normal acceptance already checks every short watch value.
+        # Scan every complete response, including candidate verdicts/receipts.
+        # The scanner bounds apply to each response, not the accumulated session.
+        # Normal acceptance additionally checks every short protected watch value.
         from lightyear_factory.isolation_scan import scan
-        scan([("mcp-responses", canonical(self.responses))], self.scan_canaries, self.protected_values)
+        artifacts = [("mcp-response-" + str(i), canonical(response))
+                     for i, response in enumerate(self.responses)]
+        self.assertTrue(artifacts)
+        # A leak after all real responses must still be detected, with no truncation.
+        leak = base64.b64encode(self.scan_canaries["session-answer"].encode()).decode()
+        with self.assertRaisesRegex(ContractError, "isolation-breach"):
+            scan(artifacts + [("late-encoded-leak", canonical({"text": leak}))],
+                 self.scan_canaries, self.protected_values)
+        response_scan = scan(artifacts, self.scan_canaries, self.protected_values)
+        self.assertEqual(len(self.responses), len(response_scan["scanned"]))
         folder = Path(os.environ["VERIFY_GRAPH_REPORT_DIR"])
         folder.mkdir(parents=True, exist_ok=True)
         stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")

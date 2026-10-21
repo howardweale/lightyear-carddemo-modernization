@@ -1,4 +1,4 @@
-"""Large byte-key browse proof; typed reconstruction remains a separate gate."""
+"""Large byte-key browse proof with one measured typed-to-original reconstruction."""
 import argparse
 from hashlib import sha256
 import json
@@ -76,6 +76,29 @@ def load_index(connection, mapping, records):
     connection.execute('ANALYZE '+quote(mapping['table']))
 
 
+def check_reconstruction(store, rows, originals):
+    """One comparison: reconstructed typed columns against the original bytes.
+
+    There is no raw-record column in the typed table and no second raw replay.
+    Check ordinal coverage too, so a duplicate or absent row cannot earn a pass.
+    """
+    compared=matched=0;seen=set();valid=True
+    for row in rows:
+        ordinal=row['source_ordinal'];compared+=1
+        if type(ordinal) is not int or not 1<=ordinal<=len(originals) or ordinal in seen:
+            valid=False;continue
+        seen.add(ordinal)
+        matched+=store.bytes(row)==originals[ordinal-1]
+    complete=valid and len(seen)==len(originals) and compared==len(originals)
+    return dict(compared=compared,matched=matched,expected=len(originals),
+                complete=complete,equal=complete and matched==compared)
+
+
+def reconstruction_text(value):
+    return (f"Typed-to-original reconstruction: {value['matched']}/{value['compared']} matched; "
+            f"{value['expected']} expected; complete={value['complete']}. One check; no separate raw replay.")
+
+
 def run(connection, root, count):
     plan,entries=build(root);reports=[]
     for item,layout,mapping in entries:
@@ -89,19 +112,17 @@ def run(connection, root, count):
         load_seconds=time.monotonic()-begin
         store=Store(connection,mapping,layout);gate=check_browse(store,records)
         from psycopg.rows import dict_row
-        exact=True;seen=0
         with connection.cursor(name='typed_volume_'+mapping['table'],row_factory=dict_row) as cursor:
             cursor.execute('SELECT * FROM '+quote(mapping['table'])+' ORDER BY source_ordinal')
-            for row in cursor:
-                seen+=1;exact = (store.bytes(row)==records[row['source_ordinal']-1]) and exact
-        exact = exact and seen==count
+            reconstruction=check_reconstruction(store,cursor,records)
         alternate_counts={k['column']:len({raw[k['key_offset']:k['key_offset']+k['key_length']] for raw in records}) for k in mapping['keys'][1:]}
         if count>20000 and any(not 1<n<count for n in alternate_counts.values()):raise ValueError('alternate duplicates not exercised')
         primary=mapping['keys'][0];keyfield=next(f for f in mapping['fields'] if f['offset']==primary['key_offset'] and f['length']==primary['key_length'])
         edge_count=0 if keyfield['digits'] else min(count,3)
         disk=connection.execute('SELECT pg_total_relation_size(%s)',(mapping['table'],)).fetchone()[0]
         reports.append(dict(table=mapping['table'],records=count,bytes=sum(map(len,records)),relation_bytes=disk,
-            load_seconds=load_seconds,wall_seconds=time.monotonic()-begin,raw_round_trip=exact,typed_round_trip=exact,browse=gate,
+            load_seconds=load_seconds,wall_seconds=time.monotonic()-begin,typed_round_trip=reconstruction['equal'],typed_reconstruction=reconstruction,
+            reconstruction_summary=reconstruction_text(reconstruction),browse=gate,
             distinct_alternate_keys=alternate_counts,non_display_primary_keys=edge_count,
             dataset_sha256=sha256(b''.join(records)).hexdigest()))
     # Raw key semantics include non-display bytes which would be invalid in PIC 9.
@@ -110,8 +131,8 @@ def run(connection, root, count):
     edge_mapping=dict(table='byte_key_edges',keys=[dict(column='ebcdic_key',name='raw-byte-key',key_offset=0,key_length=8)])
     load_index(connection,edge_mapping,edge)
     edge_result=check_browse(Store(connection,edge_mapping,None),edge)
-    ok=all(r['raw_round_trip'] and r['browse']['matched']==r['browse']['compared'] for r in reports) and edge_result['matched']==edge_result['compared']
-    return dict(schema='carddemo-volume-browse/1',head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+    ok=all(r['typed_round_trip'] and r['browse']['matched']==r['browse']['compared'] for r in reports) and edge_result['matched']==edge_result['compared']
+    return dict(schema='carddemo-volume-browse/2',head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         plan_sha256=plan['content_sha256'],records_per_file=count,files=reports,byte_key_edges=edge_result,
         scope='PostgreSQL typed reconstruction and byte-key browse at volume; generated public fixtures, not a z/OS baseline',
         baseline='Independent Python lexicographic sort/filter of generated original key bytes',

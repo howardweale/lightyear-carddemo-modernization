@@ -7875,6 +7875,44 @@
     "claim": "Operator review; not independent attestation. Historical receipts and signed overlays stay separate.",
     "content_sha256": "241cbadac8bdb7bf6c3254a0a9923daf0351e0d635a783284eac169bb4dd1fa0"
   },
+  "appl_contract_selection": {
+    "schema": "appl-result-contract-selection/1",
+    "prepared_on": "2026-10-18",
+    "records": [
+      {
+        "program": "INTCALC",
+        "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
+        "file_sha256": "2af2840e0a0da746ef6c68223fb455c67272cc93fb182f49c097f602b779bef8",
+        "template_queue_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
+        "normalized_contract_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
+        "item_set_sha256": "93204f61f4387d331f44173877517c1b289572c415627c7146af76287784d3d6",
+        "members": 81,
+        "class_proof_sha256": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8",
+        "review_required": true,
+        "reason": "Ordered position 2 is the only class request that contributes to request 06; its retained reference census has a different binding from the October 16 human sample packet."
+      },
+      {
+        "program": "POSTTRAN",
+        "path": "docs/factory/appl-result-signing-2026-10-16/POSTTRAN/contract.json",
+        "file_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "template_queue_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "normalized_contract_sha256": "92c9dab92dfa6db53c1cf72a4784775377a886d81026b67850cbd19f14e806c1",
+        "item_set_sha256": "aba24ea42f9a7410e2b8b2352beed53cd9b7cea0c6310850e0c86e6dd4fd3e65",
+        "members": 96,
+        "class_proof_sha256": "13aca947966f508c373d9a1269e4729b744549c6e1fbb32f205a6543dd38a242",
+        "review_required": false,
+        "reason": "No ordered POSTTRAN APPL-RESULT request exists in the inspected committed signing inventories; retain the existing 96-member contract unchanged."
+      }
+    ],
+    "superseded_contracts": [
+      "docs/factory/appl-result-signing-2026-10-16/INTCALC/contract.json"
+    ],
+    "historical_guide": "docs/factory/appl-result-signing-2026-10-17.md",
+    "historical_guide_sha256": "ffc473c9bb7e16021dfdb758fbb0a5edc92178fdb1b0c659bf90344c578529fa",
+    "replacement_guide": "docs/factory/appl-result-signing-2026-10-18.md",
+    "signed": false,
+    "execution_authorized": false
+  },
   "carddemo": {
     "schema": "carddemo-slice-evidence/2",
     "prepared_on": "2026-10-17",
@@ -8135,26 +8173,7 @@
     },
     "path": "docs/modernization/carddemo-slice-1-2026-10-18.json",
     "unsigned": true,
-    "final_head_ci": "separate readiness gate",
-    "acceptance_scope": "The six recorded work-order proof gates only; not complete platform, error-path, independence, or release acceptance.",
-    "work_order_acceptance_complete": true,
-    "work_order_acceptance_items": {
-      "api-reference": true,
-      "browser": true,
-      "browser-reference": true,
-      "ci-jobs": true,
-      "mutation": true,
-      "mutation-reference": true
-    },
-    "remaining_evidence_gaps": [
-      "Missing-detail screen equivalence is not established.",
-      "SQL error-path screen equivalence is not established.",
-      "Native CICS, IMS and DB2 behavior is not established.",
-      "The reference and candidate share the BMS parser and data-layout codec; independent cross-checks are absent.",
-      "IMS authorization rows and the no-change account pair are disclosed synthetic fixtures, not production evidence.",
-      "Surviving and uncovered mutants remain open; timeouts receive no killed credit. 49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT."
-    ],
-    "gap_addendum": "docs/modernization/carddemo-slice-gaps-2026-10-18.json"
+    "final_head_ci": "separate readiness gate"
   },
   "verdict_path": "docs/factory/intcalc-releasability-2026-10-17.json",
   "delivery": {
@@ -10807,6 +10826,495 @@
   },
   "retention_manifests": [
     "docs/factory/evidence-retention-2026-10-16-posttran.json",
-    "docs/factory/evidence-retention-2026-10-16.json"
-  ]
+    "docs/factory/evidence-retention-2026-10-16.json",
+    "docs/factory/evidence-retention-2026-10-18-intcalc.json"
+  ],
+  "carddemo_idiomatic": {
+    "date": "2026-10-18",
+    "program": "COSGN00C",
+    "run_id": "39147604819",
+    "source_head": "fafc4b3e63e9a4e57b4019d0a3a78d3a2570e0e5",
+    "tested_commit": "dba188ba166145808a59274240d0969e2783377a",
+    "cases": 120,
+    "interactions": 678,
+    "total": 769,
+    "killed": 702,
+    "status_counts": {
+      "KILLED": 702,
+      "SURVIVED": 49,
+      "NO_COVERAGE": 17,
+      "TIMED_OUT": 1
+    },
+    "previous_total": 768,
+    "previous_killed": 701,
+    "current": {
+      "SignonService": {
+        "total": 21,
+        "killed": 19,
+        "percent": 90.47619047619048,
+        "status_counts": {
+          "KILLED": 19,
+          "SURVIVED": 2
+        },
+        "passed": true,
+        "non_killed": [
+          {
+            "status": "SURVIVED",
+            "method": "authenticate",
+            "line": "76",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          },
+          {
+            "status": "SURVIVED",
+            "method": "authenticate",
+            "line": "78",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          }
+        ]
+      },
+      "SignonRules": {
+        "total": 15,
+        "killed": 15,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 15
+        },
+        "passed": true,
+        "non_killed": []
+      }
+    },
+    "previous": {
+      "SignonService": {
+        "total": 35,
+        "killed": 33,
+        "percent": 94.28571428571429,
+        "status_counts": {
+          "KILLED": 33,
+          "SURVIVED": 2
+        },
+        "passed": true,
+        "non_killed": [
+          {
+            "status": "SURVIVED",
+            "method": "interact",
+            "line": "38",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          },
+          {
+            "status": "SURVIVED",
+            "method": "interact",
+            "line": "38",
+            "mutator": "org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator",
+            "description": "removed call to ai/lightyear/carddemo/Commarea::set"
+          }
+        ]
+      }
+    },
+    "remaining_statement_engine_programs": [
+      "COACTVWC",
+      "COACTUPC",
+      "COPAUS0C",
+      "COPAUS1C"
+    ],
+    "other_handwritten_programs": [
+      "COMEN01C"
+    ],
+    "remaining_evidence_gaps": [
+      "Missing-detail and SQL-error screen equivalence",
+      "Native CICS, IMS and DB2 behavior",
+      "Shared BMS parser and data-layout codec",
+      "Disclosed synthetic IMS rows and account pair",
+      "All surviving, uncovered and timed-out mutants remain in the denominator"
+    ],
+    "path": "docs/modernization/carddemo-cosgn00-2026-10-18.json",
+    "unsigned": true
+  },
+  "carddemo_account": {
+    "schema": "carddemo-account-publication/1",
+    "source_head": "fb6154ae1568a0a67a69861f6ca8d51b1e010a72",
+    "tested_commit": "5ac28347d8fdceb3b50587f1316b46f353871c96",
+    "run_id": 39293036087,
+    "measurement_date": "2026-10-19",
+    "run_attempt": 1,
+    "original_receipt_date": "2026-10-18",
+    "unsigned": true,
+    "activation_authorized": false,
+    "phase2_authorized": false,
+    "program": "COACTUPC",
+    "publication_date": "2026-10-19",
+    "whole_screen_idiomatic": false,
+    "groups": {
+      "account_input_java": {
+        "validation_paragraphs": [
+          "1215-EDIT-MANDATORY",
+          "1220-EDIT-YESNO"
+        ],
+        "rule_methods": [
+          "validateRequired",
+          "validateYesNo"
+        ],
+        "java_files": [
+          "AccountInputRules.java"
+        ]
+      },
+      "account_text_money_java": {
+        "validation_paragraphs": [
+          "1225-EDIT-ALPHA-REQD",
+          "1230-EDIT-ALPHANUM-REQD",
+          "1235-EDIT-ALPHA-OPT",
+          "1240-EDIT-ALPHANUM-OPT",
+          "1245-EDIT-NUM-REQD",
+          "1250-EDIT-SIGNED-9V2"
+        ],
+        "rule_methods": [
+          "requiredName",
+          "requiredText",
+          "optionalName",
+          "optionalText",
+          "requiredNonzeroDigits",
+          "validate"
+        ],
+        "java_files": [
+          "AccountTextRules.java",
+          "AccountMoneyRule.java"
+        ]
+      },
+      "account_ssn_fico_java": {
+        "validation_paragraphs": [
+          "1265-EDIT-US-SSN",
+          "1275-EDIT-FICO-SCORE"
+        ],
+        "rule_methods": [
+          "validate",
+          "validScore",
+          "validDisplay"
+        ],
+        "java_files": [
+          "AccountSsnRule.java",
+          "AccountFicoRule.java"
+        ]
+      },
+      "account_location_java": {
+        "validation_paragraphs": [
+          "1270-EDIT-US-STATE-CD",
+          "1280-EDIT-US-STATE-ZIP-CD"
+        ],
+        "rule_methods": [
+          "state",
+          "stateZip"
+        ],
+        "java_files": [
+          "AccountLocationRules.java"
+        ]
+      }
+    },
+    "validation_paragraph_count": 12,
+    "remaining_statement_engine_programs": [
+      "COACTVWC",
+      "COACTUPC",
+      "COPAUS0C",
+      "COPAUS1C"
+    ],
+    "measurement_run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39293036087",
+    "tested_parents": [
+      "9bc5224bdc72a2cd4ef2d59fb2909ca417a07c0d",
+      "fb6154ae1568a0a67a69861f6ca8d51b1e010a72"
+    ],
+    "tested_tree": "71e1590cf1f3d9fb2fc6314b0adb4b6cf32551ca",
+    "measurement_base_note": "Run began before retargeting; tested tree equals the integrated source tree. Final current-main validation is a separate exact-head audit.",
+    "hash_closure": {
+      "source_and_mapping_hashes": 156,
+      "artifact_hashes": 176
+    },
+    "descriptor": {
+      "path": "docs/modernization/carddemo-account-evidence-2026-10-19/publication-input.json",
+      "sha256": "25745732f4fbcacee49a5d4841921bb956abedf5c02ad3818e6546a0a63d7096"
+    },
+    "scope_binding": "separate exact-source Git blobs; not claimed as original receipt inputs",
+    "scenarios": {
+      "journeys": 120,
+      "interactions": 678,
+      "named_case_interactions": 674,
+      "setup_interactions": 4,
+      "conflict_reader_interactions": 7,
+      "conflict_writer_interactions": 7
+    },
+    "observations": {
+      "retained_rows_verified": {
+        "api": 678,
+        "browser": 678,
+        "mutation": 678
+      },
+      "trace_links": {
+        "account_input_java": {
+          "path": "carddemo-web-bindings/account-input-trace.json",
+          "sha256": "4ac02cf51223ff5fab8a7421e67de53305e40ef1a23ed27cfbef1a3ce29945d6",
+          "methods": [
+            {
+              "file": "AccountInputRules.java",
+              "method": "validateRequired",
+              "program": "COACTUPC",
+              "paragraph": "1215-EDIT-MANDATORY",
+              "lines": [
+                1824,
+                1850
+              ]
+            },
+            {
+              "file": "AccountInputRules.java",
+              "method": "validateYesNo",
+              "program": "COACTUPC",
+              "paragraph": "1220-EDIT-YESNO",
+              "lines": [
+                1856,
+                1891
+              ]
+            }
+          ]
+        },
+        "account_text_money_java": {
+          "path": "carddemo-web-bindings/account-text-money-trace.json",
+          "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020",
+          "methods": [
+            {
+              "file": "AccountTextRules.java",
+              "method": "requiredName",
+              "program": "COACTUPC",
+              "paragraph": "1225-EDIT-ALPHA-REQD",
+              "lines": [
+                1898,
+                1950
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "requiredText",
+              "program": "COACTUPC",
+              "paragraph": "1230-EDIT-ALPHANUM-REQD",
+              "lines": [
+                1955,
+                2008
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "optionalName",
+              "program": "COACTUPC",
+              "paragraph": "1235-EDIT-ALPHA-OPT",
+              "lines": [
+                2012,
+                2056
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "optionalText",
+              "program": "COACTUPC",
+              "paragraph": "1240-EDIT-ALPHANUM-OPT",
+              "lines": [
+                2061,
+                2104
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "requiredNonzeroDigits",
+              "program": "COACTUPC",
+              "paragraph": "1245-EDIT-NUM-REQD",
+              "lines": [
+                2109,
+                2175
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "empty",
+              "program": "COACTUPC",
+              "paragraph": "1225-EDIT-ALPHA-REQD",
+              "lines": [
+                1902,
+                1908
+              ]
+            },
+            {
+              "file": "AccountTextRules.java",
+              "method": "text",
+              "program": "COACTUPC",
+              "paragraph": "1225-EDIT-ALPHA-REQD",
+              "lines": [
+                1923,
+                1949
+              ]
+            },
+            {
+              "file": "AccountMoneyRule.java",
+              "method": "validate",
+              "program": "COACTUPC",
+              "paragraph": "1250-EDIT-SIGNED-9V2",
+              "lines": [
+                2180,
+                2220
+              ]
+            }
+          ]
+        },
+        "account_ssn_fico_java": {
+          "path": "carddemo-web-bindings/account-ssn-fico-trace.json",
+          "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125",
+          "methods": [
+            {
+              "file": "AccountSsnRule.java",
+              "method": "validate",
+              "program": "COACTUPC",
+              "paragraph": "1265-EDIT-US-SSN",
+              "lines": [
+                2431,
+                2488
+              ]
+            },
+            {
+              "file": "AccountFicoRule.java",
+              "method": "validScore",
+              "program": "COACTUPC",
+              "paragraph": "1275-EDIT-FICO-SCORE",
+              "lines": [
+                2514,
+                2530
+              ]
+            },
+            {
+              "file": "AccountFicoRule.java",
+              "method": "validDisplay",
+              "program": "COACTUPC",
+              "paragraph": "1275-EDIT-FICO-SCORE",
+              "lines": [
+                2514,
+                2530
+              ]
+            }
+          ]
+        },
+        "account_location_java": {
+          "path": "carddemo-web-bindings/account-location-trace.json",
+          "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d",
+          "methods": [
+            {
+              "file": "AccountLocationRules.java",
+              "method": "state",
+              "program": "COACTUPC",
+              "paragraph": "1270-EDIT-US-STATE-CD",
+              "lines": [
+                2493,
+                2510
+              ]
+            },
+            {
+              "file": "AccountLocationRules.java",
+              "method": "stateZip",
+              "program": "COACTUPC",
+              "paragraph": "1280-EDIT-US-STATE-ZIP-CD",
+              "lines": [
+                2536,
+                2557
+              ]
+            }
+          ]
+        }
+      },
+      "commarea": "Exact returned COMMAREA comparisons are CI assertions in the bound Python/JavaScript proof sources; returned bytes are not separately retained for replay.",
+      "database": "Retained API and browser after-states reconciled against every expected table for all 678 rows.",
+      "shared_dependencies": [
+        "BMS parser",
+        "physical data plan and typed projection codec"
+      ]
+    },
+    "mutation": {
+      "killed": 882,
+      "total": 950,
+      "percent": 92.84210526315789,
+      "status_counts": {
+        "KILLED": 882,
+        "SURVIVED": 50,
+        "NO_COVERAGE": 17,
+        "TIMED_OUT": 1
+      },
+      "denominator": "every PIT mutation in configured screen-handler/helper scope; timeout, no-coverage and errors are not counted killed"
+    },
+    "classes": {
+      "AccountInputRules": {
+        "total": 8,
+        "killed": 8,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 8
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "AccountTextRules": {
+        "total": 43,
+        "killed": 43,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 43
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "AccountMoneyRule": {
+        "total": 9,
+        "killed": 9,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 9
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "CobolNumber": {
+        "total": 19,
+        "killed": 19,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 19
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "AccountSsnRule": {
+        "total": 6,
+        "killed": 6,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 6
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "AccountFicoRule": {
+        "total": 10,
+        "killed": 10,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 10
+        },
+        "passed": true,
+        "non_killed": []
+      },
+      "AccountLocationRules": {
+        "total": 2,
+        "killed": 2,
+        "percent": 100.0,
+        "status_counts": {
+          "KILLED": 2
+        },
+        "passed": true,
+        "non_killed": []
+      }
+    },
+    "merge_approved": false
+  }
 }

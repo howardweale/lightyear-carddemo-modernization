@@ -1,0 +1,26 @@
+{
+  "schema": "carddemo-idiomatic-java-scope/1",
+  "program": "COACTUPC",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+    "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+  },
+  "java_files": [
+    "AccountLocationRules.java"
+  ],
+  "validation_paragraphs": [
+    "1270-EDIT-US-STATE-CD",
+    "1280-EDIT-US-STATE-ZIP-CD"
+  ],
+  "rule_methods": [
+    "state",
+    "stateZip"
+  ],
+  "remaining_statement_engine_programs": [
+    "COACTVWC",
+    "COACTUPC",
+    "COPAUS0C",
+    "COPAUS1C"
+  ],
+  "proof_status": "Fresh CI required; state and ZIP rules prepared; whole account screen remains incomplete"
+}

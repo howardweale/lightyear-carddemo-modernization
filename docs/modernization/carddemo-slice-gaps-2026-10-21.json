@@ -1,0 +1,56 @@
+{
+  "schema": "carddemo-slice-gap-addendum/1",
+  "prepared_on": "2026-10-21",
+  "receipt": {
+    "path": "docs/modernization/carddemo-slice-1-2026-10-18.json",
+    "sha256": "958741da798d0e30e1527afbd88236f3a999dc6fe5952f00e925092f1ce09cc4"
+  },
+  "supersedes_interpretation": [
+    "remaining_evidence_gaps",
+    "acceptance_complete"
+  ],
+  "acceptance_meaning": "The six recorded work-order proof gates only; not complete platform, error-path, independence, or release acceptance.",
+  "remaining_evidence_gaps": [
+    {
+      "id": "missing-detail",
+      "description": "Missing-detail screen equivalence is not established."
+    },
+    {
+      "id": "sql-errors",
+      "description": "SQL error-path screen equivalence is not established."
+    },
+    {
+      "id": "native-platforms",
+      "description": "Native CICS, IMS and DB2 behavior is not established."
+    },
+    {
+      "id": "shared-codecs",
+      "description": "The original reference and candidate share the BMS parser and data-layout codec. Independent readers now cross-check 50 public and 950 disclosed synthetic rows per layout; this does not establish independent end-to-end or native-platform equivalence."
+    },
+    {
+      "id": "synthetic-data",
+      "description": "IMS authorization rows and the no-change account pair are disclosed synthetic fixtures, not production evidence."
+    },
+    {
+      "id": "mutants",
+      "description": "Surviving and uncovered mutants remain open; timeouts receive no killed credit.",
+      "mutation_statuses": [
+        "SURVIVED",
+        "NO_COVERAGE",
+        "TIMED_OUT"
+      ]
+    }
+  ],
+  "execution_authorized": false,
+  "supersedes_addendum": "docs/modernization/carddemo-slice-gaps-2026-10-18.json",
+  "independent_reader_sources": [
+    {
+      "path": "tests/independent_carddemo_layout.py",
+      "git_blob_content_hash": "77d0c8f04e444396662dbca15e6f6a5297895c4d"
+    },
+    {
+      "path": "tests/test_carddemo_independent_layout.py",
+      "git_blob_content_hash": "1ad06868ea85acf7c870815703b59e2d8e384c28"
+    }
+  ]
+}

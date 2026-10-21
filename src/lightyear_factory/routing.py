@@ -91,18 +91,19 @@ class TaskRouter:
         self.policy, self.matrix, self.proof, self.trust = policy, matrix, proof, trust
         self.clock = now or (lambda: datetime.now(timezone.utc))
 
-    def bind_order(self, order):
+    def bind_order(self, order, *, model_admission=None, runtime_admission=None):
         if order.metadata.get("campaign_id") or order.metadata.get(
             "calibration_campaign"
         ):
             raise ContractError("campaigns cannot use factory routing")
-        return RoutedBudget(self, order)
+        return RoutedBudget(self, order, model_admission=model_admission, runtime_admission=runtime_admission)
 
 
 class RoutedBudget:
-    def __init__(self, router, order):
+    def __init__(self, router, order, *, model_admission=None, runtime_admission=None):
         self.router = router
-        self.budget = AccountedModelProvider(router.providers[router.default], order)
+        self.budget = AccountedModelProvider(router.providers[router.default], order,
+            model_admission=model_admission, runtime_admission=runtime_admission)
         self.routing = []
 
     @property

@@ -76,6 +76,29 @@ class PublicToolkitTests(unittest.TestCase):
     "Requires Linux two-user acceptance runner and built candidate JAR",
 )
 class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
+    def graph_config(self):
+        return {}
+
+    def mcp_graph_args(self):
+        return []
+
+    def extra_tool_names(self):
+        return set()
+
+    async def exercise_graph(self, call):
+        pass
+
+    async def exercise_public_decode(self, call):
+        self.assertTrue(
+            (await call("decode_records", path="accounts.bin", copybook="account.cpy"))["records"]
+        )
+
+    async def inspect_graph_verdict(self, call, attempt):
+        pass
+
+    def finish_graph_acceptance(self):
+        pass
+
     async def asyncSetUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix="lightyear-verify-")
         self.base = Path(self.tmp.name)
@@ -190,6 +213,8 @@ class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
                 "target": "Java",
             },
         }
+        config.update(self.graph_config())
+        config["public_task"]["development_manifest_sha256"] = sha(self.manifest.read_bytes())
         config_path = self.private / "config.json"
         config_path.write_bytes(canonical(config))
         self.env = {
@@ -485,7 +510,7 @@ public class Probe {
                 str(self.manifest),
                 "--judge-url",
                 self.url,
-            ],
+            ] + self.mcp_graph_args(),
             env=self.env,
             cwd=str(self.public),
         )
@@ -519,7 +544,7 @@ public class Probe {
                     "get_budget",
                     "get_receipt",
                     "propose_normalization",
-                },
+                } | self.extra_tool_names(),
                 names,
             )
 
@@ -530,17 +555,12 @@ public class Probe {
                 self.responses.append(value)
                 return value
 
+            await self.exercise_graph(call)
             self.assertEqual(
                 300,
                 (await call("describe_copybook", path="account.cpy"))["record_length"],
             )
-            self.assertTrue(
-                (
-                    await call(
-                        "decode_records", path="accounts.bin", copybook="account.cpy"
-                    )
-                )["records"]
-            )
+            await self.exercise_public_decode(call)
             self.assertEqual(
                 "zos-run-observation/1",
                 (await call("read_job_log", path="job.txt"))["schema"],
@@ -633,6 +653,7 @@ public class Probe {
                     verdict["verdict"],
                     verdict,
                 )
+                await self.inspect_graph_verdict(call, attempt)
                 if name == "rounding":
                     self.assertTrue(
                         any(
@@ -819,6 +840,7 @@ public class Probe {
         )
         self.assertEqual(0, restarted.returncode, restarted.stderr.decode())
         self.assertEqual(0, json.loads(restarted.stdout)["submissions_left"])
+        self.finish_graph_acceptance()
         print(
             "VERIFY_ACCEPTANCE: five real sandbox submissions; five existing offline verdict replays; two OS identities; zero model calls"
         )

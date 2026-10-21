@@ -18,13 +18,15 @@ class CardDemoGapTests(unittest.TestCase):
             path=root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((ROOT/name).read_bytes())
 
     def test_dated_text_and_live_status_are_bound_to_original_measurement(self):
-        value=records.load_web(ROOT)
-        self.assertTrue(value['work_order_acceptance_complete'])
-        self.assertEqual(6,len(value['work_order_acceptance_items']))
-        self.assertEqual(6,len(value['remaining_evidence_gaps']))
-        self.assertIn('49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT',gaps.paragraph(value))
-        self.assertEqual((ROOT/ADDENDUM).with_suffix('.md').read_text(encoding='utf-8'),gaps.markdown(value))
-        self.assertIn(gaps.paragraph(value),records.web_paragraph(value))
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);self.fixture(root)
+            value=records.load_web(root)
+            self.assertTrue(value['work_order_acceptance_complete'])
+            self.assertEqual(6,len(value['work_order_acceptance_items']))
+            self.assertEqual(6,len(value['remaining_evidence_gaps']))
+            self.assertIn('49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT',gaps.paragraph(value))
+            self.assertEqual((root/ADDENDUM).with_suffix('.md').read_text(encoding='utf-8'),gaps.markdown(value))
+            self.assertIn(gaps.paragraph(value),records.web_paragraph(value))
 
     def test_removing_gap_changes_rendered_status_without_changing_receipt(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -69,3 +71,11 @@ class CardDemoGapTests(unittest.TestCase):
                     "SELECT jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text) FROM t"):
             with self.subTest(sql=sql):self.assertEqual([],violations(sql))
         self.assertEqual([],check(ROOT))
+
+    def test_current_addendum_retains_gaps_and_discloses_bounded_readers(self):
+        value=records.load_web(ROOT)
+        self.assertEqual('docs/modernization/carddemo-slice-gaps-2026-10-21.json',value['gap_addendum'])
+        self.assertEqual(6,len(value['remaining_evidence_gaps']))
+        self.assertIn('50 public and 950 disclosed synthetic',gaps.paragraph(value))
+        self.assertIn('49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT',gaps.paragraph(value))
+        self.assertTrue(value['work_order_acceptance_complete'])

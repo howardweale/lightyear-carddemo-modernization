@@ -1,0 +1,30 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/copau-f8-java-image-pin-r2-2026-10-20.json",
+      "reference": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/pom.xml",
+      "source_sha256": "6497637db619a851c113391524ee0044da9892b2d18a85134bcc7dc183485d5f"
+    },
+    {
+      "record": "docs/factory/copau-f8-worker-build-inputs-r2-2026-10-20.json",
+      "reference": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/pom.xml",
+      "source_sha256": "6497637db619a851c113391524ee0044da9892b2d18a85134bcc7dc183485d5f"
+    },
+    {
+      "record": "docs/factory/copau-f8-worker-packaging-r2-2026-10-20.json",
+      "reference": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/pom.xml",
+      "source_sha256": "6497637db619a851c113391524ee0044da9892b2d18a85134bcc7dc183485d5f"
+    }
+  ]
+}

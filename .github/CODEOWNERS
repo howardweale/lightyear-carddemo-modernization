@@ -1,0 +1,28 @@
+# Review ownership; branch rules determine enforcement.
+* @howardweale
+/src/lightyear_control_tower/ @howardweale
+/src/lightyear_trust/ @howardweale
+/src/lightyear_judge/ @howardweale
+/docs/factory/ @howardweale
+/.github/workflows/ @howardweale
+**/*.pem @howardweale
+**/*.key @howardweale
+/tools/*sign* @howardweale
+/tools/*release* @howardweale
+/tools/*retain* @howardweale
+/tools/*retention* @howardweale
+/tools/release/ @howardweale
+/tools/retention/ @howardweale
+
+# Frozen judge control changes require Howard's review.
+/docs/factory/copau-factory-judge-freeze-*.json @howardweale
+/tools/check_copau_judge_freeze.py @howardweale
+/.github/workflows/copau-factory-judge.yml @howardweale
+/tests/test_copau_judge_freeze.py @howardweale
+/.github/CODEOWNERS @howardweale
+
+# Main-side factory package and publication verification.
+/factory/candidate-publications/ @howardweale
+/tools/check_factory_publications.py @howardweale
+/tests/test_factory_publications.py @howardweale
+/.github/workflows/factory-main-packages.yml @howardweale

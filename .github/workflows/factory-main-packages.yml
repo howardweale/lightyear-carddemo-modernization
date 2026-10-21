@@ -1,0 +1,25 @@
+name: Factory main package verification
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  verify-published-packages:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Compare main packages with externally trusted signed candidate trees
+        env:
+          FACTORY_PUBLIC_ALLOWED_SIGNERS: ${{ vars.LIGHTYEAR_FACTORY_ALLOWED_SIGNERS }}
+        run: python -I -B tools/check_factory_publications.py

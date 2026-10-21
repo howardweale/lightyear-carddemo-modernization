@@ -164,6 +164,7 @@ jobs:
           python-version: "3.12"
       - name: Exercise recovery fingerprints against real PostgreSQL 16
         env:
+          GH_TOKEN: ${{ github.token }}
           PYTHONPATH: src
           LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER: lightyear-sql-recovery-test
         run: |
@@ -517,12 +518,26 @@ jobs:
 
       - name: Run unit and differential verification
         if: runner.os == 'Linux'
-        run: ./verify.sh
+        run: |
+          source ./python-runtime.sh
+          lightyear_resolve_python
+          PYTHONPATH=src:.:tests "$LIGHTYEAR_PYTHON_BIN" -B tools/build_factory_current_status.py
+          export LIGHTYEAR_CI_STATUS_BASELINE="$RUNNER_TEMP/lightyear-status-baseline.json"
+          "$LIGHTYEAR_PYTHON_BIN" -B tools/ci_status_baseline.py capture
+          ./verify.sh
 
       - name: Run unit and differential verification (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: .\verify.ps1
+        run: |
+          . .\python-runtime.ps1
+          $env:PYTHONPATH = "src;.;tests"
+          Invoke-FactoryDarkPython -B tools/build_factory_current_status.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:LIGHTYEAR_CI_STATUS_BASELINE = Join-Path $env:RUNNER_TEMP "lightyear-status-baseline.json"
+          Invoke-FactoryDarkPython -B tools/ci_status_baseline.py capture
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .\verify.ps1
 
       - name: Reject verification that mutates tracked evidence
         run: git diff --exit-code

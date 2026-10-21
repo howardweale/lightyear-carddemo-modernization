@@ -84,32 +84,39 @@ def verified_assessment(verdict,report,judge_key):
     return report['scenario_adequacy']
 
 
-def release(verdict,report,judge_key,policy=None,operator_key=None, *, factory_authority=None):
+def release(verdict,report,judge_key,policy=None,operator_key=None, *, factory_authority=None, release_evidence_root=None, production_review_key_sha256=None):
     from .tower_authority import configured_authority
     factory_authority = configured_authority(factory_authority)
     if factory_authority is not None:
-        return _factory_release(verdict, report, judge_key, policy, factory_authority)
+        return _factory_release(verdict, report, judge_key, policy, factory_authority, production_review_key_sha256)
     adequacy=verified_assessment(verdict,report,judge_key)
     reasons=assess(adequacy,PROPOSAL,report['compared_fields'])
+    reviews_verified = False
     if (not policy or not operator_key or not verify_envelope(policy,operator_key)
         or policy.get('schema')!='scenario-policy-approval/1'
         or policy.get('verdict_sha256')!=verdict['content_sha256']
         or policy.get('assessment_sha256')!=report['content_sha256']):
         reasons.append('exact-operator-threshold-approval-required')
     else:
+        reviews_verified = True
         reasons=assess(adequacy,policy['threshold'],report['compared_fields'])
     if verdict.get('verdict')!='equivalent':reasons.append('verdict-not-equivalent')
-    if verdict.get('oracle_status')=='provisional' or verdict.get('run_class')=='engineering':reasons.append('provisional-or-engineering-evidence')
-    return dict(releasable=not reasons,reasons=sorted(set(reasons)),scenario_adequacy=adequacy,
-                status='releasable' if not reasons else 'equivalent (not releasable: weak scenarios)' if verdict.get('verdict')=='equivalent' else 'not releasable')
+    from .release_grade import checklist, reasons as grade_reasons
+    grade = checklist(verdict, root=release_evidence_root, scope=verdict.get('release_grade', {}).get('claim_scope') if isinstance(verdict.get('release_grade'), dict) else None,
+        review_key=operator_key, production_review_key_sha256=production_review_key_sha256, reviews_verified=reviews_verified)
+    reasons += grade_reasons(grade)
+    return dict(releasable=not reasons,reasons=sorted(set(reasons)),scenario_adequacy=adequacy,release_grade=grade,
+                status='releasable' if not reasons else 'not releasable')
 
 
-def _factory_release(verdict, report, judge_key, bundle, authority):
+def _factory_release(verdict, report, judge_key, bundle, authority, production_review_key_sha256):
     """Signed mode never imports the historical EOF constants or chat policy."""
     from .tower_authority import proof_contract
     from lightyear_control_tower.factory_policy import require
     adequacy = verified_assessment(verdict, report, judge_key)
     reasons = []
+    reviews_verified = False
+    scope = None
     try:
         require(isinstance(bundle,dict) and set(bundle) == {"threshold", "approval", "io", "equivalents", "claim_scope"})
         threshold = dict(bundle["threshold"])
@@ -152,12 +159,16 @@ def _factory_release(verdict, report, judge_key, bundle, authority):
             if not compiler and row["mutant_id"] not in resolved:
                 reasons.append("signed-equivalence-review-required")
         reasons += assess(adequacy, threshold, report["compared_fields"], historical_io=False)
+        reviews_verified = not reasons
     except (KeyError, TypeError, ValueError) as error:
         if str(error) == "threshold-conditions-unmet":
             reasons.append("threshold-conditions-unmet")
         reasons.append("signed-factory-threshold-evidence-required")
     if verdict.get("verdict") != "equivalent": reasons.append("verdict-not-equivalent")
-    if verdict.get("oracle_status") == "provisional" or verdict.get("run_class") == "engineering":
-        reasons.append("provisional-or-engineering-evidence")
-    return dict(releasable=not reasons, reasons=sorted(set(reasons)), scenario_adequacy=adequacy,
+    from .release_grade import checklist, reasons as grade_reasons
+    grade = checklist(verdict, root=getattr(authority, 'evidence_root', None), scope=scope,
+        review_key=authority.public_key, production_review_key_sha256=production_review_key_sha256,
+        reviews_verified=reviews_verified)
+    reasons += grade_reasons(grade)
+    return dict(releasable=not reasons, reasons=sorted(set(reasons)), scenario_adequacy=adequacy, release_grade=grade,
                 status="releasable" if not reasons else "not releasable", authority="signed-factory-decisions")

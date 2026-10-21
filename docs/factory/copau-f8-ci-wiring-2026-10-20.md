@@ -1,0 +1,11 @@
+# F8 offline bundle CI wiring
+
+The bundle workflow assembles the actual public dependency cache, projected shared-support jar and per-file workspace map, then exercises the existing CandidateBuildBackend with the pinned Java image. It never launches a factory run, uses a model, admits a work order or signs anything.
+
+This implementation supersedes revision 2's proposed binary rewriting mechanism: CI makes exact guarded projections of scratch copies of the nine hash-bound shared sources, then compiles them. Removing the engine-specific generic type and load adapter before javac naturally produces fresh constant pools and inner-class metadata. Exactly thirteen shared classes are permitted; SourceEdits constants are refused. Existing repository Java and frozen files are unchanged.
+
+A neutral infrastructure fixture outside the authorization package validates utility linkage, erased trace construction, missing engine classes, readonly host/root, nonroot UID, dropped capabilities, no-new-privileges, absent controller-private decoy, no egress and noexec temporary storage. A second offline build must reject a deliberately missing support dependency. No authorization candidate or candidate test is authored or run.
+
+The real capsule, raw per-file maps, conformance report and source-head/run/attempt/hash summary are uploaded even when CI fails; failures produce a failure record and cannot be retained as successful evidence. Successful bytes are retained by a separate workflow_run publisher that executes trusted main code only, validates same-public-repository run/attempt/artifact provenance and tar closure, verifies Release asset bytes, and refuses overwrites. Only publication JSON is offered for a later approved receipt commit; no status or source auto-commit occurs.
+
+The new trusted publisher becomes active after it reaches main. Before then, the PR build retains its outputs as CI artifacts for 90 days. Retention is unsigned; it creates an unsigned lightweight evidence tag and prerelease, not a run approval. All results remain packaging-fixture evidence with factory_run_acceptance false. F2 still needs actual retained metadata, operator trust/private-bundle metadata, the human window/cap and final sealed bindings. Models and the USD10 cap remain unchanged.

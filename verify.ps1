@@ -14,6 +14,10 @@ Invoke-FactoryDarkPython -m lightyear_common scripts --project-root $ProjectDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Invoke-FactoryDarkPython -m unittest discover -s (Join-Path $ProjectDir "tests") -v
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+if ($env:LIGHTYEAR_CI_STATUS_BASELINE) {
+    Invoke-FactoryDarkPython -B (Join-Path $ProjectDir "tools/ci_status_baseline.py") finish
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
 
 Invoke-FactoryDarkPython -m carddemo_oracle validate-normalizations `
     --ledger (Join-Path $ProjectDir "spec\comparison-normalizations.json")

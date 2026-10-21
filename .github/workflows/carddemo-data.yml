@@ -1,10 +1,10 @@
 name: CardDemo data component
 on:
   pull_request:
-    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
+    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
   push:
     branches: [main]
-    paths: ['src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
+    paths: ['src/lightyear_readiness/**', 'readiness/ims-expiry/conformance/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-data/**', 'spec/modernization/carddemo-screens/**', 'docs/modernization/carddemo-mapping-baseline-*/**', 'tests/independent_carddemo_layout.py', 'tests/test_carddemo*', 'tests/browser/carddemo-screens.mjs', 'tests/browser/package*.json', '.github/workflows/carddemo-data.yml']
 permissions:
   contents: read
   packages: read
@@ -112,7 +112,7 @@ jobs:
           PYTHONPATH: src
           CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo
         run: python -B -m lightyear_data.carddemo.volume --count 100000 --out work/carddemo-volume
-      - name: Replay all forty corpus cases through migrated typed adapters with explicit gaps
+      - name: Replay historical corpus plus child traversal, separating adapter and local answers
         env:
           PYTHONPATH: src
           CARDDEMO_DATA_DSN: postgresql://postgres:ci-public-fixture@127.0.0.1:5432/carddemo

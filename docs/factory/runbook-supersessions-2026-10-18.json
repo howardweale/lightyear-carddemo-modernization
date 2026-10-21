@@ -1,0 +1,11 @@
+{
+  "schema": "runbook-supersessions/1",
+  "records": [
+    {
+      "historical_path": "docs/factory/appl-result-signing-2026-10-17.md",
+      "sha256": "ffc473c9bb7e16021dfdb758fbb0a5edc92178fdb1b0c659bf90344c578529fa",
+      "replacement_path": "docs/factory/appl-result-signing-2026-10-18.md",
+      "reason": "Select the ordered INTCALC contract and require a verified current journal for content-based intake."
+    }
+  ]
+}

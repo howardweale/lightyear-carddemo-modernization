@@ -4,6 +4,19 @@ Operator review; not independent attestation. Preparation is not activation.
 No Maintec data, Docker, model client, B06 service change or campaign launch.
 The review's 15-tool target predates `graph_guidance`: current target is **16**.
 
+## Automated CI preparation (G1)
+
+The [graph-on CI runbook](graph-on-ci-runbook.md) describes the extended Linux
+suite: original graph-off acceptance, all 16 graph-on MCP tools, five native
+public-fixture submissions/replays, full decoded projection inventory scan,
+source-excerpt leakage refusal, and public unsigned preparation artifacts.
+CI approvals are ephemeral synthetic fixtures. They cannot activate a live task.
+The dated scan is created by actual CI execution, not authored as passing evidence.
+Trusted-main retention publishes immutable Release assets only after validation.
+
+The following VM, real operator trust, Tower approval, expiry and revocation
+steps remain manual. A green CI suite does not complete them.
+
 ## 1. Fresh graph-off Linux acceptance
 
 Use a fresh dedicated Ubuntu 24.04 VM on the Mac; preserve the October 4 VM and

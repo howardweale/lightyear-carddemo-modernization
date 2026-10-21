@@ -1,0 +1,14 @@
+{
+  "schema": "posttran-readiness-clock-annotation/1",
+  "prepared_on": "2026-10-18",
+  "supersedes_interpretation_of": "docs/factory/posttran-phase2-readiness-2026-10-17.json",
+  "original_sha256": "cbf5a39beef0b6404720f7d506a21663c83c09bbed39008524686cf6725efe90",
+  "historical_clock_fields": [
+    "warning",
+    "expired"
+  ],
+  "clock_fields_as_of": "2026-10-17",
+  "meaning": "Historical snapshots, never current authorization. Live state is computed by check_posttran_deadline.",
+  "withdrawn": false,
+  "execution_authorized": false
+}

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import time
 
 MARKER = '<!-- lightyear-stranded-work-audit/1 -->'
 
@@ -29,9 +30,30 @@ class GitHub:
     def request(self, route, method='GET', data=None):
         command = ['gh', 'api', self.prefix + route, '--method', method]
         if data is not None: command += ['--input', '-']
-        result = subprocess.run(command, input=None if data is None else json.dumps(data),
-            text=True, capture_output=True, check=True)
-        return json.loads(result.stdout)
+        route_label = route.split('?', 1)[0]
+        if len(route_label) > 200 or not re.fullmatch(r'[A-Za-z0-9_./-]+', route_label):
+            route_label = 'redacted'
+        read_only = method == 'GET' and data is None
+        attempts = 3 if read_only else 1
+        for attempt in range(1, attempts + 1):
+            try:
+                result = subprocess.run(command, input=None if data is None else json.dumps(data),
+                    text=True, capture_output=True, check=False, timeout=60)
+            except subprocess.TimeoutExpired:
+                raise RuntimeError(f'stranded-work-api-timeout: {method} {route_label}') from None
+            if result.returncode == 0:
+                try:
+                    return json.loads(result.stdout)
+                except json.JSONDecodeError:
+                    raise RuntimeError(f'stranded-work-api-json: {method} {route_label}') from None
+            statuses = set(re.findall(r'\bHTTP ([1-5][0-9]{2})\b', result.stderr or ''))
+            status = next(iter(statuses)) if len(statuses) == 1 else 'unknown'
+            if status in {'500', '502', '503', '504'} and attempt < attempts:
+                time.sleep(2 ** attempt)
+                continue
+            # Never print captured bodies, headers, credentials or issue payloads.
+            raise RuntimeError(f'stranded-work-api: {method} {route_label} '
+                f'HTTP {status}; exit {result.returncode}; attempts {attempt}')
 
     def pages(self, route):
         result = []

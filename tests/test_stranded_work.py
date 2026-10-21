@@ -2,7 +2,9 @@
 from copy import deepcopy
 from datetime import datetime, timezone
 import unittest
-from tools.ci.stranded_work import MARKER, audit, markdown, update_issue
+import subprocess
+from unittest.mock import patch
+from tools.ci.stranded_work import GitHub, MARKER, audit, markdown, update_issue
 
 MAIN = 'a'*40
 NOW = datetime(2026, 10, 19, 14, 0, tzinfo=timezone.utc)
@@ -96,6 +98,54 @@ class StrandedWorkTests(unittest.TestCase):
         with self.assertRaises(ValueError): update_issue(client, report)
         client.issues = []; report['stranded'] = []
         self.assertIsNone(update_issue(client, report)); self.assertEqual([], client.writes)
+
+
+class GitHubRequestTests(unittest.TestCase):
+    def result(self, status=None, body='{"ok": true}', stderr=None):
+        return subprocess.CompletedProcess([], 0 if status is None else 1,
+            stdout=body, stderr=stderr if stderr is not None else f'gh: HTTP {status}')
+
+    def test_transient_get_retries_then_returns_complete_json(self):
+        for status in ('500', '502', '503', '504'):
+            responses = [self.result(status), self.result(status, stderr=f'gh: unavailable (HTTP {status})'), self.result()]
+            with self.subTest(status=status), patch('tools.ci.stranded_work.subprocess.run', side_effect=responses) as run, patch('tools.ci.stranded_work.time.sleep') as sleep:
+                self.assertEqual({'ok': True}, GitHub('owner/repo').request('pulls/399'))
+                self.assertEqual(3, run.call_count); self.assertEqual([((2,),), ((4,),)], [c[:1] for c in sleep.call_args_list])
+                self.assertEqual(run.call_args_list[0], run.call_args_list[2])
+                self.assertEqual(60, run.call_args.kwargs['timeout'])
+
+    def test_exhaustion_fails_without_captured_output(self):
+        failure = self.result('503', body='PRIVATE_BODY', stderr='PRIVATE_TOKEN (HTTP 503)')
+        with patch('tools.ci.stranded_work.subprocess.run', return_value=failure) as run, patch('tools.ci.stranded_work.time.sleep') as sleep:
+            with self.assertRaises(RuntimeError) as error: GitHub('owner/repo').request('pulls/399?secret=PRIVATE_QUERY')
+            self.assertEqual('stranded-work-api: GET pulls/399 HTTP 503; exit 1; attempts 3', str(error.exception))
+            self.assertEqual(3, run.call_count); self.assertEqual(2, sleep.call_count)
+
+    def test_permanent_ambiguous_and_unknown_errors_do_not_retry(self):
+        for stderr in ('gh: HTTP 401', 'gh: HTTP 403', 'gh: HTTP 404', 'gh: HTTP 429', 'private transport error', 'HTTP 503 HTTP 403'):
+            with self.subTest(stderr=stderr), patch('tools.ci.stranded_work.subprocess.run', return_value=self.result('error', stderr=stderr)) as run, patch('tools.ci.stranded_work.time.sleep') as sleep:
+                with self.assertRaises(RuntimeError): GitHub('owner/repo').request('pulls/399')
+                self.assertEqual(1, run.call_count); sleep.assert_not_called()
+
+    def test_writes_and_get_payloads_are_never_retried(self):
+        for method in ('POST', 'PATCH', 'GET'):
+            with self.subTest(method=method), patch('tools.ci.stranded_work.subprocess.run', return_value=self.result('503')) as run, patch('tools.ci.stranded_work.time.sleep') as sleep:
+                with self.assertRaises(RuntimeError): GitHub('owner/repo').request('issues', method, {'body': 'PRIVATE_PAYLOAD'})
+                self.assertEqual(1, run.call_count); sleep.assert_not_called()
+                self.assertIn('--input', run.call_args.args[0])
+
+    def test_timeout_and_invalid_json_fail_without_retry_or_body(self):
+        cases = (subprocess.TimeoutExpired(['PRIVATE_COMMAND'], 60, output='PRIVATE_OUTPUT'), self.result(body='PRIVATE_JSON'))
+        for case in cases:
+            with self.subTest(case=type(case).__name__), patch('tools.ci.stranded_work.subprocess.run', side_effect=[case]) as run, patch('tools.ci.stranded_work.time.sleep') as sleep:
+                with self.assertRaises(RuntimeError) as error: GitHub('owner/repo').request('pulls/399')
+                self.assertNotIn('PRIVATE', str(error.exception)); self.assertIsNone(error.exception.__cause__)
+                self.assertEqual(1, run.call_count); sleep.assert_not_called()
+
+    def test_invalid_route_is_redacted_in_failure(self):
+        with patch('tools.ci.stranded_work.subprocess.run', return_value=self.result('403')):
+            with self.assertRaisesRegex(RuntimeError, 'GET redacted HTTP 403'):
+                GitHub('owner/repo').request('secret\nPRIVATE')
 
 
 if __name__ == '__main__': unittest.main()

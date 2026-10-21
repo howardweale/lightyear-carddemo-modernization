@@ -95,3 +95,25 @@ class GateTests(unittest.TestCase):
         checkout=next(step for step in job['steps'] if step.get('uses','').startswith('actions/checkout@'))
         # The default depth-one synthetic merge omits its PR-head parent tree.
         self.assertEqual('0',checkout.get('with',{}).get('fetch-depth'))
+
+
+class ReviewPathFilterTests(unittest.TestCase):
+    def test_data_readiness_and_b06_powershell_changes_select_pr_and_push(self):
+        from pathlib import Path
+        import yaml
+        from tools.ci_gate import selected
+        root=Path(__file__).resolve().parents[1]
+        cases={
+            'carddemo-data.yml':['src/lightyear_readiness/ims_qualification.py','readiness/ims-expiry/conformance/cases.json'],
+            'b06-provenance-offline.yml':['tools/ms94_b06_pinned_exec.ps1','tools/inventory_b06_oct13_evidence.ps1'],
+        }
+        for name,paths in cases.items():
+            config=yaml.load((root/'.github/workflows'/name).read_text(),Loader=yaml.BaseLoader)
+            self.assertIn('main',config['on']['push']['branches'])
+            for path in paths:
+                with self.subTest(workflow=name,path=path):
+                    self.assertTrue(selected(config,[path]))
+                    push={'on':{'pull_request':config['on']['push']}}
+                    self.assertTrue(selected(push,[path]))
+        b06=(root/'.github/workflows/b06-provenance-offline.yml').read_text()
+        self.assertIn('test_ms94_b06_*.py',b06)

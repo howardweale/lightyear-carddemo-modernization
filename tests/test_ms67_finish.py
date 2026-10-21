@@ -32,6 +32,45 @@ CANDIDATES = {s: images_tool.REGISTRY + "/" + s + "@sha256:" + f"{i:064x}" for i
 BINDINGS = {k: "b" * 64 for k in ("ms64_receipt_sha256", "image_lock_sha256", "platform_profile_sha256")}
 
 
+class ToolDownloadTests(unittest.TestCase):
+    def test_api_token_is_origin_scoped_and_never_redirected(self):
+        urls = {
+            "https://api.github.com/repos/sigstore/cosign/releases/tags/v3.1.2": True,
+            "https://api.github.com:443/repos/sigstore/cosign/releases/tags/v3.1.2": True,
+            "https://github.com/sigstore/cosign/releases/download/v3.1.2/cosign-linux-amd64": False,
+            "https://pypi.org/pypi/distlib/0.1/json": False,
+            "https://api.github.com.example.invalid/release": False,
+            "https://api.github.com:444/release": False,
+            "https://user@api.github.com/release": False,
+            "http://api.github.com/release": False,
+        }
+        for url, authorized in urls.items():
+            with self.subTest(url=url), patch.dict(os.environ, {"GH_TOKEN": "fixture-token"}, clear=True):
+                with patch.object(images_tool.urllib.request, "urlopen") as opener:
+                    opener.return_value.__enter__.return_value.read.return_value = b"ok"
+                    self.assertEqual(images_tool.downloaded(url, 8), b"ok")
+                    request = opener.call_args.args[0]
+                    self.assertEqual(request.get_header("Authorization"),
+                                     "Bearer fixture-token" if authorized else None)
+                    self.assertNotIn("Authorization", request.headers)
+                    opener.return_value.__enter__.return_value.read.assert_called_once_with(9)
+                    if authorized:
+                        for target in ("https://api.github.com/redirected", "https://example.invalid/asset"):
+                            redirected = images_tool.urllib.request.HTTPRedirectHandler().redirect_request(
+                                request, None, 302, "Found", {}, target)
+                            self.assertIsNone(redirected.get_header("Authorization"))
+
+    def test_missing_token_and_download_limit_remain_enforced(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with patch.object(images_tool.urllib.request, "urlopen") as opener:
+                response = opener.return_value.__enter__.return_value
+                response.read.return_value = b"012345678"
+                with self.assertRaisesRegex(JourneyFailure, "tool-download-size-limit"):
+                    images_tool.downloaded("https://api.github.com/repos/sigstore/cosign", 8)
+                self.assertIsNone(opener.call_args.args[0].get_header("Authorization"))
+                response.read.assert_called_once_with(9)
+
+
 class Cloud:
     def __init__(self):
         self.objects, self.events = {}, []

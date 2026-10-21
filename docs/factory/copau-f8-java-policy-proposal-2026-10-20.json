@@ -1,0 +1,194 @@
+{
+  "schema": "f8-isolated-java-build-policy-proposal/1",
+  "state": "incomplete-proposal-not-an-ExecutionPolicy-not-approved-tooling",
+  "source_commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+  "basis": [
+    {
+      "path": "src/lightyear_execution/contracts.py",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "0bce6d7009d8d755c6f4c767238a1e7a1f990e01f6cfdf8628ea6edaa02cf88c",
+      "size_bytes": 9278
+    },
+    {
+      "path": "src/lightyear_execution/backend.py",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "7a0495da15db771f421b3157327ce0b1189b048bf1927727e27bb5d26bf5acbc",
+      "size_bytes": 6659
+    },
+    {
+      "path": "src/lightyear_factory/gates.py",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51",
+      "size_bytes": 8310
+    },
+    {
+      "path": "factory/carddemo-web/Dockerfile.service",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "32102e0f34aa8b3162b8337b22527ed11437fd9e49fae5fe18e51fcd1cce6adf",
+      "size_bytes": 844
+    },
+    {
+      "path": "factory/carddemo-web/service/pom.xml",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "6497637db619a851c113391524ee0044da9892b2d18a85134bcc7dc183485d5f",
+      "size_bytes": 2882
+    },
+    {
+      "path": "factory/execution/policy.json",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "sha256": "9d66f2a4dd1b0a498d785644054a566dfba2dfa7953bab450220830812d250c7",
+      "size_bytes": 1523
+    }
+  ],
+  "proposed_policy_fields": {
+    "schema_version": "1.0",
+    "id": "lightyear:copau:java-build-proposal",
+    "version": "1.0",
+    "runtime": {
+      "allowed": [
+        "docker"
+      ],
+      "image": "maven:3.9-eclipse-temurin-21",
+      "image_digest": null,
+      "allowed_commands": [
+        "mvn"
+      ],
+      "allowed_environment": [
+        "LIGHTYEAR_FACTORY_WORKSPACE",
+        "LIGHTYEAR_NETWORK_POLICY"
+      ]
+    },
+    "isolation": {
+      "network_mode": "none",
+      "read_only_root": true,
+      "workspace_read_only": true,
+      "run_as_user": "65532:65532",
+      "cap_drop_all": true,
+      "no_new_privileges": true,
+      "pids_limit": 256,
+      "memory_mb": 4096,
+      "cpus": 2.0,
+      "tmpfs_mb": 1024
+    },
+    "admission": {
+      "required": true,
+      "signature_algorithm": "HMAC-SHA256",
+      "trusted_key_ids": null,
+      "max_ttl_seconds": 3600
+    },
+    "identities": {
+      "credential_ttl_seconds": 900,
+      "roles": {
+        "planner": {
+          "actions": [
+            "factory:plan"
+          ]
+        },
+        "builder": {
+          "actions": [
+            "factory:build"
+          ]
+        },
+        "failure_analyst": {
+          "actions": [
+            "factory:analyze-failure"
+          ]
+        },
+        "provider": {
+          "actions": [
+            "secret:lease:OPENAI_API_KEY"
+          ]
+        },
+        "verifier": {
+          "actions": [
+            "factory:verify"
+          ]
+        }
+      }
+    },
+    "secrets": {
+      "allowed_names": [
+        "OPENAI_API_KEY"
+      ],
+      "persist_values": false
+    }
+  },
+  "toolchain": {
+    "java_release": 21,
+    "maven_tag_basis": "maven:3.9-eclipse-temurin-21 from committed Dockerfile.service; moving tag is provenance only, never an admitted pin",
+    "maven_exact_version": null,
+    "jdk_exact_version": null,
+    "platform": "linux/amd64",
+    "immutable_worker_image": null,
+    "immutable_worker_image_digest": null,
+    "dependency_manifest_sha256": null,
+    "public_digest_lookup": "No committed Java digest found. Docker Hub metadata could not be retrieved by the read-only web tool. No image pull or build attempted."
+  },
+  "pin_completion": {
+    "owner": "engineering/CI packaging, then operator review",
+    "requirements": [
+      "Select exact Maven and Temurin 21 patch versions; retain public base manifest digest and target platform.",
+      "Build an offline worker image in CI containing dependencies/plugins for a separate worker POM and a reviewed safe shared support API. Bind its registry name and immutable SHA-256, platform, dependency inventory, sizes/hashes and provenance.",
+      "Set runtime.image and runtime.image_digest to that final offline worker artifact; the upstream tag and Python fixture digest cannot substitute.",
+      "Operator supplies existing work-order trust key ids; no fixture identity is designated by this proposal."
+    ]
+  },
+  "build_contract": {
+    "backend": "lightyear_factory.gates.CandidateBuildBackend",
+    "mounted_input": "/workspace readonly; no .git; exact read_manifest",
+    "writable_copy": "/tmp/factory-build via fixed controller-owned launcher",
+    "command_basename": "mvn",
+    "offline": true,
+    "worker_pom_proposed_path": "factory/copau/worker/pom.xml",
+    "worker_pom_committed": false,
+    "goals": [
+      "test"
+    ],
+    "requirements": [
+      "No PIT configuration, prior tests, receipts, expected data, oracle or existing authorization implementation in the worker POM, classpath, image or workspace.",
+      "Candidate compiles only against reviewed shared support API and its approved transitive dependencies; tests are factory-authored within the approved package.",
+      "Maven local dependency repo must be preseeded in the immutable image; use offline mode and an explicit bounded scratch writable location where needed.",
+      "All output and user-home writes stay in /tmp; the source mount and root remain readonly. No download-capable preparatory step runs inside the worker."
+    ]
+  },
+  "compatibility_findings": [
+    {
+      "id": "supported-ephemeral-copy",
+      "status": "static-supported",
+      "source": "src/lightyear_factory/gates.py:18-39",
+      "finding": "CandidateBuildBackend validates mvn against policy, then uses fixed /bin/sh launcher to copy into /tmp/factory-build. The parent backend enforces no network, nonroot identity, readonly host mount and root, dropped caps and resource limits."
+    },
+    {
+      "id": "jdk-noexec-tmp",
+      "status": "requires-CI-conformance",
+      "source": "src/lightyear_execution/backend.py:94-102",
+      "finding": "/tmp is noexec. Java bytecode interpretation is not an ELF execution from /tmp, but JDK native extraction, launcher needs, offline repository writes and all tests must be observed under these exact flags in CI. Do not weaken isolation to make a build pass."
+    },
+    {
+      "id": "java-image-missing",
+      "status": "unresolved-public-build-artifact",
+      "finding": "Existing Python OCI probe proves its Python fixture only. Neither a Java image pin nor a ready offline dependency image is committed."
+    },
+    {
+      "id": "policy-roundtrip",
+      "status": "blocked-before-runtime",
+      "finding": "The proposal envelope intentionally cannot be loaded as ExecutionPolicy. Replace null pin/trust fields in a separately committed concrete policy, remove proposal metadata, and prove from_dict(...).to_dict() equals actual runtime policy in CI."
+    },
+    {
+      "id": "separate-trust",
+      "status": "operator-input-required",
+      "finding": "ExecutionPolicy HMAC work-order key ids and externally supplied Tower public fingerprint/current journal are distinct inputs. Neither may be invented or provisioned here."
+    },
+    {
+      "id": "resource-values",
+      "status": "proposed-not-human-caps",
+      "finding": "4096 MiB memory, 1024 MiB tmpfs, 2 CPUs, 256 PIDs and 3600/900 second admission/identity TTLs are within parser bounds. They are engineering proposals, not Howard wall-clock/window approval; adjust TTL against the final window/cap before sealing."
+    },
+    {
+      "id": "network-boundaries",
+      "status": "static-supported-build-only",
+      "finding": "OCI build network remains none. Approved model-provider transport and a read-only graph tool belong to controller mediation; the worker gets no endpoint egress or provider key. Do not put graph/API credentials in the image or mounted workspace."
+    }
+  ],
+  "execution_authorized": false
+}

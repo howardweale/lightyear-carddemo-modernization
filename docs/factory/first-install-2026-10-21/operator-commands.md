@@ -12,6 +12,9 @@ The provision command creates the identity credential AND Ed25519 key files.
 It will not recover the unverified old private key. There is no silent migration.
 Runtime and operator handoff are separate; the installer invokes none of this.
 
+First obtain the exact CI bundle using [download and staging commands](bundle-download.md).
+That separate procedure stops before installation.
+
 ## 1. Set paths, verify installed commit, prepare public snapshot
 Use a separate clean public repository checkout, never the dirty working trees.
 
@@ -119,7 +122,10 @@ your journal and create your signature; they are never installation checks.
         Invoke-WebRequest -UseBasicParsing -Uri "$Tower/proof?sha256=$($Decision.content_sha256)" -Headers $Headers -OutFile $ProofPath
         $Proof = Get-Content -LiteralPath $ProofPath -Raw | ConvertFrom-Json
         $Current = Invoke-RestMethod -Uri "$Tower/queue" -Headers $Headers
-        $TrustedHead = Read-Host 'Current journal head independently checked in your local Factory journal'
+        $PublicKey = Join-Path $AuthorityFolder 'authority.public.pem'
+        $HeadLines = @(& $Python -I -B (Join-Path $Runtime 'app\tools\factory_install\journal_head.py') --root $Root --public-key $PublicKey)
+        if ($LASTEXITCODE -ne 0 -or $HeadLines.Count -ne 1) { throw 'Local journal signature verification refused' }
+        $TrustedHead = $HeadLines[0].Trim()
         if ($TrustedHead -notmatch '^[0-9a-f]{64}$' -or $Current.journal_head_sha256 -ne $TrustedHead -or $Proof.journal.journal_head_sha256 -ne $TrustedHead) { throw 'Head differs; obtain a new reviewed public proof' }
     } finally {
         $LoginBody=$null; $Headers=$null; $Session=$null
@@ -127,10 +133,14 @@ your journal and create your signature; they are never installation checks.
 
 Do not rerun a decision after timeout/unknown response: inspect Decision history
 first. The current request UUID prevents duplicate identical submissions, but this
-example intentionally contains no retry. Read-Host does not establish independent
-trust by itself: compare the head to your locally controlled journal using your
-public-key verification procedure, not a value supplied by a request packet.
-Do not obtain proofs automatically as routine health/status checks.
+example intentionally contains no retry. The journal-head command reads only the
+Factory ownership binding, public key and a read-only SQLite snapshot. It checks
+every event's sequence, previous digest, content digest and Ed25519 signature,
+then emits only the computed head. It never initializes a service, reads private
+keys, signs, authenticates or calls Tower. Missing/empty/wrong-key/tampered journals
+fail closed. A changed head refuses the old proof; inspect privately before
+obtaining a fresh proof. This verifies the local chain, not an external rollback
+anchor. Do not obtain proofs automatically as routine health/status checks.
 
 ## 5. Verify and enable signed-only in your own terminal
 The consumer configuration embeds PUBLIC proof/contract JSON objects (not filenames).

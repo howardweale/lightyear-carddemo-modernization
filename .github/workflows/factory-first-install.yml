@@ -14,6 +14,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   windows-installation-review:
     runs-on: windows-2022
@@ -35,6 +38,11 @@ jobs:
         run: |
           $commit=(git rev-parse HEAD).Trim()
           & tools/factory_install/Test-FactoryInstall.ps1 -Stage "$env:RUNNER_TEMP/factory-bundle" -Commit $commit
+      - name: Verify journal and bundle refusal fixtures (CI only)
+        shell: powershell
+        run: |
+          & "$env:RUNNER_TEMP/factory-bundle/python/python.exe" -I -B tools/factory_install/test_review_helpers.py
+          if ($LASTEXITCODE -ne 0) { throw "Operator helper fixtures failed" }
       - name: Retain reviewed runtime, manifest and source binding
         uses: actions/upload-artifact@v4
         with:

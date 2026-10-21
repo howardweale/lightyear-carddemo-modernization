@@ -190,7 +190,9 @@ class FactoryTests(unittest.TestCase):
         def current(proof):return self.service.proof(self.token,proof["decision_sha256"])
         ip=current(ip);authority=FactoryAuthority(self.service.public_key,ip["journal"]["journal_head_sha256"],current(bp),b,evidence_root=self.root)
         key=Path(self.temp.name)/"fixture-judge.pem";initialize_key(key);signer=Signer(key)
-        verdict=signer.sign(dict(verdict="equivalent"))
+        from tests.test_release_grade import release_fixture
+        from hashlib import sha256
+        verdict=signer.sign(release_fixture(self.root))
         a=dict(instrumented=True,source_sha256=io["details"]["source_sha256"],decision_outcomes="4/4",legacy_mutants_killed="50/50",
           coverage_by_class={"business-logic":{"fraction":"4/4"}},
           systematic_mutation=dict(counts={"killed-divergent":45,"killed-failure":5,"survived":0,"not-compiled":0,"equivalent (argued, listed)":1},eligible_count=50,excluded_equivalents=1,
@@ -198,7 +200,7 @@ class FactoryTests(unittest.TestCase):
           distinct_values_per_output_field={"amount":2},uncovered=[dict(classification="io-handling",id=io["details"]["outcome_id"],outcome=io["details"]["outcome"],line=io["details"]["line"])])
         report=issue(verdict,a,["amount"],signer)
         bundle=dict(threshold=PROPOSAL,approval=current(cp),io=[ip],equivalents=[],claim_scope="twin")
-        self.assertTrue(release(verdict,report,signer.public,bundle,factory_authority=authority)["releasable"])
+        self.assertTrue(release(verdict,report,signer.public,bundle,factory_authority=authority,production_review_key_sha256=sha256(authority.public_key).hexdigest())["releasable"])
         bundle["claim_scope"]="zos-facing"
         self.assertIn("signed-equivalence-review-required",release(verdict,report,signer.public,bundle,factory_authority=authority)["reasons"])
         bundle["claim_scope"]="twin";a["uncovered"][0]["line"]+=1

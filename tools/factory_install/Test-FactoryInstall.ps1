@@ -33,9 +33,14 @@ foreach($path in $roots) { Assert (!(Test-Path -LiteralPath $path)) 'Path escape
 & $installer -RuntimeStage $Stage -ManifestSHA256 $hash -ApprovedCommit $Commit -OperatorSid $sid
 $t=Get-ScheduledTask -TaskName $task
 Assert (!$t.Settings.Enabled) 'Task enabled unexpectedly'
-Assert ($t.Principal.UserId -eq $sid -and $t.Principal.RunLevel -eq 'Limited' -and $t.Principal.LogonType -eq 'Interactive') 'Wrong task identity'
+$principalId=[string]$t.Principal.UserId
+$principalSid=if ($principalId -match '^S-1-') { ([Security.Principal.SecurityIdentifier]::new($principalId)).Value } else { ([Security.Principal.NTAccount]::new($principalId)).Translate([Security.Principal.SecurityIdentifier]).Value }
+Assert ($principalSid -eq $sid -and $t.Principal.RunLevel -eq 'Limited' -and $t.Principal.LogonType -eq 'Interactive') 'Wrong task identity'
 Assert ($t.Actions.Execute -eq "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe") 'Unexpected executable'
-Assert ($t.Triggers.UserId -eq $sid) 'Wrong login trigger'
+Assert (@($t.Triggers).Count -eq 1) 'Unexpected login trigger count'
+$triggerId=[string]$t.Triggers[0].UserId
+$triggerSid=if ($triggerId -match '^S-1-') { ([Security.Principal.SecurityIdentifier]::new($triggerId)).Value } else { ([Security.Principal.NTAccount]::new($triggerId)).Translate([Security.Principal.SecurityIdentifier]).Value }
+Assert ($triggerSid -eq $sid) 'Wrong login trigger'
 foreach($path in Get-ChildItem -LiteralPath $roots[0] -Recurse -Force) {
     $acl=Get-Acl -LiteralPath $path.FullName
     Assert ($acl.GetOwner([Security.Principal.SecurityIdentifier]).Value -eq 'S-1-5-32-544') 'Runtime owner differs'

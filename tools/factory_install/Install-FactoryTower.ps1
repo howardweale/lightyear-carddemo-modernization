@@ -115,9 +115,25 @@ $trigger = New-ScheduledTaskTrigger -AtLogOn -User $OperatorSid
 $settings = New-ScheduledTaskSettingsSet -Disable -MultipleInstances IgnoreNew -ExecutionTimeLimit ([TimeSpan]::Zero)
 Register-ScheduledTask -TaskName $task -Action $action -Principal $principal -Trigger $trigger -Settings $settings -Description 'Factory Tower; installed disabled. Howard provisions and enables separately.' | Out-Null
 $registered = Get-ScheduledTask -TaskName $task
-if ($registered.Settings.Enabled -or $registered.Principal.RunLevel -ne 'Limited' -or $registered.Principal.UserId -ne $OperatorSid) {
+# Task Scheduler may return an account name even when registration used a SID.
+function Resolve-TaskSid([string]$UserId) {
+    if ([string]::IsNullOrWhiteSpace($UserId)) { throw 'Empty task identity' }
+    if ($UserId -match '^S-1-') { return ([Security.Principal.SecurityIdentifier]::new($UserId)).Value }
+    return ([Security.Principal.NTAccount]::new($UserId)).Translate([Security.Principal.SecurityIdentifier]).Value
+}
+try {
+    $registeredSid = Resolve-TaskSid $registered.Principal.UserId
+    $triggers = @($registered.Triggers)
+    if ($triggers.Count -ne 1) { throw 'Expected exactly one login trigger' }
+    $triggerSid = Resolve-TaskSid $triggers[0].UserId
+    if ($registered.Settings.Enabled) { throw 'Task must remain disabled' }
+    if ($registered.Principal.RunLevel -ne 'Limited') { throw 'Task run level must be Limited' }
+    if ($registered.Principal.LogonType -ne 'Interactive') { throw 'Task logon type must be Interactive' }
+    if ($registeredSid -ne $OperatorSid) { throw 'Task principal SID differs' }
+    if ($triggerSid -ne $OperatorSid) { throw 'Login trigger SID differs' }
+} catch {
     Disable-ScheduledTask -TaskName $task | Out-Null
-    throw 'Task principal or disabled state differs'
+    throw
 }
 $receipt = @{
     schema='factory-install-receipt/1';source_commit=$ApprovedCommit;manifest_sha256=$ManifestSHA256

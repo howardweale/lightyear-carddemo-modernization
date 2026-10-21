@@ -16,10 +16,31 @@ try {
     for (const width of [1280,390]) {
       const page=await browser.newPage({viewport:{width,height:900}});
       const pageErrors=[]; page.on("pageerror",e=>pageErrors.push(e.message));
+      let stage="login", queueState=null;
+      const failedResponses=[];
+      page.on("response", async response=>{
+        const path=new URL(response.url()).pathname;
+        if(response.status()>=400 && failedResponses.length<16)
+          failedResponses.push({path,status:response.status()});
+        if(path==="/api/tower/queue" && response.ok()) {
+          try {
+            const data=await response.json();
+            queueState=(data.items||[]).map(item=>({kind:item.kind,status:item.status,
+              decidable:item.decidable,refusal:item.decision_refusal}));
+          } catch {queueState="response-unavailable";}
+        }
+      });
+      try {
       await page.goto(`http://127.0.0.1:${config.port}/`);
       await page.locator("#login input").fill(config.credential); await page.locator("#login button").click();
+      // Complete the initial asynchronous login/render before changing tabs.
+      await page.locator("#login").waitFor({state:"hidden"});
+      await page.getByRole("heading",{name:"Campaigns",exact:true}).waitFor();
+      stage="work queue";
       await page.getByRole("button",{name:"Work queue",exact:true}).click();
+      await page.getByRole("heading",{name:"Work queue",exact:true}).waitFor();
       await page.getByRole("button",{name:"Review and decide",exact:true}).click();
+      stage="projection review";
       await page.getByRole("heading",{name:"Public graph projection review"}).waitFor();
       await page.getByText(/Expiry is 00:00 UTC/).waitFor();
       assert.equal(await page.locator('#drawer code').filter({hasText:config.acknowledgment}).count(),1);
@@ -32,7 +53,12 @@ try {
       await page.getByRole("button",{name:"Record decision",exact:true}).click();
       await page.getByRole("heading",{name:"Decision recorded",exact:true}).waitFor();
       assert.deepEqual(pageErrors,[]);
-      await page.close();
+      } catch(error) {
+        // Only bounded queue/transport metadata; never credentials, tokens or bodies.
+        console.error("Graph review failure: "+JSON.stringify({width,stage,queueState,
+          failedResponses,pageErrorCount:pageErrors.length}));
+        throw error;
+      } finally {await page.close();}
     }
     console.log("Desktop/mobile graph review: public-only scope, UTC expiry, refused missing acknowledgment, signed test approval. Zero models.");
   } finally {await browser.close();}

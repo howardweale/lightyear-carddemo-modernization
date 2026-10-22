@@ -1,0 +1,27 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Historical source and merge identities retained from the six original unsigned templates; no new measurement.",
+  "claims": [
+    {
+      "record": "docs/factory/intcalc-review-packet-2026-10-22.json",
+      "reference": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+      "role": "source",
+      "source_path": "docs/factory/release-evidence-2026-10-15/index.json",
+      "source_sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+    },
+    {
+      "record": "docs/factory/intcalc-review-packet-2026-10-22.json",
+      "reference": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "commit": "f343925026bee705ed3c16a734dc5bae4b24c588",
+      "role": "merge",
+      "pr": 337,
+      "parents": [
+        "544247928a871bca4ecb9971185584569a51cdad",
+        "3f1ddcfb340673b906cff77922bb217320f04eab"
+      ],
+      "head_commit": "3f1ddcfb340673b906cff77922bb217320f04eab"
+    }
+  ]
+}

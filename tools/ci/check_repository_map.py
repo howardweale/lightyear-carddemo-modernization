@@ -1,6 +1,7 @@
 """Check maintained navigation and preserved history without network access."""
 import argparse
 import hashlib
+import json
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
@@ -18,6 +19,7 @@ TOKEN = re.compile(r"(?<![\w./\\-])(?:[A-Za-z]:[\\/]|[\\/]{1,2}|\.\.?[\\/])?[A-Z
 EXTENSION = re.compile(r"\.(?:md|rst|txt|json|jsonl|yaml|yml|toml|ini|cfg|py|ps1|sh|sql|xml|java|cbl|cpy|csv|tsv|svg|png|jpg|html|js|ts|tsx|css|lock|rej)$", re.IGNORECASE)
 URL = re.compile(r"(?:https?://|mailto:)[^\s<>`]+", re.IGNORECASE)
 ROOT_NAMES = {'LICENSE', 'NOTICE', 'Dockerfile', 'Makefile'}
+EXAMPLES = 'tools/ci/repository-map-path-examples.json'
 
 
 def named_paths(text, roots):
@@ -25,18 +27,18 @@ def named_paths(text, roots):
     # an independently named path in a label is still checked as a root path.
     text = LINK.sub(lambda match: match.group(0).split('](', 1)[0].lstrip('!['), text)
     text = URL.sub('', text)
-    code_spans = [m.span(1) for m in re.finditer(r'`+([^`]+)`+', text)]
     for match in TOKEN.finditer(text):
-        in_code = any(start <= match.start() and match.end() <= end for start, end in code_spans)
         raw = re.sub(r':\d+(?:-\d+)?$', '', match.group(0)).rstrip('.,;:')
         value = raw.replace('\\', '/')
         first = value.split('/', 1)[0]
         if (value.startswith(('/', './', '../')) or re.match(r'^[A-Za-z]:/', value)
                 or first in roots or value in ROOT_NAMES or value.endswith('/')
-                or (in_code and '/' in value) or EXTENSION.search(value.rstrip('/'))):
+                or '/' in value or EXTENSION.search(value.rstrip('/'))
+                or re.search(r'[A-Za-z0-9_-]\.[A-Za-z][A-Za-z0-9]{0,15}$', value)):
             # Ordinary references to root directories must include a slash;
             # otherwise words such as "tools" in prose would become paths.
-            if '/' in value or EXTENSION.search(value) or value in ROOT_NAMES:
+            if ('/' in value or EXTENSION.search(value) or value in ROOT_NAMES
+                    or re.search(r'[A-Za-z0-9_-]\.[A-Za-z][A-Za-z0-9]{0,15}$', value)):
                 yield value
 
 
@@ -56,9 +58,36 @@ def named_target(root, document, raw):
     return target.is_relative_to(root) and target.exists()
 
 
+def examples(root):
+    path = root / EXAMPLES
+    if path.is_symlink() or not path.resolve().is_relative_to(root):
+        raise ValueError('named-path-example-file')
+    value = json.loads(path.read_text(encoding='utf-8'))
+    if (set(value) != {'schema', 'examples'} or value['schema'] != 'repository-map-path-examples/1'
+            or not isinstance(value['examples'], list) or len(value['examples']) > 20):
+        raise ValueError('named-path-example-schema')
+    result = set()
+    for row in value['examples']:
+        if (not isinstance(row, dict) or set(row) != {'document', 'token', 'reason'}
+                or row['document'] not in DOCUMENTS or not isinstance(row['reason'], str)
+                or not row['reason'].strip() or not isinstance(row['token'], str)):
+            raise ValueError('named-path-example-entry')
+        token = row['token']
+        if (not token or token.startswith('/') or ':' in token or '\\' in token
+                or any(c in token for c in '*?[') or '..' in PurePosixPath(token).parts
+                or token not in set(named_paths(token, set()))):
+            raise ValueError('named-path-example-token')
+        key = (row['document'], token)
+        if key in result or named_target(root, root / row['document'], token):
+            raise ValueError('named-path-example-duplicate-or-existing')
+        result.add(key)
+    return result
+
+
 def check(root):
     root = Path(root).resolve()
     failures = []
+    allowed = examples(root)
     roots = {p.name for p in root.iterdir() if p.is_dir()}
     named_count = 0
     for name in DOCUMENTS:
@@ -75,7 +104,7 @@ def check(root):
                 failures.append(name + ': missing or escaping link ' + raw)
         for raw in sorted(set(named_paths(text, roots))):
             named_count += 1
-            if not named_target(root, path, raw):
+            if (name, raw) not in allowed and not named_target(root, path, raw):
                 failures.append(name + ': missing or escaping named path ' + raw)
     original = subprocess.check_output(['git', 'show', SOURCE + ':README.md'], cwd=root)
     archived = (root / ARCHIVE).read_bytes()

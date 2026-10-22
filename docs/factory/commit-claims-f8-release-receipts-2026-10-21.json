@@ -1,0 +1,30 @@
+{
+  "claims": [
+    {
+      "commit": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "record": "docs/factory/copau-f8-release-retention-2026-10-21.json",
+      "reference": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "role": "source",
+      "source_path": "tools/ci/f8_worker_bundle.py",
+      "source_sha256": "832d454bba5eb4d62afa5dc58343746dd6c11c58505bd63b3eeabbee9d0596e0"
+    },
+    {
+      "commit": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "record": "docs/factory/copau-f8-release-receipt-2026-10-21.json",
+      "reference": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "role": "source",
+      "source_path": "tools/ci/f8_worker_bundle.py",
+      "source_sha256": "832d454bba5eb4d62afa5dc58343746dd6c11c58505bd63b3eeabbee9d0596e0"
+    },
+    {
+      "commit": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "record": "docs/factory/copau-f8-release-receipt-2026-10-21.md",
+      "reference": "302c83f7650281040a48a24ab90b73ee7bab816e",
+      "role": "source",
+      "source_path": "tools/ci/f8_worker_bundle.py",
+      "source_sha256": "832d454bba5eb4d62afa5dc58343746dd6c11c58505bd63b3eeabbee9d0596e0"
+    }
+  ],
+  "policy_start": "2026-10-17",
+  "schema": "record-commit-claims/1"
+}

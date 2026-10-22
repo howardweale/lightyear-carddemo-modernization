@@ -230,7 +230,23 @@ class Broker:
 
             def log_message(self, *args): pass
 
+            def drain_rejected_body(self):
+                # Closing with an unread, declared body can reset a Windows
+                # connection before its 401/403/409 response reaches the peer.
+                # Consume bytes only: never parse or dispatch rejected input.
+                if getattr(self, 'body_consumed', False): return
+                self.body_consumed = True
+                lengths = self.headers.get_all('Content-Length', [])
+                if self.headers.get('Transfer-Encoding') or len(lengths) != 1: return
+                try:
+                    if len(lengths[0]) > 10: return
+                    size = int(lengths[0])
+                    if 0 < size <= MAX_BODY: self.rfile.read(size)
+                except (OSError, ValueError):
+                    pass  # Preserve the original rejection after timeout/EOF.
+
             def reply(self, code, value=None):
+                self.drain_rejected_body()
                 raw = canonical(value) if value is not None else b''
                 self.send_response(code)
                 self.send_header('Content-Length', str(len(raw)))
@@ -243,6 +259,7 @@ class Broker:
 
             def handle_request(self):
                 self.connection.settimeout(5)
+                self.body_consumed = False
                 if (self.client_address[0] != '127.0.0.1' or
                     len(self.headers.get_all('Authorization', [])) != 1 or
                     not session.authenticate(self.headers.get('Authorization'))):
@@ -260,6 +277,7 @@ class Broker:
                 try:
                     size = int(self.headers['Content-Length'])
                     if not 0 < size <= MAX_BODY: return self.reply(413)
+                    self.body_consumed = True
                     raw = self.rfile.read(size)
                     if len(raw) != size: return self.reply(400)
                     request = json.loads(raw, object_pairs_hook=_object,

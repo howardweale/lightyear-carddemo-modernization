@@ -1,0 +1,35 @@
+name: F8 unsigned request preparation
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  f8-request:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -e ".[control-tower]"
+      - name: Validate public preparation and refusal fixtures only
+        env:
+          PYTHONPATH: .:src:tests
+        run: |
+          python -B tools/check_f8_request.py
+          python -B -m unittest test_f8_request -v
+          python -B tools/build_f8_request_draft.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: copau-f2-unsigned-drafts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/f8-unsigned-request/
+          if-no-files-found: error

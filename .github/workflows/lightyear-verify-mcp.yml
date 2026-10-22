@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-java@v5
         with:
@@ -47,7 +47,7 @@ jobs:
       - run: mvn -B -f candidate-java/pom.xml package
       - name: Real graph-off and graph-on MCP, isolation, full inventory scan and replay
         env:
-          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SOURCE_SHA: ${{ github.sha }}
         run: >-
           sudo env PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin:/usr/sbin:/usr/bin:/sbin:/bin
           VERIFY_GRAPH_REPORT_DIR="$GITHUB_WORKSPACE/work/verify-graph-public"

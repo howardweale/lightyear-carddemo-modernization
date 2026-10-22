@@ -25,7 +25,25 @@ class CopauPrerequisiteTests(unittest.TestCase):
         self.exposed = self.base / 'candidate'
         self.exposed.mkdir()
         self.store = helper.Store(self.base / 'private', [self.exposed])
-        self.store.initialize()
+        try:
+            self.store.initialize()
+        except helper.Refused:
+            # CI-only public ACL metadata; never print files, paths or key values.
+            if os.name == 'nt' and not getattr(type(self), '_acl_reported', False):
+                type(self)._acl_reported = True
+                try:
+                    sid, rows = helper.windows_acl(list(self.store.root.parents))
+                    refused = []
+                    for index, row in enumerate(rows):
+                        try:
+                            helper.ancestors_acl([row], sid)
+                        except helper.Refused:
+                            refused.append(dict(ancestor_index=index, acl=row))
+                    print('CI_ANCESTOR_ACL_REFUSAL ' + json.dumps(
+                        dict(sid=sid, refused=refused), sort_keys=True), file=sys.stderr)
+                except Exception:
+                    print('CI_ANCESTOR_ACL_DIAGNOSTIC_UNAVAILABLE', file=sys.stderr)
+            raise
 
     def source(self):
         return dict(schema='copau-private-source/1', freeze_sha256=helper.FREEZE_SHA,

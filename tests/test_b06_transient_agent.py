@@ -12,7 +12,8 @@ class EquinoxAgentTests(unittest.TestCase):
   configured=os.environ.get('B06_REHEARSAL_EQUINOX')
   cls.equinox=Path(configured) if configured else Path('C:/Users/howar/OneDrive/Documents/ChatGPT/lightyear-carddemo-modernization/work/idempiere-runtime-evidence/work/idempiere-upstream/org.idempiere.p2.targetplatform/target/target-platform-repository/plugins/org.eclipse.osgi_3.18.500.v20230801-1826.jar')
   if not cls.java.exists() or not cls.javac.exists() or not cls.equinox.exists():raise unittest.SkipTest('Host JDK and local Equinox jar required; no automatic download')
-  cls.temp=tempfile.TemporaryDirectory();cls.root=Path(cls.temp.name);src=cls.root/'src';classes=cls.root/'classes';src.mkdir();classes.mkdir()
+  # Keep application fixtures outside /tmp, which the agent classifies as transient.
+  cls.temp=tempfile.TemporaryDirectory(prefix='.b06-rehearsal-',dir=cls.repo);cls.root=Path(cls.temp.name);src=cls.root/'src';classes=cls.root/'classes';src.mkdir();classes.mkdir()
   sources={
    'Main.java': '''import org.osgi.framework.*;import org.osgi.framework.launch.*;import java.nio.file.*;import java.util.*;
 public class Main {public static void main(String[] args)throws Exception {

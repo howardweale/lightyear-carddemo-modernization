@@ -1,0 +1,234 @@
+{
+  "schema": "copau-factory-scope/1",
+  "as_of": "2026-10-18",
+  "source_commit": "615cfc3b9c1a117555631d5e4c425fc65f4b4f94",
+  "programs": [
+    {
+      "program": "COPAUS0C",
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+      "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254",
+      "paragraphs": [
+        {
+          "name": "MAIN-PARA",
+          "start": 178,
+          "end": 260
+        },
+        {
+          "name": "PROCESS-ENTER-KEY",
+          "start": 261,
+          "end": 341
+        },
+        {
+          "name": "GATHER-DETAILS",
+          "start": 342,
+          "end": 361
+        },
+        {
+          "name": "PROCESS-PF7-KEY",
+          "start": 362,
+          "end": 387
+        },
+        {
+          "name": "PROCESS-PF8-KEY",
+          "start": 388,
+          "end": 414
+        },
+        {
+          "name": "PROCESS-PAGE-FORWARD",
+          "start": 415,
+          "end": 457
+        },
+        {
+          "name": "GET-AUTHORIZATIONS",
+          "start": 458,
+          "end": 487
+        },
+        {
+          "name": "REPOSITION-AUTHORIZATIONS",
+          "start": 488,
+          "end": 521
+        },
+        {
+          "name": "POPULATE-AUTH-LIST",
+          "start": 522,
+          "end": 607
+        },
+        {
+          "name": "INITIALIZE-AUTH-DATA",
+          "start": 608,
+          "end": 664
+        },
+        {
+          "name": "RETURN-TO-PREV-SCREEN",
+          "start": 665,
+          "end": 680
+        },
+        {
+          "name": "SEND-PAULST-SCREEN",
+          "start": 681,
+          "end": 711
+        },
+        {
+          "name": "RECEIVE-PAULST-SCREEN",
+          "start": 712,
+          "end": 725
+        },
+        {
+          "name": "POPULATE-HEADER-INFO",
+          "start": 726,
+          "end": 749
+        },
+        {
+          "name": "GATHER-ACCOUNT-DETAILS",
+          "start": 750,
+          "end": 811
+        },
+        {
+          "name": "GETCARDXREF-BYACCT",
+          "start": 812,
+          "end": 864
+        },
+        {
+          "name": "GETACCTDATA-BYACCT",
+          "start": 865,
+          "end": 914
+        },
+        {
+          "name": "GETCUSTDATA-BYCUST",
+          "start": 915,
+          "end": 965
+        },
+        {
+          "name": "GET-AUTH-SUMMARY",
+          "start": 966,
+          "end": 1000
+        },
+        {
+          "name": "SCHEDULE-PSB",
+          "start": 1001,
+          "end": 1032
+        }
+      ]
+    },
+    {
+      "program": "COPAUS1C",
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl",
+      "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e",
+      "paragraphs": [
+        {
+          "name": "MAIN-PARA",
+          "start": 157,
+          "end": 207
+        },
+        {
+          "name": "PROCESS-ENTER-KEY",
+          "start": 208,
+          "end": 229
+        },
+        {
+          "name": "MARK-AUTH-FRAUD",
+          "start": 230,
+          "end": 267
+        },
+        {
+          "name": "PROCESS-PF8-KEY",
+          "start": 268,
+          "end": 290
+        },
+        {
+          "name": "POPULATE-AUTH-DETAILS",
+          "start": 291,
+          "end": 359
+        },
+        {
+          "name": "RETURN-TO-PREV-SCREEN",
+          "start": 360,
+          "end": 372
+        },
+        {
+          "name": "SEND-AUTHVIEW-SCREEN",
+          "start": 373,
+          "end": 397
+        },
+        {
+          "name": "RECEIVE-AUTHVIEW-SCREEN",
+          "start": 398,
+          "end": 408
+        },
+        {
+          "name": "POPULATE-HEADER-INFO",
+          "start": 409,
+          "end": 430
+        },
+        {
+          "name": "READ-AUTH-RECORD",
+          "start": 431,
+          "end": 492
+        },
+        {
+          "name": "READ-NEXT-AUTH-RECORD",
+          "start": 493,
+          "end": 519
+        },
+        {
+          "name": "UPDATE-AUTH-DETAILS",
+          "start": 520,
+          "end": 556
+        },
+        {
+          "name": "TAKE-SYNCPOINT",
+          "start": 557,
+          "end": 564
+        },
+        {
+          "name": "ROLL-BACK",
+          "start": 565,
+          "end": 573
+        },
+        {
+          "name": "SCHEDULE-PSB",
+          "start": 574,
+          "end": 604
+        }
+      ]
+    },
+    {
+      "program": "COPAUS2C",
+      "path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl",
+      "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e",
+      "paragraphs": [
+        {
+          "name": "MAIN-PARA",
+          "start": 89,
+          "end": 220
+        },
+        {
+          "name": "FRAUD-UPDATE",
+          "start": 221,
+          "end": 244
+        }
+      ]
+    }
+  ],
+  "screens": [
+    "COPAU00",
+    "COPAU01"
+  ],
+  "candidate_package": "ai.lightyear.carddemo.authorization",
+  "candidate_directory": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization",
+  "interfaces": {
+    "handler": "ai.lightyear.carddemo.TransactionService",
+    "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+    "signatures": [
+      "Result interact(Connection database, Commarea commarea, String aid, Map<String,String> input) throws SQLException",
+      "Result interact(Connection database, Commarea commarea, String aid, Map<String,String> input, ScreenFrame prior) throws SQLException"
+    ],
+    "linked_action_signature": "Map<String,Object> apply(Connection database, Commarea commarea, Map<String,Object> detail) throws SQLException"
+  },
+  "authority": {
+    "candidate_authorship": "factory-only; no developer-session candidate code or suggestions",
+    "model_calls": "blocked until signed F2 proof is committed and verified against trusted journal",
+    "factory_tower_port": 8769
+  },
+  "claim_scope": "twin only; public data and explicitly labelled synthetic IMS rows; no z/OS"
+}

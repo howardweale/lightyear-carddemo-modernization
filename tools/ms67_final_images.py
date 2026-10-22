@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import tarfile
+import urllib.parse
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,13 @@ REVISION_LABEL = "ai.lightyr.ms67.packaging-revision"
 
 def downloaded(url, limit=300 * 1024 * 1024):
     request = urllib.request.Request(url, headers={"User-Agent": "LIGHTYEAR-MS67-final-drills"})
+    parsed = urllib.parse.urlsplit(url)
+    if (parsed.scheme == "https" and parsed.hostname == "api.github.com"
+            and parsed.port in (None, 443) and parsed.username is None and parsed.password is None):
+        token = os.environ.get("GH_TOKEN", "")
+        if token:
+            # urllib does not copy unredirected headers into redirected requests.
+            request.add_unredirected_header("Authorization", "Bearer " + token)
     with urllib.request.urlopen(request, timeout=180) as response:
         raw = response.read(limit + 1)
     require(len(raw) <= limit, "tool-download-size-limit")

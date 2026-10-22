@@ -1,0 +1,30 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/first-install-2026-10-21/dependency-review.md",
+      "reference": "bfc981c83a330e330dcfe4a9e6668e5a110c8a81",
+      "commit": "bfc981c83a330e330dcfe4a9e6668e5a110c8a81",
+      "role": "publication",
+      "publication_path": "docs/factory/factory-authority.public.pem",
+      "publication_sha256": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61"
+    },
+    {
+      "record": "docs/factory/first-install-2026-10-21/dependency-inventory.json",
+      "reference": "1000dca88eadd55cea9ea0e2ba6021111e6d013e",
+      "commit": "1000dca88eadd55cea9ea0e2ba6021111e6d013e",
+      "role": "source",
+      "source_path": "docs/factory/factory-authority.public.pem",
+      "source_sha256": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61"
+    },
+    {
+      "record": "docs/factory/first-install-2026-10-21/dependency-inventory.json",
+      "reference": "df500dbb463326b11f93de1bb326f4f4459af660",
+      "commit": "df500dbb463326b11f93de1bb326f4f4459af660",
+      "role": "source",
+      "source_path": "docs/factory/commit-claims-f8-release-receipts-2026-10-21.json",
+      "source_sha256": "09016164cd4fc1addf84d1bfcd39f2a2b883dc59eb1e3d2f07108d2f69a7c41e"
+    }
+  ]
+}

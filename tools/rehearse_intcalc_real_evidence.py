@@ -142,11 +142,13 @@ def rehearse(folder,output):
         bundle=dict(threshold=policy,approval=ep,io=[current(proofs[4])],
                     equivalents=[current(proofs[1]),current(proofs[2])],claim_scope='twin')
         result=release(verdict,report,judge.public,bundle,factory_authority=authority)
-        if result['reasons']!=['provisional-or-engineering-evidence']:
+        from lightyear_factory.release_grade import NAMES
+        # This remains an engineering fixture, with no retained release packet or production trust.
+        if result['reasons'] != sorted(NAMES):
             raise ValueError('request-06-unexpected-reasons:'+','.join(result['reasons']))
         receipt=dict(schema='intcalc-request06-ci-rehearsal/1',head=head,run_id=run,
             evidence_files=source_files,constant_fields=sorted(adequacy['constant_field_evidence']),
-            reasons=result['reasons'],releasable=False,disposable_ci_signatures_only=True,
+            reasons=result['reasons'],release_grade=result['release_grade'],releasable=False,disposable_ci_signatures_only=True,
             real_requests_signed=False,activation_performed=False,phase2_executed=False,
             authorized_by='Howard',performed_by='Codex CI rehearsal')
         receipt['content_sha256']=digest(receipt)

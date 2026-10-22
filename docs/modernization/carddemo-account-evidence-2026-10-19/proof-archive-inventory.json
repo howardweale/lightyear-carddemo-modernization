@@ -1,0 +1,1396 @@
+{
+  "archives": [
+    {
+      "members": [
+        {
+          "path": "carddemo-web-bindings/account-location-trace.json",
+          "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d",
+          "size": 845
+        },
+        {
+          "path": "carddemo-web-bindings/account-ssn-fico-trace.json",
+          "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125",
+          "size": 1036
+        },
+        {
+          "path": "carddemo-web-bindings/account-text-money-trace.json",
+          "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020",
+          "size": 2082
+        },
+        {
+          "path": "carddemo-web-bindings/authfrds.sql",
+          "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9",
+          "size": 808
+        },
+        {
+          "path": "carddemo-web-bindings/bindings.json",
+          "sha256": "ab9b22981f43ce1585d3df6c610f1961555b1092f3f30918693bb2620b89977a",
+          "size": 2290944
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.json",
+          "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c",
+          "size": 7790
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.sql",
+          "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2",
+          "size": 1231
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.json",
+          "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042",
+          "size": 4856
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.sql",
+          "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6",
+          "size": 826
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.json",
+          "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f",
+          "size": 3327
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.sql",
+          "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927",
+          "size": 635
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.json",
+          "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9",
+          "size": 10961
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.sql",
+          "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4",
+          "size": 1426
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.json",
+          "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63",
+          "size": 16878
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.sql",
+          "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd",
+          "size": 1990
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.json",
+          "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae",
+          "size": 11170
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.sql",
+          "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848",
+          "size": 1400
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.json",
+          "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b",
+          "size": 3964
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.sql",
+          "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84",
+          "size": 660
+        },
+        {
+          "path": "carddemo-web-data/plan.json",
+          "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de",
+          "size": 73253
+        },
+        {
+          "path": "carddemo-web-data/schema.sql",
+          "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770",
+          "size": 8174
+        },
+        {
+          "path": "fixture.json",
+          "sha256": "0a9f69ae5fb121339878fff411b4afd77f836f02d5f96f663819be2755c009fb",
+          "size": 826
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountFicoRule.java.html",
+          "sha256": "7b9d8cf98424987a52e834ce56718e573e5ccd5cb315f4bc15bf999789407300",
+          "size": 14295
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountInputRules.java.html",
+          "sha256": "12dd31f87d112fe29a95a53304b8d13a6aaa3712ed10e260d871c2a81d8d0516",
+          "size": 14277
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountLocationRules.java.html",
+          "sha256": "c1b5fa1d094e21b31c83a357f01a6a7ee64db69e93926f670a93086eb30517bb",
+          "size": 10258
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountMoneyRule.java.html",
+          "sha256": "f333746baa2745f208322388a7e4b6ba9fe6c6228ae8e327f24aab9713a2d0c2",
+          "size": 13880
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountSsnRule.java.html",
+          "sha256": "445ad8745186ecfe82eb16e76ef3125b19f39b7fa8a4ad6d1df3d09d21001025",
+          "size": 13338
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountTextRules.java.html",
+          "sha256": "2dbcdee832c84a4361a3d2f5f259ae88eacb0bf207b93d1fd2ab2e74fc08064b",
+          "size": 42772
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountUpdateService.java.html",
+          "sha256": "6c77b5007530ddb43a61875c988b54a4674afdb841c6c090725e42d30d629611",
+          "size": 114197
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountUpdateTransaction.java.html",
+          "sha256": "191a6f80a457b8d8ad4fa5d4481fa13cd3da667b9ee67f591097cb8d4c9b0e88",
+          "size": 46654
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AccountViewService.java.html",
+          "sha256": "67503c0146160ab32e6ea2a4b01241bc787090b181e7797ae7fafdf3e3e7c8e6",
+          "size": 62530
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AuthorizationDetailService.java.html",
+          "sha256": "e449b03dd45847cf217809a210c4ddb07403df9237f3a7c12995ed3b6dbb6402",
+          "size": 39382
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AuthorizationFraud.java.html",
+          "sha256": "360bb796280f77f505362103ebeb4dc8181e92f5c986b6649c57bec01667c259",
+          "size": 32650
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AuthorizationListService.java.html",
+          "sha256": "5e422f0d3924012ebec584ed9dfeb802afa2598bbecc44decd32cadd272f6e08",
+          "size": 117107
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/AuthorizationRendering.java.html",
+          "sha256": "a9f9c88688e4966e31389e6962adf35afb590e03c910df733547c84e38a8754f",
+          "size": 39793
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/ChangeDetection.java.html",
+          "sha256": "5acc1eacf2a70cb739cb132ed03325a54dc6f5a9ad870beca440acab36a41d45",
+          "size": 24032
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/CobolNumber.java.html",
+          "sha256": "78458b3ffe67e28927ca110e1970f488e28ea99d6be08bb94947a5341baa9c75",
+          "size": 25674
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/MenuService.java.html",
+          "sha256": "c1224875b8faff178126ec101134ec670691426a6ad13ad049dd97bcae3b5ddd",
+          "size": 42042
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/ScreenProjection.java.html",
+          "sha256": "f6eb03326613283e8d347ad228c78e36ff304ff9cd13220c70f371d0316f5ea5",
+          "size": 62250
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/SignonRules.java.html",
+          "sha256": "0afc5f767642f3ead66e09deb3616bf35d20be054b286514223219a05d221a43",
+          "size": 22873
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/SignonService.java.html",
+          "sha256": "62c251757409532ff1bb59b928ca2404154e1ed99bc99a9d40b774fa3f69fe79",
+          "size": 50548
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/SourceEdits.java.html",
+          "sha256": "b0a22496af9e97a4b0b5af322138be14dc83f6d03eba421dba26be3ef42abae2",
+          "size": 416270
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/TransactionService.java.html",
+          "sha256": "06910aea2f65bcaef8cfbad544feebe7e9990c7ec55f72fb9f7b3b074e466ecf",
+          "size": 6470
+        },
+        {
+          "path": "pit-reports/ai.lightyear.carddemo/index.html",
+          "sha256": "5aed9bbae1b1c127bec66d2d4f84d196679c4372ee4ef792393eec35b74e968a",
+          "size": 15088
+        },
+        {
+          "path": "pit-reports/index.html",
+          "sha256": "2d27f601ec1f0f8afcc5b52254c5b8aad98ac6f8b756091a78284f744024abca",
+          "size": 2295
+        },
+        {
+          "path": "pit-reports/mutations.xml",
+          "sha256": "6b10c52843cf4c427debd495d140370d4dcb7cbacc017643fbfd75a33a311f33",
+          "size": 766637
+        },
+        {
+          "path": "pit-reports/style.css",
+          "sha256": "78ea37fb78e124acd62b472b0dbdb1f80176d8b4c3353411668797fbf3db7976",
+          "size": 5839
+        },
+        {
+          "path": "reference/cases.json",
+          "sha256": "d6849f9dbd459ba83523f87bedffe4331717d11789cddd7fe10004003fa13952",
+          "size": 16482797
+        },
+        {
+          "path": "reference/expected-database/0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8.json",
+          "sha256": "0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8",
+          "size": 611575
+        },
+        {
+          "path": "reference/database/a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31.json",
+          "sha256": "a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31",
+          "size": 519690
+        },
+        {
+          "path": "reference/expected-database/16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05.json",
+          "sha256": "16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6.json",
+          "sha256": "3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe.json",
+          "sha256": "97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919.json",
+          "sha256": "b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919",
+          "size": 610841
+        },
+        {
+          "path": "reference/summary.json",
+          "sha256": "7f28e3c2c5029c71d1007532398296f2627fe1aa9eebc98868c25483fcc91de3",
+          "size": 51951
+        },
+        {
+          "path": "reference-fixture.json",
+          "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248",
+          "size": 254984
+        },
+        {
+          "path": "runtime.log",
+          "sha256": "c3aa9d224a5a0917c69d4f3e3e18d3fe00b7f9fbed9f72387acf3d35fddbafce",
+          "size": 14543
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountInputRulesTest.xml",
+          "sha256": "2c186194cf8a0bae260bbbb4d40c176822f1488a071a22bbaff7386490ac8a85",
+          "size": 21042
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountLocationRulesTest.xml",
+          "sha256": "b41768d3c707091bd99fd9e817c4b0ed4a3147e21237134ed3b8e574a04dd84b",
+          "size": 21327
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountSsnFicoRulesTest.xml",
+          "sha256": "3843c5ef2d0274be569eca4dbadcc41938eeede0b3b2d7cd2f3a8c18b1e85b98",
+          "size": 21627
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountTextMoneyRulesTest.xml",
+          "sha256": "a7f53a13871a618b47210f8b7fac8aa9f27c500f97c36a9cb71f66cdb1629d05",
+          "size": 21208
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateServiceTest.xml",
+          "sha256": "8c40fc4ea28fea01b8ac454772f51b27138c6726a4e199d3eeb857bc39d216e8",
+          "size": 21118
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateTransactionTest.xml",
+          "sha256": "12615b219173ee8f54aa5ea3f8bdd4ab57f4d52416ed3379d50b2767cee2eeee",
+          "size": 21111
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountValidationTest.xml",
+          "sha256": "b26999f22ae129acb3c8dc7bf316c5ca15959f637376fd4e12297dc7a77a4926",
+          "size": 20937
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AccountViewTest.xml",
+          "sha256": "fc72011a6b8c81477605de7c5b2ee5019430945b2b729295e21c91cfc9d18fed",
+          "size": 20882
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.AuthorizationTest.xml",
+          "sha256": "00de774d04989daba8bdf604f2e4e7127d9b734d4235fceae8cbeddd360268c9",
+          "size": 22072
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.CobolNumberTest.xml",
+          "sha256": "9bfca3c6c220c3715a9ab960f6accb98eba05e95419b892070053099fa5b6fb5",
+          "size": 20749
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.GeneratedBindingsTest.xml",
+          "sha256": "15e92c23d4e42e1e5381a0d22855356c86e11df3c122106b2a1a2ec23fb6b6b3",
+          "size": 21224
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.InteractionEngineTest.xml",
+          "sha256": "1cff8018db98f07ae1169d118ca9c234f565fe57e739fbfe63f63c2065bfe760",
+          "size": 21875
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.MasterReadFailureTest.xml",
+          "sha256": "85994cf909150c036d2679dd21b9ac835b0eb749b6485ae358788c0257a3ab3d",
+          "size": 20812
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.NumericEncodingTest.xml",
+          "sha256": "7ad2dbb9ca70e4d251f4cef05a9aa765484d28e690a457be458dc2784188ae0c",
+          "size": 20899
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.ReferenceScenarioTest.xml",
+          "sha256": "54780a9bf584809f17bfc5e1cae02251fb839ade076ccff368a5ce7d14b27b35",
+          "size": 20816
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.RoutingStateTest.xml",
+          "sha256": "4d2c32b97591f38c4dc0160b678e13954cbbd912037b14b28e840d79c5707092",
+          "size": 20935
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SessionTokenTest.xml",
+          "sha256": "f11d3e68f2f0539e6bd1a66bd0889879162ea029c8af69f052966286251f92f7",
+          "size": 20727
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SignonCommareaTest.xml",
+          "sha256": "63f5553467269d0fcce21d99ce86bcf903b8398a0f0878bf67e774cc9e7053d4",
+          "size": 20644
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SignonRulesTest.xml",
+          "sha256": "5375edd679cfcebd952f0b17e8d7786fba37f848efe4c33ddd8000351aa4c38f",
+          "size": 20919
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SourceDateEditsTest.xml",
+          "sha256": "8857a46bb3becd175ba90337c113157aa2f084b35d83f0b53ad98a1adc1dda16",
+          "size": 20918
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsContractTest.xml",
+          "sha256": "0a6b84acf5e16fae1d7ba5b6bdf6546fe87b32e12ab195356f869a7116f8c87a",
+          "size": 21615
+        },
+        {
+          "path": "surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsTest.xml",
+          "sha256": "ad13c1358963880d8e8507825deb69e7c1bc61d9227c2a83defe6f2d2db025c8",
+          "size": 21640
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountInputRulesTest.txt",
+          "sha256": "efa7e6af5248029524531ebdc31479855e2ed631c54ea83907755b0d97fa6dff",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountLocationRulesTest.txt",
+          "sha256": "36d0494de46dfbac456430d4f8c08523ecdc0a0ca9d98bca2117c8939f1523bc",
+          "size": 342
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountSsnFicoRulesTest.txt",
+          "sha256": "23b91011cd4b75795885232129d8159463175fe5bc0c9c54c517658b46167a89",
+          "size": 340
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountTextMoneyRulesTest.txt",
+          "sha256": "bfff0a68a2d1a454d3853c5847c7c12a23a76fa2a5c00f5d31216e59b575abad",
+          "size": 344
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountUpdateServiceTest.txt",
+          "sha256": "61792b9f69d7d38ea5b0382079825fb357102dfcd7eb6110f9d9a9410c76e6d7",
+          "size": 342
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountUpdateTransactionTest.txt",
+          "sha256": "67fde39d7723dcfa0e9b4b66f6e91aee8a588265743416aa78d0eaadda2a5814",
+          "size": 350
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountValidationTest.txt",
+          "sha256": "eaf6dfc32da95762fef4156727706e8f8e6294af903e23b20b157b11e5e3337a",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AccountViewTest.txt",
+          "sha256": "0fe6bf856c8ae7cbc9e984528a61ecde8931a6809ede16915c7435d6ec512c46",
+          "size": 324
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.AuthorizationTest.txt",
+          "sha256": "e469dbe53a1c7ef29f95e75c929e01497f0ffd4e88af41bf533346e05eb1e918",
+          "size": 329
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.CobolNumberTest.txt",
+          "sha256": "d11b7ef32a7bfd292505e21819befe6c5bfe51e66b4d8359f10be44b3e647010",
+          "size": 324
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.GeneratedBindingsTest.txt",
+          "sha256": "27731487368619785d0a4d172737f6369ba6b021e8474e6d68373196e4350cc9",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.InteractionEngineTest.txt",
+          "sha256": "d4e295ae8f86593a83760dc1201ccd56da84ad2c5fef6cbab26815101544558f",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.MasterReadFailureTest.txt",
+          "sha256": "4704536c2120f2da485225a54a41b8b2e78e02835dc69bc27d76ee62cf115898",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.NumericEncodingTest.txt",
+          "sha256": "50f523579172d244eb7a357a0c7e04008f9c5aa9e185c9ef0dc2823de078bc36",
+          "size": 332
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.ReferenceScenarioTest.txt",
+          "sha256": "96f32112e2b0c926a181cfbbb52e67b5414c601e31f5411656d92fb26c671199",
+          "size": 336
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SessionTokenTest.txt",
+          "sha256": "806a4efe9f1ba5c53cd40ad9aad2e5a40aafacc05b5ed3f9071cd50452092a18",
+          "size": 326
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SignonCommareaTest.txt",
+          "sha256": "5af076f6ba7d94af12786431d9379d1737943345b9276552446ad25eb7a553f2",
+          "size": 330
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.RoutingStateTest.txt",
+          "sha256": "94e9b840e4817ca00a92a6e0e8339f3391a9f9ba020039c26845bf0000b691ba",
+          "size": 326
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SignonRulesTest.txt",
+          "sha256": "41f5cec1740a6710668536fe217bab0be740c4ac8c58c08b2e8914efd92b10ee",
+          "size": 324
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SourceDateEditsTest.txt",
+          "sha256": "eda5f221211b3a1f8f2845eb50e741832bfb515ea950ed91a5c35833a31a0803",
+          "size": 332
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SourceEditsContractTest.txt",
+          "sha256": "3f951c01cca3619ee5c49cd2e50ac0569c402673aadf40c2834958e3d6b2d61a",
+          "size": 340
+        },
+        {
+          "path": "surefire-reports/ai.lightyear.carddemo.SourceEditsTest.txt",
+          "sha256": "baec714bd64feb6a35499f1871767396b56d629841e4225bba736323456d041a",
+          "size": 324
+        }
+      ],
+      "name": "carddemo-proof-mutation.zip",
+      "original_artifact_id": 12213627913,
+      "sha256": "80bd3accde048a3d252958bdf1951576868ae2550a08dbde3e1a5a372f210302",
+      "size": 1525206
+    },
+    {
+      "members": [
+        {
+          "path": "carddemo-slice-1-2026-10-18.json",
+          "sha256": "a89deeccc0b98ef3c78275d9edffee4e7d377947a5d2227df0c3d630b4955890",
+          "size": 124998
+        },
+        {
+          "path": "carddemo-slice-1-2026-10-18.md",
+          "sha256": "bc655dd84114efed8af3fb0a7d00350ede3b5ce05ec42e67261a8b4ccc3415a2",
+          "size": 9137
+        }
+      ],
+      "name": "carddemo-unsigned-receipt.zip",
+      "original_artifact_id": 12212869584,
+      "sha256": "e937719c98cdc1b601f722bd096d82f298a5af963453a2c857df3856b3fd3399",
+      "size": 22047
+    },
+    {
+      "members": [
+        {
+          "path": "browser/database/a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31.json",
+          "sha256": "a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31",
+          "size": 519690
+        },
+        {
+          "path": "browser/database/c75d7e09658c721b0210d5c0a25d6a2e2109a8a4b7f6554b6590c4dc04a4fc5c.json",
+          "sha256": "c75d7e09658c721b0210d5c0a25d6a2e2109a8a4b7f6554b6590c4dc04a4fc5c",
+          "size": 520354
+        },
+        {
+          "path": "browser/database/b31ad04ccb60dbb121a6f6fcf48bc01e39e70a2a096c4436755f4d26a7f39fd7.json",
+          "sha256": "b31ad04ccb60dbb121a6f6fcf48bc01e39e70a2a096c4436755f4d26a7f39fd7",
+          "size": 520354
+        },
+        {
+          "path": "browser/database/c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b.json",
+          "sha256": "c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b",
+          "size": 520354
+        },
+        {
+          "path": "browser/database/e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01.json",
+          "sha256": "e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01",
+          "size": 520354
+        },
+        {
+          "path": "browser/frames.json",
+          "sha256": "d0ed1fc9488cc2399339d42fdb38e5c85957e6a039ef9c2cbd84408305c45c2c",
+          "size": 56198475
+        },
+        {
+          "path": "browser/summary.json",
+          "sha256": "622ff76d87f71f71230bc4c4917e03feaf126a4f15f8862fd1086b9757524edb",
+          "size": 344
+        },
+        {
+          "path": "carddemo-web-bindings/account-location-trace.json",
+          "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d",
+          "size": 845
+        },
+        {
+          "path": "carddemo-web-bindings/account-ssn-fico-trace.json",
+          "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125",
+          "size": 1036
+        },
+        {
+          "path": "carddemo-web-bindings/account-text-money-trace.json",
+          "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020",
+          "size": 2082
+        },
+        {
+          "path": "carddemo-web-bindings/authfrds.sql",
+          "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9",
+          "size": 808
+        },
+        {
+          "path": "carddemo-web-bindings/bindings.json",
+          "sha256": "ab9b22981f43ce1585d3df6c610f1961555b1092f3f30918693bb2620b89977a",
+          "size": 2290944
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.json",
+          "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c",
+          "size": 7790
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.sql",
+          "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2",
+          "size": 1231
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.json",
+          "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042",
+          "size": 4856
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.sql",
+          "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6",
+          "size": 826
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.json",
+          "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f",
+          "size": 3327
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.sql",
+          "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927",
+          "size": 635
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.json",
+          "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9",
+          "size": 10961
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.sql",
+          "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4",
+          "size": 1426
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.json",
+          "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63",
+          "size": 16878
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.sql",
+          "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd",
+          "size": 1990
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.json",
+          "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae",
+          "size": 11170
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.sql",
+          "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848",
+          "size": 1400
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.json",
+          "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b",
+          "size": 3964
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.sql",
+          "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84",
+          "size": 660
+        },
+        {
+          "path": "carddemo-web-data/plan.json",
+          "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de",
+          "size": 73253
+        },
+        {
+          "path": "carddemo-web-data/schema.sql",
+          "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770",
+          "size": 8174
+        },
+        {
+          "path": "fixture.json",
+          "sha256": "0a9f69ae5fb121339878fff411b4afd77f836f02d5f96f663819be2755c009fb",
+          "size": 826
+        },
+        {
+          "path": "reference/cases.json",
+          "sha256": "d6849f9dbd459ba83523f87bedffe4331717d11789cddd7fe10004003fa13952",
+          "size": 16482797
+        },
+        {
+          "path": "reference/database/a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31.json",
+          "sha256": "a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31",
+          "size": 519690
+        },
+        {
+          "path": "reference/expected-database/0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8.json",
+          "sha256": "0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6.json",
+          "sha256": "3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe.json",
+          "sha256": "97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05.json",
+          "sha256": "16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919.json",
+          "sha256": "b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919",
+          "size": 610841
+        },
+        {
+          "path": "reference/summary.json",
+          "sha256": "7f28e3c2c5029c71d1007532398296f2627fe1aa9eebc98868c25483fcc91de3",
+          "size": 51951
+        },
+        {
+          "path": "reference-fixture.json",
+          "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248",
+          "size": 254984
+        },
+        {
+          "path": "runtime.log",
+          "sha256": "ea846db594cef3cb028dab054091ac0da1da351ba5addf7aab144fc54c18399f",
+          "size": 346408
+        }
+      ],
+      "name": "carddemo-proof-browser.zip",
+      "original_artifact_id": 12210660948,
+      "sha256": "5d372efd5f07d5dd6601d3eb3715e2cd62b6c4ac528dcc6fb3fcbd36087ef888",
+      "size": 3937371
+    },
+    {
+      "members": [
+        {
+          "path": "carddemo-web-bindings/account-location-trace.json",
+          "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d",
+          "size": 845
+        },
+        {
+          "path": "carddemo-web-bindings/account-ssn-fico-trace.json",
+          "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125",
+          "size": 1036
+        },
+        {
+          "path": "carddemo-web-bindings/account-text-money-trace.json",
+          "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020",
+          "size": 2082
+        },
+        {
+          "path": "carddemo-web-bindings/authfrds.sql",
+          "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9",
+          "size": 808
+        },
+        {
+          "path": "carddemo-web-bindings/bindings.json",
+          "sha256": "ab9b22981f43ce1585d3df6c610f1961555b1092f3f30918693bb2620b89977a",
+          "size": 2290944
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.json",
+          "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c",
+          "size": 7790
+        },
+        {
+          "path": "carddemo-web-data/mapping/acctdata.sql",
+          "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2",
+          "size": 1231
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.json",
+          "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042",
+          "size": 4856
+        },
+        {
+          "path": "carddemo-web-data/mapping/carddata.sql",
+          "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6",
+          "size": 826
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.json",
+          "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f",
+          "size": 3327
+        },
+        {
+          "path": "carddemo-web-data/mapping/cardxref.sql",
+          "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927",
+          "size": 635
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.json",
+          "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9",
+          "size": 10961
+        },
+        {
+          "path": "carddemo-web-data/mapping/custdata.sql",
+          "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4",
+          "size": 1426
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.json",
+          "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63",
+          "size": 16878
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautdtl1.sql",
+          "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd",
+          "size": 1990
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.json",
+          "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae",
+          "size": 11170
+        },
+        {
+          "path": "carddemo-web-data/mapping/pautsum0.sql",
+          "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848",
+          "size": 1400
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.json",
+          "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b",
+          "size": 3964
+        },
+        {
+          "path": "carddemo-web-data/mapping/usrsec.sql",
+          "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84",
+          "size": 660
+        },
+        {
+          "path": "carddemo-web-data/plan.json",
+          "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de",
+          "size": 73253
+        },
+        {
+          "path": "carddemo-web-data/schema.sql",
+          "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770",
+          "size": 8174
+        },
+        {
+          "path": "fixture.json",
+          "sha256": "0a9f69ae5fb121339878fff411b4afd77f836f02d5f96f663819be2755c009fb",
+          "size": 826
+        },
+        {
+          "path": "reference/cases.json",
+          "sha256": "5df8afd69d8ae7da73188438f1f1769d8e8210f7da4a065f5f7a83f7d22554ac",
+          "size": 44837172
+        },
+        {
+          "path": "reference/database/a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31.json",
+          "sha256": "a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31",
+          "size": 519690
+        },
+        {
+          "path": "reference/database/b31ad04ccb60dbb121a6f6fcf48bc01e39e70a2a096c4436755f4d26a7f39fd7.json",
+          "sha256": "b31ad04ccb60dbb121a6f6fcf48bc01e39e70a2a096c4436755f4d26a7f39fd7",
+          "size": 520354
+        },
+        {
+          "path": "reference/database/c75d7e09658c721b0210d5c0a25d6a2e2109a8a4b7f6554b6590c4dc04a4fc5c.json",
+          "sha256": "c75d7e09658c721b0210d5c0a25d6a2e2109a8a4b7f6554b6590c4dc04a4fc5c",
+          "size": 520354
+        },
+        {
+          "path": "reference/database/c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b.json",
+          "sha256": "c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b",
+          "size": 520354
+        },
+        {
+          "path": "reference/database/e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01.json",
+          "sha256": "e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01",
+          "size": 520354
+        },
+        {
+          "path": "reference/expected-database/0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8.json",
+          "sha256": "0257fca192e0e831fef7a42584143c56dc149f6caef73a1cb52a75725fb9b0d8",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05.json",
+          "sha256": "16706dc22a026c4596d2a907407972fee7dec9bfdb3714af72c6f5b6477afd05",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6.json",
+          "sha256": "3e6e19cb839f0880ff52f94b5e72040403fa258a6bd7bccd056f2e9c989e15a6",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe.json",
+          "sha256": "97c088dacac57946278fe85450e6c1e7f57ad476228b9c8b8e2175b0b07c7fbe",
+          "size": 611575
+        },
+        {
+          "path": "reference/expected-database/b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919.json",
+          "sha256": "b9409c1afc2509f99f90659c26f979738d7fc3a2236bce6f6df835e636301919",
+          "size": 610841
+        },
+        {
+          "path": "reference/summary.json",
+          "sha256": "7f28e3c2c5029c71d1007532398296f2627fe1aa9eebc98868c25483fcc91de3",
+          "size": 51951
+        },
+        {
+          "path": "reference-fixture.json",
+          "sha256": "e7a2552ed123322c81b3e4a299b12f4acdbf51dbe066646f3c13b75d2426b248",
+          "size": 254984
+        },
+        {
+          "path": "runtime.log",
+          "sha256": "ab55704d4700e723845576bea6c20c137e0d2033bb87c5b086f35b1e243ac5c3",
+          "size": 173252
+        }
+      ],
+      "name": "carddemo-proof-api.zip",
+      "original_artifact_id": 12207838592,
+      "sha256": "e2754113d1279923fa8316a8b8d78c63ebfc2c017c827efd1ef8d1b98feb80c7",
+      "size": 3318496
+    },
+    {
+      "members": [
+        {
+          "path": "README.md",
+          "sha256": "5e3ca1be62015c570f20995c6e8d94fdb8395b0c31fc204c89a1f0541e2cf598",
+          "size": 17158
+        },
+        {
+          "path": "carddemo-cosgn00-2026-10-18.json",
+          "sha256": "f6a17cca3de48e95fd136dadc0f3e154a8c4599536eb58f2fe0810808c0c5090",
+          "size": 1451
+        },
+        {
+          "path": "carddemo-cosgn00-2026-10-18.md",
+          "sha256": "b275dfcd0d7f7cb690071adcfaa52f02a037a6c07f4bb2a4338d09c58636316c",
+          "size": 1826
+        },
+        {
+          "path": "current-status.json",
+          "sha256": "c0221c2a30774262151f49fb6797c4bcda7187bfed2f1acd6078da5d2cab205e",
+          "size": 377921
+        },
+        {
+          "path": "current-status.md",
+          "sha256": "4c8f3475273ae34b0e962b5cc0b11c5bd8ef6f51a6e8fa793fdca56dbc275f46",
+          "size": 9610
+        }
+      ],
+      "name": "carddemo-status-render.zip",
+      "original_artifact_id": 12206568166,
+      "sha256": "87f41c0616188cf41919cfd79fecf344f68db768a59825ffb207eed0897ddf57",
+      "size": 38588
+    },
+    {
+      "members": [
+        {
+          "path": "api/database/a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31.json",
+          "sha256": "a2996d3188af2cffe3c3a509c9a9f7cc883f3a17e4feae52707eadcb8e1bae31",
+          "size": 519690
+        },
+        {
+          "path": "api/database/c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b.json",
+          "sha256": "c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b",
+          "size": 520354
+        },
+        {
+          "path": "api/database/e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01.json",
+          "sha256": "e9c2e3a2858fd0aaceda907a2f6d38f52a68d80026f361571d3dd25dc8112e01",
+          "size": 520354
+        },
+        {
+          "path": "api/frames.json",
+          "sha256": "37cc60f0ac5118c4945f3b9c777a0f333b80e402cf6f4e610ebe493cd7104aed",
+          "size": 1676058
+        },
+        {
+          "path": "api/summary.json",
+          "sha256": "3417bd050dc6cdb6b387628ddee2e483562ed27061c9135553957e6db7ad5416",
+          "size": 246
+        },
+        {
+          "path": "browser/database/c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b.json",
+          "sha256": "c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b",
+          "size": 520354
+        },
+        {
+          "path": "browser/frames.json",
+          "sha256": "d1cdd236a860ce3abbcd64e61ebe49223fa2c1a56b53bc6f0e7925ad07869237",
+          "size": 1339564
+        },
+        {
+          "path": "browser/screen.png",
+          "sha256": "4957b490d2ebfa23471c039bc58300ace20080d43843763728df2f29962adac7",
+          "size": 72005
+        },
+        {
+          "path": "browser/summary.json",
+          "sha256": "e27e33e138c04bda63114239cdf06f30ef806477078765bb1bbc033fe73287c9",
+          "size": 305
+        },
+        {
+          "path": "containers.txt",
+          "sha256": "377fa6202fca9b22536aba52934a3ebf7095cc7d8fd123940a66163d018f914f",
+          "size": 1098
+        },
+        {
+          "path": "fixture.json",
+          "sha256": "0a9f69ae5fb121339878fff411b4afd77f836f02d5f96f663819be2755c009fb",
+          "size": 826
+        },
+        {
+          "path": "reference-signon/cases.json",
+          "sha256": "0eb8921b3547a0dac18efd84ed3adaa421eb805e6c4fa361b46180787144b369",
+          "size": 200442
+        },
+        {
+          "path": "reference-signon/database/c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b.json",
+          "sha256": "c7da82e3e6f4232317fb69264b8d4cdeda742bdbae8bd2a9b5324769c27af08b",
+          "size": 520354
+        },
+        {
+          "path": "reference-signon/summary.json",
+          "sha256": "3fb8c8419013fc11ecb0083a7de6afea10071241e8bae9583bf448e0a4bd28d3",
+          "size": 1044
+        },
+        {
+          "path": "runtime.log",
+          "sha256": "07b275167d97b4a2c50fa4b1eb6aa33150d75e4e97cd25fd5d48b6f16069630e",
+          "size": 31985
+        }
+      ],
+      "name": "carddemo-compose-smoke.zip",
+      "original_artifact_id": 12206473740,
+      "sha256": "766f0f6de567ea5f831218e108abe7d443ef9bea6c7e3a14eb3c8e95a632f50b",
+      "size": 378651
+    },
+    {
+      "members": [
+        {
+          "path": "work/carddemo-web-bindings/account-input-trace.json",
+          "sha256": "4ac02cf51223ff5fab8a7421e67de53305e40ef1a23ed27cfbef1a3ce29945d6",
+          "size": 843
+        },
+        {
+          "path": "work/carddemo-web-bindings/account-ssn-fico-trace.json",
+          "sha256": "c220cb43212a5abbd2cc1497d76c62ee91583c262a5bd009e6999f0fefa4e125",
+          "size": 1036
+        },
+        {
+          "path": "work/carddemo-web-bindings/account-location-trace.json",
+          "sha256": "951cb95ecf394687f0fdf038119dde739511bfad2be73bc072192df39ede944d",
+          "size": 845
+        },
+        {
+          "path": "work/carddemo-web-bindings/account-text-money-trace.json",
+          "sha256": "4fabfc34f8982839e4e2fb8ffe4b6e5f5c9815de9d294c52a6389e670533f020",
+          "size": 2082
+        },
+        {
+          "path": "work/carddemo-web-bindings/authfrds.sql",
+          "sha256": "7d8ec5c773eeaec7672fbc69d5c7319c67ad9a92fb89506c3ef1dc1f513e7fc9",
+          "size": 808
+        },
+        {
+          "path": "work/carddemo-web-bindings/bindings.json",
+          "sha256": "ab9b22981f43ce1585d3df6c610f1961555b1092f3f30918693bb2620b89977a",
+          "size": 2290944
+        },
+        {
+          "path": "work/carddemo-web-bindings/java-trace.json",
+          "sha256": "dd0702cbf3edde5a32de33b753d861301eba22eb909dd2bd16f130fb52ef03c1",
+          "size": 2407
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/acctdata.json",
+          "sha256": "7e7a9314533994b863924d53a670ea29b6d307c4851f77cd5db508038bbe571c",
+          "size": 7790
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/acctdata.sql",
+          "sha256": "85218cdd994d3d2bef6968dbbbec18d2ca2e6681e062333125ea3634ba6caaf2",
+          "size": 1231
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/carddata.json",
+          "sha256": "dfc329a585d0ac52650bcb19432c106449ada51c549554361e502b351216d042",
+          "size": 4856
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/carddata.sql",
+          "sha256": "66a4642845d3afe0ce80ccf9f748aebe5a7b00ee56b453263a8d0bb6426016f6",
+          "size": 826
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/cardxref.json",
+          "sha256": "ee3bb6b687cdb00f8c75ad6aff8c1a317afebc90d2178a09b80878bb8a27863f",
+          "size": 3327
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/cardxref.sql",
+          "sha256": "fc72a1172f64d4b508344ce42a0e10d0ac5758793fa1fa74cc5364dad4f3f927",
+          "size": 635
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/custdata.json",
+          "sha256": "edcb06ce9256251f75a8ec931a970f388f098f79ee5d0bf281f1bd2a4cd5a8c9",
+          "size": 10961
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/custdata.sql",
+          "sha256": "13cdc7ca6cc39f28c67cf01848fa3d3cf99c3d2f80bd590594f4fcf8695f08c4",
+          "size": 1426
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/pautdtl1.json",
+          "sha256": "7f029ae00cdccd195242278e5a6669429079680a38a142fb9ded864eeef65a63",
+          "size": 16878
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/pautdtl1.sql",
+          "sha256": "e89b38ffd3441907d25fb667cd28d7f8905203812b53fb5cb3f35a066d86fdfd",
+          "size": 1990
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/pautsum0.json",
+          "sha256": "703821af541bf7ba2f3230f3fe386b08849c25e85b6fb4bba78dbff37402a9ae",
+          "size": 11170
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/pautsum0.sql",
+          "sha256": "840bbf06af371d5de3790d65ae411e3922ecc9c6d859a3f0f966568f47a6c848",
+          "size": 1400
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/usrsec.json",
+          "sha256": "abda2d3211c38a8fb651e281177f12c7e27f8f91c138c3f8ddf38bf35371fc0b",
+          "size": 3964
+        },
+        {
+          "path": "work/carddemo-web-data/mapping/usrsec.sql",
+          "sha256": "d28fe0a6e7836e88a69a2549c7a63659b31c83cdc27ccaa0cf4613df5d84dd84",
+          "size": 660
+        },
+        {
+          "path": "work/carddemo-web-data/plan.json",
+          "sha256": "2aa8e8c503829ffb2c0de9bd855fcc3734b4a83a91266dddbe9bcf5c1325f4de",
+          "size": 73253
+        },
+        {
+          "path": "work/carddemo-web-data/schema.sql",
+          "sha256": "078f6ea68292553c929beaaa45ddf9a58601dd7a510364a2383b61c2e25c9770",
+          "size": 8174
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountInputRulesTest.xml",
+          "sha256": "d791f6a20eda83e4125ac68dadd9738192a8d559ac595eff472b03cc650368af",
+          "size": 20820
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountLocationRulesTest.xml",
+          "sha256": "a998f883450703436652dfaa36ab6140c633f5b9d2407181ba98616ecec36957",
+          "size": 21105
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountSsnFicoRulesTest.xml",
+          "sha256": "c750c6c9ab3409f17be4e86922bac4586e6ed3e7344429a29f71052d95b00caa",
+          "size": 21406
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountTextMoneyRulesTest.xml",
+          "sha256": "9df2fec2c95f87a42172c7a520b440bff89e646fb316d0f0c69d01eb7f755744",
+          "size": 20986
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateServiceTest.xml",
+          "sha256": "246680b052bf2d9bfdb3659382dcf49c7728ebba7751ebe1a545fd8146dd098a",
+          "size": 20896
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountUpdateTransactionTest.xml",
+          "sha256": "4bcb3548931fabe0314519a1194e555f512efe32555b3706dd7c26666ec312a7",
+          "size": 20889
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountValidationTest.xml",
+          "sha256": "ec1f1dd5a9c16e616b227c1a9856dd14009a99bcf139fd34b7f8f3397095a9e0",
+          "size": 20715
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AccountViewTest.xml",
+          "sha256": "3704a0d5b4aeb06a16bd542723cbd8767e3c3e97b67710a207525847752c6478",
+          "size": 20661
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.AuthorizationTest.xml",
+          "sha256": "0a27876ebb590dead8d0ce8277a8c337071f512ac53625f23d226d34b7b8781a",
+          "size": 21849
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.CobolNumberTest.xml",
+          "sha256": "5393e3a80d3b6e36ce2c2cc275fbee011f621926795af12c3a2c201cf33d08c0",
+          "size": 20527
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.GeneratedBindingsTest.xml",
+          "sha256": "f0ee060ae38556629848f960126fa52e2816bcde4a71255a6481b2ef217f6f51",
+          "size": 21001
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.InteractionEngineTest.xml",
+          "sha256": "990c9e724fef277be080eebc42538700a0c014015f7e6380413b84703586fe20",
+          "size": 21652
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.MasterReadFailureTest.xml",
+          "sha256": "acb2b816f3b2be6508a3eb6908d19ae1ea67dd09fac2ea4a95e66cdfc6b06086",
+          "size": 20590
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.NumericEncodingTest.xml",
+          "sha256": "876d2ed2604a5430c5caaecb6c072d4b9cc1a5e280eea209c9a61f4b4eb86f4c",
+          "size": 20677
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.ReferenceScenarioTest.xml",
+          "sha256": "850f874b3acb6e08bff286effb61bf1c5281df3d570d0d41c68c9b09a3641ec5",
+          "size": 20758
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.RoutingStateTest.xml",
+          "sha256": "77fe6627dca79a7e42cc91184b0d988a5cec26e71d8d4edb5480943ecc5e34ba",
+          "size": 20714
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SessionTokenTest.xml",
+          "sha256": "52689ec49f535b0bb3438c72950606ff47e56fc27375797697bdbb822864fd06",
+          "size": 20505
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SignonCommareaTest.xml",
+          "sha256": "2ea5cc1946bc3e869c10789e181a850c5a7c34ffa01c766d6f28e1bfd6471898",
+          "size": 20422
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SignonRulesTest.xml",
+          "sha256": "9b2ff17932973821556221d14ef2437b581fe4126fcaa1aefe2cf2cc70099b2a",
+          "size": 20697
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SourceDateEditsTest.xml",
+          "sha256": "5a6b594946751cc5ed721a61837a12fb4d545ee244a2a3192ded3ec518e0cf55",
+          "size": 20695
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsContractTest.xml",
+          "sha256": "af50587454fcbd804e9afdd0b06180947f204991f7b5edf34c00505bd2e50e8a",
+          "size": 21393
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/TEST-ai.lightyear.carddemo.SourceEditsTest.xml",
+          "sha256": "afc745b9fc1cd6c52d951394bfa13a69f53c3949bd0f53f09f712d8d2ae05754",
+          "size": 21420
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountInputRulesTest.txt",
+          "sha256": "e183fe39250e9af6568f6089a816a51a76308c48f0d11ccb4d56b2eb53040e76",
+          "size": 336
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountLocationRulesTest.txt",
+          "sha256": "7301b65bfa28f13a81d6537a9ee9b3e3931837d86e4c2a4426b6e6fb4b0a6ea5",
+          "size": 342
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountSsnFicoRulesTest.txt",
+          "sha256": "24b2b6495cb54dc04ea824c4f9e55e3ef472f0505d3b9e15032b73e82d51a132",
+          "size": 340
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountTextMoneyRulesTest.txt",
+          "sha256": "bcea7de94d0d3df758ee27ae74df34a1b12af1c7e40ab0f81c40f808613c29de",
+          "size": 344
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountUpdateServiceTest.txt",
+          "sha256": "37288798f343bde430b93b6b24dbb446f28748f931c967cc14ad7f8156485d30",
+          "size": 342
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountUpdateTransactionTest.txt",
+          "sha256": "79172a6fa7fe08f05552e5c522f63da11f3030661962d0120f543e25f2176e52",
+          "size": 350
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountValidationTest.txt",
+          "sha256": "5310d3eb563535ec885e258cd8b131515dfe46d6ee2dc41d4d9404203976c84c",
+          "size": 336
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AccountViewTest.txt",
+          "sha256": "ca28467fb483f7c65f9d28c23cf5fe3329fcfec322d47b3f52e99d8f395aed8b",
+          "size": 324
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.AuthorizationTest.txt",
+          "sha256": "538eb92323c0a26a91134c376164d2fa5a287d147e46098d50fb949e5315a6a1",
+          "size": 329
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.CobolNumberTest.txt",
+          "sha256": "071a7b1f3cbcda1565fb1772158b52e600c347b3127bd762af782fbc5bef1616",
+          "size": 324
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.GeneratedBindingsTest.txt",
+          "sha256": "2bdc89fe0fdf05d5994189a8499032866884dc94622c944b9ce8239ff07c0cb9",
+          "size": 336
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.InteractionEngineTest.txt",
+          "sha256": "7aa4c11ec78315f816b62c99b027fb5699f00170b72470a96857720c562f9301",
+          "size": 336
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.MasterReadFailureTest.txt",
+          "sha256": "70b0dfe4dc708c979cb1d0cb6893eb5168f871a900158605770f89c67e657e63",
+          "size": 336
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.NumericEncodingTest.txt",
+          "sha256": "fbaedd4077442631a6a17ec3a0f75d3bdfcbe0149725daf61f66c427b01daafb",
+          "size": 332
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.ReferenceScenarioTest.txt",
+          "sha256": "567d49e4806912476bc8a9f00057548f8f0ffd87a9fea9c020571e38f2d45287",
+          "size": 332
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.RoutingStateTest.txt",
+          "sha256": "00f45af15065adc53e7bd372625dc2f9b5304362860a3999e0b840eed325a9f2",
+          "size": 326
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SessionTokenTest.txt",
+          "sha256": "806a4efe9f1ba5c53cd40ad9aad2e5a40aafacc05b5ed3f9071cd50452092a18",
+          "size": 326
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SignonCommareaTest.txt",
+          "sha256": "301c81c4304c9dec065d611e1347443d791c7c6b2024b67e97658bcab01dace7",
+          "size": 330
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SignonRulesTest.txt",
+          "sha256": "41f5cec1740a6710668536fe217bab0be740c4ac8c58c08b2e8914efd92b10ee",
+          "size": 324
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SourceDateEditsTest.txt",
+          "sha256": "c227dcbb62c4ff09ee6c5f0887122ab19d9e8e203adcd297d9055f85bc7ecccc",
+          "size": 332
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SourceEditsContractTest.txt",
+          "sha256": "8744c735d959d9d8ce69de8c74fc6e3744b44e13d7010f2dc3cf1aa05db64119",
+          "size": 340
+        },
+        {
+          "path": "factory/carddemo-web/service/target/surefire-reports/ai.lightyear.carddemo.SourceEditsTest.txt",
+          "sha256": "0d30acbf3140f4a69c67586207728cef94669569e5e39b4b0f771f3627544662",
+          "size": 324
+        },
+        {
+          "path": "factory/carddemo-web/ui/dist/main.js",
+          "sha256": "4920dd474e6b4c3912db650dc20393ba5f73476be1bb2520006a800cae5768f7",
+          "size": 5901
+        }
+      ],
+      "name": "carddemo-web-foundation.zip",
+      "original_artifact_id": 12205673977,
+      "sha256": "790ff60884b1a3405a875f797170a4765d8235c98e1cfeaaf3d976a71afcdffc",
+      "size": 225523
+    }
+  ],
+  "run": 39293036087,
+  "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39293036087",
+  "schema": "carddemo-retained-proof-archives/1",
+  "source_head": "fb6154ae1568a0a67a69861f6ca8d51b1e010a72",
+  "tested_commit": "5ac28347d8fdceb3b50587f1316b46f353871c96",
+  "tested_tree": "71e1590cf1f3d9fb2fc6314b0adb4b6cf32551ca"
+}

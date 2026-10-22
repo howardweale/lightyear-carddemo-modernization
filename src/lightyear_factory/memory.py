@@ -94,7 +94,7 @@ class SemanticMemoryStore:
     def from_policy_path(cls, root: Path, policy_path: Path | None) -> "SemanticMemoryStore":
         return cls(root, MemoryPolicy.load(policy_path))
 
-    def observe_run(
+    def prepare_run(
         self,
         run_dir: Path,
         order: WorkOrder,
@@ -102,7 +102,7 @@ class SemanticMemoryStore:
         context: dict[str, Any],
         artifact_references: list[dict[str, Any]],
     ) -> dict[str, Any]:
-        """Promote a safe experience or return an explicit exclusion decision."""
+        """Prepare an observation without writing experiences or snapshots."""
         evidence_class = str(order.metadata.get("evaluation_class") or "factory-run")
         decision = {
             "schema_version": MEMORY_SCHEMA_VERSION,
@@ -119,7 +119,7 @@ class SemanticMemoryStore:
                 "experience_sha256": None,
             })
             decision["content_sha256"] = canonical_hash(decision)
-            return decision
+            return self._prepared(decision, None)
         if evidence_class not in self.policy.allowed_evidence_classes:
             decision.update({
                 "disposition": "quarantined",
@@ -127,7 +127,7 @@ class SemanticMemoryStore:
                 "experience_sha256": None,
             })
             decision["content_sha256"] = canonical_hash(decision)
-            return decision
+            return self._prepared(decision, None)
         status = str(run_projection.get("status"))
         verification_status = str(run_projection.get("verification", {}).get("status"))
         if status not in {"passed", "blocked"} or verification_status == "not_run":
@@ -137,7 +137,7 @@ class SemanticMemoryStore:
                 "experience_sha256": None,
             })
             decision["content_sha256"] = canonical_hash(decision)
-            return decision
+            return self._prepared(decision, None)
         if status == "blocked" and not self.policy.allow_negative_memory:
             decision.update({
                 "disposition": "quarantined",
@@ -145,10 +145,33 @@ class SemanticMemoryStore:
                 "experience_sha256": None,
             })
             decision["content_sha256"] = canonical_hash(decision)
-            return decision
+            return self._prepared(decision, None)
 
         artifacts = self._public_artifacts(run_dir, artifact_references)
         record = self._experience(order, run_projection, context, artifacts, evidence_class)
+        return self._prepared(decision, record)
+
+    @staticmethod
+    def _prepared(decision: dict[str, Any], record: dict[str, Any] | None) -> dict[str, Any]:
+        prepared = {"decision": decision, "record": record}
+        prepared["content_sha256"] = canonical_hash(prepared)
+        return prepared
+
+    def observe_run(self, run_dir, order, run_projection, context, artifact_references):
+        # Strict factory observations must use the final-receipt publication boundary.
+        if ("candidate_authorship" in run_projection or "factory_build_receipt" in run_projection
+                or "candidate_package_finalization" in run_projection):
+            raise ContractError("memory-finalized-controller-publication-required")
+        return self._publish_prepared(self.prepare_run(
+            run_dir, order, run_projection, context, artifact_references))
+
+    def _publish_prepared(self, prepared):
+        if canonical_hash(prepared, {"content_sha256"}) != prepared.get("content_sha256"):
+            raise ContractError("memory-preparation-integrity")
+        decision = dict(prepared["decision"])
+        record = prepared["record"]
+        if record is None:
+            return decision
         self.experiences_root.mkdir(parents=True, exist_ok=True)
         path = self.experiences_root / f"{record['content_sha256']}.json"
         if path.exists():
@@ -170,6 +193,45 @@ class SemanticMemoryStore:
         })
         decision["content_sha256"] = canonical_hash(decision)
         return decision
+
+    def publish_finalized_run(self, prepared, run_dir, order, receipt, scan_record,
+                              *, require_factory_receipt=True):
+        """Publish only from a persisted final receipt; never from a provisional outcome."""
+        # Copy before calling a scanner so neither callback nor caller can mutate the record.
+        prepared = json.loads(json.dumps(prepared))
+        receipt = json.loads(json.dumps(receipt))
+        def verify_receipt():
+            persisted = json.loads((run_dir / "receipt.json").read_text(encoding="utf-8"))
+            if (persisted != receipt or canonical_hash(receipt, {"content_sha256"}) != receipt.get("content_sha256")
+                    or receipt.get("work_order_sha256") != order.content_sha256
+                    or receipt.get("status") != "passed"
+                    or receipt.get("verification", {}).get("status") != "passed"
+                    or (require_factory_receipt and
+                        receipt.get("factory_build_receipt", {}).get("qualifies_for_factory_receipt") is not True)):
+                raise ContractError("memory-final-receipt-required")
+        verify_receipt()
+        if canonical_hash(prepared, {"content_sha256"}) != prepared.get("content_sha256"):
+            raise ContractError("memory-preparation-integrity")
+        record = prepared["record"]
+        if prepared["decision"].get("run_id") != receipt.get("run_id"):
+            raise ContractError("memory-preparation-run-mismatch")
+        if record is not None:
+            binding = record["run_binding"]
+            if (binding.get("work_order_sha256") != order.content_sha256
+                    or binding.get("run_id") != receipt.get("run_id")
+                    or record["outcome"]["status"] != receipt["status"]
+                    or canonical_hash(record, {"content_sha256"}) != record.get("content_sha256")):
+                raise ContractError("memory-preparation-outcome-mismatch")
+            binding["ledger_head_sha256"] = receipt["ledger_head_sha256"]
+            binding["receipt_sha256"] = receipt["content_sha256"]
+            identity = canonical_hash(dict(run_id=receipt["run_id"],
+                work_order_sha256=order.content_sha256, ledger_head_sha256=receipt["ledger_head_sha256"],
+                outcome_class=record["outcome"]["class"]))
+            record["experience_id"] = "experience:" + identity[:24]
+            record["content_sha256"] = canonical_hash(record, {"content_sha256"})
+            scan_record(json.loads(json.dumps(record)))
+        verify_receipt()
+        return self._publish_prepared(self._prepared(prepared["decision"], record))
 
     def ingest_run_dir(self, run_dir: Path) -> dict[str, Any]:
         """Promote an existing run using only its content-addressed controller artifacts."""

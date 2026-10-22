@@ -1,0 +1,68 @@
+name: T-SQL revision-9 parser reverification
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      comment_id:
+        description: Howard's PR423 comment naming the public Release, ZIP and SHA-256
+        required: true
+        type: string
+      package_sha256:
+        description: Exact SHA-256 Howard posted for the reviewed export
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'pr' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  synthetic-review:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[control-tower,tsql]'
+      - name: Verify synthetic signed archives, refusals and all-pair reporting
+        run: python -m unittest tests.test_tsql_r9_export tests.test_tsql_r9_reverification
+  retained-replay:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: synthetic-review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[control-tower,tsql]'
+      - name: Verify Howard's public post before acquiring the two Release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMENT_ID: ${{ inputs.comment_id }}
+          PACKAGE_SHA: ${{ inputs.package_sha256 }}
+        run: >-
+          python -m tools.reverify_tsql_r9 fetch
+          --input "$RUNNER_TEMP/r3-input"
+          --comment-id "$COMMENT_ID" --package-sha256 "$PACKAGE_SHA"
+      - name: Verify signed closure and replay all 108 pairs offline
+        env:
+          PACKAGE_SHA: ${{ inputs.package_sha256 }}
+        run: >-
+          python -m tools.reverify_tsql_r9 replay
+          --input "$RUNNER_TEMP/r3-input" --out "$RUNNER_TEMP/r3-results"
+          --package-sha256 "$PACKAGE_SHA"
+      - name: Preserve differences and refusals even when acceptance fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tsql-r9-reverification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/r3-results/
+            ${{ runner.temp }}/r3-input/acquisition.json
+            ${{ runner.temp }}/r3-input/export-manifest.json
+          retention-days: 90

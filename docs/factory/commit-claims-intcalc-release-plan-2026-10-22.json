@@ -1,0 +1,23 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Planning source snapshot only, not a release campaign or measurement.",
+  "claims": [
+    {
+      "record": "docs/factory/intcalc-release-plan-2026-10-22.md",
+      "reference": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e",
+      "commit": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e",
+      "role": "source",
+      "source_path": "docs/factory/intcalc-releasability-2026-10-21.json",
+      "source_sha256": "fda840f9d2f4ac37537c574f09518bb039f90834ec557baae4c2a30f54c2e4b6"
+    },
+    {
+      "record": "docs/factory/intcalc-release-source-bindings-2026-10-22.json",
+      "reference": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e",
+      "commit": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e",
+      "role": "source",
+      "source_path": "docs/factory/intcalc-releasability-2026-10-21.json",
+      "source_sha256": "fda840f9d2f4ac37537c574f09518bb039f90834ec557baae4c2a30f54c2e4b6"
+    }
+  ]
+}

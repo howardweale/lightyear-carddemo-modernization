@@ -1,0 +1,40 @@
+{
+  "schema": "intcalc-release-plan-sources/1",
+  "prepared_on": "2026-10-22",
+  "main_source_snapshot": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e",
+  "observed_at": "2026-10-22T17:39:46.943766+00:00",
+  "sources": {
+    "docs/factory/intcalc-releasability-2026-10-21.md": "46e3db02613d97c4c473c3992b902cdb2e415366f7c190af2d0ea8250f85215e",
+    "docs/factory/intcalc-releasability-2026-10-21.json": "fda840f9d2f4ac37537c574f09518bb039f90834ec557baae4c2a30f54c2e4b6",
+    "docs/factory/release-grade-evidence-2026-10-18.md": "f674b0646717833c862f9e9b1ed7120e5634b82729bc94f8b012ea4ca6e34126",
+    "src/lightyear_factory/release_grade.py": "d00f8f91b975106b55b8fc1a1cd9670ded439be080d88617b98310f47043ff99",
+    "docs/factory/twin-oracle-decision-memo.md": "4095576f2026edc2a84ae1055ec4fb9de4f0f805933d6071f2c03309b6b54d67",
+    "docs/factory/twin-limits.md": "4737dfa0845891c93a4a542b28aeae47ef59c1e5c7a89b0b65f876ff43cc7563",
+    "src/carddemo_oracle/oracle.py": "da9718cb9a8ae84194ac73a7b6de004e0fce033ee43ca9f4e7adeeb14ca376b2",
+    "docs/factory/appl-result-contract-selection-2026-10-18.json": "ebd9732196e38dba6b411c702388d030385d5f2b9aba68ccc9f17853c3232d63",
+    "docs/factory/intcalc-signing-order-2026-10-17.json": "ef5596c1a6e5d2e9233ae1ba39c5e262828eec20ffa451f0bcd7b3d89d6adc3d"
+  },
+  "observed_branch_protection": {
+    "strict": false,
+    "required_checks": [
+      {
+        "context": "documentation-and-lint",
+        "app_id": 15368
+      },
+      {
+        "context": "required-ci",
+        "app_id": 15368
+      }
+    ]
+  },
+  "existing_release_consumer_requires_strict": true,
+  "policy_mismatch_resolved": false,
+  "release_campaign_measured": false,
+  "arithmetic": {
+    "raw_kills": 311,
+    "total_injected": 424,
+    "raw_percent": 73.34905660377359,
+    "required_kills_at_90_percent": 382,
+    "additional_kills_required": 71
+  }
+}

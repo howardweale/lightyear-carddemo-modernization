@@ -12,6 +12,7 @@ BASE = 'docs/factory/equivalence-evidence-2026-10-15'
 DEST = 'docs/factory/equivalence-scale-2026-10-16'
 EVIDENCE_COMMIT = '78be9cafb322b6a9dacaa94fd6027df2aeb605e5'
 CLASS = 'legacy-APPL-RESULT/1'
+SCORECARD = 'docs/factory/equivalence-scorecard-2026-10-22.json'
 FRESH_COMMIT = 'e5b041754c7bf38c874836eff2c7f36ede90234b'
 FRESH_RUN = 38930496735
 
@@ -44,9 +45,15 @@ def measurements(root,total):
         if summary['head']!=repeat['head'] or summary['program']!=repeat['program'] or not repeat['identical_resolutions']:
             raise ValueError('fresh-E1-provenance-mismatch')
         heads.add(summary['head'])
+        routes = copy.deepcopy(summary['routes'])
+        if summary.get('held_out') is True:
+            # Compiler identities are retained; no executable campaign measured
+            # held-out kills or resolved campaign survivors.
+            for counts in routes.values():
+                counts.update(survivors_resolved=0, kills=0)
         programs.append(dict(program=program,argued_resolved=summary['argued_resolved'],
             argued_total=summary['argued_total'],generated_cases=summary['generated_cases'],
-            routes=summary['routes'],identical_resolutions=repeat['identical_resolutions'],
+            routes=routes,identical_resolutions=repeat['identical_resolutions'],
             mutants_compared_twice=repeat['mutants'],repeat_sha256=digest(repeat_raw),summary_sha256=digest(raw)))
     if len(heads)!=1:raise ValueError('fresh-E1-mixed-heads')
     if sum(p['argued_resolved'] for p in programs)!=total['resolved_now'] or sum(p['argued_total'] for p in programs)!=total['denominator']:
@@ -138,7 +145,12 @@ def prepare(root, audit_commit=None, *, output_root=None):
         total = dict(denominator=sum(r['denominator'] for r in reports),
                      resolved_now=sum(r['resolved_now'] for r in reports),
                      resolved_after_pending_signatures=sum(r['resolved_after_pending_signatures'] for r in reports))
-        write(output_root, DEST + '/scorecard.json', sealed(dict(stage='E1', evidence_commit=EVIDENCE_COMMIT,
+        write(output_root, SCORECARD, sealed(dict(stage='E1', evidence_commit=EVIDENCE_COMMIT,
+            prepared_on='2026-10-22',
+            supersedes=dict(path=DEST+'/scorecard.json', sha256=digest(blob(root, DEST+'/scorecard.json', FRESH_COMMIT))),
+            operator_observation=dict(as_of='2026-10-22', source='Howard closeout instructions, 22 October 2026',
+                nonempty_zos_tranrept_observed=False,
+                statement='Howard reports that the 21 October Maintec TRANREPT run filtered out all records by its date window. Delivery contents were not accessed; this is operator-reported context, not record-level evidence.'),
             measurements=measurements(root,total), programs=reports, total=total,
             held_out=dict(program='TRANREPT/CBTRN03C', compiler_identities=2, sites=413,
                           class_matches=0, conclusion='no evidence of generality',

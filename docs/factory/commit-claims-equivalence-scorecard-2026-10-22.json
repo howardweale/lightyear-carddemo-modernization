@@ -1,0 +1,31 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Register inherited source references from the unchanged historical measurements; no new run or merge claim.",
+  "claims": [
+    {
+      "record": "docs/factory/equivalence-scorecard-2026-10-22.json",
+      "reference": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "role": "source",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "record": "docs/factory/equivalence-scorecard-2026-10-22.json",
+      "reference": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "commit": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "role": "source",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "record": "docs/factory/equivalence-scorecard-2026-10-22.json",
+      "reference": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+      "commit": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+      "role": "source",
+      "source_path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "source_sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    }
+  ]
+}

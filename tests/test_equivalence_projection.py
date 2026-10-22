@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from lightyear_mainframe.equivalence_automation import sealed, digest
+from lightyear_mainframe.equivalence_automation import sealed, digest, verify
 from lightyear_mainframe.equivalence_projection import project
 from lightyear_control_tower.factory_import import import_request
 from lightyear_control_tower.factory_policy import FactoryInbox
@@ -108,9 +108,9 @@ class ProjectionTests(unittest.TestCase):
 if __name__ == '__main__': unittest.main()
 
 class SigningGeneratorTests(unittest.TestCase):
-    def test_prepare_roundtrip_matches_published_bytes_without_extra_contract(self):
+    def test_prepare_keeps_audits_and_adds_corrected_scorecard_without_extra_contract(self):
         import subprocess
-        from tools.prepare_equivalence_signing import prepare,DEST,FRESH_COMMIT
+        from tools.prepare_equivalence_signing import prepare,DEST,FRESH_COMMIT,SCORECARD
         with tempfile.TemporaryDirectory() as directory:
             output=Path(directory)
             prepare(ROOT,'043c4ef3ac0c46753ea283bd8dfc1e00410256ad',output_root=output)
@@ -118,6 +118,29 @@ class SigningGeneratorTests(unittest.TestCase):
             self.assertFalse(any(name.endswith('-tower-contract.json') for name in before))
             self.assertEqual(7,len(before))
             for path,raw in before.items():
-                self.assertEqual(subprocess.check_output(['git','show',FRESH_COMMIT+':'+path],cwd=ROOT),raw,path)
+                if path != SCORECARD:
+                    self.assertEqual(subprocess.check_output(['git','show',FRESH_COMMIT+':'+path],cwd=ROOT),raw,path)
+            self.assertNotIn(DEST+'/scorecard.json', before)
+            self.assertEqual((ROOT/SCORECARD).read_bytes(), before[SCORECARD])
+            original_raw = subprocess.check_output(['git','show',FRESH_COMMIT+':'+DEST+'/scorecard.json'],cwd=ROOT)
+            original = json.loads(original_raw)
+            corrected = verify(json.loads(before[SCORECARD]))
+            old_row = next(r for r in original['measurements']['fresh_E1']['programs'] if r['program']=='TRANREPT')
+            new_row = next(r for r in corrected['measurements']['fresh_E1']['programs'] if r['program']=='TRANREPT')
+            self.assertEqual(2, old_row['routes']['S1']['survivors_resolved'])  # Historical bug only.
+            self.assertEqual(0, new_row['routes']['S1']['survivors_resolved'])
+            self.assertEqual(2, new_row['routes']['S1']['resolved'])
+            self.assertEqual(0, sum(r['kills'] for r in new_row['routes'].values()))
+            self.assertFalse(corrected['release_authorized'])
+            expected = copy.deepcopy(original)
+            expected.pop('content_sha256')
+            expected_row = next(r for r in expected['measurements']['fresh_E1']['programs'] if r['program']=='TRANREPT')
+            for counts in expected_row['routes'].values():
+                counts.update(survivors_resolved=0, kills=0)
+            for key in ('prepared_on', 'supersedes', 'operator_observation'):
+                expected[key] = corrected[key]
+            self.assertEqual(sealed(expected), corrected)
+            self.assertEqual(digest(original_raw), corrected['supersedes']['sha256'])
+            self.assertEqual((ROOT/(DEST+'/scorecard.json')).read_bytes(), original_raw)
             prepare(ROOT,'043c4ef3ac0c46753ea283bd8dfc1e00410256ad',output_root=output)
             self.assertEqual(before,{p.relative_to(output).as_posix():p.read_bytes() for p in output.rglob('*') if p.is_file()})

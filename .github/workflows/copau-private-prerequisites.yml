@@ -1,0 +1,43 @@
+name: COPAU private prerequisite helper
+on:
+  pull_request:
+    paths:
+      - tools/copau_private_prerequisites.py
+      - tests/test_copau_private_prerequisites.py
+      - .github/workflows/copau-private-prerequisites.yml
+      - docs/factory/copau-private-helper-2026-10-22.md
+      - docs/factory/copau-factory-judge-freeze-2026-10-18.json
+      - docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json
+      - tools/__init__.py
+  push:
+    branches: [main]
+    paths:
+      - tools/copau_private_prerequisites.py
+      - tests/test_copau_private_prerequisites.py
+      - .github/workflows/copau-private-prerequisites.yml
+      - docs/factory/copau-private-helper-2026-10-22.md
+      - docs/factory/copau-factory-judge-freeze-2026-10-18.json
+      - docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json
+      - tools/__init__.py
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  private-helper:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic private-root and metadata refusal tests
+        run: python -B -m unittest discover -s tests -p test_copau_private_prerequisites.py -v

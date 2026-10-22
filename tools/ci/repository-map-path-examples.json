@@ -15,6 +15,11 @@
       "document": "docs/index.md",
       "token": "iDempiere/native",
       "reason": "Two calibration categories in the documentation table; not a repository path."
+    },
+    {
+      "document": "docs/index.md",
+      "token": "screen/data",
+      "reason": "Screen and data proof categories in the modernization description; not a repository path."
     }
   ]
 }

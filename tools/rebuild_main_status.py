@@ -67,7 +67,7 @@ def publication_gate(api, repository):
     return None
 
 
-def rebuild(*, repository, command=git, render=generate, api=github):
+def rebuild(*, repository, command=git, render=generate, api=github, observe=None):
     """Create at most one source-bound draft; never update, approve, or merge it."""
     if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', repository):
         raise ValueError('Expected owner/repository')
@@ -78,6 +78,8 @@ def rebuild(*, repository, command=git, render=generate, api=github):
     if not re.fullmatch(r'[0-9a-f]{40}', source):
         raise ValueError('Main must resolve to an exact commit')
     command('checkout', '--detach', source)
+    if observe is not None:
+        observe(source, api)
     render()
     changed = command('diff', '--name-only').splitlines()
     if (set(changed) - set(STATUS_FILES) or command('diff', '--cached', '--name-only')
@@ -155,7 +157,23 @@ def main():
             or event.get('repository', {}).get('full_name') != os.environ.get('GITHUB_REPOSITORY')
             or (os.environ['GITHUB_EVENT_NAME'] == 'push' and event.get('ref') != 'refs/heads/main')):
         raise ValueError('Status publication requires a main GitHub Actions event')
-    result = rebuild(repository=os.environ['GITHUB_REPOSITORY'])
+    # One read-only observation is shared by generation and --check. The
+    # ephemeral input stays outside the checkout; its data is in both outputs.
+    import tempfile
+    from tools.release_status_records import collect_live_status
+    with tempfile.TemporaryDirectory(prefix='factory-live-status-', dir=os.environ['RUNNER_TEMP']) as temporary:
+        snapshot = Path(temporary)/'snapshot.json'
+        def observe(source, api):
+            snapshot.write_text(json.dumps(collect_live_status(api, source), sort_keys=True)+'\n', encoding='utf-8')
+        previous = os.environ.get('LIGHTYEAR_FACTORY_LIVE_STATUS')
+        os.environ['LIGHTYEAR_FACTORY_LIVE_STATUS'] = str(snapshot)
+        try:
+            result = rebuild(repository=os.environ['GITHUB_REPOSITORY'], observe=observe)
+        finally:
+            if previous is None:
+                os.environ.pop('LIGHTYEAR_FACTORY_LIVE_STATUS', None)
+            else:
+                os.environ['LIGHTYEAR_FACTORY_LIVE_STATUS'] = previous
     print(json.dumps(result, sort_keys=True))
     summary = os.environ.get('GITHUB_STEP_SUMMARY')
     if summary:

@@ -541,3 +541,12 @@ jobs:
 
       - name: Reject verification that mutates tracked evidence
         run: git diff --exit-code
+
+      - name: Retain full Python execution and skip reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-test-execution-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/ci/test-execution/
+          if-no-files-found: error
+          retention-days: 14

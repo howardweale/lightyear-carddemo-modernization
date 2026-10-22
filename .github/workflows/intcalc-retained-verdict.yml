@@ -1,0 +1,68 @@
+name: Retained INTCALC verdict
+on:
+  pull_request:
+    paths:
+      - 'tools/build_intcalc_current_releasability.py'
+      - 'tools/retained_intcalc.py'
+      - 'tests/test_retained_intcalc.py'
+      - 'tests/test_intcalc_current_releasability.py'
+      - 'tools/release_status_records.py'
+      - 'tools/build_release_packet.py'
+      - 'tools/build_factory_current_status.py'
+      - 'tests/test_derived_factory_status.py'
+      - 'tools/verify_public_retention.py'
+      - 'src/lightyear_factory/release_grade.py'
+      - 'docs/factory/evidence-retention-2026-10-18-intcalc.json'
+      - 'docs/factory/release-evidence-2026-10-18/**'
+      - 'docs/factory/intcalc-releasability-*.json'
+      - 'docs/factory/intcalc-releasability-*.md'
+      - '.github/workflows/intcalc-retained-verdict.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  retained-verdict:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install cryptography
+      - name: Verify measured text and refusal fixtures
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest test_intcalc_current_releasability test_release_grade test_public_retention test_retained_intcalc -v
+      - name: Download the retained public original archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p work/intcalc-original
+          gh release download evidence-2026-10-18-intcalc --repo howardweale/lightyear-carddemo-modernization --pattern '*.zip' --dir work/intcalc-original
+          gh api repos/howardweale/lightyear-carddemo-modernization/actions/runs/39135263450 > work/intcalc-retained-run.json
+      - name: Build unsigned verdict from verified original bytes
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m tools.build_intcalc_current_releasability --archives work/intcalc-original --run work/intcalc-retained-run.json --output work/intcalc-current-verdict
+      - name: Render status and decision packet from the new measured verdict
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          cp -R work/intcalc-current-verdict/docs/. docs/
+          python -B -m tools.build_factory_current_status
+          python -B -m tools.build_release_packet
+          python -B -m unittest test_derived_factory_status -v
+          cp docs/factory/current-status.* work/intcalc-current-verdict/docs/factory/
+          cp docs/factory/howard-decision-packet-2026-10-18-handoff-refresh.md work/intcalc-current-verdict/docs/factory/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: intcalc-current-verdict
+          path: work/intcalc-current-verdict
+          retention-days: 90

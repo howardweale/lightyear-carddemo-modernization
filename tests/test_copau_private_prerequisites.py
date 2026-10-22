@@ -16,7 +16,10 @@ from tools import copau_private_prerequisites as helper
 
 class CopauPrerequisiteTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        # Hosted Windows TEMP can have replaceable shared ancestors. Keep the
+        # disposable fixture under the runner profile; production ACL checks stay on.
+        parent = Path(os.environ['USERPROFILE']).resolve(strict=True) if os.name == 'nt' else None
+        self.temp = tempfile.TemporaryDirectory(prefix='copau-ci-', dir=parent)
         self.addCleanup(self.temp.cleanup)
         self.base = Path(self.temp.name).resolve()
         self.exposed = self.base / 'candidate'

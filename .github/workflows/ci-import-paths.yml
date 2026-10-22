@@ -1,0 +1,41 @@
+name: Python workflow import path coverage
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  import-path-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install PyYAML==6.0.3
+      - name: Exercise synthetic transitive import and trigger regressions
+        env:
+          PYTHONPATH: src:.:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B -m unittest test_ci_import_paths -v
+      - name: Compare exact committed dependency coverage
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python -B tools/check_ci_import_paths.py --base "$BASE_SHA" --head "$HEAD_SHA"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: import-path-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/ci/import-path-coverage.json
+          if-no-files-found: error
+          retention-days: 30

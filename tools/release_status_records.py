@@ -217,6 +217,10 @@ def render(model):
         verdict_path=model['projection_paths']['INTCALC']
         current.update(as_of=review['prepared_on'],intcalc=review['verdict'],
             rates={scope:dict(raw=review['raw_thresholds'][scope]['kill_rate'],projected=row['kill_rate']) for scope,row in review['projected_thresholds'].items()})
+    live = model.get('live_ci')
+    if live:
+        validate_live_status(live)
+        current['live_ci'] = live
     delivery = model.get("delivery")
     if delivery and (
         not delivery['push_workflows']
@@ -252,6 +256,8 @@ def render(model):
             "[Snapshot and full workflow links](" + Path(DELIVERY).name + ").",
             delivery["scope"], "", "## INTCALC evidence", ""]
         text[2:2] = summary
+    if live:
+        text[2:2] = live_status_markdown(live)
     for scope, row in current["rates"].items():
         text.append(f"| {scope} | {row['raw']} | {row['projected']} |")
     text += ["", "Loader assessments: " + "; ".join(f"{name}: {count}" for name, count in current["loader_domain"]["assessment_counts"].items()) + ".", "",
@@ -274,7 +280,7 @@ def render(model):
     phase2=model.get('phase2')
     if phase2:
         from tools.check_posttran_handoff import timing
-        current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(delivery["checked_at"] if delivery else model['evaluated_at']))}
+        current['phase2']={**phase2,**timing(phase2,datetime.fromisoformat(live['checked_at'] if live else (delivery["checked_at"] if delivery else model['evaluated_at'])))}
         text+=['','| Phase 2 | Plan seal | Executable commit | Sign and launch by (UTC) | Days remaining |',
                '|---|---|---|---|---:|',
                f"| POSTTRAN | `{phase2['plan_sha256']}` | `{phase2['executable_commit']}` | {phase2.get('sign_and_launch_by', phase2.get('signing_deadline'))} | {current['phase2']['days_remaining']} |",
@@ -296,7 +302,7 @@ def render(model):
            '', 'Byte storage support is implemented, but whole-program acceptance remains incomplete: zero unsupported constructs, whole-program control/effects, and 1,000 byte-exact differential inputs per program are still required. Storage inspection alone earns no differential credit.',
            '', 'E3 equivalence and all-killed-mutant rejection checks, E4 build comparisons and measured speedup, E5 held-out campaigns, and E6 policy approval remain separate gates. E7 residual grouping does not resolve evidence.',
            '','## Other unfinished work','',
-           'CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.',
+           'CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) was recorded as a draft F0 feasibility investigation as of 2026-10-17. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.',
            '', 'The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.',
            '', 'Typed condition support: '+str(model.get('typed_conditions_implemented',False))+'. Threshold/3 support: '+str(model.get('threshold3_implemented',False))+'. Presence of code is not effective policy approval.']
     if model.get("appl_contract_selection"):
@@ -312,3 +318,54 @@ def render(model):
              "This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.", "",
              f"[Measured verdict]({Path(verdict_path).with_suffix('.md').name}) · [Decision packet]({current['packet_url']})", ""]
     return current, "\n".join(text)
+
+
+LIVE_REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
+LIVE_SCHEMA = 'factory-live-status/1'
+
+
+def live_sha(value):
+    if not isinstance(value, str) or not re.fullmatch('[0-9a-f]{40}', value):
+        raise ValueError('live-status-head')
+    return value
+
+
+
+
+def validate_live_status(report):
+    if report['schema'] != LIVE_SCHEMA or report['repository'] != LIVE_REPOSITORY:
+        raise ValueError('live-status-schema')
+    checked = datetime.fromisoformat(report['checked_at'].replace('Z', '+00:00'))
+    if checked.utcoffset() is None:
+        raise ValueError('live-status-clock-zone')
+    pr = report['pr362']
+    if (pr['number'] != 362 or pr['state'] not in ('open', 'closed')
+            or type(pr['merged']) is not bool or pr['required']['head'] != pr['head']
+            or pr['url'] != 'https://github.com/'+LIVE_REPOSITORY+'/pull/362'):
+        raise ValueError('live-status-pr-binding')
+    for row in (report['main'], pr['required']):
+        head = live_sha(row['head'])
+        check = row['check']
+        if check is None:
+            if row['state'] != 'absent':
+                raise ValueError('live-status-absent-check')
+        else:
+            state = (check['conclusion'] or 'unknown') if check['status'] == 'completed' else check['status']
+            if (check['head_sha'] != head or check['name'] != 'required-ci'
+                    or row['state'] != state or type(check['id']) is not int
+                    or not check['html_url'].startswith('https://github.com/'+LIVE_REPOSITORY+'/actions/runs/')):
+                raise ValueError('live-status-check-binding')
+    return report
+
+
+def live_status_markdown(report):
+    validate_live_status(report)
+    def cell(row):
+        check = row['check']
+        return '['+row['state']+']('+check['html_url']+')' if check else 'absent (unproved)'
+    pr = report['pr362']
+    return ['## Current CI observation', '', 'Observed at '+report['checked_at']+'.', '',
+            '| Target | Exact head | Required CI |', '| --- | --- | --- |',
+            '| main | `'+report['main']['head']+'` | '+cell(report['main'])+' |',
+            '| [#362]('+pr['url']+') ('+('merged' if pr['merged'] else pr['state'])+') | `'+pr['head']+'` | '+cell(pr['required'])+' |',
+            '', 'Only the required-ci check on each named head is shown. Missing, pending or failed checks are not green. This observation grants no execution or release authority.', '']

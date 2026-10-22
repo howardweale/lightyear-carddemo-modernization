@@ -50,6 +50,7 @@ def check_scope(root,scope=None):
     base=(root/'factory/carddemo-web/service/pom.xml').read_text()
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses>'+''.join('<param>ai.lightyear.carddemo.'+n+'*</param>' for n in CLASSES)+'</targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountFeedbackTest</param></targetTests>',expected,flags=re.S)
+    expected=expected.replace('<build><plugins>','<build><plugins>'+'<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>feedback-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>${project.basedir}/supplemental-tests/feedback/java</source></sources></configuration>\n    </execution></executions></plugin>',1)
     if (root/'factory/carddemo-web/service/feedback-proof.pom.xml').read_text()!=expected:
         raise ValueError('feedback-mutation-pom')
     return dict(paragraphs=88,newly_retired_paragraphs=[],whole_screen_idiomatic=False,

@@ -83,6 +83,19 @@ class AccountFeedbackTest {
             assertEquals(first,state.get(Field.MESSAGE));
         }
     }
+    private static void seedFicoDisplay(SourceEdits edits,String value) throws Exception {
+        // The source receives raw PIC X(03) bytes through the numeric REDEFINES.
+        // Preserve invalid DISPLAY input instead of using the strict numeric setter.
+        String name="ACUP-NEW-CUST-FICO-SCORE";
+        var field=SourceEdits.class.getDeclaredField("storage");field.setAccessible(true);
+        var storage=(Commarea)field.get(edits);
+        assertTrue(storage.unsignedDisplayInteger(name));
+        int width=original.path("fields").path(name).path("length").asInt();
+        assertEquals(3,width);
+        String raw=ScreenFrame.pad(value,width);
+        storage.moveDisplayBytes(name,raw);
+        assertEquals(raw,edits.get(name));
+    }
     @Test void allNativeFeedbackPathsPreserveEveryStorageByte() throws Exception {
         Map<String,String[]> cases=new LinkedHashMap<>();
         cases.put("1215-EDIT-MANDATORY",new String[]{" ","\0","A"});
@@ -112,7 +125,7 @@ class AccountFeedbackTest {
                         edits.put("ACUP-NEW-CUST-SSN-1",value);
                         edits.put("ACUP-NEW-CUST-SSN-2","00");edits.put("ACUP-NEW-CUST-SSN-3","12X4");
                         edits.put("ACUP-NEW-CUST-ADDR-STATE-CD",item.getKey().equals("1280-EDIT-US-STATE-ZIP-CD")?"OR":value);
-                        edits.put("ACUP-NEW-CUST-ADDR-ZIP",value);edits.put("ACUP-NEW-CUST-FICO-SCORE",value);
+                        edits.put("ACUP-NEW-CUST-ADDR-ZIP",value);seedFicoDisplay(edits,value);
                         edits.run(item.getKey());
                     }
                     completeStorage(oracle,actual);compared++;

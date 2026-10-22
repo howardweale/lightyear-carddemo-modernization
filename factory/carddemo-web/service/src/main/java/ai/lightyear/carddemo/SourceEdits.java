@@ -412,6 +412,8 @@ public final class SourceEdits {
         setCondition("INPUT-ERROR");
         if(condition("WS-RETURN-MSG-OFF"))put("WS-RETURN-MSG",trimSpaces(get("WS-EDIT-VARIABLE-NAME"))+suffix);
     }
+    void initializeDateResult(){storage.initialize("WS-DATE-VALIDATION-RESULT");}
+    void checkDateService(){dateService();}
     public void run(String paragraph){
         if(model.path("native_paragraphs").has(paragraph)) {
             switch(model.path("native_paragraphs").path(paragraph).asText()) {
@@ -421,6 +423,13 @@ public final class SourceEdits {
                 case "AccountSsnRule" -> runAccountSsnRule();
                 case "AccountFicoRule" -> runAccountFicoRule();
                 case "AccountLocationRules" -> runAccountLocationRule(paragraph);
+                case "AccountPhoneRules" -> {AccountPhoneRules.validate(AccountEditState.bind(this));trace.add(new Location("app/cbl/COACTUPC.cbl",2225));}
+                case "AccountDateRules" -> {
+                    if(paragraph.equals("EDIT-DATE-CCYYMMDD"))AccountDateRules.validate(AccountEditState.bind(this));
+                    else if(paragraph.equals("EDIT-DATE-OF-BIRTH"))AccountDateRules.birth(AccountEditState.bind(this),clock);
+                    else throw new IllegalArgumentException("untranslated-date-rule");
+                    trace.add(new Location("app/cpy/CSUTLDPY.cpy",paragraph.equals("EDIT-DATE-CCYYMMDD")?18:341));
+                }
                 default -> throw new IllegalArgumentException("untranslated-native-class");
             }
             return;

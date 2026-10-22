@@ -1,0 +1,269 @@
+{
+  "schema": "copau-f2-preparation/1",
+  "prepared_on": "2026-10-22",
+  "record_path": "docs/factory/copau-f2-preparation-2026-10-22/request.json",
+  "scope": "first-copau-factory-run",
+  "g3_included": false,
+  "request_ready": false,
+  "run_authorized": false,
+  "instruction_sha256": "7149c20b59cff5fbf7e637a4389080381d80c2691e1410522a6755cdc4d603f2",
+  "timezone": "America/Los_Angeles",
+  "window": {
+    "start": "2026-10-30T08:00:00-07:00",
+    "end": "2026-10-30T20:00:00-07:00"
+  },
+  "roles": {
+    "planner": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05"
+    },
+    "builder": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05"
+    },
+    "analyst": {
+      "provider": "openai-responses",
+      "model": "gpt-5.4-2026-03-05"
+    }
+  },
+  "execution_policy": {
+    "schema_version": "1.0",
+    "id": "lightyear:copau:first-run",
+    "version": "1.0",
+    "runtime": {
+      "allowed": [
+        "docker"
+      ],
+      "image": "docker.io/library/maven",
+      "image_digest": "80034909d9a9f0b89d3d2c583f07f3b7650309bc4e6b886ad5b860b9e1bfa439",
+      "allowed_commands": [
+        "mvn"
+      ],
+      "allowed_environment": [
+        "LIGHTYEAR_FACTORY_WORKSPACE",
+        "LIGHTYEAR_NETWORK_POLICY"
+      ]
+    },
+    "isolation": {
+      "network_mode": "none",
+      "read_only_root": true,
+      "workspace_read_only": true,
+      "run_as_user": "65532:65532",
+      "cap_drop_all": true,
+      "no_new_privileges": true,
+      "pids_limit": 256,
+      "memory_mb": 4096,
+      "cpus": 2.0,
+      "tmpfs_mb": 1024
+    },
+    "admission": {
+      "required": true,
+      "signature_algorithm": "HMAC-SHA256",
+      "trusted_key_ids": [],
+      "max_ttl_seconds": 28800
+    },
+    "identities": {
+      "credential_ttl_seconds": 900,
+      "roles": {
+        "planner": {
+          "actions": [
+            "factory:plan"
+          ]
+        },
+        "builder": {
+          "actions": [
+            "factory:build"
+          ]
+        },
+        "failure_analyst": {
+          "actions": [
+            "factory:analyze-failure"
+          ]
+        },
+        "provider": {
+          "actions": [
+            "secret:lease:OPENAI_API_KEY"
+          ]
+        },
+        "verifier": {
+          "actions": [
+            "factory:verify"
+          ]
+        }
+      }
+    },
+    "secrets": {
+      "allowed_names": [
+        "OPENAI_API_KEY"
+      ],
+      "persist_values": false
+    }
+  },
+  "work_order": {
+    "schema_version": "1.0",
+    "id": "copau-first-factory-run-2026-10-30",
+    "title": "First COPAU factory run",
+    "goal": "Factory-authored authorization slice within the approved source scope and frozen independent judge.",
+    "non_goals": [
+      "G3 comparison",
+      "z/OS release claim",
+      "changes outside authorized package",
+      "judge or expected-state changes"
+    ],
+    "scope": {
+      "allowed_paths": [
+        "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization"
+      ],
+      "graph_node_ids": []
+    },
+    "acceptance": {
+      "baseline_first": true,
+      "max_attempts": 3,
+      "gates": [
+        {
+          "id": "offline-worker-tests",
+          "command": [
+            "mvn",
+            "-o",
+            "-B",
+            "-ntp",
+            "-C",
+            "-s",
+            "work/f8-public-worker-capsule/settings.xml",
+            "-gs",
+            "work/f8-public-worker-capsule/settings.xml",
+            "-f",
+            "work/f8-public-worker-capsule/pom.xml",
+            "-Dmaven.repo.local=/tmp/factory-build/work/f8-public-worker-capsule/m2",
+            "-Duser.home=/tmp/factory-build/work/f8-public-worker-capsule/home",
+            "test"
+          ],
+          "timeout_seconds": 3600,
+          "expose_output_to_builder": false
+        }
+      ]
+    },
+    "policy": {
+      "audience": "implementer",
+      "allow_network": false,
+      "max_files_changed": 20,
+      "max_patch_bytes": 250000,
+      "max_changed_lines": 4000,
+      "max_context_bytes": 80000,
+      "max_file_bytes": 250000,
+      "max_model_calls": 8,
+      "max_model_input_bytes": 400000,
+      "max_model_output_bytes": 800000,
+      "max_model_tokens": 1100000,
+      "max_model_cost_usd": 10.0,
+      "max_elapsed_seconds": 28800
+    },
+    "metadata": {
+      "claim_scope": "twin-only",
+      "candidate_authorship": "factory-only-after-signed-F2",
+      "retrieval": "packed-context-no-tools",
+      "comparison_included": false
+    }
+  },
+  "estimate": {
+    "source": "https://developers.openai.com/api/docs/models/gpt-5.4",
+    "observed_on": "2026-10-22",
+    "published_standard_input_usd_per_million": 2.5,
+    "published_standard_output_usd_per_million": 15,
+    "input_usd_per_million": 5.5,
+    "output_usd_per_million": 24.75,
+    "max_output_tokens_per_call": 25000,
+    "automatic_retries": 0,
+    "reserved_input_tokens": 808192,
+    "reserved_output_tokens": 200000,
+    "reserved_cost_microusd": 9395056,
+    "cost_cap_microusd": 10000000,
+    "basis": "Existing AccountedModelProvider reservation: 2*wire request bytes+1024 per call; eight role invocations, no tools or fallback, reasoning output included; conservative long-context/regional rates; not predicted usage."
+  },
+  "bindings": {
+    "scope": {
+      "path": "docs/factory/copau-factory-scope-2026-10-18.json",
+      "sha256": "d487621f8159c946cd91bc00fd76cf7dfaaa017df0fa1981659f360053389a82"
+    },
+    "freeze": {
+      "path": "docs/factory/copau-f8-freeze-input-proposal-2026-10-20.json",
+      "sha256": "da11effc0670df6390b2620402baf242c4a9be8dc8f4bbb2c52f814746a651cd"
+    },
+    "workspace": {
+      "path": "docs/factory/copau-f8-workspace-manifest-2026-10-21.json",
+      "sha256": "bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771"
+    },
+    "retention": {
+      "path": "docs/factory/copau-f8-release-receipt-2026-10-21.json",
+      "sha256": "6976fdbb3dd87a3ecfc4dd7f051bd4ac34de3bef8de836837f55eb68f9bd8a10"
+    },
+    "image": {
+      "path": "docs/factory/copau-f8-java-image-pin-r2-2026-10-20.json",
+      "sha256": "a82cecf452cd7802ccde36155dfc770149c71b282ee22c7c1e9a0cf69099c99a"
+    },
+    "policy_basis": {
+      "path": "docs/factory/copau-f8-java-policy-proposal-2026-10-20.json",
+      "sha256": "4a94e42d3e3fdfc238a474c46f21416ca3d367f7679e698dbcec071a14bd9184"
+    },
+    "evidence": {
+      "path": "docs/factory/copau-f8-public-evidence-proposal-2026-10-20.json",
+      "sha256": "9a57f52ff83b19bc3ff19b46997d5ee437aa2889c3b121a75d043edb009eef71"
+    }
+  },
+  "engineering_source_bindings": {
+    "observer": {
+      "path": "factory/carddemo-web/runtime/prove_slice.py",
+      "sha256": "03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1"
+    },
+    "FactoryOrchestrator": {
+      "path": "src/lightyear_factory/orchestrator.py",
+      "sha256": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622"
+    },
+    "IsolatedWorkspace": {
+      "path": "src/lightyear_factory/workspace.py",
+      "sha256": "a4c54ecaa2954a4066f174740a18b54a9d20c1cdf488acd266b8831b0c4d5aa7"
+    },
+    "CandidateBuildBackend": {
+      "path": "src/lightyear_factory/gates.py",
+      "sha256": "cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51"
+    },
+    "FactoryModelAdmission": {
+      "path": "src/lightyear_factory/model_admission.py",
+      "sha256": "b4b06ffa4439b9fd7623b8eb4ee906ea56db975d4d0ebdb0a9b2001602154dad"
+    },
+    "AccountedModelProvider": {
+      "path": "src/lightyear_factory/budgeted_providers.py",
+      "sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b"
+    },
+    "RunLedger": {
+      "path": "src/lightyear_factory/ledger.py",
+      "sha256": "b66f98a2634b87420421da9ccab3b18671c8da1b92b509259332dcd69cce8dc3"
+    }
+  },
+  "operator": {
+    "tower": {
+      "pem_sha256": null,
+      "journal_head_sha256": null,
+      "source": null
+    },
+    "private_expected_values": {
+      "sha256": null,
+      "size_bytes": null,
+      "count": null,
+      "source": null
+    }
+  },
+  "final_binding": null,
+  "model_config": {
+    "default": "copau",
+    "models": {
+      "copau": {
+        "provider": "openai",
+        "model": "gpt-5.4-2026-03-05",
+        "input_usd_per_million": 5.5,
+        "output_usd_per_million": 24.75,
+        "max_output_tokens": 25000
+      }
+    }
+  }
+}

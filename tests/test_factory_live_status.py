@@ -6,8 +6,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from tools.release_status_records import (collect_live_status as collect,
-    live_status_markdown as markdown, validate_live_status as validate,
+from tools.rebuild_main_status import collect_live_status as collect
+from tools.release_status_records import (live_status_markdown as markdown, validate_live_status as validate,
     LIVE_REPOSITORY as REPOSITORY)
 
 MAIN, HEAD = 'a'*40, 'b'*40
@@ -116,3 +116,26 @@ class LiveStatusTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'read failed'):
             rebuild(repository=REPOSITORY, command=command, render=lambda:self.fail('render after refusal'),
                     api=lambda route:self.fail('write after refusal'), observe=refused)
+
+    def test_collector_refuses_invalid_api_fields_and_clock_before_serialization(self):
+        for field in ('pr_state', 'pr_url', 'check_id', 'check_url'):
+            api, _ = self.fixture()
+            def changed(route):
+                value = api(route)
+                if route == 'pulls/362':
+                    if field == 'pr_state':
+                        value['state'] = 'invented'
+                    if field == 'pr_url':
+                        value['html_url'] = 'https://example.invalid/pull/362'
+                elif route.startswith('commits/'):
+                    if field == 'check_id':
+                        value['check_runs'][0]['id'] = '1'
+                    if field == 'check_url':
+                        value['check_runs'][0]['html_url'] = 'https://example.invalid/run/1'
+                return value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                collect(changed, MAIN, now=NOW)
+        with self.assertRaisesRegex(ValueError, 'live-status-clock-zone'):
+            collect(self.fixture()[0], MAIN, now=NOW.replace(tzinfo=None))
+        self.assertEqual(collect(self.fixture()[0], MAIN, now=NOW),
+                         validate(collect(self.fixture()[0], MAIN, now=NOW)))

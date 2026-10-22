@@ -1,5 +1,6 @@
 """CI-only status rendering followed by a draft PR, never a direct main push."""
 import json
+from datetime import datetime, timezone
 import os
 from pathlib import Path
 import re
@@ -149,6 +150,74 @@ def rebuild(*, repository, command=git, render=generate, api=github, observe=Non
             'branch': branch, 'pr': pr['number'], 'url': pr['html_url'], 'published_to_main': False}
 
 
+LIVE_REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
+LIVE_SCHEMA = 'factory-live-status/1'
+
+
+def live_sha(value):
+    if not isinstance(value, str) or not re.fullmatch('[0-9a-f]{40}', value):
+        raise ValueError('live-status-head')
+    return value
+
+
+def live_required(api, head):
+    rows = []
+    for page in range(1, 101):
+        batch = api('commits/'+head+'/check-runs?filter=latest&per_page=100&page='+str(page))
+        checks = batch['check_runs']
+        if any(row['head_sha'] != head for row in checks):
+            raise ValueError('live-status-check-head')
+        rows.extend(checks)
+        if len(rows) == batch['total_count']:
+            break
+        if not checks or len(rows) > batch['total_count']:
+            raise ValueError('live-status-check-pagination')
+    else:
+        raise ValueError('live-status-check-pagination')
+    selected = [row for row in rows if row['name'] == 'required-ci'
+                and row['app']['id'] == 15368]
+    if len(selected) > 1:
+        raise ValueError('live-status-ambiguous-required-check')
+    if not selected:
+        return dict(head=head, state='absent', check=None)
+    row = selected[0]
+    if row['status'] not in ('queued', 'in_progress', 'completed', 'waiting', 'pending', 'requested'):
+        raise ValueError('live-status-check-status')
+    if (type(row['id']) is not int
+            or not row['html_url'].startswith('https://github.com/'+LIVE_REPOSITORY+'/actions/runs/')):
+        raise ValueError('live-status-check-binding')
+    state = (row['conclusion'] or 'unknown') if row['status'] == 'completed' else row['status']
+    return dict(head=head, state=state,
+                check={key: row[key] for key in ('id', 'head_sha', 'name', 'status', 'conclusion', 'html_url')})
+
+
+def collect_live_status(api, source, *, now=None):
+    source = live_sha(source)
+    if api('git/ref/heads/main')['object']['sha'] != source:
+        raise ValueError('live-status-main-advanced')
+    pr = api('pulls/362')
+    if (pr['number'] != 362 or pr['base']['ref'] != 'main'
+            or pr['head']['repo']['full_name'] != LIVE_REPOSITORY
+            or pr['state'] not in ('open', 'closed')
+            or pr['html_url'] != 'https://github.com/'+LIVE_REPOSITORY+'/pull/362'):
+        raise ValueError('live-status-pr-provenance')
+    head = live_sha(pr['head']['sha'])
+    checked = now or datetime.now(timezone.utc)
+    if checked.utcoffset() is None:
+        raise ValueError('live-status-clock-zone')
+    report = dict(schema=LIVE_SCHEMA, repository=LIVE_REPOSITORY,
+                  checked_at=checked.isoformat(),
+                  main=live_required(api, source),
+                  pr362=dict(number=362, head=head, state=pr['state'], merged=bool(pr['merged']),
+                             url=pr['html_url'], required=live_required(api, head)))
+    latest = api('pulls/362')
+    if (api('git/ref/heads/main')['object']['sha'] != source
+            or latest['head']['sha'] != head or latest['state'] != pr['state']
+            or bool(latest['merged']) != bool(pr['merged'])):
+        raise ValueError('live-status-observation-raced')
+    return report
+
+
 def main():
     event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_bytes())
     if (os.environ.get('GITHUB_ACTIONS') != 'true'
@@ -160,7 +229,6 @@ def main():
     # One read-only observation is shared by generation and --check. The
     # ephemeral input stays outside the checkout; its data is in both outputs.
     import tempfile
-    from tools.release_status_records import collect_live_status
     with tempfile.TemporaryDirectory(prefix='factory-live-status-', dir=os.environ['RUNNER_TEMP']) as temporary:
         snapshot = Path(temporary)/'snapshot.json'
         def observe(source, api):

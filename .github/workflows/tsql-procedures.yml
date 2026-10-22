@@ -6,6 +6,10 @@ on:
       - 'data-modernization/tsql-procedures/**'
       - 'tools/tsql_scriptdom/**'
       - 'tools/*tsql_native.py'
+      - 'tools/reverify_r3_tsql.py'
+      - 'tools/export_tsql_r9.py'
+      - 'docs/tsql-r9-export.md'
+      - 'pyproject.toml'
       - 'tests/test_tsql*.py'
       - '.github/workflows/tsql-procedures.yml'
   push:
@@ -15,6 +19,10 @@ on:
       - 'data-modernization/tsql-procedures/**'
       - 'tools/tsql_scriptdom/**'
       - 'tools/*tsql_native.py'
+      - 'tools/reverify_r3_tsql.py'
+      - 'tools/export_tsql_r9.py'
+      - 'docs/tsql-r9-export.md'
+      - 'pyproject.toml'
       - 'tests/test_tsql*.py'
       - '.github/workflows/tsql-procedures.yml'
 permissions:
@@ -44,4 +52,12 @@ jobs:
       - name: Public-fixture tests; no database or model calls
         env:
           TSQL_BRIDGE: work/tsql-ci-bridge/TsqlInventory.dll
-        run: python -B -m unittest discover -s tests -p 'test_tsql*.py' -v
+          R3_PR_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python -B tools/reverify_r3_tsql.py --out work/r3-pglast-reverification
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r3-pglast-7.20-${{ matrix.os }}-${{ github.sha }}
+          path: work/r3-pglast-reverification/
+          if-no-files-found: error
+          retention-days: 90

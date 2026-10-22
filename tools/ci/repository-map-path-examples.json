@@ -1,0 +1,20 @@
+{
+  "schema": "repository-map-path-examples/1",
+  "examples": [
+    {
+      "document": "README.md",
+      "token": "z/OS",
+      "reason": "IBM platform name in the scope disclaimer; not a repository path."
+    },
+    {
+      "document": "CONTRIBUTING.md",
+      "token": "public/synthetic/native",
+      "reason": "Three evidence-scope labels in prose; not an example directory."
+    },
+    {
+      "document": "docs/index.md",
+      "token": "iDempiere/native",
+      "reason": "Two calibration categories in the documentation table; not a repository path."
+    }
+  ]
+}

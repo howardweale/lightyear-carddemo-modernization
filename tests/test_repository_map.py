@@ -1,13 +1,17 @@
 """CI refusal fixtures for navigation and exact historical bytes."""
 from pathlib import Path
+import json
 import tempfile
 import unittest
 from unittest.mock import patch
-from tools.ci.check_repository_map import ARCHIVE, DOCUMENTS, check
+from tools.ci.check_repository_map import ARCHIVE, DOCUMENTS, EXAMPLES, check
 
 
 class RepositoryMapTests(unittest.TestCase):
     def fixture(self, root):
+        policy = root / EXAMPLES
+        policy.parent.mkdir(parents=True, exist_ok=True)
+        policy.write_text(json.dumps(dict(schema="repository-map-path-examples/1", examples=[])))
         for name in DOCUMENTS:
             path = root / name
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -42,7 +46,7 @@ class RepositoryMapTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             original = self.fixture(root)
-            (root / 'tools').mkdir()
+            (root / 'tools').mkdir(exist_ok=True)
             (root / 'tools/check.py').write_text('pass\n')
             (root / 'settings.toml').write_text('[settings]\n')
             with patch('tools.ci.check_repository_map.subprocess.check_output', return_value=original):
@@ -67,11 +71,14 @@ class RepositoryMapTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             original = self.fixture(root)
+            (root / EXAMPLES).write_text(json.dumps(dict(schema='repository-map-path-examples/1', examples=[
+                dict(document='README.md', token=token, reason='Synthetic non-path prose label')
+                for token in ('public/synthetic/native', 'z/OS')])))
             (root / 'README.md').write_text(
                 'https://example.invalid/missing.py\n[remote](https://example.invalid/a.json)\n'
                 '[section](#missing.py)\npublic/synthetic/native scope; z/OS; version 3.13.\n')
             with patch('tools.ci.check_repository_map.subprocess.check_output', return_value=original):
-                self.assertEqual(0, check(root)['named_paths'])
+                self.assertEqual(2, check(root)['named_paths'])
 
     def test_named_path_cannot_escape_through_symlink(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -89,3 +96,48 @@ class RepositoryMapTests(unittest.TestCase):
                     (root / 'README.md').write_text(reference)
                     with self.assertRaisesRegex(ValueError, 'named path'):
                         check(root)
+
+    def test_bare_unknown_roots_extensions_and_extensionless_paths_are_checked(self):
+        for reference in ('unknown-root/missing', 'unknown-root/missing.proto',
+                          'missing.proto', '`missing.proto`'):
+            with self.subTest(reference=reference), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp); original = self.fixture(root)
+                (root / 'README.md').write_text(reference)
+                with patch('tools.ci.check_repository_map.subprocess.check_output', return_value=original):
+                    with self.assertRaisesRegex(ValueError, 'named path'):
+                        check(root)
+                    target = root / reference.strip('`')
+                    target.parent.mkdir(parents=True, exist_ok=True); target.touch()
+                    self.assertGreater(check(root)['named_paths'], 0)
+
+    def test_examples_are_exact_document_scoped_and_cannot_exempt_links(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); original = self.fixture(root)
+            example = dict(document='README.md', token='example/output.proto', reason='Intentional output example')
+            (root / EXAMPLES).write_text(json.dumps(dict(schema='repository-map-path-examples/1', examples=[example])))
+            with patch('tools.ci.check_repository_map.subprocess.check_output', return_value=original):
+                (root / 'README.md').write_text('example/output.proto')
+                self.assertEqual(1, check(root)['named_paths'])
+                for document, text in [('ARCHITECTURE.md', 'example/output.proto'),
+                                       ('README.md', 'example/other.proto'),
+                                       ('README.md', '[example](example/output.proto)')]:
+                    with self.subTest(document=document, text=text):
+                        (root / document).write_text(text)
+                        with self.assertRaises(ValueError): check(root)
+                        (root / document).write_text('# Guide')
+
+    def test_missing_reason_duplicate_wildcard_and_escape_allowances_refused(self):
+        variants = [dict(document='README.md', token='example/output.proto', reason=''),
+                    dict(document='README.md', token='example/*', reason='Too broad'),
+                    dict(document='README.md', token='../escape', reason='Unsafe'),
+                    dict(document='outside.md', token='example/output.proto', reason='Wrong document')]
+        for row in variants:
+            with self.subTest(row=row), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp); self.fixture(root)
+                (root / EXAMPLES).write_text(json.dumps(dict(schema='repository-map-path-examples/1', examples=[row])))
+                with self.assertRaisesRegex(ValueError, 'named-path-example'): check(root)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); self.fixture(root)
+            row = dict(document='README.md', token='example/output.proto', reason='Intentional example')
+            (root / EXAMPLES).write_text(json.dumps(dict(schema='repository-map-path-examples/1', examples=[row, row])))
+            with self.assertRaisesRegex(ValueError, 'duplicate'): check(root)

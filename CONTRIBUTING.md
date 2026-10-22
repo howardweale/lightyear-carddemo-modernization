@@ -55,7 +55,12 @@ The repository-map workflow checks local Markdown links and named repository pat
 architecture, contribution guide and [documentation index](docs/index.md).
 Paths in prose, inline code and command blocks are checked too. Named paths are
 relative to the repository root; paths with an explicit dot-directory prefix
-are relative to the document. Globs must match an existing path and cannot escape the checkout.
+are relative to the document. Globs must match an existing path and cannot escape the checkout. Bare paths with
+unknown roots, unfamiliar extensions and extensionless names are checked too.
+Intentional examples and slash-delimited non-path labels require an exact,
+document-scoped entry with a reason in
+[the short exception list](tools/ci/repository-map-path-examples.json). Exceptions
+cannot exempt Markdown links, wildcards, traversal or existing repository paths.
 Keep the README at most 150 lines and the architecture compact enough for two
 pages. CI also proves that the archive equals the original source Git blob.
 

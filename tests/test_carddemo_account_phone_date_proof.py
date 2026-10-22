@@ -1,0 +1,45 @@
+"""CI-only refusal fixtures for the additional phone/date proof gate."""
+import copy
+import json
+from pathlib import Path
+import tempfile
+import unittest
+import xml.etree.ElementTree as ET
+from tools.carddemo_account_phone_date_proof import CLASSES,SCOPE,check_scope,evaluate
+
+class PhoneDateProofTests(unittest.TestCase):
+    def report(self, statuses):
+        root=ET.Element('mutations')
+        for name,values in statuses.items():
+            for value in values:
+                node=ET.SubElement(root,'mutation',status=value)
+                ET.SubElement(node,'mutatedClass').text='ai.lightyear.carddemo.'+name
+        return ET.tostring(root)
+
+    def test_each_class_needs_nonempty_ninety_percent_killed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'mutations.xml'
+            good={name:['KILLED']*9+['SURVIVED'] for name in CLASSES};path.write_bytes(self.report(good))
+            self.assertTrue(evaluate(path)['passed'])
+            for name in CLASSES:
+                missing=copy.deepcopy(good);del missing[name];path.write_bytes(self.report(missing))
+                self.assertFalse(evaluate(path)['passed'])
+                bad=copy.deepcopy(good);bad[name]=['KILLED']*8+['TIMED_OUT','NO_COVERAGE'];path.write_bytes(self.report(bad))
+                self.assertFalse(evaluate(path)['passed'])
+            self.assertFalse(evaluate(Path(directory)/'absent.xml')['passed'])
+
+    def test_scope_inventory_hash_routes_and_remaining_scope_fail_closed(self):
+        root=Path(__file__).resolve().parents[1];scope=json.loads((root/SCOPE).read_bytes())
+        self.assertEqual(3,len(check_scope(root)['retired_ranges']))
+        for defect in ('missing-paragraph','hash','range','class','whole-screen','remaining','source-set'):
+            bad=copy.deepcopy(scope)
+            if defect=='missing-paragraph':bad['sources'][0]['paragraphs'].pop()
+            elif defect=='hash':bad['sources'][0]['sha256']='0'*64
+            elif defect=='range':bad['retired_ranges'].pop('EDIT-DATE-OF-BIRTH')
+            elif defect=='class':bad['required_mutation_classes'].pop()
+            elif defect=='whole-screen':bad['whole_screen_idiomatic']=True
+            elif defect=='remaining':bad['remaining_statement_engine_programs'].remove('COACTUPC')
+            else:bad['sources'].pop()
+            with self.subTest(defect=defect),self.assertRaises(ValueError):check_scope(root,bad)
+
+if __name__=='__main__':unittest.main()

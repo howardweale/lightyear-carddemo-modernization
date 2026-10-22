@@ -3,6 +3,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import re
+from tools import carddemo_web_gaps
 
 
 def latest(root, schema="carddemo-slice-evidence/2"):
@@ -76,7 +77,8 @@ def load_web(root):
     return dict(schema='carddemo-web-status/1',run_id=value['run_id'],status=value['status'],
                 cases=api['completed_cases'],interactions=browser['interactions'],bms_interactions=api['bms_interactions'],
                 killed=m['killed'],total=m['total'],percent=m['percent'],status_counts=counts,
-                path=path.relative_to(root).as_posix(),unsigned=True,final_head_ci='separate readiness gate')
+                path=path.relative_to(root).as_posix(),unsigned=True,final_head_ci='separate readiness gate',
+                **carddemo_web_gaps.project(root,path.relative_to(root).as_posix(),value))
 
 
 def web_paragraph(value):
@@ -89,4 +91,5 @@ def web_paragraph(value):
             f"and {c.get('TIMED_OUT',0)} timeout remain in the denominator. "
             f"[Unsigned receipt and complete retained artifacts](../modernization/{Path(value['path']).with_suffix('.md').name}). "
             'Bounded raw-source reference and disclosed synthetic fixtures; native execution and SQL-error screen equivalence remain unproved. '
-            'Final publication-head CI and Howard merge approval are separate. No signing, import, activation, Phase 2 or release authority.')
+            'Final publication-head CI and Howard merge approval are separate. No signing, import, activation, Phase 2 or release authority. '
+            +carddemo_web_gaps.paragraph(value))

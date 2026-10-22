@@ -1,10 +1,10 @@
 name: Factory allowlist and feedback fixtures
 on:
   pull_request:
-    paths: ['src/lightyear_factory/**', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'tools/ci/factory_container_probe.py', 'tests/test_factory_allowlist_feedback.py', 'tests/test_factory_publications.py', 'tools/check_factory_publications.py', '.github/workflows/factory-main-packages.yml', 'tests/test_factory_authorship.py', 'tests/test_factory_model_admission.py', 'tests/test_factory_build_receipt.py', 'tests/test_factory_controller_dryruns.py', 'tests/test_factory_graph_tools.py', 'tests/test_factory_encrypted_artifacts.py', 'tests/test_factory_transport_records.py', 'tests/test_copau_judge_freeze.py', 'tools/check_copau_judge_freeze.py', '.github/workflows/copau-factory-judge.yml', '.github/workflows/factory-allowlist-feedback.yml']
+    paths: ['src/lightyear_factory/**', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'tools/ci/factory_container_probe.py', 'tests/test_factory_allowlist_feedback.py', 'tests/test_factory_publications.py', 'tools/check_factory_publications.py', '.github/workflows/factory-main-packages.yml', 'tests/test_factory_authorship.py', 'tests/test_factory_model_admission.py', 'tests/test_factory_build_receipt.py', 'tests/test_factory_controller_dryruns.py', 'tests/test_factory_graph_tools.py', 'tests/test_factory_plain_search.py', 'tests/test_factory_retrieval_parity.py', 'tests/test_factory_encrypted_artifacts.py', 'tests/test_factory_transport_records.py', 'tests/test_copau_judge_freeze.py', 'tools/check_copau_judge_freeze.py', '.github/workflows/copau-factory-judge.yml', '.github/workflows/factory-allowlist-feedback.yml']
   push:
     branches: [main]
-    paths: ['src/lightyear_factory/**', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'tools/ci/factory_container_probe.py', 'tests/test_factory_allowlist_feedback.py', 'tests/test_factory_publications.py', 'tools/check_factory_publications.py', '.github/workflows/factory-main-packages.yml', 'tests/test_factory_authorship.py', 'tests/test_factory_model_admission.py', 'tests/test_factory_build_receipt.py', 'tests/test_factory_controller_dryruns.py', 'tests/test_factory_graph_tools.py', 'tests/test_factory_encrypted_artifacts.py', 'tests/test_factory_transport_records.py', 'tests/test_copau_judge_freeze.py', 'tools/check_copau_judge_freeze.py', '.github/workflows/copau-factory-judge.yml', '.github/workflows/factory-allowlist-feedback.yml']
+    paths: ['src/lightyear_factory/**', 'src/lightyear_execution/**', 'factory/execution/policy.json', 'tools/ci/factory_container_probe.py', 'tests/test_factory_allowlist_feedback.py', 'tests/test_factory_publications.py', 'tools/check_factory_publications.py', '.github/workflows/factory-main-packages.yml', 'tests/test_factory_authorship.py', 'tests/test_factory_model_admission.py', 'tests/test_factory_build_receipt.py', 'tests/test_factory_controller_dryruns.py', 'tests/test_factory_graph_tools.py', 'tests/test_factory_plain_search.py', 'tests/test_factory_retrieval_parity.py', 'tests/test_factory_encrypted_artifacts.py', 'tests/test_factory_transport_records.py', 'tests/test_copau_judge_freeze.py', 'tools/check_copau_judge_freeze.py', '.github/workflows/copau-factory-judge.yml', '.github/workflows/factory-allowlist-feedback.yml']
 permissions:
   contents: read
 concurrency:
@@ -25,7 +25,18 @@ jobs:
       - name: Run only offline fixture boundaries
         env:
           PYTHONPATH: .:src:tests
-        run: python -B -m unittest test_factory_allowlist_feedback test_factory_publications test_factory_authorship test_factory_model_admission test_factory_build_receipt test_factory_controller_dryruns test_factory_graph_tools test_factory_encrypted_artifacts test_factory_transport_records test_copau_judge_freeze -v
+          G3_PARITY_OUTPUT: ${{ runner.temp }}/g3-parity
+          G3_CI_SOURCE_SHA: ${{ github.sha }}
+          G3_CI_RUN_ID: ${{ github.run_id }}
+          G3_CI_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: python -B -m unittest test_factory_allowlist_feedback test_factory_publications test_factory_authorship test_factory_model_admission test_factory_build_receipt test_factory_controller_dryruns test_factory_graph_tools test_factory_plain_search test_factory_retrieval_parity test_factory_encrypted_artifacts test_factory_transport_records test_copau_judge_freeze -v
+      - name: Retain zero-model parity and public fixture prompt bytes
+        uses: actions/upload-artifact@v4
+        with:
+          name: g3-zero-model-parity-${{ github.sha }}
+          path: ${{ runner.temp }}/g3-parity
+          if-no-files-found: error
+          retention-days: 14
       - name: Pull the exact policy image for the container fixture
         run: |
           image="$(python -c 'import json; p=json.load(open("factory/execution/policy.json"))["runtime"]; print(p["image"]+"@sha256:"+p["image_digest"])')"

@@ -26,6 +26,9 @@ def encoded(value):
 
 def graph_policy(order):
     mode = order.metadata.get("graph", "packed")
+    if mode == "plain-search":
+        from .plain_search import plain_policy
+        return plain_policy(order)
     if mode not in ("packed", "on-demand"):
         raise ContractError("factory-graph-mode")
     config = order.metadata.get("graph_policy", {})
@@ -46,6 +49,9 @@ def graph_policy(order):
 
 def graph_summary(order, ledger, run_id):
     """Count only persisted controller events, never a model's claimed count."""
+    if order.metadata.get("graph") == "plain-search":
+        from .plain_search import plain_summary
+        return plain_summary(order, ledger, run_id)
     persisted = RunLedger(ledger.path)
     if persisted.events != ledger.events:
         raise ContractError("factory-graph-ledger-changed")

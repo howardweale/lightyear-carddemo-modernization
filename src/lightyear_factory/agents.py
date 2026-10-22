@@ -368,8 +368,8 @@ class ModelAgentSet:
         return self._call(
             order,
             "planner",
-            "Use the supplied graph relationships and evidence catalog to decompose the work "
-            "order. Every task must cite graph_node_ids and select only evidence_capsule_ids "
+            "Use the supplied public evidence catalog to decompose the work "
+            "order. Cite graph_node_ids only when present and select only evidence_capsule_ids "
             "listed in the catalog for later builder retrieval. Do not propose paths outside "
             "allowed_paths and state uncertainty as risk.",
             {"work_order": order.to_dict(), "planner_context": planner_context},
@@ -455,7 +455,7 @@ class ModelAgentSet:
         schema: dict[str, Any],
     ) -> dict[str, Any]:
         from .graph_tools import graph_policy
-        if graph_policy(order)["mode"] == "on-demand" and role in ("planner", "failure_analyst"):
+        if graph_policy(order)["mode"] in ("on-demand", "plain-search") and role in ("planner", "failure_analyst"):
             if self.graph_session is None or self.graph_session.order is not order:
                 raise ContractError("factory-graph-controller-binding-required")
             return self._graph_call(order, role, instruction, payload, schema)
@@ -463,6 +463,9 @@ class ModelAgentSet:
 
     def _graph_call(self, order, role, instruction, payload, schema):
         from .graph_tools import TOOLS, encoded
+        plain = self.graph_session.policy["mode"] == "plain-search"
+        if plain:
+            from .plain_search import TOOLS
         envelope = dict(type="object", properties=dict(
             graph_calls=dict(type="array", items=dict(type="object",
                 properties=dict(tool=dict(type="string", enum=list(TOOLS)),
@@ -470,15 +473,23 @@ class ModelAgentSet:
                 required=["tool", "arguments_json"], additionalProperties=False)),
             answer=dict(schema, type=["object", "null"])),
             required=["graph_calls", "answer"], additionalProperties=False)
-        instruction += (
-            " You may request ONE read-only graph tool per turn using graph_calls and answer=null."
-            " To finish, use graph_calls=[] and answer with the original response."
-            " Arguments are a JSON object: graph_search(query,kind='',limit=10,cursor='',mode='lexical');"
+        help_text = (
+            " search_code(query); read_file(path,line_start,line_end)."
+            " Search is literal and case-sensitive across every pinned public file."
+            " Read ranges are inclusive and at most 200 lines. No graph tools or hints."
+            " Cite returned evidence_catalog capsule IDs; graph_node_ids must be empty."
+        ) if plain else (
+            " graph_search(query,kind='',limit=10,cursor='',mode='lexical');"
             " graph_neighbors(node_id,relations=[],direction='both',depth=1,limit=25,cursor='');"
             " graph_node(node_id,include_source=false); graph_references(node_id,cursor='');"
-            " graph_guidance(node_id). Search is lexical only; no private state or verdict access."
-            " Cite only returned/packed node IDs and evidence_catalog capsule IDs."
-            " Every model turn uses the existing run budget; graph call_budget is shared across roles.")
+            " graph_guidance(node_id). Search is lexical only."
+            " Cite only returned/packed node IDs and evidence_catalog capsule IDs.")
+        instruction += (
+            " You may request ONE read-only retrieval tool per turn using graph_calls and answer=null."
+            " To finish, use graph_calls=[] and answer with the original response."
+            " Arguments are a JSON object:" + help_text +
+            " No private state or verdict access. Every model turn uses the existing run budget;"
+            " retrieval call_budget is shared across roles and attempts.")
         next_payload = dict(payload, graph_policy=dict(self.graph_session.policy))
         # One final model answer is allowed after the last admitted graph query.
         remaining = self.graph_session.policy["call_budget"] - self.graph_session.count

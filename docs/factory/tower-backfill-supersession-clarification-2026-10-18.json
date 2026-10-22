@@ -1,0 +1,31 @@
+{
+  "schema": "factory-backfill-supersession-clarification/1",
+  "recorded_on": "2026-10-18",
+  "supersedes_explanation": {
+    "path": "docs/factory/tower-backfill-supersessions-2026-10-17.json",
+    "sha256": "08765578595328028764ba1907a94a4323d9daab1e4305173460c8a808706c5b"
+  },
+  "records": [
+    {
+      "path": "docs/factory/tower-backfill-request-2026-10-12.json",
+      "file_sha256": "fb2c60065fbb9792bfe7765409fcb3e9097cd1a61fd46f785832088873f18e0e",
+      "contract_sha256": "fb2c60065fbb9792bfe7765409fcb3e9097cd1a61fd46f785832088873f18e0e",
+      "superseded_by": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+      "source_commit_count": 1,
+      "historical_record_count": 2,
+      "reason": "The October 12 request contains the earlier two-record inventory at one source commit. It was superseded by the recorded seven-record backfill; it is not the October 14 mixed-commit request. Do not re-import or sign this retired request."
+    },
+    {
+      "path": "docs/factory/tower-backfill-request-2026-10-14.json",
+      "file_sha256": "cf7d6ce4c56345b62cb158f01aed4fc088cfbdfec16e267b0a4f97f0194d66df",
+      "contract_sha256": "23ffd5264ce930ebdc916a877b988158fcefb6432e23dac0cb740b0433353472",
+      "superseded_by": "docs/factory/factory-local-activation-correction-2026-10-17.json",
+      "source_commit_count": 2,
+      "historical_record_count": 7,
+      "reason": "The October 14 request is a mixed-commit historical document and fails the current single-commit inventory validation. The recorded activation correction identifies the source commit that reproduces the seven-record signed backfill. Do not re-import or sign this retired request."
+    }
+  ],
+  "signed": false,
+  "activation_performed": false,
+  "scope": "Reason correction only; retired identities and historical bytes unchanged."
+}

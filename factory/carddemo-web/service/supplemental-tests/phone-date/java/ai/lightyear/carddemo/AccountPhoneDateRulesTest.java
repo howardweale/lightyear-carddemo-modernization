@@ -150,15 +150,21 @@ class AccountPhoneDateRulesTest {
                 input.put("WS-RETURN-MSG",prior);
                 input.put("WS-INPUT-FLAG",prior.isEmpty()?"0":"1");
                 input.put("WS-DATE-FORMAT","BADMASK!");
-                input.put("WS-SEVERITY","9999");input.put("WS-MSG-NO","8888");
-                input.put("WS-RESULT","STALE RESULT");
-                input.put("WS-DATE","1999-12-31");
-                input.put("WS-DATE-FMT","STALE MASK");
+                // These leaf names exist in the complete COBOL storage layout,
+                // but are not operands in the projected statement field table.
+                var seed=new Commarea(original.path("storage"),null);
+                seed.set("WS-SEVERITY","9999");seed.set("WS-MSG-NO","8888");
+                seed.set("WS-RESULT","STALE RESULT");
+                seed.set("WS-DATE","1999-12-31");
+                seed.set("WS-DATE-FMT","STALE MASK");
+                input.put("WS-DATE-VALIDATION-RESULT",seed.get("WS-DATE-VALIDATION-RESULT"));
                 var result=compare("EDIT-DATE-CCYYMMDD",input);
                 assertEquals("YYYYMMDD",result.get("WS-DATE-FORMAT"));
-                assertFalse(result.get("WS-RESULT").contains("STALE"));
-                assertFalse(result.get("WS-DATE").contains("1999"));
-                assertFalse(result.get("WS-DATE-FMT").contains("STALE"));
+                var field=SourceEdits.class.getDeclaredField("storage");field.setAccessible(true);
+                var storage=(Commarea)field.get(result);
+                assertFalse(storage.get("WS-RESULT").contains("STALE"));
+                assertFalse(storage.get("WS-DATE").contains("1999"));
+                assertFalse(storage.get("WS-DATE-FMT").contains("STALE"));
             }
     }
 }

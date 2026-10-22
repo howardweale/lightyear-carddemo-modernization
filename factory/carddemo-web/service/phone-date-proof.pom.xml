@@ -9,7 +9,10 @@
     <dependency><groupId>org.postgresql</groupId><artifactId>postgresql</artifactId><scope>runtime</scope></dependency>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
   </dependencies>
-  <build><plugins><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin><plugin><groupId>org.pitest</groupId><artifactId>pitest-maven</artifactId><version>1.19.4</version>
+  <build><plugins><plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>
+    <executions><execution><id>phone-date-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>
+      <configuration><sources><source>${project.basedir}/supplemental-tests/phone-date/java</source></sources></configuration>
+    </execution></executions></plugin><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin><plugin><groupId>org.pitest</groupId><artifactId>pitest-maven</artifactId><version>1.19.4</version>
     <dependencies><dependency><groupId>org.pitest</groupId><artifactId>pitest-junit5-plugin</artifactId><version>1.2.3</version></dependency></dependencies>
     <configuration>
       <targetClasses><param>ai.lightyear.carddemo.AccountPhoneRules*</param><param>ai.lightyear.carddemo.AccountDateRules*</param><param>ai.lightyear.carddemo.AccountEditState*</param><param>ai.lightyear.carddemo.AccountPhoneDateModel*</param></targetClasses>

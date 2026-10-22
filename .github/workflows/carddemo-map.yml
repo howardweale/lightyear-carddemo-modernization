@@ -1,0 +1,52 @@
+name: CardDemo typed account map orchestration
+on:
+  pull_request:
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_map_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_map_proof.py', '.github/workflows/carddemo-map.yml']
+  push:
+    branches: [main]
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_map_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_map_proof.py', '.github/workflows/carddemo-map.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  map-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Validate complete scope and proof refusal fixtures
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B -m unittest test_carddemo_account_map_proof -v
+          python -B -m tools.carddemo_account_map_proof --out work/carddemo-map/scope.json
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Compare complete storage and mutate every new class
+        run: |
+          mvn -B -f factory/carddemo-web/service/map-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" -Dtest=AccountMapRulesTest test
+          mvn -B -f factory/carddemo-web/service/map-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" org.pitest:pitest-maven:mutationCoverage
+      - name: Enforce nonempty per-class mutation gates
+        if: always()
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.carddemo_account_map_proof --mutation factory/carddemo-web/service/target/pit-reports/mutations.xml --out work/carddemo-map/proof.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-map-proof
+          path: |
+            work/carddemo-map/
+            factory/carddemo-web/service/target/pit-reports/
+            factory/carddemo-web/service/target/surefire-reports/
+          if-no-files-found: error
+          retention-days: 90

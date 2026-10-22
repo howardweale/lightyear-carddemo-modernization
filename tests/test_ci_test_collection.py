@@ -32,3 +32,13 @@ class CollectionGuardTests(unittest.TestCase):
         workflow=root/'.github/workflows/test.yml'
         workflow.write_text(workflow.read_text().replace('- run: |','- if: false\n        run: |'))
         self.assertFalse(any(inventory(root).values()))
+
+
+    def test_execution_reporter_and_comment_are_distinguished(self):
+        root=self.fixture('./verify.sh')
+        (root/'verify.sh').write_text('"$LIGHTYEAR_PYTHON_BIN" -B "$project_dir/tools/ci_test_execution.py"\n')
+        self.assertEqual(2,len(check(root)))
+        for run in ('# python tools/ci_test_execution.py', 'echo python tools/ci_test_execution.py',
+                    'python tools/ci_test_execution.py --root elsewhere'):
+            with self.subTest(run=run),self.assertRaisesRegex(ValueError,'CI-test-not-collected'):
+                check(self.fixture(run))

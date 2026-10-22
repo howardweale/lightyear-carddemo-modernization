@@ -1,0 +1,27 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Bind the retained publication manifest to its original measurement merge and exact CI workflow source. This adds no execution, release, signing or activation authority; all published assets and original dated records remain unchanged.",
+  "claims": [
+    {
+      "record": "docs/factory/intcalc-releasability-2026-10-21.json",
+      "reference": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
+      "commit": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
+      "role": "merge",
+      "pr": 364,
+      "parents": [
+        "5c1852cc36fc28fc34f16ed91a2243023acdc657",
+        "7129dfd8e3633e6940e6e82620f6144cdde23871"
+      ],
+      "head_commit": "7129dfd8e3633e6940e6e82620f6144cdde23871"
+    },
+    {
+      "record": "docs/factory/intcalc-releasability-2026-10-21.json",
+      "reference": "e00bcc53da3efdbf6cdbf6527ee0f8697f8ba2f7",
+      "commit": "e00bcc53da3efdbf6cdbf6527ee0f8697f8ba2f7",
+      "role": "source",
+      "source_path": ".github/workflows/intcalc-retained-verdict.yml",
+      "source_sha256": "9e27f91ac6b8c3f1f92ac205902f93a1f67d019ca526fd2d26ebdc506c8e128d"
+    }
+  ]
+}

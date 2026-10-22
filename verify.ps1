@@ -12,7 +12,7 @@ Invoke-FactoryDarkPython -m lightyear_common receipt-claims --project-root $Proj
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Invoke-FactoryDarkPython -m lightyear_common scripts --project-root $ProjectDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-Invoke-FactoryDarkPython -m unittest discover -s (Join-Path $ProjectDir "tests") -v
+Invoke-FactoryDarkPython -B (Join-Path $ProjectDir "tools/ci_test_execution.py")
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($env:LIGHTYEAR_CI_STATUS_BASELINE) {
     Invoke-FactoryDarkPython -B (Join-Path $ProjectDir "tools/ci_status_baseline.py") finish

@@ -2,7 +2,7 @@
 import copy,json,unittest
 from datetime import datetime,timezone,timedelta
 from unittest.mock import patch
-from test_graph_memory_review import ReviewTests
+import test_graph_memory_review as graph_review
 from lightyear_control_tower.decisions import digest
 from lightyear_factory.routing_policy import compile_policy,paired_interval
 from lightyear_factory.revocations import refresh
@@ -43,7 +43,7 @@ class QualityTests(unittest.TestCase):
         done=subprocess.run([sys.executable,'-m','lightyear_execution','validate'],capture_output=True,text=True)
         self.assertEqual(done.returncode,0,done.stderr+done.stdout)
 
-class ExpiryTests(ReviewTests):
+class ExpiryTests(graph_review.ReviewTests):
     def test_expiry_advances_same_ledger_sequence_and_heartbeat_survives(self):
         a=self.create();self.approve(a);_,reader,out=self.projection(a);reader.read()
         future=datetime.fromisoformat(self.expiry).replace(tzinfo=timezone.utc)+timedelta(seconds=1)
@@ -61,7 +61,7 @@ class ExpiryTests(ReviewTests):
     def test_unspecified_state_directory_refused(self):
         with self.assertRaisesRegex(ValueError,'host-owned'):RevocationReader(self.root,{},'a'*64)
 
-class MigrationTests(ReviewTests):
+class MigrationTests(graph_review.ReviewTests):
     def test_legacy_migration_never_carries_approval(self):
         from lightyear_factory.annotation_migration import propose
         a=self.create();self.approve(a)

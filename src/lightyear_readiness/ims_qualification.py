@@ -74,13 +74,41 @@ def _result(
     }
 
 
+def _reference_hierarchy() -> dict[str, list[str]]:
+    # Existing synthetic logical-model hierarchy; independent of SQL adapter rows.
+    return {"R001": ["D001", "D002"], "R002": ["D003"]}
+
+
+def execute_hierarchical_navigation(request: Mapping[str, Any]) -> dict[str, Any]:
+    """Reference full-hierarchy GN/GHN without changing historical root-only vectors."""
+    operation = str(request.get("operation", "")).upper()
+    if operation not in {"GN", "GHN"}:
+        raise ValueError("hierarchical navigation requires GN or GHN")
+    position = int(request.get("position", 0))
+    if position < 0:
+        raise ValueError("hierarchical navigation requires a nonnegative position")
+    hierarchy = _reference_hierarchy()
+    remaining = position
+    for root, children in hierarchy.items():
+        for child in (None, *children):
+            if remaining == 0:
+                segment = "PAUTSUM0" if child is None else "PAUTDTL1"
+                result = _result("SUCCESS", result_count=1, held=operation == "GHN",
+                                 trace=[f"{operation} {segment} {child or root}"])
+                return dict(result, segment_root=root, segment_child=child,
+                            scope="logical-two-level-hierarchy")
+            remaining -= 1
+    return dict(_result("END_DATABASE", trace=[f"{operation} END {position}"]),
+                segment_root=None, segment_child=None, scope="logical-two-level-hierarchy")
+
+
 def execute_conformance_case(case: Mapping[str, Any]) -> dict[str, Any]:
     """Execute a bounded hierarchical vector without emulating an IMS subsystem."""
     request = case.get("request", {})
     operation = str(request.get("operation", "")).upper()
     root = str(request.get("root", "R001"))
     child = str(request.get("child", "D001"))
-    roots = {"R001": ["D001", "D002"], "R002": ["D003"]}
+    roots = _reference_hierarchy()
     index = {"000001": "R001", "000002": "R002"}
 
     if operation in {"GU", "GHU"}:

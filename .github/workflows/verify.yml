@@ -516,6 +516,23 @@ jobs:
           Invoke-FactoryDarkPython -m pip install -e ".[control-tower,tsql,test]"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+      - name: Provision checksum-pinned Equinox for the JVM fixture tests
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, os, pathlib, urllib.request
+          url = 'https://repo.maven.apache.org/maven2/org/eclipse/platform/org.eclipse.osgi/3.18.500/org.eclipse.osgi-3.18.500.jar'
+          with urllib.request.urlopen(url, timeout=60) as response:
+              raw = response.read(2_000_001)
+          if len(raw) != 1541578 or hashlib.sha256(raw).hexdigest() != '80b275d58379723b291ea650249cc3809c8f10b34f78aaf988132cd6d434ab4e':
+              raise SystemExit('Equinox dependency size or checksum mismatch')
+          target = pathlib.Path(os.environ['RUNNER_TEMP']) / 'org.eclipse.osgi-3.18.500.jar'
+          with target.open('xb') as output:
+              output.write(raw)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as output:
+              output.write('B06_REHEARSAL_EQUINOX=' + str(target) + '\n')
+          PY
+
       - name: Run unit and differential verification
         if: runner.os == 'Linux'
         run: |
@@ -541,3 +558,12 @@ jobs:
 
       - name: Reject verification that mutates tracked evidence
         run: git diff --exit-code
+
+      - name: Retain full Python execution and skip reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-test-execution-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/ci/test-execution/
+          if-no-files-found: error
+          retention-days: 14

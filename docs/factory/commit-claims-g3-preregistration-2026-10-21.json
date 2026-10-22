@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/g3-combined-preregistration-2026-10-21/request.json",
+      "reference": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "commit": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc",
+      "role": "source",
+      "source_path": "docs/factory/b07-primary-comparison-plan.md",
+      "source_sha256": "34e3a79125bca1a266961ebf984e01bb5394248bfd5fa2ce8dc9d001bd4e6170"
+    }
+  ]
+}

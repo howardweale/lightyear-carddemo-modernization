@@ -19,7 +19,7 @@ fi
 "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common prerequisites --project-root "$project_dir"
 "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common receipt-claims --project-root "$project_dir"
 "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common scripts --project-root "$project_dir"
-"$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
+"$LIGHTYEAR_PYTHON_BIN" -B "$project_dir/tools/ci_test_execution.py"
 if [[ -n "${LIGHTYEAR_CI_STATUS_BASELINE:-}" ]]; then
     "$LIGHTYEAR_PYTHON_BIN" -B "$project_dir/tools/ci_status_baseline.py" finish
 fi

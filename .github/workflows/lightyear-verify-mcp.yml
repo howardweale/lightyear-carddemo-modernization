@@ -13,9 +13,12 @@ concurrency:
 jobs:
   isolated-judge:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -40,8 +43,21 @@ jobs:
           sudo aa-status
           id 1000 || sudo useradd -u 1000 -m verify-judge
           sudo python3 -m venv /var/lib/verify-test-venv
-          sudo /var/lib/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47'
+          sudo /var/lib/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47' 'PyYAML==6.0.3'
       - run: mvn -B -f candidate-java/pom.xml package
-      - name: Real MCP SDK, separate users, sandbox execution, leak scan and replay
-        run: sudo env PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin:/usr/sbin:/usr/bin:/sbin:/bin /var/lib/verify-test-venv/bin/python tools/run_verify_acceptance.py
-      # No private archives, logs, evaluation captures or keys are uploaded.
+      - name: Real graph-off and graph-on MCP, isolation, full inventory scan and replay
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: >-
+          sudo env PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          VERIFY_GRAPH_REPORT_DIR="$GITHUB_WORKSPACE/work/verify-graph-public"
+          GITHUB_RUN_ID="$GITHUB_RUN_ID" GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT"
+          GITHUB_SHA="$SOURCE_SHA"
+          /var/lib/verify-test-venv/bin/python tools/run_verify_acceptance.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: verify-graph-public-${{ github.run_attempt }}
+          path: work/verify-graph-public/*.json
+          if-no-files-found: error
+          retention-days: 90
+      # Only four explicitly produced public files; no private logs or captures.

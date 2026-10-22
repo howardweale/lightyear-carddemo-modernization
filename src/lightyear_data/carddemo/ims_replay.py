@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 import uuid
 
-from lightyear_readiness.ims_qualification import execute_conformance_case
+from lightyear_readiness.ims_qualification import execute_conformance_case, execute_hierarchical_navigation
 from .access import DliRepository
 from .plan import build
 from .proof import synthetic_segment
@@ -28,7 +28,7 @@ def dispatch(repo,request,roots,children,rm,cm,replacement):
     if op in ('GU','GHU'):return repo.gu(rk,hold=op=='GHU')
     if op in ('GN','GHN'):
         result=('GB',None)
-        for _ in range(int(request.get('position',0))+1):result=repo.gn(hold=op=='GHN',roots_only=True)
+        for _ in range(int(request.get('position',0))+1):result=repo.gn(hold=op=='GHN')
         return result
     if op in ('GNP','GHNP'):
         if request.get('parent_established',True):repo.gu(rk)
@@ -50,15 +50,51 @@ def dispatch(repo,request,roots,children,rm,cm,replacement):
     raise NotImplementedError('No migrated implementation for '+op)
 
 
+CHILD_CASES=(
+    dict(id='41-gn-second-child',request=dict(operation='GN',position=2),reference_scope='logical-two-level-hierarchy'),
+    dict(id='42-ghn-other-parent-child',request=dict(operation='GHN',position=4),reference_scope='logical-two-level-hierarchy'),
+)
+
+
+def execution_scope(request):
+    op=request['operation']
+    if op in ('PROCOPT','SENSEG') or (op=='SSA' and request.get('syntax') not in ('QUALIFIED','UNQUALIFIED')):
+        return 'replay-local'
+    if op in ('GU','GHU','GN','GHN','GNP','GHNP','SSA','ISRT_ROOT','ISRT_CHILD','REPL','DLET'):
+        return 'adapter'
+    return 'unsupported'
+
+
+def replay_counts(records):
+    counts={scope:sum(r['execution_scope']==scope for r in records)
+            for scope in ('adapter','replay-local','unsupported')}
+    matched={scope:sum(r['execution_scope']==scope and r['verdict']=='matched' for r in records)
+             for scope in counts}
+    return dict(adapter_cases=counts['adapter'],adapter_matched=matched['adapter'],
+                replay_local_cases=counts['replay-local'],replay_local_matched=matched['replay-local'],
+                unsupported=counts['unsupported'],matched=sum(matched.values()))
+
+
+def scope_text(counts):
+    return (f"Adapter calls: {counts['adapter_matched']}/{counts['adapter_cases']}; "
+            f"replay-local answers: {counts['replay_local_matched']}/{counts['replay_local_cases']}; "
+            f"unsupported: {counts['unsupported']}. Replay-local cases earn no adapter credit.")
+
+
 def replay(connection,source,corpus_path):
     plan,entries=build(source);corpus_raw=Path(corpus_path).read_bytes();corpus=json.loads(corpus_raw)
     _,rl,rm=next(e for e in entries if e[2]['table']=='pautsum0');_,cl,cm=next(e for e in entries if e[2]['table']=='pautdtl1')
     roots={f'R{i:03}':synthetic_segment(rl,rm,i) for i in (1,2,3,999)}
     children={f'D{i:03}':synthetic_segment(cl,cm,i) for i in (1,2,3,4)}
     records=[]
-    for case in corpus['cases']:
-        reference=execute_conformance_case(case);q=case['request'];op=q['operation']
-        result=dict(id=case['id'],operation=op,reference=reference)
+    for case in [*corpus['cases'],*CHILD_CASES]:
+        q=case['request'];op=q['operation']
+        navigation = execute_hierarchical_navigation(q) if op in ('GN','GHN') else None
+        if case.get('reference_scope')=='logical-two-level-hierarchy':
+            reference=navigation
+        else:
+            reference=execute_conformance_case(case)
+        result=dict(id=case['id'],operation=op,reference=reference,execution_scope=execution_scope(q))
         with connection.transaction(force_rollback=True):
             schema='replay_'+uuid.uuid4().hex;connection.execute('CREATE SCHEMA '+quote(schema));connection.execute('SET LOCAL search_path TO '+quote(schema))
             connection.execute(ddl(rm));connection.execute(ddl(cm))
@@ -76,9 +112,11 @@ def replay(connection,source,corpus_path):
             except NotImplementedError as error:
                 result.update(verdict='unsupported',reason=str(error));records.append(result);continue
             expected_segment=None
+            if navigation is not None and navigation['ims_status']=='  ':
+                er,ec=navigation['segment_root'],navigation['segment_child']
+                expected_segment=roots[er] if ec is None else children[ec]
             if status=='  ':
                 if op in ('GU','GHU','SSA'):expected_segment=children[cn] if q.get('child') else roots[rn]
-                elif op in ('GN','GHN'):expected_segment=roots[['R001','R002'][int(q.get('position',0))]]
                 elif op in ('GNP','GHNP'):expected_segment=children[cn]
                 elif op=='ISRT_ROOT':expected[('pautsum0',rk)]=roots[rn]
                 elif op=='ISRT_CHILD':expected[('pautdtl1',rk+ck)]=children[cn]
@@ -88,21 +126,22 @@ def replay(connection,source,corpus_path):
                     if target[0]=='pautsum0':expected={k:v for k,v in expected.items() if not(k[0]=='pautdtl1' and k[1].startswith(rk))}
             actual={(store.table,row['path_key']):store.bytes(row) for store in (repo.root,repo.child) for row in store.rows()}
             correction={'07-gnp-without-parent':'GP','28-procopt-g-denies-update':'AM'}.get(case['id'])
-            wanted=correction or reference['ims_status']
+            wanted=correction or (navigation['ims_status'] if navigation is not None else reference['ims_status'])
             result.update(verdict='matched' if status==wanted and segment==expected_segment and actual==expected else 'divergent',
-                adapter_status=status,status_equal_to_historical=status==reference['ims_status'],status_correction=correction,
+                navigation_reference=navigation,adapter_status=status,status_equal_to_historical=status==reference['ims_status'],status_correction=correction,
                 segment_compared=expected_segment is not None,segment_equal=segment==expected_segment,
                 expected_segment_sha256=sha256(expected_segment).hexdigest() if expected_segment else None,
                 actual_segment_sha256=sha256(segment).hexdigest() if segment else None,
                 after_state_equal=actual==expected,after_state_segments=len(actual),
                 after_state_sha256=sha256(b''.join(k[0].encode()+k[1]+v for k,v in sorted(actual.items()))).hexdigest())
             records.append(result)
-    return dict(schema='carddemo-typed-ims-replay/1',total=len(records),adapter_cases=sum(r['verdict']!='unsupported' for r in records),
-        matched=sum(r['verdict']=='matched' for r in records),unsupported=sum(r['verdict']=='unsupported' for r in records),
+    counts=replay_counts(records)
+    return dict(schema='carddemo-typed-ims-replay/2',total=len(records),historical_corpus_cases=len(corpus['cases']),
+        supplementary_cases=len(CHILD_CASES),**counts,execution_summary=scope_text(counts),
         segment_comparisons=sum(r.get('segment_compared',False) for r in records),
         unexpected_differences=[r['id'] for r in records if r['verdict']=='divergent'],
         corpus_sha256=sha256(corpus_raw).hexdigest(),plan_sha256=plan['content_sha256'],cases=records,
-        scope='Two-level typed PostgreSQL adapter against synthetic reference; parsed SSA qualifiers only. Historical DJ expectations corrected to GP/AM per October 16 work order. Unsupported cases count in the denominator.',
+        scope='GN/GHN traverse roots and children in fixture preorder; historical case 02 name is retained but its returned segment now includes the child. Two-level typed PostgreSQL adapter against synthetic reference; parsed SSA qualifiers only. Historical DJ expectations corrected to GP/AM per October 16 work order. Unsupported cases count in the denominator.',
         signed=False,release_authorized=False)
 
 

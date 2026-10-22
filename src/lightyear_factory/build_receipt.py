@@ -144,9 +144,22 @@ def compute_build_receipt(order, ledger, run_receipt, calls, runtime, run_dir):
         require(all(type(c.get('estimated_cost_usd')) in (int,float) and math.isfinite(c['estimated_cost_usd'])
                     and c['estimated_cost_usd']>=0 for c in calls)
                 and abs(sum(c['estimated_cost_usd'] for c in calls)-intelligence['estimated_cost_usd'])<=0.0000001,'accounted-cost')
+        from .graph_tools import graph_summary
+        graph = graph_summary(order, ledger, run_id)
+        require(run_receipt.get('graph', graph if graph['mode']=='packed' else None)==graph,
+                'graph-receipt-binding')
+        if graph['mode'] in ('on-demand', 'plain-search'):
+            require(graph['refused_tool_calls']==0, 'graph-refused-call')
+            for event in rows('plain_tool_finished' if graph['mode']=='plain-search' else 'graph_tool_finished'):
+                row=event['payload']
+                require((row.get('scan_artifact'),row.get('result_sha256')) in scanned,
+                        'graph-result-scan-binding')
+                require(any(e['sequence']<event['sequence'] and any(
+                    r.get('artifact')==row.get('scan_artifact') and r.get('sha256')==row.get('result_sha256')
+                    for r in e['payload'].get('scanned',[])) for e in scans), 'graph-scan-order')
         result={'schema':'factory-build-receipt/1','run_id':run_id,'work_order_sha256':order.content_sha256,
                 'status':'passed' if not gaps else 'blocked','qualifies_for_factory_receipt':not gaps,
-                'attempts':attempts,'repair_loops':max(0,attempts-1),'reasons':sorted(gaps),
+                'attempts':attempts,'repair_loops':max(0,attempts-1),'reasons':sorted(gaps),'graph':graph,
                 'ledger_prefix_sha256':persisted.head_sha256,'ledger_event_count':len(events),
                 'current_admission_sha256':canonical_hash(runtime),'execution_security_sha256':security.get('content_sha256'),
                 'accounting_sha256':canonical_hash(intelligence),'candidate_package_sha256':package.get('content_sha256'),

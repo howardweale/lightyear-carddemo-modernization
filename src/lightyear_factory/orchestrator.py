@@ -252,7 +252,32 @@ class FactoryOrchestrator:
                 },
             )
 
-            context = self._context(order, workspace.root)
+            from .graph_tools import graph_policy, FactoryGraphSession
+            policy = graph_policy(order)
+            if policy["mode"] in ("on-demand", "plain-search") and (
+                    type(self.agents) is not ModelAgentSet or self.workspace_read_manifest is None):
+                raise ContractError("factory-graph-controller-boundary-required")
+            if policy["mode"] == "plain-search":
+                from .plain_search import plain_context, FactoryPlainSession
+                if self.memory_store is not None:
+                    raise ContractError("factory-plain-memory-forbidden")
+                context = plain_context(order)
+                self._scan_controller_value("controller-context", context)
+            else:
+                context = self._context(order, workspace.root)
+            if policy["mode"] in ("on-demand", "plain-search"):
+                if self.agents.graph_session is not None:
+                    raise ContractError("factory-graph-agent-reuse")
+                if policy["mode"] == "plain-search":
+                    self.agents.graph_session = FactoryPlainSession(order, run_id, ledger, context,
+                        self.workspace_read_manifest, self._isolation_scanner(), workspace.root)
+                else:
+                    self.agents.graph_session = FactoryGraphSession(order, run_id, ledger, context,
+                        self.approved_projection, self.workspace_read_manifest,
+                        self._isolation_scanner(), workspace.root)
+            else:
+                ledger.append("PLANNED", "graph_policy_bound",
+                    dict(policy, run_id=run_id, work_order_sha256=order.content_sha256))
             context_ref = artifacts.write(
                 "implementer-context", "controller", "implementer", context
             )
@@ -264,6 +289,11 @@ class FactoryOrchestrator:
                 artifacts, ledger, references, "planner", "implementer"
             )
             self._validate_plan(order, plan, context)
+            plan["graph"] = dict(policy)
+            # Query expansion is controller-validated and retained for Builder citations.
+            if policy["mode"] in ("on-demand", "plain-search"):
+                references.append(artifacts.write(
+                    "queried-implementer-context", "controller", "implementer", context))
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
             references.append(plan_ref)
             ledger.append(state, "plan_created", plan_ref)
@@ -783,6 +813,8 @@ class FactoryOrchestrator:
                 *security_limitations,
             ],
         }
+        from .graph_tools import graph_summary
+        receipt["graph"] = graph_summary(order, ledger, run_id)
         if candidate_authorship is not None:
             receipt['candidate_authorship'] = dict(
                 candidate_commit=candidate_authorship['candidate_commit'],

@@ -1,0 +1,143 @@
+{
+  "schema": "intcalc-retained-publication/1",
+  "prepared_on": "2026-10-18",
+  "published_on": "2026-10-21",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "source": {
+    "head": "e00bcc53da3efdbf6cdbf6527ee0f8697f8ba2f7",
+    "run_id": 39685093189,
+    "run_attempt": 1,
+    "artifact_id": 12386887157,
+    "artifact_name": "intcalc-current-verdict"
+  },
+  "measurement": {
+    "head": "b7cfefc5adc06615a238fd09ad3ec47384f8659e",
+    "run_id": 39135263450
+  },
+  "archive": {
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/intcalc-verdict-run39685093189-attempt1/intcalc-current-verdict.zip",
+    "bytes": 199390,
+    "sha256": "25c9faa65488bfd0f22c26790bb01f2984c1404d100449e60484f1c72a535948"
+  },
+  "files": [
+    {
+      "path": "docs/factory/current-status.json",
+      "bytes": 391165,
+      "sha256": "031128e940dcb11464b0a8a76a2507b57d8a9097182071742f776b407c8aac24"
+    },
+    {
+      "path": "docs/factory/howard-decision-packet-2026-10-18-handoff-refresh.md",
+      "bytes": 4237,
+      "sha256": "3bc4504188d882c65fb8a6037f3e243704794db4719fc8741d0f3afbfe7c3044"
+    },
+    {
+      "path": "docs/factory/current-status.md",
+      "bytes": 11455,
+      "sha256": "a543f5bc75e77ce746d045ce63860f5a58e073d1b7f37e29b8c03396d2c41706"
+    },
+    {
+      "path": "docs/factory/intcalc-releasability-2026-10-18.json",
+      "bytes": 470567,
+      "sha256": "9845872e85e6557960cff0f3dc0030c8767aa49650f56eaaeea2c131198aeb0a"
+    },
+    {
+      "path": "docs/factory/intcalc-releasability-2026-10-18.md",
+      "bytes": 2041,
+      "sha256": "2242eba9b8f89372be8f4cd1bb2f9e41dac6f386e9c61db4bf9cb0ebc1a0756d"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/constant-field-evidence.json",
+      "bytes": 8049,
+      "sha256": "480420ab9cc89f076b2925fb6a97f00120b4d177ee5f9000b90b481a2cb7265a"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/loader-domain-review-projection.json",
+      "bytes": 651854,
+      "sha256": "98552f7f7df0fcf630bfb0c8890489998dc0a32213882c51813827f7498fd3ed"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/remaining-review-packet.json",
+      "bytes": 121441,
+      "sha256": "cb5c1067a6fab87c61cc7be8f35740fad632cf470dc7a99aa34ac1a513c51a50"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/request-06-rehearsal.json",
+      "bytes": 1557,
+      "sha256": "7cdaa3ddd1b6606baa634430cc1235c93edcb3ba318cd73fb92374241d699241"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/results.json",
+      "bytes": 349926,
+      "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/summary.json",
+      "bytes": 85687,
+      "sha256": "87772887f5e6a91cc97ca9d001f9e5d9ff2c9f80fb58f72fd2f28212c010826f"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/INTCALC/threshold-2-by-scope.json",
+      "bytes": 56301,
+      "sha256": "445151f8441230e26aad71f15f29bfd0127497220ab506168509662c81b311f6"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/constant-field-evidence.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/operator-review-projection.json",
+      "bytes": 60581,
+      "sha256": "07a8447a8b2a9211a0e36ca3c322f942420592c8ea0a382eb5e42e0430cfa6ff"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/remaining-review-packet.json",
+      "bytes": 72519,
+      "sha256": "a855a463dfb1b0428e43428549b5ea3eb596dc3483befc6f26c01a6da1a39bde"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/results.json",
+      "bytes": 343066,
+      "sha256": "c6e9313ac69c03766da879315b417c11c95dcce146e8374145913640c039e003"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/summary.json",
+      "bytes": 56428,
+      "sha256": "0385b6020c47e134e4535b4645cf838905f21835edf209373d7741e6559c24cb"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/POSTTRAN/threshold-2-by-scope.json",
+      "bytes": 42747,
+      "sha256": "2c95a0a026d069d740afa2e742b72b63e72898d01221b60a93558e668ecfbbb8"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/index.json",
+      "bytes": 3014,
+      "sha256": "1067676ac7e4a8a7f31900abc350f4140a245397174ff1e7e97b99e5cfe19c86"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/retention-verification.json",
+      "bytes": 1679,
+      "sha256": "5d7fa05706dd3fd4090a2d11cb4ad350593c42563dad80ede452f9b8aeccee80"
+    },
+    {
+      "path": "docs/factory/release-evidence-2026-10-18/source-run.json",
+      "bytes": 15863,
+      "sha256": "e8eed61d005a9d8888dbb4c8538712e395f72e5789dff40c770feef05240593c"
+    }
+  ],
+  "report": "docs/factory/intcalc-releasability-2026-10-18.json",
+  "index": "docs/factory/release-evidence-2026-10-18/index.json",
+  "verdict_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/intcalc-verdict-run39685093189-attempt1/intcalc-releasability-2026-10-18.md",
+  "packet_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/intcalc-verdict-run39685093189-attempt1/howard-decision-packet-2026-10-18-handoff-refresh.md",
+  "original_manifest": {
+    "path": "docs/factory/evidence-retention-2026-10-18-intcalc.json",
+    "sha256": "a241c3f37d992a32ba6e4df7822a90a7ae67604c83c4355247d5eea3e5874eda"
+  },
+  "original_archives_verified": {
+    "count": 5,
+    "files": 17002
+  },
+  "local_deletion_authorized": false,
+  "release_authorized": false
+}

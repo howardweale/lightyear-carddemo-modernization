@@ -13,7 +13,7 @@ from unittest.mock import patch
 from tools.check_posttran_handoff import check, check_amendment, READINESS
 from tools.check_posttran_deadline import main, upsert_issue, MARKER
 from tools.posttran_phase2_authorization import verify_signed, REQUEST, PROOF, PLAN, PUBLIC_KEY
-from tests.test_phase2_authorization import Phase2SignedProofTests
+from tests import test_phase2_authorization as phase2_fixture
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -65,7 +65,7 @@ class HandoffFollowups(unittest.TestCase):
             self.assertEqual(2,verify.call_count)
             self.assertEqual(2,len(json.loads((Path(folder)/'output/summary.json').read_bytes())['failures']))
 
-class LaunchWindowTests(Phase2SignedProofTests):
+class LaunchWindowTests(phase2_fixture.Phase2SignedProofTests):
     def signed_fixture(self, executable=None):
         plan,env,_=self.fixture()
         contract=json.loads((self.root/REQUEST).read_bytes())

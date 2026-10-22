@@ -231,5 +231,30 @@ Set-Acl -LiteralPath $p -AclObject $a
             self.assertEqual(helper.main(), 1)
 
 
+class CopauAclTransportTests(unittest.TestCase):
+    def test_acl_metadata_transport_on_disposable_public_directory(self):
+        if os.name != 'nt':
+            # No skip: the portable half verifies the production error channel.
+            result = subprocess.CompletedProcess([], 1, b'')
+            with patch.dict(os.environ, {'SystemRoot': '/synthetic'}), \
+                    patch.object(helper.subprocess, 'run', return_value=result) as call:
+                with self.assertRaises(helper.Refused):
+                    helper.powershell(helper.ACL_SCRIPT, ['/synthetic'])
+                self.assertIs(call.call_args.kwargs['stderr'], subprocess.DEVNULL)
+            return
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory).resolve()
+            paths = [str(base), *(str(p) for p in base.parents)]
+            executable = Path(os.environ['SystemRoot']) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
+            # This fixture contains no keys, bundle or operator configuration.
+            # Capture only its ACL transport error; production remains redacted.
+            result = subprocess.run([str(executable), '-NoProfile', '-NonInteractive', '-Command', helper.ACL_SCRIPT],
+                input=helper.encoded(paths), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace')[-2000:])
+            data = helper.load_json(result.stdout)
+            self.assertEqual(len(data['rows']), len(paths))
+            self.assertTrue(data['sid'].startswith('S-1-'))
+
+
 if __name__ == '__main__':
     unittest.main()

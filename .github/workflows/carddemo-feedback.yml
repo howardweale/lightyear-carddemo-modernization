@@ -1,10 +1,10 @@
 name: CardDemo typed account feedback
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
 permissions:
   contents: read
 concurrency:

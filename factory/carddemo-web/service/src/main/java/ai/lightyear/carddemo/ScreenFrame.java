@@ -39,6 +39,7 @@ public final class ScreenFrame {
         for(var entry:terminal.attributes().entrySet())attributes.put(entry.getKey(),new LinkedHashMap<>(entry.getValue()));
         cursor=terminal.cursor();message=terminal.message();endpoint=terminal.endpoint();
     }
+    @CobolSource(program="COSGN00C", paragraph="POPULATE-HEADER-INFO", lines="177-208")
     private void headers(Bindings b,java.time.Clock clock){
         java.time.ZonedDateTime now=java.time.ZonedDateTime.now(clock);
         for(JsonNode h:b.program(program).path("headers")){

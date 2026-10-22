@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from datetime import datetime, timezone, timedelta
 
-from tools import carddemo_web_gaps, carddemo_status_record, appl_contract_selection, carddemo_idiomatic_status, carddemo_account_status, retained_intcalc
+from tools import carddemo_web_gaps, carddemo_status_record, appl_contract_selection, carddemo_idiomatic_status, carddemo_account_status, retained_intcalc, carddemo_account_scope
 from lightyear_control_tower.decisions import digest
 from lightyear_control_tower.factory_evidence import FactoryEvidence
 from lightyear_control_tower.factory_status import status
@@ -47,6 +47,7 @@ def inputs(root=ROOT):
     additional += [p for p in ('docs/factory/posttran-phase2-authorization-request-2026-10-16.json', 'docs/factory/posttran-phase2-plan-2026-10-16.json', 'docs/factory/posttran-phase2-artifact-metadata-2026-10-16.json', 'docs/factory/status-snapshot-clock.json') if (root/p).is_file()]
     additional += carddemo_idiomatic_status.inputs(root)
     additional += carddemo_account_status.inputs(root)
+    additional += carddemo_account_scope.inputs(root)
     carddemo_path=carddemo_status_record.latest(root)
     if carddemo_path:additional.append(carddemo_path.relative_to(root).as_posix())
     web_path=carddemo_status_record.latest(root,'carddemo-slice-receipt/1')
@@ -156,6 +157,7 @@ def load(root=ROOT):
                 carddemo_web=carddemo_status_record.load_web(root),
                 carddemo_idiomatic=carddemo_idiomatic_status.load(root),
                 carddemo_account=carddemo_account_status.load(root),
+                carddemo_account_scope=carddemo_account_scope.load(root),
                 delivery=read(DELIVERY) if (root/DELIVERY).is_file() else None,
                 b06=json.loads(b06_path.read_bytes()) if b06_path.exists() else None,
                 typed_conditions_implemented=(root/'src/lightyear_control_tower/threshold_evidence.py').is_file(),
@@ -305,6 +307,9 @@ def render(model):
     if model.get("carddemo_idiomatic"):
         current["carddemo_idiomatic"] = model["carddemo_idiomatic"]
         text += ["", "## Idiomatic Java screen groups", "", carddemo_idiomatic_status.paragraph(model["carddemo_idiomatic"])]
+    if model.get("carddemo_account_scope"):
+        current["carddemo_account_scope"] = model["carddemo_account_scope"]
+        text += ["", "## Source paragraph coverage", "", carddemo_account_scope.markdown(model["carddemo_account_scope"])]
     if model.get("carddemo_account"):
         current["carddemo_account"] = model["carddemo_account"]
         text += ["", "## Account validation groups", "", carddemo_account_status.paragraph(model["carddemo_account"])]

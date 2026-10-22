@@ -24,3 +24,9 @@ jobs:
         run: |
           python -B tools/check_f8_request.py
           python -B -m unittest test_f8_request -v
+          python -B tools/build_f8_request_draft.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: copau-f2-unsigned-drafts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: work/f8-unsigned-request/
+          if-no-files-found: error

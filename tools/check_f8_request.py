@@ -80,7 +80,7 @@ def review(request, root=ROOT, public_pem=None):
     pending = []
     keys = policy["admission"]["trusted_key_ids"]
     if not keys:
-        pending.append("Howard: existing work-order trust key IDs (distinct from Tower PEM)")
+        pending.append("Howard: provisioned work-order trust key IDs and public custody record (distinct from Tower PEM)")
         # Parser-only shape check. Never emitted, designated, signed or admitted.
         policy["admission"]["trusted_key_ids"] = ["schema-validation-only"]
     else:

@@ -1,0 +1,388 @@
+{
+  "schema": "intcalc-unsigned-review-packet/1",
+  "prepared_on": "2026-10-22",
+  "program": "INTCALC",
+  "signed": false,
+  "ready_for_signing": false,
+  "execution_authorized": false,
+  "release_authorized": false,
+  "live_overlap_status": "unknown-not-read",
+  "order": {
+    "path": "docs/factory/intcalc-signing-order-2026-10-17.json",
+    "sha256": "ef5596c1a6e5d2e9233ae1ba39c5e262828eec20ffa451f0bcd7b3d89d6adc3d"
+  },
+  "selection": {
+    "path": "docs/factory/appl-result-contract-selection-2026-10-18.json",
+    "sha256": "ebd9732196e38dba6b411c702388d030385d5f2b9aba68ccc9f17853c3232d63"
+  },
+  "requests": [
+    {
+      "order": 1,
+      "contract": {
+        "path": "docs/factory/intcalc-01-loader-domain-request-2026-10-17.json",
+        "sha256": "3c59803fa8f8150163f42237463202dcfaac4678144b2bb8fefe75425666f439"
+      },
+      "kind": "legacy-behaviour-disposition",
+      "queue_sha256": "e1a593b20137ee81d8bd71d7f962e2325046c5138eaf0faa01609e516c9a7d9c",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/intcalc-duplicate-category-proposal-2026-10-12.json",
+          "sha256": "32fea63f3240c3b8040670e5d7528daa8ebfdc032e56792093a682f67d7fc7e5"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.observed_behaviour_sha256",
+          "value": "0706ffff6b402568715f3f83174327b166791c6fee88d530016cde77c6f8d882"
+        },
+        {
+          "field": "details.source_sha256",
+          "value": "13755d905a9e5c02f52cc21f3d66e796ec18352174475f45e4595ff78fa70852"
+        }
+      ],
+      "decision_scope": "Review the exact loader-domain legacy behavior and its dependent arguments.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": false
+    },
+    {
+      "order": 2,
+      "contract": {
+        "path": "docs/factory/intcalc-02-appl-result-class-request-2026-10-17.json",
+        "sha256": "2af2840e0a0da746ef6c68223fb455c67272cc93fb182f49c097f602b779bef8"
+      },
+      "kind": "equivalence-review",
+      "queue_sha256": "550f6ed38a9e8863b959b294af3c61cc91c97f11eff17e324a3476d39bed237e",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.class_proof_sha256",
+          "value": "e054defd96b168cc73a154fec1492f96c001c91f8c277737c3db78d08ae584a8"
+        },
+        {
+          "field": "details.packet_sha256",
+          "value": "78a929440858073758589ea604699329bf906a30c5a32325e0a4f170259e02e4"
+        }
+      ],
+      "decision_scope": "Review the selected 81-member APPL-RESULT equivalence class in twin scope.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": true
+    },
+    {
+      "order": 3,
+      "contract": {
+        "path": "docs/factory/intcalc-03-individual-and-compiler-request-2026-10-17.json",
+        "sha256": "240c95584878fcb2bdb53fe5d584ee5f3d0af8264ceb79b1cb7e4376aaadd039"
+      },
+      "kind": "equivalence-review",
+      "queue_sha256": "dd7f9c21f498a92c6205bd7d36c318dae4e7921438350dde80cf74eff7ddf3f1",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.packet_sha256",
+          "value": "78a929440858073758589ea604699329bf906a30c5a32325e0a4f170259e02e4"
+        }
+      ],
+      "decision_scope": "Review the named individual equivalence arguments and compiler-refusal exclusions.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": true
+    },
+    {
+      "order": 4,
+      "contract": {
+        "path": "docs/factory/intcalc-04-threshold3-policy-request-2026-10-17.json",
+        "sha256": "6ac9a909a1614c6e1c6228526692411ed765fe81767ec60c8cc9f5a952657468"
+      },
+      "kind": "scenario-threshold-approval",
+      "queue_sha256": "7a76cedf177560d3e50c65ac7e0b0e1310aefbdd06c201637ef31e65c1c9d8c9",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.conditions.0.condition_sha256",
+          "value": "3871cc1bd3eed1819181fcd0032303630e540f705dd93fe4783de86f2bdc01de"
+        },
+        {
+          "field": "details.conditions.1.condition_sha256",
+          "value": "545be2ad28a50b6ab9a45d4e989842ea81b537492fa2e6f2725a5b7f0ee8a887"
+        },
+        {
+          "field": "details.conditions.2.condition_sha256",
+          "value": "441763ef18f4593d4cc5bd534b37f23a9ca549d3cf9d9993e027db2c54621535"
+        },
+        {
+          "field": "details.conditions.3.condition_sha256",
+          "value": "45d2de740aab2effb4ab59888ee307697faeab4f9f98a325772ee5bbfae443f8"
+        },
+        {
+          "field": "details.evidence_head",
+          "value": "f343925026bee705ed3c16a734dc5bae4b24c588"
+        },
+        {
+          "field": "details.policy_sha256",
+          "value": "5f10ac8a1e4c926af8daa8bc4734cc700d85d42fb7f80b56c65cae56d0b72bf1"
+        }
+      ],
+      "decision_scope": "Review the conditional scenario-threshold/3 policy; no effective approval.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": true
+    },
+    {
+      "order": 5,
+      "contract": {
+        "path": "docs/factory/intcalc-05-line189-io-request-2026-10-17.json",
+        "sha256": "b0aaacf819c83cf4f1277d08c39d088ee6685d6013bb16c2384292ce7d9fffee"
+      },
+      "kind": "io-exception-acceptance",
+      "queue_sha256": "aa7efcda0bb215728cc084ac11670bd3ca5ac7a4a0b8de47f40ab88c50a09950",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/io-gap-arguments.json",
+          "sha256": "5b1ce7f41134dca50eedb852cdab627cfc3d0571899c644296914054f056ce90"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.argument_sha256",
+          "value": "5905fe8a67f25d49fd250b60c1f8ffe5f0e95ed3537a52fabd3032b1fd3544f2"
+        },
+        {
+          "field": "details.source_sha256",
+          "value": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        }
+      ],
+      "decision_scope": "Review the exact line-189 I/O exception argument only.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": true
+    },
+    {
+      "order": 6,
+      "contract": {
+        "path": "docs/factory/intcalc-06-effective-threshold-last-request-2026-10-17.json",
+        "sha256": "860e5c5ba5d3d4667f320ce7d862346f82e8b3ed2a0baaf30a1ad97b44a07645"
+      },
+      "kind": "scenario-threshold-approval",
+      "queue_sha256": "2548b729a3c1761a7f480f309da138d982aa8f43f8b948cce313f36bc8ff4b10",
+      "sources": [
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/results.json",
+          "sha256": "96603aba024b766b0aa5e4c3da5577a4c97b3149d60b7044418887c1d3ac7683"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/aggregate/INTCALC/summary.json",
+          "sha256": "630215c989d8c6bc38d15ebac189e0c1951b618df9ed77c3aa35377b9756668f"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/keep-or-fix-register.json",
+          "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/scenario-threshold-3-proposal-2026-10-15.json",
+          "sha256": "47551b4612fd1c3dcbbe112cf86fbd09f293e06f26a92ea118bd9c3d72321e47"
+        },
+        {
+          "commit": "bbec70cf3cb5115faf5059d3eb6b1d326f7a6c11",
+          "path": "docs/factory/release-evidence-2026-10-15/index.json",
+          "sha256": "7554dec62d9face90471bc61a69837fd11f2bfb6a524e37b394dc49fd910a452"
+        }
+      ],
+      "detail_hashes": [
+        {
+          "field": "details.conditions.0.condition_sha256",
+          "value": "3871cc1bd3eed1819181fcd0032303630e540f705dd93fe4783de86f2bdc01de"
+        },
+        {
+          "field": "details.conditions.1.condition_sha256",
+          "value": "545be2ad28a50b6ab9a45d4e989842ea81b537492fa2e6f2725a5b7f0ee8a887"
+        },
+        {
+          "field": "details.conditions.2.condition_sha256",
+          "value": "441763ef18f4593d4cc5bd534b37f23a9ca549d3cf9d9993e027db2c54621535"
+        },
+        {
+          "field": "details.conditions.3.condition_sha256",
+          "value": "45d2de740aab2effb4ab59888ee307697faeab4f9f98a325772ee5bbfae443f8"
+        },
+        {
+          "field": "details.evidence_head",
+          "value": "f343925026bee705ed3c16a734dc5bae4b24c588"
+        },
+        {
+          "field": "details.policy_sha256",
+          "value": "5f10ac8a1e4c926af8daa8bc4734cc700d85d42fb7f80b56c65cae56d0b72bf1"
+        }
+      ],
+      "decision_scope": "Review the proposed effective threshold last; four real typed conditions remain unmet.",
+      "authorization": "none-unsigned-review-only",
+      "does_not_authorize": [
+        "execution",
+        "model-spend",
+        "native-claim",
+        "release"
+      ],
+      "predecessor_binding_required": true
+    }
+  ]
+}

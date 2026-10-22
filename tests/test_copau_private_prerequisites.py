@@ -154,11 +154,11 @@ class CopauPrerequisiteTests(unittest.TestCase):
             script = r'''
 $ErrorActionPreference='Stop'
 $p=[Console]::In.ReadToEnd() | ConvertFrom-Json
-$a=Get-Acl -LiteralPath $p
+$a=[IO.Directory]::GetAccessControl($p)
 $a.AddAccessRule([Security.AccessControl.FileSystemAccessRule]::new(
   [Security.Principal.SecurityIdentifier]::new('S-1-1-0'),'ReadAndExecute',
   'ContainerInherit,ObjectInherit','None','Allow'))
-Set-Acl -LiteralPath $p -AclObject $a
+[IO.Directory]::SetAccessControl($p,$a)
 '''
             helper.powershell(script, str(self.store.root))
         else:

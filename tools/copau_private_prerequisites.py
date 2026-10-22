@@ -89,7 +89,11 @@ $ErrorActionPreference='Stop'
 $p=[Console]::In.ReadToEnd() | ConvertFrom-Json
 $sid=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 $rows=@(foreach($path in $p) {
-  $a=Get-Acl -LiteralPath $path
+  $a=if ([IO.Directory]::Exists($path)) {
+    [IO.Directory]::GetAccessControl($path)
+  } else {
+    [IO.File]::GetAccessControl($path)
+  }
   $rules=@($a.GetAccessRules($true,$true,[Security.Principal.SecurityIdentifier]) | ForEach-Object {
     @{sid=$_.IdentityReference.Value;rights=[long]$_.FileSystemRights;
       allow=($_.AccessControlType -eq 'Allow');inheritOnly=([int]$_.PropagationFlags -band 2) -ne 0}

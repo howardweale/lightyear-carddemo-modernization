@@ -7,14 +7,14 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-from tests.test_phase2_authorization import Phase2SignedProofTests
+from tests import test_phase2_authorization as phase2_fixture
 from tools.posttran_phase2_authorization import REQUEST, PROOF, verify_signed
 from tools.prepare_posttran_phase2 import digest
 from tools.run_posttran_phase2 import authorize, reserve
 from tools.finalize_posttran_phase2 import expiry_status
 
 
-class RehearsalTests(Phase2SignedProofTests):
+class RehearsalTests(phase2_fixture.Phase2SignedProofTests):
     def exercise(self, fault=None):
         plan, env, at = self.fixture()
         plan.update(generation_attempt=1, model_calls=0, preparation_run=122)

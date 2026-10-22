@@ -1,0 +1,423 @@
+{
+  "content_sha256": "47eb5a240d22bd63962f149b78e904d345acdd58ee2d3df88aa38ebb1bc1a616",
+  "evidence_commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+  "held_out": {
+    "CBSTM03A": "not measured",
+    "CBSTM03B": "not measured",
+    "class_matches": 0,
+    "compiler_identities": 2,
+    "conclusion": "no evidence of generality",
+    "program": "TRANREPT/CBTRN03C",
+    "sites": 413
+  },
+  "measurements": {
+    "fresh_E1": {
+      "denominator": 227,
+      "head": "9a4ecbdf924b7e238b19d4c6880f59ef91a94dac",
+      "programs": [
+        {
+          "argued_resolved": 4,
+          "argued_total": 113,
+          "generated_cases": 1000,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 113,
+          "program": "INTCALC",
+          "repeat_sha256": "a48b2fe34a9a2a86558234ce16fc29ea7f23986435310bb99225b8551552eb76",
+          "routes": {
+            "S1": {
+              "individual_resolved": 2,
+              "kills": 0,
+              "resolved": 4,
+              "survivors_resolved": 0
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "7dbb7d5165e171a64e2f324857d07e91a4b2c532ac4e82e3596b95ae69c31793"
+        },
+        {
+          "argued_resolved": 4,
+          "argued_total": 114,
+          "generated_cases": 1000,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 123,
+          "program": "POSTTRAN",
+          "repeat_sha256": "f4c060a6509a00d11f3a6536aa3e5ac5a2ac359867367aa35819a9b84a2bfed0",
+          "routes": {
+            "S1": {
+              "individual_resolved": 2,
+              "kills": 0,
+              "resolved": 3,
+              "survivors_resolved": 0
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 1,
+              "kills": 0,
+              "resolved": 1,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "ac257f3518e4cf4bdc1d63c9a4b9228f51b18c3fcc085e93ea99b8ddc3d7c60e"
+        },
+        {
+          "argued_resolved": 0,
+          "argued_total": 0,
+          "generated_cases": 0,
+          "identical_resolutions": true,
+          "mutants_compared_twice": 413,
+          "program": "TRANREPT",
+          "repeat_sha256": "0f18267fb5be502197b49b54baa5099f37e6b1339b2ad2feaf73cb39e33757d1",
+          "routes": {
+            "S1": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 2,
+              "survivors_resolved": 0
+            },
+            "S2": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S3": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            },
+            "S4": {
+              "individual_resolved": 0,
+              "kills": 0,
+              "resolved": 0,
+              "survivors_resolved": 0
+            }
+          },
+          "summary_sha256": "c6ca0ccccf29d3049c6f3f11b099b7cd1e4c14df340e1e1fc2e660ef724b4c78"
+        }
+      ],
+      "resolved_after_pending_signatures": 185,
+      "resolved_now": 8,
+      "run_id": 38930496735
+    },
+    "person_minutes_per_1000_sites": {
+      "method": "Prospective active-review intervals times reviewer count, excluding CI wait; sum person-minutes / distinct reviewed sites * 1000.",
+      "status": "not measured",
+      "value": null
+    },
+    "preserved_341": {
+      "denominator": 227,
+      "evidence_commit": "78be9cafb322b6a9dacaa94fd6027df2aeb605e5",
+      "resolved_after_pending_signatures": 185,
+      "resolved_now": 8
+    }
+  },
+  "model_calls": 0,
+  "operator_observation": {
+    "as_of": "2026-10-22",
+    "nonempty_zos_tranrept_observed": false,
+    "source": "Howard closeout instructions, 22 October 2026",
+    "statement": "Howard reports that the 21 October Maintec TRANREPT run filtered out all records by its date window. Delivery contents were not accessed; this is operator-reported context, not record-level evidence."
+  },
+  "prepared_on": "2026-10-22",
+  "programs": [
+    {
+      "claim_scope": "twin",
+      "content_sha256": "265244dd7a90bc0de0c580f8203bac6199a774a2ff1833f0b75fe477fde99e2e",
+      "denominator": 113,
+      "historical_denominators_changed": false,
+      "ledger_sha256": "566e886fb6347cd1afa08aae6f1bd0c3f3f635e4ae9dd8c83b0ad5284bc1c660",
+      "measurement_head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "new_kills": 0,
+      "pending_contracts": [
+        "856e8efc25a005c8ba7bbafe9493fde6f7fea0e74915e900632c724cca483c10"
+      ],
+      "pending_unique_members": [
+        "CBACT04C-constant-235-81",
+        "CBACT04C-constant-235-82",
+        "CBACT04C-constant-240-89",
+        "CBACT04C-constant-240-90",
+        "CBACT04C-constant-253-96",
+        "CBACT04C-constant-253-97",
+        "CBACT04C-constant-258-104",
+        "CBACT04C-constant-258-105",
+        "CBACT04C-constant-271-111",
+        "CBACT04C-constant-271-112",
+        "CBACT04C-constant-276-119",
+        "CBACT04C-constant-276-120",
+        "CBACT04C-constant-290-126",
+        "CBACT04C-constant-290-127",
+        "CBACT04C-constant-295-134",
+        "CBACT04C-constant-295-135",
+        "CBACT04C-constant-308-141",
+        "CBACT04C-constant-308-142",
+        "CBACT04C-constant-313-149",
+        "CBACT04C-constant-313-150",
+        "CBACT04C-constant-333-166",
+        "CBACT04C-constant-333-167",
+        "CBACT04C-constant-360-188",
+        "CBACT04C-constant-360-189",
+        "CBACT04C-constant-381-200",
+        "CBACT04C-constant-381-201",
+        "CBACT04C-constant-403-212",
+        "CBACT04C-constant-403-213",
+        "CBACT04C-constant-425-224",
+        "CBACT04C-constant-425-225",
+        "CBACT04C-constant-449-240",
+        "CBACT04C-constant-449-241",
+        "CBACT04C-constant-504-278",
+        "CBACT04C-constant-504-279",
+        "CBACT04C-constant-523-285",
+        "CBACT04C-constant-523-286",
+        "CBACT04C-constant-528-293",
+        "CBACT04C-constant-528-294",
+        "CBACT04C-constant-542-300",
+        "CBACT04C-constant-542-301",
+        "CBACT04C-constant-547-308",
+        "CBACT04C-constant-547-309",
+        "CBACT04C-constant-560-315",
+        "CBACT04C-constant-560-316",
+        "CBACT04C-constant-565-323",
+        "CBACT04C-constant-565-324",
+        "CBACT04C-constant-578-330",
+        "CBACT04C-constant-578-331",
+        "CBACT04C-constant-583-338",
+        "CBACT04C-constant-583-339",
+        "CBACT04C-constant-596-345",
+        "CBACT04C-constant-596-346",
+        "CBACT04C-constant-601-353",
+        "CBACT04C-constant-601-354",
+        "CBACT04C-delete-MOVE-235-83",
+        "CBACT04C-delete-MOVE-240-91",
+        "CBACT04C-delete-MOVE-253-98",
+        "CBACT04C-delete-MOVE-258-106",
+        "CBACT04C-delete-MOVE-271-113",
+        "CBACT04C-delete-MOVE-276-121",
+        "CBACT04C-delete-MOVE-290-128",
+        "CBACT04C-delete-MOVE-295-136",
+        "CBACT04C-delete-MOVE-308-143",
+        "CBACT04C-delete-MOVE-313-151",
+        "CBACT04C-delete-MOVE-328-160",
+        "CBACT04C-delete-MOVE-358-187",
+        "CBACT04C-delete-MOVE-379-199",
+        "CBACT04C-delete-MOVE-401-211",
+        "CBACT04C-delete-MOVE-423-223",
+        "CBACT04C-delete-MOVE-447-239",
+        "CBACT04C-delete-MOVE-502-277",
+        "CBACT04C-delete-MOVE-523-287",
+        "CBACT04C-delete-MOVE-528-295",
+        "CBACT04C-delete-MOVE-542-302",
+        "CBACT04C-delete-MOVE-547-310",
+        "CBACT04C-delete-MOVE-560-317",
+        "CBACT04C-delete-MOVE-565-325",
+        "CBACT04C-delete-MOVE-578-332",
+        "CBACT04C-delete-MOVE-583-340",
+        "CBACT04C-delete-MOVE-596-347",
+        "CBACT04C-delete-MOVE-601-355"
+      ],
+      "program": "INTCALC",
+      "release_authorized": false,
+      "resolved_after_pending_signatures": 85,
+      "resolved_now": 4,
+      "reviewer_effort_status": "not-measured",
+      "reviewer_person_minutes_per_1000_sites": null,
+      "routes": {
+        "S1": {
+          "resolved_after_pending_signatures": 4,
+          "resolved_now": 4
+        },
+        "S2": {
+          "resolved_after_pending_signatures": 81,
+          "resolved_now": 0
+        },
+        "S3": {
+          "resolved_after_pending_signatures": 0,
+          "resolved_now": 0
+        },
+        "S4": {
+          "resolved_after_pending_signatures": 0,
+          "resolved_now": 0
+        }
+      },
+      "schema": "equivalence-signature-projection/1",
+      "signatures_verified": false,
+      "unobservable": 3
+    },
+    {
+      "claim_scope": "twin",
+      "content_sha256": "be2e0ec601526aa89644d7154f5a0661524b06ebf8285ccdfe49112454411db4",
+      "denominator": 114,
+      "historical_denominators_changed": false,
+      "ledger_sha256": "e07aceacbb02462a7cebfe6c362ddae808667227a2023dcf46b3aec3086b9ae8",
+      "measurement_head": "7d95d7da8fbfd7ad8d4c30979821bf18b75cae54",
+      "new_kills": 0,
+      "pending_contracts": [
+        "35ce5a3f754e5b98460544321aaab9919ee70d29b4a81963ee78b997254f492f"
+      ],
+      "pending_unique_members": [
+        "CBTRN02C-constant-237-71",
+        "CBTRN02C-constant-237-72",
+        "CBTRN02C-constant-242-79",
+        "CBTRN02C-constant-242-80",
+        "CBTRN02C-constant-255-86",
+        "CBTRN02C-constant-255-87",
+        "CBTRN02C-constant-260-94",
+        "CBTRN02C-constant-260-95",
+        "CBTRN02C-constant-274-101",
+        "CBTRN02C-constant-274-102",
+        "CBTRN02C-constant-279-109",
+        "CBTRN02C-constant-279-110",
+        "CBTRN02C-constant-292-116",
+        "CBTRN02C-constant-292-117",
+        "CBTRN02C-constant-297-124",
+        "CBTRN02C-constant-297-125",
+        "CBTRN02C-constant-310-131",
+        "CBTRN02C-constant-310-132",
+        "CBTRN02C-constant-315-139",
+        "CBTRN02C-constant-315-140",
+        "CBTRN02C-constant-328-146",
+        "CBTRN02C-constant-328-147",
+        "CBTRN02C-constant-333-154",
+        "CBTRN02C-constant-333-155",
+        "CBTRN02C-constant-354-171",
+        "CBTRN02C-constant-354-172",
+        "CBTRN02C-constant-450-235",
+        "CBTRN02C-constant-450-236",
+        "CBTRN02C-constant-455-244",
+        "CBTRN02C-constant-455-245",
+        "CBTRN02C-constant-484-261",
+        "CBTRN02C-constant-484-262",
+        "CBTRN02C-constant-515-282",
+        "CBTRN02C-constant-515-283",
+        "CBTRN02C-constant-533-296",
+        "CBTRN02C-constant-533-297",
+        "CBTRN02C-constant-563-315",
+        "CBTRN02C-constant-563-316",
+        "CBTRN02C-constant-569-324",
+        "CBTRN02C-constant-569-325",
+        "CBTRN02C-constant-583-331",
+        "CBTRN02C-constant-583-332",
+        "CBTRN02C-constant-588-339",
+        "CBTRN02C-constant-588-340",
+        "CBTRN02C-constant-601-346",
+        "CBTRN02C-constant-601-347",
+        "CBTRN02C-constant-606-354",
+        "CBTRN02C-constant-606-355",
+        "CBTRN02C-constant-620-361",
+        "CBTRN02C-constant-620-362",
+        "CBTRN02C-constant-625-369",
+        "CBTRN02C-constant-625-370",
+        "CBTRN02C-constant-638-376",
+        "CBTRN02C-constant-638-377",
+        "CBTRN02C-constant-643-384",
+        "CBTRN02C-constant-643-385",
+        "CBTRN02C-constant-656-391",
+        "CBTRN02C-constant-656-392",
+        "CBTRN02C-constant-661-399",
+        "CBTRN02C-constant-661-400",
+        "CBTRN02C-constant-675-406",
+        "CBTRN02C-constant-675-407",
+        "CBTRN02C-constant-680-414",
+        "CBTRN02C-constant-680-415",
+        "CBTRN02C-delete-MOVE-237-73",
+        "CBTRN02C-delete-MOVE-242-81",
+        "CBTRN02C-delete-MOVE-255-88",
+        "CBTRN02C-delete-MOVE-260-96",
+        "CBTRN02C-delete-MOVE-274-103",
+        "CBTRN02C-delete-MOVE-279-111",
+        "CBTRN02C-delete-MOVE-292-118",
+        "CBTRN02C-delete-MOVE-297-126",
+        "CBTRN02C-delete-MOVE-310-133",
+        "CBTRN02C-delete-MOVE-315-141",
+        "CBTRN02C-delete-MOVE-328-148",
+        "CBTRN02C-delete-MOVE-333-156",
+        "CBTRN02C-delete-MOVE-348-165",
+        "CBTRN02C-delete-MOVE-450-237",
+        "CBTRN02C-delete-MOVE-455-246",
+        "CBTRN02C-delete-MOVE-482-260",
+        "CBTRN02C-delete-MOVE-513-281",
+        "CBTRN02C-delete-MOVE-531-295",
+        "CBTRN02C-delete-MOVE-563-317",
+        "CBTRN02C-delete-MOVE-569-326",
+        "CBTRN02C-delete-MOVE-583-333",
+        "CBTRN02C-delete-MOVE-588-341",
+        "CBTRN02C-delete-MOVE-601-348",
+        "CBTRN02C-delete-MOVE-606-356",
+        "CBTRN02C-delete-MOVE-620-363",
+        "CBTRN02C-delete-MOVE-625-371",
+        "CBTRN02C-delete-MOVE-638-378",
+        "CBTRN02C-delete-MOVE-643-386",
+        "CBTRN02C-delete-MOVE-656-393",
+        "CBTRN02C-delete-MOVE-661-401",
+        "CBTRN02C-delete-MOVE-675-408",
+        "CBTRN02C-delete-MOVE-680-416"
+      ],
+      "program": "POSTTRAN",
+      "release_authorized": false,
+      "resolved_after_pending_signatures": 100,
+      "resolved_now": 4,
+      "reviewer_effort_status": "not-measured",
+      "reviewer_person_minutes_per_1000_sites": null,
+      "routes": {
+        "S1": {
+          "resolved_after_pending_signatures": 3,
+          "resolved_now": 3
+        },
+        "S2": {
+          "resolved_after_pending_signatures": 96,
+          "resolved_now": 0
+        },
+        "S3": {
+          "resolved_after_pending_signatures": 1,
+          "resolved_now": 1
+        },
+        "S4": {
+          "resolved_after_pending_signatures": 0,
+          "resolved_now": 0
+        }
+      },
+      "schema": "equivalence-signature-projection/1",
+      "signatures_verified": false,
+      "unobservable": 0
+    }
+  ],
+  "release_authorized": false,
+  "stage": "E1",
+  "supersedes": {
+    "path": "docs/factory/equivalence-scale-2026-10-16/scorecard.json",
+    "sha256": "6853a9fbeaaf68525a979e6415ca64b8c3804aefa88d6362cd8de2506a825692"
+  },
+  "total": {
+    "denominator": 227,
+    "resolved_after_pending_signatures": 185,
+    "resolved_now": 8
+  }
+}

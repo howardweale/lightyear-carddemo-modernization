@@ -1,0 +1,107 @@
+{
+  "schema": "f8-support-source-bindings/1",
+  "prepared_on": "2026-10-22",
+  "source_commit": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+  "scope": "Static support inventory for J2 source annotations; not capsule conformance, a release receipt, signing or execution approval.",
+  "supersedes": {
+    "path": "docs/factory/copau-f8-worker-packaging-r2-2026-10-20.json",
+    "sha256": "7003b354709adf6dd5fd154e7fda740beb3a58e3ab9d67762bcd3cdc2e1c9cda",
+    "section": "selection only; the original dated proposal remains immutable"
+  },
+  "selection": {
+    "worker_support": "Exactly ten bound shared support sources and their declared nested records; 14 class entries. Adds only the repeatable source-annotation container to the original inventory.",
+    "source_bindings": [
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8",
+        "size_bytes": 543
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "ef194ef18188a1b993195f3a722117e432832dcebcf0880637bd606fff640034",
+        "size_bytes": 10440
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "b363369b4d807d1494dc2080d27d70af249a6ff60ecc05ffd942671c021baac0",
+        "size_bytes": 6258
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "659e5782e428abde119c857d1ac27c4fb19b63b7425b17def1e65875fbf2ffca",
+        "size_bytes": 7393
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "89753f7eb40857c6a137f9c6f14e2010e468a3dd80ef75a6002b159fe3debdc2",
+        "size_bytes": 3711
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "699c3962704338afca7da062b45e00d46229b24782ce5aceb1f39493213eaaa4",
+        "size_bytes": 3808
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+        "commit": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+        "sha256": "54da29d93c7ddb9dda3164a7de04cf9d3f6daeb47a53680884add269892afcbd",
+        "size_bytes": 5003
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+        "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+        "sha256": "21076bced2b3fe1bf82bab3388a9e8d1816d580fac338d394da2dcb4264eb5c6",
+        "size_bytes": 2741
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java",
+        "commit": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+        "sha256": "3ebf674735b9e52534c8dfdd879c4d7ef4ad946fe054b2c48e77791347e523b6",
+        "size_bytes": 477
+      },
+      {
+        "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSources.java",
+        "commit": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+        "sha256": "204123fc7aeb29ae9f20d7c705d91666c9aa32f4cf19ab9f09f26ee8f8c43953",
+        "size_bytes": 400
+      }
+    ],
+    "allowed_jar_class_entries": [
+      "ai/lightyear/carddemo/TransactionService.class",
+      "ai/lightyear/carddemo/TransactionService$Result.class",
+      "ai/lightyear/carddemo/Commarea.class",
+      "ai/lightyear/carddemo/TypedRecords.class",
+      "ai/lightyear/carddemo/TypedRecordImage.class",
+      "ai/lightyear/carddemo/TypedRecordImage$Image.class",
+      "ai/lightyear/carddemo/AuthorizationRecords.class",
+      "ai/lightyear/carddemo/SessionToken.class",
+      "ai/lightyear/carddemo/SessionToken$Terminal.class",
+      "ai/lightyear/carddemo/SessionToken$State.class",
+      "ai/lightyear/carddemo/ScreenFrame.class",
+      "ai/lightyear/carddemo/Bindings.class",
+      "ai/lightyear/carddemo/CobolSource.class",
+      "ai/lightyear/carddemo/CobolSources.class"
+    ],
+    "candidate_classes_in_capsule": false,
+    "service_or_boot_jar_copied": false,
+    "raw_shared_java_sources_in_worker": false
+  },
+  "preserved": [
+    "Original image pin, Maven POM/settings, projection rules and offline isolation requirements.",
+    "Hash equality for every source and exact compiled class closure; no SourceEdits references, candidate classes, service jars or raw shared Java in the worker.",
+    "CI must assemble and validate fresh bytes; prior capsule conformance does not transfer."
+  ],
+  "authority": {
+    "packaging_approved": false,
+    "request_ready": false,
+    "candidate_java_authored": false,
+    "local_execution": false,
+    "signing": false
+  }
+}

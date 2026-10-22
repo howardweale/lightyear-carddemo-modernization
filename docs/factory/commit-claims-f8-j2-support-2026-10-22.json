@@ -1,0 +1,23 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Source bindings only; no build, conformance or acceptance claim.",
+  "claims": [
+    {
+      "record": "docs/factory/copau-f8-support-bindings-j2-2026-10-22.json",
+      "reference": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+      "commit": "92d4b9d58a649e0aa88e573dd874d087d214a57b",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSources.java",
+      "source_sha256": "204123fc7aeb29ae9f20d7c705d91666c9aa32f4cf19ab9f09f26ee8f8c43953"
+    },
+    {
+      "record": "docs/factory/copau-f8-support-bindings-j2-2026-10-22.json",
+      "reference": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "commit": "6116b3fb0f5d3d757bc1b07aa8dc132d59740b0c",
+      "role": "source",
+      "source_path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "source_sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8"
+    }
+  ]
+}

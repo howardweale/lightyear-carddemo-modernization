@@ -17,7 +17,9 @@ from lightyear_factory.orchestrator import FactoryOrchestrator
 from lightyear_factory.plain_search import FactoryPlainSession, plain_context
 from lightyear_factory.providers import ScriptedModelProvider
 
-CANARIES = {"session-answer": "plain-fixture-secret-" + "x" * 64}
+CANARIES = {"session-answer": "plain-fixture-secret-" + "x" * 64,
+            "expected-state": "plain-fixture-expected-state-" + "x" * 64,
+            "reference-output": "plain-fixture-reference-output-" + "x" * 64}
 
 
 def request(tool, **arguments):

@@ -1,0 +1,72 @@
+{
+  "measurement": {
+    "artifacts": [
+      {
+        "artifact_id": 12391388280,
+        "artifact_name": "r3-pglast-7.20-windows-2025-8e2b9369f5152b56657086dae70cba15047fc1cf",
+        "artifact_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39696016782/artifacts/12391388280",
+        "generated_at": "2026-10-22T00:04:49.901432+00:00",
+        "note_sha256": "3f4febb339e83beaeea6d695689ee317532437589ee23788c8ffcdb1e6943bcd",
+        "os": "Windows",
+        "report_bytes": 255698,
+        "report_sha256": "8a0b985def6e5b106948d39ff456b8f8a186c1ffbfa9e27e474cade842b92fa5",
+        "source_inputs_verified": 625,
+        "tests_passed": 128,
+        "zip_bytes": 32914,
+        "zip_sha256": "4f25bf66eb94c108c4508a377f57f905f8208659889500277f0b339f39ec59e5"
+      },
+      {
+        "artifact_id": 12390751540,
+        "artifact_name": "r3-pglast-7.20-ubuntu-24.04-8e2b9369f5152b56657086dae70cba15047fc1cf",
+        "artifact_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39696016782/artifacts/12390751540",
+        "generated_at": "2026-10-21T23:55:33.233003+00:00",
+        "note_sha256": "41b35de7d786bb30dc081de3c4424d157c01826993ec9aa2120bfdfb6e5185f6",
+        "os": "Linux",
+        "report_bytes": 255696,
+        "report_sha256": "4c622d5dc51fce8b8b90d9fe32e2a766f69f83cc2b968f9d80bf35c62994873e",
+        "source_inputs_verified": 625,
+        "tests_passed": 128,
+        "zip_bytes": 32910,
+        "zip_sha256": "6a1479236538e90152847ab2a9d4abd209d46f45afef3137ffb9ac7ad4e0fd42"
+      }
+    ],
+    "attempt": 1,
+    "checkout": "8e2b9369f5152b56657086dae70cba15047fc1cf",
+    "checkout_parents": [
+      "9dfffd96fd846ab8a5eb3957ab8469aaf6f26487",
+      "b465240bcedcac9d59d16b6ca3929652d7d03b68"
+    ],
+    "contracts_per_os": 172,
+    "cross_os_contracts_identical": true,
+    "head": "b465240bcedcac9d59d16b6ca3929652d7d03b68",
+    "local_tests": false,
+    "native_pairs_reverified": 0,
+    "pr": 423,
+    "public_procedures": 43,
+    "run_id": 39696016782,
+    "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39696016782",
+    "source_inputs_verified": 625,
+    "stage_b_complete": false,
+    "target_variants": 86,
+    "tests_per_os": 128,
+    "verified_at": "2026-10-22T00:37:01.304617+00:00"
+  },
+  "pglast": "7.20",
+  "published_result_date_utc": "2026-10-22",
+  "schema": "r3-stage-a-public-result/1",
+  "scope": "Public corpus and comparator regression only; historical native replay is Stage B.",
+  "stage_b": {
+    "historical_result_reissued": false,
+    "native_pairs_reverified": 0,
+    "prior_result": "86/86 expected outcomes over 108 native pairs (55 matches, 53 divergences), measured with the earlier parser; not 108 equivalence certificates.",
+    "status": "pending-human-export"
+  },
+  "verdict": "PASS",
+  "verification": {
+    "archives": "Both CI ZIP sizes and GitHub SHA-256 digests verified; exact two-file inventory; no extraction or execution.",
+    "contracts": "All 43 procedures, 86 correct/wrong variants and both parser modules yield 172 contracts per OS. Source hashes and coverage verified; complete contracts identical across OS.",
+    "limits": "Parser contracts and public regression success do not prove native equivalence. Historical receipts and expected outcomes are unchanged.",
+    "sources": "All 625 report inputs match the exact CI checkout and PR head. CI merge parents and tree independently verified.",
+    "tests": "All 128 statically enumerated test methods appear exactly once as passing on each OS; no failures, errors, skips or expected failures."
+  }
+}

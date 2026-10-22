@@ -1,0 +1,45 @@
+{
+  "schema": "intcalc-release-planning-inputs/1",
+  "prepared_on": "2026-10-22",
+  "source": {
+    "description": "Howard's explicitly adopted closeout instructions, 22 October 2026",
+    "document": "codex-remaining-closeout-2026-10-22.md",
+    "sha256": "47f3df50d0cd6a7768b840a5b6a6dbadcccadbc2e60ac4fc859bc1660c55a232"
+  },
+  "decided": {
+    "minimum_killed_percent": 90,
+    "denominator": "all injected faults",
+    "conditional_projections_count_as_kills": false,
+    "record_level_zos_before_after_match_required": true,
+    "oracle": "pinned GnuCOBOL twin and Python reference, confirmed record by record against z/OS",
+    "fixtures": "source behavior and cited COBOL lines; never tuned to reach a threshold"
+  },
+  "operator_reported_delivery": {
+    "date": "2026-10-21",
+    "provider": "Maintec",
+    "description": "job logs only",
+    "independently_inspected_by_Codex": false,
+    "record_level_gate_met": false
+  },
+  "proposed_estimate": {
+    "status": "planning allowance, not measured or approved",
+    "model_usd": 0,
+    "ci_runner_hours": 4,
+    "assumption": "up to two clean campaigns at two runner-hours each; summed concurrent job hours",
+    "howard_review_hours": [
+      2,
+      3
+    ],
+    "excludes": [
+      "engineering work to close the actual kill gap",
+      "external native delivery wait"
+    ],
+    "ci_dollar_cost": "unpriced pending runner type and account billing",
+    "second_campaign": "requires usage review and authorization; no automatic retry"
+  },
+  "source_snapshot_is_release_campaign": false,
+  "run_authorized": false,
+  "spend_authorized": false,
+  "signing_authorized": false,
+  "release_authorized": false
+}

@@ -1,0 +1,294 @@
+{
+  "schema": "carddemo-j3-retention-manifest/1",
+  "prepared_on": "2026-10-22",
+  "status": "retained-and-independently-verified",
+  "release": {
+    "id": 420416645,
+    "tag": "carddemo-j3-phone-date-feedback-2026-10-22",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/carddemo-j3-phone-date-feedback-2026-10-22",
+    "target_commit": "77d14ae016e654fed9d026d2847b35c64b75c3d6",
+    "published_at": "2026-10-22T07:25:35Z",
+    "target_is_measured_checkout": false
+  },
+  "inventory": {
+    "id": 665038375,
+    "name": "proof-inventory.json",
+    "size": 269409,
+    "sha256": "3306a49d144b1e59b64394589dc965a78135a222cd140f98f9e4195467da892b",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/proof-inventory.json"
+  },
+  "lanes": [
+    {
+      "name": "phone-date",
+      "pr": 419,
+      "source_head": "1fd463ed1c358020a4abc0877c5879edd08bf31f",
+      "tested_commit": "e88904bfe59832edab3cb4208e7407cab276cf5b",
+      "tested_tree": "57597ab96b236331f4a402e8c526d20ed9a47299",
+      "tested_parents": [
+        "9dfffd96fd846ab8a5eb3957ab8469aaf6f26487",
+        "1fd463ed1c358020a4abc0877c5879edd08bf31f"
+      ],
+      "supplemental_run": 39699145688,
+      "supplemental_job": 119563819325,
+      "full_slice_run": 39699145679,
+      "run_attempt": 1,
+      "checkout_log_sha256": "c1ab95fb778cbd1deb9d023099546abba7dcbabb8e8e25b03d41f198286f3bb3",
+      "checkout_observation": [
+        "2026-10-22T00:35:17.1300302Z [command]/usr/bin/git log -1 --format=%H",
+        "2026-10-22T00:35:17.1331930Z e88904bfe59832edab3cb4208e7407cab276cf5b"
+      ],
+      "supplemental_test_methods": 10,
+      "supplemental_per_class_mutation": {
+        "AccountPhoneRules": {
+          "total": 36,
+          "killed": 34,
+          "status_counts": {
+            "KILLED": 34,
+            "SURVIVED": 2
+          }
+        },
+        "AccountDateRules": {
+          "total": 71,
+          "killed": 65,
+          "status_counts": {
+            "KILLED": 65,
+            "SURVIVED": 6
+          }
+        },
+        "AccountEditState": {
+          "total": 8,
+          "killed": 8,
+          "status_counts": {
+            "KILLED": 8
+          }
+        },
+        "AccountPhoneDateModel": {
+          "total": 4,
+          "killed": 4,
+          "status_counts": {
+            "KILLED": 4
+          }
+        }
+      },
+      "full_slice_cases_per_reference_mode": 120,
+      "full_slice_interactions_per_reference_mode": 678,
+      "full_slice_browser_interactions": 678,
+      "full_slice_mutation": {
+        "killed": 887,
+        "total": 958,
+        "status_counts": {
+          "KILLED": 887,
+          "NO_COVERAGE": 17,
+          "SURVIVED": 53,
+          "TIMED_OUT": 1
+        }
+      },
+      "source_hash_bindings": 155,
+      "supplemental_source_hash_bindings": 44,
+      "scope_path": "spec/modernization/carddemo-screens/idiomatic-account-phone-date-scope.json",
+      "scope_sha256": "b3822c307171f7634741f08e915bdec0cf151153d1c8e964db89fd0461a7cb63",
+      "unsigned_receipt_sha256": "cf8bd171e51d6cbd285cc377e4c391e6f05be2982930c45a811ef251627f1359",
+      "supplemental_proof_sha256": "d2e782c9c582fc7b2779e4fa8caa9746a07488bd2c482b43ced98d3ce8e1f015",
+      "original_receipt_date": "2026-10-18",
+      "measured_on": "2026-10-22",
+      "whole_screen_idiomatic": false
+    },
+    {
+      "name": "feedback",
+      "pr": 422,
+      "source_head": "8445d970a40f513a05585ec46f485b38670e6dfc",
+      "tested_commit": "029d93577ea2f7db4a9a1c783f9b42b06bface8a",
+      "tested_tree": "8d588f389afe5a40e5c90bc0ddc8647a2af2de55",
+      "tested_parents": [
+        "9dfffd96fd846ab8a5eb3957ab8469aaf6f26487",
+        "8445d970a40f513a05585ec46f485b38670e6dfc"
+      ],
+      "supplemental_run": 39698289736,
+      "supplemental_job": 119560975802,
+      "full_slice_run": 39698289701,
+      "run_attempt": 1,
+      "checkout_log_sha256": "5cdfb68970830112d6b00c7acf9f53f6c4f2eee6a7bf3a8c0d8bf98a8bb02216",
+      "checkout_observation": [
+        "2026-10-22T00:48:13.3476755Z [command]/usr/bin/git log -1 --format=%H",
+        "2026-10-22T00:48:13.3507165Z 029d93577ea2f7db4a9a1c783f9b42b06bface8a"
+      ],
+      "supplemental_test_methods": 5,
+      "supplemental_per_class_mutation": {
+        "AccountValidationFeedback": {
+          "total": 19,
+          "killed": 19,
+          "status_counts": {
+            "KILLED": 19
+          }
+        },
+        "AccountFeedbackState": {
+          "total": 4,
+          "killed": 4,
+          "status_counts": {
+            "KILLED": 4
+          }
+        }
+      },
+      "full_slice_cases_per_reference_mode": 120,
+      "full_slice_interactions_per_reference_mode": 678,
+      "full_slice_browser_interactions": 678,
+      "full_slice_mutation": {
+        "killed": 874,
+        "total": 943,
+        "status_counts": {
+          "KILLED": 874,
+          "NO_COVERAGE": 17,
+          "SURVIVED": 51,
+          "TIMED_OUT": 1
+        }
+      },
+      "source_hash_bindings": 153,
+      "supplemental_source_hash_bindings": 42,
+      "scope_path": "spec/modernization/carddemo-screens/idiomatic-account-feedback-scope.json",
+      "scope_sha256": "160177e788a125ad0e758946870be61bf5efc39c7afd200c7b51f095f8a4ec08",
+      "unsigned_receipt_sha256": "f03d78c5cddeb1613ba15972bdc367571120d2f695aafee18c67d9d3c2f38a2b",
+      "supplemental_proof_sha256": "15713d3d9107313a88c0b22d77b009f30af97d810088eba0fb6bec6dd0bc2868",
+      "original_receipt_date": "2026-10-18",
+      "measured_on": "2026-10-22",
+      "whole_screen_idiomatic": false
+    }
+  ],
+  "assets": [
+    {
+      "id": 665038044,
+      "name": "feedback-full-carddemo-compose-smoke.zip",
+      "size": 378680,
+      "sha256": "5113ed61ce35cb1efb44f203fed6ba5ff3dafe50811a6576ab4415d84b903f38",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-compose-smoke.zip"
+    },
+    {
+      "id": 665037838,
+      "name": "feedback-full-carddemo-proof-api.zip",
+      "size": 3318668,
+      "sha256": "57796e835df98ab8bd172401a3de547ff38815860a5e8f0c9bfd9501a60f7069",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-proof-api.zip"
+    },
+    {
+      "id": 665037932,
+      "name": "feedback-full-carddemo-proof-browser.zip",
+      "size": 3937212,
+      "sha256": "daf54766b225d45236cabc4b15b3762c6ec7a5828428120f4530cb56352fe0f5",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-proof-browser.zip"
+    },
+    {
+      "id": 665037674,
+      "name": "feedback-full-carddemo-proof-mutation.zip",
+      "size": 1524829,
+      "sha256": "39cfb696d4526f9673ff67b2433bc36551db44e0d409f5236d2b37294c5dca9c",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-proof-mutation.zip"
+    },
+    {
+      "id": 665038136,
+      "name": "feedback-full-carddemo-status-render.zip",
+      "size": 56726,
+      "sha256": "d4a75d25ad66fddad523bb90771e916250e18ffef0b09e709b6d8f596c43cc55",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-status-render.zip"
+    },
+    {
+      "id": 665037757,
+      "name": "feedback-full-carddemo-unsigned-receipt.zip",
+      "size": 22169,
+      "sha256": "10f0f37902fe5aa32dc13dc7f7cbbba69035ab643ee9f5f4c3905faf4b43f598",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-unsigned-receipt.zip"
+    },
+    {
+      "id": 665038218,
+      "name": "feedback-full-carddemo-web-foundation.zip",
+      "size": 225484,
+      "sha256": "fdd4de1b367a0d513f4530a47964aafe18f24a8b2be40f14c26db654c159a2a9",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-full-carddemo-web-foundation.zip"
+    },
+    {
+      "id": 665038307,
+      "name": "feedback-supplemental-proof.zip",
+      "size": 14846,
+      "sha256": "0362db036707476beaaaa54717c0305904133eae31e194b999bb502d8cbabb5f",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/feedback-supplemental-proof.zip"
+    },
+    {
+      "id": 665037371,
+      "name": "phone-date-full-carddemo-compose-smoke.zip",
+      "size": 377622,
+      "sha256": "03330ff79c5ba088cb7d67008f21ae911cdcd7aafca7f556fdaba53066132eac",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-compose-smoke.zip"
+    },
+    {
+      "id": 665037196,
+      "name": "phone-date-full-carddemo-proof-api.zip",
+      "size": 3255588,
+      "sha256": "69a1eadad39fb4ee227aff078945f914ede30127f1d18b4ffc07dfb85170e3c7",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-proof-api.zip"
+    },
+    {
+      "id": 665037277,
+      "name": "phone-date-full-carddemo-proof-browser.zip",
+      "size": 3850371,
+      "sha256": "5f7adb494955e2e160d1f79383f3c8c275e73859a78b280294e3a7f389fa01a7",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-proof-browser.zip"
+    },
+    {
+      "id": 665037130,
+      "name": "phone-date-full-carddemo-proof-mutation.zip",
+      "size": 1526249,
+      "sha256": "ea5c9de3a247af986ab744a69f9a3f838a7d6a9bf9a3ec9a15ec701a90f081c1",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-proof-mutation.zip"
+    },
+    {
+      "id": 665037507,
+      "name": "phone-date-full-carddemo-status-render.zip",
+      "size": 56726,
+      "sha256": "41191ec70a65281369b3cf3b90eca08668f83d3af63142f84664671f2940afe2",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-status-render.zip"
+    },
+    {
+      "id": 665037087,
+      "name": "phone-date-full-carddemo-unsigned-receipt.zip",
+      "size": 22265,
+      "sha256": "f2309be3c6810df039ba9b35bcf42cdd33b338d368eb0608a41ba653347d84f9",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-unsigned-receipt.zip"
+    },
+    {
+      "id": 665037447,
+      "name": "phone-date-full-carddemo-web-foundation.zip",
+      "size": 225510,
+      "sha256": "04e54931305e8272ef1d45fcbf32fd20d7474dbfc652e4655e7b8f8cb8c19543",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-full-carddemo-web-foundation.zip"
+    },
+    {
+      "id": 665037582,
+      "name": "phone-date-supplemental-proof.zip",
+      "size": 28171,
+      "sha256": "bea93a5bd89244561c23bcb639c34bc68bd237e3f0a7188b16f82581371bdf8a",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/phone-date-supplemental-proof.zip"
+    },
+    {
+      "id": 665038375,
+      "name": "proof-inventory.json",
+      "size": 269409,
+      "sha256": "3306a49d144b1e59b64394589dc965a78135a222cd140f98f9e4195467da892b",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j3-phone-date-feedback-2026-10-22/proof-inventory.json"
+    }
+  ],
+  "verification": {
+    "original_zip_bytes_preserved": true,
+    "archive_count": 16,
+    "member_hashes": 566,
+    "source_hash_bindings": 394,
+    "public_download_digests_verified": true,
+    "mutation_denominator": "KILLED only / all generated; nonempty per required class; unchanged 90% threshold",
+    "zero_junit_failures_errors_skips": true,
+    "no_local_test_execution": true
+  },
+  "scope_limits": [
+    "Measured final PR heads and their recorded synthetic merge checkouts only; not a rerun on current main",
+    "Phone/date retires only the three ranges declared in its bound scope; feedback retires no complete paragraph body",
+    "Public and synthetic bounded evidence; not whole-screen idiomatic completion or native platform equivalence",
+    "Original dated records, unsigned receipts and generated current status remain unchanged",
+    "No signing, activation, Phase 2, installation or startup authority"
+  ]
+}

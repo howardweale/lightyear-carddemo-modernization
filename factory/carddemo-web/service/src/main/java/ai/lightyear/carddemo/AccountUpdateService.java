@@ -11,7 +11,7 @@ public final class AccountUpdateService implements TransactionService {
     private static final String PROGRAM="COACTUPC";
     private final Bindings bindings;private final TypedRecords records;private final AccountUpdateTransaction update;
     public AccountUpdateService(Bindings b){bindings=b;records=new TypedRecords(b);update=new AccountUpdateTransaction(b);}
-    private SourceEdits edits(Commarea area){SourceEdits e=new SourceEdits(AccountPhoneDateModel.retire(bindings.root.path("account_update").path("validation")),bindings.clock);e.loadArea(area);return e;}
+    private SourceEdits edits(Commarea area){SourceEdits e=new SourceEdits(AccountMapModel.retire(bindings.root.path("account_update").path("validation")),bindings.clock);e.loadArea(area);return e;}
     private String literal(String value){return bindings.literal(PROGRAM,value);}
     private static boolean blank(String text){return text.chars().allMatch(c->c==0||c==' ');}
     private Result render(Commarea area,SourceEdits e){

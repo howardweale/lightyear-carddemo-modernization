@@ -2,10 +2,10 @@ import copy
 import unittest
 from datetime import datetime,timezone
 from lightyear_control_tower.factory_status import status,markdown,unresolved
-from test_decision_console_factory_views import FactoryViewsTests
+import test_decision_console_factory_views as factory_views
 
 
-class FactoryStatusTests(FactoryViewsTests):
+class FactoryStatusTests(factory_views.FactoryViewsTests):
     def test_same_model_markdown_ages_and_scope_filters(self):
         pending=[dict(id="review-1",program="POSTTRAN",kind="twin-human-review",source_sha256="a"*64,created_at="2026-10-12T04:00:00Z"),dict(id="old-review",program="INTCALC",kind="equivalence-review",source_sha256="b"*64)]
         view=status(self.evidence,pending=pending,now=datetime(2026,10,12,4,10,tzinfo=timezone.utc))

@@ -27,8 +27,13 @@ def inventory(root):
                 if str(step.get('if','')).strip() in ('false','${{ false }}'):continue
                 for line in commands(step.get('run',''),root):
                     line=line.strip()
-                    if line.startswith(('#','echo ','printf ','Write-Output ')) or '-m unittest' not in line:continue
-                    arguments=line.split('-m unittest',1)[1]
+                    if line.startswith(('#','echo ','printf ','Write-Output ')):continue
+                    reporter = bool(re.search(r'tools[/\\]ci_test_execution\.py', line)) and '--root' not in line
+                    if reporter:
+                        arguments='discover -s tests'
+                    elif '-m unittest' in line:
+                        arguments=line.split('-m unittest',1)[1]
+                    else:continue
                     if 'discover' in arguments:
                         # The repository's Bash and PowerShell wrappers use
                         # project_dir/tests and Join-Path $ProjectDir "tests".

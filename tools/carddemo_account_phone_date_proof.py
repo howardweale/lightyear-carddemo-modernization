@@ -12,6 +12,18 @@ JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
 CLASSES=('AccountPhoneRules','AccountDateRules','AccountEditState','AccountPhoneDateModel')
 RANGES={'1260-EDIT-US-PHONE-NUM':'AccountPhoneRules','EDIT-DATE-CCYYMMDD':'AccountDateRules','EDIT-DATE-OF-BIRTH':'AccountDateRules'}
 
+def check_service_route(root, service):
+    argument='bindings.root.path("account_update").path("validation")'
+    if 'AccountPhoneDateModel.retire('+argument+')' in service:return
+    # J5 composes the existing retirement. Bind the complete reviewed adapter,
+    # so a missing call, changed input, discarded result or decoy is refused.
+    model=Path(root)/JAVA/'AccountMapModel.java'
+    if 'AccountMapModel.retire('+argument+')' not in service or not model.is_file():
+        raise ValueError('phone-date-service-routing')
+    if sha256(model.read_bytes().replace(b'\r\n',b'\n')).hexdigest()!='8944014de4abdca25cbfcb812536dc3b7a8a1230d1c26aac0aa1b1fb370b50ae':
+        raise ValueError('phone-date-composed-model-binding')
+
+
 def check_scope(root, scope=None):
     root=Path(root);scope=scope or json.loads((root/SCOPE).read_bytes())
     if scope['retired_ranges']!=RANGES or scope['required_mutation_classes']!=list(CLASSES):raise ValueError('phone-date-required-scope')
@@ -38,7 +50,7 @@ def check_scope(root, scope=None):
         for name,owner in RANGES.items():
             if owner+'.java'==filename and 'paragraph="'+name+'"' not in code:raise ValueError('phone-date-range-annotation')
     service=(root/JAVA/'AccountUpdateService.java').read_text()
-    if 'AccountPhoneDateModel.retire(bindings.root.path("account_update").path("validation"))' not in service:raise ValueError('phone-date-service-routing')
+    check_service_route(root,service)
     adapter=(root/JAVA/'AccountPhoneDateModel.java').read_text()
     if any('"'+name+'","'+owner+'"' not in adapter for name,owner in RANGES.items()):raise ValueError('phone-date-retirement-routing')
     base=(root/'factory/carddemo-web/service/pom.xml').read_text()

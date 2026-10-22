@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
-from tools.carddemo_account_phone_date_proof import CLASSES,SCOPE,check_scope,evaluate
+from tools.carddemo_account_phone_date_proof import CLASSES,SCOPE,JAVA,check_scope,check_service_route,evaluate
 
 class PhoneDateProofTests(unittest.TestCase):
     def report(self, statuses):
@@ -41,5 +41,34 @@ class PhoneDateProofTests(unittest.TestCase):
             elif defect=='remaining':bad['remaining_statement_engine_programs'].remove('COACTUPC')
             else:bad['sources'].pop()
             with self.subTest(defect=defect),self.assertRaises(ValueError):check_scope(root,bad)
+
+
+    def test_direct_and_exact_composed_service_routes_and_refusals(self):
+        root=Path(__file__).resolve().parents[1]
+        original=(root/JAVA/'AccountMapModel.java').read_bytes().replace(b'\r\n',b'\n')
+        argument='bindings.root.path("account_update").path("validation")'
+        direct='AccountPhoneDateModel.retire('+argument+')'
+        composed='AccountMapModel.retire('+argument+')'
+        with tempfile.TemporaryDirectory() as directory:
+            sandbox=Path(directory);model=sandbox/JAVA/'AccountMapModel.java'
+            model.parent.mkdir(parents=True)
+            check_service_route(sandbox,direct)
+            with self.assertRaisesRegex(ValueError,'phone-date-service-routing'):
+                check_service_route(sandbox,composed)
+            model.write_bytes(original)
+            check_service_route(sandbox,composed)
+            model.write_bytes(original.replace(b'\n',b'\r\n'))
+            check_service_route(sandbox,composed)
+            for service in ('',composed.replace('"validation"','"other"'),composed.replace('AccountMapModel','OtherModel')):
+                with self.subTest(service=service),self.assertRaisesRegex(ValueError,'phone-date-service-routing'):
+                    check_service_route(sandbox,service)
+            for bad in (original.replace(b'AccountPhoneDateModel.retire(original)',b'original.deepCopy()'),
+                        original.replace(b'retire(original)',b'retire(original.deepCopy())'),
+                        original.replace(b'return model;',b'return original;'),
+                        original+b'// AccountPhoneDateModel.retire(original)\n'):
+                self.assertNotEqual(original,bad)
+                model.write_bytes(bad)
+                with self.subTest(model=bad),self.assertRaisesRegex(ValueError,'phone-date-composed-model-binding'):
+                    check_service_route(sandbox,composed)
 
 if __name__=='__main__':unittest.main()

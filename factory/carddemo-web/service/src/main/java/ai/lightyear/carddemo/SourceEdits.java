@@ -409,9 +409,41 @@ public final class SourceEdits {
     }
     void initializeDateResult(){storage.initialize("WS-DATE-VALIDATION-RESULT");}
     void checkDateService(){dateService();}
+    // Package-private primitives available only through the closed map adapter.
+    void initializeMapDetails(){storage.initialize("ACUP-NEW-DETAILS");}
+    void mapLow(String name){put(name,"\u0000".repeat(field(name).path("length").asInt()));}
+    void mapMove(String target,String source){
+        String value=get(source);
+        boolean numeric=field(source).path("type").asText().equals("number");
+        if(!numeric && stored.contains(target) && storage.unsignedDisplayInteger(target) && !value.matches("[0-9]+")){
+            storage.moveDisplayBytes(target,value);return;
+        }
+        if(numeric && field(target).path("type").asText().equals("edited"))
+            value=ScreenProjection.edited(value,field(target).path("picture").asText());
+        put(target,value);
+    }
+    boolean mapSame(String first,String second){
+        return compare(get(first),get(second),field(first).path("type").asText().equals("number") ||
+            field(second).path("type").asText().equals("number"))==0;
+    }
+    void mapMessagePrefix(String text){
+        String previous=get("WS-RETURN-MSG");int length=Math.min(text.length(),previous.length());
+        put("WS-RETURN-MSG",text.substring(0,length)+previous.substring(length));
+    }
     public void run(String paragraph){
         if(model.path("native_paragraphs").has(paragraph)) {
             switch(model.path("native_paragraphs").path(paragraph).asText()) {
+                case "AccountMapRules" -> {
+                    AccountMapState state=AccountMapState.bind(this);
+                    int line=switch(paragraph) {
+                        case "1100-RECEIVE-MAP" -> {AccountMapRules.receive(state);yield 1039;}
+                        case "1200-EDIT-MAP-INPUTS" -> {AccountMapRules.validate(state);yield 1429;}
+                        case "1205-COMPARE-OLD-NEW" -> {AccountMapRules.compare(state);yield 1681;}
+                        case "1210-EDIT-ACCOUNT" -> {AccountMapRules.account(state);yield 1783;}
+                        default -> throw new IllegalArgumentException("untranslated-map-rule:"+paragraph);
+                    };
+                    trace.add(new Location("app/cbl/COACTUPC.cbl",line));
+                }
                 case "AccountInputRules" -> runAccountInputRule(paragraph);
                 case "AccountTextRules" -> runAccountTextRule(paragraph);
                 case "AccountMoneyRule" -> runAccountMoneyRule();

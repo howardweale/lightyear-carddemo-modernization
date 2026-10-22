@@ -1,0 +1,178 @@
+{
+  "schema": "carddemo-j3-retention-manifest/1",
+  "prepared_on": "2026-10-22",
+  "status": "retained-and-independently-verified",
+  "release": {
+    "id": 421143213,
+    "tag": "carddemo-j5-map-2026-10-22",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/carddemo-j5-map-2026-10-22",
+    "target_commit": "710e23fc252bc4d1eed028127cc918fc2595a34e",
+    "published_at": "2026-10-22T19:59:18Z",
+    "target_is_measured_checkout": false
+  },
+  "inventory": {
+    "id": 666930038,
+    "name": "proof-inventory.json",
+    "size": 139786,
+    "sha256": "19e4ec8d6494e266f967b3fdecbcabf2d14a743a4d79c57957f1f5ce5a8dba38",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/proof-inventory.json"
+  },
+  "lanes": [
+    {
+      "name": "map",
+      "pr": 428,
+      "source_head": "980e88e83fe88fb252868b2e44f2ce47cc31a269",
+      "tested_commit": "550e8e49595eb4be8d28674cbacfdbe675db30e2",
+      "tested_tree": "0fb8740caf73b927da22f23258f43067adfe1895",
+      "tested_parents": [
+        "77d14ae016e654fed9d026d2847b35c64b75c3d6",
+        "980e88e83fe88fb252868b2e44f2ce47cc31a269"
+      ],
+      "supplemental_run": 39759480687,
+      "supplemental_job": 119759785500,
+      "full_slice_run": 39759480744,
+      "run_attempt": 1,
+      "checkout_log_sha256": "f7dd23818b6ca5d0540f2543f47a43d764d2fed96e854b11f988fb14fb8b2122",
+      "checkout_observation": [
+        "2026-10-22T10:02:52.4445604Z [command]/usr/bin/git log -1 --format=%H",
+        "2026-10-22T10:02:52.4489959Z 550e8e49595eb4be8d28674cbacfdbe675db30e2"
+      ],
+      "supplemental_test_methods": 7,
+      "supplemental_per_class_mutation": {
+        "AccountMapRules": {
+          "total": 187,
+          "killed": 183,
+          "status_counts": {
+            "KILLED": 183,
+            "SURVIVED": 4
+          }
+        },
+        "AccountMapStorage": {
+          "total": 13,
+          "killed": 13,
+          "status_counts": {
+            "KILLED": 13
+          }
+        },
+        "AccountMapModel": {
+          "total": 4,
+          "killed": 4,
+          "status_counts": {
+            "KILLED": 4
+          }
+        },
+        "AccountMapState": {
+          "total": 1,
+          "killed": 1,
+          "status_counts": {
+            "KILLED": 1
+          }
+        }
+      },
+      "full_slice_cases_per_reference_mode": 120,
+      "full_slice_interactions_per_reference_mode": 678,
+      "full_slice_browser_interactions": 678,
+      "full_slice_mutation": {
+        "killed": 888,
+        "total": 970,
+        "status_counts": {
+          "KILLED": 888,
+          "NO_COVERAGE": 21,
+          "SURVIVED": 60,
+          "TIMED_OUT": 1
+        }
+      },
+      "source_hash_bindings": 161,
+      "supplemental_source_hash_bindings": 50,
+      "scope_path": "spec/modernization/carddemo-screens/idiomatic-account-map-scope.json",
+      "scope_sha256": "f7d923ec87ffcac4c6af14aa17a7cb5f6bb7faf1daec6a3fcd11ec85b56274cc",
+      "unsigned_receipt_sha256": "4b33d700848369dd3da3b6620053dc52baf062dd7a8a0b94e2b7090151410575",
+      "supplemental_proof_sha256": "1197fb4331c6b9c1d60de2a7be998425fae1c455fc1f95764154161f6b4a2709",
+      "original_receipt_date": "2026-10-18",
+      "measured_on": "2026-10-22",
+      "whole_screen_idiomatic": false
+    }
+  ],
+  "assets": [
+    {
+      "id": 666929868,
+      "name": "map-full-carddemo-compose-smoke.zip",
+      "size": 375766,
+      "sha256": "d53026f9c2273d5ba550e41e8015d6ee44252a6401b80a41a483129d67c0bb17",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-compose-smoke.zip"
+    },
+    {
+      "id": 666929626,
+      "name": "map-full-carddemo-proof-api.zip",
+      "size": 3085479,
+      "sha256": "2b9af31622ffdf9dfec24653bb0ad0b8c38acf1bb4113f7c9e25f4b40088d1fc",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-proof-api.zip"
+    },
+    {
+      "id": 666929544,
+      "name": "map-full-carddemo-proof-browser.zip",
+      "size": 3683265,
+      "sha256": "ad96c07cf0a3f23a6d98e3c34339c83fcd2e61aaf93ca5fe488e8b7526397351",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-proof-browser.zip"
+    },
+    {
+      "id": 666929497,
+      "name": "map-full-carddemo-proof-mutation.zip",
+      "size": 1528068,
+      "sha256": "3dec56c6cf4bc25a7a5e41f6dda170dc804488707c9b95b9721c228d57023d04",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-proof-mutation.zip"
+    },
+    {
+      "id": 666929723,
+      "name": "map-full-carddemo-status-render.zip",
+      "size": 57424,
+      "sha256": "4e879df71dd1a3cf5901b706115d26e15d1481b9e6b1517f40b8f05882c1206d",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-status-render.zip"
+    },
+    {
+      "id": 666929455,
+      "name": "map-full-carddemo-unsigned-receipt.zip",
+      "size": 22550,
+      "sha256": "6ae1130c711d9266d5f85bef43d22cf26f09af7c02582f0616a337efa83db9fe",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-unsigned-receipt.zip"
+    },
+    {
+      "id": 666929793,
+      "name": "map-full-carddemo-web-foundation.zip",
+      "size": 225454,
+      "sha256": "b6bbf7b578c8b6180dfd2bcaa8aa7359515436a9ed0fc1dd009a455dc283e5a3",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-full-carddemo-web-foundation.zip"
+    },
+    {
+      "id": 666929967,
+      "name": "map-supplemental-proof.zip",
+      "size": 34209,
+      "sha256": "4a99060f11ab619afbd691704818c8a3250892fde122709526913f0ab3175342",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/map-supplemental-proof.zip"
+    },
+    {
+      "id": 666930038,
+      "name": "proof-inventory.json",
+      "size": 139786,
+      "sha256": "19e4ec8d6494e266f967b3fdecbcabf2d14a743a4d79c57957f1f5ce5a8dba38",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/carddemo-j5-map-2026-10-22/proof-inventory.json"
+    }
+  ],
+  "verification": {
+    "original_zip_bytes_preserved": true,
+    "archive_count": 8,
+    "member_hashes": 284,
+    "source_hash_bindings": 211,
+    "public_download_digests_verified": true,
+    "mutation_denominator": "KILLED only / all generated; nonempty per required class; unchanged 90% threshold",
+    "zero_junit_failures_errors_skips": true,
+    "no_local_test_execution": true
+  },
+  "scope_limits": [
+    "Measured final PR heads and their recorded synthetic merge checkouts only; not a rerun on current main",
+    "Only four COACTUPC paragraphs 1100, 1200, 1205 and 1210 are newly retired; rendering remains outstanding",
+    "Public and synthetic bounded evidence; not whole-screen idiomatic completion or native platform equivalence",
+    "Original dated records, unsigned receipts and generated current status remain unchanged",
+    "No signing, activation, Phase 2, installation or startup authority"
+  ]
+}

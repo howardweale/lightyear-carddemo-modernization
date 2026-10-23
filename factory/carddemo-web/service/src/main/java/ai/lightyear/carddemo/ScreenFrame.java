@@ -40,6 +40,7 @@ public final class ScreenFrame {
         cursor=terminal.cursor();message=terminal.message();endpoint=terminal.endpoint();
     }
     @CobolSource(program="COSGN00C", paragraph="POPULATE-HEADER-INFO", lines="177-208")
+    @CobolSource(program="COMEN01C", paragraph="POPULATE-HEADER-INFO", lines="238-257")
     private void headers(Bindings b,java.time.Clock clock){
         java.time.ZonedDateTime now=java.time.ZonedDateTime.now(clock);
         for(JsonNode h:b.program(program).path("headers")){

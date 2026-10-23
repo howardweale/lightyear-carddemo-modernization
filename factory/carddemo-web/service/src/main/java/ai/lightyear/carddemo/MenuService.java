@@ -8,6 +8,12 @@ import tools.jackson.databind.JsonNode;
 public final class MenuService implements TransactionService {
     private final Bindings bindings;
     public MenuService(Bindings bindings){this.bindings=bindings;}
+    @CobolSource(program="COMEN01C", paragraph="MAIN-PARA", lines="75-110")
+    @CobolSource(program="COMEN01C", paragraph="PROCESS-ENTER-KEY", lines="115-191")
+    @CobolSource(program="COMEN01C", paragraph="RETURN-TO-SIGNON-SCREEN", lines="196-203")
+    @CobolSource(program="COMEN01C", paragraph="SEND-MENU-SCREEN", lines="208-220")
+    @CobolSource(program="COMEN01C", paragraph="RECEIVE-MENU-SCREEN", lines="225-233")
+    @CobolSource(program="COMEN01C", paragraph="BUILD-MENU-OPTIONS", lines="262-303")
     public Result interact(Connection db,Commarea area,String aid,Map<String,String> input){
         ScreenFrame frame=new ScreenFrame(bindings,"COMEN01C");
         for(JsonNode option:bindings.root.path("menu")){

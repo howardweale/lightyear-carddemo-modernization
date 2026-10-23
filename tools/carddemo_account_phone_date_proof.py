@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_proof_profiles import baseline_pom, profile_pom
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-phone-date-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
@@ -53,8 +54,8 @@ def check_scope(root, scope=None):
     check_service_route(root,service)
     adapter=(root/JAVA/'AccountPhoneDateModel.java').read_text()
     if any('"'+name+'","'+owner+'"' not in adapter for name,owner in RANGES.items()):raise ValueError('phone-date-retirement-routing')
-    base=(root/'factory/carddemo-web/service/pom.xml').read_text()
-    additional=(root/'factory/carddemo-web/service/phone-date-proof.pom.xml').read_text()
+    base=baseline_pom(root)
+    additional=profile_pom(root, 'phone-date')
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses>'+''.join('<param>ai.lightyear.carddemo.'+name+'*</param>' for name in CLASSES)+'</targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountPhoneDateRulesTest</param></targetTests>',expected,flags=re.S)
     expected=expected.replace('<build><plugins>','<build><plugins>'+'<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>phone-date-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>${project.basedir}/supplemental-tests/phone-date/java</source></sources></configuration>\n    </execution></executions></plugin>',1)

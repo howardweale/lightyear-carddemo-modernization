@@ -1,0 +1,22 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/first-install-accepted-2026-10-23.json",
+      "reference": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+      "commit": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+      "role": "source",
+      "source_path": "tools/factory_install/Install-FactoryTower.ps1",
+      "source_sha256": "64cd650211bc8573141c0c5b08716cc451a0e156b26520a078e31b33e7cf6af1"
+    },
+    {
+      "record": "docs/factory/first-install-accepted-2026-10-23.md",
+      "reference": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+      "commit": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+      "role": "source",
+      "source_path": "tools/factory_install/Install-FactoryTower.ps1",
+      "source_sha256": "64cd650211bc8573141c0c5b08716cc451a0e156b26520a078e31b33e7cf6af1"
+    }
+  ]
+}

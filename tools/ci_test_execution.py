@@ -193,7 +193,7 @@ def main(argv=None):
                            ('GITHUB_REPOSITORY', 'GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_JOB')})
     try:
         context['checkout'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
-        event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text()) if os.environ.get('GITHUB_EVENT_PATH') else {}
+        event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8')) if os.environ.get('GITHUB_EVENT_PATH') else {}
         context['pr_head'] = event.get('pull_request', {}).get('head', {}).get('sha')
         policy_path = root / 'tools/ci/test-skip-allowlist.json'
         context['policy_sha256'] = hashlib.sha256(policy_path.read_bytes()).hexdigest()

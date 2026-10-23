@@ -3,6 +3,7 @@ import base64
 from copy import deepcopy
 from contextlib import redirect_stdout, redirect_stderr
 import io
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -28,8 +29,11 @@ class HeldoutReferenceTests(unittest.TestCase):
             # Windows checkout conversion must not relax the producer's byte seal.
             freeze = json.loads(subprocess.check_output(['git', 'show', 'HEAD:docs/factory/copau-factory-judge-freeze-2026-10-18.json'], cwd=root))
             amendment = json.loads(subprocess.check_output(['git', 'show', 'HEAD:docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json'], cwd=root))
-            paths = {r['path'] for r in freeze['files']} | {r['path'] for r in amendment['files']}
-            paths.add(amendment['existing_authorized_change']['path'])
+            expected = {r['path']: r['sha256'] for r in freeze['files']}
+            change = amendment['existing_authorized_change']
+            expected[change['path']] = change['sha256']
+            expected.update({r['path']: r['sha256'] for r in amendment['files']})
+            paths = set(expected)
             roots = ['src', 'tools', 'factory/carddemo-web', 'spec/modernization/carddemo-data',
                      'spec/modernization/carddemo-screens', 'tests/test_copau_answer_key.py',
                      'docs/factory/copau-factory-judge-freeze-2026-10-18.json',
@@ -38,11 +42,12 @@ class HeldoutReferenceTests(unittest.TestCase):
             with tempfile.TemporaryDirectory(prefix='copau-exact-synthetic-') as temp:
                 target = Path(temp); archive = target / 'source.tar'
                 with archive.open('wb') as stream:
-                    subprocess.run(['git', 'archive', 'HEAD', *roots], cwd=root, stdout=stream, check=True)
+                    subprocess.run(['git', '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', 'archive', 'HEAD', *roots], cwd=root, stdout=stream, check=True)
                 with tarfile.open(archive) as packaged:packaged.extractall(target, filter='data')
                 mismatches = 0
                 for path in sorted(paths):
                     canonical = (target / path).read_bytes(); working = (root / path).read_bytes()
+                    self.assertEqual(hashlib.sha256(canonical).hexdigest(), expected[path], path)
                     if canonical != working:
                         mismatches += 1
                         self.assertEqual(working.replace(b'\r\n', b'\n'), canonical, path)

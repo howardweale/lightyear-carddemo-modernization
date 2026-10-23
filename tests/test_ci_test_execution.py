@@ -119,6 +119,39 @@ class ExecutionReportTests(unittest.TestCase):
             self.assertEqual(report['discovered'], 1)
             self.assertIn('tests/test_broken.py', report['context']['test_sources'])
 
+
+    def test_utf8_event_metadata_under_legacy_locale_and_invalid_bytes_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); (root / 'tests').mkdir(); (root / 'tools/ci').mkdir(parents=True)
+            (root / 'tests/test_ok.py').write_text(
+                'import unittest\nclass Example(unittest.TestCase):\n    def test_ok(self): self.assertTrue(True)\n', encoding='utf-8')
+            (root / 'tools/ci/test-skip-allowlist.json').write_text(json.dumps(
+                dict(schema='ci-test-skip-policy/1', sources={}, allowances=[])), encoding='utf-8')
+            subprocess.run(['git', 'init', '-q', str(root)], check=True)
+            subprocess.run(['git', '-C', str(root), '-c', 'user.name=Fixture',
+                '-c', 'user.email=fixture@example.invalid', 'commit', '--allow-empty',
+                '--no-gpg-sign', '-qm', 'fixture'], check=True)
+            event = root / 'event.json'; head = 'a' * 40
+            event.write_bytes(json.dumps(dict(pull_request=dict(head=dict(sha=head)),
+                body='Unicode \u201cmetadata\u201d \u6f22'), ensure_ascii=False).encode('utf-8'))
+            tool = Path(__file__).resolve().parents[1] / 'tools/ci_test_execution.py'
+            env = {k:v for k,v in os.environ.items() if k != 'GITHUB_STEP_SUMMARY'}
+            env.update(GITHUB_EVENT_PATH=str(event), PYTHONUTF8='0', PYTHONCOERCECLOCALE='0')
+            def run():
+                result = subprocess.run([sys.executable, '-B', str(tool), '--root', str(root)],
+                    capture_output=True, env=env)
+                data = json.loads((root / 'work/ci/test-execution/report.json').read_text(encoding='utf-8'))
+                return result, data
+            result, data = run()
+            self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', 'replace'))
+            self.assertTrue(data['accepted']); self.assertEqual(data['context']['pr_head'], head)
+            self.assertEqual(data['discovered'], 1); self.assertEqual(data['started'], 1)
+            self.assertEqual(data['counts'], {'passed': 1}); self.assertEqual(data['errors'], [])
+            event.write_bytes(b'{"body":"\xff"}')
+            result, data = run()
+            self.assertEqual(result.returncode, 1); self.assertFalse(data['accepted'])
+            self.assertIn('runner-setup:UnicodeDecodeError', data['errors'][0])
+
     def test_failed_reports_have_human_readable_skip_summary(self):
         def skip(t): t.skipTest('dedicated job')
         data = self.run_report(dict(test_skip=skip))

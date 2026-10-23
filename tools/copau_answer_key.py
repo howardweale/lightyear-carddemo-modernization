@@ -6,9 +6,9 @@ an approval input, not a claim that a directory listing proves completeness.
 """
 import argparse
 from datetime import datetime, timezone
-import getpass
 import hashlib
 import io
+from itertools import chain
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -25,10 +25,14 @@ from tools.copau_private_prerequisites import (
     encoded, bundle_info, no_links, windows_host,
 )
 from tools.copau_heldout_reference import run_session
+from tools import copau_seed_custody as seed_custody
 
 SCANNER_SHA = '0f887ad5865655d4d12f08278a2339a57a1546b1e2feb6d9e3dd7b7aa4bcfa25'
 WORKER_SHA = 'bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771'
-CORPORA = {'worker', 'public', 'history', 'graph'}
+EXPOSURE = {'worker', 'graph', 'prompts', 'contexts'}
+BASELINE = {'main', 'worker', 'graph'}
+CORPORA = EXPOSURE | BASELINE
+HISTORICAL = 'not inspected; not relevant to freshly generated values'
 # Scanner plumbing only. These are public and NOT the held-out answer values.
 CANARIES = {name: hashlib.sha256(('public-synthetic-scanner-probe:' + name).encode()).hexdigest()
             for name in isolation_scan.CLASSES}
@@ -138,29 +142,26 @@ def git_bytes(root, *args, data=None):
     return result.stdout
 
 
-def history_records(root, row):
-    # The reviewed index binds the exact locally retained public ref inventory.
-    # Deleted/unavailable history must be listed in index.unavailable, never omitted.
-    require(git_bytes(root, 'rev-parse', '--is-shallow-repository').strip() == b'false')
-    refs = git_bytes(root, 'show-ref').splitlines()
-    require(sha(b'\n'.join(sorted(refs)) + b'\n') == row['refs_sha256'])
-    objects = git_bytes(root, 'rev-list', '--objects', '--all').splitlines()
-    ids = sorted({line.split(b' ', 1)[0] for line in objects})
-    require(sha(b'\n'.join(ids) + b'\n') == row['objects_sha256'] and len(ids) == row['object_count'])
-    for oid in ids:
-        kind = git_bytes(root, 'cat-file', '-t', oid.decode()).strip()
-        if kind != b'blob':
-            continue
+def main_records(root, row):
+    require(re.fullmatch(r'[0-9a-f]{40}', row['commit']))
+    listing = git_bytes(root, 'ls-tree', '-rz', '--full-tree', row['commit'])
+    require(sha(listing) == row['tree_listing_sha256'])
+    for entry in listing.split(b'\0'):
+        if not entry:continue
+        meta, path = entry.split(b'\t', 1); mode, kind, oid = meta.split()
+        # Gitlinks and symlinks are unscanned surfaces, never skipped success.
+        require(kind == b'blob' and mode in (b'100644', b'100755'))
+        member_name(path.decode('utf-8'))
         size = int(git_bytes(root, 'cat-file', '-s', oid.decode()))
         require(size <= 256 * 1024 * 1024)
-        raw = git_bytes(root, 'cat-file', 'blob', oid.decode())
-        require(len(raw) == size)
-        yield dict(sha256=sha(raw), size_bytes=size, archive=zipfile.is_zipfile(io.BytesIO(raw))), raw
+        raw = git_bytes(root, 'cat-file', 'blob', oid.decode()); require(len(raw) == size)
+        yield dict(path=path.decode('utf-8'), sha256=sha(raw), size_bytes=size,
+                   archive=zipfile.is_zipfile(io.BytesIO(raw))), raw
 
 
 def validate_index(index):
-    require(set(index) == {'schema', 'captured_at', 'corpora', 'unavailable', 'closure_review'})
-    require(index['schema'] == 'copau-public-corpus-index/1' and set(index['corpora']) == CORPORA)
+    require(set(index) == {'schema', 'captured_at', 'corpora', 'unavailable', 'closure_review', 'historical'})
+    require(index['schema'] == 'copau-run-surface-index/2' and set(index['corpora']) == CORPORA)
     require(datetime.fromisoformat(index['captured_at']).utcoffset() is not None)
     require(index['closure_review']['status'] == 'reviewed-complete'
             and len(index['closure_review']['reference']) > 0)
@@ -168,7 +169,7 @@ def validate_index(index):
     # Only public identifiers may be disclosed for unavailable material.
     for item in index['unavailable']:
         require(set(item) == {'corpus', 'kind', 'id'} and item['corpus'] in CORPORA
-                and item['kind'] in ('artifact', 'release-asset', 'git-object', 'graph-snapshot', 'unknown-history')
+                and item['kind'] in ('file', 'git-object', 'graph-snapshot', 'template')
                 and ((type(item['id']) is int and item['id'] > 0) or
                      (isinstance(item['id'], str) and re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}', item['id']))))
     worker = index['corpora']['worker']
@@ -177,17 +178,26 @@ def validate_index(index):
     bindings = load_json(manifest)
     require(len(bindings) == 403 and len(worker['files']) == 403)
     require({r['path']: r['sha256'] for r in worker['files']} == bindings)
-    for name in ('public', 'graph'):
+    history = index['historical']
+    require(set(history) == {'status', 'catalog_sha256', 'observed_count', 'missing', 'metadata_error_count'})
+    require(history['status'] == HISTORICAL and re.fullmatch(r'[0-9a-f]{64}', history['catalog_sha256']))
+    require(type(history['observed_count']) is int and history['observed_count'] >= 0
+            and type(history['metadata_error_count']) is int and history['metadata_error_count'] >= 0)
+    for item in history['missing']:
+        require(set(item) == {'kind', 'id'} and item['kind'] in ('artifact', 'release-asset', 'unknown-history')
+                and ((type(item['id']) is int and item['id'] > 0) or
+                     (isinstance(item['id'], str) and re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}', item['id']))))
+    for name in EXPOSURE:
         corpus = index['corpora'][name]
         require(corpus['files'] and corpus['records'] > 0 and corpus['inventory_complete'] is True)
         require(corpus['inventory_sha256'] == sha(encoded(corpus['files'])))
-    public = index['corpora']['public']
-    require(set(public['observed_ids']) == {r['public_id'] for r in public['files']} |
-            {str(r['kind']) + ':' + str(r['id']) for r in index['unavailable']
-             if r['corpus'] == 'public' and r['kind'] in ('artifact', 'release-asset')})
-    require(len(public['observed_ids']) == len(set(public['observed_ids'])))
-    require(re.fullmatch(r'[0-9a-f]{64}', index['corpora']['graph']['query_boundary_sha256']) and
-            index['corpora']['graph']['all_queryable_snapshots_included'] is True)
+    for name in ('graph', 'prompts', 'contexts'):
+        corpus = index['corpora'][name]
+        require(re.fullmatch(r'[0-9a-f]{64}', corpus['run_binding_sha256'])
+                and corpus['all_run_visible_content_included'] is True)
+    main = index['corpora']['main']
+    require(re.fullmatch(r'[0-9a-f]{40}', main['commit']) and
+            re.fullmatch(r'[0-9a-f]{64}', main['tree_listing_sha256']))
     return index
 
 
@@ -195,22 +205,23 @@ def scan_corpora(index, values):
     validate_index(index)
     require(all(isinstance(v, str) and len(v) == 40 and not any(c.isspace() for c in v) for v in values))
     require(len(windows(values)) == len(values))
-    report = dict(schema='copau-public-collision-report/1', corpus_index_sha256=sha(encoded(index)),
+    require(values and len(values) == len(set(values)))
+    report = dict(schema='copau-public-collision-report/2', corpus_index_sha256=sha(encoded(index)),
                   scanner_sha256=SCANNER_SHA, window_count=len(windows(values)), corpora={},
-                  unavailable=index['unavailable'], qualified=False)
+                  historical=index['historical'], unavailable=index['unavailable'], scans_clean=False)
     for name in sorted(CORPORA):
         corpus = index['corpora'][name]
         row = dict(file_count=0, record_count=0, window_count=len(windows(values)), match_count=0,
                    missing_count=sum(x['corpus'] == name for x in index['unavailable']), error_count=0)
         inventory = []
         try:
-            records = (history_records(Path(corpus['root']), corpus) if name == 'history'
+            records = (main_records(Path(corpus['root']), corpus) if name == 'main'
                        else directory_records(Path(corpus['root']), corpus['files']))
             for meta, raw in records:
                 row['file_count'] += 1
                 inventory.append([sha(raw), len(raw)])
                 try:
-                    for content in views(raw, meta.get('archive', False)):
+                    for content in chain([meta['path'].encode()], views(raw, meta.get('archive', False))):
                         row['record_count'] += 1
                         matches, errors = scan_bytes(content, values)
                         row['match_count'] += matches; row['error_count'] += errors
@@ -220,71 +231,130 @@ def scan_corpora(index, values):
             row['error_count'] += 1
         row['corpus_sha256'] = sha(encoded(sorted(inventory)))
         report['corpora'][name] = row
-    report['qualified'] = all(row['file_count'] > 0 and row['record_count'] > 0 and
-                              row['match_count'] == row['missing_count'] == row['error_count'] == 0
-                              for row in report['corpora'].values())
+    def clean(names):
+        return all(report['corpora'][n]['file_count'] > 0 and report['corpora'][n]['record_count'] > 0 and
+                   report['corpora'][n]['match_count'] == report['corpora'][n]['missing_count'] ==
+                   report['corpora'][n]['error_count'] == 0 for n in names)
+    report['exposure_clean'] = clean(EXPOSURE)
+    report['collision_clean'] = clean(BASELINE)
+    report['collision_count'] = sum(report['corpora'][n]['match_count'] for n in BASELINE)
+    report['scans_clean'] = report['exposure_clean'] and report['collision_clean']
     return report
 
 
-def prepare(store, root, seed, index):
+def verify_current_main(index):
+    from tools.copau_public_corpus_index import github
+    require(github('git/ref/heads/main')['object']['sha'] == index['corpora']['main']['commit'])
+
+
+def prepare(store, root, seed, index, private_random_seed_confirmed=False, seed_commitment=False):
     store.absent('heldout-provenance.json', 'heldout-collision-report.json', 'expected-source.json',
                  'copau-expected-values.json', 'bundle-binding.json', 'heldout-bundle-attestation.json')
     require(sha((root / 'src/lightyear_factory/isolation_scan.py').read_bytes()) == SCANNER_SHA)
-    values, provenance = run_session(root, seed)
+    validate_index(index); verify_current_main(index)
     # Prevent accidental acceptance of the public synthetic CI seed.
-    require(seed not in (bytes(range(32)), bytes(reversed(range(32))), bytes(32)))
+    require(private_random_seed_confirmed is True and isinstance(seed, bytes) and len(seed) == 32
+            and seed not in (bytes(range(32)), bytes(reversed(range(32))), bytes(32)))
+    created = datetime.now(timezone.utc)
+    require(datetime.fromisoformat(index['captured_at']) < created)
+    values, provenance = run_session(root, seed)
+    require(len(provenance['selected_output_bindings']) == len(values) and all(
+        b['selection'] == 'existing-judge-computed-record-digest' and
+        b['private_identifier_characters'] == 15 and b['length'] == 40
+        for b in provenance['selected_output_bindings']))
     report = scan_corpora(index, values)
-    provenance.update(created_at=datetime.now(timezone.utc).isoformat(), private_seed_hex=seed.hex(),
+    verify_current_main(index)
+    # Production CLI supplies a privately persisted OS-random seed; tests use synthetic seeds.
+    report['freshness'] = dict(os_generated_private_seed=True,
+        private_input_dependency=True, generated_after_snapshot=True,
+        public_reconstruction='requires unexposed high-entropy seed; computational claim')
+    report['selection'] = dict(identifier_characters=15, selected_count=len(values),
+                              messages_labels_padding_selected=False)
+    report['qualified'] = report['scans_clean']
+    provenance.update(created_at=created.isoformat(), seed_custody_file=seed_custody.SEED,
+                      private_random_seed_confirmed=True,
                       values=values, corpus_index_sha256=sha(encoded(index)))
     store.write('heldout-provenance.json', encoded(provenance))
-    store.write('heldout-collision-report.json', encoded(report))
+    # Historical disclosure can be large; retain its hash/count privately and
+    # return the complete public-ID list publicly. It must not exhaust Store's
+    # per-file limit and thereby become an accidental qualification blocker.
+    stored_report = dict(report, historical=dict(status=HISTORICAL,
+        disclosure_sha256=sha(encoded(report['historical'])),
+        missing_count=len(report['historical']['missing']),
+        metadata_error_count=report['historical']['metadata_error_count']))
+    store.write('heldout-collision-report.json', encoded(stored_report))
     if not report['qualified']:
         return report, None
     source = dict(schema='copau-private-source/1', freeze_sha256=FREEZE_SHA, amendment_sha256=AMENDMENT_SHA,
                   source_reference='heldout-provenance.json',
-                  coverage_description='Original COPAU authorization/fraud session; selected 40-character returned COMMAREA fragments. Does not detect isolated short display-field leakage. Corpus closure bound to reviewed public index.',
+                  coverage_description='Existing judge computed record digests derived from private transaction IDs; exact 40-character windows. Short-field leakage is outside coverage. Bound worker, graph, prompt/context exposure and current-main collision baseline; historical artifacts disclosure-only.',
                   approved_expected_state_source=True, values=values)
     raw = encoded(dict(schema='factory-private-expected-values/1', values=values))
     info = bundle_info(raw)
     store.write('expected-source.json', encoded(source))
     store.write('copau-expected-values.json', raw)
     store.write('bundle-binding.json', encoded(info))
-    store.write('heldout-bundle-attestation.json', encoded(info))
+    commitment = dict(optional=True, published=seed_commitment)
+    if seed_commitment:commitment['sha256'] = sha(seed)
+    store.write('heldout-bundle-attestation.json', encoded(dict(bundle=info, optional_seed_commitment=commitment)))
     return report, info
 
 
+
+class PrivateArguments(argparse.ArgumentParser):
+    def error(self, message):raise Refused()
+
+def operate(args):
+    root = Path(__file__).resolve().parents[1]
+    require(Path.cwd().resolve() == root)
+    require(git_bytes(root, 'rev-parse', 'HEAD').decode().strip() == args.reviewed_commit)
+    require(not git_bytes(root, 'status', '--porcelain', '--untracked-files=all').strip())
+    no_links(args.corpus_index.absolute())
+    raw = stable_read(args.corpus_index.absolute(), 16 * 1024 * 1024)
+    require(sha(raw) == args.reviewed_corpus_sha256)
+    index = validate_index(load_json(raw))
+    roots = [root, *args.exposed_root, *(Path(x['root']) for x in index['corpora'].values())]
+    store = seed_custody.PrivateStore(args.private_dir, roots, args.expected_owner_sid)
+    # Check every public input before creating any private seed.
+    if not args.reuse:verify_current_main(index)
+    seed, record, created = seed_custody.seed_for(store, sha(encoded(index)), reuse=args.reuse)
+    args.seed_status[:] = [str(store.path(seed_custody.SEED)), created]
+    complete = os.path.lexists(store.path('copau-expected-values.json'))
+    if args.reuse or complete:
+        info = seed_custody.replay(store, root, seed, run_session, bundle_info)
+        report = dict(audit_replay_verified=True, fresh_surface_qualification=False)
+    else:
+        require(datetime.fromisoformat(index['captured_at']) < datetime.fromisoformat(record['created_at']))
+        report, info = prepare(store, root, seed, index, True, args.seed_commitment)
+    if args.seed_commitment:
+        report['optional_seed_commitment'] = dict(optional=True, sha256=sha(seed))
+    return report, info, str(store.path(seed_custody.SEED)), created
+
 def main():
+    status = []
     try:
-        parser = argparse.ArgumentParser(description=__doc__)
+        parser = PrivateArguments(description=__doc__)
         parser.add_argument('--reviewed-commit', required=True)
         parser.add_argument('--corpus-index', type=Path, required=True)
         parser.add_argument('--reviewed-corpus-sha256', required=True)
         parser.add_argument('--exposed-root', action='append', required=True)
+        parser.add_argument('--private-dir', type=Path, default=seed_custody.DEFAULT if windows_host() else Path.home()/'private/copau-key-1')
+        parser.add_argument('--expected-owner-sid')
+        parser.add_argument('--reuse', action='store_true')
+        parser.add_argument('--seed-commitment', action='store_true', help='Optional public SHA-256 seed commitment')
         args = parser.parse_args()
-        require(windows_host())
-        root = Path(__file__).resolve().parents[1]
-        require(Path.cwd().resolve() == root)
-        require(git_bytes(root, 'rev-parse', 'HEAD').decode().strip() == args.reviewed_commit)
-        require(not git_bytes(root, 'status', '--porcelain', '--untracked-files=all').strip())
-        raw = stable_read(args.corpus_index.resolve(strict=True), 16 * 1024 * 1024)
-        require(sha(raw) == args.reviewed_corpus_sha256)
-        index = validate_index(load_json(raw))
-        roots = [root, Path.cwd(), *args.exposed_root, *(Path(x['root']) for x in index['corpora'].values())]
-        store = Store(ROOT, roots); store.check()
-        seed_text = getpass.getpass('Private 64-hex-digit seed (never paste into chat): ')
-        require(len(seed_text) == 64)
-        seed = bytes.fromhex(seed_text)
-        report, info = prepare(store, root, seed, index)
-        # Closed public serialization: no seed, paths, output strings or matches.
+        args.seed_status = status
+        with seed_custody.quiet_private():report, info, seed_path, created = operate(args)
+        print(('Seed created: ' if created else 'Existing seed reused: ') + seed_path)
+        print('Back up the seed file privately; never display or publish its contents.')
         print(json.dumps(report, sort_keys=True))
-        if info is not None:
-            print(json.dumps(info, sort_keys=True))
-            return 0
-        return 2
-    except Exception:
+        if info is not None:print(json.dumps(info, sort_keys=True))
+        return 0 if info is not None else 2
+    except BaseException:
+        if status:
+            print(('Seed created: ' if status[1] else 'Existing seed reused: ') + status[0])
+            print('Back up the seed file privately; never display or publish its contents.')
         print('REFUSED: preserve private files; inspect privately. No automatic retry.', file=sys.stderr)
         return 1
 
-
-if __name__ == '__main__':
-    sys.exit(main())
+if __name__ == '__main__':sys.exit(main())

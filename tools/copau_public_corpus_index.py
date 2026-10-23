@@ -1,7 +1,7 @@
-"""Collect public metadata/bytes before private generation; no completeness override.
+"""Inventory exact run surfaces before private generation; historical metadata only.
 
-Produces an UNREVIEWED corpus index. An independent closure review must account
-for deleted public history and bind the actual agent query boundary before use.
+Output needs independent review of the run-visible graph and prompt/context
+boundary. Historical bytes are not downloaded and their absence is not a gate.
 """
 import argparse
 from datetime import datetime, timezone
@@ -11,17 +11,17 @@ from pathlib import Path
 import subprocess
 import sys
 import zipfile
-from tools.copau_answer_key import sha, encoded, stable_read, no_links, git_bytes, member_name, WORKER_SHA
+from tools.copau_answer_key import sha, encoded, stable_read, no_links, git_bytes, member_name, WORKER_SHA, HISTORICAL
 from tools.copau_private_prerequisites import ROOT, require, load_json
 
 REPO = 'howardweale/lightyear-carddemo-modernization'
 
 
-def github(path, binary=False):
+def github(path):
     result = subprocess.run(['gh', 'api', 'repos/' + REPO + '/' + path],
                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False)
     require(result.returncode == 0)
-    return result.stdout if binary else load_json(result.stdout)
+    return load_json(result.stdout)
 
 
 def pages(path, key=None):
@@ -30,8 +30,7 @@ def pages(path, key=None):
         data = github(path + ('&' if '?' in path else '?') + 'per_page=100&page=' + str(page))
         if key:
             if total is None:total = data['total_count']
-            require(data['total_count'] == total)
-            rows = data[key]
+            require(data['total_count'] == total); rows = data[key]
         else:rows = data
         result.extend(rows)
         if len(rows) < 100:
@@ -54,98 +53,76 @@ def file_rows(root):
     return rows
 
 
-def collect_public(destination):
-    require(not destination.exists()); destination.mkdir()
-    rows, unavailable, observed = [], [], []
-    artifacts = pages('actions/artifacts', 'artifacts')
-    assets = []
-    for release in pages('releases'):
-        if release['draft']:continue
-        assets.extend(pages('releases/' + str(int(release['id'])) + '/assets'))
-    for kind, records in [('artifact', artifacts), ('release-asset', assets)]:
-        for item in records:
-            identifier = int(item['id']); public_id = kind + ':' + str(identifier)
-            require(public_id not in observed); observed.append(public_id)
-            if (item.get('expired') or not str(item.get('digest', '')).startswith('sha256:')
-                    or not 0 < item.get('size_in_bytes', item.get('size', 0)) <= 256 * 1024 * 1024):
-                unavailable.append(dict(corpus='public', kind=kind, id=identifier)); continue
-            try:
-                if kind == 'artifact':
-                    raw = github('actions/artifacts/' + str(identifier) + '/zip', True)
-                else:
-                    result = subprocess.run(['gh', 'api', '-H', 'Accept: application/octet-stream',
-                        'repos/' + REPO + '/releases/assets/' + str(identifier)], stdout=subprocess.PIPE,
-                        stderr=subprocess.DEVNULL, check=False)
-                    require(result.returncode == 0); raw = result.stdout
-                require(len(raw) <= 256 * 1024 * 1024)
-                require(sha(raw) == item['digest'].removeprefix('sha256:'))
-                require(len(raw) == item.get('size_in_bytes', item.get('size')))
-                name = kind + '-' + str(identifier) + '.bin'
-                with (destination / name).open('xb') as stream:stream.write(raw)
-                rows.append(dict(path=name, sha256=sha(raw), size_bytes=len(raw), public_id=public_id,
-                                 archive=zipfile.is_zipfile(io.BytesIO(raw))))
-            except Exception:
-                unavailable.append(dict(corpus='public', kind=kind, id=identifier))
-    require(len(observed) == len(set(observed)))
-    return dict(root=str(destination), files=rows, records=len(rows), observed_ids=observed,
-                inventory_sha256=sha(encoded(rows)), inventory_complete=False), unavailable
+def historical_metadata():
+    observed, missing, errors = [], [], 0
+    try:
+        for item in pages('actions/artifacts', 'artifacts'):
+            identifier = int(item['id']); observed.append(dict(kind='artifact', id=identifier))
+            if item.get('expired'):missing.append(dict(kind='artifact', id=identifier))
+    except Exception:
+        errors += 1; missing.append(dict(kind='unknown-history', id='artifact-catalog-unavailable'))
+    try:
+        for release in pages('releases'):
+            if release['draft']:continue
+            for item in pages('releases/' + str(int(release['id'])) + '/assets'):
+                observed.append(dict(kind='release-asset', id=int(item['id'])))
+    except Exception:
+        errors += 1; missing.append(dict(kind='unknown-history', id='release-catalog-unavailable'))
+    # Current APIs cannot enumerate deleted objects. Disclose that limitation;
+    # no historical archive bytes or prior commit blobs are read for qualification.
+    missing.append(dict(kind='unknown-history', id='deleted-artifacts-assets-and-prior-history-not-enumerated'))
+    return dict(status=HISTORICAL, catalog_sha256=sha(encoded(observed)), observed_count=len(observed),
+                missing=missing, metadata_error_count=errors)
 
 
-def build_index(worker, manifest, history, graph, graph_boundary, public):
-    bindings = load_json(stable_read(manifest, 2 * 1024 * 1024))
-    require(sha(manifest.read_bytes()) == WORKER_SHA and len(bindings) == 403)
+def build_index(worker, manifest, repository, graph, prompts, contexts, run_boundary):
+    raw = stable_read(manifest, 2 * 1024 * 1024); bindings = load_json(raw)
+    require(sha(raw) == WORKER_SHA and len(bindings) == 403)
     worker_rows = file_rows(worker)
     require({r['path']: r['sha256'] for r in worker_rows} == bindings)
-    require(git_bytes(history, 'rev-parse', '--is-shallow-repository').strip() == b'false')
-    refs = sorted(git_bytes(history, 'show-ref').splitlines())
-    ids = sorted({r.split(b' ', 1)[0] for r in git_bytes(history, 'rev-list', '--objects', '--all').splitlines()})
-    graph_rows = file_rows(graph)
-    boundary_raw = stable_read(graph_boundary, 2 * 1024 * 1024)
-    # An export's presence alone never establishes all agent-queryable content.
-    boundary = load_json(boundary_raw)
-    require(boundary['schema'] == 'copau-query-boundary/1' and boundary['records'] > 0)
-    public_index, unavailable = collect_public(public)
-    unavailable.extend([
-        dict(corpus='public', kind='unknown-history', id='deleted-artifacts-and-release-assets-unreconciled'),
-        dict(corpus='history', kind='unknown-history', id='deleted-public-refs-unreconciled'),
-        dict(corpus='graph', kind='graph-snapshot', id='query-boundary-review-pending'),
-    ])
-    return dict(schema='copau-public-corpus-index/1', captured_at=datetime.now(timezone.utc).isoformat(),
-                closure_review=dict(status='unreviewed', reference=''), unavailable=unavailable,
-                corpora=dict(worker=dict(root=str(worker), manifest=str(manifest), files=worker_rows),
-                             public=public_index,
-                             history=dict(root=str(history), refs_sha256=sha(b'\n'.join(refs)+b'\n'),
-                                          objects_sha256=sha(b'\n'.join(ids)+b'\n'), object_count=len(ids)),
-                             graph=dict(root=str(graph), files=graph_rows, records=boundary['records'],
-                                        query_boundary_sha256=sha(boundary_raw), all_queryable_snapshots_included=False,
-                                        inventory_sha256=sha(encoded(graph_rows)), inventory_complete=False)))
+    boundary_raw = stable_read(run_boundary, 2 * 1024 * 1024); boundary = load_json(boundary_raw)
+    require(boundary['schema'] == 'copau-run-visible-boundary/1'
+            and set(boundary['surfaces']) == {'graph', 'prompts', 'contexts'})
+    corpora = dict(worker=dict(root=str(worker), manifest=str(manifest), files=worker_rows,
+        records=403, inventory_sha256=sha(encoded(worker_rows)), inventory_complete=True))
+    for name, root in [('graph', graph), ('prompts', prompts), ('contexts', contexts)]:
+        rows = file_rows(root); expected = boundary['surfaces'][name]
+        # Review must establish closure, not just presence of an export directory.
+        require(expected['inventory_sha256'] == sha(encoded(rows)) and expected['records'] > 0)
+        corpora[name] = dict(root=str(root), files=rows, records=expected['records'],
+            inventory_sha256=sha(encoded(rows)), inventory_complete=False,
+            run_binding_sha256=sha(boundary_raw), all_run_visible_content_included=False)
+    commit = github('git/ref/heads/main')['object']['sha']
+    listing = git_bytes(repository, 'ls-tree', '-rz', '--full-tree', commit)
+    require(listing)
+    corpora['main'] = dict(root=str(repository), commit=commit, tree_listing_sha256=sha(listing))
+    return dict(schema='copau-run-surface-index/2', captured_at=datetime.now(timezone.utc).isoformat(),
+                closure_review=dict(status='unreviewed', reference=''), unavailable=[],
+                historical=historical_metadata(), corpora=corpora)
 
 
 def main():
     try:
         p = argparse.ArgumentParser(description=__doc__)
-        for name in ('worker', 'manifest', 'history', 'graph', 'graph-boundary', 'public-destination', 'out'):
+        for name in ('worker', 'manifest', 'repository', 'graph', 'prompts', 'contexts', 'run-boundary', 'out'):
             p.add_argument('--'+name, type=Path, required=True)
         args = p.parse_args()
-        roots = [p.resolve() for p in vars(args).values()]
-        require(all(ROOT != p and ROOT not in p.parents and p not in ROOT.parents for p in roots))
-        require(not args.out.exists())
-        output = args.out.resolve()
-        require(all(output != p and p not in output.parents for p in
-                    (args.worker.resolve(), args.history.resolve(), args.graph.resolve(), args.public_destination.resolve())))
-        # Verify this exact repository is public before using authenticated gh GETs.
-        result = subprocess.run(['gh', 'api', 'repos/'+REPO], stdout=subprocess.PIPE,
-                                stderr=subprocess.DEVNULL, check=False)
-        require(result.returncode == 0 and load_json(result.stdout)['private'] is False)
-        index = build_index(args.worker.resolve(), args.manifest.resolve(), args.history.resolve(),
-                            args.graph.resolve(), args.graph_boundary.resolve(), args.public_destination.resolve())
+        roots = [x.resolve() for x in vars(args).values()]
+        require(all(ROOT != x and ROOT not in x.parents and x not in ROOT.parents for x in roots))
+        require(not args.out.exists()); output = args.out.resolve()
+        require(all(output != x and x not in output.parents for x in
+                    (args.worker.resolve(), args.repository.resolve(), args.graph.resolve(),
+                     args.prompts.resolve(), args.contexts.resolve())))
+        require(github('')['private'] is False)
+        index = build_index(args.worker.resolve(), args.manifest.resolve(), args.repository.resolve(),
+                            args.graph.resolve(), args.prompts.resolve(), args.contexts.resolve(),
+                            args.run_boundary.resolve())
         raw = encoded(index)
         with args.out.open('xb') as stream:stream.write(raw)
-        print(json.dumps(dict(sha256=sha(raw), size_bytes=len(raw), unavailable_count=len(index['unavailable']),
-                              reviewed=False, qualified=False)))
+        print(json.dumps(dict(sha256=sha(raw), size_bytes=len(raw), reviewed=False, qualified=False)))
         return 0
     except Exception:
-        print('REFUSED: preserve collected files. No private generation or automatic retry.', file=sys.stderr)
+        print('REFUSED: preserve files. No private generation or automatic retry.', file=sys.stderr)
         return 1
 
 

@@ -15,6 +15,8 @@ import sys
 from tools.copau_private_prerequisites import require, encoded, FREEZE_SHA, AMENDMENT_SHA, load_json
 
 PINNED = {
+    'src/lightyear_data/carddemo/codec.py': '7444dc7c0493621d283c24c260710fe2e5c479219a7b7cc2537a41be1036a6e4',
+    'src/lightyear_data/carddemo/store.py': 'caeb16c615532c3286728dc4c73e8a47762d88db010d02f866d2682189e76c22',
     'factory/carddemo-web/runtime/prove_slice.py': '03d4ecefbcc82a7711ccb7305d028dd29cab4f24cb81c163271cef86cc2b41d1',
     'factory/carddemo-web/runtime/seed.py': '9429b67dfc868cd64dbf2f1ed156e8259ed00561741968dc2b23d68a27c3cccc',
     'src/lightyear_data/carddemo/reference_screens.py': '6936586237129cd2a02ef6e978ca3cead580783f503522380ec9ecc043099793',
@@ -95,9 +97,9 @@ def fixture_inputs(seed, helpers):
     private_inputs = []
     for ordinal in range(1, 8):
         prefix = str(ordinal) + ':'
-        # Merchant display identifiers are valid scenario business fields, not
-        # appended canaries. The reference must actually return their bytes.
-        merchant = derive(seed, prefix + 'merchant', 22, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        # Private business identifiers drive the judge's existing computed
+        # after-state digest. Names/messages/padding are never selected.
+        merchant = 'HELDOUT MERCHANT'
         fields = {'PA-AUTH-DATE-9C': 99999 - 26000 - ordinal,
                   'PA-AUTH-TIME-9C': 999999999 - 123456000 - ordinal,
                   'PA-AUTH-ORIG-DATE': '261017', 'PA-AUTH-ORIG-TIME': '123456',
@@ -109,7 +111,7 @@ def fixture_inputs(seed, helpers):
                   'PA-MERCHANT-NAME': merchant,
                   'PA-MERCHANT-CITY': derive(seed, prefix + 'city', 13, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
                   'PA-MERCHANT-STATE': 'WA', 'PA-MERCHANT-ZIP': '981010000',
-                  'PA-TRANSACTION-ID': derive(seed, prefix + 'transaction', 15, '0123456789'),
+                  'PA-TRANSACTION-ID': derive(seed, prefix + 'transaction', 15, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
                   'PA-MATCH-STATUS': 'P', 'PA-AUTH-FRAUD': ' '}
         raw = helpers.fixture(dl, dm, fields)
         require(helpers.value(dl, dm, raw, 'PA-MERCHANT-NAME').rstrip() == merchant)
@@ -156,21 +158,27 @@ def run_session(root, seed):
     require({'COPAUS0C', 'COPAUS1C'} <= programs)
     require(any(row['fraud'] and row['fraud'][-1]['auth_fraud'] == 'F' for row in driver.rows))
     require(any(row['fraud'] and row['fraud'][-1]['auth_fraud'] == 'R' for row in driver.rows))
+    _, entries = fixtures.build(Path('spec/modernization/carddemo-data'))
+    layout, mapping = next((l, m) for _, l, m in entries if m['table'] == 'pautdtl1')
     values, bindings = [], []
-    for fields in inputs:
-        # 20 real returned EBCDIC merchant bytes, encoded exactly as the judge's
-        # returned COMMAREA. 26**20 choices (~94 bits) under a private random seed.
-        value = fields['PA-MERCHANT-NAME'][:20].encode('cp037').hex()
-        require(len(value) == 40 and len(set(fields['PA-MERCHANT-NAME'][:20])) >= 10)
-        found = [(i, row['result']['commarea'].find(value)) for i, row in enumerate(driver.rows)
-                 if row['result']['program'] in {'COPAUS0C', 'COPAUS1C'}
-                 and value in row['result']['commarea']]
-        if found:
-            require(value not in values)
-            values.append(value)
-            bindings.append(dict(record=len(values), interaction=found[0][0],
-                                 output='commarea', character_offset=found[0][1], length=40))
-    require(1 <= len(values) <= 7)
+    for record in driver.engine.store.records:
+        if record['table'] != 'pautdtl1':continue
+        # Invoke the exact Store.project_rows used by Proof.expected_state.
+        # Parent/sequence locate the real fixture row; no connection is used.
+        parent = next(r for r in driver.engine.store.records if r['identity'] == record['parent'])
+        ordinal = int(record['identity'].split(':')[1])
+        projected, _ = producer.Store(None, mapping, layout).project_rows(
+            record['raw'], ordinal, parent_path=parent['segment_key'], twin_seq=ordinal)
+        identifier = fixtures.value(layout, mapping, record['raw'], 'PA-TRANSACTION-ID')
+        require(identifier in {x['PA-TRANSACTION-ID'] for x in inputs}
+                and len(identifier) == 15 and len(set(identifier)) >= 8)
+        digest = projected['source_sha256']; value = digest[:40]
+        require(len(digest) == 64 and set(digest) <= set('0123456789abcdef') and value not in values)
+        values.append(value)
+        bindings.append(dict(record=record['identity'], output='pautdtl1.source_sha256',
+                             character_offset=0, length=40, private_identifier_characters=15,
+                             selection='existing-judge-computed-record-digest', output_sha256=digest))
+    require(len(values) == 7)
     private = dict(producer=PINNED, session='Proof.run.authorizations', input_fields=inputs,
                    fixture_sha256=hashlib.sha256(encoded(raw)).hexdigest(),
                    output_sha256=hashlib.sha256(encoded(producer.canonical(driver.rows))).hexdigest(),

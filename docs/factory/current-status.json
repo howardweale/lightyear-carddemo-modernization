@@ -8173,7 +8173,26 @@
     },
     "path": "docs/modernization/carddemo-slice-1-2026-10-18.json",
     "unsigned": true,
-    "final_head_ci": "separate readiness gate"
+    "final_head_ci": "separate readiness gate",
+    "acceptance_scope": "The six recorded work-order proof gates only; not complete platform, error-path, independence, or release acceptance.",
+    "work_order_acceptance_complete": true,
+    "work_order_acceptance_items": {
+      "api-reference": true,
+      "browser": true,
+      "browser-reference": true,
+      "ci-jobs": true,
+      "mutation": true,
+      "mutation-reference": true
+    },
+    "remaining_evidence_gaps": [
+      "Missing-detail screen equivalence is not established.",
+      "SQL error-path screen equivalence is not established.",
+      "Native CICS, IMS and DB2 behavior is not established.",
+      "The original reference and candidate share the BMS parser and data-layout codec. Independent readers now cross-check 50 public and 950 disclosed synthetic rows per layout; this does not establish independent end-to-end or native-platform equivalence.",
+      "IMS authorization rows and the no-change account pair are disclosed synthetic fixtures, not production evidence.",
+      "Surviving and uncovered mutants remain open; timeouts receive no killed credit. 49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT."
+    ],
+    "gap_addendum": "docs/modernization/carddemo-slice-gaps-2026-10-21.json"
   },
   "verdict_path": "docs/factory/intcalc-releasability-2026-10-17.json",
   "delivery": {

@@ -22,7 +22,7 @@ def check_scope(root,scope=None):
     if scope['required_mutation_classes']!=list(CLASSES) or scope['independent_full_slice_required'] is not True:raise ValueError('view-proof-scope')
     source=scope['source']
     if source['path']!='spec/modernization/carddemo-screens/upstream/app/cbl/COACTVWC.cbl':raise ValueError('view-source-path')
-    raw=(root/source['path']).read_text()
+    raw=(root/source['path']).read_text(encoding='utf-8')
     if digest(raw)!=source['sha256']:raise ValueError('view-source-hash')
     labels=[dict(name=line[7:72].strip()[:-1],line=i+1) for i,line in enumerate(raw.splitlines())
         if len(line)>7 and line[6]!='*' and line[7]!=' ' and re.fullmatch('[A-Z0-9][A-Z0-9-]*[.]',line[7:72].strip())]
@@ -33,14 +33,14 @@ def check_scope(root,scope=None):
     accounting=dict(source_label_occurrences=38,metadata_labels=3,procedure_occurrences=35,
         complete_paragraph_retirements=0,partial_projection_paragraph='1200-SETUP-SCREEN-VARS')
     if scope.get('retirement_accounting')!=accounting:raise ValueError('view-retirement-accounting')
-    code=(root/JAVA/'AccountViewRendering.java').read_text()
+    code=(root/JAVA/'AccountViewRendering.java').read_text(encoding='utf-8')
     moves=re.findall(r'move\(frame,"([A-Z0-9]+)",Field\.([A-Z0-9_]+),(account|customer)\);',code)
     expected=[(target,field.replace('-','_'),'account' if field.startswith('ACCT-') else 'customer') for field,target in scope['source_moves']]
     if len(expected)!=27 or moves!=expected:raise ValueError('view-moves')
     if 'ssn.substring(0,3)+"-"+ssn.substring(3,5)+"-"+ssn.substring(5,9)' not in code:raise ValueError('view-ssn-slices')
     if '@CobolSource(program="COACTVWC", paragraph="1200-SETUP-SCREEN-VARS", lines="460-535")' not in code:raise ValueError('view-annotation')
     if 'account_view_projection' in code or re.search(r'\b(?:JsonNode|SourceEdits)\b',code):raise ValueError('view-generic-route')
-    service=(root/JAVA/'AccountViewService.java').read_text()
+    service=(root/JAVA/'AccountViewService.java').read_text(encoding='utf-8')
     if service.count('@CobolSource(program="COACTVWC", paragraph="0000-MAIN", lines="262-393")')!=1:raise ValueError('view-service-annotation')
     replacements=[('private final AccountViewRendering projection','private final ScreenProjection projection'),
                   ('projection=new AccountViewRendering(bindings)','projection=new ScreenProjection(bindings)'),
@@ -50,14 +50,14 @@ def check_scope(root,scope=None):
         service=service.replace(after,before)
     service=re.sub(r'^    @CobolSource\(program="COACTVWC", paragraph="0000-MAIN", lines="262-393"\)\n','',service,flags=re.M)
     if digest(service)!=scope['service_original_sha256']:raise ValueError('view-control-flow-changed')
-    check_service_oracle((root/SERVICE_ORACLE).read_text(),scope['service_original_sha256'])
-    if digest((root/JAVA/'ScreenProjection.java').read_text())!=scope['oracle_sha256']:raise ValueError('view-oracle-changed')
-    base=(root/'factory/carddemo-web/service/pom.xml').read_text()
+    check_service_oracle((root/SERVICE_ORACLE).read_text(encoding='utf-8'),scope['service_original_sha256'])
+    if digest((root/JAVA/'ScreenProjection.java').read_text(encoding='utf-8'))!=scope['oracle_sha256']:raise ValueError('view-oracle-changed')
+    base=(root/'factory/carddemo-web/service/pom.xml').read_text(encoding='utf-8')
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses><param>ai.lightyear.carddemo.AccountViewRendering*</param></targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountViewRenderingTest</param></targetTests>',expected,flags=re.S)
     plugin='<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>account-view-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>${project.basedir}/supplemental-tests/account-view/java</source></sources></configuration>\n    </execution></executions></plugin>'
     expected=expected.replace('<build><plugins>','<build><plugins>'+plugin,1)
-    if (root/'factory/carddemo-web/service/account-view-proof.pom.xml').read_text()!=expected:raise ValueError('view-pom')
+    if (root/'factory/carddemo-web/service/account-view-proof.pom.xml').read_text(encoding='utf-8')!=expected:raise ValueError('view-pom')
     return dict(source_label_occurrences=38,paragraph_occurrences=35,whole_screen_idiomatic=False,source_sha256=source['sha256'],independent_full_slice_required=True)
 
 def evaluate(path):

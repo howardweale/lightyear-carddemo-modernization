@@ -37,7 +37,7 @@ class AccountViewProofTests(unittest.TestCase):
 
     def test_service_oracle_requires_exact_original_executable_bytes(self):
         from tools.carddemo_account_view_proof import SERVICE_ORACLE,check_service_oracle
-        original=(ROOT/SERVICE_ORACLE).read_text();scope=json.loads((ROOT/SCOPE).read_text())
+        original=(ROOT/SERVICE_ORACLE).read_text(encoding='utf-8');scope=json.loads((ROOT/SCOPE).read_text(encoding='utf-8'))
         check_service_oracle(original,scope['service_original_sha256'])
         check_service_oracle(original.replace('\n','\r\n'),scope['service_original_sha256'])
         for bad in (original.replace('AccountViewProjectionOracle','AccountViewService'),original+'// changed\n',
@@ -57,19 +57,19 @@ class AccountViewProofTests(unittest.TestCase):
             for path in paths:
                 target=root/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((ROOT/path).read_bytes())
             self.assertEqual(35,check_scope(root)['paragraph_occurrences'])
-            path=JAVA+'AccountViewService.java';original=(root/path).read_text()
+            path=JAVA+'AccountViewService.java';original=(root/path).read_text(encoding='utf-8')
             route='projection.apply(frame,rows.get("acctdata"),rows.get("custdata"))'
             annotation='    @CobolSource(program="COACTVWC", paragraph="0000-MAIN", lines="262-393")'
             for bad in (original.replace(annotation+'\n',''),original.replace(annotation,annotation+'\n'+annotation),
                         original.replace(route,route.replace('rows.get("custdata")','rows.get("acctdata")')),
                         original.replace(route,'projection.apply(frame,null,null)'),
                         original.replace('if(acct==null)missing','if(acct!=null)missing')):
-                self.assertNotEqual(original,bad);(root/path).write_text(bad)
+                self.assertNotEqual(original,bad);(root/path).write_text(bad,encoding='utf-8')
                 with self.assertRaises(ValueError):check_scope(root)
-            (root/path).write_text(original)
-            path=JAVA+'AccountViewRendering.java';original=(root/path).read_text()
+            (root/path).write_text(original,encoding='utf-8')
+            path=JAVA+'AccountViewRendering.java';original=(root/path).read_text(encoding='utf-8')
             for bad in (original.replace('lines="460-535"','lines="460-534"'),original.replace('ssn.substring(0,3)','ssn.substring(0,2)')):
-                self.assertNotEqual(original,bad);(root/path).write_text(bad)
+                self.assertNotEqual(original,bad);(root/path).write_text(bad,encoding='utf-8')
                 with self.assertRaises(ValueError):check_scope(root)
 
     def test_metadata_labels_and_partial_projection_cannot_be_counted_as_retirements(self):
@@ -84,3 +84,31 @@ class AccountViewProofTests(unittest.TestCase):
             elif defect=='retirement':scope['retirement_accounting']['complete_paragraph_retirements']=1
             else:scope['retirement_accounting']['procedure_occurrences']=38
             with self.subTest(defect=defect),self.assertRaises(ValueError):check_scope(ROOT,scope)
+
+    def test_source_bindings_ignore_ansi_default_but_reject_changed_utf8(self):
+        from unittest.mock import patch
+        from tools.carddemo_account_view_proof import JAVA,SERVICE_ORACLE
+        real_read_text=Path.read_text
+        def ansi_default(path,*args,**kwargs):
+            kwargs.setdefault('encoding','cp1252')
+            return real_read_text(path,*args,**kwargs)
+        # The retained Java comments contain en dashes. ANSI decoding must never alter
+        # their exact UTF-8 source hashes, on Windows or any other locale.
+        service=(ROOT/(JAVA+'AccountViewService.java')).read_bytes()
+        self.assertNotEqual(service.decode('utf-8'),service.decode('cp1252'))
+        scope=json.loads((ROOT/SCOPE).read_bytes())
+        paths=[SCOPE,scope['source']['path'],'factory/carddemo-web/service/pom.xml',
+               'factory/carddemo-web/service/account-view-proof.pom.xml',SERVICE_ORACLE,
+               JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',JAVA+'ScreenProjection.java']
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            for path in paths:
+                target=root/path;target.parent.mkdir(parents=True,exist_ok=True)
+                target.write_bytes((ROOT/path).read_bytes())
+            with patch.object(Path,'read_text',ansi_default):
+                self.assertEqual(35,check_scope(root)['paragraph_occurrences'])
+                target=root/(JAVA+'AccountViewService.java')
+                target.write_bytes(service+b'// changed UTF-8 source\n')
+                with self.assertRaisesRegex(ValueError,'view-control-flow-changed'):check_scope(root)
+                target.write_bytes(service+b'\x81')
+                with self.assertRaises(UnicodeDecodeError):check_scope(root)

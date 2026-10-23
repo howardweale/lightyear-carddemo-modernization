@@ -60,7 +60,9 @@ public final class AccountViewRendering {
         if(customer!=null){
             move(frame,"ACSTNUM",Field.CUST_ID,customer);
             String ssn=value(Field.CUST_SSN,customer);
-            frame.set("ACSTSSN",ssn.substring(0,3)+"-"+ssn.substring(3,5)+"-"+ssn.substring(5,9));
+            // COACTVWC 496-504 STRING writes 11 bytes; the 12th receiving byte is untouched.
+            frame.set("ACSTSSN",ssn.substring(0,3)+"-"+ssn.substring(3,5)+"-"+ssn.substring(5,9)
+                +frame.values.get("ACSTSSN").substring(11));
             move(frame,"ACSTFCO",Field.CUST_FICO_CREDIT_SCORE,customer);
             move(frame,"ACSTDOB",Field.CUST_DOB_YYYY_MM_DD,customer);
             move(frame,"ACSFNAM",Field.CUST_FIRST_NAME,customer);

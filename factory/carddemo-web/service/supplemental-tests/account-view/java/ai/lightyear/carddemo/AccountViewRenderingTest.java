@@ -47,6 +47,14 @@ class AccountViewRenderingTest {
         var old=frame();var typed=frame();Map<String,Map<String,Object>> rows=new LinkedHashMap<>();
         if(account!=null)rows.put("acctdata",account);if(customer!=null)rows.put("custdata",customer);
         new ScreenProjection(bindings).apply(old,bindings.root.path("account_view_projection"),rows);
+        // The retained generic projection pads STRING like MOVE. Correct only that known
+        // oracle defect using COACTVWC 496-504; all other generic results remain exact.
+        // Independent original-COBOL fixtures below verify this receiving-byte behavior.
+        if(customer!=null){
+            assertEquals(12,old.values.get("ACSTSSN").length());
+            assertEquals(" ",old.values.get("ACSTSSN").substring(11));
+            old.set("ACSTSSN",old.values.get("ACSTSSN").substring(0,11)+typed.values.get("ACSTSSN").substring(11));
+        }
         unchanged(beforeAccount,account);unchanged(beforeCustomer,customer);
         new AccountViewRendering(bindings).apply(typed,account,customer);
         same(old,typed);unchanged(beforeAccount,account);unchanged(beforeCustomer,customer);
@@ -209,6 +217,23 @@ class AccountViewRenderingTest {
             for(var property:item.path("expected").properties())expected.set(property.getKey(),property.getValue().asText());
             new AccountViewRendering(bindings).apply(typed,account,customer);
             same(expected,typed);unchanged(beforeAccount,account);unchanged(beforeCustomer,customer);
+        }
+    }
+
+    // COACTVWC 493-504: STRING does not clear its receiver, and absent customers do not write it.
+    @Test void ssnStringPreservesReceivingTailAcrossRepeatedWritesAndMissingCustomer() {
+        for(String tail:List.of(" ","S","0","!","\u0000")) {
+            var typed=frame();typed.set("ACSTSSN","ABCDEFGHIJK"+tail);var expected=frame();
+            expected.set("ACSTSSN","ABCDEFGHIJK"+tail);
+            new AccountViewRendering(bindings).apply(typed,null,null);same(expected,typed);
+            var customer=records.initialized("custdata");var before=copy(customer);
+            new AccountViewRendering(bindings).apply(typed,null,customer);
+            assertEquals("000-00-0000"+tail,typed.values.get("ACSTSSN"));unchanged(before,customer);
+            set("custdata",customer,"CUST-SSN",Commarea.encode("ABC12DEFG"));before=copy(customer);
+            new AccountViewRendering(bindings).apply(typed,null,customer);
+            assertEquals("ABC-12-DEFG"+tail,typed.values.get("ACSTSSN"));unchanged(before,customer);
+            var snapshot=new LinkedHashMap<>(typed.values);
+            new AccountViewRendering(bindings).apply(typed,null,null);assertEquals(snapshot,typed.values);
         }
     }
 }

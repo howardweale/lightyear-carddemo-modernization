@@ -1,0 +1,57 @@
+{
+  "schema": "factory-first-install-acceptance/1",
+  "recorded_on": "2026-10-23",
+  "title": "Factory Tower first installation accepted",
+  "accepted_by": "Howard",
+  "acceptance_scope": "First installation and observed automatic startup; public trust handoff only.",
+  "install_commit": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+  "bundle_manifest_sha256": "3b68c83ce45de2b1251d4d648ec1506de318a9bd01b54f0e1e4f462d230e25b0",
+  "reviewed_bundle_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39682920021/artifacts/12384763102",
+  "correction": {
+    "path": "docs/factory/first-install-2026-10-21/ms106-correction.md",
+    "sha256": "c29c85b5a2d5f5478ddb0aed29d5891bfca5cefa4fcef744dddf5db13e573b4f",
+    "disposition": "Additive evidence for the new installation; original MS-106 correction and historical records remain unchanged."
+  },
+  "task": {
+    "name": "Lightyear-FactoryTower-Howard",
+    "account": "POWDERSNOW\\howar",
+    "sid": "S-1-5-21-3687384130-2006818898-1210227752-1001",
+    "state": "Running",
+    "enabled": true,
+    "logon_type": "Interactive",
+    "run_level": "Limited",
+    "trigger": "AtLogOn for the same account",
+    "last_run": "2026-10-23T08:18:46-07:00"
+  },
+  "listener": {
+    "address": "127.0.0.1",
+    "port": 8769,
+    "count": 1,
+    "process_owned_by_same_account": true,
+    "process_started": "2026-10-23T08:19:09.200628-07:00"
+  },
+  "restart_check": {
+    "operator_signed_out_and_back_in": true,
+    "operator_did_not_manually_start": true,
+    "task_and_process_started_after_pre_logout_observation": true,
+    "pre_logout_observed_at": "2026-10-23T08:14:30.0999129-07:00",
+    "source": "Howard sign-in confirmation and read-only scheduled-task, listener and process-owner queries in the review session"
+  },
+  "signed_only": {
+    "user_environment_setting_present": true,
+    "referenced_configuration_file_present": true,
+    "claim_limit": "Presence was checked after sign-in; this record does not embed a backfill proof or independently re-verify current consumer acceptance."
+  },
+  "public_authority": {
+    "source_url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/415#issuecomment-6368416273",
+    "source_comment_id": 6368416273,
+    "pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAN7nhVi3JYLepJDsdKo+6VF/VfEl26Wf8D1k5o2jlLFI=\n-----END PUBLIC KEY-----\n",
+    "pem_bytes": 113,
+    "pem_sha256": "658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a",
+    "journal_head_sha256": "568c8f8330ddec00b05d27c0c64a84a0208daaae0ec004e96aaa877191f33218",
+    "journal_observation": "Howard ran the installed read-only journal verifier and deliberately posted this head; it is a point-in-time value, not a future-currentness claim."
+  },
+  "execution_authorized": false,
+  "model_calls_authorized": false,
+  "signing_authorized": false
+}

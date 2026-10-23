@@ -167,3 +167,38 @@ class OperationalClaimsTests(unittest.TestCase):
         self.commit()
         with self.assertRaisesRegex(ClaimRefused, "evidence-required"):
             combined(self.root, self.base)
+
+    def test_exact_legacy_audit_decoding_preserves_claims_and_source(self):
+        from unittest.mock import patch
+        raw = b"Tower is installed. \x97 Historical text.\n"
+        path = "docs/historical.md"
+        self.write(path, "placeholder")
+        (self.root / path).write_bytes(raw)
+        revision = self.commit()
+        with patch("tools.operational_claims.LEGACY_AUDIT_CP1252", {path: sha256(raw).hexdigest()}):
+            report = audit(self.root, revision)
+            self.assertEqual([], report["errors"])
+            self.assertEqual(1, report["unsupported_count"])
+            self.assertEqual([dict(path=path, file_sha256=sha256(raw).hexdigest(), encoding="cp1252")], report["legacy_decodings"])
+            with self.assertRaises(UnicodeDecodeError):
+                check(self.root, self.base)
+        self.assertEqual(raw, (self.root / path).read_bytes())
+
+    def test_legacy_binding_cannot_cover_altered_bytes_or_different_path(self):
+        from unittest.mock import patch
+        from tools.operational_claims import audit_text
+        raw = b"Tower is installed. \x97 Historical text.\n"
+        with patch("tools.operational_claims.LEGACY_AUDIT_CP1252", {"docs/old.md": sha256(raw).hexdigest()}):
+            for path, changed in (("docs/old.md", raw + b"changed"), ("docs/other.md", raw)):
+                with self.subTest(path=path), self.assertRaises(UnicodeDecodeError):
+                    audit_text(path, changed)
+        self.assertEqual(("ASCII source", "utf-8"), audit_text("docs/new.md", b"ASCII source"))
+
+    def test_unknown_historical_encoding_remains_audit_error(self):
+        path = "docs/unknown.md"
+        self.write(path, "placeholder")
+        (self.root / path).write_bytes(b"Tower is installed. \xff")
+        revision = self.commit()
+        report = audit(self.root, revision)
+        self.assertEqual([dict(path=path, error="source-unavailable")], report["errors"])
+        self.assertEqual([], report["legacy_decodings"])

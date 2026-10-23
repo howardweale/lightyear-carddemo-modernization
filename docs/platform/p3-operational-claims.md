@@ -67,3 +67,14 @@ arbitrary paraphrases and claims embedded in executable code examples remain
 outside automatic classification and require review.
 
 P1 remains higher priority. P4 and P5 follow. Java idiomatic-index change: zero.
+
+## Exact historical encoding bindings
+
+The additive historical audit decodes three immutable, hash-bound Windows-1252
+Markdown blobs without changing their bytes. Their legacy non-ASCII bytes are
+em dash and multiplication characters. Every fallback appears in the report
+with path, exact source SHA-256 and encoding; its claims still undergo the same
+evidence classification. Unknown encodings, changed bytes and other paths
+remain audit errors. New and changed prose still requires strict UTF-8.
+Three additional synthetic CI cases cover retained claims, exact-byte/path
+binding, source immutability and refusal of unknown or newly changed prose.

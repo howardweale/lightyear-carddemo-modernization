@@ -217,6 +217,23 @@ def check(root, base):
     return checked
 
 
+# Immutable historical Windows-1252 files, independently byte/hash reviewed.
+# Applies only to additive audit decoding; incremental checks stay strict UTF-8.
+LEGACY_AUDIT_CP1252 = {'docs/calibration/idempiere-ms94/stage-b-06/preparation/generated-class-alternative-r2.md': '2f3742ea4fe8c1e5a325d6233c07f40faddbc0dca03e043313dc5d9e4bb06805', 'docs/calibration/idempiere-ms94/stage-b-06/preparation/review-r3/README.md': '4faf27e1e62ad94c3d61d64f357aeb3fccf7dcf135627f0b3f2e1e556f53a840', 'docs/factory/graph-review-r3/README.md': 'e9413fa8823f78a16c08731f4a205486faecfe8b26d88a7907990c79734df35a'}
+
+
+def audit_text(path, raw):
+    try:
+        return raw.decode("utf-8"), "utf-8"
+    except UnicodeDecodeError:
+        if LEGACY_AUDIT_CP1252.get(path) != sha256(raw).hexdigest():
+            raise
+        text = raw.decode("cp1252")
+        if text.encode("cp1252") != raw:
+            raise ClaimRefused("historical-encoding-roundtrip")
+        return text, "cp1252"
+
+
 def audit(root, revision):
     """Additive inventory of old unsupported lexical claims; no exemptions file.
 
@@ -229,12 +246,15 @@ def audit(root, revision):
         if not entry.startswith((b"100644 blob ", b"100755 blob ")) or entry.count(b"\0") != 1:
             raise ClaimRefused("operational-receipt-regular-file")
         return git(root, "show", revision + ":" + path)
-    rows, errors = [], []
+    rows, errors, legacy_decodings = [], [], []
     for path in sorted(n for n in names if n and in_scope(n)):
         try:
             raw = read_blob(path)
+            text, encoding = audit_text(path, raw)
+            if encoding != "utf-8":
+                legacy_decodings.append(dict(path=path, file_sha256=sha256(raw).hexdigest(), encoding=encoding))
             claims = []
-            for unit in units(raw.decode("utf-8")):
+            for unit in units(text):
                 try:
                     ok = supported(unit, path, read_blob)
                 except (ClaimRefused, subprocess.CalledProcessError):
@@ -246,5 +266,5 @@ def audit(root, revision):
         except (UnicodeError, ClaimRefused, subprocess.CalledProcessError):
             errors.append(dict(path=path, error="source-unavailable"))
     return dict(schema="operational-claim-audit/1", revision=revision, rows=rows,
-                unsupported_count=sum(len(r["claims"]) for r in rows), errors=errors,
+                unsupported_count=sum(len(r["claims"]) for r in rows), errors=errors, legacy_decodings=legacy_decodings,
                 authority_granted=False, scope="lexical claims without a recognized, digest-bound receipt on the same clause")

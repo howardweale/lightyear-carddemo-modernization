@@ -1,20 +1,11 @@
 name: POSTTRAN original executable key-change rehearsal
-on:
-  pull_request:
-    paths:
-      - 'docs/factory/posttran-key-change-2026-10-23/**'
-      - 'tools/check_posttran_key_change.py'
-      - 'tools/**'
-      - 'src/**'
-      - 'tests/**'
-      - 'spec/mainframe/**'
-      - '.github/workflows/posttran-key-change-proof.yml'
+on: [pull_request]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: posttran-key-change-${{ github.event.pull_request.number }}
-  cancel-in-progress: false
+  group: posttran-key-change-${{ github.ref == 'refs/heads/main' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   key-change-proof:
     runs-on: ubuntu-24.04

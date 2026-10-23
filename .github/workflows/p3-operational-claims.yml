@@ -1,0 +1,37 @@
+name: Operational claim evidence
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: p3-claims-${{ github.ref == 'refs/heads/main' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  operational-claims:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Synthetic evidence refusal and real Git regressions
+        env:
+          PYTHONPATH: .:src:tests
+        run: python -B -m unittest -v test_operational_claims
+      - name: Inventory historical operational prose without rewriting it
+        env:
+          PYTHONPATH: .:src:tests
+          AUDIT_REVISION: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python -B tools/ci/p3_claim_audit.py --revision "$AUDIT_REVISION" --output work/p3-public/historical-audit.json
+      - name: Retain public paths, hashes and claim locations
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: p3-historical-claim-audit
+          path: work/p3-public/historical-audit.json
+          if-no-files-found: error

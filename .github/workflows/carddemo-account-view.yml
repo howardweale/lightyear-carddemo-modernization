@@ -1,0 +1,53 @@
+name: CardDemo typed account view projection
+on:
+  pull_request:
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
+  push:
+    branches: [main]
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  account-view-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Validate complete scope and proof refusal fixtures
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B -m unittest test_carddemo_account_view_proof -v
+          python -B -m tools.carddemo_account_view_proof --out work/carddemo-account-view/scope.json
+          python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+          python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+          python -B -m tools.carddemo_account_view_fixtures --out work/carddemo-account-view/source-fixtures.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Compare complete storage and mutate every new class
+        run: |
+          mvn -B -f factory/carddemo-web/service/account-view-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" -Dtest=AccountViewRenderingTest test
+          mvn -B -f factory/carddemo-web/service/account-view-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" org.pitest:pitest-maven:mutationCoverage
+      - name: Enforce nonempty per-class mutation gates
+        if: always()
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.carddemo_account_view_proof --mutation factory/carddemo-web/service/target/pit-reports/mutations.xml --out work/carddemo-account-view/proof.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-account-view-proof
+          path: |
+            work/carddemo-account-view/
+            factory/carddemo-web/service/target/pit-reports/
+            factory/carddemo-web/service/target/surefire-reports/
+          if-no-files-found: error
+          retention-days: 90

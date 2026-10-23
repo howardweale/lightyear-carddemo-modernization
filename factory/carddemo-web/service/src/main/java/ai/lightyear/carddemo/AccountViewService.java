@@ -6,9 +6,10 @@ import java.util.*;
 /** COACTVWC: physical source lines below are checked against the pinned bindings. */
 public final class AccountViewService implements TransactionService {
     private static final String PROGRAM="COACTVWC";
-    private final Bindings bindings;private final TypedRecords records;private final ScreenProjection projection;
-    public AccountViewService(Bindings bindings){this.bindings=bindings;records=new TypedRecords(bindings);projection=new ScreenProjection(bindings);}
+    private final Bindings bindings;private final TypedRecords records;private final AccountViewRendering projection;
+    public AccountViewService(Bindings bindings){this.bindings=bindings;records=new TypedRecords(bindings);projection=new AccountViewRendering(bindings);}
     private String message(String value){return bindings.literal(PROGRAM,value);}
+    @CobolSource(program="COACTVWC", paragraph="0000-MAIN", lines="262-393")
     public Result interact(Connection db,Commarea area,String aid,Map<String,String> input)throws SQLException {
         ScreenFrame frame=new ScreenFrame(bindings,PROGRAM);frame.cursor="ACCTSID";
         frame.set("INFOMSG",message("Enter or update id of account to display")); // 113–114,528–534
@@ -47,7 +48,7 @@ public final class AccountViewService implements TransactionService {
         Map<String,Map<String,Object>> rows=new LinkedHashMap<>();if(acct!=null)rows.put("acctdata",acct);
         var cust=records.read(db,"custdata",Commarea.encode(customer),false);if(cust!=null)rows.put("custdata",cust);
         if(acct==null && cust!=null)rows.put("acctdata",records.initialized("acctdata")); // Explicit deterministic uninitialized-record reference assumption.
-        projection.apply(frame,bindings.root.path("account_view_projection"),rows); // 471–523
+        projection.apply(frame,rows.get("acctdata"),rows.get("custdata")); // 471–523
         if(cust==null && frame.message.isEmpty()){ // 9400: master data already read is still displayed.
             String reason=message("CustId:")+customer+message(" not found")+message(" in customer master.Resp: ")+response(13)+message(" REAS:")+response(0);
             frame.error(ScreenFrame.pad(reason,75).stripTrailing(),frame.cursor);return new Result(PROGRAM,frame,false);

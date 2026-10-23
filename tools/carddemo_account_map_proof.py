@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
-from tools.carddemo_render_route import check_render_route
+from tools.carddemo_account_render_route import check_render_route
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-map-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'

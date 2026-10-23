@@ -40,6 +40,10 @@ class AccountRenderRulesTest {
         }
         screen.cursor="ACSEFTC";screen.message="OLD ERROR";screen.endpoint="unchanged";
         SourceEdits edits=new SourceEdits(model,CLOCK);edits.attachScreen(screen);
+        // COACTUPC 2797-2813 reads signed numeric REDEFINES after a master read.
+        // Their PIC X base fields initialize to spaces; seed valid account money in both lanes.
+        for(String name:List.of("CURR-BAL","CREDIT-LIMIT","CASH-CREDIT-LIMIT","CURR-CYC-CREDIT","CURR-CYC-DEBIT"))
+            edits.put("ACUP-OLD-"+name+"-N","0.00");
         return new Lane(edits,screen);
     }
     private static Lane[] pair(){return new Lane[]{lane(original),lane(production)};}

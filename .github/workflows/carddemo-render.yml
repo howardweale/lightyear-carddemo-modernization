@@ -1,10 +1,10 @@
 name: CardDemo typed account rendering
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_render_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_render_route.py', 'tests/test_carddemo_render_route.py', 'tests/test_carddemo_account_render_proof.py', '.github/workflows/carddemo-render.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_render_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_account_render_route.py', 'tests/test_carddemo_account_render_route.py', 'tests/test_carddemo_account_render_proof.py', '.github/workflows/carddemo-render.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_render_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_render_route.py', 'tests/test_carddemo_render_route.py', 'tests/test_carddemo_account_render_proof.py', '.github/workflows/carddemo-render.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_render_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_account_render_route.py', 'tests/test_carddemo_account_render_route.py', 'tests/test_carddemo_account_render_proof.py', '.github/workflows/carddemo-render.yml']
 permissions:
   contents: read
 concurrency:
@@ -23,7 +23,7 @@ jobs:
         env:
           PYTHONPATH: src:.:tests
         run: |
-          python -B -m unittest test_carddemo_account_render_proof test_carddemo_render_route -v
+          python -B -m unittest test_carddemo_account_render_proof test_carddemo_account_render_route -v
           python -B -m tools.carddemo_account_render_proof --out work/carddemo-render/scope.json
           python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
           python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data

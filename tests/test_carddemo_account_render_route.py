@@ -1,7 +1,7 @@
 """CI-only exact rendering composition and decoy/refusal checks."""
 from pathlib import Path
 import tempfile,unittest
-from tools.carddemo_render_route import JAVA,MODELS,check_render_route
+from tools.carddemo_account_render_route import JAVA,MODELS,check_render_route
 ROOT=Path(__file__).resolve().parents[1]
 class RenderRouteTests(unittest.TestCase):
     def test_exact_chain_and_missing_changed_discarded_or_decoy_routes(self):

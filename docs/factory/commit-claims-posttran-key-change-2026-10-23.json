@@ -1,0 +1,30 @@
+{
+  "schema": "record-commit-claims/1",
+  "policy_start": "2026-10-17",
+  "claims": [
+    {
+      "record": "docs/factory/posttran-key-change-2026-10-23/amendment.json",
+      "reference": "2a54a9198f250ba56d42a8c64dd21d0012d7c039",
+      "commit": "2a54a9198f250ba56d42a8c64dd21d0012d7c039",
+      "role": "source",
+      "source_path": "docs/factory/posttran-phase2-plan-2026-10-16.json",
+      "source_sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+    },
+    {
+      "record": "docs/factory/posttran-key-change-2026-10-23/amendment.json",
+      "reference": "e4c6845ee9dd5ebc4eb4b3001cc7cde6fc70414b",
+      "commit": "e4c6845ee9dd5ebc4eb4b3001cc7cde6fc70414b",
+      "role": "source",
+      "source_path": "docs/factory/posttran-phase2-plan-2026-10-16.json",
+      "source_sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+    },
+    {
+      "record": "docs/factory/posttran-key-change-2026-10-23/unsigned-request.json",
+      "reference": "2a54a9198f250ba56d42a8c64dd21d0012d7c039",
+      "commit": "2a54a9198f250ba56d42a8c64dd21d0012d7c039",
+      "role": "source",
+      "source_path": "docs/factory/posttran-phase2-plan-2026-10-16.json",
+      "source_sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+    }
+  ]
+}

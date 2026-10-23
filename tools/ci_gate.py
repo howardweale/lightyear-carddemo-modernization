@@ -172,6 +172,14 @@ def lint():
               if exists else Path(fence_path).read_bytes())
     subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
                     '--base', base, '--head', 'HEAD'], check=True)
+    platform_path = 'tools/ci/platform_fence.py'
+    platform_exists = subprocess.run(['git', 'cat-file', '-e', base + ':' + platform_path],
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+    platform_source = (subprocess.check_output(['git', 'show', base + ':' + platform_path])
+                       if platform_exists else Path(platform_path).read_bytes())
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+    subprocess.run([sys.executable, '-B', '-c', platform_source.decode('utf-8'),
+                    '--base', base, '--head', head], check=True)
     for p in Path('.github/workflows').glob('*.yml'):
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p

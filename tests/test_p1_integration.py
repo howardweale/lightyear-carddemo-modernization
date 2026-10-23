@@ -1,0 +1,90 @@
+from contextlib import redirect_stdout, redirect_stderr
+from io import StringIO
+import json
+import os
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+from tools.ci import p1_codeql, p1_security_collect
+from tools.ci.p1_reports import ReportRefused
+
+
+class P1IntegrationTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+
+    def test_dependency_groups_cover_all_extras_and_empty_groups(self):
+        (self.root / "pyproject.toml").write_text('[project]\ndependencies=[]\n[project.optional-dependencies]\na=["idna==3.10"]\nb=[]\n[dependency-groups]\nc=["PyYAML==6.0.3"]\n')
+        rows = p1_security_collect.python_groups(self.root, {"pyproject.toml", "requirements-ci.txt"})
+        self.assertEqual({"default", "a", "b", "c", "requirements-file"}, {r[1] for r in rows})
+
+    def test_dynamic_and_included_dependencies_fail_closed(self):
+        for text in ('[project]\ndynamic=["dependencies"]\n', '[dependency-groups]\ntest=[{include-group="hidden"}]\n'):
+            (self.root / "pyproject.toml").write_text(text)
+            with self.assertRaises(ReportRefused):
+                p1_security_collect.python_groups(self.root, {"pyproject.toml"})
+
+    def test_dependency_resolution_cannot_report_empty_success(self):
+        with patch.object(p1_security_collect, "capture", return_value=(0, b'{"dependencies":[]}', b"")):
+            with self.assertRaisesRegex(ReportRefused, "empty-resolution"):
+                p1_security_collect.run_dependency([], self.root, "pip-audit", "pyproject.toml", self.root, {"pyproject.toml"})
+
+    def test_dependency_analysis_errors_refuse_even_with_findings(self):
+        payload = dict(dependencies=[dict(fileName="fixture.jar", vulnerabilities=[dict(name="synthetic", severity="HIGH")])], scanInfo=dict(analysisExceptions=["private raw text"]))
+        with patch.object(p1_security_collect, "capture", return_value=(1, json.dumps(payload).encode(), b"")):
+            with self.assertRaisesRegex(ReportRefused, "dependency-incomplete"):
+                p1_security_collect.run_dependency([], self.root, "dependency-check", "pom.xml", self.root, {"pom.xml"})
+
+    def sarif(self, with_probe=True, real=False, failed=False):
+        def result(path):
+            return dict(ruleId="py/code-injection", message=dict(text="SYNTHETIC-RAW-DIAGNOSTIC"), locations=[dict(physicalLocation=dict(artifactLocation=dict(uri=path), region=dict(startLine=1)))])
+        rows = [result("p1-synthetic-codeql/probe.py")] if with_probe else []
+        if real:
+            rows.append(result("src/a.py"))
+        payload = dict(version="2.1.0", runs=[dict(tool=dict(driver=dict(rules=[dict(id="py/code-injection", properties={"security-severity": "9.8"})])), invocations=[dict(executionSuccessful=not failed)], results=rows)])
+        folder = self.root / "raw"
+        folder.mkdir(exist_ok=True)
+        (folder / "python.sarif").write_text(json.dumps(payload))
+        return folder
+
+    def test_codeql_requires_real_negative_control_result(self):
+        folder = self.sarif(with_probe=False)
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            with self.assertRaisesRegex(ReportRefused, "negative-control"):
+                p1_codeql.reduce(self.root, "python", folder, self.root / "public")
+
+    def test_codeql_control_not_counted_as_repository_finding(self):
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            self.assertTrue(p1_codeql.reduce(self.root, "python", self.sarif(), self.root / "public"))
+        report = json.loads((self.root / "public/python.json").read_text())
+        self.assertEqual(0, report["summary"]["total"])
+        self.assertTrue(report["negative_control_detected"])
+
+    def test_codeql_real_findings_fail_and_raw_text_never_published(self):
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            self.assertFalse(p1_codeql.reduce(self.root, "python", self.sarif(real=True), self.root / "public"))
+        raw = (self.root / "public/python.json").read_text()
+        self.assertNotIn("SYNTHETIC-RAW-DIAGNOSTIC", raw)
+        self.assertNotIn("p1-synthetic-codeql", raw)
+        self.assertEqual({"critical": 1}, json.loads(raw)["summary"]["severity_counts"])
+
+    def test_failed_codeql_invocation_refuses_clean_result(self):
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            with self.assertRaisesRegex(ReportRefused, "incomplete"):
+                p1_codeql.reduce(self.root, "python", self.sarif(failed=True), self.root / "public")
+
+    def test_cli_suppresses_exception_payload_and_traceback(self):
+        output = StringIO()
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch("sys.argv", ["tool", "pip-audit", "--output", "unused"]), patch.object(p1_security_collect, "pip_audit", side_effect=ValueError("SYNTHETIC-SECRET-DETAIL")), redirect_stdout(output), redirect_stderr(output):
+            self.assertEqual(1, p1_security_collect.main())
+        self.assertNotIn("SYNTHETIC-SECRET-DETAIL", output.getvalue())
+        self.assertNotIn("Traceback", output.getvalue())
+
+    def test_control_creation_is_inert_and_exclusive(self):
+        p1_codeql.prepare(self.root, "python")
+        self.assertTrue((self.root / "p1-synthetic-codeql/probe.py").is_file())
+        with self.assertRaises(FileExistsError):
+            p1_codeql.prepare(self.root, "python")

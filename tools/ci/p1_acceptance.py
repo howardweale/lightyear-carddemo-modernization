@@ -45,7 +45,7 @@ def quality_probes():
 
 def main():
     try:
-        print(json.dumps(dict(quality_probes=quality_probes(), security_probes="not implemented")))
+        print(json.dumps(dict(quality_probes=quality_probes())))
         return 0
     except Exception:
         print("P1 quality acceptance probe failed", file=sys.stderr)

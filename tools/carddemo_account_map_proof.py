@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_proof_profiles import baseline_pom, profile_pom
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-map-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
@@ -47,12 +48,12 @@ def check_scope(root,scope=None):
     if 'AccountMapModel.retire(' not in service or 'AccountMapState.bind(this)' not in edits:raise ValueError('map-production-route')
     for method in ('receive','validate','compare','account'):
         if 'AccountMapRules.'+method+'(state)' not in edits:raise ValueError('map-production-dispatch')
-    base=(root/'factory/carddemo-web/service/pom.xml').read_text()
+    base=baseline_pom(root)
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses>'+''.join('<param>ai.lightyear.carddemo.'+n+'*</param>' for n in CLASSES)+'</targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountMapRulesTest</param></targetTests>',expected,flags=re.S)
     plugin='<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>map-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>'+chr(36)+'{project.basedir}/supplemental-tests/map/java</source></sources></configuration>\n    </execution></executions></plugin>'
     expected=expected.replace('<build><plugins>','<build><plugins>'+plugin,1)
-    if (root/'factory/carddemo-web/service/map-proof.pom.xml').read_text()!=expected:raise ValueError('map-proof-pom')
+    if profile_pom(root, 'map')!=expected:raise ValueError('map-proof-pom')
     return dict(paragraphs=88,newly_retired_paragraphs=RETIRED,whole_screen_idiomatic=False,classes=list(CLASSES),
         source_sha256=source['sha256'],scope_sha256=sha256((root/SCOPE).read_bytes()).hexdigest())
 

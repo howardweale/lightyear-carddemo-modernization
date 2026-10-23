@@ -49,7 +49,6 @@ class AccountViewProofTests(unittest.TestCase):
         from tools.carddemo_account_view_proof import JAVA
         scope=json.loads((ROOT/SCOPE).read_bytes())
         paths=[SCOPE,scope['source']['path'],'factory/carddemo-web/service/pom.xml',
-               'factory/carddemo-web/service/account-view-proof.pom.xml',
                'factory/carddemo-web/service/supplemental-tests/account-view/java/ai/lightyear/carddemo/AccountViewProjectionOracle.java',
                JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',JAVA+'ScreenProjection.java']
         with tempfile.TemporaryDirectory() as directory:
@@ -98,7 +97,7 @@ class AccountViewProofTests(unittest.TestCase):
         self.assertNotEqual(service.decode('utf-8'),service.decode('cp1252'))
         scope=json.loads((ROOT/SCOPE).read_bytes())
         paths=[SCOPE,scope['source']['path'],'factory/carddemo-web/service/pom.xml',
-               'factory/carddemo-web/service/account-view-proof.pom.xml',SERVICE_ORACLE,
+               SERVICE_ORACLE,
                JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',JAVA+'ScreenProjection.java']
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)

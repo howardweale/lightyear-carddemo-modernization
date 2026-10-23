@@ -4,6 +4,7 @@ from hashlib import sha256
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_proof_profiles import baseline_pom, profile_pom
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-view-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
 CLASSES=('AccountViewRendering',)
@@ -52,12 +53,12 @@ def check_scope(root,scope=None):
     if digest(service)!=scope['service_original_sha256']:raise ValueError('view-control-flow-changed')
     check_service_oracle((root/SERVICE_ORACLE).read_text(encoding='utf-8'),scope['service_original_sha256'])
     if digest((root/JAVA/'ScreenProjection.java').read_text(encoding='utf-8'))!=scope['oracle_sha256']:raise ValueError('view-oracle-changed')
-    base=(root/'factory/carddemo-web/service/pom.xml').read_text(encoding='utf-8')
+    base=baseline_pom(root)
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses><param>ai.lightyear.carddemo.AccountViewRendering*</param></targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountViewRenderingTest</param></targetTests>',expected,flags=re.S)
     plugin='<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>account-view-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>${project.basedir}/supplemental-tests/account-view/java</source></sources></configuration>\n    </execution></executions></plugin>'
     expected=expected.replace('<build><plugins>','<build><plugins>'+plugin,1)
-    if (root/'factory/carddemo-web/service/account-view-proof.pom.xml').read_text(encoding='utf-8')!=expected:raise ValueError('view-pom')
+    if profile_pom(root, 'account-view')!=expected:raise ValueError('view-pom')
     return dict(source_label_occurrences=38,paragraph_occurrences=35,whole_screen_idiomatic=False,source_sha256=source['sha256'],independent_full_slice_required=True)
 
 def evaluate(path):

@@ -1,10 +1,10 @@
 name: CardDemo typed account feedback
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_proof_profiles.py', 'tests/test_carddemo_proof_profiles.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/__init__.py', 'src/lightyear_mainframe/records.py', 'src/lightyear_mainframe/source.py', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_feedback_proof.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_proof_profiles.py', 'tests/test_carddemo_proof_profiles.py', 'tests/test_carddemo_account_feedback_proof.py', '.github/workflows/carddemo-feedback.yml']
 permissions:
   contents: read
 concurrency:
@@ -33,8 +33,35 @@ jobs:
           java-version: '21'
       - name: Compare complete storage and mutate every new class
         run: |
-          mvn -B -f factory/carddemo-web/service/feedback-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" -Dtest=AccountFeedbackTest test
-          mvn -B -f factory/carddemo-web/service/feedback-proof.pom.xml -Dcarddemo.root="$GITHUB_WORKSPACE" org.pitest:pitest-maven:mutationCoverage
+          mvn -B -f factory/carddemo-web/service/pom.xml -Pproof-feedback -Dcarddemo.root="$GITHUB_WORKSPACE" -Dtest=AccountFeedbackTest test
+          mvn -B -f factory/carddemo-web/service/pom.xml -Pproof-feedback -Dcarddemo.root="$GITHUB_WORKSPACE" org.pitest:pitest-maven:mutationCoverage
+      - name: Materialize original reviewed baseline for paired proof
+        uses: actions/checkout@v7
+        with:
+          ref: f267fc9ee8d1329529debf4b5edd72bb026b63a5
+          path: work/k7-baseline
+      - name: Compare original build and profile on the same source and fixtures
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          set -euo pipefail
+          python -B -m unittest test_carddemo_proof_profiles -v
+          baseline="$GITHUB_WORKSPACE/work/k7-baseline"
+          output="$GITHUB_WORKSPACE/work/k7-paired/feedback"
+          mkdir -p "$output"
+          mvn -B -f factory/carddemo-web/service/pom.xml -Pproof-feedback -Dcarddemo.root="$GITHUB_WORKSPACE" org.apache.maven.plugins:maven-help-plugin:3.5.1:effective-pom -Doutput="$output/profile-effective.xml"
+          cp factory/carddemo-web/service/target/pit-reports/mutations.xml "$output/profile-mutations.xml"
+          (
+            cd "$baseline"
+            python -B -m lightyear_data.carddemo.web_bindings --out work/carddemo-web-bindings
+            python -B -m lightyear_data.carddemo.plan --out work/carddemo-web-data
+            mvn -B -f factory/carddemo-web/service/feedback-proof.pom.xml -Dcarddemo.root="$baseline" -Dtest=AccountFeedbackTest test
+            mvn -B -f factory/carddemo-web/service/feedback-proof.pom.xml -Dcarddemo.root="$baseline" org.pitest:pitest-maven:mutationCoverage
+            mvn -B -f factory/carddemo-web/service/feedback-proof.pom.xml -Dcarddemo.root="$baseline" org.apache.maven.plugins:maven-help-plugin:3.5.1:effective-pom -Doutput="$output/baseline-effective.xml"
+          )
+          cp "$baseline/factory/carddemo-web/service/target/pit-reports/mutations.xml" "$output/baseline-mutations.xml"
+          cp -R "$baseline/factory/carddemo-web/service/target/surefire-reports" "$output/baseline-surefire"
+          python -B -m tools.carddemo_proof_profiles --old "$output/baseline-mutations.xml" --new "$output/profile-mutations.xml" --old-effective "$output/baseline-effective.xml" --new-effective "$output/profile-effective.xml" --old-root "$baseline" --new-root "$GITHUB_WORKSPACE" --out "$output/comparison.json"
       - name: Enforce nonempty per-class mutation gates
         if: always()
         env:
@@ -45,6 +72,7 @@ jobs:
         with:
           name: carddemo-feedback-proof
           path: |
+            work/k7-paired/
             work/carddemo-feedback/
             factory/carddemo-web/service/target/pit-reports/
             factory/carddemo-web/service/target/surefire-reports/

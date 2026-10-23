@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_proof_profiles import baseline_pom, profile_pom
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-feedback-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
@@ -47,11 +48,11 @@ def check_scope(root,scope=None):
     source_edits=(root/JAVA/'SourceEdits.java').read_text()
     if 'AccountValidationFeedback.error(new AccountFeedbackState(this),reason)' not in source_edits:
         raise ValueError('feedback-production-route')
-    base=(root/'factory/carddemo-web/service/pom.xml').read_text()
+    base=baseline_pom(root)
     expected=re.sub(r'<targetClasses>.*?</targetClasses>','<targetClasses>'+''.join('<param>ai.lightyear.carddemo.'+n+'*</param>' for n in CLASSES)+'</targetClasses>',base,flags=re.S)
     expected=re.sub(r'<targetTests>.*?</targetTests>','<targetTests><param>ai.lightyear.carddemo.AccountFeedbackTest</param></targetTests>',expected,flags=re.S)
     expected=expected.replace('<build><plugins>','<build><plugins>'+'<plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.2</version>\n    <executions><execution><id>feedback-supplemental-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>\n      <configuration><sources><source>${project.basedir}/supplemental-tests/feedback/java</source></sources></configuration>\n    </execution></executions></plugin>',1)
-    if (root/'factory/carddemo-web/service/feedback-proof.pom.xml').read_text()!=expected:
+    if profile_pom(root, 'feedback')!=expected:
         raise ValueError('feedback-mutation-pom')
     return dict(paragraphs=88,newly_retired_paragraphs=[],whole_screen_idiomatic=False,
         classes=list(CLASSES),source_sha256=source['sha256'],scope_sha256=sha256((root/SCOPE).read_bytes()).hexdigest())

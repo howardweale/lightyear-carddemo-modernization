@@ -186,6 +186,8 @@ def lint():
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()
     from tools.check_source_lf import check_paths
     check_paths(Path.cwd(), files)
+    from tools.check_java_text import check as check_java_text
+    check_java_text(Path.cwd())
     for name in files:
         p=Path(name)
         if not p.is_file(): continue

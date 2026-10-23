@@ -1,0 +1,15 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-22",
+  "scope": "Source of the private COPAU operator-helper requirements; no execution or approval claim.",
+  "claims": [
+    {
+      "record": "docs/factory/copau-private-helper-2026-10-22.md",
+      "reference": "83a3c892f3d449222f2fa3c0b8f15d24c4622946",
+      "commit": "83a3c892f3d449222f2fa3c0b8f15d24c4622946",
+      "role": "source",
+      "source_path": "docs/factory/copau-f2-prerequisites-2026-10-22.md",
+      "source_sha256": "bbdf6673522761d15e72ae6921b710d18337a8629ca1f21858ba9df318412e0c"
+    }
+  ]
+}

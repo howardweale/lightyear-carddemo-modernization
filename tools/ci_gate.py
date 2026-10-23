@@ -162,6 +162,16 @@ def gate():
     raise SystemExit('CI timed out; missing/queued/running is not acceptance')
 
 def lint():
+    # Execute the trusted base checker so a candidate cannot remove its fence.
+    # Bootstrap only when the base predates this newly introduced check.
+    fence_path = 'tools/check_java_quality_fence.py'
+    base = os.environ['BASE_SHA']
+    exists = subprocess.run(['git', 'cat-file', '-e', base + ':' + fence_path],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+    source = (subprocess.check_output(['git', 'show', base + ':' + fence_path])
+              if exists else Path(fence_path).read_bytes())
+    subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
+                    '--base', base, '--head', 'HEAD'], check=True)
     for p in Path('.github/workflows').glob('*.yml'):
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p
@@ -176,6 +186,8 @@ def lint():
     files=subprocess.check_output(['git','diff','--name-only','--diff-filter=ACMR',os.environ['BASE_SHA'],'HEAD'],text=True).splitlines()
     from tools.check_source_lf import check_paths
     check_paths(Path.cwd(), files)
+    from tools.check_java_text import check as check_java_text
+    check_java_text(Path.cwd())
     for name in files:
         p=Path(name)
         if not p.is_file(): continue

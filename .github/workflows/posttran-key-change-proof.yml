@@ -1,0 +1,46 @@
+name: POSTTRAN original executable key-change rehearsal
+on: [pull_request]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: posttran-key-change-${{ github.ref == 'refs/heads/main' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  key-change-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'cryptography>=46,<47'
+      - name: Fetch public key-only executable and verify every original binding
+        run: |
+          git fetch origin refs/heads/codex/posttran-original-key-oct23
+          python -B tools/check_posttran_key_change.py
+          python -B -c "import json,subprocess; r=json.load(open('docs/factory/posttran-key-change-2026-10-23/amendment.json')); subprocess.run(['git','worktree','add','--detach','work/posttran-key-only',r['executable_commit']],check=True)"
+      - name: Original plan checkout and disposable-authority preflight rehearsal
+        working-directory: work/posttran-key-only
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B -c "from tools.run_posttran_phase2 import bound_plan; bound_plan()"
+          python -B -m unittest tests.test_phase2_authorization.Phase2AuthorizationTests tests.test_phase2_authorization.Phase2SignedProofTests -v
+          python -B -m unittest tests.test_phase2_rehearsal.RehearsalTests.test_sign_proof_variables_and_intercepted_reservation tests.test_phase2_rehearsal.RehearsalTests.test_wrong_head tests.test_phase2_rehearsal.RehearsalTests.test_wrong_plan tests.test_phase2_rehearsal.RehearsalTests.test_missing_journal tests.test_phase2_rehearsal.RehearsalTests.test_missing_proof tests.test_phase2_rehearsal.RehearsalTests.test_changed_request tests.test_phase2_rehearsal.RehearsalTests.test_expired_window tests.test_phase2_rehearsal.RehearsalTests.test_changed_image -v
+      - name: Independently check retained compiler bytes without loading the image
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052649453 > work/compiler-metadata.json
+          gh api repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052649453/zip > work/compiler.zip
+          python -B tools/check_posttran_key_change.py --artifact-metadata work/compiler-metadata.json --archive work/compiler.zip > work/key-change-proof.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: posttran-key-change-proof
+          path: work/key-change-proof.json
+          retention-days: 14

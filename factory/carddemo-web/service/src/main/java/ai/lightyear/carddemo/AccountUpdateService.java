@@ -5,7 +5,7 @@ import java.util.*;
 
 /** COACTUPC transaction orchestration. Editing, messages and rendering execute
  * generated source statements; physical data columns always come from the plan.
- * Source ranges: main 903â€“1009, action 2561â€“2647, reads 3608â€“3797, write 3892â€“4106.
+ * Source ranges: main 903-1009, action 2561-2647, reads 3608-3797, write 3892-4106.
  */
 public final class AccountUpdateService implements TransactionService {
     private static final String PROGRAM="COACTUPC";

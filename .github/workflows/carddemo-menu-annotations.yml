@@ -1,0 +1,34 @@
+name: CardDemo menu source annotations
+on:
+  pull_request:
+    paths: ['factory/carddemo-web/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_menu_annotations.py', 'tests/test_carddemo_menu_annotations.py', '.github/workflows/carddemo-menu-annotations.yml']
+  push:
+    branches: [main]
+    paths: ['factory/carddemo-web/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_menu_annotations.py', 'tests/test_carddemo_menu_annotations.py', '.github/workflows/carddemo-menu-annotations.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  menu-annotations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Verify exact source and Java bindings
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B -m unittest test_carddemo_menu_annotations -v
+          python -B -m tools.carddemo_menu_annotations --out work/carddemo-menu-annotations/proof.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carddemo-menu-annotations
+          path: work/carddemo-menu-annotations/
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,86 @@
+{
+  "schema": "posttran-not-adopted/1",
+  "recorded_on": "2026-10-23",
+  "status": "not-adopted",
+  "reference_only": true,
+  "execution_authorized": false,
+  "bindings": [
+    {
+      "path": ".github/workflows/posttran-phase2.yml",
+      "old_sha256": "bab0459268754f5dc6508995ff4a53fd9a2797490749c242002abbd69718a712",
+      "proposed_sha256": "9cb3924ac70ae92ee24b4db73f5f7b4e9767da760b681254e4969b32aba7d994",
+      "reason": "Workflow now checks the retained October 16 plan at its recorded source using check_posttran_retained_plan, rather than treating current checkout bindings as the historical plan.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "Historical workflow bound_plan matches all 182 files at the original executable; the later workflow adjustment addresses inspection on a drifted checkout."
+    },
+    {
+      "path": "src/lightyear_mainframe/claim_scope.py",
+      "old_sha256": "baedf58b852b45f89114e8ab9f16d94c4d49df247c718e14bc2ec4707639b7b0",
+      "proposed_sha256": "42d011406904618fe26b5f56f49a6d37e9077e3032151900caaf311fa9ceb086",
+      "reason": "Claim-scope validation pins the accepted historical overlay and adds signed review-packet checks for equivalence upgrades; unknown self-sealed overlays refuse.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "The run retains its historical claim-scope inputs and no equivalence upgrade is requested. No later overlay is adopted."
+    },
+    {
+      "path": "src/lightyear_mainframe/generic_scenario_ir.py",
+      "old_sha256": "5438974e5d310bc68899e44d672ac15503acd56c627ab47a0a308d41c6e85e1c",
+      "proposed_sha256": "d5e29e6be8f83ffa9c2243a2875ad4ac35fd2d6852d779738f0fe9c47980cdc5",
+      "reason": "Scenario IR recognizes signed numeric literals through an optional leading plus or minus.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "POSTTRAN uses legacy_twin.public_inputs and scenario_generation.case from the sealed plan, not the generic scenario IR parser."
+    },
+    {
+      "path": "src/lightyear_mainframe/records.py",
+      "old_sha256": "d873f4f11a14d0064b76a66dca3c57f165960e21ff2961e7a85d5275989bd204",
+      "proposed_sha256": "69d3719ccb9d25af86fd1d79d1da160416663cd92c192e15738b1755414752ff",
+      "reason": "Copybook compilation supports bounded working-storage lengths and overlays, recognizes VALUE/VALUES condition names, and checks oversized subordinate REDEFINES; the default record limit remains 32760.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "POSTTRAN copybook calls retain the default record limit and do not request the later storage_overlays option. The change was for working-storage consumers."
+    },
+    {
+      "path": "src/lightyear_mainframe/systematic_mutation.py",
+      "old_sha256": "c4218407e70f50d0bde10b13b569ff52ca3c6b3e218ec5d3ac1a8300a477110d",
+      "proposed_sha256": "68e199f0f3cbb1a9309f5a96497594029921dfb8c3bb07826a1ecbb4533d21f1",
+      "reason": "Mutation enumeration adds source-bound constant-output mutations for CBACT04C merchant fields.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "The added sites concern CBACT04C mutation enumeration; this run executes unchanged CBTRN02C and does not enumerate mutations."
+    },
+    {
+      "path": "src/lightyear_mainframe/targeted_witness.py",
+      "old_sha256": "c87a05546bd23e2c4a73cc7c57a5e49406c21e17827e8b14f29f7cfb57d40738",
+      "proposed_sha256": "12b08d0e269b6daca5f5f526b484786f2de308edc236ecbca3fe83f9af26edc9",
+      "reason": "Targeted-witness dispatch adds the equivalence-cex case route.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "The run uses the fixed public/generated POSTTRAN scenarios, not the later equivalence-cex witness route."
+    },
+    {
+      "path": "tools/legacy_twin/install-pinned.sh",
+      "old_sha256": "4832913e251ce802c4b973b1240c321fbf40267d497b9d2011f8c3f0f3ecd6d7",
+      "proposed_sha256": "2467b6de41d65e5e4b232619e266676f4346cd26e2fafeb018b1105b08160a2f",
+      "reason": "Pinned twin installer bounds primary archive retries to 60 seconds; package pins and snapshot fallback remain unchanged.",
+      "frozen": true,
+      "approval": "not-adopted",
+      "source_bytes_change_requested": false,
+      "disposition": "reference-only; excluded by Howard decision 2026-10-23",
+      "original_execution_impact_review": "Execution loads the retained compiler image by exact hash; it does not rebuild using the installer. A later mirror retry bound is not needed for that path."
+    }
+  ]
+}

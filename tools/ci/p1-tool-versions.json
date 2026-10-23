@@ -1,0 +1,13 @@
+{
+  "schema": "p1-tool-selection/1",
+  "verified_on": "2026-10-23",
+  "ruff": "0.17.2",
+  "mypy": "2.4.0",
+  "pip-audit": "2.10.1",
+  "gitleaks": "8.30.1",
+  "dependency-check": "13.0.0",
+  "codeql_bundle": "2.27.3",
+  "installed_locally": false,
+  "baseline_measured": false,
+  "execution_status": "not run; CI integration and pinned distribution hashes still required"
+}

@@ -16,13 +16,19 @@ def check_scope(root,scope=None):
     if len(labels)!=7 or labels!=source['inventory']:raise ValueError('menu-inventory')
     expected=scope['bindings']
     if len(expected)!=7 or {b['paragraph'] for b in expected}!={p['name'] for p in labels}:raise ValueError('menu-bindings')
-    starts={p['name']:p['line'] for p in labels};observed=[]
+    ranges={}
+    for i,item in enumerate(labels):
+        first=item['line'];stop=labels[i+1]['line']-1 if i+1<len(labels) else len(lines)
+        active=[n for n in range(first,stop+1) if len(lines[n-1])>7
+                and lines[n-1][6] not in ('*','/') and lines[n-1][7:72].strip()]
+        ranges[item['name']]=(first,active[-1])
+    observed=[]
     for path,bound_hash in scope['executable_sha256'].items():
         if path not in ('factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/MenuService.java','factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java'):raise ValueError('menu-java-path')
         code=(root/path).read_text()
         for match in re.finditer(r'@CobolSource\(program="COMEN01C", paragraph="([^"]+)", lines="([^"]+)"\)',code):
             paragraph,span=match.groups();first,last=map(int,span.split('-'))
-            if first!=starts.get(paragraph) or last<first or last>len(lines):raise ValueError('menu-range')
+            if (first,last)!=ranges.get(paragraph):raise ValueError('menu-range')
             tail=re.sub(r'^\s*(?:@CobolSource\([^\n]+\)\s*)+','',code[match.end():])
             method=re.match(r'\s*(?:(?:public|private|protected|static|final)\s+)*[\w<>?,.\[\]]+\s+(\w+)\s*\(',tail)
             if not method:raise ValueError('menu-method')

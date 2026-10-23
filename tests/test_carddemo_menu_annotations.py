@@ -52,3 +52,27 @@ class MenuAnnotationTests(unittest.TestCase):
                 with self.assertRaises(ValueError):check_scope(root)
             (root/path).write_text(original)
             self.assertEqual(7,check_scope(root)['annotations'])
+
+    def test_coordinated_annotation_and_manifest_range_changes_are_refused(self):
+        from tools.carddemo_menu_annotations import digest
+        scope=json.loads((ROOT/SCOPE).read_bytes())
+        paths=[SCOPE,scope['source']['path'],*scope['executable_sha256']]
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            for path in paths:
+                target=root/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((ROOT/path).read_bytes())
+            self.assertEqual(7,check_scope(root)['annotations'])
+            lines=(root/scope['source']['path']).read_text().splitlines()
+            for index,binding in enumerate(scope['bindings']):
+                path=binding['file'];original=(ROOT/path).read_text()
+                annotation='@CobolSource(program="COMEN01C", paragraph="'+binding['paragraph']+'", lines="'+binding['lines']+'")'
+                first,last=map(int,binding['lines'].split('-'))
+                for end in (last-1,last+1):
+                    altered=copy.deepcopy(scope);span=str(first)+'-'+str(end)
+                    altered['bindings'][index]['lines']=span
+                    altered['bindings'][index]['source_span_sha256']=digest('\n'.join(lines[first-1:end])+'\n')
+                    (root/path).write_text(original.replace(annotation,annotation.replace(binding['lines'],span)))
+                    with self.subTest(paragraph=binding['paragraph'],end=end),self.assertRaisesRegex(ValueError,'menu-range'):
+                        check_scope(root,altered)
+                (root/path).write_text(original)
+            self.assertEqual(7,check_scope(root)['annotations'])

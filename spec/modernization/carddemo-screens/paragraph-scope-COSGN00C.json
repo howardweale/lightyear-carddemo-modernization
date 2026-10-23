@@ -1,0 +1,36 @@
+{
+  "schema": "carddemo-paragraph-scope/1",
+  "program": "COSGN00C",
+  "source": {
+    "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COSGN00C.cbl",
+    "sha256": "4f901ae6b113eebae60ae1d94b30f8cb9906d031a4419770bf56980bdf97e377"
+  },
+  "routing_sources": {
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountFicoRule.java": "bf4920630e72ad871e38c75d3e86e96754a018939724d3b39821d755606bb833",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountInputRules.java": "77486569edec9341cb67f19ba7945409b0ddfa0e2bacd5aa28d0ddb6197fc5e3",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountLocationRules.java": "c1360f7999cc2507f9b91579142c88058b78a80f4f428b33488cbe691516d17d",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapModel.java": "8944014de4abdca25cbfcb812536dc3b7a8a1230d1c26aac0aa1b1fb370b50ae",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapRules.java": "332aeff97c47544b77f7941bb7c966be7a3d080a47b704ac36aa1bf0f898203a",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMoneyRule.java": "8e3a58adbd1154f0854818f4dd24ba7b4146933c3e76fa6db4b65825f624e3a8",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountPhoneDateModel.java": "bef008ed0aff7edb027b3f488c8cea5007e373ee38533c63104433635e841db1",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountPhoneRules.java": "407e3238dfb5a994089fb10968e52ad38aa80b81e7caea6f701f106a8db772d5",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountSsnRule.java": "eb30fdcfb224200dd52620ff78c28af69e60eb3f9473a3561ee67be41b6ddd71",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountTextRules.java": "c1acfe30886f8b81b025bc465db8eacb7f7b89fc1c23ed4bbb9460597785ff75",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateService.java": "5d4b0fd3428990dad1ec37648733af437dc37ee1013740dbe988b4ce26dcddab",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateTransaction.java": "aa1a9be3883aa9093c5939c384b32d995493a817c9b5659ffe077872af4bc002",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java": "3ebf674735b9e52534c8dfdd879c4d7ef4ad946fe054b2c48e77791347e523b6",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSources.java": "204123fc7aeb29ae9f20d7c705d91666c9aa32f4cf19ab9f09f26ee8f8c43953",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java": "54da29d93c7ddb9dda3164a7de04cf9d3f6daeb47a53680884add269892afcbd",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java": "04e30114b488da9d74008d7efc69dbba802972919b52c2f9b22fc74987419dbc",
+    "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SourceEdits.java": "fe869f6717d1072daf0c5f3563788f9f681e5acd2b39d418776ec797b0eced5e",
+    "src/lightyear_data/carddemo/update_edits.py": "4c762114ba17dc936f9b08c491ba63a41915c4a0978e6499ebda8e9d25ea1292"
+  },
+  "paragraphs": [
+    {"name":"MAIN-PARA","line":73,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java","class":"SignonService","method":"interact","annotation":{"program":"COSGN00C","paragraph":"MAIN-PARA","lines":"73-102"},"source_span_sha256":"53b70ca73ecbbc87af4a3849aa94cfc87c35cd934377fdb41609d27ed9be820f"}},
+    {"name":"PROCESS-ENTER-KEY","line":108,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java","class":"SignonService","method":"signIn","annotation":{"program":"COSGN00C","paragraph":"PROCESS-ENTER-KEY","lines":"108-140"},"source_span_sha256":"51564bdd14dc06be83a0750ca4ced82369666f44fd61c4d747516e93e076eac5"}},
+    {"name":"SEND-SIGNON-SCREEN","line":145,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java","class":"SignonService","method":"error","annotation":{"program":"COSGN00C","paragraph":"SEND-SIGNON-SCREEN","lines":"145-157"},"source_span_sha256":"33587afbcb36199e15d441a5d13951bfec3e868053db473460518e9e2279a726"}},
+    {"name":"SEND-PLAIN-TEXT","line":162,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java","class":"SignonService","method":"endSession","annotation":{"program":"COSGN00C","paragraph":"SEND-PLAIN-TEXT","lines":"162-172"},"source_span_sha256":"33b473dd866a60ed40e9b232ac6b071739b24365b8d0a22ac3f3c7acd4645434"}},
+    {"name":"POPULATE-HEADER-INFO","line":177,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java","class":"ScreenFrame","method":"headers","annotation":{"program":"COSGN00C","paragraph":"POPULATE-HEADER-INFO","lines":"177-208"},"source_span_sha256":"2ca9345cb96b08b39d00bd4f19b33452e9004bd8332849920eb48df39a8834cd"}},
+    {"name":"READ-USER-SEC-FILE","line":209,"classification":"java","java":{"file":"factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java","class":"SignonService","method":"authenticate","annotation":{"program":"COSGN00C","paragraph":"READ-USER-SEC-FILE","lines":"209-251"},"source_span_sha256":"6e3d83834a6f14b89274ebfd8ca23bf0325d5508cbaa4a528b31d6cf432a6579"}}
+  ]
+}

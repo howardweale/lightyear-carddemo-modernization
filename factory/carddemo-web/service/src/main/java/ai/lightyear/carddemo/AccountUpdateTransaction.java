@@ -24,6 +24,7 @@ public final class AccountUpdateTransaction {
     private static String expression(JsonNode e,Function<String,String> fields){
         return e.path("operation").asText().equals("literal")?e.path("value").asText():ChangeDetection.evaluate(e,fields);
     }
+    @CobolSource(program="COACTUPC", paragraph="9500-STORE-FETCHED-DATA", lines="3801-3884")
     public void capture(Commarea area,Map<String,Map<String,Object>> rows){
         for(JsonNode move:bindings.root.path("account_update").path("fetched"))
             area.move(move.path("target").asText(),expression(move.path("expression"),name->field(name,area,rows)));
@@ -42,6 +43,8 @@ public final class AccountUpdateTransaction {
         }
         return Map.of("acctdata",buffers.get("ACCT-UPDATE-RECORD").bytes(),"custdata",buffers.get("CUST-UPDATE-RECORD").bytes());
     }
+    @CobolSource(program="COACTUPC", paragraph="9600-WRITE-PROCESSING", lines="3888-4104")
+    @CobolSource(program="COACTUPC", paragraph="9700-CHECK-CHANGE-IN-REC", lines="4109-4192")
     public Outcome save(Connection connection,Commarea area)throws SQLException {
         if(connection.getAutoCommit())throw new IllegalArgumentException("interaction-transaction-required");
         if(!area.get("ACUP-CHANGE-ACTION").equals("N"))throw new IllegalArgumentException("source-confirmation-state-required");

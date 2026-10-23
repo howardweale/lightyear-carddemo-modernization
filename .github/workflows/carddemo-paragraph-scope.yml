@@ -1,0 +1,28 @@
+name: CardDemo complete paragraph scope
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'pr' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  paragraph-scope:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[control-tower]'
+      - name: Check complete source ownership and refusal fixtures
+        run: |
+          python -m unittest tests.test_carddemo_account_scope tests.test_carddemo_account_paragraph_scope
+          python -m tools.carddemo_account_scope --out work/carddemo-paragraph-scope/counts.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: carddemo-paragraph-scope-${{ github.sha }}
+          path: work/carddemo-paragraph-scope/counts.json
+          if-no-files-found: error

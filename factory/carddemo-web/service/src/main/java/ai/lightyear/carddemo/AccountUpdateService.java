@@ -14,6 +14,10 @@ public final class AccountUpdateService implements TransactionService {
     private SourceEdits edits(Commarea area){SourceEdits e=new SourceEdits(AccountMapModel.retire(bindings.root.path("account_update").path("validation")),bindings.clock);e.loadArea(area);return e;}
     private String literal(String value){return bindings.literal(PROGRAM,value);}
     private static boolean blank(String text){return text.chars().allMatch(c->c==0||c==' ');}
+    @CobolSource(program="COACTUPC", paragraph="COMMON-RETURN", lines="1007-1020")
+    @CobolSource(program="COACTUPC", paragraph="3000-SEND-MAP", lines="2649-2663")
+    @CobolSource(program="COACTUPC", paragraph="3100-SCREEN-INIT", lines="2668-2693")
+    @CobolSource(program="COACTUPC", paragraph="3400-SEND-SCREEN", lines="3589-3602")
     private Result render(Commarea area,SourceEdits e){
         ScreenFrame screen=new ScreenFrame(bindings,PROGRAM);e.attachScreen(screen);
         for(String paragraph:List.of("3200-SETUP-SCREEN-VARS","3250-SETUP-INFOMSG","3300-SETUP-SCREEN-ATTRS","3390-SETUP-INFOMSG-ATTRS"))e.run(paragraph);
@@ -22,6 +26,9 @@ public final class AccountUpdateService implements TransactionService {
     @Override public Result interact(Connection db,Commarea area,String aid,Map<String,String> input)throws SQLException{
         return interact(db,area,aid,input,null);
     }
+    @CobolSource(program="COACTUPC", paragraph="0000-MAIN", lines="859-1006")
+    @CobolSource(program="COACTUPC", paragraph="1000-PROCESS-INPUTS", lines="1025-1035")
+    @CobolSource(program="COACTUPC", paragraph="2000-DECIDE-ACTION", lines="2562-2642")
     @Override public Result interact(Connection db,Commarea area,String aid,Map<String,String> input,ScreenFrame prior)throws SQLException{
         // Source maps invalid PF keys to ENTER. PF3 precedes every other state.
         if(aid.equals("PF3")){
@@ -69,6 +76,10 @@ public final class AccountUpdateService implements TransactionService {
         }
         return render(area,e);
     }
+    @CobolSource(program="COACTUPC", paragraph="9000-READ-ACCT", lines="3608-3646")
+    @CobolSource(program="COACTUPC", paragraph="9200-GETCARDXREF-BYACCT", lines="3650-3697")
+    @CobolSource(program="COACTUPC", paragraph="9300-GETACCTDATA-BYACCT", lines="3701-3747")
+    @CobolSource(program="COACTUPC", paragraph="9400-GETCUSTDATA-BYCUST", lines="3752-3796")
     private void fetch(Connection db,Commarea area,SourceEdits e)throws SQLException{
         String account=e.get("CC-ACCT-ID");area.initialize("ACUP-OLD-DETAILS");e.setCondition("WS-NO-INFO-MESSAGE");
         area.move("ACUP-OLD-ACCT-ID",account); // COACTUPC 3614: retain search key even when the xref READ fails.

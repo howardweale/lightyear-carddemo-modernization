@@ -111,7 +111,7 @@ def probe(source, image, missing=False):
 
 def assemble(output):
     output.mkdir(parents=True, exist_ok=True)
-    spec = json.loads(Path(DOC + 'worker-packaging-r2-2026-10-20.json').read_bytes())
+    spec = json.loads(Path(DOC + 'support-bindings-j2-2026-10-22.json').read_bytes())
     image = json.loads(Path(DOC + 'java-image-pin-r2-2026-10-20.json').read_bytes())['selection']
     run(['docker', 'pull', image['reference']])
     actual = json.loads(run(['docker', 'image', 'inspect', image['reference']]))[0]

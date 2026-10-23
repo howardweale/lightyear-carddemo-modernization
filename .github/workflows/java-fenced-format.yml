@@ -1,0 +1,46 @@
+name: Held fenced Java formatting patch
+on:
+  pull_request:
+    paths: ['java-format-fenced.pom.xml', 'tools/java-format/**', 'tools/java_format_fenced.py', 'tests/test_java_format_fenced.py', 'factory/carddemo-web/service/**', '.github/workflows/java-fenced-format.yml']
+  push:
+    branches: [main]
+    paths: ['java-format-fenced.pom.xml', 'tools/java-format/**', 'tools/java_format_fenced.py', 'tests/test_java_format_fenced.py', 'factory/carddemo-web/service/**', '.github/workflows/java-fenced-format.yml']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  format-patch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Review exact input scope and produce formatting patch only
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin f267fc9ee8d1329529debf4b5edd72bb026b63a5
+          python -B -m unittest test_java_format_fenced -v
+          python -B -m tools.java_format_fenced capture --out work/fenced-format
+          mvn -B -f java-format-fenced.pom.xml spotless:apply
+          mvn -B -f java-format-fenced.pom.xml spotless:check
+          python -B -m tools.java_format_fenced report --out work/fenced-format
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fenced-format-patch
+          path: |
+            work/fenced-format/format.patch
+            work/fenced-format/manifest.json
+          if-no-files-found: error
+          retention-days: 90

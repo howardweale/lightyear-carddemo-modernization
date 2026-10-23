@@ -1,10 +1,10 @@
 name: CardDemo typed account view projection
 on:
   pull_request:
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_common_area_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
   push:
     branches: [main]
-    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
+    paths: ['factory/carddemo-web/**', 'src/lightyear_data/carddemo/**', 'src/lightyear_data/__init__.py', 'src/lightyear_mainframe/**', 'spec/modernization/carddemo-screens/**', 'tools/carddemo_account_view_proof.py', 'tools/carddemo_account_view_fixtures.py', 'tools/carddemo_java_proof.py', 'tools/carddemo_common_area_proof.py', 'tests/test_carddemo_account_view_proof.py', '.github/workflows/carddemo-account-view.yml']
 permissions:
   contents: read
 concurrency:

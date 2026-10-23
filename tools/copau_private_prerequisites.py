@@ -137,7 +137,10 @@ def ancestors_acl(rows, sid):
     dangerous = 0x40 | 0x10000 | 0x40000 | 0x80000
     for row in rows:
         require(row['owner'] in trusted)
-        require(not any(r['allow'] and not r['inheritOnly'] and r['sid'] not in trusted
+        # OWNER_RIGHTS (S-1-3-4) means this object's current owner, already
+        # checked above. It is not an additional independently trusted principal.
+        require(not any(r['allow'] and not r['inheritOnly']
+                        and (row['owner'] if r['sid'] == 'S-1-3-4' else r['sid']) not in trusted
                         and r['rights'] & dangerous for r in row['rules']))
 
 

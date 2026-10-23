@@ -277,5 +277,47 @@ class CopauAclTransportTests(unittest.TestCase):
             self.assertTrue(data['sid'].startswith('S-1-'))
 
 
+
+class CopauOwnerRightsTests(unittest.TestCase):
+    def test_owner_rights_resolve_only_to_the_checked_current_owner(self):
+        sid = 'S-1-5-21-123'
+        owners = [sid, 'S-1-5-18', 'S-1-5-32-544',
+                  'S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464']
+        for owner in owners:
+            # Exact public ACE shape observed on the hosted Windows fixture.
+            row = dict(owner=owner, protected=True, rules=[
+                dict(sid='S-1-3-4', allow=True, inheritOnly=False, rights=2032127),
+                dict(sid='S-1-5-18', allow=True, inheritOnly=False, rights=2032127),
+                dict(sid='S-1-5-32-544', allow=True, inheritOnly=False, rights=2032127)])
+            with self.subTest(owner=owner):helper.ancestors_acl([row], sid)
+        for owner in ['S-1-1-0', 'S-1-5-21-999', 'S-1-3-4', 'S-1-3-0']:
+            row['owner'] = owner
+            with self.subTest(untrusted_owner=owner), self.assertRaises(helper.Refused):
+                helper.ancestors_acl([row], sid)
+
+    def test_owner_rights_do_not_hide_other_dangerous_ancestor_grants(self):
+        sid = 'S-1-5-21-123'
+        owner_rule = dict(sid='S-1-3-4', allow=True, inheritOnly=False, rights=0x1F01FF)
+        for principal in ['S-1-1-0', 'S-1-5-21-999', 'S-1-3-0', 'S-1-3-1']:
+            for right in [0x40, 0x10000, 0x40000, 0x80000]:
+                extra = dict(sid=principal, allow=True, inheritOnly=False, rights=right)
+                row = dict(owner=sid, protected=True, rules=[owner_rule, extra])
+                with self.subTest(principal=principal, right=right), self.assertRaises(helper.Refused):
+                    helper.ancestors_acl([row], sid)
+                # Existing deny and inherit-only handling is unchanged.
+                helper.ancestors_acl([dict(row, rules=[owner_rule, dict(extra, allow=False)])], sid)
+                helper.ancestors_acl([dict(row, rules=[owner_rule, dict(extra, inheritOnly=True)])], sid)
+
+    def test_private_directory_and_file_policy_stays_exact_sid_only(self):
+        sid = 'S-1-5-21-123'
+        own = dict(sid=sid, allow=True, inheritOnly=False, rights=0x1F01FF)
+        alias = dict(own, sid='S-1-3-4')
+        for directory in [False, True]:
+            helper.private_acl(dict(owner=sid, protected=True, rules=[own]), sid, directory)
+            for rules in [[alias], [own, alias]]:
+                with self.subTest(directory=directory, rules=rules), self.assertRaises(helper.Refused):
+                    helper.private_acl(dict(owner=sid, protected=True, rules=rules), sid, directory)
+
+
 if __name__ == '__main__':
     unittest.main()

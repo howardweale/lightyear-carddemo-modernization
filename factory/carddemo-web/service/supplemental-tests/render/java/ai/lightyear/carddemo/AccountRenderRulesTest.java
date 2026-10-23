@@ -40,10 +40,11 @@ class AccountRenderRulesTest {
         }
         screen.cursor="ACSEFTC";screen.message="OLD ERROR";screen.endpoint="unchanged";
         SourceEdits edits=new SourceEdits(model,CLOCK);edits.attachScreen(screen);
-        // COACTUPC 2797-2813 reads signed numeric REDEFINES after a master read.
-        // Their PIC X base fields initialize to spaces; seed valid account money in both lanes.
-        for(String name:List.of("CURR-BAL","CREDIT-LIMIT","CASH-CREDIT-LIMIT","CURR-CYC-CREDIT","CURR-CYC-DEBIT"))
-            edits.put("ACUP-OLD-"+name+"-N","0.00");
+        // COACTUPC 2797-2813 and 2874-2908 read old/new signed numeric REDEFINES.
+        // LOW-VALUES flags mean valid (197-215); both PIC X-backed records need numeric seeds.
+        for(String prefix:List.of("ACUP-OLD-","ACUP-NEW-"))
+            for(String name:List.of("CURR-BAL","CREDIT-LIMIT","CASH-CREDIT-LIMIT","CURR-CYC-CREDIT","CURR-CYC-DEBIT"))
+                edits.put(prefix+name+"-N","0.00");
         return new Lane(edits,screen);
     }
     private static Lane[] pair(){return new Lane[]{lane(original),lane(production)};}

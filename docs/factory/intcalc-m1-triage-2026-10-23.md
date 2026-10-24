@@ -6,7 +6,7 @@ All 113 sites are classified `equivalent` within the explicitly bounded host con
 
 These are source/runtime arguments, not a claim that 200 surviving cases prove equivalence. The retained 30 individually targeted sites each survived 200 cases (6,000 total); the 81 APPL-RESULT class members have no raw-value consumer; two further sites have identical fresh compiler-generated C under the retained normalization. Every mutation is listed below, and its complete argument and exact source/record hashes are in [the JSON record](intcalc-m1-triage-2026-10-23.json).
 
-Scope: pinned GnuCOBOL twin, approved loader inputs and declared fault seams, one invocation with a terminating CEE3ABD shim. Storage and alternate-index arguments retain their explicit compiler/runtime restrictions. Malformed databases, other runtimes and native z/OS are outside this claim. Any contradictory witness must invalidate the affected classification, while retaining the raw record.
+Scope: pinned GnuCOBOL twin, contract-defined loader inputs and declared fault seams, one invocation with a terminating CEE3ABD shim. Storage and alternate-index arguments retain their explicit compiler/runtime restrictions. Malformed databases, other runtimes and native z/OS are outside this claim. Any contradictory witness must invalidate the affected classification, while retaining the raw record.
 
 | Category | Count |
 |---|---:|

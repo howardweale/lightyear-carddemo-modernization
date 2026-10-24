@@ -56,7 +56,7 @@ def validate(record, read):
     require(sum(item['targeted_cases'] or 0 for item in rows) == 6000, 'targeted-counts')
     require(sum(item['fresh_compiler_identity'] for item in rows) == 2, 'compiler-counts')
     require(sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest() ==
-            'e668f871544852723738a76933b47b9b43995cc51a959d0095f5382c0004c84f', 'reviewed-record-content-changed')
+            '512d4d313b9b8d0d381a4f44d024f1d4d1707194fee3c840fde41addcc4c2bdb', 'reviewed-record-content-changed')
     return dict(schema='intcalc-m1-triage-validation/1', survivors=113, arguments=22,
                 raw_killed=311, denominator=424, additional_kills_claimed=0,
                 record_sha256=sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),

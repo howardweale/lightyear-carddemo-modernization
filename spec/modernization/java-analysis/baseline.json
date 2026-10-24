@@ -1,0 +1,7 @@
+{
+  "schema": "java-analysis-baseline/1",
+  "status": "pending-ci-review",
+  "versions": {"checkstyle": "3.6.0", "checkstyle_engine": "10.21.4", "errorprone": "2.38.0", "compiler": "3.14.0", "spotbugs": "4.9.3.0"},
+  "findings": {"checkstyle": [], "errorprone": [], "spotbugs": []},
+  "note": "This is not an empty approved baseline. The gate refuses until actual source-bound CI reports are reviewed and retained. No automatic acceptance."
+}

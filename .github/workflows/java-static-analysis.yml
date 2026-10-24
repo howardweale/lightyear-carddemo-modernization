@@ -1,0 +1,69 @@
+name: Java static analysis baseline
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  capture:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [checkstyle, errorprone, spotbugs]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Parser and baseline refusal tests
+        env:
+          PYTHONPATH: .:src:tests
+        run: python -B -m unittest test_java_analysis -v
+      - name: Capture scanner evidence and prove negative control
+        run: python -B -m tools.java_analysis capture --tool ${{ matrix.tool }} --out work/java-analysis/${{ matrix.tool }}
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: java-analysis-${{ matrix.tool }}
+          path: work/java-analysis/${{ matrix.tool }}
+          if-no-files-found: error
+          retention-days: 90
+  baseline:
+    needs: capture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v6
+        with:
+          pattern: java-analysis-*
+          path: work/java-analysis-download
+      - name: Require reviewed baseline and refuse additions
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          mkdir -p work/java-analysis
+          for tool in checkstyle errorprone spotbugs; do
+            mv "work/java-analysis-download/java-analysis-$tool" "work/java-analysis/$tool"
+          done
+          python -B -m tools.java_analysis gate --out work/java-analysis --base "$BASE"

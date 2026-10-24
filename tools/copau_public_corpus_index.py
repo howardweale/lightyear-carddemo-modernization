@@ -75,6 +75,11 @@ def historical_metadata():
                 missing=missing, metadata_error_count=errors)
 
 
+def inventory_digest(rows):
+    """One byte contract shared with the public boundary producer."""
+    return sha(encoded(rows))
+
+
 def build_index(worker, manifest, repository, graph, prompts, contexts, run_boundary):
     raw = stable_read(manifest, 2 * 1024 * 1024); bindings = load_json(raw)
     require(sha(raw) == WORKER_SHA and len(bindings) == 403)
@@ -84,11 +89,11 @@ def build_index(worker, manifest, repository, graph, prompts, contexts, run_boun
     require(boundary['schema'] == 'copau-run-visible-boundary/1'
             and set(boundary['surfaces']) == {'graph', 'prompts', 'contexts'})
     corpora = dict(worker=dict(root=str(worker), manifest=str(manifest), files=worker_rows,
-        records=403, inventory_sha256=sha(encoded(worker_rows)), inventory_complete=True))
+        records=403, inventory_sha256=inventory_digest(worker_rows), inventory_complete=True))
     for name, root in [('graph', graph), ('prompts', prompts), ('contexts', contexts)]:
         rows = file_rows(root); expected = boundary['surfaces'][name]
         # Review must establish closure, not just presence of an export directory.
-        require(expected['inventory_sha256'] == sha(encoded(rows)))
+        require(expected['inventory_sha256'] == inventory_digest(rows))
         if name == 'graph' and expected.get('status') == 'disabled':
             from lightyear_factory.copau_boundary import disabled_graph
             require(len(rows) == 1 and rows[0]['path'] == 'disabled.json')
@@ -96,7 +101,7 @@ def build_index(worker, manifest, repository, graph, prompts, contexts, run_boun
         else:
             require(expected['records'] > 0)
         corpora[name] = dict(root=str(root), files=rows, records=expected['records'],
-            inventory_sha256=sha(encoded(rows)), inventory_complete=False,
+            inventory_sha256=inventory_digest(rows), inventory_complete=False,
             run_binding_sha256=sha(boundary_raw), all_run_visible_content_included=False)
         if name == 'graph' and expected.get('status') == 'disabled':
             corpora[name].update(status='disabled', exception=expected['exception'],

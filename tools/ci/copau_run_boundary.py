@@ -14,7 +14,7 @@ from urllib.request import urlopen
 from lightyear_factory.contracts import WorkOrder
 from lightyear_factory.context import GraphContextAssembler
 from lightyear_factory.copau_boundary import DISABLED_GRAPH, SETTINGS, encoded, digest, require
-from tools.copau_public_corpus_index import file_rows, github, historical_metadata
+from tools.copau_public_corpus_index import file_rows, github, historical_metadata, inventory_digest
 
 WORKER = 'docs/factory/copau-f8-workspace-manifest-2026-10-21.json'
 WORKER_SHA = 'bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771'
@@ -147,15 +147,15 @@ def collect(repo, output):
         launch_settings=SETTINGS, launch_settings_sha256=digest(encoded(SETTINGS)),
         graph_declaration=DISABLED_GRAPH,
         worker=dict(files=403, manifest_path=WORKER, manifest_sha256=WORKER_SHA,
-                    inventory_sha256=digest(encoded(file_rows(worker))),
+                    inventory_sha256=inventory_digest(file_rows(worker)),
                     deciding_code='FactoryModelAdmission.verify_runtime -> IsolatedWorkspace._create_allowlisted'),
         surfaces=dict(
             graph=dict(status='disabled', records=0, exception='copau-empty-graph-2026-10-24',
-                declaration_sha256=digest(encoded(DISABLED_GRAPH)), inventory_sha256=digest(encoded(rows['graph'])),
+                declaration_sha256=digest(encoded(DISABLED_GRAPH)), inventory_sha256=inventory_digest(rows['graph']),
                 deciding_code='copau_boundary.enforce passes graph/evidence None; graph_policy packed gives zero tool budget'),
-            prompts=dict(records=len(prompt_records), inventory_sha256=digest(encoded(rows['prompts'])),
+            prompts=dict(records=len(prompt_records), inventory_sha256=inventory_digest(rows['prompts']),
                 templates=prompt_records, deciding_code='ModelAgentSet.plan/build/analyze_failure -> _call_once -> provider.complete'),
-            contexts=dict(records=len(context_records)+407, inventory_sha256=digest(encoded(rows['contexts'])),
+            contexts=dict(records=len(context_records)+407, inventory_sha256=inventory_digest(rows['contexts']),
                 templates=context_records, worker_input_files=403, order_records=1, rendered_records=3,
                 deciding_code='FactoryOrchestrator._context -> GraphContextAssembler.assemble/planner_context/builder_context; gates.builder_failure_view; ModelAgentSet payloads')),
         historical=historical,

@@ -51,3 +51,4 @@ jobs:
           name: copau-public-run-boundary
           path: C:/Users/howar/Lightyear/COPAUReview-v1/public
           if-no-files-found: error
+          include-hidden-files: true

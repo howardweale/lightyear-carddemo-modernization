@@ -8,6 +8,44 @@ from tools import copau_private_prerequisites as custody
 
 
 class PublicCorpusIndexTests(unittest.TestCase):
+    def test_producer_disabled_graph_inventory_uses_index_byte_contract(self):
+        from tools.ci import copau_run_boundary as producer
+        from lightyear_factory.copau_boundary import DISABLED_GRAPH
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp).resolve(); roots = {}
+            for name in ('worker', 'graph', 'prompts', 'contexts'):
+                root = base/name; root.mkdir(); roots[name] = root
+                if name != 'graph':
+                    for i in range(403 if name == 'worker' else 1):
+                        (root/(str(i)+'.txt')).write_bytes(('synthetic '+str(i)).encode())
+            (roots['graph']/'disabled.json').write_bytes(producer.encoded(DISABLED_GRAPH))
+            rows = {n:collector.file_rows(root) for n,root in roots.items()}
+            surfaces = {n:dict(records=1, inventory_sha256=producer.inventory_digest(rows[n]))
+                        for n in ('graph','prompts','contexts')}
+            surfaces['graph'].update(status='disabled', records=0,
+                exception='copau-empty-graph-2026-10-24',
+                declaration_sha256=producer.digest(producer.encoded(DISABLED_GRAPH)))
+            self.assertIs(producer.inventory_digest, collector.inventory_digest)
+            manifest = base/'manifest.json'
+            manifest.write_bytes(collector.encoded({r['path']:r['sha256'] for r in rows['worker']}))
+            boundary = base/'boundary.json'
+            value = dict(schema='copau-run-visible-boundary/1', main_commit='a'*40, surfaces=surfaces)
+            boundary.write_bytes(producer.encoded(value))
+            with patch.object(collector,'WORKER_SHA',collector.sha(manifest.read_bytes())), \
+                    patch.object(collector,'github',return_value={'object':{'sha':'a'*40}}), \
+                    patch.object(collector,'git_bytes',return_value=b'synthetic-tree'), \
+                    patch.object(collector,'historical_metadata',return_value={}):
+                args = (roots['worker'],manifest,base,roots['graph'],roots['prompts'],roots['contexts'],boundary)
+                index = collector.build_index(*args)
+                self.assertEqual(index['closure_review']['status'],'unreviewed')
+                self.assertEqual(index['corpora']['graph']['records'],0)
+                self.assertEqual(index['corpora']['graph']['status'],'disabled')
+                # The old no-newline inventory digest must still be refused.
+                surfaces['graph']['inventory_sha256'] = producer.digest(producer.encoded(rows['graph']))
+                self.assertNotEqual(surfaces['graph']['inventory_sha256'],producer.inventory_digest(rows['graph']))
+                boundary.write_bytes(producer.encoded(value))
+                with self.assertRaises(custody.Refused):collector.build_index(*args)
+
     def test_repository_endpoint_has_no_empty_path_separator(self):
         from subprocess import CompletedProcess
         with patch.object(collector.subprocess, 'run', return_value=CompletedProcess([], 0, b'{"private":false}')) as run:

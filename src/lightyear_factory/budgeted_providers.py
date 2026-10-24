@@ -1,6 +1,7 @@
 """Opt-in failed-call accounting without changing the historical provider module."""
 
 import json
+import time
 from typing import Any
 from .contracts import ContractError, canonical_hash
 from .providers import BoundedModelProvider, ProviderError, ProviderResult
@@ -13,6 +14,11 @@ class AccountedModelProvider(BoundedModelProvider):
         super().__init__(provider, order)
         self.model_admission=model_admission
         self.runtime_admission=runtime_admission
+
+    def _check_elapsed(self) -> None:
+        # Compare to the deadline directly: rounded subtraction can admit equality.
+        if time.monotonic() >= self.started + self.order.max_elapsed_seconds:
+            raise ContractError("Model provider exceeded max_elapsed_seconds")
 
     def complete(
         self,

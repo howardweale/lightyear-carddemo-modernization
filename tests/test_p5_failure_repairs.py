@@ -11,6 +11,9 @@ from unittest.mock import patch
 
 from lightyear_execution.admission import AdmissionNonceStore
 from lightyear_execution.contracts import ExecutionContractError
+from lightyear_factory.contracts import ContractError
+from tools.ci.p5_fixture import Fixture
+from tools.ci.p5_drills import wrapped, call
 
 
 def hold_reader(path, entered, release):
@@ -32,6 +35,22 @@ class FailureRepairTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
 
+    def test_cap_boundary_refuses_before_transport(self):
+        fixture = Fixture(self.root, Path(__file__).resolve().parents[1])
+        self.addCleanup(fixture.close)
+        stub, provider = wrapped(fixture)
+        # This start crosses a floating-point exponent at the 60-second deadline.
+        # (started + 60) - started is below 60, so subtraction would admit equality.
+        provider.started = 1048516.0000000001
+        self.assertLess((provider.started + 60) - provider.started, 60)
+        for offset in (0, 0.001):
+            with patch("lightyear_factory.providers.time.monotonic", return_value=provider.started + fixture.order.max_elapsed_seconds + offset):
+                with self.assertRaises(ContractError):
+                    call(provider)
+        self.assertEqual(0, stub.calls)
+        with patch("lightyear_factory.providers.time.monotonic", return_value=provider.started + fixture.order.max_elapsed_seconds - 0.001):
+            call(provider)
+        self.assertEqual(1, stub.calls)
 
     def test_legacy_consumed_hashes_and_new_nonce_survive(self):
         path = self.root / "nonces"

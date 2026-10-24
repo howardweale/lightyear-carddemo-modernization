@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule: {interval: weekly}
+    open-pull-requests-limit: 0
+  - package-ecosystem: maven
+    directories:
+      - /candidate-java
+      - /factory/carddemo-web/service
+      - /tests/fixtures/request-logging
+      - /tests/fixtures/transfer-framing
+    schedule: {interval: weekly}
+    open-pull-requests-limit: 0
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: {interval: weekly}
+    open-pull-requests-limit: 0
+  - package-ecosystem: npm
+    directories: [/factory/carddemo-web/ui, /tests/browser]
+    schedule: {interval: weekly}
+    open-pull-requests-limit: 0

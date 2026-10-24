@@ -33,15 +33,15 @@ privately to Howard immediately; do not put its details in a PR comment.
 The first Gitleaks integration run measures the complete fetched public Git
 history as well as the PR range. Its reviewed count/path report will become a
 dated retained receipt; the history bootstrap must then be removed in the next
-revision, leaving required PR-range scanning. No history scan has run yet.
+revision, leaving required PR-range scanning. Historical measurements now exist in [run 40112806955](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40112806955); findings remain unresolved and do not establish a clean scan.
 
 ## Initial baseline and subsequent changes
 
 The measurement job retains `summary.json` and `baseline-proposal.json` even
 when the baseline gate fails. No fabricated zero baseline is present. Review
-the real artifact and its exact checkout/run/attempt/source hashes, then commit
-the approved initial quality findings as `p1-quality-baseline.json` and publish
-the one-page severity summary on #436. That work is still pending CI.
+the real artifact and its exact checkout/run/attempt/source hashes.
+Planned: commit the initial quality findings as `p1-quality-baseline.json` only after Howard reviews them, then publish
+the one-page severity summary on #436. Baseline acceptance and publication remain pending review.
 
 For bootstrap only, when the trusted base has no baseline, CI independently
 scans the exact base checkout with the same tools. A proposed baseline cannot

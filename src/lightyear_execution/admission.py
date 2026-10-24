@@ -4,7 +4,6 @@ import hashlib
 import hmac
 import json
 import os
-import stat
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
@@ -133,53 +132,14 @@ class AdmissionNonceStore:
 
     def consume(self, nonce: str) -> None:
         identity = hashlib.sha256(nonce.encode("utf-8")).hexdigest()
-        lock_path = self.path.with_name(self.path.name + ".lock")
-        if self.path.is_symlink() or lock_path.is_symlink():
-            raise ExecutionContractError("Replay ledger links are not allowed")
-        # Keep a stable lock inode. Closing releases the OS lock after crashes;
-        # deleting it would let two writers lock different files with one name.
-        stream = None
-        try:
-            descriptor = os.open(lock_path, os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0), 0o600)
-            stream = os.fdopen(descriptor, "r+b")
-            info = os.fstat(stream.fileno())
-            if not stat.S_ISREG(info.st_mode):
-                raise ExecutionContractError("Replay lock is not a regular file")
-            if info.st_size == 0:
-                stream.write(b"0")
-                stream.flush()
-            stream.seek(0)
-            if os.name == "nt":
-                import msvcrt
-                msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
-            else:
-                import fcntl
-                fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            self._consume_locked(identity)
-        except (OSError, UnicodeError):
-            # Contention or an uncertain write is a refusal, never admission.
-            raise ExecutionContractError("Replay ledger unavailable or busy") from None
-        finally:
-            if stream is not None:
-                stream.close()
-
-    def _consume_locked(self, identity: str) -> None:
         known = set()
         if self.path.is_file():
-            raw = self.path.read_text(encoding="ascii")
-            lines = raw.splitlines()
-            if raw and (not raw.endswith("\n") or any(
-                    len(line) != 64 or any(c not in "0123456789abcdef" for c in line)
-                    for line in lines)):
-                raise ExecutionContractError("Replay ledger is incomplete or malformed")
-            known = set(lines)
+            known = {line.strip() for line in self.path.read_text(encoding="ascii").splitlines()}
         if identity in known:
             raise ExecutionContractError("Signed work-order nonce has already been consumed")
-        descriptor = os.open(self.path, os.O_APPEND | os.O_CREAT | os.O_WRONLY | getattr(os, "O_NOFOLLOW", 0), 0o600)
+        descriptor = os.open(self.path, os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
         try:
-            record = (identity + "\n").encode("ascii")
-            if os.write(descriptor, record) != len(record):
-                raise ExecutionContractError("Replay ledger write was incomplete")
+            os.write(descriptor, (identity + "\n").encode("ascii"))
             os.fsync(descriptor)
         finally:
             os.close(descriptor)

@@ -515,7 +515,7 @@ class BoundedModelProvider:
         return payload
 
     def _check_elapsed(self) -> None:
-        if time.monotonic() - self.started >= self.order.max_elapsed_seconds:
+        if time.monotonic() - self.started > self.order.max_elapsed_seconds:
             raise ContractError("Model provider exceeded max_elapsed_seconds")
 
 

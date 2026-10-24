@@ -26,14 +26,10 @@ to isolate report rules; those tests are not signature acceptance evidence.
 | Wall/window | At and beyond elapsed cap, signed window immediately before and at end | Full controller timeout receipt; measured boundary mismatch if any |
 | Duplicate attempt | Sequential replay and eight concurrent real nonce verifications | Run-directory identity and controller receipt |
 
-The first measured concurrent test forced all actual ledger reads before any
-append and observed eight admissions. The repaired test holds the first real
-read before append while seven contenders reach the real OS lock and must refuse.
-It does not replace ledger values, signature checks or writes. Counts report
-observed admissions; they are never changed to one to make the test pass. This
-measures lock contention, not arbitrary scheduler coverage. Separate Windows/Linux
-CI regressions cover process contention, process-death lock release, existing
-consumed hashes, partial writes and link refusal.
+The concurrent test forces a feasible interleaving: all actual ledger reads
+complete before any append. It does not replace the read values, signature checks,
+or writes. Counts report observed admissions; they are never changed to one to
+make the test pass. This measures a race boundary, not arbitrary scheduler coverage.
 The wall test injects only the monotonic clock, and supplies explicit times to the
 real signed-window verifier. Boundary outcomes are reported even if unexpected.
 
@@ -48,12 +44,9 @@ The qualification step verifies retained signatures and refuses missing records,
 harness errors, mismatched summaries, failed expectations, observer-only receipts
 or any remaining gap. This draft therefore intentionally blocks qualification
 until end-to-end evidence is implemented. Green report-policy tests or successful
-measurement cannot make the factory run eligible. The measured repair changes
-two unfenced production files: elapsed-cap equality now refuses before transport,
-and nonce read/check/append/fsync is serialized by a stable OS lock. Contention,
-malformed records and partial writes refuse admission. Signature checks and frozen
-files are unchanged; a defect requiring a frozen change must be escalated, not
-fixed through an implicit exception. Fresh CI must validate these repairs.
+measurement cannot make the factory run eligible. Production and frozen files are
+unchanged; a measured defect requiring a frozen change must be escalated, not fixed
+through an implicit exception.
 
 Post actual results and each remaining gap to approval queue issue #436 after
 independent artifact review. The deadline remains Wednesday 28 October 2026,

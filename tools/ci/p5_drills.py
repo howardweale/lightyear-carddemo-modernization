@@ -268,34 +268,23 @@ def duplicate_attempt(f):
     race = f.parent / 'race-ledger'
     race.write_text('', encoding='ascii')
     store = AdmissionNonceStore(race)
-    entered, release = threading.Event(), threading.Event()
+    barrier = threading.Barrier(8)
     read = Path.read_text
 
     def interleave(path, *args, **kwargs):
         contents = read(path, *args, **kwargs)
-        if path == race and not entered.is_set():
-            entered.set()
-            if not release.wait(timeout=20):
-                raise ValueError('p5-replay-schedule-timeout')
+        if path == race:
+            barrier.wait(timeout=10)
         return contents
 
-    def contender():
-        return not refused(lambda: f.verify_order(AdmissionNonceStore(race)), ExecutionContractError)
+    def contender(_):
+        return not refused(lambda: f.verify_order(store), ExecutionContractError)
 
-    # Hold the first real read before append; every overlapping contender must
-    # refuse at the real OS lock. No signature, ledger value or write is mocked.
+    # Preserve actual reads, signatures and writes; force the feasible read-before-append interleaving.
     with patch.object(Path, 'read_text', interleave), ThreadPoolExecutor(max_workers=8) as pool:
-        first = pool.submit(contender)
-        try:
-            if not entered.wait(timeout=20):
-                raise ValueError('p5-replay-reader-timeout')
-            remaining = [pool.submit(contender) for _ in range(7)]
-            admitted = sum(future.result(timeout=20) for future in remaining)
-        finally:
-            release.set()
-        admitted += first.result(timeout=20)
+        admitted = sum(pool.map(contender, range(8)))
     return dict(sequential_replay_refused=sequential, concurrent_admissions=admitted, contenders=8,
-                forced_schedule='first real read held before append while seven contenders attempt admission',
+                forced_schedule='all real ledger reads complete before any append',
                 nonce_rows=len(race.read_text(encoding='ascii').splitlines())), sequential and admitted == 1, [
         'Work-order nonce replay is measured; the factory run-directory attempt identity needs a separate end-to-end drill.']
 

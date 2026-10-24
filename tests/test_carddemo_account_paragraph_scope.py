@@ -123,5 +123,17 @@ class ParagraphScopeTests(unittest.TestCase):
             model.write_text(original)
 
 
+
+    def test_formatted_annotations_preserve_literals_method_and_comment_refusal(self):
+        expected=[dict(program='COACTUPC',paragraph='1215-EDIT-MANDATORY',lines='1824-1854',method='apply')]
+        for gap in ('','\n  ','\r\n  '):
+            annotation='@CobolSource('+gap+'program = "COACTUPC",'+gap+'paragraph = "1215-EDIT-MANDATORY",'+gap+'lines = "1824-1854"'+gap+')'
+            code=annotation+'\n public static void apply() {}'
+            self.assertEqual(expected,scope.java_annotations(code))
+            self.assertEqual([],scope.java_annotations('/* '+code+' */'))
+            self.assertNotEqual(expected,scope.java_annotations(code.replace('1215-EDIT-MANDATORY','1215-EDIT-MANDATORY ')))
+            self.assertNotEqual(expected,scope.java_annotations(code.replace('apply()', 'other()')))
+            self.assertEqual([],scope.java_annotations(code.replace('program =', 'program :')))
+
 if __name__ == '__main__':
     unittest.main()

@@ -9,7 +9,7 @@ SCOPE='spec/modernization/carddemo-screens/idiomatic-java-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo'
 # Record headers declare types; their explicitly declared methods still need annotations.
 METHOD=r'(?:public|private|protected)\s+(?!\s*(?:static\s+)?(?:record|class|interface|enum)\b)(?:static\s+)?[\w<>., ?]+\s+(\w+)\s*\('
-ANNOTATION=re.compile(r'@CobolSource\(program="([^"]+)", paragraph="([^"]+)", lines="(\d+)-(\d+)"\)\s*'+METHOD)
+ANNOTATION=re.compile(r'@CobolSource\s*\(\s*program\s*=\s*"([^"]+)"\s*,\s*paragraph\s*=\s*"([^"]+)"\s*,\s*lines\s*=\s*"(\d+)-(\d+)"\s*\)\s*'+METHOD)
 
 
 def check(root, scope_path=SCOPE):

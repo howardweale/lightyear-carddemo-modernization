@@ -45,13 +45,14 @@ def check_scope(root, scope=None):
             'EDIT-DATE-OF-BIRTH':(labels[1]['EDIT-DATE-OF-BIRTH'],labels[1]['EDIT-DATE-OF-BIRTH-EXIT']+2)}
     for paragraph,owner in RANGES.items():
         start,end=ranges[paragraph]
-        annotation='@CobolSource(program="COACTUPC", paragraph="'+paragraph+'", lines="'+str(start)+'-'+str(end)+'")'
-        if annotation not in (root/JAVA/(owner+'.java')).read_text():raise ValueError('phone-date-physical-range')
+        annotation=(r'@CobolSource\s*\(\s*program\s*=\s*"COACTUPC"\s*,\s*paragraph\s*=\s*"'
+                    +re.escape(paragraph)+r'"\s*,\s*lines\s*=\s*"'+str(start)+'-'+str(end)+r'"\s*\)')
+        if not re.search(annotation,(root/JAVA/(owner+'.java')).read_text()):raise ValueError('phone-date-physical-range')
     for filename in ('AccountPhoneRules.java','AccountDateRules.java'):
         code=(root/JAVA/filename).read_text()
         if re.search(r'\b(?:SourceEdits|JsonNode|ObjectNode|execute|run)\b',code):raise ValueError('phone-date-statement-engine')
         for name,owner in RANGES.items():
-            if owner+'.java'==filename and 'paragraph="'+name+'"' not in code:raise ValueError('phone-date-range-annotation')
+            if owner+'.java'==filename and not re.search(r'\bparagraph\s*=\s*"'+re.escape(name)+'"',code):raise ValueError('phone-date-range-annotation')
     service=(root/JAVA/'AccountUpdateService.java').read_text()
     check_service_route(root,service)
     adapter=(root/JAVA/'AccountPhoneDateModel.java').read_text()

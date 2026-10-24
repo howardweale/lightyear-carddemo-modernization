@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ai.lightyear</groupId><artifactId>unfenced-format</artifactId><version>1</version><packaging>pom</packaging>
+  <build><plugins><plugin>
+    <groupId>com.diffplug.spotless</groupId><artifactId>spotless-maven-plugin</artifactId><version>2.43.0</version>
+    <configuration><encoding>UTF-8</encoding><lineEndings>UNIX</lineEndings><java><includes>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountEditState.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountFeedbackState.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountFicoRule.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountInputRules.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountLocationRules.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMoneyRule.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountPhoneRules.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountSsnRule.java</include>
+      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountTextRules.java</include>
+    </includes><googleJavaFormat><version>1.24.0</version><style>GOOGLE</style>
+      <reorderImports>false</reorderImports><reflowLongStrings>false</reflowLongStrings><formatJavadoc>false</formatJavadoc>
+    </googleJavaFormat></java></configuration>
+  </plugin></plugins></build>
+</project>

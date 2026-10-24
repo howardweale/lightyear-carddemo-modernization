@@ -11,7 +11,7 @@ def git(root, *args):
     return subprocess.check_output(["git", *args], cwd=root, stderr=subprocess.DEVNULL).decode().strip()
 
 
-def comparison_base(root, base, event_name, event, checkout):
+def comparison_base(root, base, event_name, event, checkout, ref=None):
     if not re.fullmatch(r"[0-9a-f]{40}", base):
         raise ValueError("comparison-base-identity")
     if event_name == "push":
@@ -24,8 +24,12 @@ def comparison_base(root, base, event_name, event, checkout):
     pr = event["pull_request"]
     if pr["base"]["sha"] != base:
         raise ValueError("comparison-event-base")
-    if pr["merge_commit_sha"] != checkout:
-        raise ValueError("comparison-event-merge")
+    # The event merge_commit_sha may differ from the runner's merge checkout.
+    # Bind the runner ref to this PR, then independently prove its parents/tree.
+    number = event.get("number")
+    if (type(number) is not int or number <= 0 or type(pr.get("number")) is not int
+            or pr["number"] != number or ref != "refs/pull/" + str(number) + "/merge"):
+        raise ValueError("comparison-pr-merge-ref")
     parents = git(root, "rev-list", "--parents", "-n", "1", "HEAD").split()
     if len(parents) != 3 or parents[0] != checkout or parents[2] != pr["head"]["sha"]:
         raise ValueError("comparison-merge-parents")
@@ -41,7 +45,7 @@ def comparison_base(root, base, event_name, event, checkout):
 def refusal_code(exc):
     """Expose only closed diagnostic labels, never event contents or command output."""
     codes = {"comparison-base-identity", "comparison-push-identity", "comparison-event",
-             "comparison-event-base", "comparison-event-merge", "comparison-merge-parents",
+             "comparison-event-base", "comparison-event-merge", "comparison-pr-merge-ref", "comparison-merge-parents",
              "comparison-merge-tree", "ci-only"}
     if type(exc) is ValueError and str(exc) in codes:
         return str(exc)
@@ -62,7 +66,7 @@ def main():
         if os.environ.get("GITHUB_ACTIONS") != "true":
             raise ValueError("ci-only")
         event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_bytes())
-        print(comparison_base(Path.cwd(), args.base, os.environ["GITHUB_EVENT_NAME"], event, os.environ["GITHUB_SHA"]))
+        print(comparison_base(Path.cwd(), args.base, os.environ["GITHUB_EVENT_NAME"], event, os.environ["GITHUB_SHA"], os.environ["GITHUB_REF"]))
         return 0
     except Exception as exc:
         print("CI comparison identity refused: " + refusal_code(exc), file=__import__("sys").stderr)

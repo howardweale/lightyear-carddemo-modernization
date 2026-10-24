@@ -10,11 +10,11 @@ requires-python = ">=3.11"
 
 [project.optional-dependencies]
 test = ["PyYAML==6.0.3"]
-cloud-runner = ["cryptography>=46,<51"]
-tsql = ["pglast==7.20", "python-tds==1.16.1", "psycopg[binary]>=3.2,<4", "cryptography>=46,<47"]
-control-tower = ["cryptography>=46,<47"]
-agent = ["cryptography>=46,<47", "mcp==2.2.0"]
-verify = ["cryptography>=46,<47", "mcp==2.2.0"]
+cloud-runner = ["cryptography>=50.0.2,<51"]
+tsql = ["pglast==7.20", "python-tds==1.16.1", "psycopg[binary]>=3.2,<4", "cryptography>=50.0.2,<51"]
+control-tower = ["cryptography>=50.0.2,<51"]
+agent = ["cryptography>=50.0.2,<51", "mcp==2.2.0"]
+verify = ["cryptography>=50.0.2,<51", "mcp==2.2.0"]
 graph-embeddings = ["onnxruntime>=1.20,<2", "tokenizers>=0.20,<1", "numpy>=2,<3"]
 docs = [
     "python-docx>=1.1,<2",

@@ -1,0 +1,110 @@
+name: P1 security and quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: p1-security-${{ github.ref == 'refs/heads/main' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - name: Provision pinned quality tools
+        run: python -m pip install ruff==0.17.2 mypy==2.4.0
+      - name: Real-tool synthetic negative and positive controls
+        env: {PYTHONPATH: '.'}
+        run: python -B tools/ci/p1_acceptance.py
+      - name: Measure every tracked Python source file
+        env: {PYTHONPATH: '.'}
+        run: python -B tools/ci/p1_quality_collect.py --output work/p1-public/quality
+      - name: Enforce reviewed shrink-only baseline
+        env:
+          PYTHONPATH: '.'
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python -B tools/ci/p1_quality_gate.py --base "$BASE_SHA" --measurement work/p1-public/quality/baseline-proposal.json
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: p1-quality-counts-and-baseline-proposal
+          path: work/p1-public/quality
+          if-no-files-found: error
+  dependencies-and-secrets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [pip-audit, dependency-check, gitleaks]
+    steps:
+      - uses: actions/checkout@v7
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - uses: actions/setup-java@v5
+        if: matrix.tool == 'dependency-check'
+        with: {distribution: temurin, java-version: '21'}
+      - name: Provision Python audit tool
+        if: matrix.tool == 'pip-audit'
+        run: python -m pip install pip-audit==2.10.1
+      - name: Real-tool controls and security measurement
+        env:
+          PYTHONPATH: '.'
+          TOOL: ${{ matrix.tool }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python -B tools/ci/p1_security_collect.py "$TOOL" --base "$BASE_SHA" --history --output work/p1-public/security
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: p1-security-${{ matrix.tool }}-counts-only
+          path: work/p1-public/security
+          if-no-files-found: error
+  codeql:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, java, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v7
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - name: Write inert synthetic query control
+        env:
+          PYTHONPATH: '.'
+          LANGUAGE: ${{ matrix.language }}
+        run: python -B tools/ci/p1_codeql.py prepare --language "$LANGUAGE"
+      - name: Verify pinned CodeQL distribution bytes
+        run: python -B tools/ci/p1_codeql_distribution.py
+      - uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          queries: security-extended
+          tools: ${{ runner.temp }}/p1-codeql-bundle.tar.gz
+      - uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
+        with:
+          output: ${{ runner.temp }}/p1-raw-sarif
+          upload: never
+          upload-database: false
+      - name: Verify query control and reduce to public counts
+        env:
+          PYTHONPATH: '.'
+          LANGUAGE: ${{ matrix.language }}
+        run: python -B tools/ci/p1_codeql.py reduce --language "$LANGUAGE" --sarif "$RUNNER_TEMP/p1-raw-sarif" --output work/p1-public/codeql
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: p1-codeql-${{ matrix.language }}-counts-only
+          path: work/p1-public/codeql
+          if-no-files-found: error

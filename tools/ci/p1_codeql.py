@@ -59,6 +59,19 @@ def reduce(root, language, directory, output):
     return not report["findings"]
 
 
+
+def failure_report(language, error):
+    # Closed vocabulary: arbitrary exception text can contain raw SARIF/source.
+    known = {"codeql-report-inventory", "codeql-incomplete", "codeql-negative-control",
+             "source-inventory", "scanner-path", "scanner-unbound-path", "scanner-schema",
+             "scanner-severity", "scanner-location", "scanner-unsupported", "capture-failed",
+             "capture-output-limit"}
+    return dict(schema="p1-codeql-incomplete/1", language=language, completed=False,
+                error_type=type(error).__name__ if type(error) in
+                (ReportRefused, ValueError, KeyError, TypeError, UnicodeError) else "other",
+                refusal_code=str(error) if type(error) is ReportRefused and str(error) in known else "unclassified")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("mode", choices=("prepare", "reduce"))
@@ -75,8 +88,13 @@ def main():
         ok = reduce(Path.cwd(), args.language, args.sarif, args.output)
         print("CodeQL controls and scan passed" if ok else "CodeQL findings require review")
         return 0 if ok else 1
-    except Exception:
-        print("CodeQL scan incomplete; no raw diagnostic published", file=sys.stderr)
+    except Exception as error:
+        diagnostic = failure_report(args.language, error)
+        if args.mode == "reduce" and args.output is not None:
+            args.output.mkdir(parents=True, exist_ok=True)
+            with (args.output / (args.language + "-incomplete.json")).open("x", encoding="utf-8") as stream:
+                json.dump(diagnostic, stream, indent=2)
+        print(json.dumps(diagnostic), file=sys.stderr)
         return 1
 
 

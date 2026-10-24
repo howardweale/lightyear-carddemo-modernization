@@ -67,21 +67,32 @@ def collect(root, output):
         "mypy": [sys.executable, "-m", "mypy", "--config-file=", "--no-incremental", "--no-error-summary", "--output=json", "src/"],
     }
     results, baselines = [], {}
+    public_codes = {"format-output-schema", "format-duplicates", "format-incomplete-inventory",
+                    "scanner-path", "scanner-unbound-path", "scanner-execution-error",
+                    "scanner-incomplete", "capture-output-limit", "capture-failed"}
     for tool, command in commands.items():
+        diagnostic = {"stage": "capture"}
         try:
-            code, stdout, _stderr = capture(command, root)
+            code, stdout, stderr = capture(command, root)
+            diagnostic.update(stage="parse", exit_code=code, stdout_bytes=len(stdout),
+                              stderr_bytes=len(stderr), stdout_sha256=sha256(stdout).hexdigest(),
+                              stderr_sha256=sha256(stderr).hexdigest())
             if tool == "ruff-format":
                 report = format_report(stdout, root, set(paths))
             elif tool == "mypy":
                 report = normalize(tool, decode_json_lines(stdout), root, allowed)
             else:
                 report = normalize(tool, json.loads(stdout), root, set(paths))
+            diagnostic["stage"] = "execution-gate"
             state = execution_gate(tool, code, report, True)
             results.append(dict(tool=tool, state=state, summary=public_summary(report)))
             baselines[tool] = report
-        except (CaptureRefused, ReportRefused, ValueError):
+        except (CaptureRefused, ReportRefused, ValueError) as error:
             # Do not serialize exception text: JSON errors can quote source.
-            results.append(dict(tool=tool, state=dict(completed=False, error="scanner-incomplete")))
+            diagnostic.update(error_type=type(error).__name__,
+                              refusal_code=str(error) if str(error) in public_codes else "unclassified")
+            results.append(dict(tool=tool, state=dict(completed=False, error="scanner-incomplete"),
+                                diagnostic=diagnostic))
     commit_code, commit, _ = capture(["git", "rev-parse", "HEAD"], root)
     if commit_code or not re.fullmatch(rb"[0-9a-f]{40}\s*", commit):
         raise CaptureRefused("checkout-identity")

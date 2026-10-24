@@ -36,23 +36,61 @@ def write_summary(output, tool, rows, inventory):
     return all(r["completed"] and r.get("clean") for r in rows)
 
 
-def failure(path):
-    return dict(path=path, completed=False, clean=False, error="scanner-incomplete")
+def diagnostic(error, stage="prepare", code=None, stdout=b"", stderr=b""):
+    known = {"inventory", "report-size", "dependency-empty-resolution", "dependency-incomplete",
+             "dependency-schema", "dependency-tool", "dependency-scan-incomplete", "dependency-severity",
+             "scanner-execution-error", "scanner-incomplete", "scanner-path", "scanner-unbound-path",
+             "scanner-schema", "scanner-severity", "scanner-unsupported", "dynamic-dependencies",
+             "dependency-inventory-empty", "dependency-group-schema", "pip-negative-control",
+             "maven-inventory-empty", "maven-negative-control", "base-identity", "tool-distribution",
+             "tool-member", "gitleaks-negative-control", "history-inventory", "ci-only",
+             "capture-output-limit", "capture-failed"}
+    if isinstance(error, DependencyIncomplete):
+        return error.diagnostic
+    result = dict(stage=stage, exit_code=code,
+                  error_type=type(error).__name__ if type(error) in
+                  (ReportRefused, CaptureRefused, ValueError, KeyError, TypeError, OSError,
+                   UnicodeDecodeError, json.JSONDecodeError) else "other",
+                  refusal_code=str(error) if type(error) in (ReportRefused, CaptureRefused)
+                  and str(error) in known else "unclassified")
+    result.update(stdout_bytes=len(stdout), stdout_sha256=sha256(stdout).hexdigest(),
+                  stderr_bytes=len(stderr), stderr_sha256=sha256(stderr).hexdigest())
+    return result
+
+
+class DependencyIncomplete(ReportRefused):
+    def __init__(self, details):
+        super().__init__(details["refusal_code"])
+        self.diagnostic = details
+
+
+def failure(path, error):
+    return dict(path=path, completed=False, clean=False, error="scanner-incomplete", diagnostic=diagnostic(error))
 
 
 def run_dependency(command, cwd, tool, manifest, root, allowed, report_path=None):
-    code, stdout, _ = capture(command, cwd, timeout=3600)
-    raw = report_path.read_bytes() if report_path is not None and report_path.is_file() else stdout
-    if len(raw) > 64 * 1024 * 1024:
-        raise ReportRefused("report-size")
-    payload = json.loads(raw)
-    if tool == "pip-audit" and not payload.get("dependencies"):
-        raise ReportRefused("dependency-empty-resolution")
-    if tool == "dependency-check" and payload.get("scanInfo", {}).get("analysisExceptions"):
-        raise ReportRefused("dependency-incomplete")
-    report = dependency_report(tool, payload, manifest, root, allowed)
-    state = execution_gate(tool, code, report, True)
-    return dict(path=manifest, **state, summary=public_summary(report))
+    stage, code, stdout, stderr = "capture", None, b"", b""
+    try:
+        code, stdout, stderr = capture(command, cwd, timeout=3600)
+        stage = "parse"
+        raw = report_path.read_bytes() if report_path is not None and report_path.is_file() else stdout
+        if len(raw) > 64 * 1024 * 1024:
+            raise ReportRefused("report-size")
+        payload = json.loads(raw)
+        if tool == "pip-audit" and not payload.get("dependencies"):
+            raise ReportRefused("dependency-empty-resolution")
+        if tool == "dependency-check" and payload.get("scanInfo", {}).get("analysisExceptions"):
+            raise ReportRefused("dependency-incomplete")
+        report = dependency_report(tool, payload, manifest, root, allowed)
+        stage = "execution-gate"
+        state = execution_gate(tool, code, report, True)
+        # Opaque identifiers bind private triage without publishing package names,
+        # versions, advisory IDs, descriptions or raw scanner streams.
+        return dict(path=manifest, **state, summary=public_summary(report),
+                    finding_fingerprints=sorted(row["fingerprint"] for row in report["findings"]))
+    except Exception as error:
+        raise DependencyIncomplete(diagnostic(error, stage, code, stdout, stderr)) from None
+
 
 
 def python_groups(root, paths):
@@ -101,8 +139,8 @@ def pip_audit(root, output):
                 row = run_dependency(command + ["-r", str(source)], root, "pip-audit", path, root, paths)
                 row["group"] = group
                 rows.append(row)
-            except Exception:
-                rows.append(dict(group=group, **failure(path)))
+            except Exception as error:
+                rows.append(dict(group=group, **failure(path, error)))
     return write_summary(output, "pip-audit", rows, [(p, g) for p, g, _ in groups])
 
 
@@ -127,8 +165,8 @@ def maven(root, output):
                 dest = scratch / str(index)
                 rows.append(run_dependency(command + ["-f", str(root / path), "-DoutputDirectory=" + str(dest)], root,
                                            "dependency-check", path, root, paths, dest / "dependency-check-report.json"))
-            except Exception:
-                rows.append(failure(path))
+            except Exception as error:
+                rows.append(failure(path, error))
     return write_summary(output, "dependency-check", rows, manifests)
 
 
@@ -182,8 +220,8 @@ def gitleaks(root, output, base, history):
                 allowed = paths | {p.lstrip("\n") for p in names.decode("utf-8").split("\0") if p.strip("\n")}
                 report = normalize("gitleaks", json.loads(destination.read_bytes()), root, allowed)
                 rows.append(dict(scope=label, **execution_gate("gitleaks", code, report, True), summary=public_summary(report)))
-            except Exception:
-                rows.append(dict(scope=label, **failure("repository")))
+            except Exception as error:
+                rows.append(dict(scope=label, **failure("repository", error)))
     return write_summary(output, "gitleaks", rows, sorted(paths))
 
 
@@ -202,8 +240,15 @@ def main():
               pip_audit(root, args.output) if args.tool == "pip-audit" else maven(root, args.output))
         print("P1 security scan complete and clean" if ok else "P1 security findings or incomplete scan; review required")
         return 0 if ok else 1
-    except Exception:
-        print("P1 security scan incomplete; no raw diagnostic published", file=sys.stderr)
+    except Exception as error:
+        result = dict(schema="p1-security-incomplete/1", tool=args.tool,
+                      run_id=os.environ.get("GITHUB_RUN_ID"), run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT"),
+                      checkout=os.environ.get("GITHUB_SHA"), completed=False, clean=False,
+                      diagnostic=diagnostic(error))
+        args.output.mkdir(parents=True, exist_ok=True)
+        with (args.output / (args.tool + "-incomplete.json")).open("x", encoding="utf-8") as stream:
+            json.dump(result, stream, indent=2)
+        print(json.dumps(result), file=sys.stderr)
         return 1
 
 

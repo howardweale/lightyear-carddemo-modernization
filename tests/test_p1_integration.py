@@ -16,6 +16,54 @@ class P1IntegrationTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
 
+
+    def test_dependency_fingerprints_bind_findings_without_raw_details(self):
+        marker = "SYNTHETIC-PRIVATE-DIAGNOSTIC"
+        dependency = dict(name=marker, version="synthetic-version", vulns=[
+            dict(id="SYNTHETIC-ADVISORY", description=marker)])
+        payload = dict(dependencies=[dependency])
+        with patch.object(p1_security_collect, "capture", return_value=(1, json.dumps(payload).encode(), marker.encode())):
+            result = p1_security_collect.run_dependency([], self.root, "pip-audit", "pyproject.toml", self.root, {"pyproject.toml"})
+        expected = p1_security_collect.digest(["pip-audit", marker, "synthetic-version", "SYNTHETIC-ADVISORY"])
+        self.assertEqual([expected], result["finding_fingerprints"])
+        self.assertTrue(result["completed"])
+        self.assertFalse(result["clean"])
+        self.assertEqual(1, result["findings"])
+        for forbidden in (marker, "synthetic-version", "SYNTHETIC-ADVISORY", "description"):
+            self.assertNotIn(forbidden, json.dumps(result))
+        dependency["vulns"][0]["id"] = "SYNTHETIC-DIFFERENT-ADVISORY"
+        with patch.object(p1_security_collect, "capture", return_value=(1, json.dumps(payload).encode(), b"")):
+            changed = p1_security_collect.run_dependency([], self.root, "pip-audit", "pyproject.toml", self.root, {"pyproject.toml"})
+        self.assertNotEqual(result["finding_fingerprints"], changed["finding_fingerprints"])
+
+
+    def test_dependency_diagnostic_preserves_failure_without_streams(self):
+        marker = "SYNTHETIC-RAW-SECRET-DETAIL"
+        with patch.object(p1_security_collect, "capture", return_value=(2, marker.encode(), marker.encode())):
+            with self.assertRaises(p1_security_collect.DependencyIncomplete) as raised:
+                p1_security_collect.run_dependency([], self.root, "dependency-check", "pom.xml", self.root, {"pom.xml"})
+        row = p1_security_collect.failure("pom.xml", raised.exception)
+        self.assertFalse(row["completed"])
+        self.assertFalse(row["clean"])
+        self.assertEqual("parse", row["diagnostic"]["stage"])
+        self.assertEqual(2, row["diagnostic"]["exit_code"])
+        self.assertEqual(len(marker), row["diagnostic"]["stderr_bytes"])
+        self.assertNotIn(marker, json.dumps(row))
+
+    def test_security_cli_keeps_closed_failure_artifact(self):
+        output = self.root / "security-diagnostic"
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(p1_security_collect.sys, "argv",
+                ["collector", "gitleaks", "--base", "a" * 40, "--output", str(output)]), \
+                patch.object(p1_security_collect, "gitleaks", side_effect=ReportRefused("tool-distribution")), \
+                redirect_stderr(StringIO()) as stderr:
+            self.assertEqual(1, p1_security_collect.main())
+        report = json.loads((output / "gitleaks-incomplete.json").read_text())
+        self.assertFalse(report["completed"])
+        self.assertFalse(report["clean"])
+        self.assertEqual("tool-distribution", report["diagnostic"]["refusal_code"])
+        marker = "SYNTHETIC-RAW-SECRET-DETAIL"
+        self.assertNotIn(marker, json.dumps(p1_security_collect.diagnostic(ReportRefused(marker))))
+
     def test_dependency_groups_cover_all_extras_and_empty_groups(self):
         (self.root / "pyproject.toml").write_text('[project]\ndependencies=[]\n[project.optional-dependencies]\na=["idna==3.10"]\nb=[]\n[dependency-groups]\nc=["PyYAML==6.0.3"]\n')
         rows = p1_security_collect.python_groups(self.root, {"pyproject.toml", "requirements-ci.txt"})
@@ -88,3 +136,26 @@ class P1IntegrationTests(unittest.TestCase):
         self.assertTrue((self.root / "p1-synthetic-codeql/probe.py").is_file())
         with self.assertRaises(FileExistsError):
             p1_codeql.prepare(self.root, "python")
+
+    def test_codeql_incomplete_diagnostic_never_serializes_arbitrary_errors(self):
+        for error in (ValueError("SYNTHETIC-SECRET"), KeyError("SYNTHETIC-SECRET"),
+                      ReportRefused("SYNTHETIC-SECRET")):
+            row = p1_codeql.failure_report("javascript-typescript", error)
+            self.assertFalse(row["completed"])
+            self.assertEqual("unclassified", row["refusal_code"])
+            self.assertNotIn("SYNTHETIC-SECRET", json.dumps(row))
+        self.assertEqual("codeql-negative-control", p1_codeql.failure_report(
+            "javascript-typescript", ReportRefused("codeql-negative-control"))["refusal_code"])
+
+    def test_codeql_failure_cli_retains_incomplete_report_and_nonzero_exit(self):
+        output = self.root / "diagnostic"
+        console = StringIO()
+        args = ["tool", "reduce", "--language", "javascript-typescript", "--sarif", "unused",
+                "--output", str(output)]
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch("sys.argv", args), patch.object(
+            p1_codeql, "reduce", side_effect=ReportRefused("codeql-negative-control")), redirect_stderr(console):
+            self.assertEqual(1, p1_codeql.main())
+        report = json.loads((output / "javascript-typescript-incomplete.json").read_text())
+        self.assertFalse(report["completed"])
+        self.assertEqual("codeql-negative-control", report["refusal_code"])
+        self.assertFalse((output / "javascript-typescript.json").exists())

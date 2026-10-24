@@ -70,6 +70,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--factory-contract")
     run.add_argument("--factory-trust", type=Path)
     run.add_argument("--factory-private-expected-values", type=Path)
+    run.add_argument("--factory-run-boundary", type=Path)
     run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
     run.add_argument("--execution-runtime", choices=["docker", "podman"])
     run.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
@@ -334,7 +335,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    import sys
+    supplied_options = list(sys.argv[1:] if argv is None else argv)
+    args = build_parser().parse_args(supplied_options)
     if args.command == "annotate":
         from .annotation_cli import run
         print(json.dumps(run(args), indent=2, sort_keys=True))
@@ -638,6 +641,8 @@ def main(argv: list[str] | None = None) -> int:
             datetime.now(timezone.utc).isoformat(),
             None,
         )
+        from .copau_boundary import enforce as enforce_copau_boundary
+        enforce_copau_boundary(args, order, supplied_options, model_admission)
         # Validate the existing signed envelope without consuming its nonce.
         # F2 proof must also pass before any reservation or credential lease.
         if model_admission is not None:
@@ -663,6 +668,8 @@ def main(argv: list[str] | None = None) -> int:
                 "Host compatibility mode requires exactly one unsigned --work-order"
             )
         order = WorkOrder.load(args.work_order)
+        from .copau_boundary import enforce as enforce_copau_boundary
+        enforce_copau_boundary(args, order, supplied_options, model_admission)
         if model_admission is not None:
             model_admission.verify_plan(order)
     if args.provider == "local":

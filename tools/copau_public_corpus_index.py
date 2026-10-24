@@ -71,7 +71,7 @@ def historical_metadata():
     # Current APIs cannot enumerate deleted objects. Disclose that limitation;
     # no historical archive bytes or prior commit blobs are read for qualification.
     missing.append(dict(kind='unknown-history', id='deleted-artifacts-assets-and-prior-history-not-enumerated'))
-    return dict(status=HISTORICAL, catalog_sha256=sha(encoded(observed)), observed_count=len(observed),
+    return dict(status=HISTORICAL, catalog_sha256=sha(encoded(observed)), observed_count=len(observed), catalog=observed,
                 missing=missing, metadata_error_count=errors)
 
 
@@ -88,14 +88,25 @@ def build_index(worker, manifest, repository, graph, prompts, contexts, run_boun
     for name, root in [('graph', graph), ('prompts', prompts), ('contexts', contexts)]:
         rows = file_rows(root); expected = boundary['surfaces'][name]
         # Review must establish closure, not just presence of an export directory.
-        require(expected['inventory_sha256'] == sha(encoded(rows)) and expected['records'] > 0)
+        require(expected['inventory_sha256'] == sha(encoded(rows)))
+        if name == 'graph' and expected.get('status') == 'disabled':
+            from lightyear_factory.copau_boundary import disabled_graph
+            require(len(rows) == 1 and rows[0]['path'] == 'disabled.json')
+            disabled_graph(expected, load_json(stable_read(root/'disabled.json', 4096)))
+        else:
+            require(expected['records'] > 0)
         corpora[name] = dict(root=str(root), files=rows, records=expected['records'],
             inventory_sha256=sha(encoded(rows)), inventory_complete=False,
             run_binding_sha256=sha(boundary_raw), all_run_visible_content_included=False)
+        if name == 'graph' and expected.get('status') == 'disabled':
+            corpora[name].update(status='disabled', exception=expected['exception'],
+                declaration_sha256=expected['declaration_sha256'])
     commit = github('git/ref/heads/main')['object']['sha']
+    require(boundary['main_commit'] == commit)
     listing = git_bytes(repository, 'ls-tree', '-rz', '--full-tree', commit)
     require(listing)
     corpora['main'] = dict(root=str(repository), commit=commit, tree_listing_sha256=sha(listing))
+    require(github('git/ref/heads/main')['object']['sha'] == commit)
     return dict(schema='copau-run-surface-index/2', captured_at=datetime.now(timezone.utc).isoformat(),
                 closure_review=dict(status='unreviewed', reference=''), unavailable=[],
                 historical=historical_metadata(), corpora=corpora)

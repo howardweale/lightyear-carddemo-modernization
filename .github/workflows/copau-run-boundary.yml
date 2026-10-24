@@ -1,0 +1,53 @@
+name: COPAU public run boundary
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: copau-boundary-${{ github.ref == 'refs/heads/main' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  launch-refusals:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -e ".[test,control-tower]"
+      - name: Refuse graph files, tools and memory before admission effects
+        env: {PYTHONPATH: '.'}
+        run: python -B -m unittest discover -s tests -p "test_copau_run_boundary.py" -v
+  public-index:
+    needs: launch-refusals
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -e ".[test,control-tower]"
+      - name: Materialize the public Windows review layout
+        run: |
+          git -c core.autocrlf=false -c core.longpaths=true worktree add --detach C:/Users/howar/Lightyear/COPAUReview-v1/repository HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Public layout creation refused' }
+      - name: Assemble only public surfaces and emit an unreviewed index
+        working-directory: C:/Users/howar/Lightyear/COPAUReview-v1/repository
+        env:
+          PYTHONPATH: '.'
+          GH_TOKEN: ${{ github.token }}
+        run: python -B tools/ci/copau_run_boundary.py --out C:/Users/howar/Lightyear/COPAUReview-v1/public
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: copau-public-run-boundary
+          path: C:/Users/howar/Lightyear/COPAUReview-v1/public
+          if-no-files-found: error

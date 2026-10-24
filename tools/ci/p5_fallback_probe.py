@@ -101,7 +101,7 @@ def observe(parent, repository, *, changed_fallback_model=False):
             raise ValueError('p5-fallback-route-binding')
         if len(routed.routing) != (2 if changed_fallback_model else 3):
             raise ValueError('p5-fallback-next-call-boundary')
-        if not changed_fallback_model and routed.routing[2]['task_type'] != 'implement':
+        if not changed_fallback_model and routed.routing[2]['task_type'] != 'repair-from-closed-diagnostic':
             raise ValueError('p5-fallback-builder-not-reached')
         path = parent/'runs'/'fallback-probe'/'receipt.json'
         receipt = inspect_receipt(path)

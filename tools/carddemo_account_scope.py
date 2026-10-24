@@ -71,7 +71,7 @@ import re
 BASE = 'spec/modernization/carddemo-screens/'
 JAVA = 'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
 PATHS = [BASE + 'paragraph-scope-' + p + '.json' for p in ('COACTUPC', 'COSGN00C')]
-ANNOTATION = r'@CobolSource\(program="([^"]+)", paragraph="([^"]+)", lines="([^"]+)"\)'
+ANNOTATION = r'@CobolSource\s*\(\s*program\s*=\s*"([^"]+)"\s*,\s*paragraph\s*=\s*"([^"]+)"\s*,\s*lines\s*=\s*"([^"]+)"\s*\)'
 DIRECT = {'AccountUpdateService.java', 'AccountUpdateTransaction.java', 'SignonService.java', 'ScreenFrame.java'}
 
 

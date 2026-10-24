@@ -40,3 +40,34 @@ class FeedbackProofTests(unittest.TestCase):
             self.assertFalse(evaluate(path)['passed'])
             path.write_text('<mutations>'+''.join(f'<mutation status="KILLED"><mutatedClass>ai.lightyear.carddemo.{name}</mutatedClass></mutation>' for name in CLASSES)+'</mutations>')
             self.assertTrue(evaluate(path)['passed'])
+
+    def test_annotation_layout_preserves_values_and_refuses_changed_literals(self):
+        import re
+        from unittest.mock import patch
+        root=Path(__file__).resolve().parents[1]
+        expected=check_scope(root)
+        read_text=Path.read_text
+        pattern='@CobolSource\\s*\\(\\s*program\\s*=\\s*"([^"]+)"\\s*,\\s*paragraph\\s*=\\s*"([^"]+)"\\s*,\\s*lines\\s*=\\s*"([^"]+)"\\s*\\)'
+        target='AccountFeedbackState.java'
+        for layout in ('compact','multiline','crlf'):
+            def rewritten(path,*args,**kwargs):
+                text=read_text(path,*args,**kwargs)
+                if path.name!=target:return text
+                gap='' if layout=='compact' else ('\r\n  ' if layout=='crlf' else '\n  ')
+                return re.sub(pattern,lambda match:'@CobolSource('+gap+'program = "'+match[1]+'",'+gap+'paragraph = "'+match[2]+'",'+gap+'lines = "'+match[3]+'"'+gap+')',text)
+            with self.subTest(layout=layout),patch.object(Path,'read_text',rewritten):
+                self.assertEqual(expected,check_scope(root))
+        for defect in ('program','paragraph','range','missing'):
+            def changed(path,*args,**kwargs):
+                text=read_text(path,*args,**kwargs)
+                if path.name!=target:return text
+                def alter(match):
+                    if defect=='missing':return ''
+                    program,paragraph,span=match.groups()
+                    if defect=='program':program='COACT UPC'
+                    if defect=='paragraph':paragraph+=' '
+                    if defect=='range':span='1-2'
+                    return '@CobolSource(program="'+program+'", paragraph="'+paragraph+'", lines="'+span+'")'
+                return re.sub(pattern,alter,text,count=1)
+            with self.subTest(defect=defect),patch.object(Path,'read_text',changed),self.assertRaises(ValueError):
+                check_scope(root)

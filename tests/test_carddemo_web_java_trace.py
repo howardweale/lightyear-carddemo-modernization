@@ -48,3 +48,19 @@ class CardDemoJavaTraceTests(unittest.TestCase):
         self.assertFalse(summarize([],('SignonRules',))['SignonRules']['passed'])
         nodes[-1]=node('SignonRules','KILLED')
         self.assertTrue(summarize(nodes,('SignonRules',))['SignonRules']['passed'])
+
+    def test_trace_annotations_allow_layout_but_preserve_exact_source_identity(self):
+        import re
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);self.fixture(root)
+            expected=check(root)['methods'];path=root/JAVA/'SignonRules.java';original=path.read_text()
+            pattern='@CobolSource\\s*\\(\\s*program\\s*=\\s*"([^"]+)"\\s*,\\s*paragraph\\s*=\\s*"([^"]+)"\\s*,\\s*lines\\s*=\\s*"([^"]+)"\\s*\\)'
+            for gap in ('','\n  ','\r\n  '):
+                formatted=re.sub(pattern,lambda match:'@CobolSource('+gap+'program = "'+match[1]+'",'+gap+'paragraph = "'+match[2]+'",'+gap+'lines = "'+match[3]+'"'+gap+')',original)
+                path.write_text(formatted,encoding='utf-8')
+                self.assertEqual(expected,check(root)['methods'])
+            for replacement in ('', '@CobolSource(program="WRONG", paragraph="PROCESS-ENTER-KEY", lines="117-130")',
+                                '@CobolSource(program="COSGN00C", paragraph="PROCESS-ENTER-KEY ", lines="117-130")',
+                                '@CobolSource(program="COSGN00C", paragraph="PROCESS-ENTER-KEY", lines="1-99999")'):
+                path.write_text(re.sub(pattern,lambda match:replacement,original,count=1),encoding='utf-8')
+                with self.assertRaises(ValueError):check(root)

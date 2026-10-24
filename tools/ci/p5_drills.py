@@ -119,16 +119,20 @@ def worker_network(f):
 
 
 def budget_exhausted(f):
+    from tools.ci.p5_controller_budgets import observe
     stub, provider = wrapped(f)
     call(provider)
     call(provider)
     stopped = refused(lambda: call(provider))
+    controller_cases = observe(f, Path(__file__).resolve().parents[2])
     observed = dict(calls=stub.calls, accounted_calls=len(provider.calls), call_cap=f.order.max_model_calls,
-                    third_call_refused=stopped, real_model_calls=0, actual_spend=0)
+                    third_call_refused=stopped, real_model_calls=0, actual_spend=0,
+                    controller_cases=controller_cases)
     return observed, stopped and stub.calls == len(provider.calls) == 2, [
-        'This drill measures call-count exhaustion with real admission before each call.',
-        'Dollar and token exhaustion with failure/fallback accounting still require separate measured subcases.',
-        'No complete FactoryOrchestrator budget-failure receipt is measured.']
+        'Controller dollar/token preflight and returned-usage refusals retain blocked receipts; simulated accounting is observed separately.',
+        'Failed primary accounting and refusal of an unauthorised secondary are measured through the real router; an approved fallback policy is not exercised.',
+        'Isolation failure receipts do not yet durably retain all model charge details; observer accounting is not a replacement controller receipt.',
+        'Full signed factory build receipts and abrupt-stop recovery remain unqualified.']
 
 
 def tower_unreachable(f):
@@ -293,6 +297,7 @@ def collect(repository, output):
     rows = []
     sources = {p: hashlib.sha256((repository / p).read_bytes()).hexdigest() for p in (
         'tools/ci/p5_fixture.py', 'tools/ci/p5_drills.py', 'tools/ci/p5_controller_probe.py',
+        'tools/ci/p5_controller_budgets.py', 'tests/test_p5_controller_budgets.py',
         'src/lightyear_factory/orchestrator.py', 'src/lightyear_factory/agents.py',
         'src/lightyear_factory/routing.py', 'src/lightyear_factory/model_admission.py',
         'src/lightyear_factory/providers.py', 'src/lightyear_factory/budgeted_providers.py',

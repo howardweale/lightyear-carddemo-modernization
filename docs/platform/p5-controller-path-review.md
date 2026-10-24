@@ -64,3 +64,28 @@ This measures the first controller-level gap. Dollar/token/fallback, operator
 API outage, assembled context and attempt-identity closure still need their
 separate evidence. Planned observations grant no signing, spending or run
 permission, and no gap is accepted.
+
+
+## Controller budget subcases prepared 24 October
+
+The next synthetic CI batch retains the call-cap observation and adds six real
+controller cases: an ordinary blocked positive control; dollar and token
+preflight refusals before transport; over-budget returned dollar and token usage
+that must remain accounted; and a failed primary through the real TaskRouter
+with no authority to call an available secondary. Each checks the actual
+controller-created blocked receipt and exact WorkOrder binding. Case results
+retain counts, simulated accounting, receipt hashes and call evidence hashes.
+No real model transport or spending occurs.
+
+Both direct and routed controller paths must construct AccountedModelProvider.
+A separate mutation control substitutes the bare BoundedModelProvider at the
+controller constructor and requires the observation to refuse that path.
+All real signature and runtime admission verification remains in place.
+
+This closes neither controller recovery nor approved-fallback qualification.
+The failure recorder at orchestrator.py:500-515 omits durable model-charge
+details; observing the in-memory budget is not a replacement for those receipts.
+The production orchestrator is F2-fenced and is unchanged. No gap is accepted.
+Strict qualification, all other seven drill functions, all production files,
+the existing workflow and all fenced paths are unchanged by this batch.
+The full eight-drill set runs again in CI; results and run URL remain pending.

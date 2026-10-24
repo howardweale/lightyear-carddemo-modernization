@@ -16,7 +16,9 @@ class R9ExportTests(unittest.TestCase):
     def setUp(self):
         temp=tempfile.TemporaryDirectory();self.addCleanup(temp.cleanup)
         self.root=Path(temp.name);self.run=self.root/'run';self.run.mkdir()
-        self.key=Ed25519PrivateKey.generate()
+        # Public synthetic key only: random base64 signatures can resemble a
+        # credential marker. Real signature verification and scanning stay on.
+        self.key=Ed25519PrivateKey.from_private_bytes(bytes(range(32)))
         self.public=self.key.public_key().public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw)
         self.files={}
         self.store('evidence-public-key.bin',self.public)
@@ -121,3 +123,21 @@ class R9ExportTests(unittest.TestCase):
             try:link.symlink_to(self.root,target_is_directory=True)
             except OSError:return  # Windows may prohibit link creation; Linux exercises it.
             with self.assertRaisesRegex(ValueError,'linked-evidence-directory'):export.inspect(self.run)
+
+    def test_fixed_public_fixture_signatures_are_scanned_and_verified(self):
+        for name in ('plan.json', 'report.json', *(
+                f'pair-{i:03d}-fixture-correct-1/manifest.json' for i in range(1, 109))):
+            value = json.loads((self.run / name).read_bytes())
+            with self.subTest(path=name):
+                self.assertIsNone(export.SECRET_TEXT.search(value['signature']))
+                export.scan(value, name, set())
+                export.envelope(value, self.public)
+        with self.guard():
+            self.assertEqual(108, export.inspect(self.run)['native_pairs'])
+
+    def test_credential_shaped_signature_still_refuses(self):
+        # Deliberately synthetic, not a credential: preserve the exact refusal
+        # that exposed the random-fixture collision, even in a signature field.
+        value = {'signature': 'AKIA' + 'A' * 16}
+        with self.assertRaisesRegex(ValueError, 'secret-marker:fixture.json'):
+            export.scan(value, 'fixture.json', set())

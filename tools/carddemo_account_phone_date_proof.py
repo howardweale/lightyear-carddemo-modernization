@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_account_render_route import check_render_route
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-phone-date-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
@@ -17,6 +18,8 @@ def check_service_route(root, service):
     if 'AccountPhoneDateModel.retire('+argument+')' in service:return
     # J5 composes the existing retirement. Bind the complete reviewed adapter,
     # so a missing call, changed input, discarded result or decoy is refused.
+    if 'AccountRenderModel.retire('+argument+')' in service:
+        check_render_route(root,service);return
     model=Path(root)/JAVA/'AccountMapModel.java'
     if 'AccountMapModel.retire('+argument+')' not in service or not model.is_file():
         raise ValueError('phone-date-service-routing')

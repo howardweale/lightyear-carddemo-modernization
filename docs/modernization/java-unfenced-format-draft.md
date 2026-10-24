@@ -12,8 +12,8 @@ The formatter versions, input hashes and POM include list are exact. CI captures
 all tracked file bytes, rejects out-of-scope changes, inventory or mode changes,
 and retains a patch plus before/after hashes. Import reordering, long-string
 reflow and Javadoc formatting are disabled. Six synthetic CI tests cover scope,
-path and fence refusals, inventories and source bindings. Nothing runs locally
-except Howard's separately authorized static lint command.
+path and fence refusals, inventories and source bindings. Local work is limited
+to static metadata review and the lint command.
 
 Before this draft can be ready for merge, review the actual CI patch, preserve
 the independent oracle and frozen inputs byte-for-byte, commit formatting in a

@@ -30,7 +30,9 @@ jobs:
         env:
           PYTHONPATH: '.'
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python -B tools/ci/p1_quality_gate.py --base "$BASE_SHA" --measurement work/p1-public/quality/baseline-proposal.json
+        run: |
+          BASE_SHA="$(python -B tools/ci/comparison_base.py --base "$BASE_SHA")"
+          python -B tools/ci/p1_quality_gate.py --base "$BASE_SHA" --measurement work/p1-public/quality/baseline-proposal.json
       - uses: actions/upload-artifact@v6
         if: always()
         with:
@@ -60,7 +62,9 @@ jobs:
           PYTHONPATH: '.'
           TOOL: ${{ matrix.tool }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python -B tools/ci/p1_security_collect.py "$TOOL" --base "$BASE_SHA" --history --output work/p1-public/security
+        run: |
+          BASE_SHA="$(python -B tools/ci/comparison_base.py --base "$BASE_SHA")"
+          python -B tools/ci/p1_security_collect.py "$TOOL" --base "$BASE_SHA" --history --output work/p1-public/security
       - uses: actions/upload-artifact@v6
         if: always()
         with:
@@ -68,6 +72,8 @@ jobs:
           path: work/p1-public/security
           if-no-files-found: error
   codeql:
+    env:
+      CODEQL_ACTION_DIFF_INFORMED_QUERIES: 'false'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     strategy:

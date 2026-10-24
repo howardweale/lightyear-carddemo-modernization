@@ -271,3 +271,13 @@ class P1IntegrationTests(unittest.TestCase):
         self.assertNotIn("abcdefghijklmnopqrstuvwxyz", probe)
         entropy = -sum((n / len(probe)) * log2(n / len(probe)) for n in Counter(probe).values())
         self.assertGreater(entropy, 3)
+
+    def test_tls_endpoint_diagnostics_are_counts_only(self):
+        marker = b"SYNTHETIC-SECRET-DETAIL"
+        raw = marker + b" services.nvd.nist.gov PKIX path building failed SunCertPathBuilderException"
+        result = p1_security_collect.maven_diagnostic(raw, b"", None)
+        self.assertEqual(1, result["marker_counts"]["endpoint-nvd"])
+        self.assertEqual(0, result["marker_counts"]["endpoint-cisa"])
+        self.assertEqual(1, result["marker_counts"]["certificate-path"])
+        self.assertFalse(result["report_present"])
+        self.assertNotIn(marker.decode(), json.dumps(result))

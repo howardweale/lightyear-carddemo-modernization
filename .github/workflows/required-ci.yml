@@ -31,6 +31,9 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           PYTHONPATH: .:src:tests
         run: |
+          python -B -m unittest test_ci_comparison_base -v
+          BASE_SHA="$(python -B tools/ci/comparison_base.py --base "$BASE_SHA")"
+          export BASE_SHA
           python -B -m unittest test_ci_gate -v
           python -B -m unittest test_stranded_work -v
           python -B tools/ci_gate.py lint

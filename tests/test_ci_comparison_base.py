@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from tools.ci.comparison_base import comparison_base
+from tools.ci.comparison_base import comparison_base, refusal_code
 
 
 class ComparisonBaseTests(unittest.TestCase):
@@ -73,3 +73,23 @@ class ComparisonBaseTests(unittest.TestCase):
             comparison_base(self.root, self.current, "push", event, self.head)
         with self.assertRaises(ValueError):
             comparison_base(self.root, self.base, "workflow_dispatch", event, self.head)
+
+    def test_diagnostics_are_closed_and_never_include_exception_payloads(self):
+        secret = "synthetic-private-payload-must-not-be-printed"
+        for code in ("comparison-event-base", "comparison-event-merge", "comparison-merge-tree"):
+            self.assertEqual(code, refusal_code(ValueError(code)))
+        for exc in (ValueError(secret), KeyError(secret), RuntimeError(secret),
+                    subprocess.CalledProcessError(1, ["unexpected", secret], output=secret),
+                    subprocess.CalledProcessError(1, ["git", secret], stderr=secret)):
+            self.assertEqual("comparison-unexpected-error", refusal_code(exc))
+        for operation in ("rev-parse", "rev-list", "merge-base", "merge-tree"):
+            exc = subprocess.CalledProcessError(1, ["git", operation, secret], output=secret, stderr=secret)
+            self.assertEqual("comparison-git-" + operation, refusal_code(exc))
+            self.assertNotIn(secret, refusal_code(exc))
+
+    def test_event_base_and_merge_failures_remain_refused_with_distinct_codes(self):
+        for field, value, code in (("base", {"sha": self.head}, "comparison-event-base"),
+                                   ("merge_commit_sha", self.head, "comparison-event-merge")):
+            event = deepcopy(self.event); event["pull_request"][field] = value
+            with self.assertRaisesRegex(ValueError, code):
+                comparison_base(self.root, self.base, "pull_request", event, self.merge)

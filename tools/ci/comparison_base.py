@@ -22,8 +22,10 @@ def comparison_base(root, base, event_name, event, checkout):
     if event_name != "pull_request":
         raise ValueError("comparison-event")
     pr = event["pull_request"]
-    if pr["base"]["sha"] != base or pr["merge_commit_sha"] != checkout:
-        raise ValueError("comparison-event-identity")
+    if pr["base"]["sha"] != base:
+        raise ValueError("comparison-event-base")
+    if pr["merge_commit_sha"] != checkout:
+        raise ValueError("comparison-event-merge")
     parents = git(root, "rev-list", "--parents", "-n", "1", "HEAD").split()
     if len(parents) != 3 or parents[0] != checkout or parents[2] != pr["head"]["sha"]:
         raise ValueError("comparison-merge-parents")
@@ -36,6 +38,22 @@ def comparison_base(root, base, event_name, event, checkout):
     return parents[1]
 
 
+def refusal_code(exc):
+    """Expose only closed diagnostic labels, never event contents or command output."""
+    codes = {"comparison-base-identity", "comparison-push-identity", "comparison-event",
+             "comparison-event-base", "comparison-event-merge", "comparison-merge-parents",
+             "comparison-merge-tree", "ci-only"}
+    if type(exc) is ValueError and str(exc) in codes:
+        return str(exc)
+    if isinstance(exc, subprocess.CalledProcessError):
+        command = exc.cmd
+        if isinstance(command, list) and len(command) > 1 and command[0] == "git":
+            operation = command[1]
+            if operation in {"rev-parse", "rev-list", "merge-base", "merge-tree"}:
+                return "comparison-git-" + operation
+    return "comparison-unexpected-error"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", required=True)
@@ -46,8 +64,8 @@ def main():
         event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_bytes())
         print(comparison_base(Path.cwd(), args.base, os.environ["GITHUB_EVENT_NAME"], event, os.environ["GITHUB_SHA"]))
         return 0
-    except Exception:
-        print("CI comparison identity refused", file=__import__("sys").stderr)
+    except Exception as exc:
+        print("CI comparison identity refused: " + refusal_code(exc), file=__import__("sys").stderr)
         return 1
 
 

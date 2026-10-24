@@ -1,0 +1,30 @@
+name: INTCALC M1 triage and POSTTRAN fence
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  triage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Validate retained accounting and refuse POSTTRAN changes
+        env:
+          PYTHONPATH: .:src:tests
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          python -B -m unittest test_intcalc_m1_triage -v
+          python -B -m tools.check_intcalc_m1_triage --base "$BASE"

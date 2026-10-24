@@ -3,8 +3,7 @@
 Howard selected **graph=none, memory=disabled, context=packed** on 24 October.
 This additive decision applies only to the first COPAU run. The model, USD 10
 cap, eight-hour wall cap and 30 October 08:00–20:00 Pacific window are unchanged.
-No signature, model call, private generation, Tower write or proof export is
-authorized. `request_ready` remains false. This record is not merge approval.
+Not authorized: signatures, model calls, private generation, Tower writes or proof exports. `request_ready` remains false. This record is not merge approval.
 
 ## Explicit disabled-surface exception
 
@@ -17,11 +16,11 @@ and tool calls. It is a configuration record, not a fictional graph node.
 The helper still scans that declaration's actual bytes; the scanner and its
 40-character matching, normalization and decoding rules are unchanged.
 
-Howard also accepted that the unchanged 40-character scan cannot detect isolated
+Howard also accepts that the unchanged 40-character scan cannot detect isolated
 short-field leaks, **for this first COPAU run only**. No broader leak guarantee,
-accepted P5 gap or weakened collision/selection requirement follows from that.
+P5 gap acceptance or weakened collision/selection requirement follows from that.
 
-## Enforced launch and pending signed bindings
+## Planned launch enforcement and pending signature bindings
 
 For WorkOrder `copau-first-factory-run-2026-10-30`, the CLI requires
 `--factory-run-boundary`. After verifying the WorkOrder envelope, but before
@@ -31,11 +30,11 @@ and any memory option or metadata. Abbreviated and `--option=value` forms are
 covered. It passes actual `None` objects for graph/evidence to the controller and
 disables semantic memory. Host compatibility mode cannot bypass this requirement.
 
-The existing signed-plan verifier must validate the exact boundary and launch
+Planned: the existing signed-plan verifier must validate the exact boundary and launch
 settings binding. The later concrete F2 plan must contain `run_visible_boundary`
 with `path`, exact-file `sha256`, `launch_settings_sha256` and `main_commit`.
 The plan executable must equal that main commit. No existing F2 record or seal
-is rewritten by this PR. After the approved P5 repair merges, recompute F2 from
+is rewritten by this PR. After Howard reviews and merges the P5 repair, recompute F2 from
 the exact merge commit, publish before/after hashes, rebuild the boundary and
 index, and obtain Howard's digest review. No readiness before all fields pass CI.
 
@@ -71,7 +70,7 @@ CI invokes `tools/copau_public_corpus_index.py` and uploads `boundary.json`,
 **unreviewed**. The receipt gives hashes, counts, gaps and the CI run URL. Changes
 to main, graph, workspace, templates or launch settings invalidate prior approval.
 The Windows public layout is `C:\Users\howar\Lightyear\COPAUReview-v1` so exact
-index paths can be reproduced on Howard's PC without rewriting the approved index.
+index paths can be reproduced on Howard's PC without rewriting the reviewed index.
 Public files may be relocated only by creating and reviewing a new index digest.
 
 ## PowerShell: prepare arguments only; no private-store access
@@ -105,5 +104,5 @@ foreach ($Root in $ExposedRoots) { $HelperArgs += @('--exposed-root',$Root) }
 ```
 
 The helper's already reviewed default private location and custody rules remain
-unchanged. A later separately authorized private invocation uses this argument
+unchanged. Planned: a later separately authorized private invocation uses this argument
 array; generating the public boundary does not authorize that invocation.

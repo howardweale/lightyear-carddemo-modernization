@@ -18,7 +18,7 @@ REPO = 'howardweale/lightyear-carddemo-modernization'
 
 
 def github(path):
-    result = subprocess.run(['gh', 'api', 'repos/' + REPO + '/' + path],
+    result = subprocess.run(['gh', 'api', 'repos/' + REPO + ('/' + path if path else '')],
                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False)
     require(result.returncode == 0)
     return load_json(result.stdout)

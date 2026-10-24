@@ -281,3 +281,74 @@ class P1IntegrationTests(unittest.TestCase):
         self.assertEqual(1, result["marker_counts"]["certificate-path"])
         self.assertFalse(result["report_present"])
         self.assertNotIn(marker.decode(), json.dumps(result))
+
+    def test_codeql_review_retains_only_bound_rule_and_numeric_location(self):
+        folder = self.sarif(real=True)
+        source = folder / "python.sarif"
+        payload = json.loads(source.read_text())
+        run = payload["runs"][0]
+        run["tool"]["driver"]["rules"][0]["properties"]["security-severity"] = "7.5"
+        row = run["results"][1]
+        row["codeFlows"] = [dict(message="SYNTHETIC-PRIVATE-FLOW")]
+        row["locations"][0]["physicalLocation"]["region"].update(
+            endLine=3, snippet=dict(text="SYNTHETIC-PRIVATE-SOURCE"))
+        source.write_text(json.dumps(payload))
+        output = self.root / "review-locations"
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            self.assertFalse(p1_codeql.reduce(self.root, "python", folder, output))
+        public = (output / "python.json").read_text()
+        result = json.loads(public)
+        self.assertEqual(1, len(result["review_locations"]))
+        detail = result["review_locations"][0]
+        self.assertEqual({"path", "rule_id", "start_line", "end_line", "severity", "fingerprint"}, set(detail))
+        self.assertEqual(("src/a.py", "py/code-injection", 1, 3, "high"),
+            tuple(detail[k] for k in ("path", "rule_id", "start_line", "end_line", "severity")))
+        self.assertEqual(64, len(detail["fingerprint"]))
+        self.assertEqual(0, result["critical_details_withheld"])
+        for marker in ("SYNTHETIC-RAW-DIAGNOSTIC", "SYNTHETIC-PRIVATE-FLOW", "SYNTHETIC-PRIVATE-SOURCE", "p1-synthetic-codeql"):
+            self.assertNotIn(marker, public)
+
+    def test_codeql_critical_details_are_withheld_but_gate_still_fails(self):
+        folder = self.sarif(real=True)
+        output = self.root / "critical-review"
+        with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+            self.assertFalse(p1_codeql.reduce(self.root, "python", folder, output))
+        public = (output / "python.json").read_text()
+        result = json.loads(public)
+        self.assertEqual({"critical": 1}, result["summary"]["severity_counts"])
+        self.assertEqual(1, result["summary"]["total"])
+        self.assertEqual([], result["summary"]["files"])
+        self.assertEqual([], result["review_locations"])
+        self.assertEqual(1, result["critical_details_withheld"])
+        self.assertTrue(result["private_operator_review_required"])
+        for marker in ("src/a.py", "py/code-injection", "SYNTHETIC-RAW-DIAGNOSTIC"):
+            self.assertNotIn(marker, public)
+
+    def test_codeql_review_rejects_invalid_locations_rules_and_unbound_paths(self):
+        from copy import deepcopy
+        original = json.loads((self.sarif(real=True) / "python.sarif").read_text())
+        original["runs"][0]["tool"]["driver"]["rules"][0]["properties"]["security-severity"] = "7.5"
+        cases = []
+        for value in (0, -1, True, "SYNTHETIC-PRIVATE-LOCATION", 100000001, None):
+            bad = deepcopy(original)
+            bad["runs"][0]["results"][1]["locations"][0]["physicalLocation"]["region"]["startLine"] = value
+            cases.append(bad)
+        bad = deepcopy(original)
+        bad["runs"][0]["results"][1]["locations"][0]["physicalLocation"]["region"]["endLine"] = 0
+        cases.append(bad)
+        bad = deepcopy(original)
+        bad["runs"][0]["results"][1]["locations"][0]["physicalLocation"]["artifactLocation"]["uri"] = "src/unknown.py"
+        cases.append(bad)
+        bad = deepcopy(original)
+        bad["runs"][0]["tool"]["driver"]["rules"].append(dict(id="SYNTHETIC-PRIVATE-RULE", properties={"security-severity": "7.5"}))
+        bad["runs"][0]["results"][1]["ruleId"] = "SYNTHETIC-PRIVATE-RULE"
+        cases.append(bad)
+        for index, payload in enumerate(cases):
+            folder = self.root / ("bad-review-" + str(index)); folder.mkdir()
+            (folder / "python.sarif").write_text(json.dumps(payload))
+            output = self.root / ("bad-public-" + str(index))
+            with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+                with self.assertRaises(ReportRefused) as raised:
+                    p1_codeql.reduce(self.root, "python", folder, output)
+            self.assertNotIn("SYNTHETIC-PRIVATE", str(raised.exception))
+            self.assertFalse((output / "python.json").exists())

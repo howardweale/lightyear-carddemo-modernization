@@ -1,0 +1,50 @@
+{
+  "schema": "p5-boundary-exception-decision/1",
+  "decided_on": "2026-10-24",
+  "decision": "approved-exact-file-exception-only",
+  "approver": "Howard Weale",
+  "approval_source": {
+    "kind": "direct-human-chat-reply",
+    "question_item": "call_5c3636b463354430842e5270e6f42116",
+    "github_comment_url": null,
+    "attribution": "Approval supplied directly in this chat; no GitHub approval-comment URL was supplied or inferred."
+  },
+  "scope": {
+    "path": "src/lightyear_factory/budgeted_providers.py",
+    "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+    "final_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+  },
+  "proposal": {
+    "path": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+    "commit": "588dd5f24425a5eaa651ce12d538bdebdfb33043",
+    "sha256": "2ec7157cb45c509b9b015cffea787cf0edea5b021a6ea02effe9528ad8280d01"
+  },
+  "reason": "The P5 wall-and-window drill found a call admitted exactly at the time cap; this fix refuses it.",
+  "conditions": [
+    "Any further change to this file or any other fenced path requires new approval.",
+    "The fence checker is unchanged.",
+    "src/lightyear_factory/providers.py stays byte-identical to main.",
+    "Recompute F2 bindings from the exact merge commit after merge."
+  ],
+  "authority": {
+    "fence_exception": true,
+    "merge": false,
+    "signing": false,
+    "spend": false,
+    "factory_run": false,
+    "gap_acceptance": false
+  },
+  "merge_conditions": [
+    "A final green head including disposable-drills.",
+    "Separate Howard exact-head merge approval after fresh checks."
+  ],
+  "preservation": {
+    "judge_freeze_changed_paths": [],
+    "historical_exception_record_rewritten": false,
+    "checker_override": false
+  },
+  "f2": {
+    "recomputation": "after exact approved merge",
+    "request_ready": false
+  }
+}

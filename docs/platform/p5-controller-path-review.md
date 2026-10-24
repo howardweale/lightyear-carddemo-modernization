@@ -42,3 +42,25 @@ Not authorized: merge, production signing, private generation, model calls,
 spending or a factory run. The request remains not ready. F2 binding recomputation
 must use the eventual exact merge commit. The Tuesday 27 October 09:00 Pacific
 checkpoint and Wednesday 28 October 18:00 Pacific go/no-go remain in force.
+
+## Abrupt-controller observation prepared 24 October
+
+Planned CI evidence: the kill-mid-build drill now targets the real controller,
+using a synthetic expected-value bundle outside its executable and run roots.
+An ordinary blocked run is the positive control: it must reach both planner and
+builder transports and retain a canonical controller receipt. The kill probe
+must reach builder transport before the parent terminates its process.
+A second invocation with fresh disposable admission must refuse the existing
+run directory before any stub call and preserve every retained file hash.
+
+The probe records actual receipt presence, controller receipt hashes, retained
+inventory counts and hashes, and re-entry results. It does not implement resume
+or manufacture a missing controller recovery receipt. Any missing recovery path
+remains an explicit qualification gap; strict --qualify is unchanged. Runtime
+results and the run URL are pending CI. The other seven drill functions are
+unchanged, as are production, authority checks, frozen paths and workflows.
+
+This measures the first controller-level gap. Dollar/token/fallback, operator
+API outage, assembled context and attempt-identity closure still need their
+separate evidence. Planned observations grant no signing, spending or run
+permission, and no gap is accepted.

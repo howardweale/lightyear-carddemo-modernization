@@ -31,7 +31,7 @@ from tools.ci.p5_fixture import Fixture
 DRILLS = ('kill-mid-build', 'worker-network', 'budget-exhausted', 'tower-unreachable',
           'workspace-changed', 'answer-fragment', 'wall-and-window', 'duplicate-attempt')
 EXPECTED = dict(zip(DRILLS, (
-    'Worker killed after readiness; no accepted candidate.',
+    'Real controller killed at builder transport; existing attempt preserved on refused re-entry.',
     'Reachable positive control; actual isolated worker connection denied.',
     'Two admitted calls accounted; third call refused before stub transport.',
     'Unavailable trust and append both refused; journal count unchanged after outage.',
@@ -77,30 +77,8 @@ def refused(action, expected=ContractError):
 
 
 def kill_mid_build(f):
-    f.runtime()
-    f.verify_order()
-    marker = f.parent / 'candidate-accepted'
-    script = "import time,sys;print('READY',flush=True);time.sleep(120);open(sys.argv[1],'w').write('unexpected')"
-    process = subprocess.Popen([sys.executable, '-B', '-u', '-c', script, str(marker)],
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    try:
-        # communicate has a bound, so a worker that never reaches READY cannot hang CI.
-        try:
-            process.communicate(timeout=1)
-            raise ValueError('p5-worker-exited-before-kill')
-        except subprocess.TimeoutExpired as error:
-            ready = b'READY' in (error.output or b'')
-        process.kill()
-        out, err = process.communicate(timeout=10)
-        observed = dict(ready=ready, exit_code=process.returncode, candidate_marker_exists=marker.exists(),
-                        stdout_sha256=hashlib.sha256(out).hexdigest(), stderr_sha256=hashlib.sha256(err).hexdigest())
-        return observed, ready and process.returncode != 0 and not marker.exists(), [
-            'Killed worker is a real subprocess, but full FactoryOrchestrator kill/recovery is not exercised.',
-            'No production controller kill-path receipt was observed.']
-    finally:
-        if process.poll() is None:
-            process.kill()
-            process.wait(timeout=10)
+    from tools.ci.p5_controller_probe import observe
+    return observe(f, Path(__file__).resolve().parents[2])
 
 
 def worker_network(f):
@@ -314,7 +292,9 @@ def collect(repository, output):
     output.mkdir(parents=True)
     rows = []
     sources = {p: hashlib.sha256((repository / p).read_bytes()).hexdigest() for p in (
-        'tools/ci/p5_fixture.py', 'tools/ci/p5_drills.py', 'src/lightyear_factory/model_admission.py',
+        'tools/ci/p5_fixture.py', 'tools/ci/p5_drills.py', 'tools/ci/p5_controller_probe.py',
+        'src/lightyear_factory/orchestrator.py', 'src/lightyear_factory/agents.py',
+        'src/lightyear_factory/routing.py', 'src/lightyear_factory/model_admission.py',
         'src/lightyear_factory/providers.py', 'src/lightyear_factory/budgeted_providers.py',
         'src/lightyear_factory/isolation_scan.py', 'src/lightyear_execution/admission.py',
         'src/lightyear_execution/backend.py', 'src/lightyear_control_tower/decisions.py',

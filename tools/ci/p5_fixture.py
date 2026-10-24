@@ -21,7 +21,7 @@ from lightyear_factory.model_admission import FactoryModelAdmission
 class Fixture:
     """Real signatures, Git evidence and admission; no verifier patching."""
 
-    def __init__(self, parent, repository):
+    def __init__(self, parent, repository, *, controller_probe=False):
         if os.environ.get('GITHUB_ACTIONS') != 'true':
             raise ValueError('p5-ci-only')
         self.parent = Path(parent)
@@ -43,6 +43,15 @@ class Fixture:
             gates=[dict(id='synthetic', command=['python3', 'worker.py'], timeout_seconds=10,
                         expose_output_to_builder=False)])
         order['policy'].update(max_model_calls=2, max_elapsed_seconds=60, max_model_cost_usd=1.0)
+        self.private_values_path = None
+        if controller_probe:
+            order['acceptance']['baseline_first'] = False
+            order['scope']['graph_node_ids'] = []
+            self.private_values_path = self.parent / 'synthetic-expected-values.json'
+            raw = canonical(dict(schema='factory-private-expected-values/1',
+                values=['synthetic-private-account-18732491-balance-694127.83-unpublished-fixture']))
+            with self.private_values_path.open('xb') as stream:
+                stream.write(raw)
         self.order = WorkOrder.from_dict(order)
         self.git('init', '--quiet')
         self.git('config', 'core.autocrlf', 'false')
@@ -72,6 +81,10 @@ class Fixture:
                     executable_commit=executable, caps=caps, bound_inputs=bound,
                     roles={role: dict(provider='p5-stub', model='p5-stub-2026-10-23')
                            for role in ('planner', 'builder', 'analyst')})
+        if controller_probe:
+            raw = self.private_values_path.read_bytes()
+            plan['private_expected_values'] = dict(sha256=hashlib.sha256(raw).hexdigest(),
+                size_bytes=len(raw), count=1)
         plan['content_sha256'] = canonical_hash(plan)
         self.contract = dict(schema='factory-contract/1', kind='engineering-run-approval', program='factory',
             sources=[dict(row, commit=executable) for row in bound.values()],

@@ -89,3 +89,21 @@ The production orchestrator is F2-fenced and is unchanged. No gap is accepted.
 Strict qualification, all other seven drill functions, all production files,
 the existing workflow and all fenced paths are unchanged by this batch.
 The full eight-drill set runs again in CI; results and run URL remain pending.
+
+
+## Signed fallback controller cases prepared 24 October
+
+Two additional synthetic CI cases use the actual routing-policy compiler and a
+separate disposable Tower authority. Synthetic 35-pair matrix cells are fixture
+inputs, not benchmark results. No approval or signature verifier is mocked.
+The first case fails the primary, admits an approved secondary with the same
+F2-bound provider/model identity, and must refuse the next builder transport at
+the shared two-call limit. The failed primary remains charged. The second uses
+a valid routing decision for a different secondary model: the independent F2
+model admission must still refuse that transport, retaining the primary charge.
+Neither changes or authorizes the first COPAU run's provider/model selection.
+
+Both inspect the real controller's blocked receipt and WorkOrder binding.
+Durable failure-accounting and abrupt-stop reconciliation remain open; the
+controller is fenced and unchanged. Strict qualification and the other seven
+drill functions remain unchanged. Runtime results await CI on this revision.

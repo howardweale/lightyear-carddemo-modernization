@@ -1,0 +1,45 @@
+name: Unfenced Java formatting patch
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  format-patch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prove scope refusals and produce a review patch
+        env:
+          PYTHONPATH: src:.:tests
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          python -B -m unittest test_java_format_unfenced -v
+          python -B -m tools.java_format_unfenced capture --base "$BASE" --out work/unfenced-format
+          mvn -B -f java-format-unfenced.pom.xml spotless:apply
+          mvn -B -f java-format-unfenced.pom.xml spotless:check
+          python -B -m tools.java_format_unfenced report --base "$BASE" --out work/unfenced-format
+      - uses: actions/upload-artifact@v6
+        with:
+          name: unfenced-format-patch
+          path: |
+            work/unfenced-format/format.patch
+            work/unfenced-format/manifest.json
+          if-no-files-found: error
+          retention-days: 90

@@ -43,7 +43,7 @@ def diagnostic(error, stage="prepare", code=None, stdout=b"", stderr=b""):
              "scanner-schema", "scanner-severity", "scanner-unsupported", "dynamic-dependencies",
              "dependency-inventory-empty", "dependency-group-schema", "pip-negative-control",
              "maven-inventory-empty", "maven-negative-control", "base-identity", "tool-distribution",
-             "tool-member", "gitleaks-negative-control", "history-inventory", "ci-only",
+             "tool-member", "gitleaks-negative-control", "gitleaks-positive-control", "history-inventory", "ci-only",
              "capture-output-limit", "capture-failed"}
     if isinstance(error, DependencyIncomplete):
         return error.diagnostic
@@ -89,7 +89,34 @@ def run_dependency(command, cwd, tool, manifest, root, allowed, report_path=None
         return dict(path=manifest, **state, summary=public_summary(report),
                     finding_fingerprints=sorted(row["fingerprint"] for row in report["findings"]))
     except Exception as error:
-        raise DependencyIncomplete(diagnostic(error, stage, code, stdout, stderr)) from None
+        details = diagnostic(error, stage, code, stdout, stderr)
+        if tool == "dependency-check":
+            details.update(maven_diagnostic(stdout, stderr, report_path))
+        raise DependencyIncomplete(details) from None
+
+
+def maven_diagnostic(stdout, stderr, report_path):
+    """Only fixed categories/counts, never Maven paths, URLs or raw messages."""
+    stream = stdout + b"\n" + stderr
+    markers = {
+        "plugin-resolution": b"PluginResolutionException",
+        "dependency-resolution": b"DependencyResolutionException",
+        "nvd-api": b"NVD API",
+        "rate-limited": b"429",
+        "access-refused": b"403",
+        "tls-certificate": b"PKIX path building failed",
+        "database-update": b"UpdateException",
+        "no-data": b"NoDataException",
+        "maven-failure": b"BUILD FAILURE",
+    }
+    return dict(report_present=report_path is not None and report_path.is_file(),
+                marker_counts={key: stream.count(marker) for key, marker in markers.items()})
+
+
+def gitleaks_probe():
+    # Public deterministic synthetic input, not issued by any credential service.
+    # Avoid the pinned default allowlist's alphabet-sequence stopword.
+    return "ghp_" + sha256(b"p1-gitleaks-negative-control-v2").hexdigest()[:36]
 
 
 
@@ -201,11 +228,19 @@ def gitleaks(root, output, base, history):
         probe.mkdir()
         # Synthetic, deterministic, never a credential. Constructed so the
         # repository's own text does not contain the complete planted pattern.
-        (probe / "fake.txt").write_text("token = '" + "ghp_" + "0123456789abcdefghijklmnopqrstuvwxyz" + "'\n", encoding="utf-8")
+        (probe / "fake.txt").write_text("token = '" + gitleaks_probe() + "'\n", encoding="utf-8")
         destination = scratch / "negative.json"
         code, _, _ = capture(common + ["dir", str(probe), "--report-path", str(destination)], scratch)
-        if code != 1 or not json.loads(destination.read_bytes()):
+        control = json.loads(destination.read_bytes())
+        if code != 1 or not any(row.get("RuleID") == "github-pat" for row in control):
             raise ReportRefused("gitleaks-negative-control")
+        clean = scratch / "clean"
+        clean.mkdir()
+        (clean / "plain.txt").write_text("synthetic ordinary text\n", encoding="utf-8")
+        destination = scratch / "positive.json"
+        code, _, _ = capture(common + ["dir", str(clean), "--report-path", str(destination)], scratch)
+        if code != 0 or json.loads(destination.read_bytes()) != []:
+            raise ReportRefused("gitleaks-positive-control")
         ranges = [("pr-diff", base + "..HEAD")]
         if history:
             ranges.append(("full-history", "--all"))

@@ -126,10 +126,12 @@ class P1IntegrationTests(unittest.TestCase):
 
     def test_cli_suppresses_exception_payload_and_traceback(self):
         output = StringIO()
-        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch("sys.argv", ["tool", "pip-audit", "--output", "unused"]), patch.object(p1_security_collect, "pip_audit", side_effect=ValueError("SYNTHETIC-SECRET-DETAIL")), redirect_stdout(output), redirect_stderr(output):
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch("sys.argv", ["tool", "pip-audit", "--output", str(self.root / "cli-failure")]), patch.object(p1_security_collect, "pip_audit", side_effect=ValueError("SYNTHETIC-SECRET-DETAIL")), redirect_stdout(output), redirect_stderr(output):
             self.assertEqual(1, p1_security_collect.main())
         self.assertNotIn("SYNTHETIC-SECRET-DETAIL", output.getvalue())
         self.assertNotIn("Traceback", output.getvalue())
+        self.assertTrue((self.root / "cli-failure/pip-audit-incomplete.json").is_file())
+        self.assertNotIn("SYNTHETIC-SECRET-DETAIL", (self.root / "cli-failure/pip-audit-incomplete.json").read_text())
 
     def test_control_creation_is_inert_and_exclusive(self):
         p1_codeql.prepare(self.root, "python")
@@ -159,3 +161,113 @@ class P1IntegrationTests(unittest.TestCase):
         self.assertFalse(report["completed"])
         self.assertEqual("codeql-negative-control", report["refusal_code"])
         self.assertFalse((output / "javascript-typescript.json").exists())
+
+    def test_format_json_keeps_bound_paths_and_refuses_malformed_results(self):
+        from tools.ci.p1_quality_collect import format_json_report
+        from tools.ci.p1_reports import execution_gate
+        row = dict(code="unformatted", filename=str(self.root / "src/a.py"),
+                   message="SYNTHETIC-RAW", fix=dict(edits=[dict(content="SYNTHETIC-RAW")]))
+        encode = lambda rows: json.dumps(rows).encode()
+        report = format_json_report(encode([row]), self.root, {"src/a.py"})
+        self.assertEqual(["src/a.py"], [r["path"] for r in report["findings"]])
+        self.assertNotIn("SYNTHETIC-RAW", json.dumps(report))
+        self.assertEqual(1, execution_gate("ruff-format", 1, report, True)["findings"])
+        clean = format_json_report(b"[]", self.root, {"src/a.py"})
+        self.assertTrue(execution_gate("ruff-format", 0, clean, True)["clean"])
+        for raw in (b"not-json", b"{}", encode([row, row]), encode([dict(row, code="syntax-error")]),
+                    encode([dict(row, filename="src/unknown.py")])):
+            with self.subTest(raw=raw), self.assertRaises(ReportRefused):
+                format_json_report(raw, self.root, {"src/a.py"})
+        for code, result in ((1, clean), (0, report), (2, report)):
+            with self.subTest(code=code), self.assertRaises(ReportRefused):
+                execution_gate("ruff-format", code, result, True)
+
+    def test_format_collector_names_every_file_and_refuses_stderr(self):
+        from tools.ci import p1_quality_collect
+        (self.root / "src").mkdir()
+        (self.root / "src/a.py").write_text("x = 1\n")
+        (self.root / "src/b.pyi").write_text("x: int\n")
+        for index, stderr in enumerate((b"", b"SYNTHETIC-RAW-ERROR")):
+            commands = []
+            def capture(command, root):
+                commands.append(command)
+                if command[:2] == ["git", "ls-files"]:
+                    return 0, b"src/a.py\0src/b.pyi\0", b""
+                if command[:2] == ["git", "rev-parse"]:
+                    return 0, b"a" * 40, b""
+                if "format" in command:
+                    return 0, b"[]", stderr
+                return 0, b"" if "mypy" in command else b"[]", b""
+            output = self.root / ("quality-" + str(index))
+            with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(
+                    p1_quality_collect, "capture", side_effect=capture), patch.object(
+                    p1_quality_collect, "version", side_effect=lambda name: {"ruff": "0.17.2", "mypy": "2.4.0"}[name]):
+                self.assertEqual(not bool(stderr), p1_quality_collect.collect(self.root, output))
+            command = next(c for c in commands if "format" in c)
+            self.assertIn("--output-format=json", command)
+            self.assertEqual(["src/a.py", "src/b.pyi"], command[-2:])
+            public = (output / "summary.json").read_text()
+            self.assertEqual(2, json.loads(public)["file_count"])
+            self.assertNotIn("SYNTHETIC-RAW-ERROR", public)
+
+    def test_grouped_codeql_preserves_control_real_findings_and_severity(self):
+        for index, real in enumerate((False, True)):
+            folder = self.sarif(real=real)
+            source = folder / "python.sarif"
+            payload = json.loads(source.read_text())
+            run = payload["runs"][0]
+            rules = run["tool"]["driver"].pop("rules")
+            run["tool"]["extensions"] = [dict(name="synthetic-pack", rules=rules)]
+            for row in run["results"]:
+                row["rule"] = dict(id=row["ruleId"], index=0, toolComponent=dict(index=0, name="synthetic-pack"))
+            source.write_text(json.dumps(payload))
+            output = self.root / ("grouped-" + str(index))
+            with patch.object(p1_codeql, "capture", return_value=(0, b"src/a.py\0", b"")):
+                self.assertEqual(not real, p1_codeql.reduce(self.root, "python", folder, output))
+            public = (output / "python.json").read_text()
+            self.assertEqual(int(real), json.loads(public)["summary"]["total"])
+            self.assertEqual({"critical": 1} if real else {}, json.loads(public)["summary"]["severity_counts"])
+            self.assertNotIn("SYNTHETIC-RAW-DIAGNOSTIC", public)
+
+    def test_grouped_codeql_refuses_failed_ambiguous_or_unbound_rules(self):
+        from copy import deepcopy
+        from tools.ci.p1_reports import codeql_rules, normalize
+        folder = self.sarif(real=True)
+        original = json.loads((folder / "python.sarif").read_text())
+        run = original["runs"][0]
+        run["tool"]["extensions"] = [dict(name="pack", rules=run["tool"]["driver"].pop("rules"))]
+        cases = []
+        bad = deepcopy(original); bad["runs"][0]["invocations"][0]["executionSuccessful"] = False; cases.append(bad)
+        bad = deepcopy(original); bad["runs"][0]["tool"]["driver"]["rules"] = deepcopy(run["tool"]["extensions"][0]["rules"]); cases.append(bad)
+        bad = deepcopy(original); bad["runs"][0]["tool"]["extensions"][0]["rules"] = []; cases.append(bad)
+        for reference in (dict(index=-1), dict(index=9), dict(index=0, toolComponent=dict(index=9)),
+                          dict(index=0, toolComponent=dict(index=0, name="wrong")), dict(id="wrong")):
+            bad = deepcopy(original); bad["runs"][0]["results"][0]["rule"] = reference; cases.append(bad)
+        for bad in cases:
+            with self.subTest(case=bad), self.assertRaises(ReportRefused):
+                normalize("codeql", bad, self.root, {"src/a.py", "p1-synthetic-codeql/probe.py"})
+        self.assertEqual({"py/code-injection"}, set(codeql_rules(run)))
+
+    def test_maven_diagnostics_are_closed_counts_and_never_make_failure_clean(self):
+        marker = b"SYNTHETIC-RAW-SECRET"
+        output = marker + b" PluginResolutionException BUILD FAILURE"
+        with patch.object(p1_security_collect, "capture", return_value=(1, output, marker)):
+            with self.assertRaises(p1_security_collect.DependencyIncomplete) as raised:
+                p1_security_collect.run_dependency([], self.root, "dependency-check", "pom.xml",
+                    self.root, {"pom.xml"}, self.root / "missing.json")
+        result = p1_security_collect.failure("pom.xml", raised.exception)
+        self.assertFalse(result["completed"])
+        self.assertFalse(result["clean"])
+        self.assertFalse(result["diagnostic"]["report_present"])
+        self.assertEqual(1, result["diagnostic"]["marker_counts"]["plugin-resolution"])
+        self.assertNotIn(marker.decode(), json.dumps(result))
+
+    def test_gitleaks_probe_is_deterministic_high_entropy_and_not_allowlisted_alphabet(self):
+        from collections import Counter
+        from math import log2
+        probe = p1_security_collect.gitleaks_probe()
+        self.assertEqual(probe, p1_security_collect.gitleaks_probe())
+        self.assertRegex(probe, r"^ghp_[0-9a-f]{36}$")
+        self.assertNotIn("abcdefghijklmnopqrstuvwxyz", probe)
+        entropy = -sum((n / len(probe)) * log2(n / len(probe)) for n in Counter(probe).values())
+        self.assertGreater(entropy, 3)

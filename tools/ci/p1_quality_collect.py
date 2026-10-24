@@ -42,6 +42,26 @@ def format_report(raw, root, paths):
     return dict(schema="p1-normalized-findings/1", tool="ruff-format", findings=sorted(found, key=lambda r: r["path"]))
 
 
+def format_json_report(raw, root, paths):
+    """Pinned Ruff JSON: one unformatted diagnostic per explicitly named file."""
+    from tools.ci.p1_reports import relative_path
+    try:
+        rows = json.loads(raw)
+    except (ValueError, UnicodeError):
+        raise ReportRefused("format-output-schema") from None
+    if not paths or not isinstance(rows, list):
+        raise ReportRefused("format-output-schema")
+    found = []
+    for row in rows:
+        if not isinstance(row, dict) or row.get("code") != "unformatted":
+            raise ReportRefused("format-output-schema")
+        path = relative_path(row.get("filename"), root, paths)
+        found.append(dict(path=path, severity="warning", fingerprint=digest(["ruff-format", path])))
+    if len(found) != len({r["path"] for r in found}):
+        raise ReportRefused("format-duplicates")
+    return dict(schema="p1-normalized-findings/1", tool="ruff-format", findings=sorted(found, key=lambda r: r["path"]))
+
+
 def collect(root, output):
     if os.environ.get("GITHUB_ACTIONS") != "true":
         raise CaptureRefused("ci-only")
@@ -63,7 +83,7 @@ def collect(root, output):
     # Explicit files prevent an ignore/config change from silently reducing scope.
     commands = {
         "ruff": [sys.executable, "-m", "ruff", "check", "--isolated", "--no-cache", "--output-format=json", *paths],
-        "ruff-format": [sys.executable, "-m", "ruff", "format", "--isolated", "--no-cache", "--check", *paths],
+        "ruff-format": [sys.executable, "-m", "ruff", "format", "--isolated", "--no-cache", "--check", "--output-format=json", *paths],
         "mypy": [sys.executable, "-m", "mypy", "--config-file=", "--no-incremental", "--no-error-summary", "--output=json", "src/"],
     }
     results, baselines = [], {}
@@ -78,7 +98,9 @@ def collect(root, output):
                               stderr_bytes=len(stderr), stdout_sha256=sha256(stdout).hexdigest(),
                               stderr_sha256=sha256(stderr).hexdigest())
             if tool == "ruff-format":
-                report = format_report(stdout, root, set(paths))
+                report = format_json_report(stdout, root, set(paths))
+                if stderr.strip():
+                    raise ReportRefused("format-output-schema")
             elif tool == "mypy":
                 report = normalize(tool, decode_json_lines(stdout), root, allowed)
             else:

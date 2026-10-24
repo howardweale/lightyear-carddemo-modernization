@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 import tempfile
 from tools.ci.p1_capture import CaptureRefused, capture
-from tools.ci.p1_quality_collect import decode_json_lines
+from tools.ci.p1_quality_collect import decode_json_lines, format_json_report
 
 
 def quality_probes():
@@ -23,8 +23,9 @@ def quality_probes():
         if code != 1 or not any(r["code"] == "F401" for r in rows):
             raise CaptureRefused("ruff-negative-control")
         (root / "formatting.py").write_text("x=  1\n", encoding="utf-8")
-        code, _, _ = capture([sys.executable, "-m", "ruff", "format", "--isolated", "--check", "formatting.py"], root)
-        if code != 1:
+        code, out, err = capture([sys.executable, "-m", "ruff", "format", "--isolated", "--check", "--output-format=json", "formatting.py"], root)
+        report = format_json_report(out, root, {"formatting.py"})
+        if code != 1 or err.strip() or len(report["findings"]) != 1:
             raise CaptureRefused("format-negative-control")
         (root / "mismatch.py").write_text('value: int = "synthetic"\n', encoding="utf-8")
         code, out, _ = capture([sys.executable, "-m", "mypy", "--config-file=", "--no-incremental", "--no-error-summary", "--output=json", "mismatch.py"], root)
@@ -32,6 +33,9 @@ def quality_probes():
         if code != 1 or not any(r["code"] == "assignment" and r["severity"] == "error" for r in rows):
             raise CaptureRefused("mypy-negative-control")
         (root / "clean.py").write_text("value: int = 1\n", encoding="utf-8")
+        code, out, err = capture([sys.executable, "-m", "ruff", "format", "--isolated", "--check", "--output-format=json", "clean.py"], root)
+        if code or err.strip() or format_json_report(out, root, {"clean.py"})["findings"]:
+            raise CaptureRefused("format-positive-control")
         for command in (
             [sys.executable, "-m", "ruff", "check", "--isolated", "clean.py"],
             [sys.executable, "-m", "ruff", "format", "--isolated", "--check", "clean.py"],

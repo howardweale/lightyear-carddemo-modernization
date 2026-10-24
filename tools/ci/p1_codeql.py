@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import sys
 from tools.ci.p1_capture import capture
-from tools.ci.p1_reports import normalize, public_summary, ReportRefused
+from tools.ci.p1_reports import codeql_rule, codeql_rules, normalize, public_summary, ReportRefused
 
 
 PROBES = {
@@ -35,10 +35,10 @@ def reduce(root, language, directory, output):
     allowed = set(filter(None, raw.decode("utf-8").split("\0"))) | {probe}
     probe_findings = 0
     for run in payload["runs"]:
-        if not run["tool"]["driver"]["rules"] or any(i.get("executionSuccessful") is False for i in run.get("invocations", [])):
-            raise ReportRefused("codeql-incomplete")
+        rules = codeql_rules(run)
         retained = []
         for row in run.get("results", []):
+            codeql_rule(run, row, rules)
             locations = [x["physicalLocation"]["artifactLocation"]["uri"] for x in row["locations"]]
             if locations and all(p == probe for p in locations):
                 if row["ruleId"] == rule:

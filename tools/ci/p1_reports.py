@@ -35,6 +35,56 @@ def relative_path(value, root, allowed):
     return value
 
 
+def codeql_rules(run):
+    """Resolve both driver and pack rules; ambiguous IDs never default clean."""
+    try:
+        if any(i.get("executionSuccessful") is False for i in run.get("invocations", [])):
+            raise ReportRefused("codeql-incomplete")
+        components = [run["tool"]["driver"], *run["tool"].get("extensions", [])]
+        rules = {}
+        for component in components:
+            for rule in component.get("rules", []):
+                identity = rule["id"]
+                if not isinstance(identity, str) or not identity or identity in rules:
+                    raise ReportRefused("codeql-incomplete")
+                rules[identity] = rule
+        if not rules:
+            raise ReportRefused("codeql-incomplete")
+        return rules
+    except (KeyError, TypeError, AttributeError):
+        raise ReportRefused("codeql-incomplete") from None
+
+
+def codeql_rule(run, row, rules):
+    """Bind optional SARIF component/index references to the same rule ID."""
+    try:
+        identity = row["ruleId"]
+        rule = rules[identity]
+        reference = row.get("rule", {})
+        if reference.get("id", identity) != identity:
+            raise ReportRefused("codeql-incomplete")
+        component = run["tool"]["driver"]
+        if "toolComponent" in reference:
+            ref = reference["toolComponent"]
+            index = ref["index"]
+            if type(index) is not int or index < 0:
+                raise ReportRefused("codeql-incomplete")
+            component = run["tool"]["extensions"][index]
+            if any(ref[k] != component.get(k) for k in ("name", "guid") if k in ref):
+                raise ReportRefused("codeql-incomplete")
+        indices = [reference[k] for k in ("index",) if k in reference]
+        if "ruleIndex" in row:
+            indices.append(row["ruleIndex"])
+        for index in indices:
+            if type(index) is not int or index < 0 or component["rules"][index]["id"] != identity:
+                raise ReportRefused("codeql-incomplete")
+        if "toolComponent" in reference and not any(r["id"] == identity for r in component.get("rules", [])):
+            raise ReportRefused("codeql-incomplete")
+        return rule
+    except (KeyError, TypeError, IndexError, AttributeError):
+        raise ReportRefused("codeql-incomplete") from None
+
+
 def normalize(tool, payload, root, allowed):
     """Return only bound paths, severity and opaque finding fingerprints.
 
@@ -73,9 +123,9 @@ def normalize(tool, payload, root, allowed):
             if payload["version"] != "2.1.0" or not isinstance(payload["runs"], list) or not payload["runs"]:
                 raise ReportRefused("scanner-schema")
             for run in payload["runs"]:
-                rules = {r["id"]: r for r in run["tool"]["driver"]["rules"]}
+                rules = codeql_rules(run)
                 for row in run.get("results", []):
-                    rule = rules[row["ruleId"]]
+                    rule = codeql_rule(run, row, rules)
                     score = rule.get("properties", {}).get("security-severity")
                     severity = row.get("level", "warning")
                     if score is not None:

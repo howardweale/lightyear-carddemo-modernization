@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from tools.java_format_unfenced import selected, verify, combined_fence, check_scope_fence, inventory
+from tools.java_format_unfenced import selected, verify, combined_fence, check_scope_fence, inventory, require_clean
 
 class UnfencedFormatTests(unittest.TestCase):
     def test_selected_modifications_only(self):
@@ -52,3 +52,8 @@ class UnfencedFormatTests(unittest.TestCase):
         self.assertEqual([],violations(fence,names))
         for row in scope['selected']:
             self.assertEqual(row['sha256'],sha256((root/row['path']).read_bytes()).hexdigest())
+
+    def test_formatted_batch_rejects_any_remaining_formatter_change(self):
+        require_clean([])
+        with self.assertRaisesRegex(ValueError, 'format-not-clean'):
+            require_clean(['AccountFicoRule.java'])

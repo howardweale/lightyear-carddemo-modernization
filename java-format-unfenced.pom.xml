@@ -4,39 +4,15 @@
   <build><plugins><plugin>
     <groupId>com.diffplug.spotless</groupId><artifactId>spotless-maven-plugin</artifactId><version>2.43.0</version>
     <configuration><encoding>UTF-8</encoding><lineEndings>UNIX</lineEndings><java><includes>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountDateRules.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountEditState.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountFeedbackState.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountFicoRule.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountInputRules.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountLocationRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapModel.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapState.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMapStorage.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountMoneyRule.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountPhoneDateModel.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountPhoneRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountRenderModel.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountRenderRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountRenderState.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountRenderStorage.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountSsnRule.java</include>
       <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountTextRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateService.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountUpdateTransaction.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountValidationFeedback.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountViewRendering.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountViewService.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CardDemoApplication.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ChangeDetection.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolNumber.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/InteractionController.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/InteractionEngine.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/MenuService.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenProjection.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonRules.java</include>
-      <include>factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SignonService.java</include>
     </includes><googleJavaFormat><version>1.24.0</version><style>GOOGLE</style>
       <reorderImports>false</reorderImports><reflowLongStrings>false</reflowLongStrings><formatJavadoc>false</formatJavadoc>
     </googleJavaFormat></java></configuration>

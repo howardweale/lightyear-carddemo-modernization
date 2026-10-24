@@ -51,8 +51,11 @@ def check_scope_fence(root, base, names):
     if violations(fence,names):raise ValueError('format-fenced-selection')
     return dict(base=base,sha256=sha256(json.dumps(fence,sort_keys=True,separators=(',',':')).encode()).hexdigest(),paths=len(fence['paths']),prefixes=len(fence['prefixes']))
 
+def require_clean(changed):
+    if changed:raise ValueError("format-not-clean")
+
 def main():
-    p=argparse.ArgumentParser();p.add_argument('phase',choices=('capture','report'));p.add_argument('--root',type=Path,default=Path('.'));p.add_argument('--out',type=Path,required=True);p.add_argument('--base',required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('phase',choices=('capture','report'));p.add_argument('--root',type=Path,default=Path('.'));p.add_argument('--out',type=Path,required=True);p.add_argument('--base',required=True);p.add_argument('--require-clean',action='store_true');a=p.parse_args()
     root=a.root.resolve();scope=json.loads((root/SCOPE).read_bytes());names=selected(scope)
     fence=check_scope_fence(root,a.base,names)
     ns={'m':'http://maven.apache.org/POM/4.0.0'};pom=ET.parse(root/'java-format-unfenced.pom.xml').getroot()
@@ -79,4 +82,5 @@ def main():
         files=[dict(path=p,before_sha256=before['files'][p],after_sha256=current[p]) for p in changed],
         proof_complete=False,merge_authorized=False,stage='review-patch-before-format-only-commit')
     (a.out/'manifest.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+    if a.require_clean:require_clean(changed)
 if __name__=='__main__':main()

@@ -102,7 +102,6 @@ class NormalReceiptTests(unittest.TestCase):
         from lightyear_factory.providers import ScriptedModelProvider, ProviderResult
         from lightyear_factory.contracts import canonical_hash, write_json
         from lightyear_factory.build_receipt import compute_build_receipt
-        from lightyear_factory.qualification import _run_provenance
         from lightyear_execution.backend import OCIContainerBackend, LocalProcessBackend
         from lightyear_execution.integration import HardenedExecutionContext
         from tools.ci.p5_fixture import Fixture
@@ -282,23 +281,28 @@ class NormalReceiptTests(unittest.TestCase):
             intelligence = receipt['intelligence']
             self.assertEqual(receipt['failure_accounting']['calls'], intelligence['calls'])
             self.assertEqual(intelligence['calls'], 4)
-            fields = dict(model_calls='calls', provider_attempts='provider_attempts',
-                provider_retries='provider_retries', input_tokens='input_tokens', output_tokens='output_tokens',
-                estimated_cost_usd='estimated_cost_usd', elapsed_ms='elapsed_ms',
-                cost_estimate_available='cost_estimate_available')
-            result = dict(receipt_sha256=receipt['content_sha256'], status='blocked', attempts=1,
-                          **{out:intelligence[source] for out,source in fields.items()})
-            totals = {key:result[key] for key in fields if key!='elapsed_ms'}
-            provenance = _run_provenance(root, dict(results=[result], totals=totals))
-            self.assertEqual(provenance['providers'], [provider.provider_id])
-            self.assertEqual(provenance['call_evidence_sha256'], sorted(intelligence['call_evidence_sha256']))
+            # Validate retained call envelopes, then feed their enclosed calls to
+            # the first-run build-receipt reader. Portfolio qualification is separate.
+            calls = []
+            for reference in receipt['artifacts']:
+                if reference['artifact_type'] != 'model-call-evidence':
+                    continue
+                artifact = json.loads((run/reference['path']).read_bytes())
+                self.assertEqual(artifact['content_sha256'], canonical_hash(artifact, {'content_sha256'}))
+                self.assertEqual(artifact['content_sha256'], reference['content_sha256'])
+                self.assertEqual(artifact['run_id'], receipt['run_id'])
+                calls.append(artifact['content'])
+            self.assertEqual(calls, agents.bounded_provider.calls)
+            self.assertEqual({call['provider'] for call in calls}, {provider.provider_id})
+            self.assertEqual(intelligence['call_evidence_sha256'], [call['content_sha256'] for call in calls])
             runtime = dict(schema='factory-model-admission/1', work_order_sha256=order.content_sha256,
                            provider_verified=False)
-            build = compute_build_receipt(order, ledger, receipt, agents.bounded_provider.calls, runtime, run)
+            build = compute_build_receipt(order, ledger, receipt, calls, runtime, run)
             self.assertEqual(build['status'], 'blocked')
             self.assertFalse(build['qualifies_for_factory_receipt'])
             self.assertIn('acceptance-gates', build['reasons'])
             self.assertEqual(build['accounting_sha256'], canonical_hash(intelligence))
+            self.assertNotIn('call-digest', build['reasons'])
             accounting_reasons = {'model-call-budget','accounting-digests','cost-accounting',
                 'accounted-input_tokens','accounted-output_tokens','accounted-cost','token-budget',
                 'budget-input_bytes','budget-output_bytes','budget-estimated_cost_usd','budget-elapsed_ms'}

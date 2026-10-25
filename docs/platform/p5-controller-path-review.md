@@ -62,8 +62,8 @@ unchanged, as are production, authority checks, frozen paths and workflows.
 
 This measures the first controller-level gap. Dollar/token/fallback, operator
 API outage, assembled context and attempt-identity closure still need their
-separate evidence. Planned observations grant no signing, spending or run
-permission, and no gap is accepted.
+separate evidence. Planned observations grant no signing, spending or run permission.
+Not accepted: any gap, except the first-run human-attestation gap accepted separately [operator-chat receipt](../factory/f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e).
 
 
 ## Controller budget subcases prepared 24 October
@@ -82,21 +82,21 @@ A separate mutation control substitutes the bare BoundedModelProvider at the
 controller constructor and requires the observation to refuse that path.
 All real signature and runtime admission verification remains in place.
 
-This closes neither controller recovery nor approved-fallback qualification.
+Not yet closed: controller recovery or approved-fallback qualification.
 The failure recorder at orchestrator.py:500-515 omits durable model-charge
 details; observing the in-memory budget is not a replacement for those receipts.
-The production orchestrator is F2-fenced and is unchanged. No gap is accepted.
+The production orchestrator is F2-fenced and is unchanged. Not accepted: any gap, except the first-run human-attestation gap accepted separately [operator-chat receipt](../factory/f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e).
 Strict qualification, all other seven drill functions, all production files,
 the existing workflow and all fenced paths are unchanged by this batch.
 The full eight-drill set runs again in CI; results and run URL remain pending.
 
 
-## Signed fallback controller cases prepared 24 October
+## Planned CI evidence: signed fallback controller cases prepared 24 October
 
 Two additional synthetic CI cases use the actual routing-policy compiler and a
 separate disposable Tower authority. Synthetic 35-pair matrix cells are fixture
 inputs, not benchmark results. No approval or signature verifier is mocked.
-The first case fails the primary, admits an approved secondary with the same
+Planned CI evidence: the first case fails the primary, admits an approved secondary with the same
 F2-bound provider/model identity, and must refuse the next builder transport at
 the shared two-call limit. The failed primary remains charged. The second uses
 a valid routing decision for a different secondary model: the independent F2

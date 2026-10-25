@@ -57,12 +57,59 @@ def validate_claim(root,claim):
     return commit
 
 
-def references(lines, *, record=''):
+def bound_path_spans(root, line):
+    """Exclude only typed, byte-bound regular-file paths from commit lexing.
+
+    A complete single-line JSON object is required. Invalid, duplicate-key,
+    uncommitted or mismatched bindings receive no exemption. Other fields on
+    the same line, including explicit commit claims, are still checked.
+    """
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('duplicate-key')
+            result[key] = value
+        return result
+    try:
+        row = json.loads(line.strip().removesuffix(','), object_pairs_hook=unique)
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(row, dict):
+        return []
+    spans = []
+    for key, digest_key in (('record', 'record_sha256'), ('path', 'sha256')):
+        name, digest = row.get(key), row.get(digest_key)
+        if (not isinstance(name, str) or not isinstance(digest, str)
+                or not re.fullmatch('[0-9a-f]{64}', digest)
+                or name.startswith('/') or ':' in name or '\\' in name
+                or any(part in ('', '.', '..') for part in name.split('/'))):
+            continue
+        try:
+            entry = git(root, 'ls-tree', '-z', 'HEAD', '--', name)
+            if (entry.count(b'\0') != 1 or not entry.startswith(b'100644 blob ')
+                    or entry.split(b'\t', 1)[1][:-1].decode() != name):
+                continue
+            if sha256(git(root, 'show', 'HEAD:'+name)).hexdigest() != digest:
+                continue
+        except (subprocess.CalledProcessError, UnicodeError, IndexError):
+            continue
+        token = re.compile(r'"'+key+r'"\s*:\s*("(?:[^"\\]|\\.)*")')
+        for match in token.finditer(line):
+            if json.loads(match[1]) == name:
+                spans.append(match.span(1))
+    return spans
+
+
+def references(lines, *, record='', root=None):
     lines = list(lines)
     hashes = set(re.findall(r'(?<![A-Za-z0-9])[0-9a-f]{64}(?![A-Za-z0-9])', record+'\n'+'\n'.join(lines)))
     result = set()
     for line in lines:
+        paths = bound_path_spans(root, line) if root is not None else []
         for match in REF.finditer(line):
+            if any(start <= match.start() and match.end() <= end for start, end in paths):
+                continue
             ref = match[1]
             if not re.search('[a-f]', ref):
                 continue
@@ -212,7 +259,7 @@ def check(root,base):
         patch=git(root,'diff','--unified=0',base,'HEAD','--',name).decode('utf-8')
         added=[line[1:] for line in patch.splitlines() if line.startswith('+') and not line.startswith('+++')]
         record=git(root,'show','HEAD:'+name).decode('utf-8',errors='replace') if added else ''
-        refs=references(added,record=record)
+        refs=references(added,record=record,root=root)
         for ref in sorted(refs):
             resolve(root,ref)
             matches=[c for c in claims if c['record']==name and c['reference']==ref]

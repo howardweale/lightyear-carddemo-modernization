@@ -423,6 +423,87 @@ class ExactF2ExceptionTests(unittest.TestCase):
                 policy.validate_workflow_binding(value)
 
 
+    def add_verify_timeout_binding(self):
+        self.verify_before = (b'name: synthetic verification\npermissions: {contents: read}\n'
+            b"timeout-minutes: ${{ matrix.os == 'windows-2025' && 60 || 35 }}\n")
+        self.verify_after = self.verify_before.replace(b'&& 60 ||', b'&& 90 ||')
+        for constant, raw in (('VERIFY_BEFORE_SHA', self.verify_before),
+                              ('VERIFY_AFTER_SHA', self.verify_after)):
+            patcher = patch.object(policy, constant, policy.sha(raw))
+            patcher.start(); self.addCleanup(patcher.stop)
+        self.git('checkout', '--detach', '-q', self.base)
+        value = json.loads((Path(__file__).resolve().parents[1]/policy.VERIFY_BINDING).read_bytes())
+        value.update(base_preimage=policy.VERIFY_BEFORE_SHA, final_sha256=policy.VERIFY_AFTER_SHA)
+        value['provenance']['exact_sha256'] = policy.VERIFY_AFTER_SHA
+        self.doc(policy.VERIFY_BINDING, value)
+        self.put(policy.VERIFY_WORKFLOW, self.verify_before)
+        self.base = self.commit('trusted synthetic verify binding')
+        self.put(policy.BUDGETED, self.new)
+        self.put(policy.VERIFY_WORKFLOW, self.verify_after)
+        if hasattr(self, 'workflow_bytes'):
+            self.put(policy.P5_WORKFLOW, self.workflow_bytes)
+        self.head = self.commit('synthetic timeout candidate')
+
+    def test_verify_timeout_exact_bytes_and_pr_scope(self):
+        self.add_verify_timeout_binding()
+        report = self.run_check()
+        self.assertTrue(report['fence_requirement_met'])
+        self.assertFalse(report['merge_authorized'])
+        self.assertFalse(report['run_authorized'])
+        self.assertEqual(policy.VERIFY_AFTER_SHA,
+                         report['accepted_workflow_bindings'][0]['after']['sha256'])
+        event = {'repository': {'full_name': policy.REPOSITORY}, 'pull_request': self.live()}
+        event['pull_request']['number'] = 456
+        with self.assertRaisesRegex(ValueError, 'wrong-pr'):
+            self.run_check(event=event)
+
+    def test_verify_and_p5_workflow_bindings_coexist(self):
+        self.add_workflow_binding(); self.add_verify_timeout_binding()
+        self.assertEqual({policy.P5_WORKFLOW, policy.VERIFY_WORKFLOW},
+                         {r['path'] for r in self.run_check()['accepted_workflow_bindings']})
+
+    def test_verify_hash_permissions_other_jobs_modes_and_candidate_binding_refuse(self):
+        self.add_verify_timeout_binding(); original = self.head
+        for change in ('hash', 'permission', 'linux', 'extra-workflow', 'mode', 'binding'):
+            self.git('checkout', '--detach', '-q', original)
+            if change == 'mode':
+                self.git('update-index', '--chmod=+x', policy.VERIFY_WORKFLOW)
+                self.git('commit', '--no-gpg-sign', '-qm', 'mode')
+                self.head = self.git('rev-parse', 'HEAD')
+            else:
+                if change == 'hash': self.put(policy.VERIFY_WORKFLOW, self.verify_after+b'# changed\n')
+                elif change == 'permission': self.put(policy.VERIFY_WORKFLOW, self.verify_after.replace(b'contents: read', b'contents: write'))
+                elif change == 'linux': self.put(policy.VERIFY_WORKFLOW, self.verify_after.replace(b'|| 35', b'|| 90'))
+                elif change == 'extra-workflow': self.put('.github/workflows/extra.yml', b'name: other\n')
+                else: self.put(policy.VERIFY_BINDING, b'{}\n')
+                self.head = self.commit('unbound change')
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+    def test_verify_binding_wrong_hash_pr_and_added_permission_refuse(self):
+        root = Path(__file__).resolve().parents[1]
+        original = policy.document((root/policy.VERIFY_BINDING).read_bytes())
+        self.assertEqual(policy.VERIFY_AFTER_SHA, policy.validate_verify_binding(original)['final_sha256'])
+        for change in (lambda v: v.update(final_sha256='0'*64),
+                       lambda v: v.update(base_preimage='0'*64),
+                       lambda v: v.update(pr=456), lambda v: v.update(pr=True),
+                       lambda v: v.update(permissions={'contents': 'write'}),
+                       lambda v: v.update(path=policy.P5_WORKFLOW),
+                       lambda v: v['provenance'].update(github_identity_is_human_proof=True)):
+            value = copy.deepcopy(original); change(value)
+            with self.assertRaises(ValueError): policy.validate_verify_binding(value)
+
+    def test_verify_missing_binding_and_wrong_preimage_refuse(self):
+        self.add_verify_timeout_binding(); original_base = self.base
+        for change in ('missing', 'preimage'):
+            self.git('checkout', '--detach', '-q', original_base)
+            if change == 'missing': self.git('rm', policy.VERIFY_BINDING)
+            else: self.put(policy.VERIFY_WORKFLOW, self.verify_before+b'# changed\n')
+            self.base = self.commit('changed trusted base')
+            self.put(policy.BUDGETED, self.new); self.put(policy.VERIFY_WORKFLOW, self.verify_after)
+            self.head = self.commit('candidate')
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+
 class FencePolicyIntegrationTests(unittest.TestCase):
     def test_lint_loads_policy_from_base_and_keeps_original_checker(self):
         root = Path(__file__).resolve().parents[1]

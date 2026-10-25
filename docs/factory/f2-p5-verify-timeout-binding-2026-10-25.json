@@ -1,0 +1,17 @@
+{
+  "schema": "f2-exact-workflow-binding/1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "pr": 455,
+  "path": ".github/workflows/verify.yml",
+  "mode": "100644",
+  "base_preimage": "1736424d5716880a0eb5dc941fcafc085d58faa04e4838c4eb7a8834ad1dbd1b",
+  "final_sha256": "a83be67630a54de10840743bcc24a7f1bd9c786c7447108eb448ae4818e91cf3",
+  "provenance": {
+    "source": "operator-chat",
+    "requested_by": "Howard Weale",
+    "requested_on": "2026-10-25",
+    "exact_sha256": "a83be67630a54de10840743bcc24a7f1bd9c786c7447108eb448ae4818e91cf3",
+    "statement": "Planned: Windows verification timeout only, 60 to 90 minutes; exact bytes require separate review before publication and merge.",
+    "github_identity_is_human_proof": false
+  }
+}

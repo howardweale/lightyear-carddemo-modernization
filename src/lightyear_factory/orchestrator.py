@@ -168,7 +168,14 @@ class FactoryOrchestrator:
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         self._validate_attempt_budget(order)
         self._receipt_started = time.monotonic()
+        self._receipt_transports = []
+        self._receipt_pending = False
+        self._receipt_journal = None
+        lease = None
         try:
+            if self.model_admission is not None:
+                run_id = _run_id(run_id)
+                lease = _ControllerAttemptLease(self.runs_root, run_id, create=True).__enter__()
             return self._run(order, run_id)
         except Exception:
             # Cover allocation/constructor failures and errors writing a blocked receipt.
@@ -176,6 +183,9 @@ class FactoryOrchestrator:
             if self.workspace_read_manifest is not None:
                 raise ContractError('factory-isolation-run-refused') from None
             raise
+        finally:
+            if lease is not None:
+                lease.__exit__()
 
     def _run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         run_id = _run_id(run_id)
@@ -220,6 +230,7 @@ class FactoryOrchestrator:
             if self.execution_context:
                 security_binding = self.execution_context.bind(order.content_sha256, started_at)
                 ledger.append(state, "hardened_admission_bound", security_binding)
+            self._begin_reconciliation_evidence(run_dir, run_id, order)
             workspace.create()
             if self.prepare_workspace:
                 self.prepare_workspace(workspace, order)
@@ -530,6 +541,126 @@ class FactoryOrchestrator:
                     duration_basis='observed-through-checkpoint', billing_final=False)
 
 
+    def _begin_reconciliation_evidence(self, run_dir, run_id, order):
+        if self.model_admission is None:
+            return
+        from hashlib import sha256
+        from .model_admission import _bounded_regular_bytes
+        admission = self.execution_context.admission_receipt
+        if (admission.get('status') != 'passed'
+                or admission.get('work_order_sha256') != order.content_sha256
+                or admission.get('content_sha256') != canonical_hash(admission, {'content_sha256'})
+                or not re.fullmatch('[0-9a-f]{64}', admission.get('nonce_sha256', ''))):
+            raise ContractError('reconciliation-admission-binding')
+        source = Path(self.factory_input_paths['workspace'])
+        if not source.is_absolute():
+            source = self.source_root/source
+        raw = _bounded_regular_bytes(source, 8*1024*1024, 'reconciliation-workspace')
+        if json.loads(raw) != self.workspace_read_manifest:
+            raise ContractError('reconciliation-workspace-binding')
+        identity = dict(schema='factory-attempt-identity/1', attempt_id=run_id,
+            work_order_sha256=order.content_sha256,
+            admission_receipt_sha256=admission['content_sha256'],
+            consumed_nonce_sha256=admission['nonce_sha256'],
+            sealed_workspace_sha256=sha256(raw).hexdigest(),
+            workspace_inventory_sha256=canonical_hash(self.workspace_read_manifest))
+        identity['content_sha256'] = canonical_hash(identity)
+        with (run_dir/'attempt-identity.json').open('x', encoding='utf-8') as stream:
+            stream.write(json.dumps(identity, sort_keys=True, separators=(',', ':'))+'\n')
+            stream.flush()
+            __import__('os').fsync(stream.fileno())
+        self._receipt_identity = identity
+        self._receipt_journal = RunLedger(run_dir/'attempt-accounting.jsonl')
+        self._checkpoint_accounting()
+
+    def _checkpoint_accounting(self, name=None, raw=None):
+        if getattr(self, '_receipt_journal', None) is None:
+            return
+        from hashlib import sha256
+        if name is not None:
+            role, separator, phase = name.rpartition('-')
+            if role not in ('planner', 'builder', 'failure_analyst') or phase not in ('prompt', 'response'):
+                return
+            if phase == 'prompt':
+                self._receipt_transports.append(dict(role=role, prompt_sha256=sha256(raw).hexdigest(), response_sha256=None))
+                self._receipt_pending = True
+            else:
+                if not self._receipt_pending or self._receipt_transports[-1]['role'] != role:
+                    raise ContractError('reconciliation-transport-order')
+                self._receipt_transports[-1]['response_sha256'] = sha256(raw).hexdigest()
+                self._receipt_pending = False
+        accounting = self._failure_accounting()
+        _validate_reconciliation_accounting(accounting)
+        self._receipt_journal.append('OBSERVED', 'sanitized_accounting', dict(
+            attempt_identity_sha256=self._receipt_identity['content_sha256'],
+            accounting=accounting))
+        with self._receipt_journal.path.open('ab') as stream:
+            __import__('os').fsync(stream.fileno())
+
+    @staticmethod
+    def reconcile_interrupted(runs_root, run_id, *, work_order_sha256,
+                              consumed_nonce_sha256, sealed_workspace_sha256):
+        """Abort-only: no admission, provider, retry, resume, or signing interface."""
+        import os
+        from .model_admission import _bounded_regular_bytes
+        run_id = _run_id(run_id)
+        for value in (work_order_sha256, consumed_nonce_sha256, sealed_workspace_sha256):
+            if not isinstance(value, str) or not re.fullmatch('[0-9a-f]{64}', value):
+                raise ContractError('reconciliation-binding-required')
+        root = Path(runs_root)
+        with _ControllerAttemptLease(root, run_id, create=False):
+            run_dir = root/run_id
+            identity = json.loads(_bounded_regular_bytes(run_dir/'attempt-identity.json', 16384, 'reconciliation-identity'))
+            expected = dict(attempt_id=run_id, work_order_sha256=work_order_sha256,
+                consumed_nonce_sha256=consumed_nonce_sha256,
+                sealed_workspace_sha256=sealed_workspace_sha256)
+            identity_fields = {'schema','attempt_id','work_order_sha256','consumed_nonce_sha256',
+                'sealed_workspace_sha256','admission_receipt_sha256','workspace_inventory_sha256','content_sha256'}
+            if (not isinstance(identity, dict) or set(identity) != identity_fields
+                    or any(not isinstance(identity[k],str) or not re.fullmatch('[0-9a-f]{64}',identity[k])
+                           for k in identity_fields-{'schema','attempt_id'})
+                    or identity.get('schema') != 'factory-attempt-identity/1'
+                    or identity.get('content_sha256') != canonical_hash(identity, {'content_sha256'})
+                    or any(identity.get(k) != v for k,v in expected.items())):
+                raise ContractError('reconciliation-identity-binding')
+            nonces = _bounded_regular_bytes(root/'admission-nonces.sha256', 8*1024*1024, 'reconciliation-nonce-store').decode('ascii')
+            if (not nonces.endswith('\n') or consumed_nonce_sha256 not in nonces.splitlines()
+                    or any(not re.fullmatch('[0-9a-f]{64}', x) for x in nonces.splitlines())):
+                raise ContractError('reconciliation-consumed-nonce-required')
+            for name in ('events.jsonl', 'attempt-accounting.jsonl'):
+                data = _bounded_regular_bytes(run_dir/name, 32*1024*1024, 'reconciliation-ledger')
+                if not data or not data.endswith(b'\n') or any(not line.strip() for line in data.splitlines()):
+                    raise ContractError('reconciliation-incomplete-ledger')
+            ledger = RunLedger(run_dir/'events.jsonl')
+            checkpoints = RunLedger(run_dir/'attempt-accounting.jsonl')
+            if (any((run_dir/name).exists() or (run_dir/name).is_symlink() for name in ('receipt.json','summary.json'))
+                    or any(e['state'] in ('PASSED', 'BLOCKED', 'INTERRUPTED') for e in ledger.events)):
+                raise ContractError('reconciliation-terminal-attempt-refused')
+            if (not any(e['kind']=='work_order_accepted' and e['payload'].get('work_order_sha256')==work_order_sha256 for e in ledger.events)
+                    or not any(e['kind']=='hardened_admission_bound' and e['payload'].get('admission_receipt_sha256')==identity['admission_receipt_sha256'] for e in ledger.events)
+                    or not any(e['kind']=='workspace_read_manifest' and e['payload'].get('sha256')==identity['workspace_inventory_sha256'] for e in ledger.events)):
+                raise ContractError('reconciliation-run-ledger-binding')
+            if not checkpoints.events or any(
+                    e['state'] != 'OBSERVED' or e['kind'] != 'sanitized_accounting'
+                    or set(e['payload']) != {'attempt_identity_sha256','accounting'}
+                    or e['payload'].get('attempt_identity_sha256') != identity['content_sha256']
+                    for e in checkpoints.events):
+                raise ContractError('reconciliation-accounting-binding')
+            accounting = checkpoints.events[-1]['payload']['accounting']
+            _validate_reconciliation_accounting(accounting)
+            payload = dict(schema='factory-interrupted-attempt/1', **expected,
+                status='interrupted; awaiting human attestation',
+                admission_receipt_sha256=identity['admission_receipt_sha256'],
+                attempt_identity_sha256=identity['content_sha256'],
+                accounting_ledger_head_sha256=checkpoints.head_sha256,
+                accounting=accounting, unsigned=True, human_attestation=None,
+                qualifies_for_factory_receipt=False, resume_allowed=False,
+                retry_allowed=False, new_admission_allowed=False)
+            event = ledger.append('INTERRUPTED', 'interrupted_attempt', payload)
+            with ledger.path.open('ab') as stream:
+                os.fsync(stream.fileno())
+            return event
+
     def _validate_attempt_budget(self, order):
         if self.workspace_read_manifest is not None:
             if type(order.max_attempts) is not int or not 1 <= order.max_attempts <= 3:
@@ -537,6 +668,7 @@ class FactoryOrchestrator:
 
     def _record_isolation_failure(self, run_dir, order, attempts, ledger):
         # No raw exception, drained model evidence, private names, context or paths.
+        self._checkpoint_accounting()
         ledger.append('BLOCKED', 'controller_error', {'reason': 'factory-isolation-run-refused'})
         receipt = {'schema_version': RUN_RECEIPT_SCHEMA_VERSION,
                    'receipt_type': 'lightyear-autonomous-factory-run',
@@ -579,6 +711,7 @@ class FactoryOrchestrator:
                 excluded_roots=(self.runs_root, workspace.root))
         expected_values()  # Refuse missing/unapproved inputs before constructing agent context.
         def inspect(name, raw):
+            self._checkpoint_accounting(name, raw)
             result = scan([(name, raw)], canaries, expected_values())
             ledger.append('RUNNING', 'model_isolation_scan_passed', result)
         self.agents.isolation_scan = inspect
@@ -810,6 +943,7 @@ class FactoryOrchestrator:
             }
         )
         if state == "BLOCKED":
+            self._checkpoint_accounting()
             intelligence = self._failure_accounting()
         security_limitations = (
             ["Acceptance gates ran inside the admitted OCI security policy."]
@@ -982,3 +1116,80 @@ def _run_id(value: str | None) -> str:
         return value
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     return f"run-{stamp}-{secrets.token_hex(4)}"
+
+class _ControllerAttemptLease:
+    """Separate OS lease; closing/killing releases it without deleting its inode."""
+    def __init__(self, root, run_id, *, create):
+        self.root, self.run_id, self.create = Path(root), run_id, create
+        self.stream = None
+
+    def __enter__(self):
+        import os
+        import stat
+        try:
+            directory = self.root/'.controller-leases'
+            path = directory/(self.run_id+'.lock')
+            for parent in (path, *path.parents):
+                if parent.exists() or parent.is_symlink():
+                    info = parent.lstat()
+                    if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0)&0x400:
+                        raise ContractError('reconciliation-link-refused')
+            if self.create:
+                directory.mkdir(parents=True, exist_ok=True)
+            flags = os.O_RDWR | (os.O_CREAT if self.create else 0) | getattr(os, 'O_NOFOLLOW', 0)
+            fd = os.open(path, flags, 0o600)
+            self.stream = os.fdopen(fd, 'r+b')
+            info = os.fstat(fd)
+            if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+                raise ContractError('reconciliation-lease-file')
+            if info.st_size == 0:
+                if not self.create:
+                    raise ContractError('reconciliation-lease-incomplete')
+                self.stream.write(b'0');self.stream.flush()
+            elif info.st_size != 1:
+                raise ContractError('reconciliation-lease-shape')
+            self.stream.seek(0)
+            if os.name == 'nt':
+                import msvcrt
+                msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return self
+        except Exception:
+            if self.stream is not None:self.stream.close()
+            raise ContractError('reconciliation-controller-live-or-lease-refused') from None
+
+    def __exit__(self, *_):
+        self.stream.close()
+
+
+def _validate_reconciliation_accounting(value):
+    import math
+    required = {'schema','calls','input_tokens','output_tokens','estimated_cost_usd',
+                'duration_ms','duration_basis','call_hashes','scanned_transports','in_flight_final_usage','billing_final'}
+    if not isinstance(value, dict) or set(value) != required or value['schema'] != 'factory-sanitized-accounting/1':
+        raise ContractError('reconciliation-accounting-shape')
+    if any(type(value[k]) is not int or value[k] < 0 for k in ('calls','input_tokens','output_tokens','duration_ms')):
+        raise ContractError('reconciliation-accounting-counts')
+    cost=value['estimated_cost_usd']
+    if type(cost) not in (int,float) or not math.isfinite(cost) or cost<0 or value['billing_final'] is not False:
+        raise ContractError('reconciliation-accounting-cost')
+    if value['duration_basis'] != 'observed-through-checkpoint':
+        raise ContractError('reconciliation-accounting-duration')
+    if value['in_flight_final_usage'] not in ('unknown','none') or not isinstance(value['call_hashes'],list) or len(value['call_hashes']) != value['calls']:
+        raise ContractError('reconciliation-accounting-calls')
+    if not isinstance(value['scanned_transports'], list):
+        raise ContractError('reconciliation-accounting-transports')
+    for row in value['call_hashes']:
+        if not isinstance(row,dict) or set(row) != {'request_sha256','response_sha256'}:
+            raise ContractError('reconciliation-accounting-hashes')
+        if any(v is not None and (not isinstance(v,str) or not re.fullmatch('[0-9a-f]{64}',v)) for v in row.values()):
+            raise ContractError('reconciliation-accounting-hash')
+    for row in value['scanned_transports']:
+        if not isinstance(row,dict) or set(row) != {'role','prompt_sha256','response_sha256'} or row['role'] not in ('planner','builder','failure_analyst'):
+            raise ContractError('reconciliation-accounting-transport')
+        if not isinstance(row['prompt_sha256'],str) or not re.fullmatch('[0-9a-f]{64}',row['prompt_sha256']):
+            raise ContractError('reconciliation-accounting-prompt')
+        if row['response_sha256'] is not None and (not isinstance(row['response_sha256'],str) or not re.fullmatch('[0-9a-f]{64}',row['response_sha256'])):
+            raise ContractError('reconciliation-accounting-response')

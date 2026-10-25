@@ -49,6 +49,13 @@ def build_parser() -> argparse.ArgumentParser:
     from .annotation_cli import parser as annotation_parser
     annotation_parser(subparsers)
 
+    reconcile = subparsers.add_parser("reconcile-interrupted", help="Append an unsigned abort record; never resume or retry")
+    reconcile.add_argument("--runs-root", type=Path, required=True)
+    reconcile.add_argument("--run-id", required=True)
+    reconcile.add_argument("--work-order-sha256", required=True)
+    reconcile.add_argument("--consumed-nonce-sha256", required=True)
+    reconcile.add_argument("--sealed-workspace-sha256", required=True)
+
     run = subparsers.add_parser("run", help="Execute one approved factory work order")
     run.add_argument("--work-order", type=Path)
     run.add_argument("--signed-work-order", type=Path)
@@ -335,6 +342,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "reconcile-interrupted":
+        try:
+            record = FactoryOrchestrator.reconcile_interrupted(args.runs_root, args.run_id,
+                work_order_sha256=args.work_order_sha256,
+                consumed_nonce_sha256=args.consumed_nonce_sha256,
+                sealed_workspace_sha256=args.sealed_workspace_sha256)
+        except Exception:
+            print("Interrupted-attempt reconciliation refused; no resume, retry or admission.")
+            return 1
+        print(json.dumps(record, indent=2, sort_keys=True))
+        return 0
     if args.command == "annotate":
         from .annotation_cli import run
         print(json.dumps(run(args), indent=2, sort_keys=True))

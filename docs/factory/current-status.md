@@ -1,8 +1,19 @@
-# Factory current status — 2026-10-17
+# Factory current status — 2026-10-18
+
+## Current CI observation
+
+Observed at 2026-10-25T04:04:46.174166+00:00.
+
+| Target | Exact head | Required CI |
+| --- | --- | --- |
+| main | `b9729cb16795d78865e7f92d5a5e92f9bde75180` | [in_progress](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40160379390/job/121070616847) |
+| [#362](https://github.com/howardweale/lightyear-carddemo-modernization/pull/362) (merged) | `55ea6a699da392bb2fad6bb0211f29acebbb65f4` | [success](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39036210066/job/117406431713) |
+
+Only the required-ci check on each named head is shown. Missing, pending or failed checks are not green. This observation grants no execution or release authority.
 
 ## Completed merges and main CI
 
-CI snapshot checked at 2026-10-17T13:10:22+00:00. Evidence measurements below retain their dated scope (2026-10-17).
+CI snapshot checked at 2026-10-17T13:10:22+00:00. Evidence measurements below retain their dated scope (2026-10-18).
 
 | PR | Merge commit | Merged at (UTC) |
 | --- | --- | --- |
@@ -19,12 +30,12 @@ Observed push workflows on this exact main commit only. Equivalence automation a
 
 Factory: activated locally (signed-only); threshold policy not effective.
 
-INTCALC business outcomes 8/8; I/O 85/86; raw mutation kills 308/421.
+INTCALC business outcomes 8/8; I/O 85/86; raw mutation kills 311/424.
 
 | Scope | Raw | Projected, pending decisions |
 | --- | --- | --- |
-| twin | 308/421 | 308/308 |
-| zos-facing | 308/421 | 308/421 |
+| twin | 311/424 | 311/311 |
+| zos-facing | 311/424 | 311/424 |
 
 Loader assessments: resolved-by-valid-comparisons: 113.
 
@@ -65,7 +76,7 @@ Diversity deficit: 7 fields.
 - TRANSACT:TRAN-RECORD.TRAN-SOURCE
 - TRANSACT:TRAN-RECORD.TRAN-TYPE-CD
 
-## POSTTRAN
+## POSTTRAN (review as of 2026-10-16)
 
 Not releasable: nine fresh-campaign gaps remain after the effective twin-only October 12 supplement; no new z/OS acceptances.
 Business 24/24; I/O 85/86; diversity deficit 0 fields.
@@ -74,10 +85,10 @@ zos-facing: 360/390 projected; 30 unresolved.
 
 | Phase 2 | Plan seal | Executable commit | Sign and launch by (UTC) | Days remaining |
 |---|---|---|---|---:|
-| POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 12.066 |
+| POSTTRAN | `9b199d95ed391319ad45d5e316e95e927f9ad67ccb0a5cd1a53b39d189896f13` | `65bd4cd549067dd3695f4197e495cc15c9473417` | 2026-10-29T14:46:00+00:00 | 4.445 |
 
-Evaluated at 2026-10-17T13:10:22+00:00. Request: [posttran-phase2-authorization-request-2026-10-16.json](posttran-phase2-authorization-request-2026-10-16.json).
-More than five days remain before sign-and-launch deadline at snapshot time.
+Evaluated at 2026-10-25T04:04:46.174166+00:00. Request: [posttran-phase2-authorization-request-2026-10-16.json](posttran-phase2-authorization-request-2026-10-16.json).
+Warning: five days or fewer remain before sign-and-launch deadline.
 [Operator runbook](posttran-phase2-runbook.md). The window end applies to the reserve launch check as well as signing. The daily deadline workflow uses the real UTC clock; this page is a dated snapshot. Preparation and rehearsal do not authorize execution.
 
 ## Durable public evidence
@@ -93,7 +104,7 @@ Dated October 14/15 retention statements remain historical; use these manifests 
 
 ## CardDemo six-screen proof
 
-CI run 39127778944: 120/120 cases and 678/678 API/browser interactions across six programs (666 BMS interactions). Strict mutation: 701/768 KILLED (91.28%); 49 survivors, 17 uncovered and 1 timeout remain in the denominator. [Unsigned receipt and complete retained artifacts](../modernization/carddemo-slice-1-2026-10-18.md). Bounded raw-source reference and disclosed synthetic fixtures; native execution and SQL-error screen equivalence remain unproved. Final publication-head CI and Howard merge approval are separate. No signing, import, activation, Phase 2 or release authority.
+CI run 39127778944: 120/120 cases and 678/678 API/browser interactions across six programs (666 BMS interactions). Strict mutation: 701/768 KILLED (91.28%); 49 survivors, 17 uncovered and 1 timeout remain in the denominator. [Unsigned receipt and complete retained artifacts](../modernization/carddemo-slice-1-2026-10-18.md). Bounded raw-source reference and disclosed synthetic fixtures; native execution and SQL-error screen equivalence remain unproved. Final publication-head CI and Howard merge approval are separate. No signing, import, activation, Phase 2 or release authority. Acceptance scope: The six recorded work-order proof gates only; not complete platform, error-path, independence, or release acceptance. Open evidence gaps: Missing-detail screen equivalence is not established. SQL error-path screen equivalence is not established. Native CICS, IMS and DB2 behavior is not established. The original reference and candidate share the BMS parser and data-layout codec. Independent readers now cross-check 50 public and 950 disclosed synthetic rows per layout; this does not establish independent end-to-end or native-platform equivalence. IMS authorization rows and the no-change account pair are disclosed synthetic fixtures, not production evidence. Surviving and uncovered mutants remain open; timeouts receive no killed credit. 49 SURVIVED, 17 NO_COVERAGE, 1 TIMED_OUT. [Dated gap addendum](../modernization/carddemo-slice-gaps-2026-10-21.md).
 
 ## B06 access
 
@@ -113,7 +124,7 @@ E3 equivalence and all-killed-mutant rejection checks, E4 build comparisons and 
 
 ## Other unfinished work
 
-CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) remains a draft F0 feasibility investigation. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.
+CMS [PR #360](https://github.com/howardweale/lightyear-carddemo-modernization/pull/360) was recorded as a draft F0 feasibility investigation as of 2026-10-17. Same-revision equivalence is not established; publication/merge and F1–F4 need separate authorization.
 
 The Phase 2 request remains unsigned and unexecuted. Final reviewed-checkout readiness verification is still required before any future signing. Public retention verification does not authorize local evidence deletion.
 
@@ -139,12 +150,20 @@ POSTTRAN: No ordered POSTTRAN APPL-RESULT request exists in the inspected commit
 
 As of 2026-10-18, COSGN00C idiomatic Java passed CI run 39147604819: 120 journeys and 678/678 API/browser interactions. Strict full-scope KILLED/all-generated: 702/769 (91.29%); historical baseline 701/768 (91.28%). SignonService: 19/21 (90.48%); SignonRules: 15/15 (100.00%). Remaining statement-engine programs: COACTVWC, COACTUPC, COPAUS0C, COPAUS1C. Other existing hand-written orchestration: COMEN01C. Open gaps: Missing-detail and SQL-error screen equivalence; Native CICS, IMS and DB2 behavior; Shared BMS parser and data-layout codec; Disclosed synthetic IMS rows and account pair; All surviving, uncovered and timed-out mutants remain in the denominator. No survivor, uncovered mutant or timeout is waived. Final publication CI and merge approval are separate. Unsigned; no signing, import, activation, Phase 2 or release authority.
 
+## Source paragraph coverage
+
+| Program | Inventory entries | Java | Engine | Not applicable |
+|---|---:|---:|---:|---:|
+| COACTUPC | 88 | 43 | 1 | 44 |
+| COSGN00C | 6 | 6 | 0 | 0 |
+Counts classify source scope, not passing execution or mutation proof. The retained full-slice 678/678 proof is unchanged. COACTUPC inventory includes three identification headers and its exit labels.
+
 ## Account validation groups
 
 COACTUPC: 12 validation paragraphs in 4 groups; 120 journeys and 678 interactions per API, browser and mutation-reference run. Strict mutation result 882/950 (92.84210526%), KILLED only. Measured source fb6154ae1568a0a67a69861f6ca8d51b1e010a72, run 39293036087; publication 2026-10-19. Whole account screen remains incomplete. Statement engines remain for COACTVWC, COACTUPC, COPAUS0C, COPAUS1C. No merge or execution authority.
 
-Not releasable: Fresh complete caught-mutant evidence required for: TRANSACT:TRAN-RECORD.TRAN-MERCHANT-NAME, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-CITY, TRANSACT:TRAN-RECORD.TRAN-MERCHANT-ZIP. Retained campaign index does not certify complete durable retention. Ordered effective decisions are not recorded in these unsigned inputs. Non-provisional release evidence is not established by this retained engineering campaign.
+Not releasable: qualified-oracle-required. release-run-required. protected-main-campaign-required. production-review-proofs-required. current-ordered-decision-proof-not-supplied.
 
 This is recorded local activation and twin-scoped evidence; it grants no execution, release, or z/OS authority.
 
-[Measured verdict](intcalc-releasability-2026-10-17.md) · [Decision packet](howard-decision-packet-2026-10-17-handoff-refresh.md)
+[Measured verdict](intcalc-releasability-2026-10-21.md) · [Decision packet](https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/intcalc-verdict-run39685093189-attempt1/howard-decision-packet-2026-10-18-handoff-refresh.md)

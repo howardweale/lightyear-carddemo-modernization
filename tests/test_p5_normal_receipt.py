@@ -145,6 +145,18 @@ class NormalReceiptTests(unittest.TestCase):
                 normalized.pop('failure_accounting')
                 normalized['content_sha256'] = canonical_hash(normalized, {'content_sha256'})
                 write_json(normalized, run/'normalized-receipt.json')
+                if old_bytes != (run/'normalized-receipt.json').read_bytes():
+                    # Only fixed receipt-field names/counts/hashes, never field contents.
+                    import re
+                    changed = sorted(key for key in set(old) | set(normalized)
+                                     if old.get(key) != normalized.get(key))
+                    safe_keys = [key if re.fullmatch('[a-z_]{1,64}', key) else 'redacted'
+                                 for key in changed[:32]]
+                    print('p5-receipt-difference:' + json.dumps(dict(
+                        fields=safe_keys, old_event_count=old.get('event_count'),
+                        current_event_count=normalized.get('event_count'),
+                        old_bytes_sha256=hashlib.sha256(old_bytes).hexdigest(),
+                        current_bytes_sha256=hashlib.sha256((run/'normalized-receipt.json').read_bytes()).hexdigest()), sort_keys=True), flush=True)
                 check.assertEqual(old_bytes, (run/'normalized-receipt.json').read_bytes())
                 summary = json.loads((run/'summary.json').read_bytes())
                 summary['receipt_sha256'] = old['content_sha256']

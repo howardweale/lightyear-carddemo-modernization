@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-24",
+  "claims": [
+    {
+      "record": "docs/factory/f2-workflow-provenance-receipt-2026-10-24.json",
+      "reference": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "role": "source",
+      "source_path": ".github/workflows/p5-factory-drills.yml",
+      "source_sha256": "302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f"
+    }
+  ]
+}

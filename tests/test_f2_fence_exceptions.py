@@ -28,7 +28,7 @@ class ExactF2ExceptionTests(unittest.TestCase):
         # Test Git object modes, independent of Windows/POSIX working-tree modes.
         self.git('config', 'core.filemode', 'false')
         source_root = Path(__file__).resolve().parents[1]
-        for path in (policy.CHECKER, policy.VALIDATOR):
+        for path in (policy.CHECKER, policy.VALIDATOR, policy.WORKFLOW_BINDING):
             self.put(path, (source_root / path).read_bytes())
         self.put(policy.GATE, b'# synthetic gate\n')
         self.put(policy.PROVIDERS, b'unchanged provider\n')
@@ -327,6 +327,100 @@ class ExactF2ExceptionTests(unittest.TestCase):
         self.assertEqual('e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8', value['entries'][1]['final_sha256'])
         self.assertNotIn('src/lightyear_factory/cli.py', [x['path'] for x in value['entries']])
 
+
+
+    def add_workflow_binding(self):
+        self.workflow_bytes = (b'name: synthetic P5\non: [pull_request, push]\n'
+                               b'permissions: {contents: read}\njobs: {}\n')
+        self.workflow_digest = policy.sha(self.workflow_bytes)
+        patcher = patch.object(policy, 'P5_WORKFLOW_SHA', self.workflow_digest)
+        patcher.start(); self.addCleanup(patcher.stop)
+        self.git('checkout', '--detach', '-q', self.base)
+        value = json.loads((self.root / policy.WORKFLOW_BINDING).read_bytes())
+        value['final_sha256'] = self.workflow_digest
+        value['provenance']['exact_sha256'] = self.workflow_digest
+        value['provenance']['statement'] = ('approved by Howard in the operator chat, ' +
+            value['provenance']['recorded_at_pt'] + ', exact hash ' + self.workflow_digest +
+            policy.WORKFLOW_EVIDENCE_LINK)
+        self.doc(policy.WORKFLOW_BINDING, value)
+        self.base = self.commit('trusted exact workflow binding')
+        self.put(policy.BUDGETED, self.new)
+        self.put(policy.P5_WORKFLOW, self.workflow_bytes)
+        self.head = self.commit('approved source and workflow')
+
+    def test_exact_workflow_binding_has_absent_preimage_and_live_pr_identity(self):
+        self.add_workflow_binding()
+        report = self.run_check()
+        self.assertTrue(report['fence_requirement_met'])
+        self.assertFalse(report['merge_authorized'])
+        self.assertEqual('absent', report['accepted_workflow_bindings'][0]['before'])
+        self.assertEqual(self.workflow_digest,
+                         report['accepted_workflow_bindings'][0]['after']['sha256'])
+        event = {'repository': {'full_name': policy.REPOSITORY}, 'pull_request': self.live()}
+        event['pull_request']['number'] = 456
+        with self.assertRaisesRegex(ValueError, 'wrong-pr'):
+            self.run_check(event=event)
+
+    def test_workflow_hash_mode_permissions_secrets_rename_and_extra_refuse(self):
+        self.add_workflow_binding()
+        original = self.head
+        for change in ('hash', 'mode', 'permission', 'secret', 'rename', 'extra', 'manifest'):
+            self.git('checkout', '--detach', '-q', original)
+            if change == 'mode':
+                self.git('update-index', '--chmod=+x', policy.P5_WORKFLOW)
+                self.git('commit', '--no-gpg-sign', '-qm', 'workflow mode')
+                self.head = self.git('rev-parse', 'HEAD')
+                self.assertTrue(self.git('ls-tree', self.head, '--', policy.P5_WORKFLOW).startswith('100755 blob '))
+            else:
+                if change == 'hash': self.put(policy.P5_WORKFLOW, self.workflow_bytes + b'# changed\n')
+                elif change == 'permission':
+                    self.put(policy.P5_WORKFLOW, self.workflow_bytes.replace(b'contents: read', b'contents: write'))
+                elif change == 'secret':
+                    self.put(policy.P5_WORKFLOW, self.workflow_bytes + b'env: {TOKEN: "${{ secrets.EXAMPLE }}"}\n')
+                elif change == 'rename': self.git('mv', policy.P5_WORKFLOW, '.github/workflows/renamed.yml')
+                elif change == 'extra': self.put('.github/workflows/extra.yml', b'name: other\n')
+                else:
+                    value = json.loads((self.root / policy.WORKFLOW_BINDING).read_bytes())
+                    value['final_sha256'] = '0' * 64
+                    self.doc(policy.WORKFLOW_BINDING, value)
+                self.head = self.commit('unapproved workflow change')
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+    def test_workflow_existing_preimage_and_missing_binding_refuse(self):
+        self.add_workflow_binding()
+        original_base = self.base
+        for change in ('preimage', 'missing', 'judge'):
+            self.git('checkout', '--detach', '-q', original_base)
+            if change == 'preimage': self.put(policy.P5_WORKFLOW, b'preexisting workflow\n')
+            elif change == 'missing': self.git('rm', policy.WORKFLOW_BINDING)
+            else:
+                amendment = json.loads((self.root / fence.AMENDMENT).read_bytes())
+                amendment['files'].append(dict(path=policy.P5_WORKFLOW, sha256=self.workflow_digest))
+                self.doc(fence.AMENDMENT, amendment)
+            self.base = self.commit('changed trusted base')
+            self.put(policy.BUDGETED, self.new)
+            self.put(policy.P5_WORKFLOW, self.workflow_bytes)
+            self.head = self.commit('workflow candidate')
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+    def test_workflow_binding_exact_fields_and_provenance_refuse_mutations(self):
+        root = Path(__file__).resolve().parents[1]
+        original = policy.document((root / policy.WORKFLOW_BINDING).read_bytes())
+        self.assertEqual('302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f',
+                         policy.validate_workflow_binding(original)['final_sha256'])
+        changes = [lambda v: v.update(repository='other/repository'),
+                   lambda v: v.update(pr=456), lambda v: v.update(mode='100755'),
+                   lambda v: v.update(path='.github/workflows/other.yml'),
+                   lambda v: v.update(base_preimage='0' * 64),
+                   lambda v: v.update(final_sha256='0' * 64),
+                   lambda v: v.pop('provenance'),
+                   lambda v: v['provenance'].update(source='github-comment'),
+                   lambda v: v['provenance'].update(github_identity_is_human_proof=True),
+                   lambda v: v.update(expires='tomorrow')]
+        for index, change in enumerate(changes):
+            value = copy.deepcopy(original); change(value)
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                policy.validate_workflow_binding(value)
 
 
 class FencePolicyIntegrationTests(unittest.TestCase):

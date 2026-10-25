@@ -1,0 +1,17 @@
+{
+  "schema": "f2-exact-workflow-binding/1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "pr": 455,
+  "path": ".github/workflows/p5-factory-drills.yml",
+  "mode": "100644",
+  "base_preimage": "absent",
+  "final_sha256": "302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f",
+  "provenance": {
+    "source": "operator-chat",
+    "approved_by": "Howard Weale",
+    "recorded_at_pt": "2026-10-24 ~17:55 PT",
+    "exact_sha256": "302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f",
+    "statement": "approved by Howard in the operator chat, 2026-10-24 ~17:55 PT, exact hash 302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f [operator-chat record](f2-workflow-provenance-receipt-2026-10-24.json#sha256=f5202f3faaff9699d66cc51c92926e0ef8aa13ff6e0242116b10069acacc388d)",
+    "github_identity_is_human_proof": false
+  }
+}

@@ -49,7 +49,7 @@ the allowed final bytes. Every judge path, frozen test inventory addition and
 POSTTRAN-bound path remains ineligible, even if it overlaps F2 engineering scope.
 
 An extra fenced path, rename, mode change, wrong bytes, changed candidate
-manifest/validator/checker/gate/workflow, modified `providers.py`, missing
+manifest/validator/checker/gate or any unbound workflow, modified `providers.py`, missing
 provenance, wrong repository/PR, stale live head or incomplete checker report
 refuses. The live PR must target this repository's main. A synthetic checkout
 must have the expected parents and exact merge tree. Post-merge lint accepts the
@@ -76,4 +76,20 @@ record still says `interrupted; awaiting human attestation`.
 No judge unfreeze, history rewrite, private-store access or ten-minute monitor
 is introduced.
 
-Open compatibility blocker: the existing PR #455 P5 workflow differs from main. The unchanged candidate-workflow refusal still blocks it; this revision grants no workflow exception. Any proposed exact-byte workflow treatment requires a separate decision.
+## Separate exact workflow control binding
+
+Howard approved preparation of one trusted-base workflow binding in the operator chat, 24 October 2026 approximately 17:55 PT. [operator-chat record](f2-workflow-provenance-receipt-2026-10-24.json#sha256=f5202f3faaff9699d66cc51c92926e0ef8aa13ff6e0242116b10069acacc388d)
+The separate `f2-p5-workflow-binding-2026-10-24.json` record permits only repository
+`howardweale/lightyear-carddemo-modernization`, PR #455,
+`.github/workflows/p5-factory-drills.yml`, absent base preimage at both anchor and
+live base, mode `100644`, SHA-256 `302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f`.
+The workflow bytes are unchanged. Its contents-read permission, pull-request/push
+triggers, no-secret-reference content and pinned image are bound by that exact digest.
+Any byte change, including permissions or a secret reference, requires a new operator
+approval and remains refused by this binding. Every other workflow delta is refused
+when applying an F2 exception. The binding itself is a protected trusted-base control;
+candidate-side edits, missing provenance, wrong PR/repository, renames or mode changes
+refuse. Judge and POSTTRAN protections apply before workflow exception evaluation.
+This is a separate control binding, not a third fenced-source exception. All original
+refusal test methods and assertions remain unchanged; four synthetic methods cover
+the exact binding and its refusal boundaries. CI execution is still required.

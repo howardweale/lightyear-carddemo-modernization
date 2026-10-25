@@ -25,7 +25,11 @@ PROVENANCE_EVIDENCE_LINK = ' [operator-chat record](f2-operator-chat-provenance-
 ORCHESTRATOR = 'src/lightyear_factory/orchestrator.py'
 ORCHESTRATOR_SHA = 'e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8'
 ORCHESTRATOR_EVIDENCE_LINK = ' [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523)'
-CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE}
+WORKFLOW_BINDING = 'docs/factory/f2-p5-workflow-binding-2026-10-24.json'
+P5_WORKFLOW = '.github/workflows/p5-factory-drills.yml'
+P5_WORKFLOW_SHA = '302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f'
+WORKFLOW_EVIDENCE_LINK = ' [operator-chat record](f2-workflow-provenance-receipt-2026-10-24.json#sha256=f5202f3faaff9699d66cc51c92926e0ef8aa13ff6e0242116b10069acacc388d)'
+CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE, WORKFLOW_BINDING}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
                'merge_permitted', 'automatic_expiry'}
@@ -152,6 +156,47 @@ def validate_entry(entry):
     return entry
 
 
+def validate_workflow_binding(value):
+    fields(value, {'schema', 'repository', 'pr', 'path', 'mode', 'base_preimage',
+                   'final_sha256', 'provenance'}, 'workflow-binding-fields')
+    require(value['schema'] == 'f2-exact-workflow-binding/1', 'workflow-binding-schema')
+    require(value['repository'] == REPOSITORY and type(value['pr']) is int and
+            value['pr'] == 455, 'workflow-binding-target')
+    require(value['path'] == P5_WORKFLOW and value['mode'] == '100644' and
+            value['base_preimage'] == 'absent', 'workflow-binding-scope')
+    require(value['final_sha256'] == P5_WORKFLOW_SHA, 'workflow-binding-postimage')
+    provenance = value['provenance']
+    fields(provenance, {'source', 'approved_by', 'recorded_at_pt', 'exact_sha256',
+                        'statement', 'github_identity_is_human_proof'}, 'workflow-provenance-fields')
+    require(provenance['source'] == 'operator-chat' and
+            provenance['approved_by'] == 'Howard Weale' and
+            provenance['recorded_at_pt'] == '2026-10-24 ~17:55 PT' and
+            provenance['exact_sha256'] == P5_WORKFLOW_SHA and
+            provenance['github_identity_is_human_proof'] is False, 'workflow-provenance')
+    require(provenance['statement'] == 'approved by Howard in the operator chat, ' +
+            provenance['recorded_at_pt'] + ', exact hash ' + P5_WORKFLOW_SHA +
+            WORKFLOW_EVIDENCE_LINK, 'workflow-approval-statement')
+    return value
+
+
+def inspect_workflow_change(repo, base, head, anchor, changed):
+    workflows = [p for p in changed if p.startswith('.github/workflows/')]
+    if not workflows:
+        return []
+    require(workflows == [P5_WORKFLOW], 'candidate-control-change')
+    _, raw = blob(repo, base, WORKFLOW_BINDING)
+    binding = validate_workflow_binding(document(raw))
+    # Absent means no tree entry of any kind, both at the anchor and live base.
+    require(not git(repo, 'ls-tree', '-z', base, '--', P5_WORKFLOW) and
+            not git(repo, 'ls-tree', '-z', anchor, '--', P5_WORKFLOW),
+            'workflow-preimage-not-absent')
+    after, _ = blob(repo, head, P5_WORKFLOW)
+    require(after == {'mode': binding['mode'], 'sha256': binding['final_sha256']},
+            'workflow-postimage-refused')
+    return [dict(path=P5_WORKFLOW, before='absent', after=after,
+                 binding_sha256=sha(raw), provenance=binding['provenance'])]
+
+
 def ineligible_paths(repo, base, checker):
     original = document(git(repo, 'show', base + ':' + checker['ORIGINAL']))
     amendment = document(git(repo, 'show', base + ':' + checker['AMENDMENT']))
@@ -233,12 +278,12 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     anchor = resolve(repo, manifest['base_anchor'])
     require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
                            capture_output=True).returncode == 0, 'unrelated-base-anchor')
-    require(not (set(changed) & CONTROLS) and
-            not any(p.startswith('.github/workflows/') for p in changed), 'candidate-control-change')
+    require(not (set(changed) & CONTROLS), 'candidate-control-change')
     # All of these objects must exist in base, including the validator itself.
     for path in CONTROLS:
         require(blob(repo, base, path) == blob(repo, head, path), 'candidate-control-change')
     require(blob(repo, base, PROVIDERS) == blob(repo, head, PROVIDERS), 'providers-change-refused')
+    workflow_bindings = inspect_workflow_change(repo, base, head, anchor, changed)
     require(len(set(report['blocked_paths'])) == len(report['blocked_paths']) and
             all(p in entries for p in report['blocked_paths']), 'unlisted-fence-violation')
     accepted = []
@@ -261,7 +306,7 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     # Re-check live provenance after object reads; stale observations never pass.
     require(context(repo, base, head, event or {}, environment or {}, query) == bound,
             'context-changed')
-    result.update(accepted_exceptions=accepted,
+    result.update(accepted_exceptions=accepted, accepted_workflow_bindings=workflow_bindings,
                   fence_requirement_met=True, manifest_sha256=sha(raw), context=bound)
     return result
 

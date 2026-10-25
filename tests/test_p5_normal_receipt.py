@@ -122,6 +122,10 @@ class NormalReceiptTests(unittest.TestCase):
         class ComparedController(orchestrator.FactoryOrchestrator):
             def _finish(self, *args, **kwargs):
                 check.assertEqual(args[3], 'BLOCKED')
+                check.assertEqual(args[-1]['approved_roots'], [])
+                check.assertEqual(args[-1]['nodes'], [])
+                check.assertEqual(args[-1]['edges'], [])
+                check.assertIsNone(args[-1]['semantic_memory'])
                 run = args[0]
                 tick = orchestrator.time.monotonic()
                 with patch.object(baseline, 'datetime', FixedDatetime), \
@@ -163,8 +167,7 @@ class NormalReceiptTests(unittest.TestCase):
         path = 'factory/benchmarks/intcalc_candidate.py'
         plan = dict(summary='Synthetic divergent plan', risks=[], tasks=[dict(
             id='synthetic', objective='Preserve deliberately divergent rounding',
-            paths=[path], graph_node_ids=['workload:carddemo-intcalc'],
-            evidence_capsule_ids=['capsule:00499794e29839da11701d13'])])
+            paths=[path], graph_node_ids=[], evidence_capsule_ids=[])])
         diagnosis = dict(summary='Synthetic gate divergence', failure_codes=['GATE_FAILED:private-intcalc-policy'],
                          builder_guidance='Synthetic refusal case', risk='medium')
         proposal = dict(summary='Synthetic divergent edit', edits=[dict(path=path,
@@ -172,7 +175,8 @@ class NormalReceiptTests(unittest.TestCase):
             rationale='Exercise exhausted attempts without changing the wrong behaviour')], blocked_reason=None)
         provider = SyntheticProvider([plan, diagnosis, proposal, diagnosis])
         agents = ModelAgentSet(provider)
-        order = replace(benchmark_work_order('rounding-mode'), max_attempts=1)
+        # Receipt regression uses packed file context, not the unrelated full public graph.
+        order = replace(benchmark_work_order('rounding-mode'), max_attempts=1, graph_node_ids=())
 
         def prepare(workspace, _):
             target = workspace.resolve(path)
@@ -192,8 +196,6 @@ class NormalReceiptTests(unittest.TestCase):
             backend = OCIContainerBackend(fixture.policy, 'docker', execute=True)
             context = HardenedExecutionContext(fixture.policy, backend, admission, fixture.key)
             controller = ComparedController(fixture.root, root/'runs', agents,
-                graph_path=repository/'knowledge/graph.snapshot.json.gz',
-                evidence_path=repository/'knowledge/evidence/source.pack.json.gz',
                 prepare_workspace=prepare, execution_context=context,
                 model_admission=fixture.admission, factory_input_paths=fixture.input_paths,
                 workspace_read_manifest=fixture.runtime()['workspace_read_manifest'],

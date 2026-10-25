@@ -34,5 +34,22 @@ class ControllerBudgetTests(unittest.TestCase):
                     observe_case(Path(temp)/'bare', repository, 'dollar-preflight')
 
 
+    def test_operator_outage_receipt_and_terminal_attempt_identity(self):
+        from tools.ci.p5_controller_outage import observe
+        self.assertEqual(os.environ.get('GITHUB_ACTIONS'), 'true')
+        repository = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory(prefix='p5-outage-ci-') as temp:
+            row = observe(Path(temp)/'controller', repository)
+        self.assertTrue(row['operator_outage_refused'])
+        self.assertEqual(row['controller_receipt']['status'], 'blocked')
+        self.assertEqual(row['stub_calls'], 1)
+        self.assertEqual(row['accounted_calls'], 1)
+        self.assertTrue(row['duplicate_attempt_refused'])
+        self.assertEqual(row['duplicate_stub_calls'], 0)
+        self.assertTrue(row['attempt_files_unchanged'])
+        self.assertTrue(row['nonce_unchanged'])
+        self.assertEqual(row['real_model_calls'], 0)
+        self.assertEqual(row['actual_spend'], 0)
+
 if __name__ == '__main__':
     unittest.main()

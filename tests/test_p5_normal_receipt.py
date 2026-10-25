@@ -103,6 +103,11 @@ class NormalReceiptTests(unittest.TestCase):
         from lightyear_factory.contracts import canonical_hash, write_json
         from lightyear_factory.build_receipt import compute_build_receipt
         from lightyear_factory.qualification import _run_provenance
+        from lightyear_execution.backend import OCIContainerBackend, LocalProcessBackend
+        from lightyear_execution.integration import HardenedExecutionContext
+        from tools.ci.p5_fixture import Fixture
+        from contextlib import ExitStack
+        from lightyear_factory.gates import CandidateBuildBackend
 
         repository = Path(__file__).resolve().parents[1]
         raw = (repository/'tests/fixtures/p5/normal_finish_before.txt').read_bytes()
@@ -147,7 +152,7 @@ class NormalReceiptTests(unittest.TestCase):
         class SyntheticProvider(ScriptedModelProvider):
             # Explicit synthetic identity: structural validation, never real-model qualification.
             provider_id = 'p5-synthetic-provenance'
-            model = 'p5-synthetic-only'
+            model = 'p5-synthetic-only-2026-10-24'
 
             def complete(self, *args, **kwargs):
                 result = super().complete(*args, **kwargs)
@@ -175,13 +180,38 @@ class NormalReceiptTests(unittest.TestCase):
             self.assertIn('ROUNDING = "down"', source)
             target.write_text(source.replace('ROUNDING = "down"', 'ROUNDING = "half-up"', 1), encoding='utf-8')
 
-        with tempfile.TemporaryDirectory(prefix='p5-blocked-model-ci-') as temp:
+        with ExitStack() as cleanup:
+            temp = cleanup.enter_context(tempfile.TemporaryDirectory(prefix='p5-blocked-model-ci-'))
             root = Path(temp)
-            controller = ComparedController(repository, root/'runs', agents,
+            fixture = Fixture(root, repository, controller_probe=True,
+                blocked_receipt_order=order,
+                blocked_receipt_identity=(provider.provider_id, provider.model))
+            cleanup.callback(fixture.close)
+            self.assertEqual(fixture.order.content_sha256, order.content_sha256)
+            _, admission = fixture.verify_order()
+            backend = OCIContainerBackend(fixture.policy, 'docker', execute=True)
+            context = HardenedExecutionContext(fixture.policy, backend, admission, fixture.key)
+            controller = ComparedController(fixture.root, root/'runs', agents,
                 graph_path=repository/'knowledge/graph.snapshot.json.gz',
                 evidence_path=repository/'knowledge/evidence/source.pack.json.gz',
-                prepare_workspace=prepare)
-            receipt = controller.run(order, 'blocked-model')
+                prepare_workspace=prepare, execution_context=context,
+                model_admission=fixture.admission, factory_input_paths=fixture.input_paths,
+                workspace_read_manifest=fixture.runtime()['workspace_read_manifest'],
+                private_expected_values_path=fixture.private_values_path)
+            gate_results = []
+            def synthetic_container(container, command, workspace, environment, timeout):
+                # CI fixture only: real benchmark subprocess and real admission;
+                # OCI execution evidence is simulated, never acceptance evidence.
+                _, plan = container.build_invocation(command, workspace, environment)
+                result = LocalProcessBackend().execute(command, workspace, environment, timeout)
+                self.assertEqual(result.exit_code, 1)
+                self.assertIn(b'INTCALC private policy gate failed', result.stderr)
+                gate_results.append(result.exit_code)
+                return replace(result, evidence=dict(plan, assurance='enforced', enforced=True,
+                    synthetic_execution=True))
+            with patch.object(CandidateBuildBackend, 'execute', new=synthetic_container):
+                receipt = controller.run(order, 'blocked-model')
+            self.assertEqual(gate_results, [1, 1])
             run = root/'runs'/'blocked-model'
             ledger = RunLedger(run/'events.jsonl')
             self.assertEqual(compared, [True])

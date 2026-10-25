@@ -21,7 +21,8 @@ from lightyear_factory.model_admission import FactoryModelAdmission
 class Fixture:
     """Real signatures, Git evidence and admission; no verifier patching."""
 
-    def __init__(self, parent, repository, *, controller_probe=False):
+    def __init__(self, parent, repository, *, controller_probe=False,
+                 blocked_receipt_order=None, blocked_receipt_identity=None):
         if os.environ.get('GITHUB_ACTIONS') != 'true':
             raise ValueError('p5-ci-only')
         self.parent = Path(parent)
@@ -52,6 +53,14 @@ class Fixture:
                 values=['synthetic-private-account-18732491-balance-694127.83-unpublished-fixture']))
             with self.private_values_path.open('xb') as stream:
                 stream.write(raw)
+        if blocked_receipt_order is not None:
+            if (not controller_probe or blocked_receipt_order.max_attempts != 1
+                    or blocked_receipt_order.allowed_paths != ('factory/benchmarks/intcalc_candidate.py',)
+                    or blocked_receipt_identity != ('p5-synthetic-provenance', 'p5-synthetic-only-2026-10-24')):
+                raise ValueError('p5-blocked-receipt-fixture-scope')
+            order = blocked_receipt_order.to_dict()
+        elif blocked_receipt_identity is not None:
+            raise ValueError('p5-blocked-receipt-fixture-identity')
         self.order = WorkOrder.from_dict(order)
         self.git('init', '--quiet')
         self.git('config', 'core.autocrlf', 'false')
@@ -60,11 +69,18 @@ class Fixture:
         self.git('config', 'user.name', 'Disposable P5 CI')
         self.git('config', 'user.email', 'p5-ci@example.invalid')
         (self.root / 'worker.py').write_bytes(b'print("synthetic")\n')
+        if blocked_receipt_order is not None:
+            candidate = self.order.allowed_paths[0]
+            target = self.root / candidate
+            target.parent.mkdir(parents=True)
+            target.write_bytes((repository / candidate).read_bytes())
         self.input_paths = {name: 'docs/factory/p5/' + name + '.json'
                             for name in ('scope', 'freeze', 'workspace', 'execution_policy')}
         inputs = dict(scope={'synthetic': True}, freeze={'synthetic': True},
                       workspace={'worker.py': hashlib.sha256((self.root / 'worker.py').read_bytes()).hexdigest()},
                       execution_policy=self.policy.to_dict())
+        if blocked_receipt_order is not None:
+            inputs['workspace'][candidate] = hashlib.sha256((self.root / candidate).read_bytes()).hexdigest()
         for name, value in inputs.items():
             self.write(self.input_paths[name], value)
         self.git('add', '.')
@@ -74,6 +90,11 @@ class Fixture:
                  for name, path in self.input_paths.items()}
         caps = dict(max_attempts=1, max_repair_loops=1, max_elapsed_seconds=60,
                     max_model_calls=2, max_model_tokens=self.order.max_model_tokens, cost_cap_microusd=1000000)
+        if blocked_receipt_order is not None:
+            caps.update(max_attempts=self.order.max_attempts,
+                        max_elapsed_seconds=self.order.max_elapsed_seconds,
+                        max_model_calls=self.order.max_model_calls,
+                        cost_cap_microusd=int(self.order.max_model_cost_usd * 1_000_000))
         self.now = datetime.now(timezone.utc)
         self.end = self.now + timedelta(minutes=30)
         self.window = dict(start=(self.now - timedelta(minutes=5)).isoformat(), end=self.end.isoformat())
@@ -81,6 +102,10 @@ class Fixture:
                     executable_commit=executable, caps=caps, bound_inputs=bound,
                     roles={role: dict(provider='p5-stub', model='p5-stub-2026-10-23')
                            for role in ('planner', 'builder', 'analyst')})
+        if blocked_receipt_order is not None:
+            plan['roles'] = {role: dict(provider=blocked_receipt_identity[0],
+                                       model=blocked_receipt_identity[1])
+                             for role in ('planner', 'builder', 'analyst')}
         if controller_probe:
             raw = self.private_values_path.read_bytes()
             plan['private_expected_values'] = dict(sha256=hashlib.sha256(raw).hexdigest(),

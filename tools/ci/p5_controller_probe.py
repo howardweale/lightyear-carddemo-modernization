@@ -141,9 +141,12 @@ def observe(fixture, repository):
             reached = READY in (error.output or b'')
         process.kill()
         stdout, stderr = process.communicate(timeout=10)
+        timeout_marker_seen = reached
+        # Windows may return buffered stdout only after communicate completes.
+        reached = reached or READY in stdout
         if not reached or process.returncode == 0:
             # Counts, marker-presence booleans and hashes only; never raw output.
-            diagnostic = dict(timeout_marker_seen=reached, final_marker_seen=READY in stdout,
+            diagnostic = dict(timeout_marker_seen=timeout_marker_seen, final_marker_seen=READY in stdout,
                 killed_exit=process.returncode, stdout_bytes=len(stdout), stderr_bytes=len(stderr),
                 stdout_sha256=hashlib.sha256(stdout).hexdigest(),
                 stderr_sha256=hashlib.sha256(stderr).hexdigest())

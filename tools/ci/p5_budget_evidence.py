@@ -44,7 +44,16 @@ def validate(value, *, case, run_id, work_order_sha256):
             require(item['content_sha256'] == canonical_hash(item, {'content_sha256'}))
             require(item['work_order_sha256'] == work_order_sha256)
         require(identity['schema'] == 'factory-attempt-identity/1' and identity['attempt_id'] == run_id)
-        require(receipt['status'] == 'blocked' and receipt['qualifies_for_factory_receipt'] is False)
+        require(receipt['status'] == 'blocked')
+        if case == 'control':
+            # _finish emits the normal BLOCKED control receipt without this field.
+            # Bind that exact shape; absence is never a qualification assertion.
+            require('qualifies_for_factory_receipt' not in receipt)
+            require(receipt['run_id'] == run_id)
+            require(receipt['receipt_type'] == 'lightyear-autonomous-factory-run')
+            require('factory_build_receipt' not in receipt)
+        else:
+            require(receipt['qualifies_for_factory_receipt'] is False)
         require(isinstance(calls, list) and len(calls) == CASES[case])
         require(len({call['content_sha256'] for call in calls}) == len(calls))
         for index, call in enumerate(calls, 1):

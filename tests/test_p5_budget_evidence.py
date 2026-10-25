@@ -39,6 +39,35 @@ class BudgetEvidenceTests(unittest.TestCase):
         for value in retained:
             args = {key: value[key] for key in ('case', 'run_id', 'work_order_sha256')}
             self.assertTrue(validate(value, **args))
+            receipt = json.loads(value['receipt_utf8'])
+            if value['case'] == 'control':
+                self.assertNotIn('qualifies_for_factory_receipt', receipt)
+                self.assertNotIn('factory_build_receipt', receipt)
+                self.assertEqual(receipt['run_id'], value['run_id'])
+            else:
+                self.assertIs(receipt['qualifies_for_factory_receipt'], False)
+            for mutation in ('passed', 'claimed-qualification', 'wrong-run', 'nested-build-claim', 'missing-refusal-flag'):
+                if mutation in ('wrong-run', 'nested-build-claim') and value['case'] != 'control':
+                    continue
+                if mutation == 'missing-refusal-flag' and value['case'] == 'control':
+                    continue
+                bad = copy.deepcopy(value)
+                changed = copy.deepcopy(receipt)
+                if mutation == 'passed':
+                    changed['status'] = 'passed'
+                elif mutation == 'claimed-qualification':
+                    changed['qualifies_for_factory_receipt'] = True
+                elif mutation == 'wrong-run':
+                    changed['run_id'] = 'another-run'
+                elif mutation == 'nested-build-claim':
+                    changed['factory_build_receipt'] = {'qualifies_for_factory_receipt': True}
+                else:
+                    del changed['qualifies_for_factory_receipt']
+                changed['content_sha256'] = canonical_hash(changed, {'content_sha256'})
+                bad['receipt_utf8'] = json.dumps(changed, sort_keys=True)
+                bad['receipt_sha256'] = hashlib.sha256(bad['receipt_utf8'].encode()).hexdigest()
+                with self.subTest(case=value['case'], receipt_mutation=mutation), self.assertRaises(ValueError):
+                    validate(bad, **args)
             for field in ('receipt_utf8', 'identity_utf8', 'calls_utf8', 'case', 'run_id', 'work_order_sha256'):
                 bad = copy.deepcopy(value)
                 bad[field] += 'changed'
@@ -70,7 +99,12 @@ class BudgetEvidenceTests(unittest.TestCase):
     def test_collector_keeps_budget_bytes_and_gaps_without_qualification(self):
         # Plumbing control only; the integration test above uses the real controller.
         class FakeFixture:
-            def __init__(self, *args): pass
+            def __init__(self, parent, repository):
+                self.envelope = {'signature': {'value': 'fixture'}}
+                self.service = type('Service', (), {'public_key': b'fixture-not-a-key'})()
+            def verify_order(self, envelope):
+                raise drills.ExecutionContractError('synthetic corrupt signature')
+            def signed_observation(self, body): return body
             def close(self): pass
         value = {'receipt_utf8': '{"synthetic": true}', 'calls_utf8': '[]'}
         def measured(fixture):

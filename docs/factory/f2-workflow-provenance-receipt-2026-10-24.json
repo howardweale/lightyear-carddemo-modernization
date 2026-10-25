@@ -1,0 +1,24 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+  "evidence_sha256": "aeaf796fa809fabf8a8e3479fc77989f24cda7c3fa6074de1e10b53b43b1d8c7",
+  "observed_at": "2026-10-24T17:55:00-07:00",
+  "time_is_operator_supplied_approximation": true,
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/461#issuecomment-6391657433",
+  "provenance_source": "operator-chat",
+  "operator": "Howard Weale",
+  "scope": "Prepare exact trusted-base workflow binding and synthetic refusal tests",
+  "path": ".github/workflows/p5-factory-drills.yml",
+  "final_sha256": "302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f",
+  "github_identity_is_human_proof": false,
+  "identity_limitation": "The agent shares Howard GitHub identity; this comment is a transcription, not independent human authentication.",
+  "authority": {
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false
+  }
+}

@@ -1,0 +1,327 @@
+"""Validate an exact F2 exception from trusted base objects, never PR records.
+
+This does not change the raw Java fence report or authorize a merge or run.
+Human approval is recorded provenance, not machine authentication of the human.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+CHECKER = 'tools/check_java_quality_fence.py'
+VALIDATOR = 'tools/check_f2_fence_exceptions.py'
+MANIFEST = 'docs/factory/f2-exact-byte-exceptions-2026-10-24.json'
+GATE = 'tools/ci_gate.py'
+BUDGETED = 'src/lightyear_factory/budgeted_providers.py'
+PROVIDERS = 'src/lightyear_factory/providers.py'
+POSTTRAN = 'docs/factory/posttran-phase2-plan-2026-10-16.json'
+REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
+APPROVED_SHA = '12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928'
+PROVENANCE_EVIDENCE_LINK = ' [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e)'
+ORCHESTRATOR = 'src/lightyear_factory/orchestrator.py'
+ORCHESTRATOR_SHA = 'e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8'
+ORCHESTRATOR_EVIDENCE_LINK = ' [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523)'
+WORKFLOW_BINDING = 'docs/factory/f2-p5-workflow-binding-2026-10-24.json'
+P5_WORKFLOW = '.github/workflows/p5-factory-drills.yml'
+P5_WORKFLOW_SHA = '302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f'
+WORKFLOW_EVIDENCE_LINK = ' [operator-chat record](f2-workflow-provenance-receipt-2026-10-24.json#sha256=f5202f3faaff9699d66cc51c92926e0ef8aa13ff6e0242116b10069acacc388d)'
+CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE, WORKFLOW_BINDING}
+REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
+               'fenced_prefixes', 'source_records', 'blocked_paths',
+               'merge_permitted', 'automatic_expiry'}
+
+
+def require(condition, code):
+    if not condition:
+        raise ValueError(code)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        require(key not in result, 'duplicate-json-key')
+        result[key] = value
+    return result
+
+
+def document(raw):
+    return json.loads(raw, object_pairs_hook=unique_object)
+
+
+def fields(value, names, code):
+    require(isinstance(value, dict) and set(value) == set(names), code)
+
+
+def digest(value, length=64):
+    require(isinstance(value, str) and re.fullmatch('[0-9a-f]{%d}' % length, value),
+            'invalid-object-digest')
+    return value
+
+
+def git(repo, *args):
+    return subprocess.check_output(['git', '-C', str(repo), *args])
+
+
+def resolve(repo, value):
+    digest(value, 40)
+    result = git(repo, 'rev-parse', '--verify', value + '^{commit}').decode().strip()
+    require(result == value, 'commit-identity')
+    return result
+
+
+def blob(repo, commit, path):
+    row = git(repo, 'ls-tree', '-z', commit, '--', path).decode().split('\0')
+    require(len(row) == 2 and row[1] == '', 'missing-or-ambiguous-blob')
+    metadata, actual_path = row[0].split('\t')
+    mode, kind, oid = metadata.split()
+    require(actual_path == path and kind == 'blob' and mode == '100644', 'blob-mode')
+    raw = git(repo, 'cat-file', 'blob', oid)
+    return dict(mode=mode, sha256=sha(raw)), raw
+
+
+def load_checker(repo, base):
+    _, source = blob(repo, base, CHECKER)
+    namespace = {'__name__': 'trusted_base_fence'}
+    exec(compile(source, CHECKER, 'exec'), namespace)
+    return namespace, source
+
+
+def validate_raw_report(raw, expected, returncode):
+    report = document(raw)
+    fields(report, REPORT_KEYS, 'incomplete-fence-report')
+    require(report == expected, 'unexpected-fence-report')
+    require(report['schema'] == 'java-quality-fence/1', 'unknown-fence-schema')
+    require(report['automatic_expiry'] is False, 'automatic-expiry-refused')
+    require(report['merge_permitted'] is (not bool(report['blocked_paths'])),
+            'inconsistent-fence-result')
+    require(returncode == (1 if report['blocked_paths'] else 0), 'checker-error')
+    return report
+
+
+def validate_manifest(value):
+    fields(value, {'schema', 'repository', 'base_anchor', 'activation', 'entries',
+                   'identity_limitation', 'authority'}, 'manifest-fields')
+    require(value['schema'] == 'f2-exact-byte-exceptions/1', 'manifest-schema')
+    require(value['repository'] == REPOSITORY, 'manifest-repository')
+    digest(value['base_anchor'], 40)
+    require(value['activation'] == 'trusted-base-only-after-exact-head-merge-approval',
+            'manifest-activation')
+    require(value['identity_limitation'] ==
+            'Operator-chat attribution is not independently authenticated; the agent shares Howard\'s GitHub identity. Open after-run item.',
+            'identity-limitation-required')
+    require(value['authority'] == {'merge': False, 'run': False, 'signing': False,
+                                   'spend': False, 'gap_acceptance': False}, 'manifest-authority')
+    require(isinstance(value['entries'], list) and 1 <= len(value['entries']) <= 2,
+            'approved-entry-count')
+    require(all(isinstance(e, dict) for e in value['entries']), 'entry-fields')
+    paths = [e.get('path') for e in value['entries']]
+    require(paths[0] == BUDGETED and len(set(paths)) == len(paths)
+            and all(p in (BUDGETED, ORCHESTRATOR) for p in paths), 'ineligible-entry')
+    for entry in value['entries']:
+        validate_entry(entry)
+    return value['entries'][0]
+
+
+def validate_entry(entry):
+    fields(entry, {'repository', 'pr', 'path', 'mode', 'base_preimage_sha256',
+                   'final_sha256', 'approved_change_commit', 'provenance'}, 'entry-fields')
+    require(entry['repository'] == REPOSITORY and type(entry['pr']) is int and entry['pr'] == 455,
+            'entry-target')
+    require(entry['path'] in (BUDGETED, ORCHESTRATOR) and entry['mode'] == '100644', 'ineligible-entry')
+    approved_sha = APPROVED_SHA if entry['path'] == BUDGETED else ORCHESTRATOR_SHA
+    evidence_link = PROVENANCE_EVIDENCE_LINK if entry['path'] == BUDGETED else ORCHESTRATOR_EVIDENCE_LINK
+    digest(entry['base_preimage_sha256']); digest(entry['approved_change_commit'], 40)
+    require(entry['final_sha256'] == approved_sha, 'unapproved-postimage')
+    provenance = entry['provenance']
+    fields(provenance, {'source', 'approved_by', 'recorded_at_pt', 'exact_sha256',
+                        'statement', 'github_identity_is_human_proof'}, 'provenance-fields')
+    require(provenance['source'] == 'operator-chat' and provenance['approved_by'] == 'Howard Weale',
+            'approval-provenance')
+    require(isinstance(provenance['recorded_at_pt'], str) and
+            re.fullmatch(r'2026-10-24T\d{2}:\d{2}:\d{2}-07:00', provenance['recorded_at_pt']),
+            'approval-time')
+    require(provenance['exact_sha256'] == approved_sha and
+            provenance['github_identity_is_human_proof'] is False, 'approval-hash-or-identity')
+    require(provenance['statement'] == 'approved by Howard in the operator chat, ' +
+            provenance['recorded_at_pt'] + ', exact hash ' + approved_sha +
+            evidence_link, 'approval-statement')
+    return entry
+
+
+def validate_workflow_binding(value):
+    fields(value, {'schema', 'repository', 'pr', 'path', 'mode', 'base_preimage',
+                   'final_sha256', 'provenance'}, 'workflow-binding-fields')
+    require(value['schema'] == 'f2-exact-workflow-binding/1', 'workflow-binding-schema')
+    require(value['repository'] == REPOSITORY and type(value['pr']) is int and
+            value['pr'] == 455, 'workflow-binding-target')
+    require(value['path'] == P5_WORKFLOW and value['mode'] == '100644' and
+            value['base_preimage'] == 'absent', 'workflow-binding-scope')
+    require(value['final_sha256'] == P5_WORKFLOW_SHA, 'workflow-binding-postimage')
+    provenance = value['provenance']
+    fields(provenance, {'source', 'approved_by', 'recorded_at_pt', 'exact_sha256',
+                        'statement', 'github_identity_is_human_proof'}, 'workflow-provenance-fields')
+    require(provenance['source'] == 'operator-chat' and
+            provenance['approved_by'] == 'Howard Weale' and
+            provenance['recorded_at_pt'] == '2026-10-24 ~17:55 PT' and
+            provenance['exact_sha256'] == P5_WORKFLOW_SHA and
+            provenance['github_identity_is_human_proof'] is False, 'workflow-provenance')
+    require(provenance['statement'] == 'approved by Howard in the operator chat, ' +
+            provenance['recorded_at_pt'] + ', exact hash ' + P5_WORKFLOW_SHA +
+            WORKFLOW_EVIDENCE_LINK, 'workflow-approval-statement')
+    return value
+
+
+def inspect_workflow_change(repo, base, head, anchor, changed):
+    workflows = [p for p in changed if p.startswith('.github/workflows/')]
+    if not workflows:
+        return []
+    require(workflows == [P5_WORKFLOW], 'candidate-control-change')
+    _, raw = blob(repo, base, WORKFLOW_BINDING)
+    binding = validate_workflow_binding(document(raw))
+    # Absent means no tree entry of any kind, both at the anchor and live base.
+    require(not git(repo, 'ls-tree', '-z', base, '--', P5_WORKFLOW) and
+            not git(repo, 'ls-tree', '-z', anchor, '--', P5_WORKFLOW),
+            'workflow-preimage-not-absent')
+    after, _ = blob(repo, head, P5_WORKFLOW)
+    require(after == {'mode': binding['mode'], 'sha256': binding['final_sha256']},
+            'workflow-postimage-refused')
+    return [dict(path=P5_WORKFLOW, before='absent', after=after,
+                 binding_sha256=sha(raw), provenance=binding['provenance'])]
+
+
+def ineligible_paths(repo, base, checker):
+    original = document(git(repo, 'show', base + ':' + checker['ORIGINAL']))
+    amendment = document(git(repo, 'show', base + ':' + checker['AMENDMENT']))
+    judge = {checker['ORIGINAL'], checker['AMENDMENT']}
+    judge.update(x['path'] for x in original['files'])
+    judge.update(x['path'] for x in amendment['files'])
+    judge.add(amendment['existing_authorized_change']['path'])
+    prefixes = {p.split('/src/test/')[0] + '/src/test/' for p in judge
+                if '/service/src/test/' in p}
+    plan = document(git(repo, 'show', base + ':' + POSTTRAN))
+    excluded = judge | set(plan['bound_files']) | set(plan['candidate_files']) | {POSTTRAN}
+    prefixes.update(('docs/factory/posttran-', 'spec/mainframe/posttran-independent/'))
+    return excluded, prefixes
+
+
+def api(route):
+    return document(subprocess.check_output(['gh', 'api', 'repos/' + REPOSITORY + '/' + route]))
+
+
+def context(repo, base, head, event, environment, query=api):
+    """Check live PR provenance; a main push must be the actual approved merge."""
+    require(environment.get('GITHUB_REPOSITORY') == REPOSITORY and
+            event.get('repository', {}).get('full_name') == REPOSITORY, 'wrong-repository')
+    kind = environment.get('GITHUB_EVENT_NAME')
+    live = query('pulls/455')
+    require(live['number'] == 455 and live['base']['ref'] == 'main' and
+            live['base']['repo']['full_name'] == REPOSITORY and
+            live['head']['repo']['full_name'] == REPOSITORY, 'wrong-pr-or-repository')
+    parents = git(repo, 'show', '-s', '--format=%P', head).decode().split()
+    if kind == 'pull_request':
+        pr = event['pull_request']
+        require(pr['number'] == 455 and live['state'] == 'open' and not live['merged'], 'wrong-pr')
+        require(pr['base']['sha'] == live['base']['sha'] == base and
+                pr['head']['sha'] == live['head']['sha'], 'stale-pr-context')
+        require(pr['head']['repo']['full_name'] == REPOSITORY, 'fork-refused')
+        candidate = live['head']['sha']
+        if head != candidate:
+            require(parents == [base, candidate], 'unbound-checkout')
+            tree = git(repo, 'merge-tree', '--write-tree', base, candidate).decode().strip()
+            require(tree == git(repo, 'rev-parse', head + '^{tree}').decode().strip(),
+                    'unexpected-merge-tree')
+    elif kind == 'push':
+        require(event.get('ref') == 'refs/heads/main' and event.get('before') == base and
+                event.get('after') == head and live['merged'] is True and
+                live['merge_commit_sha'] == head and parents == [base, live['head']['sha']],
+                'unbound-main-merge')
+        candidate = live['head']['sha']
+    else:
+        raise ValueError('exception-requires-pr-or-exact-main-merge')
+    return dict(repository=REPOSITORY, pr=455, candidate=candidate)
+
+
+def inspect(repo, base, head, event=None, environment=None, query=api):
+    base = resolve(repo, base); head = resolve(repo, head)
+    checker, source = load_checker(repo, base)
+    # Keep the unchanged checker's actual report and exit outcome, and independently
+    # reconstruct its complete result using the same trusted-base implementation.
+    expected = checker['inspect'](repo, base, head)
+    process = subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
+                              '--repo', str(repo), '--base', base, '--head', head],
+                             capture_output=True, check=False)
+    report = validate_raw_report(process.stdout, expected, process.returncode)
+    result = dict(schema='f2-fence-exception-result/1', raw_fence_report=report,
+                  raw_checker_exit=process.returncode, accepted_exceptions=[],
+                  fence_requirement_met=not report['blocked_paths'], merge_authorized=False,
+                  run_authorized=False)
+    changed = [p for p in git(repo, 'diff', '--no-renames', '--name-only', '-z', base, head)
+               .decode().split('\0') if p]
+    excluded, prefixes = ineligible_paths(repo, base, checker)
+    # The Java checker does not enumerate POSTTRAN. Independently refuse every
+    # changed protected path, even when the raw Java report has no violations.
+    require(not any(p in excluded or any(p.startswith(prefix) for prefix in prefixes)
+                    for p in changed), 'judge-or-posttran-change-refused')
+    if not report['blocked_paths']:
+        return result
+    _, raw = blob(repo, base, MANIFEST)
+    manifest = document(raw); validate_manifest(manifest)
+    entries = {e['path']: e for e in manifest['entries']}
+    anchor = resolve(repo, manifest['base_anchor'])
+    require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
+                           capture_output=True).returncode == 0, 'unrelated-base-anchor')
+    require(not (set(changed) & CONTROLS), 'candidate-control-change')
+    # All of these objects must exist in base, including the validator itself.
+    for path in CONTROLS:
+        require(blob(repo, base, path) == blob(repo, head, path), 'candidate-control-change')
+    require(blob(repo, base, PROVIDERS) == blob(repo, head, PROVIDERS), 'providers-change-refused')
+    workflow_bindings = inspect_workflow_change(repo, base, head, anchor, changed)
+    require(len(set(report['blocked_paths'])) == len(report['blocked_paths']) and
+            all(p in entries for p in report['blocked_paths']), 'unlisted-fence-violation')
+    accepted = []
+    for path in report['blocked_paths']:
+        entry = entries[path]
+        require(path not in excluded and not any(path.startswith(p) for p in prefixes),
+                'judge-or-posttran-exception-refused')
+        f2 = document(git(repo, 'show', base + ':' + checker['F2']))
+        require(path in {b['path'] for b in f2['engineering_source_bindings'].values()},
+                'not-f2-engineering-source')
+        before, _ = blob(repo, base, path); anchored, _ = blob(repo, anchor, path)
+        after, _ = blob(repo, head, path)
+        require(before == anchored == {'mode': entry['mode'], 'sha256': entry['base_preimage_sha256']},
+                'wrong-preimage')
+        require(after == {'mode': entry['mode'], 'sha256': entry['final_sha256']}, 'wrong-postimage')
+        approved, _ = blob(repo, resolve(repo, entry['approved_change_commit']), path)
+        require(approved == after, 'approved-commit-content')
+        accepted.append(dict(path=path, before=before, after=after, provenance=entry['provenance']))
+    bound = context(repo, base, head, event or {}, environment or {}, query)
+    # Re-check live provenance after object reads; stale observations never pass.
+    require(context(repo, base, head, event or {}, environment or {}, query) == bound,
+            'context-changed')
+    result.update(accepted_exceptions=accepted, accepted_workflow_bindings=workflow_bindings,
+                  fence_requirement_met=True, manifest_sha256=sha(raw), context=bound)
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--repo', default='.')
+    parser.add_argument('--base', required=True)
+    parser.add_argument('--head', required=True)
+    args = parser.parse_args()
+    event = document(Path(os.environ['GITHUB_EVENT_PATH']).read_bytes()) if os.environ.get('GITHUB_EVENT_PATH') else {}
+    report = inspect(args.repo, args.base, args.head, event, os.environ)
+    print(json.dumps(report, sort_keys=True))
+    require(report['fence_requirement_met'], 'fence-requirement-not-met')
+
+
+if __name__ == '__main__':
+    main()

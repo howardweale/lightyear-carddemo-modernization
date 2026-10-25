@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-24",
+  "claims": [
+    {
+      "record": "docs/factory/f2-orchestrator-provenance-receipt-2026-10-24.json",
+      "reference": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8"
+    }
+  ]
+}

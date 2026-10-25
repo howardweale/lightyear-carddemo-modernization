@@ -1,0 +1,38 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-24",
+  "claims": [
+    {
+      "record": "docs/factory/f2-exact-byte-exceptions-2026-10-24.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b"
+    },
+    {
+      "record": "docs/factory/f2-exact-byte-exceptions-2026-10-24.json",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    },
+    {
+      "record": "docs/factory/f2-exact-byte-policy-2026-10-24.md",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b"
+    },
+    {
+      "record": "docs/factory/f2-exact-byte-policy-2026-10-24.md",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    }
+  ]
+}

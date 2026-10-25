@@ -1,0 +1,25 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+  "evidence_sha256": "29bf69629403e6d06e6b0bb1176b74aad91f6e251311344e5d704f89950b5dd0",
+  "observed_at": "2026-10-24T15:23:34-07:00",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/455#issuecomment-6390370116",
+  "provenance_source": "operator-chat",
+  "operator": "Howard Weale",
+  "scope": "PR 455 budgeted provider exact-byte exception only",
+  "path": "src/lightyear_factory/budgeted_providers.py",
+  "final_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
+  "processing_time_not_authenticated_message_time": true,
+  "github_identity_is_human_proof": false,
+  "identity_limitation": "The agent shares the operator GitHub identity; the comment is a secondary transcription, not independent human authentication.",
+  "authority": {
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false
+  },
+  "first_run_only_deferred_gap": "interrupted-record human attestation; record remains awaiting human attestation"
+}

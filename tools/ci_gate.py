@@ -162,16 +162,25 @@ def gate():
     raise SystemExit('CI timed out; missing/queued/running is not acceptance')
 
 def lint():
-    # Execute the trusted base checker so a candidate cannot remove its fence.
-    # Bootstrap only when the base predates this newly introduced check.
-    fence_path = 'tools/check_java_quality_fence.py'
+    # Candidate records cannot grant exceptions: execute only the base policy.
+    # When that policy does not exist yet, retain the original checker bootstrap.
     base = os.environ['BASE_SHA']
-    exists = subprocess.run(['git', 'cat-file', '-e', base + ':' + fence_path],
-                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
-    source = (subprocess.check_output(['git', 'show', base + ':' + fence_path])
-              if exists else Path(fence_path).read_bytes())
-    subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
-                    '--base', base, '--head', 'HEAD'], check=True)
+    policy_path = 'tools/check_f2_fence_exceptions.py'
+    policy_exists = subprocess.run(['git', 'cat-file', '-e', base + ':' + policy_path],
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+    if policy_exists:
+        source = subprocess.check_output(['git', 'show', base + ':' + policy_path])
+        head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+        subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
+                        '--base', base, '--head', head], check=True)
+    else:
+        fence_path = 'tools/check_java_quality_fence.py'
+        exists = subprocess.run(['git', 'cat-file', '-e', base + ':' + fence_path],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+        source = (subprocess.check_output(['git', 'show', base + ':' + fence_path])
+                  if exists else Path(fence_path).read_bytes())
+        subprocess.run([sys.executable, '-B', '-c', source.decode('utf-8'),
+                        '--base', base, '--head', 'HEAD'], check=True)
     for p in Path('.github/workflows').glob('*.yml'):
         d=yaml.load(p.read_text(),Loader=yaml.BaseLoader)
         assert 'on' in d and 'jobs' in d,p

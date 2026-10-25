@@ -28,10 +28,12 @@ jobs:
         run: git fetch --no-tags origin cf43585fc4fb7ae4466f7414eb4ae5028bcccad8 dba188ba166145808a59274240d0969e2783377a
       - name: Validate workflow policy and changed source syntax
         env:
+          GH_TOKEN: ${{ github.token }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           PYTHONPATH: .:src:tests
         run: |
           python -B -m unittest test_ci_gate -v
+          python -B -m unittest test_f2_fence_exceptions -v
           python -B -m unittest test_stranded_work -v
           python -B tools/ci_gate.py lint
           python -B tools/check_status_pr.py

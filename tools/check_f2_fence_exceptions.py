@@ -29,6 +29,10 @@ WORKFLOW_BINDING = 'docs/factory/f2-p5-workflow-binding-2026-10-24.json'
 P5_WORKFLOW = '.github/workflows/p5-factory-drills.yml'
 P5_WORKFLOW_SHA = '302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f'
 WORKFLOW_EVIDENCE_LINK = ' [operator-chat record](f2-workflow-provenance-receipt-2026-10-24.json#sha256=f5202f3faaff9699d66cc51c92926e0ef8aa13ff6e0242116b10069acacc388d)'
+VERIFY_BINDING = 'docs/factory/f2-p5-verify-timeout-binding-2026-10-25.json'
+VERIFY_WORKFLOW = '.github/workflows/verify.yml'
+VERIFY_BEFORE_SHA = '1736424d5716880a0eb5dc941fcafc085d58faa04e4838c4eb7a8834ad1dbd1b'
+VERIFY_AFTER_SHA = 'a83be67630a54de10840743bcc24a7f1bd9c786c7447108eb448ae4818e91cf3'
 CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE, WORKFLOW_BINDING}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
@@ -179,7 +183,7 @@ def validate_workflow_binding(value):
     return value
 
 
-def inspect_workflow_change(repo, base, head, anchor, changed):
+def inspect_p5_workflow_change(repo, base, head, anchor, changed):
     workflows = [p for p in changed if p.startswith('.github/workflows/')]
     if not workflows:
         return []
@@ -195,6 +199,52 @@ def inspect_workflow_change(repo, base, head, anchor, changed):
             'workflow-postimage-refused')
     return [dict(path=P5_WORKFLOW, before='absent', after=after,
                  binding_sha256=sha(raw), provenance=binding['provenance'])]
+
+
+def validate_verify_binding(value):
+    fields(value, {'schema', 'repository', 'pr', 'path', 'mode', 'base_preimage',
+                   'final_sha256', 'provenance'}, 'verify-binding-fields')
+    require(value['schema'] == 'f2-exact-workflow-binding/1', 'verify-binding-schema')
+    require(value['repository'] == REPOSITORY and type(value['pr']) is int and
+            value['pr'] == 455, 'verify-binding-target')
+    require(value['path'] == VERIFY_WORKFLOW and value['mode'] == '100644' and
+            value['base_preimage'] == VERIFY_BEFORE_SHA, 'verify-binding-scope')
+    require(value['final_sha256'] == VERIFY_AFTER_SHA, 'verify-binding-postimage')
+    require(value['provenance'] == dict(source='operator-chat',
+            requested_by='Howard Weale', requested_on='2026-10-25',
+            exact_sha256=VERIFY_AFTER_SHA,
+            statement='Planned: Windows verification timeout only, 60 to 90 minutes; exact bytes require separate review before publication and merge.',
+            github_identity_is_human_proof=False), 'verify-binding-provenance')
+    return value
+
+
+def inspect_workflow_change(repo, base, head, anchor, changed):
+    workflows = [p for p in changed if p.startswith('.github/workflows/')]
+    require(all(p in (P5_WORKFLOW, VERIFY_WORKFLOW) for p in workflows),
+            'candidate-control-change')
+    accepted = inspect_p5_workflow_change(repo, base, head, anchor,
+                                         [p for p in workflows if p == P5_WORKFLOW])
+    if VERIFY_WORKFLOW not in workflows:
+        return accepted
+    _, raw = blob(repo, base, VERIFY_BINDING)
+    binding = validate_verify_binding(document(raw))
+    require(blob(repo, base, VERIFY_BINDING) == blob(repo, head, VERIFY_BINDING),
+            'candidate-control-change')
+    before, before_raw = blob(repo, base, VERIFY_WORKFLOW)
+    after, after_raw = blob(repo, head, VERIFY_WORKFLOW)
+    require(before == {'mode': '100644', 'sha256': binding['base_preimage']},
+            'verify-workflow-preimage')
+    require(after == {'mode': '100644', 'sha256': binding['final_sha256']},
+            'verify-workflow-postimage')
+    # Independently enforce the single authorized line even for synthetic tests.
+    old_line = b"timeout-minutes: ${{ matrix.os == 'windows-2025' && 60 || 35 }}"
+    new_line = b"timeout-minutes: ${{ matrix.os == 'windows-2025' && 90 || 35 }}"
+    require(before_raw.count(old_line) == 1 and
+            after_raw == before_raw.replace(old_line, new_line),
+            'verify-timeout-only')
+    accepted.append(dict(path=VERIFY_WORKFLOW, before=before, after=after,
+                         binding_sha256=sha(raw), provenance=binding['provenance']))
+    return accepted
 
 
 def ineligible_paths(repo, base, checker):
@@ -278,7 +328,7 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     anchor = resolve(repo, manifest['base_anchor'])
     require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
                            capture_output=True).returncode == 0, 'unrelated-base-anchor')
-    require(not (set(changed) & CONTROLS), 'candidate-control-change')
+    require(not (set(changed) & (CONTROLS | {VERIFY_BINDING})), 'candidate-control-change')
     # All of these objects must exist in base, including the validator itself.
     for path in CONTROLS:
         require(blob(repo, base, path) == blob(repo, head, path), 'candidate-control-change')

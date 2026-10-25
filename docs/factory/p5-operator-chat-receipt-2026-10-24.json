@@ -15,7 +15,7 @@
   },
   "approval_source": {
     "kind": "direct-human-chat-reply",
-    "question_item": "call_5c3636b463354430842e5270e6f42116",
+    "question_item_sha256": "101b35ff58f1475b252f0d792817a7f370b5b889aa9c58a7cafb3bd165525588",
     "github_comment_url": null
   },
   "provenance": "The public URL identifies an agent transcription. It is not a human-authored GitHub approval or independent authentication of the operator.",

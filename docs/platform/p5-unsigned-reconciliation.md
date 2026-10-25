@@ -1,7 +1,7 @@
 # Proposed abort-only reconciliation
 
 This is an unpublished review proposal, not an instruction to run the command now.
-No key is created or used. No receipt is machine-signed. No admission or model is constructed.
+No key is created or used. Not signed: any receipt by machine. No admission or model is constructed.
 
 After an interrupted controller has exited, the proposed command accepts an existing
 run directory and independently reviewed public bindings:
@@ -28,9 +28,8 @@ the record is not proof that billing is complete. Preserve all evidence on refus
 Hash chaining detects inconsistencies but does not authenticate a complete owner rewrite.
 
 Human attestation is still blocked: the current Tower factory-review registry has no
-interruption-attestation kind. No Tower change, relabeled backfill, internal signing
-shortcut or accepted-gap claim is included. Howard must decide the next step.
+interruption-attestation kind. This proposal includes no Tower change, relabeled backfill, internal signing shortcut or new gap-acceptance claim. Howard must decide the next step.
 
 The immutable historical orchestrator mismatch is identified in the dated exception
-proposal. Recompute a new F2 request only after approved merge, from frozen main.
+proposal. Planned: recompute a new F2 request only after approved merge, from frozen main.
 request_ready stays false until CI validates all fields. No run authority is granted.

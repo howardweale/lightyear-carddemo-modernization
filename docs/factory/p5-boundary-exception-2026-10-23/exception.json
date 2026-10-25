@@ -11,7 +11,14 @@
       "name": "01-reverse-combined-boundary-repair-for-separate-review",
       "parent": "1f463c337e2e6aefe5f9774304fdf81195c301b8",
       "head": "91294940925b151e32676bb8d94c905976fa2045",
-      "tree": "d3e71e59af17e08955272aff25676b27759065d4",
+      "file_bindings": [
+        {"path":".github/workflows/p5-factory-drills.yml","mode":"100644","sha256":"72b14fc9a37c5695b9590892dcc5d380815dd36f13a80f854806ac6473ce0741"},
+        {"path":"docs/platform/p5-factory-drills.md","mode":"100644","sha256":"2c1465dfbf952532831d8b0fe05c2f85a2d9ce177c37488652c972543c6a3f05"},
+        {"path":"src/lightyear_execution/admission.py","mode":"100644","sha256":"5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0"},
+        {"path":"src/lightyear_factory/providers.py","mode":"100644","sha256":"f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"},
+        {"path":"tests/test_p5_failure_repairs.py","state":"absent","mode":null,"sha256":null},
+        {"path":"tools/ci/p5_drills.py","mode":"100644","sha256":"0a8fb56a6fd8c2637fb4556cd78768e43bd3f66e38ee290fabcb985f937c4a99"}
+      ],
       "paths": [
         ".github/workflows/p5-factory-drills.yml",
         "docs/platform/p5-factory-drills.md",
@@ -25,7 +32,12 @@
       "name": "02-serialize-work-order-nonce-consumption-and-test-contention",
       "parent": "91294940925b151e32676bb8d94c905976fa2045",
       "head": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
-      "tree": "5731dbd29f28ac78e52fd2a511f26c4d743e269f",
+      "file_bindings": [
+        {"path":".github/workflows/p5-factory-drills.yml","mode":"100644","sha256":"302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f"},
+        {"path":"src/lightyear_execution/admission.py","mode":"100644","sha256":"939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd"},
+        {"path":"tests/test_p5_failure_repairs.py","mode":"100644","sha256":"28e6c2cbc68cf72a19bfec44dc0b024ba4fdc45b46b9c1933e698bdbe702b15d"},
+        {"path":"tools/ci/p5_drills.py","mode":"100644","sha256":"340ec84c99b886d8c2640cc11dec8e0813daa7abaddb8aa3e7709bf92b21541a"}
+      ],
       "paths": [
         ".github/workflows/p5-factory-drills.yml",
         "src/lightyear_execution/admission.py",
@@ -37,7 +49,10 @@
       "name": "03-refuse-accounted-provider-deadline-equality-with-deterministic-regression",
       "parent": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
       "head": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
-      "tree": "0f0bbc752462b119b0d6bf73446084cae26810c4",
+      "file_bindings": [
+        {"path":"src/lightyear_factory/budgeted_providers.py","mode":"100644","sha256":"12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"},
+        {"path":"tests/test_p5_failure_repairs.py","mode":"100644","sha256":"1232870dd6acecab0388621dfc80715260229b2140b5fce95406036da933b753"}
+      ],
       "paths": [
         "src/lightyear_factory/budgeted_providers.py",
         "tests/test_p5_failure_repairs.py"
@@ -122,6 +137,6 @@
   "fence_checker_changed": false,
   "binding_inventory": {
     "path": "docs/factory/p5-boundary-exception-2026-10-23/binding-inventory.json",
-    "sha256": "17a5b799185e7bc009e0971af8d4da8e62c6d19dc528e23affe0906904c91768"
+    "sha256": "aa62741bb3b5a68506e5e28539226ca978d134742a29c30bc58b614b0ee9b3b6"
   }
 }

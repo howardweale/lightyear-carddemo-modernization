@@ -86,7 +86,7 @@
   ],
   "historical_inventory": {
     "path": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
-    "sha256": "6035d259a74630d5f93b0f4ee68b9b9edc460387f36a01860abeffca38b24896",
+    "sha256": "5cc6bab74dd0e30b183006a8d47c5318e0c3a35b708a94fa29f9dd4e28120ced",
     "retained_records": 170,
     "scope": "Every currently retained public record identified by orchestrator path or observed digests; immutable Git history retained, not a claim to enumerate every historical version"
   },

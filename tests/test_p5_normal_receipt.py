@@ -128,15 +128,42 @@ class NormalReceiptTests(unittest.TestCase):
                 check.assertIsNone(args[-1]['semantic_memory'])
                 run = args[0]
                 tick = orchestrator.time.monotonic()
-                with patch.object(baseline, 'datetime', FixedDatetime), \
-                     patch('time.monotonic', return_value=tick):
-                    old = baseline.__dict__['_finish'](self, *args, **kwargs)
-                old_bytes = (run/'receipt.json').read_bytes()
-                old_summary = (run/'summary.json').read_bytes()
+                # Compare finalizers from the same authentic pre-finalization history.
+                # The baseline scanner still runs; only its append destination is a
+                # separate real RunLedger. Never rewind the live ledger or normalize it.
+                ledger = args[6]
+                initial_bytes = ledger.path.read_bytes()
+                initial_events = json.loads(json.dumps(ledger.events))
+                check.assertIsNone(self.memory_store)
+                with tempfile.TemporaryDirectory(prefix='p5-baseline-ledger-', dir=run.parent) as shadow:
+                    shadow_path = Path(shadow)/'events.jsonl'
+                    shadow_path.write_bytes(initial_bytes)
+                    baseline_ledger = RunLedger(shadow_path)
+                    check.assertEqual(baseline_ledger.events, initial_events)
+                    baseline_args = (*args[:6], baseline_ledger, *args[7:])
+                    with patch.object(baseline, 'datetime', FixedDatetime), \
+                         patch('lightyear_factory.ledger.datetime', FixedDatetime), \
+                         patch('time.monotonic', return_value=tick), \
+                         patch.object(ledger, 'append', baseline_ledger.append):
+                        old = baseline.__dict__['_finish'](self, *baseline_args, **kwargs)
+                    old_bytes = (run/'receipt.json').read_bytes()
+                    old_summary = (run/'summary.json').read_bytes()
+                    check.assertEqual(ledger.path.read_bytes(), initial_bytes)
+                    check.assertEqual(ledger.events, initial_events)
+                    check.assertEqual(len(baseline_ledger.events), len(initial_events)+3)
+                    check.assertEqual([e['kind'] for e in baseline_ledger.events[len(initial_events):]],
+                                      ['model_isolation_scan_passed']*3)
+                    check.assertTrue(baseline_ledger.verify())
                 with patch.object(orchestrator, 'datetime', FixedDatetime), \
+                     patch('lightyear_factory.ledger.datetime', FixedDatetime), \
                      patch('time.monotonic', return_value=tick):
                     current = super()._finish(*args, **kwargs)
                     check.assertEqual(current['intelligence'], self.agents.intelligence_summary())
+                check.assertEqual(len(ledger.events), len(initial_events)+3)
+                check.assertEqual(ledger.events[:len(initial_events)], initial_events)
+                check.assertEqual([e['kind'] for e in ledger.events[len(initial_events):]],
+                                  ['model_isolation_scan_passed']*3)
+                check.assertTrue(ledger.verify())
                 check.assertEqual(old['intelligence'], current['intelligence'])
                 check.assertEqual(set(current)-set(old), {'failure_accounting'})
                 check.assertEqual(current['failure_accounting']['schema'],

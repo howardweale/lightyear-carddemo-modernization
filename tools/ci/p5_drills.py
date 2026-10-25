@@ -199,6 +199,8 @@ def tower_unreachable(f):
 
 
 def workspace_changed(f):
+    from tools.ci.p5_controller_workspace import observe as observe_workspace
+    controller = observe_workspace(f, Path(__file__).resolve().parents[2])
     f.runtime()
     path = f.root / 'worker.py'
     old = path.read_bytes()
@@ -208,7 +210,11 @@ def workspace_changed(f):
         stopped = refused(lambda: call(provider))
         return dict(admission_refused=stopped, stub_calls=stub.calls,
                     original_sha256=hashlib.sha256(old).hexdigest(),
-                    changed_sha256=hashlib.sha256(path.read_bytes()).hexdigest()), stopped and stub.calls == 0, [
+                    changed_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                    controller_workspace=controller), stopped and stub.calls == 0 and (
+                        tuple(row['case'] for row in controller) == ('clean', 'read-mutation')) and all(
+                        row['controller_refused'] is (row['case'] != 'clean') and
+                        row['transport_calls'] == (2 if row['case'] == 'clean' else 1) for row in controller), [
             'Tracked-source tampering is measured; race-time replacement inside the assembled worker needs an end-to-end drill.']
     finally:
         path.write_bytes(old)
@@ -317,6 +323,8 @@ def collect(repository, output):
         'tools/ci/p5_budget_evidence.py', 'tests/test_p5_budget_evidence.py',
         'tools/ci/p5_controller_outage.py', 'tools/ci/p5_controller_evidence.py',
         'tests/test_p5_controller_evidence.py',
+        'tools/ci/p5_controller_workspace.py', 'tools/ci/p5_workspace_evidence.py',
+        'tests/test_p5_controller_workspace.py',
         'tools/ci/p5_controller_context.py', 'tools/ci/p5_context_evidence.py',
         'tests/test_p5_controller_context.py', 'src/lightyear_factory/context.py',
         'src/lightyear_factory/ledger.py', 'src/lightyear_factory/workspace.py',

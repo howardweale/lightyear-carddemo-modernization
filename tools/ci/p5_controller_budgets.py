@@ -13,6 +13,7 @@ from lightyear_factory.orchestrator import FactoryOrchestrator
 from lightyear_factory.providers import ProviderError, ProviderResult
 from lightyear_factory.routing import RoutedBudget, TaskRouter
 from tools.ci.p5_controller_probe import inspect_receipt
+from tools.ci.p5_budget_evidence import retain
 from tools.ci.p5_fixture import Fixture
 
 CASES = ('control', 'dollar-preflight', 'dollar-returned', 'token-preflight',
@@ -125,7 +126,10 @@ def observe_case(parent, repository, case):
                 or tokens <= 0 or cost <= 0 or len(bounded.routing) != 1
                 or bounded.routing[0]['fallback'] is not False):
             raise ValueError('p5-budget-failed-primary-accounting')
+        retained = retain(path.parent, budget.calls, case=case, run_id='p5-budget-'+case,
+                          work_order_sha256=fixture.order.content_sha256)
         return dict(case=case, controller_refused=refused, primary_stub_calls=primary.calls,
+            retained_budget_evidence=retained,
             secondary_stub_calls=secondary.calls, accounted_calls=len(budget.calls),
             accounted_tokens=tokens, simulated_accounted_cost_usd=cost,
             call_evidence_sha256=[c['content_sha256'] for c in budget.calls],

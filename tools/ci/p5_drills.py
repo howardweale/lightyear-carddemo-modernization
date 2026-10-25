@@ -308,6 +308,7 @@ def collect(repository, output):
     sources = {p: hashlib.sha256((repository / p).read_bytes()).hexdigest() for p in (
         'tools/ci/p5_fixture.py', 'tools/ci/p5_drills.py', 'tools/ci/p5_controller_probe.py',
         'tools/ci/p5_controller_budgets.py', 'tests/test_p5_controller_budgets.py',
+        'tools/ci/p5_budget_evidence.py', 'tests/test_p5_budget_evidence.py',
         'tools/ci/p5_controller_outage.py', 'tools/ci/p5_controller_evidence.py',
         'tests/test_p5_controller_evidence.py',
         'tools/ci/p5_fallback_probe.py', 'tests/test_p5_controller_fallback.py',

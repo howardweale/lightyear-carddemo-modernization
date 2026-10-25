@@ -18,6 +18,7 @@ from lightyear_factory.routing import TaskRouter, admitted_policy
 from lightyear_factory.routing_policy import compile_policy
 from tools.ci.p5_controller_budgets import BudgetStub
 from tools.ci.p5_controller_probe import inspect_receipt
+from tools.ci.p5_budget_evidence import retain
 from tools.ci.p5_fixture import Fixture
 
 
@@ -117,7 +118,11 @@ def observe(parent, repository, *, changed_fallback_model=False):
                 or type(accounting.get('duration_ms')) is not int
                 or len(accounting.get('call_hashes', [])) != len(budget.calls)):
             raise ValueError('p5-fallback-durable-accounting-mismatch')
+        retained = retain(path.parent, budget.calls,
+            case='fallback-model-refused' if changed_fallback_model else 'fallback-admitted',
+            run_id='fallback-probe', work_order_sha256=fixture.order.content_sha256)
         return dict(changed_fallback_model=changed_fallback_model,
+            retained_budget_evidence=retained,
             routing_approval_verified=True, policy_sha256=digest(policy),
             primary_calls=primary.calls, secondary_calls=secondary.calls,
             accounted_calls=len(budget.calls), shared_call_cap=fixture.order.max_model_calls,

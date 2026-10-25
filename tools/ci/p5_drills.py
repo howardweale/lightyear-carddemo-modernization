@@ -140,6 +140,8 @@ def budget_exhausted(f):
 
 
 def tower_unreachable(f):
+    from tools.ci.p5_controller_outage import observe as observe_controller
+    controller = observe_controller(f.parent/'outage-controller', Path(__file__).resolve().parents[2])
     head = f.head
 
     class Relay(http.server.BaseHTTPRequestHandler):
@@ -186,7 +188,8 @@ def tower_unreachable(f):
         with f.service.transaction() as db:
             after = len(f.service.events(db))
         return dict(admission_refused=admission_stopped, append_refused=append_stopped,
-                    journal_events_before=before, journal_events_after=after), admission_stopped and append_stopped and before == after, [
+                    journal_events_before=before, journal_events_after=after,
+                    controller_outage=controller), admission_stopped and append_stopped and before == after and controller['operator_outage_refused'], [
             'Real verifier and signed journal sit behind a disposable HTTP relay, not the deployed Tower API.',
             'Production controller handling of an unavailable append and its fallback receipt remains unmeasured.']
     finally:
@@ -247,6 +250,8 @@ def wall_and_window(f):
 
 
 def duplicate_attempt(f):
+    from tools.ci.p5_controller_outage import observe as observe_controller
+    controller = observe_controller(f.parent/'duplicate-controller', Path(__file__).resolve().parents[2])
     ledger = f.parent / 'nonce-ledger'
     store = AdmissionNonceStore(ledger)
     f.verify_order(store)
@@ -282,8 +287,9 @@ def duplicate_attempt(f):
         admitted += first.result(timeout=20)
     return dict(sequential_replay_refused=sequential, concurrent_admissions=admitted, contenders=8,
                 forced_schedule='first real read held before append while seven contenders attempt admission',
-                nonce_rows=len(race.read_text(encoding='ascii').splitlines())), sequential and admitted == 1, [
-        'Work-order nonce replay is measured; the factory run-directory attempt identity needs a separate end-to-end drill.']
+                nonce_rows=len(race.read_text(encoding='ascii').splitlines()),
+                controller_attempt=controller), sequential and admitted == 1 and controller['duplicate_attempt_refused'], [
+        'Real controller terminal re-entry and unchanged attempt/nonce bytes are retained; this disposable observation is not a signed production factory receipt.']
 
 
 FUNCTIONS = dict(zip(DRILLS, (kill_mid_build, worker_network, budget_exhausted, tower_unreachable,
@@ -302,6 +308,8 @@ def collect(repository, output):
     sources = {p: hashlib.sha256((repository / p).read_bytes()).hexdigest() for p in (
         'tools/ci/p5_fixture.py', 'tools/ci/p5_drills.py', 'tools/ci/p5_controller_probe.py',
         'tools/ci/p5_controller_budgets.py', 'tests/test_p5_controller_budgets.py',
+        'tools/ci/p5_controller_outage.py', 'tools/ci/p5_controller_evidence.py',
+        'tests/test_p5_controller_evidence.py',
         'tools/ci/p5_fallback_probe.py', 'tests/test_p5_controller_fallback.py',
         'src/lightyear_factory/orchestrator.py', 'src/lightyear_factory/agents.py',
         'src/lightyear_factory/routing.py', 'src/lightyear_factory/model_admission.py',

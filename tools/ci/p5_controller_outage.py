@@ -15,6 +15,7 @@ from lightyear_factory.budgeted_providers import AccountedModelProvider
 from lightyear_factory.contracts import ContractError
 from lightyear_factory.orchestrator import FactoryOrchestrator
 from tools.ci.p5_controller_budgets import BudgetStub
+from tools.ci.p5_controller_evidence import validate as validate_evidence
 from tools.ci.p5_controller_probe import inspect_receipt, snapshot
 from tools.ci.p5_fixture import Fixture
 
@@ -124,7 +125,23 @@ def observe(parent, repository):
         if (duplicate_stub.calls != 0 or snapshot(runs/run_id) != before
                 or store.path.read_bytes() != consumed):
             raise ValueError('p5-controller-identity-mutated')
+        identity_path = runs/run_id/'attempt-identity.json'
+        retained = dict(schema='p5-retained-controller-evidence/1',
+            origin='disposable CI controller with stub transport',
+            run_id=run_id, work_order_sha256=fixture.order.content_sha256,
+            receipt_utf8=receipt_path.read_bytes().decode('utf-8'),
+            receipt_sha256=hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
+            identity_utf8=identity_path.read_bytes().decode('utf-8'),
+            identity_sha256=hashlib.sha256(identity_path.read_bytes()).hexdigest(),
+            attempt_files_before=before, attempt_files_after=snapshot(runs/run_id),
+            consumed_nonce_store_utf8=consumed.decode('ascii'),
+            nonce_before_sha256=hashlib.sha256(consumed).hexdigest(),
+            nonce_after_sha256=hashlib.sha256(store.path.read_bytes()).hexdigest(),
+            transport_calls_before_reentry=stub.calls,
+            duplicate_transport_calls=duplicate_stub.calls)
+        validate_evidence(retained, run_id=run_id, work_order_sha256=fixture.order.content_sha256)
         return dict(operator_outage_refused=True, controller_receipt=receipt,
+            retained_controller_evidence=retained,
             receipt_bytes_sha256=hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
             accounted_calls=len(bounded.calls), stub_calls=stub.calls,
             duplicate_attempt_refused=True, duplicate_stub_calls=duplicate_stub.calls,

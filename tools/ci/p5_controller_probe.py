@@ -142,7 +142,12 @@ def observe(fixture, repository):
         process.kill()
         stdout, stderr = process.communicate(timeout=10)
         if not reached or process.returncode == 0:
-            raise ValueError('p5-controller-builder-not-killed')
+            # Counts, marker-presence booleans and hashes only; never raw output.
+            diagnostic = dict(timeout_marker_seen=reached, final_marker_seen=READY in stdout,
+                killed_exit=process.returncode, stdout_bytes=len(stdout), stderr_bytes=len(stderr),
+                stdout_sha256=hashlib.sha256(stdout).hexdigest(),
+                stderr_sha256=hashlib.sha256(stderr).hexdigest())
+            raise ValueError('p5-controller-builder-not-killed:' + json.dumps(diagnostic, sort_keys=True))
         run_dir = runs/RUN_ID
         before = snapshot(run_dir)
         identity = json.loads((run_dir/'attempt-identity.json').read_bytes())

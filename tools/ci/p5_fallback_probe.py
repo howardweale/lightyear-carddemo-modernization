@@ -108,13 +108,22 @@ def observe(parent, repository, *, changed_fallback_model=False):
         raw = json.loads(path.read_bytes())
         if raw.get('work_order_sha256') != fixture.order.content_sha256:
             raise ValueError('p5-fallback-receipt-binding')
+        accounting = raw.get('failure_accounting', {})
+        if (accounting.get('schema') != 'factory-sanitized-accounting/1'
+                or accounting.get('calls') != len(budget.calls)
+                or accounting.get('input_tokens') != budget.input_tokens
+                or accounting.get('output_tokens') != budget.output_tokens
+                or accounting.get('estimated_cost_usd') != budget.estimated_cost_usd
+                or type(accounting.get('duration_ms')) is not int
+                or len(accounting.get('call_hashes', [])) != len(budget.calls)):
+            raise ValueError('p5-fallback-durable-accounting-mismatch')
         return dict(changed_fallback_model=changed_fallback_model,
             routing_approval_verified=True, policy_sha256=digest(policy),
             primary_calls=primary.calls, secondary_calls=secondary.calls,
             accounted_calls=len(budget.calls), shared_call_cap=fixture.order.max_model_calls,
             simulated_accounted_cost_usd=budget.estimated_cost_usd,
             controller_receipt=receipt,
-            receipt_has_model_accounting='calls' in raw.get('intelligence', {}),
+            receipt_has_model_accounting='calls' in raw.get('failure_accounting', {}),
             real_model_calls=0, actual_spend=0)
     finally:
         if service is not None:

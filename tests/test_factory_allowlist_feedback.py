@@ -431,6 +431,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             agents=Mock(name='agent-object');agents.name='fixture-agent'
             order=SimpleNamespace(max_attempts=1,allowed_paths=('candidate',),
                 content_sha256='a'*64,order_id=private,to_dict=Mock(return_value={'title':private}))
+            agents.bounded_provider = None  # Startup failed before a provider was constructed.
             controller=FactoryOrchestrator(source,root/'runs',agents,
                 workspace_read_manifest={},prepare_workspace=Mock(side_effect=RuntimeError(private)))
             with self.assertRaisesRegex(ContractError,'^factory-isolation-run-refused$'):
@@ -478,6 +479,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
             agents = Mock(); agents.name = 'fixture-agent'
             order = SimpleNamespace(max_attempts=1, allowed_paths=('candidate',),
                 content_sha256='a'*64, to_dict=Mock())
+            agents.bounded_provider = None  # Startup failed before a provider was constructed.
             controller = FactoryOrchestrator(source, root/'runs', agents,
                 workspace_read_manifest={}, prepare_workspace=Mock(side_effect=RuntimeError(private)))
             with patch('lightyear_factory.orchestrator.write_json', side_effect=OSError(private)) as write:

@@ -103,6 +103,15 @@ def observe_case(parent, repository, case):
         if (refused != (case != 'control') or primary.calls != expected_calls
                 or len(budget.calls) != expected_calls or secondary.calls != 0):
             raise ValueError('p5-budget-call-or-refusal-mismatch')
+        accounting = raw_receipt.get('intelligence', {})
+        if (accounting.get('schema') != 'factory-sanitized-accounting/1'
+                or accounting.get('calls') != len(budget.calls)
+                or accounting.get('input_tokens') != budget.input_tokens
+                or accounting.get('output_tokens') != budget.output_tokens
+                or accounting.get('estimated_cost_usd') != budget.estimated_cost_usd
+                or type(accounting.get('duration_ms')) is not int
+                or len(accounting.get('call_hashes', [])) != len(budget.calls)):
+            raise ValueError('p5-budget-durable-accounting-mismatch')
         tokens = budget.input_tokens + budget.output_tokens
         cost = budget.estimated_cost_usd
         if case == 'dollar-returned' and cost <= fixture.order.max_model_cost_usd:

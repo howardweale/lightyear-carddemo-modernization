@@ -8,11 +8,13 @@ import subprocess
 import sys
 import time
 
+from lightyear_execution.admission import AdmissionNonceStore
 from lightyear_execution.backend import OCIContainerBackend
 from lightyear_execution.integration import HardenedExecutionContext
 from lightyear_factory.agents import ModelAgentSet
 from lightyear_factory.contracts import ContractError, canonical_hash
 from lightyear_factory.orchestrator import FactoryOrchestrator
+from lightyear_factory.ledger import RunLedger
 from lightyear_factory.providers import ProviderResult
 from tools.ci.p5_fixture import Fixture
 
@@ -57,7 +59,22 @@ def child(repository, parent, runs, mode):
     fixture = Fixture(parent, repository, controller_probe=True)
     try:
         stub = ControllerStub(mode == 'wait')
-        _, admission = fixture.verify_order()
+        store = AdmissionNonceStore(runs/'admission-nonces.sha256')
+        if mode == 'reenter':
+            before_nonce = store.path.read_bytes()
+            try:
+                fixture.verify_order(store=store)
+            except Exception as error:
+                if 'already been consumed' not in str(error):
+                    raise ValueError('p5-duplicate-nonce-wrong-refusal') from None
+            else:
+                raise ValueError('p5-duplicate-nonce-admitted')
+            if store.path.read_bytes() != before_nonce:
+                raise ValueError('p5-duplicate-nonce-mutated')
+            # Existing stronger run-directory control is retained as well.
+            _, admission = fixture.verify_order()
+        else:
+            _, admission = fixture.verify_order(store=store)
         context = HardenedExecutionContext(fixture.policy,
             OCIContainerBackend(fixture.policy, 'docker', execute=False), admission, fixture.key)
         controller = FactoryOrchestrator(fixture.root, runs, ModelAgentSet(stub),
@@ -128,6 +145,48 @@ def observe(fixture, repository):
             raise ValueError('p5-controller-builder-not-killed')
         run_dir = runs/RUN_ID
         before = snapshot(run_dir)
+        identity = json.loads((run_dir/'attempt-identity.json').read_bytes())
+        if identity['attempt_id'] != RUN_ID:
+            raise ValueError('p5-attempt-identity-mismatch')
+        nonce_before = (runs/'admission-nonces.sha256').read_bytes()
+        ledger_before = (run_dir/'events.jsonl').read_bytes()
+        from lightyear_factory.cli import main as abort_cli
+        arguments = ['reconcile-interrupted', '--runs-root', str(runs), '--run-id', RUN_ID]
+        for key in ('work_order_sha256','consumed_nonce_sha256','sealed_workspace_sha256'):
+            arguments.extend(['--'+key.replace('_','-'), identity[key]])
+        import contextlib
+        import io
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = abort_cli(arguments)
+        if code != 0:
+            raise ValueError('p5-abort-cli-refused')
+        event = json.loads(output.getvalue())
+        payload = event['payload']
+        ledger = RunLedger(run_dir/'events.jsonl')
+        if (ledger.events[-1] != event or event['state'] != 'INTERRUPTED'
+                or payload['status'] != 'interrupted; awaiting human attestation'
+                or payload['unsigned'] is not True or payload['human_attestation'] is not None
+                or any(payload[key] != identity[key] for key in
+                       ('attempt_id','work_order_sha256','consumed_nonce_sha256','sealed_workspace_sha256'))
+                or not (run_dir/'events.jsonl').read_bytes().startswith(ledger_before)):
+            raise ValueError('p5-abort-record-binding')
+        accounting = payload['accounting']
+        if (accounting['calls'] != 1 or accounting['input_tokens'] != 1
+                or accounting['output_tokens'] != 1 or accounting['estimated_cost_usd'] != 0
+                or accounting['in_flight_final_usage'] != 'unknown'
+                or not any(row['role']=='builder' and row['response_sha256'] is None
+                           for row in accounting['scanned_transports'])):
+            raise ValueError('p5-abort-accounting-mismatch')
+        after = snapshot(run_dir)
+        if set(after) != set(before) or any(after[k] != v for k,v in before.items() if k != 'events.jsonl'):
+            raise ValueError('p5-abort-changed-other-evidence')
+        with contextlib.redirect_stdout(io.StringIO()):
+            if abort_cli(arguments) != 1:
+                raise ValueError('p5-terminal-abort-not-refused')
+        if snapshot(run_dir) != after or (runs/'admission-nonces.sha256').read_bytes() != nonce_before:
+            raise ValueError('p5-abort-duplicate-mutated')
+        before = after
         # Fresh disposable admission is a deliberately stronger re-entry probe:
         # even another otherwise valid invocation must not overwrite this attempt.
         again = subprocess.run(command+['--parent', str(base/'reenter'),
@@ -142,12 +201,14 @@ def observe(fixture, repository):
             retained_inventory_sha256=canonical_hash(before),
             stdout_sha256=hashlib.sha256(stdout).hexdigest(), stderr_sha256=hashlib.sha256(stderr).hexdigest(),
             real_model_calls=0, actual_spend=0,
-            recovery_scope='Fresh disposable admission re-entry; no implemented resume or recovery command is inferred.')
+            recovery_scope='Abort-only unsigned ledger record; consumed nonce and sealed workspace bound; no resume/retry/readmission.',
+            interrupted_record=event, interrupted_record_sha256=canonical_hash(event),
+            consumed_nonce_unchanged=(runs/'admission-nonces.sha256').read_bytes()==nonce_before,
+            terminal_abort_refused=True, human_attestation_verified=False)
         if receipt_exists:
             result['post_kill_receipt'] = inspect_receipt(run_dir/'receipt.json')
-        gaps = ['Abrupt-stop recovery is not implemented by this probe; unchanged production controller re-entry is refusal only.',
-                'No production controller recovery receipt is available after the kill.' if not receipt_exists
-                else 'A post-kill receipt requires recovery-path provenance review before qualification.']
+        gaps = ['Existing human Tower path has not attested the interrupted record; no gap acceptance is inferred.',
+                'Kill during in-flight transport leaves final billable usage unknown; observed accounting is not final billing.']
         return result, again.returncode == 0 and preserved, gaps
     finally:
         if process.poll() is None:

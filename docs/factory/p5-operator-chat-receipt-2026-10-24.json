@@ -1,0 +1,34 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+  "evidence_sha256": "ac194daf364fe0f144277cd52b7ea8f2b323c5fb08b7dc0c30bd6bbb8aae4ef7",
+  "observed_at": "2026-10-24T20:03:05Z",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6385480266",
+  "evidence_type": "operator-chat transcription",
+  "transcription": {
+    "path": "docs/factory/p5-operator-chat-transcription-2026-10-24.txt",
+    "sha256": "ac194daf364fe0f144277cd52b7ea8f2b323c5fb08b7dc0c30bd6bbb8aae4ef7",
+    "format": "UTF-8; exact contemporaneous agent summary paragraph, not verbatim human wording"
+  },
+  "approval_source": {
+    "kind": "direct-human-chat-reply",
+    "question_item": "call_5c3636b463354430842e5270e6f42116",
+    "github_comment_url": null
+  },
+  "provenance": "The public URL identifies an agent transcription. It is not a human-authored GitHub approval or independent authentication of the operator.",
+  "scope": {
+    "path": "src/lightyear_factory/budgeted_providers.py",
+    "sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+  },
+  "authority": {
+    "fence_exception_only": true,
+    "merge": false,
+    "signing": false,
+    "spend": false,
+    "factory_run": false,
+    "gap_acceptance": false
+  }
+}

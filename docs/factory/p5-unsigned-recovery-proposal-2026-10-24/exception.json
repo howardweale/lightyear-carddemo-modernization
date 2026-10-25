@@ -1,7 +1,8 @@
 {
   "schema": "p5-unsigned-recovery-exception-proposal/1",
   "prepared_on": "2026-10-24",
-  "status": "proposal-not-approved",
+  "status": "Not approved: proposal",
+  "later_publication_decision": "Later approval of the revised orchestrator and CLI bytes is recorded separately [operator-chat receipt](../p5-recovery-publication-approval-2026-10-24.json#sha256=c204149d2ff2ac644ced8b5c116c716ad129e929af83c926316795e6667ad7fd)",
   "base_pr_head": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
   "main": "3bc468666be34faf69796a6cfece9fe59f9f8939",
   "production_files": {
@@ -94,7 +95,7 @@
     "current": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
     "introduced_by": "790deb46650454bb2e3870221e6aa4f6c3c06155",
     "reason": "Graph/plain-search integration added ledger policy binding, plan graph and receipt graph even for packed mode; real stale source binding, not byte-equivalent.",
-    "resolution": "This proposal explicitly identifies current main as the baseline plus the exact proposed recovery delta. Old records stay unchanged. A new dated F2 request must recompute every binding from exact frozen main after approved merge; CI must validate all fields. No silent reseal.",
+    "resolution": "This proposal explicitly identifies current main as the baseline plus the exact proposed recovery delta. Old records stay unchanged. Planned: a new dated F2 request must recompute every binding from exact frozen main after approved merge; CI must validate all fields. No silent reseal.",
     "operational_resolution_complete": false
   },
   "ci": {

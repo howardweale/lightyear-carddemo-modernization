@@ -1,7 +1,7 @@
 {
   "schema": "p5-boundary-exception-decision/1",
   "decided_on": "2026-10-24",
-  "decision": "approved-exact-file-exception-only",
+  "decision": "approved-exact-file-exception-only [operator-chat transcription receipt](p5-operator-chat-receipt-2026-10-24.json#sha256=0ff1ea48be53e3541f73635bc269265241b0435bccbe1e851bffee45bf9a67cc)",
   "approver": "Howard Weale",
   "approval_source": {
     "kind": "direct-human-chat-reply",
@@ -44,7 +44,7 @@
     "checker_override": false
   },
   "f2": {
-    "recomputation": "after exact approved merge",
+    "recomputation": "Planned: after exact approved merge",
     "request_ready": false
   }
 }

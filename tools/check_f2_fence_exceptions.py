@@ -21,6 +21,7 @@ PROVIDERS = 'src/lightyear_factory/providers.py'
 POSTTRAN = 'docs/factory/posttran-phase2-plan-2026-10-16.json'
 REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
 APPROVED_SHA = '12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928'
+PROVENANCE_EVIDENCE_LINK = ' [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e)'
 CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
@@ -132,7 +133,8 @@ def validate_manifest(value):
     require(provenance['exact_sha256'] == APPROVED_SHA and
             provenance['github_identity_is_human_proof'] is False, 'approval-hash-or-identity')
     require(provenance['statement'] == 'approved by Howard in the operator chat, ' +
-            provenance['recorded_at_pt'] + ', exact hash ' + APPROVED_SHA, 'approval-statement')
+            provenance['recorded_at_pt'] + ', exact hash ' + APPROVED_SHA +
+            PROVENANCE_EVIDENCE_LINK, 'approval-statement')
     return entry
 
 

@@ -25,7 +25,7 @@
         "approved_by": "Howard Weale",
         "recorded_at_pt": "2026-10-24T15:23:34-07:00",
         "exact_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
-        "statement": "approved by Howard in the operator chat, 2026-10-24T15:23:34-07:00, exact hash 12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
+        "statement": "approved by Howard in the operator chat, 2026-10-24T15:23:34-07:00, exact hash 12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928 [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e)",
         "github_identity_is_human_proof": false
       }
     }

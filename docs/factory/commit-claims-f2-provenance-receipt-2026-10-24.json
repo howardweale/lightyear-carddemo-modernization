@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-10-24",
+  "claims": [
+    {
+      "record": "docs/factory/f2-operator-chat-provenance-receipt-2026-10-24.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b"
+    }
+  ]
+}

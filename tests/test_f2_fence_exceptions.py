@@ -67,7 +67,7 @@ class ExactF2ExceptionTests(unittest.TestCase):
                 mode='100644', base_preimage_sha256=before, final_sha256=self.digest,
                 approved_change_commit=approved, provenance=dict(source='operator-chat',
                     approved_by='Howard Weale', recorded_at_pt=when, exact_sha256=self.digest,
-                    statement='approved by Howard in the operator chat, ' + when + ', exact hash ' + self.digest,
+                    statement='approved by Howard in the operator chat, ' + when + ', exact hash ' + self.digest + policy.PROVENANCE_EVIDENCE_LINK,
                     github_identity_is_human_proof=False))])
         self.doc(policy.MANIFEST, self.manifest)
         self.base = self.commit('trusted policy')

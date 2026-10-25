@@ -210,7 +210,27 @@ class NormalReceiptTests(unittest.TestCase):
                 return replace(result, evidence=dict(plan, assurance='enforced', enforced=True,
                     synthetic_execution=True))
             with patch.object(CandidateBuildBackend, 'execute', new=synthetic_container):
-                receipt = controller.run(order, 'blocked-model')
+                try:
+                    receipt = controller.run(order, 'blocked-model')
+                except Exception as error:
+                    # CI synthetic fixture: disclose only types, safe codes and source locations.
+                    import re
+                    chain = []
+                    seen = set()
+                    while error is not None and id(error) not in seen and len(chain) < 6:
+                        seen.add(id(error))
+                        code = str(error) if type(error).__name__ == 'ContractError' else ''
+                        if not re.fullmatch('[a-z][a-z0-9-]{0,79}', code):
+                            code = 'redacted'
+                        frames = []
+                        tb = error.__traceback__
+                        while tb is not None:
+                            frames.append(dict(file=Path(tb.tb_frame.f_code.co_filename).name,
+                                               line=tb.tb_lineno, function=tb.tb_frame.f_code.co_name))
+                            tb = tb.tb_next
+                        chain.append(dict(type=type(error).__name__, code=code, frames=frames[-6:]))
+                        error = error.__context__
+                    raise AssertionError('p5-blocked-fixture-refused:' + json.dumps(chain, sort_keys=True)) from None
             self.assertEqual(gate_results, [1, 1])
             run = root/'runs'/'blocked-model'
             ledger = RunLedger(run/'events.jsonl')

@@ -179,7 +179,14 @@ def validate_index(index):
     require(len(bindings) == 403 and len(worker['files']) == 403)
     require({r['path']: r['sha256'] for r in worker['files']} == bindings)
     history = index['historical']
-    require(set(history) == {'status', 'catalog_sha256', 'observed_count', 'missing', 'metadata_error_count'})
+    historical_keys = {'status', 'catalog_sha256', 'observed_count', 'missing', 'metadata_error_count'}
+    require(set(history) in (historical_keys, historical_keys | {'catalog'}))
+    if 'catalog' in history:
+        require(len(history['catalog']) == history['observed_count']
+                and sha(encoded(history['catalog'])) == history['catalog_sha256'])
+        for item in history['catalog']:
+            require(set(item) == {'kind', 'id'} and item['kind'] in ('artifact', 'release-asset')
+                    and type(item['id']) is int and item['id'] > 0)
     require(history['status'] == HISTORICAL and re.fullmatch(r'[0-9a-f]{64}', history['catalog_sha256']))
     require(type(history['observed_count']) is int and history['observed_count'] >= 0
             and type(history['metadata_error_count']) is int and history['metadata_error_count'] >= 0)
@@ -189,7 +196,13 @@ def validate_index(index):
                      (isinstance(item['id'], str) and re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}', item['id']))))
     for name in EXPOSURE:
         corpus = index['corpora'][name]
-        require(corpus['files'] and corpus['records'] > 0 and corpus['inventory_complete'] is True)
+        require(corpus['files'] and corpus['inventory_complete'] is True)
+        if name == 'graph' and corpus.get('status') == 'disabled':
+            from lightyear_factory.copau_boundary import disabled_graph
+            require(len(corpus['files']) == 1 and corpus['files'][0]['path'] == 'disabled.json')
+            disabled_graph(corpus, load_json(stable_read(Path(corpus['root'])/'disabled.json', 4096)))
+        else:
+            require(corpus['records'] > 0)
         require(corpus['inventory_sha256'] == sha(encoded(corpus['files'])))
     for name in ('graph', 'prompts', 'contexts'):
         corpus = index['corpora'][name]

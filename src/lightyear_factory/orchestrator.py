@@ -678,7 +678,7 @@ class FactoryOrchestrator:
                    'ledger_head_sha256': ledger.head_sha256,
                    'qualifies_for_factory_receipt': False,
                    'reason': 'factory-isolation-run-refused',
-                   'intelligence': self._failure_accounting()}
+                   'failure_accounting': self._failure_accounting()}
         receipt['content_sha256'] = canonical_hash(receipt)
         write_json(receipt, run_dir/'receipt.json')
         write_json({'status': 'blocked', 'attempts': attempts,
@@ -944,7 +944,6 @@ class FactoryOrchestrator:
         )
         if state == "BLOCKED":
             self._checkpoint_accounting()
-            intelligence = self._failure_accounting()
         security_limitations = (
             ["Acceptance gates ran inside the admitted OCI security policy."]
             if execution_security.get("production_ready")
@@ -988,6 +987,8 @@ class FactoryOrchestrator:
                 *security_limitations,
             ],
         }
+        if state == "BLOCKED":
+            receipt["failure_accounting"] = self._failure_accounting()
         from .graph_tools import graph_summary
         receipt["graph"] = graph_summary(order, ledger, run_id)
         if candidate_authorship is not None:

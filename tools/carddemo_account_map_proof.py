@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_account_render_route import check_render_route
 
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-map-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
@@ -44,7 +45,8 @@ def check_scope(root,scope=None):
         raise ValueError('map-retirement-route')
     service=(root/JAVA/'AccountUpdateService.java').read_text()
     edits=(root/JAVA/'SourceEdits.java').read_text()
-    if 'AccountMapModel.retire(' not in service or 'AccountMapState.bind(this)' not in edits:raise ValueError('map-production-route')
+    if 'AccountMapModel.retire(' not in service:check_render_route(root,service)
+    if 'AccountMapState.bind(this)' not in edits:raise ValueError('map-production-route')
     for method in ('receive','validate','compare','account'):
         if 'AccountMapRules.'+method+'(state)' not in edits:raise ValueError('map-production-dispatch')
     base=(root/'factory/carddemo-web/service/pom.xml').read_text()

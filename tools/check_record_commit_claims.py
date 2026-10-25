@@ -222,6 +222,8 @@ def check(root,base):
     # the corresponding prose did not change in the same patch.
     if manifests.intersection(names):
         for claim in claims:validate_claim(root,claim)
+    from tools.operational_claims import check as check_operational_claims
+    check_operational_claims(root, base)
     return rows
 
 

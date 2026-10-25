@@ -103,7 +103,7 @@ def observe_case(parent, repository, case):
         if (refused != (case != 'control') or primary.calls != expected_calls
                 or len(budget.calls) != expected_calls or secondary.calls != 0):
             raise ValueError('p5-budget-call-or-refusal-mismatch')
-        accounting = raw_receipt.get('intelligence', {})
+        accounting = raw_receipt.get('failure_accounting', {})
         if (accounting.get('schema') != 'factory-sanitized-accounting/1'
                 or accounting.get('calls') != len(budget.calls)
                 or accounting.get('input_tokens') != budget.input_tokens
@@ -131,7 +131,7 @@ def observe_case(parent, repository, case):
             call_evidence_sha256=[c['content_sha256'] for c in budget.calls],
             wrapper_type=type(budget).__name__, routed=routed, controller_receipt=receipt,
             work_order_sha256=fixture.order.content_sha256,
-            receipt_has_model_accounting='calls' in raw_receipt.get('intelligence', {}),
+            receipt_has_model_accounting='calls' in raw_receipt.get('failure_accounting', {}),
             receipt_bytes_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
             real_model_calls=0, actual_spend=0)
     finally:

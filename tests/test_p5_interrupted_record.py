@@ -117,5 +117,50 @@ class InterruptedRecordTests(unittest.TestCase):
         # Refusal is a measured gap, not an accepted attestation or a passing P5 qualification.
 
 
+    def test_cli_refusal_prints_only_code_and_suppresses_sensitive_errors(self):
+        import contextlib
+        import io
+        from lightyear_factory.cli import main
+        args=['reconcile-interrupted','--runs-root',str(self.root),'--run-id',self.run.name]
+        for name,value in self.bindings.items():args.extend(['--'+name.replace('_','-'),value])
+        for error,expected in ((ContractError('reconciliation-terminal-attempt-refused'),
+                                'reconciliation-terminal-attempt-refused'),
+                               (ContractError('private C:/secret/material'), 'reconciliation-refused'),
+                               (OSError('private C:/secret/material'), 'reconciliation-refused')):
+            with self.subTest(error_type=type(error).__name__, expected=expected):
+                stdout=io.StringIO();stderr=io.StringIO()
+                with patch.object(FactoryOrchestrator,'reconcile_interrupted',side_effect=error), \
+                     contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                    self.assertEqual(main(args),1)
+                self.assertEqual(stdout.getvalue(),expected+'\n')
+                self.assertEqual(stderr.getvalue(),'')
+
+    def test_abort_parser_refuses_every_run_surface_option_before_reconciliation(self):
+        import contextlib
+        import io
+        from lightyear_factory.cli import build_parser, main
+        args=['reconcile-interrupted','--runs-root',str(self.root),'--run-id',self.run.name]
+        for name,value in self.bindings.items():args.extend(['--'+name.replace('_','-'),value])
+        parser=build_parser()
+        sub=next(action for action in parser._actions if hasattr(action,'choices')
+                 and isinstance(action.choices,dict) and 'run' in action.choices)
+        run_options={option for action in sub.choices['run']._actions for option in action.option_strings
+                     if any(word in option for word in ('graph','evidence','projection','memory'))}
+        self.assertTrue(run_options)
+        self.assertEqual({word for word in ('graph','evidence','projection','memory')
+                          if any(word in option for option in run_options)},
+                         {'graph','evidence','projection','memory'})
+        options=run_options|{'--graph','--evidence','--projection','--memory','--runs-ro'}
+        before=(self.run/'events.jsonl').read_bytes()
+        for option in sorted(options):
+            with self.subTest(option=option), \
+                 patch.object(FactoryOrchestrator,'reconcile_interrupted') as reconcile, \
+                 contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                with self.assertRaises(SystemExit) as refused:main(args+[option,'synthetic'])
+                self.assertEqual(refused.exception.code,2)
+                reconcile.assert_not_called()
+        self.assertEqual(before,(self.run/'events.jsonl').read_bytes())
+
+
 if __name__=='__main__':
     unittest.main()

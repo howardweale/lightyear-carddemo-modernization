@@ -71,7 +71,7 @@ import re
 BASE = 'spec/modernization/carddemo-screens/'
 JAVA = 'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
 PATHS = [BASE + 'paragraph-scope-' + p + '.json' for p in ('COACTUPC', 'COSGN00C')]
-ANNOTATION = r'@CobolSource\(program="([^"]+)", paragraph="([^"]+)", lines="([^"]+)"\)'
+ANNOTATION = r'@CobolSource\s*\(\s*program\s*=\s*"([^"]+)"\s*,\s*paragraph\s*=\s*"([^"]+)"\s*,\s*lines\s*=\s*"([^"]+)"\s*\)'
 DIRECT = {'AccountUpdateService.java', 'AccountUpdateTransaction.java', 'SignonService.java', 'ScreenFrame.java'}
 
 
@@ -130,16 +130,27 @@ def native_routes(root):
                 require(call.func.attr == 'update' and len(call.args) == 1 and not call.keywords, 'native-route-form')
                 result.update(mapping(call.args[0]))
     require(result, 'native-routes-empty')
-    for filename in ('AccountPhoneDateModel.java', 'AccountMapModel.java'):
+    for filename in ('AccountPhoneDateModel.java', 'AccountMapModel.java', 'AccountRenderModel.java'):
         code = raw(root, JAVA + filename).decode()
-        match = re.search(r'RULES=Map.of\(([\s\S]*?)\);', code)
-        require(match, 'model-route-form')
-        pairs = re.findall(r'"([^"]+)"\s*,\s*"([^"]+)"', match[1])
-        require(pairs and not set(result).intersection(p for p, _ in pairs), 'model-route-duplicate')
+        if filename == 'AccountRenderModel.java':
+            match = re.search(r'RULES=Map[.]ofEntries\(([\s\S]*?)\);', code)
+            require(match, 'render-model-route-form')
+            entry = r'Map[.]entry\("([^"]+)","([^"]+)"\)'
+            pairs = re.findall(entry, match[1])
+            require(not re.sub(entry + r'\s*,?\s*', '', match[1]).strip(), 'render-model-route-form')
+            require(len(pairs) == 9 and {c for _, c in pairs} == {'AccountRenderRules'}, 'render-model-route-count')
+        else:
+            match = re.search(r'RULES=Map.of\(([\s\S]*?)\);', code)
+            require(match, 'model-route-form')
+            pairs = re.findall(r'"([^"]+)"\s*,\s*"([^"]+)"', match[1])
+        require(pairs and len({p for p, _ in pairs}) == len(pairs)
+                and not set(result).intersection(p for p, _ in pairs), 'model-route-duplicate')
         result.update(pairs)
     edits = raw(root, JAVA + 'SourceEdits.java').decode()
     require(all('case "' + name + '"' in edits for name in set(result.values())), 'native-dispatch-class')
-    require('AccountMapModel.retire(' in raw(root, JAVA + 'AccountUpdateService.java').decode()
+    require('new SourceEdits(AccountRenderModel.retire(bindings.root.path("account_update").path("validation")),bindings.clock)'
+            in raw(root, JAVA + 'AccountUpdateService.java').decode()
+            and 'ObjectNode model=(ObjectNode)AccountMapModel.retire(original);' in raw(root, JAVA + 'AccountRenderModel.java').decode()
             and 'AccountPhoneDateModel.retire(original)' in raw(root, JAVA + 'AccountMapModel.java').decode(), 'production-route-chain')
     return result
 
@@ -159,6 +170,7 @@ def check(root, manifest):
         require(sha256(raw(root, path)).hexdigest() == digest, 'routing-source-changed:' + path)
     needed = {'src/lightyear_data/carddemo/update_edits.py', JAVA + 'SourceEdits.java',
               JAVA + 'AccountMapModel.java', JAVA + 'AccountPhoneDateModel.java',
+              *(JAVA + name + '.java' for name in ('AccountRenderRules', 'AccountRenderStorage', 'AccountRenderState', 'AccountRenderModel')),
               *(JAVA + name for name in DIRECT)}
     require(needed <= set(manifest['routing_sources']), 'routing-binding-closure')
     native = native_routes(root) if program == 'COACTUPC' else {}

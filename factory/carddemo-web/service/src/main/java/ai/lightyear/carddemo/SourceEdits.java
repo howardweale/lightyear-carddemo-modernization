@@ -433,6 +433,22 @@ public final class SourceEdits {
     public void run(String paragraph){
         if(model.path("native_paragraphs").has(paragraph)) {
             switch(model.path("native_paragraphs").path(paragraph).asText()) {
+                case "AccountRenderRules" -> {
+                    AccountRenderState state=AccountRenderState.bind(this);
+                    int line=switch(paragraph) {
+                        case "3200-SETUP-SCREEN-VARS" -> {AccountRenderRules.values(state);yield 2698;}
+                        case "3201-SHOW-INITIAL-VALUES" -> {AccountRenderRules.initial(state);yield 2731;}
+                        case "3202-SHOW-ORIGINAL-VALUES" -> {AccountRenderRules.original(state);yield 2787;}
+                        case "3203-SHOW-UPDATED-VALUES" -> {AccountRenderRules.updated(state);yield 2870;}
+                        case "3250-SETUP-INFOMSG" -> {AccountRenderRules.information(state);yield 2955;}
+                        case "3300-SETUP-SCREEN-ATTRS" -> {AccountRenderRules.attributes(state);yield 2986;}
+                        case "3310-PROTECT-ALL-ATTRS" -> {AccountRenderRules.protect(state);yield 3441;}
+                        case "3320-UNPROTECT-FEW-ATTRS" -> {AccountRenderRules.unprotect(state);yield 3500;}
+                        case "3390-SETUP-INFOMSG-ATTRS" -> {AccountRenderRules.informationAttributes(state);yield 3566;}
+                        default -> throw new IllegalArgumentException("untranslated-render-rule:"+paragraph);
+                    };
+                    trace.add(new Location("app/cbl/COACTUPC.cbl",line));
+                }
                 case "AccountMapRules" -> {
                     AccountMapState state=AccountMapState.bind(this);
                     int line=switch(paragraph) {

@@ -33,7 +33,7 @@ def check_scope(root,scope=None):
     starts={p['name']:p['line'] for p in labels}
     for name in CLASSES:
         code=(root/JAVA/(name+'.java')).read_text()
-        found=[list(pair) for pair in re.findall(r'@CobolSource\(program="COACTUPC", paragraph="([^"]+)", lines="([^"]+)"\)',code)]
+        found=[list(pair) for pair in re.findall(r'@CobolSource\s*\(\s*program\s*=\s*"COACTUPC"\s*,\s*paragraph\s*=\s*"([^"]+)"\s*,\s*lines\s*=\s*"([^"]+)"\s*\)',code)]
         if found!=ANNOTATIONS[name]:raise ValueError('feedback-annotations')
         for paragraph,span in found:
             start,end=map(int,span.split('-'))

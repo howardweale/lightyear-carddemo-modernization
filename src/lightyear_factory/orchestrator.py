@@ -167,6 +167,7 @@ class FactoryOrchestrator:
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         self._validate_attempt_budget(order)
+        self._receipt_started = time.monotonic()
         try:
             return self._run(order, run_id)
         except Exception:
@@ -491,13 +492,50 @@ class FactoryOrchestrator:
             )
             raise
 
+    def _failure_accounting(self):
+        """Allowlisted accounting only; unknown transport outcomes are not zeroes."""
+        import math
+        from .routing import RoutedBudget
+        from .providers import BoundedModelProvider
+        from .budgeted_providers import AccountedModelProvider as AccountingProvider
+        bound = getattr(self.agents, 'bounded_provider', None)
+        if type(bound) is RoutedBudget:
+            bound = bound.budget
+        # Accounting a refused base-wrapper mutation does not authorize that path.
+        # The controller integration test separately requires AccountingProvider.
+        if bound is not None and type(bound) not in (AccountingProvider, BoundedModelProvider):
+            raise ContractError('reconciliation-accounting-provider')
+        calls = [] if bound is None else bound.calls
+        hashes = []
+        for call in calls:
+            row = {}
+            for name in ('request_sha256', 'response_sha256'):
+                value = call.get(name)
+                if value is not None and not re.fullmatch('[0-9a-f]{64}', value):
+                    raise ContractError('reconciliation-accounting-hash')
+                row[name] = value
+            hashes.append(row)
+        numbers = {name: 0 if bound is None else getattr(bound, name)
+                   for name in ('input_tokens', 'output_tokens')}
+        cost = 0.0 if bound is None else bound.estimated_cost_usd
+        if (any(type(v) is not int or v < 0 for v in numbers.values())
+                or type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0):
+            raise ContractError('reconciliation-accounting-number')
+        return dict(schema='factory-sanitized-accounting/1', calls=len(calls),
+                    **numbers, estimated_cost_usd=cost,
+                    duration_ms=max(0, int((time.monotonic()-self._receipt_started)*1000)),
+                    call_hashes=hashes,
+                    scanned_transports=[dict(row) for row in getattr(self, '_receipt_transports', [])],
+                    in_flight_final_usage='unknown' if getattr(self, '_receipt_pending', False) else 'none',
+                    duration_basis='observed-through-checkpoint', billing_final=False)
+
+
     def _validate_attempt_budget(self, order):
         if self.workspace_read_manifest is not None:
             if type(order.max_attempts) is not int or not 1 <= order.max_attempts <= 3:
                 raise ContractError('factory-attempt-budget-refused')
 
-    @staticmethod
-    def _record_isolation_failure(run_dir, order, attempts, ledger):
+    def _record_isolation_failure(self, run_dir, order, attempts, ledger):
         # No raw exception, drained model evidence, private names, context or paths.
         ledger.append('BLOCKED', 'controller_error', {'reason': 'factory-isolation-run-refused'})
         receipt = {'schema_version': RUN_RECEIPT_SCHEMA_VERSION,
@@ -507,7 +545,8 @@ class FactoryOrchestrator:
                    'work_order_sha256': order.content_sha256,
                    'ledger_head_sha256': ledger.head_sha256,
                    'qualifies_for_factory_receipt': False,
-                   'reason': 'factory-isolation-run-refused'}
+                   'reason': 'factory-isolation-run-refused',
+                   'intelligence': self._failure_accounting()}
         receipt['content_sha256'] = canonical_hash(receipt)
         write_json(receipt, run_dir/'receipt.json')
         write_json({'status': 'blocked', 'attempts': attempts,
@@ -770,6 +809,8 @@ class FactoryOrchestrator:
                 "limitations": ["Agent set did not emit intelligence provenance."],
             }
         )
+        if state == "BLOCKED":
+            intelligence = self._failure_accounting()
         security_limitations = (
             ["Acceptance gates ran inside the admitted OCI security policy."]
             if execution_security.get("production_ready")

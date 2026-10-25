@@ -202,6 +202,13 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
                   raw_checker_exit=process.returncode, accepted_exceptions=[],
                   fence_requirement_met=not report['blocked_paths'], merge_authorized=False,
                   run_authorized=False)
+    changed = [p for p in git(repo, 'diff', '--no-renames', '--name-only', '-z', base, head)
+               .decode().split('\0') if p]
+    excluded, prefixes = ineligible_paths(repo, base, checker)
+    # The Java checker does not enumerate POSTTRAN. Independently refuse every
+    # changed protected path, even when the raw Java report has no violations.
+    require(not any(p in excluded or any(p.startswith(prefix) for prefix in prefixes)
+                    for p in changed), 'judge-or-posttran-change-refused')
     if not report['blocked_paths']:
         return result
     _, raw = blob(repo, base, MANIFEST)
@@ -209,8 +216,6 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     anchor = resolve(repo, manifest['base_anchor'])
     require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
                            capture_output=True).returncode == 0, 'unrelated-base-anchor')
-    changed = [p for p in git(repo, 'diff', '--no-renames', '--name-only', '-z', base, head)
-               .decode().split('\0') if p]
     require(not (set(changed) & CONTROLS) and
             not any(p.startswith('.github/workflows/') for p in changed), 'candidate-control-change')
     # All of these objects must exist in base, including the validator itself.

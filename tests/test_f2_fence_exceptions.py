@@ -25,7 +25,8 @@ class ExactF2ExceptionTests(unittest.TestCase):
         self.git('config', 'user.name', 'Synthetic')
         self.git('config', 'user.email', 'synthetic@example.invalid')
         self.git('config', 'core.autocrlf', 'false')
-        self.git('config', 'core.filemode', 'true')
+        # Test Git object modes, independent of Windows/POSIX working-tree modes.
+        self.git('config', 'core.filemode', 'false')
         source_root = Path(__file__).resolve().parents[1]
         for path in (policy.CHECKER, policy.VALIDATOR):
             self.put(path, (source_root / path).read_bytes())
@@ -148,6 +149,7 @@ class ExactF2ExceptionTests(unittest.TestCase):
                 self.git('update-index', '--chmod=+x', policy.BUDGETED)
                 self.git('commit', '--no-gpg-sign', '-qm', 'mode')
                 self.head = self.git('rev-parse', 'HEAD')
+                self.assertTrue(self.git('ls-tree', self.head, '--', policy.BUDGETED).startswith('100755 blob '))
             else:
                 if change == 'rename': self.git('mv', policy.BUDGETED, 'renamed.py')
                 elif change == 'extra': self.put('orchestrator.py', b'new fenced delta\n')

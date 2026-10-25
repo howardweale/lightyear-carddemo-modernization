@@ -22,6 +22,9 @@ POSTTRAN = 'docs/factory/posttran-phase2-plan-2026-10-16.json'
 REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
 APPROVED_SHA = '12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928'
 PROVENANCE_EVIDENCE_LINK = ' [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e)'
+ORCHESTRATOR = 'src/lightyear_factory/orchestrator.py'
+ORCHESTRATOR_SHA = 'e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8'
+ORCHESTRATOR_EVIDENCE_LINK = ' [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523)'
 CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
@@ -112,16 +115,27 @@ def validate_manifest(value):
             'identity-limitation-required')
     require(value['authority'] == {'merge': False, 'run': False, 'signing': False,
                                    'spend': False, 'gap_acceptance': False}, 'manifest-authority')
-    require(isinstance(value['entries'], list) and len(value['entries']) == 1,
-            'one-approved-entry-only')
-    entry = value['entries'][0]
+    require(isinstance(value['entries'], list) and 1 <= len(value['entries']) <= 2,
+            'approved-entry-count')
+    require(all(isinstance(e, dict) for e in value['entries']), 'entry-fields')
+    paths = [e.get('path') for e in value['entries']]
+    require(paths[0] == BUDGETED and len(set(paths)) == len(paths)
+            and all(p in (BUDGETED, ORCHESTRATOR) for p in paths), 'ineligible-entry')
+    for entry in value['entries']:
+        validate_entry(entry)
+    return value['entries'][0]
+
+
+def validate_entry(entry):
     fields(entry, {'repository', 'pr', 'path', 'mode', 'base_preimage_sha256',
                    'final_sha256', 'approved_change_commit', 'provenance'}, 'entry-fields')
     require(entry['repository'] == REPOSITORY and type(entry['pr']) is int and entry['pr'] == 455,
             'entry-target')
-    require(entry['path'] == BUDGETED and entry['mode'] == '100644', 'ineligible-entry')
+    require(entry['path'] in (BUDGETED, ORCHESTRATOR) and entry['mode'] == '100644', 'ineligible-entry')
+    approved_sha = APPROVED_SHA if entry['path'] == BUDGETED else ORCHESTRATOR_SHA
+    evidence_link = PROVENANCE_EVIDENCE_LINK if entry['path'] == BUDGETED else ORCHESTRATOR_EVIDENCE_LINK
     digest(entry['base_preimage_sha256']); digest(entry['approved_change_commit'], 40)
-    require(entry['final_sha256'] == APPROVED_SHA, 'unapproved-postimage')
+    require(entry['final_sha256'] == approved_sha, 'unapproved-postimage')
     provenance = entry['provenance']
     fields(provenance, {'source', 'approved_by', 'recorded_at_pt', 'exact_sha256',
                         'statement', 'github_identity_is_human_proof'}, 'provenance-fields')
@@ -130,11 +144,11 @@ def validate_manifest(value):
     require(isinstance(provenance['recorded_at_pt'], str) and
             re.fullmatch(r'2026-10-24T\d{2}:\d{2}:\d{2}-07:00', provenance['recorded_at_pt']),
             'approval-time')
-    require(provenance['exact_sha256'] == APPROVED_SHA and
+    require(provenance['exact_sha256'] == approved_sha and
             provenance['github_identity_is_human_proof'] is False, 'approval-hash-or-identity')
     require(provenance['statement'] == 'approved by Howard in the operator chat, ' +
-            provenance['recorded_at_pt'] + ', exact hash ' + APPROVED_SHA +
-            PROVENANCE_EVIDENCE_LINK, 'approval-statement')
+            provenance['recorded_at_pt'] + ', exact hash ' + approved_sha +
+            evidence_link, 'approval-statement')
     return entry
 
 
@@ -214,7 +228,8 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     if not report['blocked_paths']:
         return result
     _, raw = blob(repo, base, MANIFEST)
-    manifest = document(raw); entry = validate_manifest(manifest)
+    manifest = document(raw); validate_manifest(manifest)
+    entries = {e['path']: e for e in manifest['entries']}
     anchor = resolve(repo, manifest['base_anchor'])
     require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
                            capture_output=True).returncode == 0, 'unrelated-base-anchor')
@@ -224,27 +239,29 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     for path in CONTROLS:
         require(blob(repo, base, path) == blob(repo, head, path), 'candidate-control-change')
     require(blob(repo, base, PROVIDERS) == blob(repo, head, PROVIDERS), 'providers-change-refused')
-    require(report['blocked_paths'] == [entry['path']], 'unlisted-fence-violation')
-    excluded, prefixes = ineligible_paths(repo, base, checker)
-    path = entry['path']
-    require(path not in excluded and not any(path.startswith(p) for p in prefixes),
-            'judge-or-posttran-exception-refused')
-    f2 = document(git(repo, 'show', base + ':' + checker['F2']))
-    require(path in {b['path'] for b in f2['engineering_source_bindings'].values()},
-            'not-f2-engineering-source')
-    before, _ = blob(repo, base, path); anchored, _ = blob(repo, anchor, path)
-    after, _ = blob(repo, head, path)
-    require(before == anchored == {'mode': entry['mode'], 'sha256': entry['base_preimage_sha256']},
-            'wrong-preimage')
-    require(after == {'mode': entry['mode'], 'sha256': entry['final_sha256']}, 'wrong-postimage')
-    approved, _ = blob(repo, resolve(repo, entry['approved_change_commit']), path)
-    require(approved == after, 'approved-commit-content')
+    require(len(set(report['blocked_paths'])) == len(report['blocked_paths']) and
+            all(p in entries for p in report['blocked_paths']), 'unlisted-fence-violation')
+    accepted = []
+    for path in report['blocked_paths']:
+        entry = entries[path]
+        require(path not in excluded and not any(path.startswith(p) for p in prefixes),
+                'judge-or-posttran-exception-refused')
+        f2 = document(git(repo, 'show', base + ':' + checker['F2']))
+        require(path in {b['path'] for b in f2['engineering_source_bindings'].values()},
+                'not-f2-engineering-source')
+        before, _ = blob(repo, base, path); anchored, _ = blob(repo, anchor, path)
+        after, _ = blob(repo, head, path)
+        require(before == anchored == {'mode': entry['mode'], 'sha256': entry['base_preimage_sha256']},
+                'wrong-preimage')
+        require(after == {'mode': entry['mode'], 'sha256': entry['final_sha256']}, 'wrong-postimage')
+        approved, _ = blob(repo, resolve(repo, entry['approved_change_commit']), path)
+        require(approved == after, 'approved-commit-content')
+        accepted.append(dict(path=path, before=before, after=after, provenance=entry['provenance']))
     bound = context(repo, base, head, event or {}, environment or {}, query)
     # Re-check live provenance after object reads; stale observations never pass.
     require(context(repo, base, head, event or {}, environment or {}, query) == bound,
             'context-changed')
-    result.update(accepted_exceptions=[dict(path=path, before=before, after=after,
-                                          provenance=entry['provenance'])],
+    result.update(accepted_exceptions=accepted,
                   fence_requirement_met=True, manifest_sha256=sha(raw), context=bound)
     return result
 

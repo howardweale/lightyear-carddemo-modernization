@@ -1,0 +1,24 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+  "evidence_sha256": "8d2664ba174db547590038ce48a60e3c67a59344cc55d4717114c4bbfa4199ee",
+  "observed_at": "2026-10-24T17:46:15-07:00",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/455#issuecomment-6391586803",
+  "provenance_source": "operator-chat",
+  "operator": "Howard Weale",
+  "scope": "PR 455 exact recovery source publication and matching orchestrator fence entry only",
+  "path": "src/lightyear_factory/orchestrator.py",
+  "final_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8",
+  "processing_time_not_authenticated_message_time": true,
+  "github_identity_is_human_proof": false,
+  "identity_limitation": "The agent shares the operator GitHub identity; the comment is a secondary transcription, not independent human authentication.",
+  "authority": {
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false
+  }
+}

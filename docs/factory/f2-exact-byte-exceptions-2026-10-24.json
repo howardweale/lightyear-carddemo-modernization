@@ -28,6 +28,23 @@
         "statement": "approved by Howard in the operator chat, 2026-10-24T15:23:34-07:00, exact hash 12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928 [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e)",
         "github_identity_is_human_proof": false
       }
+    },
+    {
+      "repository": "howardweale/lightyear-carddemo-modernization",
+      "pr": 455,
+      "path": "src/lightyear_factory/orchestrator.py",
+      "mode": "100644",
+      "base_preimage_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
+      "final_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8",
+      "approved_change_commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "provenance": {
+        "source": "operator-chat",
+        "approved_by": "Howard Weale",
+        "recorded_at_pt": "2026-10-24T17:46:15-07:00",
+        "exact_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8",
+        "statement": "approved by Howard in the operator chat, 2026-10-24T17:46:15-07:00, exact hash e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8 [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523)",
+        "github_identity_is_human_proof": false
+      }
     }
   ]
 }

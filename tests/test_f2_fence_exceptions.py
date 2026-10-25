@@ -33,6 +33,7 @@ class ExactF2ExceptionTests(unittest.TestCase):
         self.put(policy.GATE, b'# synthetic gate\n')
         self.put(policy.PROVIDERS, b'unchanged provider\n')
         self.put(policy.BUDGETED, b'old deadline behaviour\n')
+        self.put(policy.ORCHESTRATOR, b'old synthetic controller\n')
         self.put('judge/frozen.py', b'judge\n')
         self.put('factory/service/src/test/java/OldTest.java', b'original test\n')
         original = self.doc(fence.ORIGINAL, {'files': [
@@ -46,7 +47,8 @@ class ExactF2ExceptionTests(unittest.TestCase):
         workspace = self.doc('workspace.json', {'worker/input.txt': '5' * 64})
         self.doc(fence.F2, {'schema': 'copau-f2-preparation/1',
             'engineering_source_bindings': {'provider': {'path': policy.BUDGETED},
-                                           'controller': {'path': 'orchestrator.py'}},
+                                           'controller': {'path': 'orchestrator.py'},
+                                           'approved_controller': {'path': policy.ORCHESTRATOR}},
             'bindings': {'scope': scope, 'workspace': workspace},
             'work_order': {'scope': {'allowed_paths': ['candidate']}}})
         self.doc('docs/factory/copau-f8-support-bindings-synthetic.json',
@@ -247,6 +249,84 @@ class ExactF2ExceptionTests(unittest.TestCase):
                                 query=lambda route: self.fail('unexpected API call'))
         self.assertTrue(report['raw_fence_report']['merge_permitted'])
         self.assertEqual([], report['accepted_exceptions'])
+
+
+    def add_controller_approval(self):
+        self.controller_bytes = b'synthetic approved recovery\n'
+        self.controller_digest = policy.sha(self.controller_bytes)
+        patcher = patch.object(policy, 'ORCHESTRATOR_SHA', self.controller_digest)
+        patcher.start(); self.addCleanup(patcher.stop)
+        self.git('checkout', '--detach', '-q', self.base)
+        before = policy.sha((self.root/policy.ORCHESTRATOR).read_bytes())
+        self.put(policy.ORCHESTRATOR, self.controller_bytes)
+        approved = self.commit('approved synthetic recovery')
+        self.git('checkout', '--detach', '-q', self.base)
+        value = copy.deepcopy(self.manifest)
+        entry = copy.deepcopy(value['entries'][0])
+        entry.update(path=policy.ORCHESTRATOR, base_preimage_sha256=before,
+                     final_sha256=self.controller_digest, approved_change_commit=approved)
+        entry['provenance']['exact_sha256'] = self.controller_digest
+        entry['provenance']['statement'] = ('approved by Howard in the operator chat, ' +
+            entry['provenance']['recorded_at_pt'] + ', exact hash ' + self.controller_digest +
+            policy.ORCHESTRATOR_EVIDENCE_LINK)
+        value['entries'].append(entry)
+        self.doc(policy.MANIFEST, value); self.manifest = value
+        self.base = self.commit('trusted two-entry policy')
+        self.put(policy.BUDGETED, self.new)
+        self.put(policy.ORCHESTRATOR, self.controller_bytes)
+        self.head = self.commit('two approved changes')
+
+    def test_two_exact_entries_and_independent_orchestrator_refusals(self):
+        self.add_controller_approval()
+        report = self.run_check()
+        self.assertTrue(report['fence_requirement_met'])
+        self.assertFalse(report['raw_fence_report']['merge_permitted'])
+        self.assertEqual({policy.BUDGETED, policy.ORCHESTRATOR},
+                         {x['path'] for x in report['accepted_exceptions']})
+        original = self.head
+        for change in ('bytes', 'mode', 'rename', 'extra', 'manifest', 'workflow'):
+            self.git('checkout', '--detach', '-q', original)
+            if change == 'mode':
+                self.git('update-index', '--chmod=+x', policy.ORCHESTRATOR)
+                self.git('commit', '--no-gpg-sign', '-qm', 'controller mode')
+                self.head = self.git('rev-parse', 'HEAD')
+                self.assertTrue(self.git('ls-tree', self.head, '--', policy.ORCHESTRATOR).startswith('100755 blob '))
+            else:
+                if change == 'bytes': self.put(policy.ORCHESTRATOR, b'unapproved controller\n')
+                elif change == 'rename': self.git('mv', policy.ORCHESTRATOR, 'renamed-controller.py')
+                elif change == 'extra': self.put('orchestrator.py', b'extra fenced source\n')
+                elif change == 'manifest': self.doc(policy.MANIFEST, dict(self.manifest, expires='never'))
+                else: self.put('.github/workflows/p5-factory-drills.yml', b'untrusted workflow\n')
+                self.head = self.commit(change)
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+    def test_controller_wrong_preimage_provenance_and_judge_overlap_refuse(self):
+        self.add_controller_approval()
+        original_base = self.base
+        for change in ('preimage', 'provenance', 'judge', 'posttran'):
+            self.git('checkout', '--detach', '-q', original_base)
+            value = copy.deepcopy(self.manifest)
+            if change == 'preimage': value['entries'][1]['base_preimage_sha256'] = '0'*64
+            elif change == 'provenance': value['entries'][1].pop('provenance')
+            elif change == 'judge':
+                amendment = json.loads((self.root/fence.AMENDMENT).read_bytes())
+                amendment['files'].append(dict(path=policy.ORCHESTRATOR, sha256='9'*64))
+                self.doc(fence.AMENDMENT, amendment)
+            else:
+                self.doc(policy.POSTTRAN, dict(bound_files={policy.ORCHESTRATOR:'9'*64}, candidate_files={}))
+            self.doc(policy.MANIFEST, value)
+            self.base = self.commit('different controller policy')
+            self.put(policy.BUDGETED, self.new); self.put(policy.ORCHESTRATOR, self.controller_bytes)
+            self.head = self.commit('controller candidate')
+            with self.subTest(change=change), self.assertRaises(ValueError): self.run_check()
+
+    def test_public_manifest_binds_only_two_exact_paths(self):
+        source_root = Path(__file__).resolve().parents[1]
+        value = policy.document((source_root/policy.MANIFEST).read_bytes())
+        self.assertEqual([policy.BUDGETED, policy.ORCHESTRATOR], [x['path'] for x in value['entries']])
+        self.assertEqual('e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8', value['entries'][1]['final_sha256'])
+        self.assertNotIn('src/lightyear_factory/cli.py', [x['path'] for x in value['entries']])
+
 
 
 class FencePolicyIntegrationTests(unittest.TestCase):

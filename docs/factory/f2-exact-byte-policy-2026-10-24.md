@@ -1,6 +1,6 @@
 # Exact-byte F2 fence policy proposal — 24 October 2026
 
-This policy recognizes one operator-approved source delta in PR #455. [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e) It does
+This policy recognizes two operator-approved source deltas in PR #455. [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e) It does
 not approve a merge, signing, a factory run, spending or any other exception.
 Planned: it becomes usable only after its own exact green head is approved and merged
 into main. The candidate cannot supply its own exception manifest or validator.
@@ -13,7 +13,7 @@ validates every reported violation against the trusted-base approval manifest.
 Only the fence requirement may be satisfied by this policy; all other lint,
 frozen-judge, selected workflow and strict P5 qualification gates still apply.
 
-## The sole allowed entry
+## Exact allowed entries
 
 Repository: `howardweale/lightyear-carddemo-modernization`; PR: `455`.
 
@@ -26,8 +26,9 @@ Path: `src/lightyear_factory/budgeted_providers.py`; regular-file mode: `100644`
 
 The manifest is
 `docs/factory/f2-exact-byte-exceptions-2026-10-24.json`.
-There is no orchestrator entry. Adding one requires a separate exact-hash
-operator approval and a separately reviewed policy change. The old F2 records
+Orchestrator entry: `src/lightyear_factory/orchestrator.py`, mode `100644`, preimage `beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add`, final SHA-256 `e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8`, source commit `94c98b053080af3e705eb160104142e4e74ff70a`. [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523)
+
+The old F2 records
 are preserved; their bindings must be recomputed from the exact merged/frozen
 main before any request becomes ready.
 
@@ -67,10 +68,12 @@ authorize an exception.
 This main-based PR must be green and on issue #436 by Sunday 25 October 14:00 PT
 for Howard's exact-head approval. A missed gate moves the run to Friday under
 the operator's schedule. The policy does not make #455 green by itself.
-Orchestrator publication still needs its own approval; recovery and the other
+The exact recovery publication has separate operator-chat approval. [operator-chat record](f2-orchestrator-provenance-receipt-2026-10-24.json#sha256=f5751763ffddcf4c12370866f31817012b7d63a55e9fb2f78e20dea8ff1b9523) Recovery and the other
 controller drills must pass. Tower implementation is outside this PR. The
 first-run human-attestation gap is accepted separately by Howard [operator-chat record](f2-operator-chat-provenance-receipt-2026-10-24.json#sha256=b0a9e8187be72b9c78a6f13d750247f2355e626f41f49fd50017396f4e86fe7e); an interrupted
 record still says `interrupted; awaiting human attestation`.
 
 No judge unfreeze, history rewrite, private-store access or ten-minute monitor
 is introduced.
+
+Open compatibility blocker: the existing PR #455 P5 workflow differs from main. The unchanged candidate-workflow refusal still blocks it; this revision grants no workflow exception. Any proposed exact-byte workflow treatment requires a separate decision.

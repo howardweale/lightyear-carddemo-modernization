@@ -215,6 +215,8 @@ def workspace_changed(f):
 
 
 def answer_fragment(f):
+    from tools.ci.p5_controller_context import observe as observe_context
+    controller = observe_context(f, Path(__file__).resolve().parents[2])
     values = ['synthetic-account-7e091c2d-amount-178352.91-balance-782146.32']
     canaries = {name: hashlib.sha256(('p5-' + name).encode()).hexdigest()
                 for name in ('expected-state', 'reference-output', 'session-answer')}
@@ -228,7 +230,11 @@ def answer_fragment(f):
 
     stopped = refused(contaminated)
     return dict(clean_scan=clean['status'], expected_windows=clean['expected_window_count'],
-                normalized_fragment_refused=stopped, stub_calls=stub.calls), stopped and stub.calls == 0, [
+                normalized_fragment_refused=stopped, stub_calls=stub.calls,
+                controller_context=controller), stopped and stub.calls == 0 and (
+                    tuple(row['case'] for row in controller) == ('clean', 'normalized', 'base64', 'hex')) and all(
+                    row['controller_refused'] is (row['case'] != 'clean') and
+                    row['transport_calls'] == (2 if row['case'] == 'clean' else 0) for row in controller), [
         'The unchanged scanner is exercised before the stub; full controller context construction and failure receipt remain unmeasured.']
 
 
@@ -311,6 +317,9 @@ def collect(repository, output):
         'tools/ci/p5_budget_evidence.py', 'tests/test_p5_budget_evidence.py',
         'tools/ci/p5_controller_outage.py', 'tools/ci/p5_controller_evidence.py',
         'tests/test_p5_controller_evidence.py',
+        'tools/ci/p5_controller_context.py', 'tools/ci/p5_context_evidence.py',
+        'tests/test_p5_controller_context.py', 'src/lightyear_factory/context.py',
+        'src/lightyear_factory/ledger.py', 'src/lightyear_factory/workspace.py',
         'tools/ci/p5_fallback_probe.py', 'tests/test_p5_controller_fallback.py',
         'src/lightyear_factory/orchestrator.py', 'src/lightyear_factory/agents.py',
         'src/lightyear_factory/routing.py', 'src/lightyear_factory/model_admission.py',

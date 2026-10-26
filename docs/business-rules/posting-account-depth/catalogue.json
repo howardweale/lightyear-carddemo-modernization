@@ -1,0 +1,460 @@
+{
+  "schema": "public-rule-depth-catalogue/1",
+  "source_commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+  "program_aliases": {
+    "COACTUP": "COACTUPC"
+  },
+  "existing_catalogue_and_graph_unchanged": true,
+  "verification_scope": "source line/hash binding only; behavioral verification unmeasured",
+  "rules": [
+    {
+      "id": "cbtrn02c-reject-versus-post",
+      "program": "CBTRN02C",
+      "statement": "Each successfully read transaction resets its validation reason. Reason zero selects posting; any nonzero reason increments reject count and writes a reject record.",
+      "falsifier": "A nonzero validation reason reaches posting, or a rejected input is neither counted nor written.",
+      "proposed_public_case": "One valid transaction, one invalid card, then one valid transaction; assert validation state is reset between records.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 202,
+        "end_line": 219,
+        "excerpt_sha256": "769c2ccf4c7bcf1c68fb5750718e8f4b07dadfeba6be4bb4cd46a5ac7ca14e37",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L202-L219"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-reject-return-code",
+      "program": "CBTRN02C",
+      "statement": "After normal file closure, at least one rejected transaction sets RETURN-CODE to 4.",
+      "falsifier": "A normally completed run with one reject returns a code other than 4.",
+      "proposed_public_case": "Compare normal completion with one reject against an all-valid run; do not infer the all-valid return code from this conditional alone.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 221,
+        "end_line": 231,
+        "excerpt_sha256": "ad249f1b405ee1ca4e4edbe9fa65ab33d47a1a6e4979beeffcb730e8c981c9b2",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L221-L231"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-xref-before-account",
+      "program": "CBTRN02C",
+      "statement": "Cross-reference lookup precedes account lookup; an invalid card sets reason 100 and suppresses account validation.",
+      "falsifier": "Missing XREF causes an account lookup or a reason other than 100 before reject emission.",
+      "proposed_public_case": "Use a nonexistent synthetic card with a separate account lookup counter.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 370,
+        "end_line": 392,
+        "excerpt_sha256": "d4f7ae600edd607e7ae4f0638c7d0a1e1ed1798fa8c4eaf2a5b43ccf9bd3ce28",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L370-L392"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-account-missing",
+      "program": "CBTRN02C",
+      "statement": "Account lookup uses XREF-ACCT-ID; INVALID KEY assigns reason 101.",
+      "falsifier": "The transaction card is used as the account key, or a missing account proceeds to posting.",
+      "proposed_public_case": "Provide a valid card-to-account link whose account record is absent.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 393,
+        "end_line": 400,
+        "excerpt_sha256": "f9af12fd4b0fba8e101e4a2e4dabb35c8fff29990340f899c1703bec7b69bb8c",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L393-L400"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-credit-limit-inclusive",
+      "program": "CBTRN02C",
+      "statement": "Temporary balance is current-cycle credit minus current-cycle debit plus transaction amount. A value above the credit limit assigns reason 102; equality passes this check.",
+      "falsifier": "Equality is rejected, or a value one cent above the limit passes this check with a nonexpired account.",
+      "proposed_public_case": "Set cycle credit=90.00, debit=10.00, amount=20.00, limit=100.00, then amount=20.01; keep expiry valid.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 403,
+        "end_line": 413,
+        "excerpt_sha256": "ab0d538ef9f7636b3efc8e2ef0c13f04c97c537ca95efdb47dd6dacce0d8dc29",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L403-L413"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-expiry-overwrites-overlimit",
+      "program": "CBTRN02C",
+      "statement": "The account expiry date is compared with the first ten characters of original transaction timestamp. An earlier expiry assigns reason 103 after the credit-limit check, so expiry failure overwrites 102.",
+      "falsifier": "A transaction failing both checks retains reason 102, or equality of dates fails solely on expiry.",
+      "proposed_public_case": "Use over-limit and expired input, then same-day expiry; retain exact fixed-width date strings.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 413,
+        "end_line": 421,
+        "excerpt_sha256": "f73a38014bc80d198f9c3b44b915fbb24a85e85a62d31a6eec4bcce330d4fecb",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L413-L421"
+      },
+      "limits": "Lexical source comparison, not a newly validated calendar/parser contract; malformed dates and field encodings need independent cases."
+    },
+    {
+      "id": "cbtrn02c-posting-order",
+      "program": "CBTRN02C",
+      "statement": "Posting copies transaction fields, computes processing time, then updates category balance, updates account and writes the transaction in that order.",
+      "falsifier": "Transaction output is written before either balance update, or an original timestamp is silently used as processing time.",
+      "proposed_public_case": "Instrument public fixture I/O order and distinguish original versus processing timestamps.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 423,
+        "end_line": 445,
+        "excerpt_sha256": "169e75d500fd65bf13a906538b1dcf4058d9afb985f936a60c406bbc848ebd28",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L423-L445"
+      },
+      "limits": "No atomicity or rollback guarantee follows from this sequential call order."
+    },
+    {
+      "id": "cbtrn02c-category-key-create",
+      "program": "CBTRN02C",
+      "statement": "Category balance is keyed by XREF account, transaction type and category. A missing key selects creation; creation initializes the record and adds the amount.",
+      "falsifier": "Different category/type records are combined, or a missing category starts with stale balance data.",
+      "proposed_public_case": "Two transaction types and categories for one synthetic account; include one previously absent key.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 467,
+        "end_line": 510,
+        "excerpt_sha256": "d272cdfe033e94d2486efcd0a703132ff4ece769cc8c05d75c15f3415cd7b03b",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L467-L510"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-category-existing",
+      "program": "CBTRN02C",
+      "statement": "An existing category balance adds the transaction amount and rewrites the record. A nonzero rewrite status enters the error/abend path.",
+      "falsifier": "The amount replaces an existing balance or a failed rewrite is treated as success.",
+      "proposed_public_case": "Start at 10.00, apply -3.00, expect 7.00 before testing a forced rewrite failure.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 526,
+        "end_line": 542,
+        "excerpt_sha256": "e6ec83bc28f48e40a72975f8afa8941908ca1a9085a6ffa974eb2b71dbea39da",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L526-L542"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-signed-cycle-update",
+      "program": "CBTRN02C",
+      "statement": "All amounts add to current balance. Nonnegative amounts add to cycle credit; negative amounts add, with their sign intact, to cycle debit.",
+      "falsifier": "A negative amount is made positive before adding to cycle debit, or zero selects the debit branch.",
+      "proposed_public_case": "Use +2.00, 0.00 and -2.00 against independently captured before/after account records.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 545,
+        "end_line": 552,
+        "excerpt_sha256": "e8f6bf08fdd0cb887299dbfeaabbff1a434228a910ab83959f44819570ddc78a",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L545-L552"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "cbtrn02c-account-rewrite-failure",
+      "program": "CBTRN02C",
+      "statement": "Account rewrite INVALID KEY sets reason 109; the caller still performs the following transaction-write paragraph. This extraction does not invent an abort or second validation branch.",
+      "falsifier": "The proposed source-faithful account-rewrite path automatically revalidates or aborts before transaction output despite these statements.",
+      "proposed_public_case": "Force account rewrite INVALID KEY and retain subsequent I/O calls and reason 109.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/mainframe/public-source/CBTRN02C.cbl",
+        "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+        "start_line": 554,
+        "end_line": 578,
+        "excerpt_sha256": "82fa31f72c9cc67948b7a87bc3b10a3109af3b52db2e95927abdd200d19bfae4",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/mainframe/public-source/CBTRN02C.cbl#L554-L578"
+      },
+      "limits": "Potential product behavior requiring review; not an endorsement. Do not fix a frozen source path under this catalogue work."
+    },
+    {
+      "id": "coactupc-account-required",
+      "program": "COACTUPC",
+      "statement": "Blank or low-value account input sets INPUT-ERROR and blank flag, clears both account identifiers, and exits account editing.",
+      "falsifier": "Blank input is admitted or leaves a prior account identifier available for a new lookup.",
+      "proposed_public_case": "Submit blank input after a previously selected synthetic account; check both identifiers.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 1783,
+        "end_line": 1797,
+        "excerpt_sha256": "a9bf4ca25b0923e156c8f26b2652b6309b1c61a1a686e28d0f261b667cc2c9b8",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L1783-L1797"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-account-numeric-nonzero",
+      "program": "COACTUPC",
+      "statement": "Supplied account input must be numeric and nonzero in its fixed-width field; otherwise editing fails and CDEMO-ACCT-ID is cleared.",
+      "falsifier": "Alphabetic input or all zeroes receives the valid account flag.",
+      "proposed_public_case": "Use fixed-width zero, alphabetic and nonzero numeric values.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 1799,
+        "end_line": 1817,
+        "excerpt_sha256": "dd744fd496f6f242d21acd5ff9987ac552d695772175fdce23af36aa6d2050c2",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L1799-L1817"
+      },
+      "limits": "The text says eleven digits; exact field size and receive-map behavior also require their own source bindings for end-to-end input-length claims."
+    },
+    {
+      "id": "coactupc-mandatory-field",
+      "program": "COACTUPC",
+      "statement": "A mandatory edit field fails when its selected substring is low-values, spaces or empty after trimming; otherwise the mandatory-valid flag is set.",
+      "falsifier": "A whitespace-only required name passes mandatory editing.",
+      "proposed_public_case": "Exercise low-values, spaces, and a nonblank synthetic name with declared field length.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 1824,
+        "end_line": 1850,
+        "excerpt_sha256": "81aa8bc340819fc5fd0f218a317790073f89e573ad1ce90beec5c513ae6240ba",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L1824-L1850"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-yes-no-required",
+      "program": "COACTUPC",
+      "statement": "Low-values, spaces or zeroes fail the yes/no edit as missing. Other values must satisfy the existing FLG-YES-NO-ISVALID condition.",
+      "falsifier": "A missing flag passes or an invalid condition value receives no input error.",
+      "proposed_public_case": "Use each missing sentinel and condition-valid/invalid values; bind the condition definition before claiming case normalization.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 1856,
+        "end_line": 1892,
+        "excerpt_sha256": "0ae6b07297eb70252de791881e2b5814b27293da23ac76f905c3f5d32b34fc4a",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L1856-L1892"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-fico-range",
+      "program": "COACTUPC",
+      "statement": "FICO values outside FICO-RANGE-IS-VALID set INPUT-ERROR and the FICO-not-OK flag; the source definition is inclusive 300 through 850.",
+      "falsifier": "299 or 851 is admitted, or 300 or 850 fails solely the range check.",
+      "proposed_public_case": "Public values 299,300,850,851 after numeric editing.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 2514,
+        "end_line": 2529,
+        "excerpt_sha256": "c4ae37036bac08f5441c58ae454fa4a07abb70620f092bbeb38773a254213c5d",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L2514-L2529"
+      },
+      "limits": "Additional definition binding: COACTUPC.cbl lines 845\u2013849; missing/non-numeric handling occurs before this paragraph."
+    },
+    {
+      "id": "coactupc-confirmation-before-write",
+      "program": "COACTUPC",
+      "statement": "Valid changed details first enter an unconfirmed state. Write processing occurs in the unconfirmed state only with PF05; otherwise it continues without saving.",
+      "falsifier": "Ordinary Enter saves the changed records without the PF05 confirmation branch.",
+      "proposed_public_case": "Edit a valid field, press Enter, then PF05; compare call trace before and after confirmation.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 2585,
+        "end_line": 2621,
+        "excerpt_sha256": "e8d8599b04a06e996ed174007ff273104ba40f4055b6e96fa9e6e033a61a22aa",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L2585-L2621"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-account-lock-refusal",
+      "program": "COACTUPC",
+      "statement": "Write processing reads the account for update and exits on a non-NORMAL response before reading/updating the customer.",
+      "falsifier": "An account lock failure reaches a customer update or either rewrite.",
+      "proposed_public_case": "Inject a public synthetic non-NORMAL account read response and capture ordered CICS operations.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 3888,
+        "end_line": 3915,
+        "excerpt_sha256": "26160aed500f6c45feb6de87de441fced19d80984caeb781255b2617c12c0f20",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L3888-L3915"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-customer-lock-refusal",
+      "program": "COACTUPC",
+      "statement": "After account read-for-update succeeds, customer read-for-update must return NORMAL; otherwise INPUT-ERROR is set and write processing exits.",
+      "falsifier": "A customer lock failure proceeds to account or customer rewrite.",
+      "proposed_public_case": "Account NORMAL followed by customer non-NORMAL; assert zero rewrites.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 3917,
+        "end_line": 3942,
+        "excerpt_sha256": "36c5a6127442d420d541b6fd2240275b1487d33f722b633ffcc98c99a8a73193",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L3917-L3942"
+      },
+      "limits": "Lock release behavior is not proven by this paragraph alone."
+    },
+    {
+      "id": "coactupc-stale-record-refusal",
+      "program": "COACTUPC",
+      "statement": "The old/new record check runs before preparing updates; its changed-data flag exits write processing before rewriting.",
+      "falsifier": "An externally changed field detected by 9700 is overwritten by the proposed update.",
+      "proposed_public_case": "Change one compared public field between screen display and update-lock read.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 3944,
+        "end_line": 3952,
+        "excerpt_sha256": "f9b3c161accc01b40efb967f53fcb2f2e127a5ba7c0a5ee85150163bb5592244",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L3944-L3952"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-case-normalized-stale-check",
+      "program": "COACTUPC",
+      "statement": "Account stale-data checks compare numeric/date fields exactly while account group is compared after LOWER-CASE.",
+      "falsifier": "Case-only account-group differences alone produce the changed-data flag, or a compared balance difference is missed.",
+      "proposed_public_case": "Keep all other captured fields equal; vary group case, then vary current balance.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 4115,
+        "end_line": 4145,
+        "excerpt_sha256": "e9e7e13a7042456f77d079f484a77b59ef2dd199442b2f1826f7ec20a0ac4db6",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L4115-L4145"
+      },
+      "limits": "This is the account portion only; customer checks have their own conditions and date slicing."
+    },
+    {
+      "id": "coactupc-rewrite-order-refusal",
+      "program": "COACTUPC",
+      "statement": "Account rewrite precedes customer rewrite; a non-NORMAL account rewrite sets update-failed and exits.",
+      "falsifier": "Customer rewrite occurs after a failed account rewrite.",
+      "proposed_public_case": "Inject account rewrite failure after both locks and stale checks succeed.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 4065,
+        "end_line": 4081,
+        "excerpt_sha256": "545a0f446aed8bac64dd73d2673e5fa47c19fcdc2c5fed9160b92c97a15819e0",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L4065-L4081"
+      },
+      "limits": "Source-derived rule; no new native or candidate execution has been measured."
+    },
+    {
+      "id": "coactupc-customer-failure-rollback",
+      "program": "COACTUPC",
+      "statement": "A non-NORMAL customer rewrite sets update-failed and explicitly requests SYNCPOINT ROLLBACK.",
+      "falsifier": "Customer rewrite failure returns without requesting rollback.",
+      "proposed_public_case": "Account rewrite NORMAL, customer rewrite non-NORMAL; capture rollback request and independently verify resulting stored state.",
+      "status": "untested",
+      "evidence_kind": "source-cited-extraction",
+      "source": {
+        "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+        "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+        "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "start_line": 4085,
+        "end_line": 4103,
+        "excerpt_sha256": "69b3ec1601df3dbf48865a4c278ec183e0f28ae11752336857b084c1750a31e2",
+        "url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef/spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl#L4085-L4103"
+      },
+      "limits": "Requesting rollback is not measured proof of transactional rollback across a target implementation."
+    }
+  ],
+  "source_files": {
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+  },
+  "additional_definition_bindings": [
+    {
+      "path": "spec/modernization/carddemo-screens/upstream/app/cbl/COACTUPC.cbl",
+      "start_line": 845,
+      "end_line": 849,
+      "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396"
+    }
+  ]
+}

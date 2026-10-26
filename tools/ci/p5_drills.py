@@ -110,7 +110,13 @@ def worker_network(f):
             timed_out=result.timed_out, enforced=result.evidence['enforced'],
             backend_evidence_sha256=hashlib.sha256(canonical(result.evidence)).hexdigest(),
             policy_sha256=f.policy.content_sha256)
-        return observed, positive.returncode == 0 and result.exit_code == 42 and not result.timed_out and result.evidence['enforced'], [
+        # Recheck reachability after denial so a dead positive-control server cannot pass.
+        restored = subprocess.run(positive.args, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                  timeout=30, check=False)
+        from tools.ci.p5_network_evidence import retain as retain_network
+        observed['retained_network_evidence'] = retain_network(
+            positive, result, restored, f.policy, code, gateway, port)
+        return observed, positive.returncode == 0 and result.exit_code == 42 and not result.timed_out and result.evidence['enforced'] and restored.returncode == 0, [
             'OCI denial is measured directly; the factory controller post-denial receipt path is not exercised.']
     finally:
         server.shutdown()
@@ -201,6 +207,8 @@ def tower_unreachable(f):
 def workspace_changed(f):
     from tools.ci.p5_controller_workspace import observe as observe_workspace
     controller = observe_workspace(f, Path(__file__).resolve().parents[2])
+    from tools.ci.p5_workspace_replacement import observe as observe_replacement
+    replacement = observe_replacement()
     f.runtime()
     path = f.root / 'worker.py'
     old = path.read_bytes()
@@ -211,7 +219,7 @@ def workspace_changed(f):
         return dict(admission_refused=stopped, stub_calls=stub.calls,
                     original_sha256=hashlib.sha256(old).hexdigest(),
                     changed_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
-                    controller_workspace=controller), stopped and stub.calls == 0 and (
+                    controller_workspace=controller, workspace_path_replacement=replacement), stopped and stub.calls == 0 and (
                         tuple(row['case'] for row in controller) == ('clean', 'read-mutation')) and all(
                         row['controller_refused'] is (row['case'] != 'clean') and
                         row['transport_calls'] == (2 if row['case'] == 'clean' else 1) for row in controller), [
@@ -334,6 +342,10 @@ def collect(repository, output):
         'tests/test_p5_controller_workspace.py',
         'tools/ci/p5_controller_wall.py', 'tests/test_p5_controller_wall.py',
         'tests/test_p5_wall_collection.py',
+        'tools/ci/p5_workspace_replacement.py',
+        'tests/test_p5_workspace_replacement.py',
+        'tools/ci/p5_network_evidence.py',
+        'tests/test_p5_network_evidence.py',
         'tools/ci/p5_controller_context.py', 'tools/ci/p5_context_evidence.py',
         'tests/test_p5_controller_context.py', 'src/lightyear_factory/context.py',
         'src/lightyear_factory/ledger.py', 'src/lightyear_factory/workspace.py',

@@ -56,6 +56,9 @@ def observe_case(parent, case):
     if os.environ.get('GITHUB_ACTIONS') != 'true' or case not in CASES:
         raise ValueError('p5-workspace-replacement-ci-only')
     parent = Path(parent); parent.mkdir()
+    # IsolatedWorkspace resolves its root. Use the same canonical path for the
+    # interception target, including Windows short-name and lexical aliases.
+    parent = parent.resolve(strict=True)
     source = parent/'source'; root = parent/'workspace'
     source.mkdir(); root.mkdir()
     original = b'print("original")\n'; replacement = b'print("replaced")\n'
@@ -70,6 +73,7 @@ def observe_case(parent, case):
     real_open, real_stat = Path.open, Path.stat
     opened = closed = checked = False
     reads = []; replacements = []; file_scans = []
+    handle_identities = []
 
     class ReadWindow:
         def __init__(self, handle): self.handle = handle
@@ -78,7 +82,10 @@ def observe_case(parent, case):
             nonlocal closed
             result = self.handle.__exit__(*args); closed = True
             return result
-        def fileno(self): return self.handle.fileno()
+        def fileno(self):
+            descriptor = self.handle.fileno()
+            handle_identities.append(identity(os.fstat(descriptor)))
+            return descriptor
         def read(self, *args):
             raw = self.handle.read(*args); reads.append(digest(raw)); return raw
 
@@ -117,7 +124,17 @@ def observe_case(parent, case):
         read_closed_before_final_stat=closed and checked, replacements=len(replacements),
         identity_before=identity(old), identity_after=identity(target.stat()),
         file_scan_sha256=file_scans, outcome=outcome, scan_result=result, production_controller_receipt=False)
-    validate(value)
+    try:
+        validate(value)
+    except ValueError as error:
+        # Retain the failed observation, including the clean control. Never change
+        # identity values, relax validation, skip a platform, or relabel a refusal.
+        diagnostic = dict(observation=value, handle_identities=handle_identities,
+                          opened=opened, closed=closed, final_stat_checked=checked,
+                          read_sha256s=reads, replacement_identities=replacements)
+        failure = ValueError('p5-workspace-replacement-invalid: '+json.dumps(diagnostic, sort_keys=True))
+        failure.observation = diagnostic
+        raise failure from error
     return value
 
 

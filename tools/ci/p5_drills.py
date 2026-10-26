@@ -424,7 +424,15 @@ def main():
     try:
         if os.environ.get('GITHUB_ACTIONS') != 'true':
             raise ValueError('p5-ci-only')
-        result = qualify(args.output) if args.qualify else collect(Path.cwd(), args.output)
+        if args.qualify:
+            result = qualify(args.output)
+        else:
+            result = collect(Path.cwd(), args.output)
+            # Run independent keyless cases even when the original collection fails.
+            # Their raw evidence shares the existing upload; the strict qualifier is unchanged.
+            from tools.ci.p5_additional_controller_drills import collect as collect_additional
+            additional = collect_additional(Path.cwd(), args.output/'additional-controller')
+            result = result and additional
         print('P5 qualification passed' if args.qualify and result else
               'P5 observations retained; qualification is separate' if result else
               'P5 blocked: inspect public gaps and harness-error counts')

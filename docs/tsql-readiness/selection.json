@@ -1,0 +1,21 @@
+{
+  "schema": "public-tsql-readiness-ten/1",
+  "source_commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+  "ids": [
+    "len",
+    "integer-division",
+    "isnull-length",
+    "datediff-day",
+    "datediff-year",
+    "round-negative",
+    "money-scale",
+    "bit",
+    "uuid-case",
+    "trailing-varchar"
+  ],
+  "corpus": {
+    "path": "data-modernization/tsql-procedures/typed-corpus-r1/corpus.json",
+    "sha256": "57861a00427bc73d813c702016cc4087f8d31d222ce742c3436e644fee6725d4"
+  },
+  "native_execution_measured": false
+}

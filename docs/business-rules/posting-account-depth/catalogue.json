@@ -179,7 +179,7 @@
       "limits": "Source-derived rule; no new native or candidate execution has been measured."
     },
     {
-      "id": "cbtrn02c-signed-cycle-update",
+      "id": "cbtrn02c-amount-sign-cycle-update",
       "program": "CBTRN02C",
       "statement": "All amounts add to current balance. Nonnegative amounts add to cycle credit; negative amounts add, with their sign intact, to cycle debit.",
       "falsifier": "A negative amount is made positive before adding to cycle debit, or zero selects the debit branch.",

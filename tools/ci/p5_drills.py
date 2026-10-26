@@ -245,6 +245,8 @@ def answer_fragment(f):
 
 
 def wall_and_window(f):
+    from tools.ci.p5_controller_wall import observe as observe_wall
+    controller = observe_wall(f, Path(__file__).resolve().parents[2])
     stub, provider = wrapped(f)
     with patch('lightyear_factory.providers.time.monotonic', return_value=provider.started + f.order.max_elapsed_seconds):
         at_wall = refused(lambda: call(provider))
@@ -254,11 +256,16 @@ def wall_and_window(f):
     at_window = refused(lambda: f.runtime(now=f.end))
     observed = dict(at_wall_refused=at_wall, past_wall_refused=past_wall,
         before_window_admitted=before_window, at_window_refused=at_window, stub_calls=stub.calls,
+        controller_wall=controller,
         clock_injection='monotonic boundary only; real signed-window verifier receives explicit timestamps')
     gaps = ['Complete controller timeout and signed failure receipt remain unmeasured.']
     if not at_wall:
         gaps.append('The provider elapsed boundary uses >, so a call exactly at the wall cap was admitted.')
-    return observed, at_wall and past_wall and before_window and at_window, gaps
+    return observed, at_wall and past_wall and before_window and at_window and (
+        tuple(row['case'] for row in controller) == ('clean', 'past-wall')) and all(
+        row['controller_refused'] is (row['case'] == 'past-wall') and
+        row['transport_calls'] == (2 if row['case'] == 'clean' else 1)
+        for row in controller), gaps
 
 
 def duplicate_attempt(f):
@@ -325,6 +332,8 @@ def collect(repository, output):
         'tests/test_p5_controller_evidence.py',
         'tools/ci/p5_controller_workspace.py', 'tools/ci/p5_workspace_evidence.py',
         'tests/test_p5_controller_workspace.py',
+        'tools/ci/p5_controller_wall.py', 'tests/test_p5_controller_wall.py',
+        'tests/test_p5_wall_collection.py',
         'tools/ci/p5_controller_context.py', 'tools/ci/p5_context_evidence.py',
         'tests/test_p5_controller_context.py', 'src/lightyear_factory/context.py',
         'src/lightyear_factory/ledger.py', 'src/lightyear_factory/workspace.py',

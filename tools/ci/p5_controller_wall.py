@@ -181,3 +181,21 @@ def observe_case(parent, repository, case):
         return value
     finally:
         fixture.close()
+
+
+def validate_collection(rows):
+    if (not isinstance(rows, list) or len(rows) != len(CASES)
+            or not all(isinstance(row, dict) for row in rows)
+            or tuple(row.get('case') for row in rows) != CASES):
+        raise ValueError('p5-wall-collection-invalid')
+    if not all(validate(row) is True for row in rows):
+        raise ValueError('p5-wall-collection-invalid')
+    return True
+
+
+def observe(fixture, repository):
+    root = fixture.parent/'wall-controller-probes'
+    root.mkdir()
+    rows = [observe_case(root/case, repository, case) for case in CASES]
+    validate_collection(rows)
+    return rows

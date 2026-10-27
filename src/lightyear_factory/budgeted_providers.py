@@ -14,6 +14,8 @@ class AccountedModelProvider(BoundedModelProvider):
         super().__init__(provider, order)
         self.model_admission=model_admission
         self.runtime_admission=runtime_admission
+        self.reservation_checkpoint = None
+        self.observed_checkpoint = None
 
     def _check_elapsed(self) -> None:
         # Compare to the deadline directly: rounded subtraction can admit equality.
@@ -91,8 +93,18 @@ class AccountedModelProvider(BoundedModelProvider):
             raise ContractError(
                 "Model provider cannot admit call inside max_model_tokens"
             )
+        if self.reservation_checkpoint is not None:
+            invocation = {"instruction": instruction, "payload": payload, "schema": schema}
+            self.reservation_checkpoint(dict(
+                call_sequence=len(self.calls) + 1, role=role,
+                request_sha256=canonical_hash(wire_body if hasattr(self.provider, "request") else invocation),
+                invocation_sha256=canonical_hash(invocation),
+                input_tokens=reserved_input_tokens, output_tokens=output_cap,
+                estimated_cost_usd=(reserved_input_tokens * input_price + output_cap * output_price) / 1_000_000))
         try:
-            result = self.provider.complete(role, instruction, payload, schema)
+            result = self._complete_with_transport_journal(
+                role, instruction, payload, schema, reserved_input_tokens, output_cap,
+                input_price, output_price)
         except (ProviderError, ContractError):
             if strict_budget:
                 # A failed call can still be billed. Charge its reserved maximum,
@@ -129,6 +141,8 @@ class AccountedModelProvider(BoundedModelProvider):
                     evidence['transport_record'] = transport_record
                 evidence["content_sha256"] = canonical_hash(evidence)
                 self.calls.append(evidence)
+                if self.observed_checkpoint is not None:
+                    self.observed_checkpoint()
             raise
         response_bytes = len(
             json.dumps(result.content, sort_keys=True, separators=(",", ":")).encode(
@@ -168,6 +182,8 @@ class AccountedModelProvider(BoundedModelProvider):
                 next_cost,
                 next_cost_available,
             )
+            if self.observed_checkpoint is not None:
+                self.observed_checkpoint()
             if (
                 self.output_bytes > self.order.max_model_output_bytes
                 or next_input_tokens + next_output_tokens > self.order.max_model_tokens

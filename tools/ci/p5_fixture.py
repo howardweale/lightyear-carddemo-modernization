@@ -22,9 +22,14 @@ class Fixture:
     """Real signatures, Git evidence and admission; no verifier patching."""
 
     def __init__(self, parent, repository, *, controller_probe=False,
-                 blocked_receipt_order=None, blocked_receipt_identity=None):
+                 blocked_receipt_order=None, blocked_receipt_identity=None,
+                 controller_provider_identity=None):
         if os.environ.get('GITHUB_ACTIONS') != 'true':
             raise ValueError('p5-ci-only')
+        if controller_provider_identity is not None and (
+                not controller_probe or blocked_receipt_order is not None
+                or controller_provider_identity != ('openai-responses', 'gpt-5.4-2026-03-05')):
+            raise ValueError('p5-controller-provider-fixture-scope')
         self.parent = Path(parent)
         self.root = self.parent / 'executable'
         self.root.mkdir()
@@ -102,6 +107,10 @@ class Fixture:
                     executable_commit=executable, caps=caps, bound_inputs=bound,
                     roles={role: dict(provider='p5-stub', model='p5-stub-2026-10-23')
                            for role in ('planner', 'builder', 'analyst')})
+        if controller_provider_identity is not None:
+            plan['roles'] = {role: dict(provider=controller_provider_identity[0],
+                                       model=controller_provider_identity[1])
+                             for role in ('planner', 'builder', 'analyst')}
         if blocked_receipt_order is not None:
             plan['roles'] = {role: dict(provider=blocked_receipt_identity[0],
                                        model=blocked_receipt_identity[1])

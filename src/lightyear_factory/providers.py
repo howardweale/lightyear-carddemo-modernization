@@ -11,6 +11,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from .contracts import ContractError, WorkOrder, canonical_hash
+from .transport_journal import observe_transport, reserve_transport
 
 
 class ModelProvider(Protocol):
@@ -168,10 +169,13 @@ class OpenAIResponsesProvider:
                 },
                 method="POST",
             )
+            reservation = reserve_transport(self, role, request, "responses", attempt)
             try:
-                with self.opener(request, timeout=self.request_timeout_seconds) as response:
-                    response_headers = _safe_rate_limit_headers(getattr(response, "headers", {}))
-                    response_payload = json.loads(response.read().decode("utf-8"))
+                with observe_transport(reservation) as received:
+                    with self.opener(request, timeout=self.request_timeout_seconds) as response:
+                        response_headers = _safe_rate_limit_headers(getattr(response, "headers", {}))
+                        response_payload = json.loads(response.read().decode("utf-8"))
+                        received(response_payload)
                 break
             except HTTPError as exc:
                 error_code = _http_error_code(exc)
@@ -314,12 +318,15 @@ class OpenAIResponsesProvider:
                 },
                 method="POST",
             )
+            reservation = reserve_transport(self, role, request, "input-token-count", attempt)
             try:
-                with self.opener(request, timeout=self.request_timeout_seconds) as response:
-                    response_headers = _safe_rate_limit_headers(
-                        getattr(response, "headers", {})
-                    )
-                    payload = json.loads(response.read().decode("utf-8"))
+                with observe_transport(reservation) as received:
+                    with self.opener(request, timeout=self.request_timeout_seconds) as response:
+                        response_headers = _safe_rate_limit_headers(
+                            getattr(response, "headers", {})
+                        )
+                        payload = json.loads(response.read().decode("utf-8"))
+                        received(payload)
                 count = payload.get("input_tokens")
                 if not isinstance(count, int) or isinstance(count, bool) or count < 0:
                     raise ProviderError(
@@ -412,6 +419,8 @@ class BoundedModelProvider:
         self.output_tokens = 0
         self.estimated_cost_usd = 0.0
         self.cost_estimate_available = True
+        self.transport_reservation_checkpoint = None
+        self.transport_observed_checkpoint = None
 
     def complete(
         self,
@@ -441,7 +450,9 @@ class BoundedModelProvider:
             ) / 1_000_000
             if self.estimated_cost_usd + conservative_call_cost > self.order.max_model_cost_usd:
                 raise ContractError("Model provider cannot admit call inside max_model_cost_usd")
-        result = self.provider.complete(role, instruction, payload, schema)
+        result = self._complete_with_transport_journal(
+            role, instruction, payload, schema, request_bytes, output_cap,
+            input_price, output_price)
         response_bytes = len(
             json.dumps(result.content, sort_keys=True, separators=(",", ":")).encode("utf-8")
         )
@@ -471,8 +482,37 @@ class BoundedModelProvider:
         evidence["response_bytes"] = response_bytes
         evidence["content_sha256"] = canonical_hash(evidence, {"content_sha256"})
         self.calls.append(evidence)
+        checkpoint = getattr(self, "observed_checkpoint", None)
+        if checkpoint is not None and isinstance(self.provider, OpenAIResponsesProvider):
+            checkpoint()
         self._check_elapsed()
         return ProviderResult(result.content, evidence)
+
+    def _complete_with_transport_journal(
+        self, role, instruction, payload, schema, reserved_input_tokens,
+        output_cap, input_price, output_price,
+    ):
+        from .transport_journal import TransportJournalError, transport_journal_scope
+        reserve = self.transport_reservation_checkpoint
+        observe = self.transport_observed_checkpoint
+        if reserve is None and observe is None:
+            return self.provider.complete(role, instruction, payload, schema)
+        if reserve is None or observe is None:
+            raise TransportJournalError("Incomplete transport journal binding")
+        from .additional_providers import JSONProvider
+        if not isinstance(self.provider, OpenAIResponsesProvider) and not isinstance(self.provider, JSONProvider):
+            return self.provider.complete(role, instruction, payload, schema)
+        priced = input_price > 0 and output_price > 0 and output_cap > 0
+        bounds = dict(input_tokens=reserved_input_tokens, output_tokens=output_cap,
+                      estimated_cost_usd=(
+                          (reserved_input_tokens * input_price + output_cap * output_price)
+                          / 1_000_000 if priced else None),
+                      cost_estimate_available=priced)
+        invocation = dict(call_sequence=len(self.calls) + 1,
+                          invocation_sha256=canonical_hash(dict(
+                              instruction=instruction, payload=payload, schema=schema)))
+        with transport_journal_scope(reserve, observe, invocation=invocation, bounds=bounds):
+            return self.provider.complete(role, instruction, payload, schema)
 
     def summary(self) -> dict[str, Any]:
         payload = {

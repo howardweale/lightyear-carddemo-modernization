@@ -182,7 +182,10 @@ def observe(fixture, repository):
         accounting = payload['accounting']
         if (accounting['calls'] != 1 or accounting['input_tokens'] != 1
                 or accounting['output_tokens'] != 1 or accounting['estimated_cost_usd'] != 0
-                or accounting['in_flight_final_usage'] != 'unknown'
+                or accounting['in_flight_final_usage'] != 'unknown; reserved upper bound recorded'
+                or accounting['reserved_in_flight']['call_sequence'] != 2
+                or accounting['reserved_in_flight']['role'] != 'builder'
+                or accounting['billing_final'] is not False
                 or not any(row['role']=='builder' and row['response_sha256'] is None
                            for row in accounting['scanned_transports'])):
             raise ValueError('p5-abort-accounting-mismatch')

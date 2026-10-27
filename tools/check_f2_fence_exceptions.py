@@ -35,8 +35,10 @@ VERIFY_BEFORE_SHA = '1736424d5716880a0eb5dc941fcafc085d58faa04e4838c4eb7a8834ad1
 VERIFY_AFTER_SHA = 'a83be67630a54de10840743bcc24a7f1bd9c786c7447108eb448ae4818e91cf3'
 CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE, WORKFLOW_BINDING}
 
+EXECUTION_GATES = 'src/lightyear_factory/gates.py'
+DURABLE_EVIDENCE_LINK = ' [operator-chat record](p5-durable-publication-operator-receipt-2026-10-26.json#sha256=511036c6271004549bc285e97384609078eaba506d61a73fa02c5fcdafd60734)'
 DURABLE_BINDING = 'docs/factory/p5-durable-reservation-exact-binding-2026-10-26.json'
-DURABLE_RUNTIME = {'src/lightyear_factory/additional_providers.py': {'before': {'mode': '100644', 'sha256': 'cfcfc12f3300240dff2435abe22b9af726293bb8ba91ab40893166f935ec212c'}, 'after': {'mode': '100644', 'sha256': 'b76c37c6359cd1af0710033bb87dd4050f0d4ab36f6aa31cd75004b69216b1fc'}}, 'src/lightyear_factory/budgeted_providers.py': {'before': {'mode': '100644', 'sha256': '7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b'}, 'after': {'mode': '100644', 'sha256': '885b383a0daae7636c26a8218836e3f9202a1894723abbb55c75a1160de38289'}}, 'src/lightyear_factory/model_versions.py': {'before': {'mode': '100644', 'sha256': 'ceab75e32be2a8e686a8260044ba72d8bf44a5abafb550fab24d187f6e359d97'}, 'after': {'mode': '100644', 'sha256': 'ac31255a9e872b09c97e7f15932f1e8bc3d398496225bfc31fa8767bbcdc61a2'}}, 'src/lightyear_factory/orchestrator.py': {'before': {'mode': '100644', 'sha256': 'beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add'}, 'after': {'mode': '100644', 'sha256': '1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de'}}, 'src/lightyear_factory/providers.py': {'before': {'mode': '100644', 'sha256': 'f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d'}, 'after': {'mode': '100644', 'sha256': 'd61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88'}}, 'src/lightyear_factory/transport_journal.py': {'before': None, 'after': {'mode': '100644', 'sha256': '872754188010d07b8c03449ee076246e8969c75652b45faede60f037badf4875'}}}
+DURABLE_RUNTIME = {'src/lightyear_factory/additional_providers.py': {'before': {'mode': '100644', 'sha256': 'cfcfc12f3300240dff2435abe22b9af726293bb8ba91ab40893166f935ec212c'}, 'after': {'mode': '100644', 'sha256': 'b76c37c6359cd1af0710033bb87dd4050f0d4ab36f6aa31cd75004b69216b1fc'}}, 'src/lightyear_factory/budgeted_providers.py': {'before': {'mode': '100644', 'sha256': '7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b'}, 'after': {'mode': '100644', 'sha256': '885b383a0daae7636c26a8218836e3f9202a1894723abbb55c75a1160de38289'}}, 'src/lightyear_factory/gates.py': {'before': {'mode': '100644', 'sha256': 'cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51'}, 'after': {'mode': '100644', 'sha256': '5257a3da78e325ec46a6e70a5c6b24fdbb0287758279084acb3cd3fc4388c262'}}, 'src/lightyear_factory/model_versions.py': {'before': {'mode': '100644', 'sha256': 'ceab75e32be2a8e686a8260044ba72d8bf44a5abafb550fab24d187f6e359d97'}, 'after': {'mode': '100644', 'sha256': 'ac31255a9e872b09c97e7f15932f1e8bc3d398496225bfc31fa8767bbcdc61a2'}}, 'src/lightyear_factory/orchestrator.py': {'before': {'mode': '100644', 'sha256': 'beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add'}, 'after': {'mode': '100644', 'sha256': '7535d93984ca6f4dc4e43b86b8160fdc2416fab45a79fd7a9c06fd53176f9223'}}, 'src/lightyear_factory/providers.py': {'before': {'mode': '100644', 'sha256': 'f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d'}, 'after': {'mode': '100644', 'sha256': 'd61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88'}}, 'src/lightyear_factory/transport_journal.py': {'before': None, 'after': {'mode': '100644', 'sha256': '872754188010d07b8c03449ee076246e8969c75652b45faede60f037badf4875'}}}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
                'merge_permitted', 'automatic_expiry'}
@@ -209,7 +211,8 @@ def validate_durable_binding(value):
     require(approval['exact_sha256'] == expected, 'durable-approval-hashes')
     exact = sha(json.dumps(expected, sort_keys=True, separators=(',', ':')).encode())
     require(approval['statement'] == 'approved by Howard in the operator chat, '
-            + approval['recorded_at_pt'] + ', exact runtime hash set ' + exact,
+            + approval['recorded_at_pt'] + ', exact runtime hash set ' + exact
+            + DURABLE_EVIDENCE_LINK,
             'durable-approval-statement')
     return value
 
@@ -226,7 +229,7 @@ def load_durable_binding(repo, base, head):
 
 
 def inspect_durable_companions(repo, base, head, binding, excluded, prefixes):
-    """All six files are one exact set; no wildcard provider exception."""
+    """All seven files are one exact set; no wildcard provider exception."""
     approved = resolve(repo, binding['approved_change_commit'])
     result = []
     for entry in binding['entries']:
@@ -416,7 +419,7 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     if durable_used:
         require(durable['base_anchor'] == manifest['base_anchor'], 'durable-anchor-mismatch')
         durable_companions = inspect_durable_companions(repo, base, head, durable, excluded, prefixes)
-        for path in (BUDGETED, ORCHESTRATOR):
+        for path in (BUDGETED, ORCHESTRATOR, EXECUTION_GATES):
             row = DURABLE_RUNTIME[path]
             entries[path] = dict(path=path, mode='100644',
                 base_preimage_sha256=row['before']['sha256'],

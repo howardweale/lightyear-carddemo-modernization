@@ -28,7 +28,7 @@ class DurableBindingTests(unittest.TestCase):
         value.update(status='approved-exact-hashes', approved_change_commit='a'*40,
             approval=dict(source='operator-chat', approved_by='Howard Weale',
                 recorded_at_pt=stamp, exact_sha256=hashes,
-                statement='approved by Howard in the operator chat, '+stamp+', exact runtime hash set '+exact,
+                statement='approved by Howard in the operator chat, '+stamp+', exact runtime hash set '+exact+gate.DURABLE_EVIDENCE_LINK,
                 github_identity_is_human_proof=False))
         return value
 
@@ -105,7 +105,7 @@ class DurableBindingTests(unittest.TestCase):
         anchor = legacy['base_anchor']
         if changed is None:
             changed = sorted(gate.DURABLE_RUNTIME) if active else [gate.BUDGETED, gate.ORCHESTRATOR]
-        blocked = [p for p in changed if p in (gate.BUDGETED, gate.ORCHESTRATOR, 'extra-fenced.py')]
+        blocked = [p for p in changed if p in (gate.BUDGETED, gate.ORCHESTRATOR, gate.EXECUTION_GATES, 'extra-fenced.py')]
         report = dict(schema='java-quality-fence/1', base=base, head=head,
             fence_sha256='1'*64, fenced_paths=[], fenced_prefixes=[], source_records=[],
             blocked_paths=blocked, merge_permitted=not bool(blocked), automatic_expiry=False)
@@ -166,7 +166,7 @@ class DurableBindingTests(unittest.TestCase):
                     protected = {gate.PROVIDERS:'0'*64} if 'posttran-overlap' in faults else {}
                     return encoded(dict(bound_files=protected, candidate_files={}))
                 if path == 'f2.json':
-                    paths = (gate.BUDGETED,) if 'missing-engineering' in faults else (gate.BUDGETED, gate.ORCHESTRATOR)
+                    paths = (gate.BUDGETED,) if 'missing-engineering' in faults else (gate.BUDGETED, gate.ORCHESTRATOR, gate.EXECUTION_GATES)
                     return encoded(dict(engineering_source_bindings={p:dict(path=p) for p in paths}))
             raise AssertionError(args)
         def process(args, **kwargs):
@@ -251,3 +251,36 @@ class DurableBindingTests(unittest.TestCase):
         for fault in ('unrelated-anchor', 'live-head', 'fork', 'candidate-binding'):
             with self.subTest(fault=fault), self.assertRaises(ValueError):
                 self.inspect_fixture(active=True, faults=(fault,))
+
+
+    def test_unified_gates_route_is_exact_and_keeps_raw_fence_failure(self):
+        result, queries = self.inspect_fixture(active=True)
+        accepted = {e['path']: e for e in result['accepted_exceptions']}
+        self.assertIn(gate.EXECUTION_GATES, accepted)
+        self.assertEqual(gate.DURABLE_RUNTIME[gate.EXECUTION_GATES]['after'],
+                         accepted[gate.EXECUTION_GATES]['after'])
+        self.assertEqual(7, len(result['accepted_durable_companions']))
+        self.assertFalse(result['raw_fence_report']['merge_permitted'])
+        self.assertEqual(1, result['raw_checker_exit'])
+        self.assertEqual(['pulls/455', 'pulls/455'], queries)
+        self.assertFalse(result['merge_authorized'])
+        self.assertFalse(result['run_authorized'])
+        with self.assertRaisesRegex(ValueError, 'not-f2-engineering-source'):
+            self.inspect_fixture(active=True, faults=('missing-engineering',))
+        with self.assertRaisesRegex(ValueError, 'unlisted-fence-violation'):
+            self.inspect_fixture(active=True,
+                changed=sorted(gate.DURABLE_RUNTIME)+['extra-fenced.py'])
+
+    def test_unified_provenance_link_and_gates_hash_cannot_be_substituted(self):
+        value = self.synthetic_approved()
+        for replacement in ('', gate.DURABLE_EVIDENCE_LINK.replace('#sha256=', '#wrong=')):
+            bad = copy.deepcopy(value)
+            bad['approval']['statement'] = bad['approval']['statement'].replace(
+                gate.DURABLE_EVIDENCE_LINK, replacement)
+            with self.subTest(replacement=replacement), self.assertRaisesRegex(
+                    ValueError, 'durable-approval-statement'):
+                gate.validate_durable_binding(bad)
+        bad = copy.deepcopy(value)
+        bad['approval']['exact_sha256'][gate.EXECUTION_GATES] = '0'*64
+        with self.assertRaisesRegex(ValueError, 'durable-approval-hashes'):
+            gate.validate_durable_binding(bad)

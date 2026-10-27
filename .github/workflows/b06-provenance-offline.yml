@@ -11,6 +11,7 @@ on:
       - 'tests/test_b06_*.py'
       - 'tests/test_ms94_b06_*.py'
       - '.github/workflows/b06-provenance-offline.yml'
+      - 'src/lightyear_factory/transport_journal.py'
   push:
     branches: [main]
     paths:
@@ -23,6 +24,7 @@ on:
       - 'tests/test_b06_*.py'
       - 'tests/test_ms94_b06_*.py'
       - '.github/workflows/b06-provenance-offline.yml'
+      - 'src/lightyear_factory/transport_journal.py'
 permissions:
   contents: read
 concurrency:

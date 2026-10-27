@@ -11,6 +11,7 @@ on:
       - 'tests/fixtures/B06GenerationStress.java'
       - 'tests/test_evidence_content.py'
       - '.github/workflows/b06-host-review.yml'
+      - 'src/lightyear_factory/transport_journal.py'
   workflow_dispatch:
 permissions:
   contents: read

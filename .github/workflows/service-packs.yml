@@ -11,6 +11,7 @@ on:
       - 'tests/test_runtime_gate_qualification.py'
       - 'pyproject.toml'
       - '.github/workflows/service-packs.yml'
+      - 'src/lightyear_factory/transport_journal.py'
   push:
     branches: [main]
     paths:
@@ -23,6 +24,7 @@ on:
       - 'tests/test_runtime_gate_qualification.py'
       - 'pyproject.toml'
       - '.github/workflows/service-packs.yml'
+      - 'src/lightyear_factory/transport_journal.py'
 permissions:
   contents: read
 concurrency:

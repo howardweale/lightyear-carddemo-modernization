@@ -12,6 +12,7 @@ on:
       - 'tests/test_cloudbank_*.py'
       - 'factory/cloudbank/alloydb-second-target/**'
       - '.github/workflows/ms71-alloydb.yml'
+      - 'src/lightyear_factory/transport_journal.py'
   push:
     branches: [main]
     paths:
@@ -25,6 +26,7 @@ on:
       - 'tests/test_cloudbank_*.py'
       - 'factory/cloudbank/alloydb-second-target/**'
       - '.github/workflows/ms71-alloydb.yml'
+      - 'src/lightyear_factory/transport_journal.py'
 permissions:
   contents: read
 concurrency:

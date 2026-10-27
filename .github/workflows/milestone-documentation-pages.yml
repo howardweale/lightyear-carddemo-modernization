@@ -19,6 +19,7 @@ on:
       - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
+      - 'src/lightyear_factory/transport_journal.py'
   push:
     branches: [main]
     paths:
@@ -38,6 +39,7 @@ on:
       - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
+      - 'src/lightyear_factory/transport_journal.py'
   workflow_dispatch:
 
 permissions:

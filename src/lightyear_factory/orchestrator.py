@@ -164,6 +164,10 @@ class FactoryOrchestrator:
         self.candidate_signing_paths = candidate_signing_paths
         self.transport_encryption = transport_encryption
         self.memory_retrieval: dict[str, Any] | None = None
+        # Direct internal finalization/binding has the same initialized state;
+        # run() still resets both fields at the start of each actual attempt.
+        self._receipt_started = time.monotonic()
+        self._receipt_journal = None
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         self._validate_attempt_budget(order)
@@ -1475,7 +1479,8 @@ def _reconcile_physical_accounting_journal(events, identity_sha256):
     result = dict(accounting, in_flight_final_usage='none', model_transport_accounting=transports)
     # A failed retry with unknown usage remains unresolved after a later success.
     unresolved = [item for item in transports if item['observation'] is None or
-                  (item['reservation']['transport_kind'] != 'input-token-count'
+                  ((item['observation']['outcome'] == 'failed'
+                    or item['reservation']['transport_kind'] != 'input-token-count')
                    and not item['observation']['cost_estimate_available'])]
     if unresolved:
         result['unresolved_model_transports'] = copy.deepcopy(unresolved)

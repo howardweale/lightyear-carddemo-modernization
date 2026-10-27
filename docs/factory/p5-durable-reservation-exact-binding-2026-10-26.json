@@ -2,7 +2,7 @@
   "schema": "p5-durable-reservation-exact-binding/1",
   "repository": "howardweale/lightyear-carddemo-modernization",
   "pr": 455,
-  "status": "approved-exact-hashes",
+  "status": "pending-exact-hash-approval",
   "base_anchor": "3bc468666be34faf69796a6cfece9fe59f9f8939",
   "entries": [
     {
@@ -28,6 +28,17 @@
       }
     },
     {
+      "path": "src/lightyear_factory/gates.py",
+      "before": {
+        "mode": "100644",
+        "sha256": "cd069b3321379235cd65ac357b1cd6d2f0afb6907ff2a66eff1e6b7db4c5ae51"
+      },
+      "after": {
+        "mode": "100644",
+        "sha256": "5257a3da78e325ec46a6e70a5c6b24fdbb0287758279084acb3cd3fc4388c262"
+      }
+    },
+    {
       "path": "src/lightyear_factory/model_versions.py",
       "before": {
         "mode": "100644",
@@ -46,7 +57,7 @@
       },
       "after": {
         "mode": "100644",
-        "sha256": "1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de"
+        "sha256": "7535d93984ca6f4dc4e43b86b8160fdc2416fab45a79fd7a9c06fd53176f9223"
       }
     },
     {
@@ -69,22 +80,8 @@
       }
     }
   ],
-  "approved_change_commit": "3d5159858a88b2bca56326ecbd2ebc10b5f057de",
-  "approval": {
-    "source": "operator-chat",
-    "approved_by": "Howard Weale",
-    "recorded_at_pt": "2026-10-26T17:16:58-07:00",
-    "exact_sha256": {
-      "src/lightyear_factory/additional_providers.py": "b76c37c6359cd1af0710033bb87dd4050f0d4ab36f6aa31cd75004b69216b1fc",
-      "src/lightyear_factory/budgeted_providers.py": "885b383a0daae7636c26a8218836e3f9202a1894723abbb55c75a1160de38289",
-      "src/lightyear_factory/model_versions.py": "ac31255a9e872b09c97e7f15932f1e8bc3d398496225bfc31fa8767bbcdc61a2",
-      "src/lightyear_factory/orchestrator.py": "1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de",
-      "src/lightyear_factory/providers.py": "d61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88",
-      "src/lightyear_factory/transport_journal.py": "872754188010d07b8c03449ee076246e8969c75652b45faede60f037badf4875"
-    },
-    "statement": "approved by Howard in the operator chat, 2026-10-26T17:16:58-07:00, exact runtime hash set 3eabc0defac12ca89901f30eb58a9b8526dc00d151dadec66f13f0b32d2946d9",
-    "github_identity_is_human_proof": false
-  },
+  "approved_change_commit": null,
+  "approval": null,
   "authority": {
     "merge": false,
     "run": false,

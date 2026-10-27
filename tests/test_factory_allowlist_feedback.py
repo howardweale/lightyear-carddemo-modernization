@@ -610,7 +610,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
                 agents.intelligence_summary.return_value={'mode':'fixture','calls':0}
                 controller=FactoryOrchestrator(root,root,agents);controller.memory_store=Mock()
                 events=[];controller.memory_store.prepare_run.side_effect=lambda *a: events.append('prepare') or {}
-                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',metadata={})
+                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',metadata={},max_elapsed_seconds=60)
                 ledger=RunLedger(root/'events.jsonl')
                 def package_check():events.append('package');return {'fixture':True}
                 def publish(prepared,run_dir,order,receipt,scan_record,**kwargs):

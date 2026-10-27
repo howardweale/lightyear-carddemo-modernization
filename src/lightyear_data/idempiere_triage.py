@@ -725,6 +725,61 @@ def run_model_triage(
     })
 
 
+def _retained_stage3_projection(
+    project_root: Path,
+    actual: Mapping[str, Mapping[str, Any]],
+    expected: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Mapping[str, Any]]:
+    """Compare an explicit rebinding projection; never rewrite retained evidence."""
+    record_path = ROOT_PATH / "stage3-retained-rebinding-2026-10-27.json"
+    if not (project_root / record_path).exists():
+        return dict(actual)
+    record = _read(project_root / record_path)
+    names = {WORK_PACKAGE_PATH.name, CALIBRATION_PATH.name, COVERAGE_PATH.name,
+             DIVERGENCE_PATH.name, INDETERMINATE_PATH.name, PROVENANCE_PATH.name,
+             RECEIPT_PATH.name}
+    current = {path: source_hashes(project_root / path)[0] for path in CODE_PATHS}
+    if (record.get("schema") != "ms70-retained-rebinding/1"
+            or record.get("content_sha256") != content_hash(record)
+            or record.get("implementation_logical_sha256") != current
+            or set(record.get("original_artifacts", {})) != names
+            or set(record.get("projected_content_sha256", {})) != names
+            or record.get("evidence_kind") != "deterministic-binding-projection"
+            or record.get("new_execution") is not False
+            or record.get("model_calls") != 0
+            or type(record.get("model_calls")) is not int
+            or record.get("claims") != CLAIMS):
+        raise ValueError("MS70 retained rebinding identity mismatch")
+    dependencies = {
+        "work_package_sha256": WORK_PACKAGE_PATH.name,
+        "calibration_sha256": CALIBRATION_PATH.name,
+        "coverage_sha256": COVERAGE_PATH.name,
+        "divergence_register_sha256": DIVERGENCE_PATH.name,
+        "indeterminate_register_sha256": INDETERMINATE_PATH.name,
+        "provenance_register_sha256": PROVENANCE_PATH.name,
+    }
+    projected = dict(actual)
+    for name in sorted(names):
+        original_path = project_root / ROOT_PATH / name
+        original = _read(original_path)
+        pin = record["original_artifacts"][name]
+        if (source_hashes(original_path)[0] != pin["logical_sha256"]
+                or original.get("content_sha256") != pin["content_sha256"]
+                or content_hash(original) != pin["content_sha256"]
+                or expected[name]["content_sha256"] != record["projected_content_sha256"][name]):
+            raise ValueError("MS70 retained rebinding artifact mismatch: " + name)
+        # Preserve the existing caller-supplied tamper diagnostics.
+        if dict(actual[name]) != original:
+            continue
+        candidate = json.loads(json.dumps(original))
+        candidate["bindings"]["implementation_logical_sha256"] = current
+        for key, target in dependencies.items():
+            if key in candidate["bindings"]:
+                candidate["bindings"][key] = expected[target]["content_sha256"]
+        projected[name] = seal(candidate)
+    return projected
+
+
 def validate_stage3_artifacts(
     project_root: Path,
     *,
@@ -739,10 +794,11 @@ def validate_stage3_artifacts(
     try:
         actual = dict(artifacts or {name: _read(project_root / ROOT_PATH / name) for name in names})
         expected = build_stage3_artifacts(project_root)
+        projected = _retained_stage3_projection(project_root, actual, expected)
         for name in names:
             if actual[name].get("content_sha256") != content_hash(dict(actual[name])):
                 errors.append(f"stage3-content-hash-invalid:{name}")
-            if actual[name] != expected[name]:
+            if projected[name] != expected[name]:
                 errors.append(f"stage3-artifact-drift:{name}")
         receipt = actual[RECEIPT_PATH.name]
         if receipt.get("claims") != CLAIMS:

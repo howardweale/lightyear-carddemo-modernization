@@ -1,0 +1,13 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/milestones/drafts/catch-up-2026-10-26/posttran-receipt-addendum-2026-10-27.md",
+      "reference": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "commit": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "role": "publication",
+      "publication_path": "docs/factory/posttran-phase2-authorization-request-2026-10-16.json",
+      "publication_sha256": "c65f23f7d91e6c7e6e33354e70db46a11f7eaaf59a4693696094ba6ecda890bc"
+    }
+  ]
+}

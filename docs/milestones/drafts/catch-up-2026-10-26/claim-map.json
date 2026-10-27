@@ -1,0 +1,156 @@
+{
+  "schema": "milestone-draft-claim-map/1",
+  "claims": [
+    {
+      "id": "C115",
+      "milestone": 115,
+      "proposed_text": "The first packaged Factory installation and automatic-start observations have a retained acceptance record.",
+      "evidence_prs": [
+        420,
+        444
+      ],
+      "receipt_urls": [
+        "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6424943134"
+      ],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C116",
+      "milestone": 116,
+      "proposed_text": "The POSTTRAN key-change review and corrected packaged-installation handoff are traceable to retained evidence.",
+      "evidence_prs": [
+        445
+      ],
+      "receipt_urls": [
+        "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6424943134"
+      ],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C117",
+      "milestone": 117,
+      "proposed_text": "COPAU preparation has an explicit first-run boundary and narrow exact-byte F2 controls.",
+      "evidence_prs": [
+        415,
+        430,
+        446,
+        459,
+        461,
+        463
+      ],
+      "receipt_urls": [],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C118",
+      "milestone": 118,
+      "proposed_text": "Platform work distinguishes receipt-linked claims and policy proposals from unresolved security and drill work.",
+      "evidence_prs": [
+        453,
+        454
+      ],
+      "receipt_urls": [
+        "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6399834543",
+        "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6430233511"
+      ],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C119",
+      "milestone": 119,
+      "proposed_text": "Java hygiene work is separated from fenced or deferred quality changes.",
+      "evidence_prs": [
+        447,
+        448,
+        457
+      ],
+      "receipt_urls": [],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C120",
+      "milestone": 120,
+      "proposed_text": "INTCALC survivor arguments remain tied to the pinned twin contract without overstating mutation coverage.",
+      "evidence_prs": [
+        381,
+        433,
+        434,
+        456
+      ],
+      "receipt_urls": [],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C121",
+      "milestone": 121,
+      "proposed_text": "The remaining post-MS114 merges have an explicit commit ledger rather than an inferred campaign-completion claim.",
+      "evidence_prs": [
+        380,
+        414,
+        412,
+        386,
+        387,
+        416,
+        391,
+        418,
+        417,
+        421,
+        373,
+        392,
+        419,
+        422,
+        423,
+        425,
+        426,
+        427,
+        428,
+        431,
+        435,
+        439,
+        437,
+        440,
+        438,
+        432,
+        442,
+        443,
+        441
+      ],
+      "receipt_urls": [],
+      "operator_receipt": null,
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    },
+    {
+      "id": "C122",
+      "milestone": 122,
+      "proposed_text": "Planned: retain the first judged COPAU result with its exact inputs, receipt and limitations after Friday.",
+      "evidence_prs": [],
+      "receipt_urls": [],
+      "operator_receipt": "operator-direction.json",
+      "wording_review": "Friday 2026-10-30 batch",
+      "wording_decision": null,
+      "customer_publication": false
+    }
+  ],
+  "scope": "Every customer-value sentence above; delivery details additionally cite the same evidence in each milestone.",
+  "public_wording_decision": null
+}

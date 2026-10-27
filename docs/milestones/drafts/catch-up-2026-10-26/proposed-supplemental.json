@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "records": [
+    {
+      "number": 115,
+      "path": "MS-115/MS-115.md",
+      "title": "First packaged Factory installation record",
+      "customer_value": "The first packaged Factory installation and automatic-start observations have a retained acceptance record.",
+      "status": "Historical installation record retained; no new runtime measurement",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 116,
+      "path": "MS-116/MS-116.md",
+      "title": "POSTTRAN key change and operator handoff",
+      "customer_value": "The POSTTRAN key-change review and corrected packaged-installation handoff are traceable to retained evidence.",
+      "status": "Key-change record merged; operator rehearsal and execution evidence remain separate",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 117,
+      "path": "MS-117/MS-117.md",
+      "title": "COPAU first-run boundary and exact F2 policy",
+      "customer_value": "COPAU preparation has an explicit first-run boundary and narrow exact-byte F2 controls.",
+      "status": "Preparation and policy records merged; run readiness remains unproved",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 118,
+      "path": "MS-118/MS-118.md",
+      "title": "P1–P5 platform evidence and remaining gaps",
+      "customer_value": "Platform work distinguishes receipt-linked claims and policy proposals from unresolved security and drill work.",
+      "status": "P3 merged; P4 proposal merged; P1 analysis and P5 repairs remain open; P2 held",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 119,
+      "path": "MS-119/MS-119.md",
+      "title": "K-track fence and bounded Java hygiene",
+      "customer_value": "Java hygiene work is separated from fenced or deferred quality changes.",
+      "status": "Fence, text hygiene and unfenced formatting merged; K-track remains partial",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 120,
+      "path": "MS-120/MS-120.md",
+      "title": "INTCALC M1 survivor evidence without new kill credit",
+      "customer_value": "INTCALC survivor arguments remain tied to the pinned twin contract without overstating mutation coverage.",
+      "status": "113 survivor arguments retained across 22 groups; raw score remains 311/424",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 121,
+      "path": "MS-121/MS-121.md",
+      "title": "Repository, graph, data and application evidence catch-up",
+      "customer_value": "The remaining post-MS114 merges have an explicit commit ledger rather than an inferred campaign-completion claim.",
+      "status": "Merge inventory reconciled; each original record retains its own scope and limits",
+      "formats": [
+        "md"
+      ]
+    },
+    {
+      "number": 122,
+      "path": "MS-122/MS-122.md",
+      "title": "First judged COPAU Factory run — placeholder",
+      "customer_value": "Planned: retain the first judged COPAU result with its exact inputs, receipt and limitations after Friday.",
+      "status": null,
+      "formats": [
+        "md"
+      ]
+    }
+  ],
+  "addenda": []
+}

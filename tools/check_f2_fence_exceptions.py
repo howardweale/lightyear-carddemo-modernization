@@ -34,6 +34,9 @@ VERIFY_WORKFLOW = '.github/workflows/verify.yml'
 VERIFY_BEFORE_SHA = '1736424d5716880a0eb5dc941fcafc085d58faa04e4838c4eb7a8834ad1dbd1b'
 VERIFY_AFTER_SHA = 'a83be67630a54de10840743bcc24a7f1bd9c786c7447108eb448ae4818e91cf3'
 CONTROLS = {CHECKER, VALIDATOR, MANIFEST, GATE, WORKFLOW_BINDING}
+
+DURABLE_BINDING = 'docs/factory/p5-durable-reservation-exact-binding-2026-10-26.json'
+DURABLE_RUNTIME = {'src/lightyear_factory/additional_providers.py': {'before': {'mode': '100644', 'sha256': 'cfcfc12f3300240dff2435abe22b9af726293bb8ba91ab40893166f935ec212c'}, 'after': {'mode': '100644', 'sha256': 'b76c37c6359cd1af0710033bb87dd4050f0d4ab36f6aa31cd75004b69216b1fc'}}, 'src/lightyear_factory/budgeted_providers.py': {'before': {'mode': '100644', 'sha256': '7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b'}, 'after': {'mode': '100644', 'sha256': '885b383a0daae7636c26a8218836e3f9202a1894723abbb55c75a1160de38289'}}, 'src/lightyear_factory/model_versions.py': {'before': {'mode': '100644', 'sha256': 'ceab75e32be2a8e686a8260044ba72d8bf44a5abafb550fab24d187f6e359d97'}, 'after': {'mode': '100644', 'sha256': 'ac31255a9e872b09c97e7f15932f1e8bc3d398496225bfc31fa8767bbcdc61a2'}}, 'src/lightyear_factory/orchestrator.py': {'before': {'mode': '100644', 'sha256': 'beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add'}, 'after': {'mode': '100644', 'sha256': '1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de'}}, 'src/lightyear_factory/providers.py': {'before': {'mode': '100644', 'sha256': 'f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d'}, 'after': {'mode': '100644', 'sha256': 'd61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88'}}, 'src/lightyear_factory/transport_journal.py': {'before': None, 'after': {'mode': '100644', 'sha256': '872754188010d07b8c03449ee076246e8969c75652b45faede60f037badf4875'}}}
 REPORT_KEYS = {'schema', 'base', 'head', 'fence_sha256', 'fenced_paths',
                'fenced_prefixes', 'source_records', 'blocked_paths',
                'merge_permitted', 'automatic_expiry'}
@@ -159,6 +162,86 @@ def validate_entry(entry):
             evidence_link, 'approval-statement')
     return entry
 
+
+
+def validate_durable_binding(value):
+    """Pending review is inert; approved bytes still require trusted-base loading."""
+    fields(value, {'schema', 'repository', 'pr', 'status', 'base_anchor',
+                   'entries', 'approved_change_commit', 'approval', 'authority'},
+           'durable-binding-fields')
+    require(value['schema'] == 'p5-durable-reservation-exact-binding/1'
+            and value['repository'] == REPOSITORY
+            and type(value['pr']) is int and value['pr'] == 455,
+            'durable-binding-target')
+    require(value['base_anchor'] == '3bc468666be34faf69796a6cfece9fe59f9f8939',
+            'durable-binding-anchor')
+    require(value['authority'] == dict(merge=False, run=False, signing=False,
+            spend=False, gap_acceptance=False), 'durable-binding-authority')
+    require(isinstance(value['entries'], list)
+            and len(value['entries']) == len(DURABLE_RUNTIME), 'durable-entry-count')
+    paths = []
+    for entry in value['entries']:
+        fields(entry, {'path', 'before', 'after'}, 'durable-entry-fields')
+        path = entry['path']
+        require(isinstance(path, str) and path in DURABLE_RUNTIME
+                and path not in paths, 'durable-entry-path')
+        paths.append(path)
+        require({'before': entry['before'], 'after': entry['after']} == DURABLE_RUNTIME[path],
+                'durable-entry-bytes')
+    require(paths == sorted(DURABLE_RUNTIME), 'durable-entry-order')
+    if value['status'] == 'pending-exact-hash-approval':
+        require(value['approval'] is None and value['approved_change_commit'] is None,
+                'durable-pending-provenance')
+        return None
+    require(value['status'] == 'approved-exact-hashes', 'durable-binding-status')
+    digest(value['approved_change_commit'], 40)
+    approval = value['approval']
+    fields(approval, {'source', 'approved_by', 'recorded_at_pt', 'exact_sha256',
+                     'statement', 'github_identity_is_human_proof'}, 'durable-approval-fields')
+    require(approval['source'] == 'operator-chat'
+            and approval['approved_by'] == 'Howard Weale'
+            and approval['github_identity_is_human_proof'] is False,
+            'durable-approval-identity')
+    require(isinstance(approval['recorded_at_pt'], str)
+            and re.fullmatch(r'2026-10-\d{2}T\d{2}:\d{2}:\d{2}-07:00',
+                             approval['recorded_at_pt']), 'durable-approval-time')
+    expected = {path: row['after']['sha256'] for path, row in DURABLE_RUNTIME.items()}
+    require(approval['exact_sha256'] == expected, 'durable-approval-hashes')
+    exact = sha(json.dumps(expected, sort_keys=True, separators=(',', ':')).encode())
+    require(approval['statement'] == 'approved by Howard in the operator chat, '
+            + approval['recorded_at_pt'] + ', exact runtime hash set ' + exact,
+            'durable-approval-statement')
+    return value
+
+
+def load_durable_binding(repo, base, head):
+    if not git(repo, 'ls-tree', '-z', base, '--', DURABLE_BINDING):
+        require(not git(repo, 'ls-tree', '-z', head, '--', DURABLE_BINDING),
+                'candidate-durable-binding-refused')
+        return None
+    before, raw = blob(repo, base, DURABLE_BINDING)
+    require((before, raw) == blob(repo, head, DURABLE_BINDING),
+            'candidate-durable-binding-refused')
+    return validate_durable_binding(document(raw))
+
+
+def inspect_durable_companions(repo, base, head, binding, excluded, prefixes):
+    """All six files are one exact set; no wildcard provider exception."""
+    approved = resolve(repo, binding['approved_change_commit'])
+    result = []
+    for entry in binding['entries']:
+        path = entry['path']
+        require(path not in excluded and not any(path.startswith(p) for p in prefixes),
+                'judge-or-posttran-exception-refused')
+        if entry['before'] is None:
+            require(not git(repo, 'ls-tree', '-z', base, '--', path),
+                    'durable-preimage-not-absent')
+        else:
+            require(blob(repo, base, path)[0] == entry['before'], 'durable-preimage')
+        require(blob(repo, head, path)[0] == entry['after'], 'durable-postimage')
+        require(blob(repo, approved, path)[0] == entry['after'], 'durable-approved-content')
+        result.append(dict(path=path, before=entry['before'], after=entry['after']))
+    return result
 
 def validate_workflow_binding(value):
     fields(value, {'schema', 'repository', 'pr', 'path', 'mode', 'base_preimage',
@@ -320,11 +403,26 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     # changed protected path, even when the raw Java report has no violations.
     require(not any(p in excluded or any(p.startswith(prefix) for prefix in prefixes)
                     for p in changed), 'judge-or-posttran-change-refused')
+    durable = load_durable_binding(repo, base, head)
+    durable_used = durable is not None and bool(set(changed) & set(DURABLE_RUNTIME))
+    # A pending manifest never changes the historical exact-byte path.
     if not report['blocked_paths']:
+        require(not durable_used, 'durable-binding-requires-engineering-exception')
         return result
     _, raw = blob(repo, base, MANIFEST)
     manifest = document(raw); validate_manifest(manifest)
     entries = {e['path']: e for e in manifest['entries']}
+    durable_companions = []
+    if durable_used:
+        require(durable['base_anchor'] == manifest['base_anchor'], 'durable-anchor-mismatch')
+        durable_companions = inspect_durable_companions(repo, base, head, durable, excluded, prefixes)
+        for path in (BUDGETED, ORCHESTRATOR):
+            row = DURABLE_RUNTIME[path]
+            entries[path] = dict(path=path, mode='100644',
+                base_preimage_sha256=row['before']['sha256'],
+                final_sha256=row['after']['sha256'],
+                approved_change_commit=durable['approved_change_commit'],
+                provenance=durable['approval'])
     anchor = resolve(repo, manifest['base_anchor'])
     require(subprocess.run(['git', '-C', str(repo), 'merge-base', '--is-ancestor', anchor, base],
                            capture_output=True).returncode == 0, 'unrelated-base-anchor')
@@ -332,7 +430,8 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     # All of these objects must exist in base, including the validator itself.
     for path in CONTROLS:
         require(blob(repo, base, path) == blob(repo, head, path), 'candidate-control-change')
-    require(blob(repo, base, PROVIDERS) == blob(repo, head, PROVIDERS), 'providers-change-refused')
+    if not durable_used:
+        require(blob(repo, base, PROVIDERS) == blob(repo, head, PROVIDERS), 'providers-change-refused')
     workflow_bindings = inspect_workflow_change(repo, base, head, anchor, changed)
     require(len(set(report['blocked_paths'])) == len(report['blocked_paths']) and
             all(p in entries for p in report['blocked_paths']), 'unlisted-fence-violation')
@@ -358,6 +457,8 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
             'context-changed')
     result.update(accepted_exceptions=accepted, accepted_workflow_bindings=workflow_bindings,
                   fence_requirement_met=True, manifest_sha256=sha(raw), context=bound)
+    if durable_used:
+        result['accepted_durable_companions'] = durable_companions
     return result
 
 

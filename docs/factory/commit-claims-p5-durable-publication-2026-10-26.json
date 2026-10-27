@@ -1,0 +1,20 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/factory/p5-durable-reservation-exact-binding-2026-10-26.json",
+      "reference": "3d5159858a88b2bca56326ecbd2ebc10b5f057de",
+      "commit": "3d5159858a88b2bca56326ecbd2ebc10b5f057de",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de"
+    },
+    {
+      "record": "docs/factory/p5-durable-reservation-exact-binding-2026-10-26.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "ancestor",
+      "descendant": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef"
+    }
+  ]
+}

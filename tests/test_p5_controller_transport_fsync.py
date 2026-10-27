@@ -42,7 +42,7 @@ class ControllerTransportFsyncTests(unittest.TestCase):
         sink._receipt_journal = RunLedger(path)
         ledger = sink._receipt_journal
         ledger.append('READY', 'model_reservations',
-                      dict(attempt_identity_sha256=IDENTITY, protocol=2))
+                      dict(attempt_identity_sha256=IDENTITY, protocol=4))
         ledger.append('OBSERVED', 'sanitized_accounting', dict(
             attempt_identity_sha256=IDENTITY,
             accounting=dict(schema='factory-sanitized-accounting/1', calls=0,

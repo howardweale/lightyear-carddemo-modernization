@@ -3,7 +3,7 @@
 from contextlib import contextmanager
 from contextvars import ContextVar
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from hashlib import sha256
 import json
 from .contracts import canonical_hash
@@ -20,6 +20,7 @@ class _Scope:
     observe: Callable[[Any, dict[str, Any]], None]
     invocation: dict[str, Any]
     bounds: dict[str, Any]
+    counted: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class _Reservation:
     kind: str
     input_price: float
     output_price: float
+    record: dict[str, Any]
 
 
 _active: ContextVar[_Scope | None] = ContextVar("factory_transport_journal", default=None)
@@ -71,11 +73,34 @@ def reserve_transport(provider, role, request, kind, attempt):
         pricing=dict(input_usd_per_million=provider.input_usd_per_million,
                      output_usd_per_million=provider.output_usd_per_million),
     )
+    if kind == "input-token-count":
+        scope.counted.clear()
+    elif kind == "responses":
+        record["input_token_preflight"] = None
+        if provider.token_preflight:
+            counted = scope.counted
+            bound = scope.bounds.get("input_tokens")
+            body = json.loads(raw)
+            try:
+                projection = {key: body[key] for key in ("model", "instructions", "input", "text")}
+            except (KeyError, TypeError):
+                raise TransportJournalError("Generation input cannot be bound to token count") from None
+            if (not counted or type(bound) is not int or bound < 0
+                    or any(counted[key] != record[key] for key in ("provider", "model", "role"))
+                    or canonical_hash(projection) != counted["canonical_request_sha256"]):
+                raise TransportJournalError("Generation requires matching durable token count")
+            if counted["input_tokens"] > bound:
+                raise TransportJournalError("Counted input exceeds reserved input bound")
+            record["input_token_preflight"] = dict(
+                input_tokens=counted["input_tokens"],
+                count_request_sha256=counted["request_sha256"],
+                count_projection_sha256=counted["canonical_request_sha256"])
     # The sink appends the identity-bound reservation and fsyncs before returning
     # its ticket. The opener has not been entered if this callback fails.
     ticket = _emit(scope.reserve, record)
     return _Reservation(scope, ticket, kind,
-                        provider.input_usd_per_million, provider.output_usd_per_million)
+                        provider.input_usd_per_million, provider.output_usd_per_million,
+                        deepcopy(record))
 
 
 def _reported_usage(kind, payload):
@@ -118,10 +143,16 @@ def _observation(reservation, payload, failure):
         if all(type(value) is int and value >= 0 for value in values):
             if reservation.input_price > 0 and reservation.output_price > 0:
                 cost = round((values[0]*reservation.input_price + values[1]*reservation.output_price)/1_000_000, 8)
-    return dict(outcome="failed" if failure is not None else "returned",
+    result = dict(outcome="failed" if failure is not None else "returned",
                 response_usage=observed, estimated_cost_usd=cost,
                 cost_estimate_available=cost is not None,
                 failure_type=type(failure).__name__ if failure is not None else None)
+    if reservation.kind == "input-token-count":
+        # Count evidence is not billed usage. Never give the count endpoint a
+        # fabricated zero cost, even when it returned a valid count.
+        count = payload.get("input_tokens") if isinstance(payload, dict) else None
+        result["input_token_count"] = count if type(count) is int and count >= 0 else None
+    return result
 
 
 def report_transport_payload(payload):
@@ -148,7 +179,14 @@ def observe_transport(reservation):
               _observation(reservation, payload, exc))
         raise
     else:
-        _emit(reservation.scope.observe, reservation.ticket,
-              _observation(reservation, payload, None))
+        observation = _observation(reservation, payload, None)
+        _emit(reservation.scope.observe, reservation.ticket, observation)
+        if reservation.kind == "input-token-count" and observation["input_token_count"] is not None:
+            # Publish the count to the next send only AFTER the durable observer
+            # returns. A failed fsync cannot enable a generation transport.
+            reservation.scope.counted.update(
+                {key: reservation.record[key] for key in
+                 ("provider", "model", "role", "request_sha256", "canonical_request_sha256")},
+                input_tokens=observation["input_token_count"])
     finally:
         _received.reset(token)

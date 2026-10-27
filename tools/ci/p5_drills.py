@@ -353,6 +353,7 @@ def collect(repository, output):
         'src/lightyear_factory/orchestrator.py', 'src/lightyear_factory/agents.py',
         'src/lightyear_factory/routing.py', 'src/lightyear_factory/model_admission.py',
         'src/lightyear_factory/providers.py', 'src/lightyear_factory/budgeted_providers.py',
+        'src/lightyear_factory/transport_journal.py', 'tests/test_p5_count_reservation_bound.py',
         'src/lightyear_factory/isolation_scan.py', 'src/lightyear_execution/admission.py',
         'src/lightyear_execution/backend.py', 'src/lightyear_control_tower/decisions.py',
         'src/lightyear_control_tower/verification.py', 'src/lightyear_control_tower/factory_policy.py')}

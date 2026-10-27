@@ -576,7 +576,7 @@ class FactoryOrchestrator:
         self._receipt_identity = identity
         self._receipt_journal = RunLedger(run_dir/'attempt-accounting.jsonl')
         self._receipt_journal.append('READY', 'model_reservations', dict(
-            attempt_identity_sha256=identity['content_sha256'], protocol=2))
+            attempt_identity_sha256=identity['content_sha256'], protocol=4))
         self._checkpoint_accounting()
         self._bind_reservation_journal()
 
@@ -591,9 +591,36 @@ class FactoryOrchestrator:
             bound.transport_reservation_checkpoint = self._reserve_model_transport
             bound.transport_observed_checkpoint = self._observe_model_transport
 
+    def _live_journal_events(self):
+        # Protocol 2 is an archive/replay format, never a live write target.
+        from .transport_journal import TransportJournalError
+        journal = self._receipt_journal
+        persisted = RunLedger(journal.path)
+        identity = self._receipt_identity['content_sha256']
+        if (not persisted.verify() or persisted.events != journal.events
+                or not persisted.events
+                or persisted.events[0]['state'] != 'READY'
+                or persisted.events[0]['kind'] != 'model_reservations'
+                or persisted.events[0]['payload'] != {
+                    'attempt_identity_sha256': identity, 'protocol': 4}):
+            raise TransportJournalError('Live transport requires a current protocol-4 journal')
+        return persisted.events
+
+    def _live_transport_accounting(self):
+        return _reconcile_accounting_journal(
+            self._live_journal_events(), self._receipt_identity['content_sha256'])
+
     def _reserve_model_transport(self, reservation):
         from .transport_journal import TransportJournalError
         _validate_physical_reservation(reservation)
+        accounting = self._live_transport_accounting()
+        if reservation['transport_kind'] == 'responses':
+            if reservation.get('input_token_preflight') is None:
+                raise TransportJournalError('Live generation requires a durable input count')
+            current = [item for item in accounting['model_transport_accounting']
+                       if item['reservation']['invocation']['call_sequence']
+                       == reservation['invocation']['call_sequence']]
+            _validate_count_preflight(reservation, current)
         physical = [event for event in self._receipt_journal.events
                     if event['kind'] in ('model_transport_reserved', 'model_transport_observed')]
         if physical and physical[-1]['kind'] != 'model_transport_observed':
@@ -611,6 +638,7 @@ class FactoryOrchestrator:
 
     def _observe_model_transport(self, ticket, observation):
         from .transport_journal import TransportJournalError
+        self._live_transport_accounting()
         physical = [event for event in self._receipt_journal.events
                     if event['kind'] in ('model_transport_reserved', 'model_transport_observed')]
         if not physical or physical[-1]['kind'] != 'model_transport_reserved':
@@ -622,6 +650,9 @@ class FactoryOrchestrator:
                         reservation_event_sha256=event['event_sha256'])
         if ticket != expected:
             raise TransportJournalError('Transport observation reservation binding mismatch')
+        if (event['payload']['reservation']['transport_kind'] == 'input-token-count'
+                and 'input_token_count' not in observation):
+            raise TransportJournalError('Live count observation requires its count field')
         _validate_physical_observation(observation, event['payload']['reservation'])
         self._receipt_journal.append('OBSERVED', 'model_transport_observed', dict(
             attempt_identity_sha256=self._receipt_identity['content_sha256'],
@@ -630,6 +661,7 @@ class FactoryOrchestrator:
             __import__('os').fsync(stream.fileno())
 
     def _reserve_model_call(self, reservation):
+        self._live_journal_events()
         _validate_model_reservation(reservation)
         self._receipt_journal.append('RESERVED', 'reserved', dict(
             attempt_identity_sha256=self._receipt_identity['content_sha256'],
@@ -640,6 +672,7 @@ class FactoryOrchestrator:
     def _checkpoint_accounting(self, name=None, raw=None):
         if getattr(self, '_receipt_journal', None) is None:
             return
+        self._live_journal_events()
         from hashlib import sha256
         if name is not None:
             role, separator, phase = name.rpartition('-')
@@ -1276,7 +1309,7 @@ def _validate_model_reservation(value):
 
 def _reconcile_accounting_journal(events, identity_sha256):
     if (events and events[0]['kind'] == 'model_reservations'
-            and events[0]['payload'].get('protocol') == 2):
+            and events[0]['payload'].get('protocol') in (2, 4)):
         return _reconcile_physical_accounting_journal(events, identity_sha256)
     # Old journals retain their original uncertainty. Only the explicit new
     # protocol can establish that no transport preceded a durable reservation.
@@ -1338,6 +1371,7 @@ def _reconcile_physical_accounting_journal(events, identity_sha256):
     import copy
     accounting = logical = active = None
     transports = []
+    protocol = None
     for index, event in enumerate(events):
         payload = event['payload']
         if not isinstance(payload, dict) or payload.get('attempt_identity_sha256') != identity_sha256:
@@ -1346,8 +1380,9 @@ def _reconcile_physical_accounting_journal(events, identity_sha256):
         if index == 0:
             if (kind != 'model_reservations' or event['state'] != 'READY'
                     or set(payload) != {'attempt_identity_sha256', 'protocol'}
-                    or type(payload['protocol']) is not int or payload['protocol'] != 2):
+                    or type(payload['protocol']) is not int or payload['protocol'] not in (2, 4)):
                 raise ContractError('reconciliation-reservation-protocol')
+            protocol = payload['protocol']
             continue
         if kind == 'reserved':
             if (event['state'] != 'RESERVED'
@@ -1375,6 +1410,12 @@ def _reconcile_physical_accounting_journal(events, identity_sha256):
                 raise ContractError('reconciliation-physical-reservation-order')
             current = [item for item in transports
                        if item['reservation']['invocation']['call_sequence'] == invocation['call_sequence']]
+            if protocol == 4 and value['transport_kind'] == 'responses':
+                if 'input_token_preflight' not in value:
+                    raise ContractError('reconciliation-count-preflight-missing')
+                _validate_count_preflight(value, current)
+            elif 'input_token_preflight' in value:
+                _validate_count_preflight(value, current)
             if current:
                 previous = current[-1]['reservation']
                 if any(value[key] != previous[key] for key in ('invocation', 'provider', 'model', 'role', 'bounds', 'pricing')):
@@ -1409,6 +1450,9 @@ def _reconcile_physical_accounting_journal(events, identity_sha256):
                     or active is None or payload['reservation_ticket'] != active['reservation_ticket']):
                 raise ContractError('reconciliation-physical-observation-binding')
             _validate_physical_observation(payload['observation'], active['reservation'])
+            if (protocol == 4 and active['reservation']['transport_kind'] == 'input-token-count'
+                    and 'input_token_count' not in payload['observation']):
+                raise ContractError('reconciliation-count-observation-missing')
             active['observation'] = copy.deepcopy(payload['observation'])
             active = None
         elif kind == 'sanitized_accounting':
@@ -1512,8 +1556,19 @@ def _validate_physical_reservation(value):
     fields = {'invocation', 'bounds', 'provider', 'model', 'role', 'transport_kind',
               'provider_attempt', 'request_sha256', 'request_bytes',
               'canonical_request_sha256', 'pricing'}
-    if not isinstance(value, dict) or set(value) != fields:
+    if not isinstance(value, dict) or set(value) not in (fields, fields | {'input_token_preflight'}):
         raise ContractError('reconciliation-physical-reservation-shape')
+    if 'input_token_preflight' in value:
+        preflight = value['input_token_preflight']
+        if value['transport_kind'] != 'responses':
+            raise ContractError('reconciliation-count-preflight-kind')
+        if preflight is not None and (
+                not isinstance(preflight, dict)
+                or set(preflight) != {'input_tokens', 'count_request_sha256', 'count_projection_sha256'}
+                or type(preflight['input_tokens']) is not int or preflight['input_tokens'] < 0
+                or any(not isinstance(preflight[key], str) or not re.fullmatch('[0-9a-f]{64}', preflight[key])
+                       for key in ('count_request_sha256', 'count_projection_sha256'))):
+            raise ContractError('reconciliation-count-preflight-shape')
     kinds = {'openai-responses': ('responses', 'input-token-count'),
              'anthropic-messages': ('anthropic-messages',),
              'gemini-generate-content': ('gemini-generate-content',)}
@@ -1564,8 +1619,13 @@ def _validate_physical_observation(value, reservation=None):
     import math
     fields = {'outcome', 'response_usage', 'estimated_cost_usd',
               'cost_estimate_available', 'failure_type'}
-    if not isinstance(value, dict) or set(value) != fields:
+    if not isinstance(value, dict) or set(value) not in (fields, fields | {'input_token_count'}):
         raise ContractError('reconciliation-physical-observation-shape')
+    if 'input_token_count' in value and (
+            reservation is None or reservation['transport_kind'] != 'input-token-count'
+            or (value['input_token_count'] is not None and
+                (type(value['input_token_count']) is not int or value['input_token_count'] < 0))):
+        raise ContractError('reconciliation-count-observation-shape')
     if (value['outcome'] not in ('returned', 'failed')
             or (value['response_usage'] is not None and not isinstance(value['response_usage'], dict))
             or type(value['cost_estimate_available']) is not bool
@@ -1588,3 +1648,28 @@ def _validate_physical_observation(value, reservation=None):
                                   + counts[1]*prices['output_usd_per_million'])/1_000_000, 8)
         if cost != expected or value['cost_estimate_available'] != (expected is not None):
             raise ContractError('reconciliation-physical-observed-cost-mismatch')
+
+
+def _validate_count_preflight(reservation, current):
+    """Bind generation to an earlier durable count, without treating it as usage."""
+    counts = [item for item in current
+              if item['reservation']['transport_kind'] == 'input-token-count']
+    preflight = reservation['input_token_preflight']
+    if preflight is None:
+        if counts:
+            raise ContractError('reconciliation-count-preflight-omitted')
+        return  # Explicit non-preflight adapter; not configured COPAU proof.
+    if not counts:
+        raise ContractError('reconciliation-count-preflight-without-count')
+    counted = counts[-1]
+    observed = counted['observation']
+    source = counted['reservation']
+    if (observed is None or observed['outcome'] != 'returned'
+            or type(observed.get('input_token_count')) is not int
+            or observed['input_token_count'] != preflight['input_tokens']
+            or any(source[key] != reservation[key] for key in
+                   ('invocation', 'provider', 'model', 'role', 'bounds', 'pricing'))
+            or source['request_sha256'] != preflight['count_request_sha256']
+            or source['canonical_request_sha256'] != preflight['count_projection_sha256']
+            or preflight['input_tokens'] > reservation['bounds']['input_tokens']):
+        raise ContractError('reconciliation-count-preflight-binding')

@@ -1,8 +1,9 @@
-"""CI-only abrupt-kill regression for journal sinks and abort-only CLI.
+"""CI-only abrupt-kill regression for legacy journals and abort-only CLI.
 
 Synthetic identity/ledger data grants no run authority. No keys, signing,
 provider calls, Tower service, or admission bypass is used. This tests the
-journal/recovery boundary, not a fully admitted controller execution.
+historical protocol-2 recovery, not a new controller execution.
+Legacy records are fixture-built; production live sinks must refuse protocol 2.
 """
 import json
 import os
@@ -53,6 +54,28 @@ def physical(call):
                 pricing=dict(input_usd_per_million=10, output_usd_per_million=50))
 
 
+def legacy_reserve(controller, value):
+    """Construct an archived protocol-2 fixture, never call the live writer."""
+    journal = controller._receipt_journal
+    identity = controller._receipt_identity['content_sha256']
+    sequence = 1 + sum(e['kind'] == 'model_transport_reserved' for e in journal.events)
+    event = journal.append('RESERVED', 'model_transport_reserved', dict(
+        attempt_identity_sha256=identity, transport_sequence=sequence, reservation=value))
+    with journal.path.open('ab') as stream:
+        os.fsync(stream.fileno())
+    return dict(attempt_identity_sha256=identity, transport_sequence=sequence,
+                request_sha256=value['request_sha256'], reservation_event_sha256=event['event_sha256'])
+
+
+def legacy_observe(controller, ticket, value):
+    journal = controller._receipt_journal
+    journal.append('OBSERVED', 'model_transport_observed', dict(
+        attempt_identity_sha256=controller._receipt_identity['content_sha256'],
+        reservation_ticket=ticket, observation=value))
+    with journal.path.open('ab') as stream:
+        os.fsync(stream.fileno())
+
+
 def child(root, stage):
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         raise RuntimeError('CI only')
@@ -79,15 +102,15 @@ def child(root, stage):
                        dict(attempt_identity_sha256=identity['content_sha256'], protocol=2))
         checkpoint(journal, identity['content_sha256'], 0)
         if stage != 'before-reserve':
-            first = controller._reserve_model_transport(physical(1))
-            # Reload before the stub boundary; the real sink must have completed.
+            first = legacy_reserve(controller, physical(1))
+            # Reload the archived fixture before the simulated historical send.
             assert RunLedger(journal.path).events[-1]['event_sha256'] == first['reservation_event_sha256']
             flush_file(root/'stub-sends.json', json.dumps([first]).encode())
-            controller._observe_model_transport(first, dict(outcome='returned',
+            legacy_observe(controller, first, dict(outcome='returned',
                 response_usage=dict(input_tokens=7, output_tokens=3), estimated_cost_usd=.00022,
                 cost_estimate_available=True, failure_type=None))
             checkpoint(journal, identity['content_sha256'], 1)
-            second = controller._reserve_model_transport(physical(2))
+            second = legacy_reserve(controller, physical(2))
             assert RunLedger(journal.path).events[-1]['event_sha256'] == second['reservation_event_sha256']
             if stage == 'after-send':
                 flush_file(root/'stub-sends.json', json.dumps([first, second]).encode())

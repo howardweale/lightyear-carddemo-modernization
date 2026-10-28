@@ -269,7 +269,27 @@ class DurableBindingTests(unittest.TestCase):
         self.assertIn(gate.EXECUTION_GATES, accepted)
         self.assertEqual(gate.DURABLE_RUNTIME[gate.EXECUTION_GATES]['after'],
                          accepted[gate.EXECUTION_GATES]['after'])
-        self.assertEqual(7, len(result['accepted_durable_companions']))
+        # The approved count/Flex integration expanded the seven-file binding to twelve.
+        expected_paths = {
+            'src/lightyear_factory/additional_providers.py',
+            'src/lightyear_factory/budgeted_providers.py',
+            'src/lightyear_factory/controller_count_accounting.py',
+            'src/lightyear_factory/count_charge_account.py',
+            'src/lightyear_factory/count_request_bound.py',
+            'src/lightyear_factory/flex_billing.py',
+            'src/lightyear_factory/gates.py',
+            'src/lightyear_factory/model_config.py',
+            'src/lightyear_factory/model_versions.py',
+            'src/lightyear_factory/orchestrator.py',
+            'src/lightyear_factory/providers.py',
+            'src/lightyear_factory/transport_journal.py',
+        }
+        companions = result['accepted_durable_companions']
+        self.assertEqual(12, len(companions))
+        self.assertEqual(expected_paths, {entry['path'] for entry in companions})
+        self.assertEqual(expected_paths, set(gate.DURABLE_RUNTIME))
+        for entry in companions:
+            self.assertEqual(gate.DURABLE_RUNTIME[entry['path']]['after'], entry['after'])
         self.assertFalse(result['raw_fence_report']['merge_permitted'])
         self.assertEqual(1, result['raw_checker_exit'])
         self.assertEqual(['pulls/455', 'pulls/455'], queries)

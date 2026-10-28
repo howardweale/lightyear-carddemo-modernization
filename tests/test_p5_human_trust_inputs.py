@@ -67,11 +67,16 @@ class PublicHumanTrustInputTests(unittest.TestCase):
             with self.subTest(reseal=reseal), self.assertRaisesRegex(ValueError, 'human-trust-approved-plan'):
                 validate_public_configuration(env, 'a' * 40, changed)
 
+    def committed_public_bytes(self, relative):
+        # Fixtures use exact committed public bytes, independent of host checkout EOLs.
+        repository = Path(__file__).resolve().parents[1]
+        return subprocess.check_output(['git', '-C', str(repository), 'show', 'HEAD:' + relative])
+
     def git_fixture(self, temporary):
         root = Path(temporary) / 'source'
         root.mkdir()
         plan, env = self.fixture()
-        public = (Path(__file__).resolve().parents[1] / PUBLIC_KEY).read_bytes()
+        public = self.committed_public_bytes(PUBLIC_KEY)
         for relative, raw in [(PUBLIC_KEY, public), (PLAN, json.dumps(plan).encode()),
                               ('docs/factory/p5-human-clean-control/proof.json', b'{}'),
                               ('docs/factory/p5-human-clean-control/contract.json', b'{}')]:
@@ -80,6 +85,7 @@ class PublicHumanTrustInputTests(unittest.TestCase):
             path.write_bytes(raw)
         command = ['git', '-C', str(root)]
         subprocess.run(command + ['init', '--quiet'], check=True, capture_output=True)
+        subprocess.run(command + ['config', 'core.autocrlf', 'false'], check=True, capture_output=True)
         subprocess.run(command + ['add', '.'], check=True, capture_output=True)
         subprocess.run(command + ['-c', 'commit.gpgsign=false', '-c', 'user.name=Public fixture',
             '-c', 'user.email=public-fixture@example.invalid', 'commit', '--quiet', '-m', 'Unsigned parser fixture'],
@@ -132,9 +138,9 @@ class PublicHumanTrustInputTests(unittest.TestCase):
         self.assertEqual(PUBLIC_KEY,
             'docs/factory/posttran-key-change-2026-10-23/authority.public.pem')
         repository = Path(__file__).resolve().parents[1]
-        public = (repository / PUBLIC_KEY).read_bytes()
+        public = self.committed_public_bytes(PUBLIC_KEY)
         self.assertEqual(sha256(public).hexdigest(), helper.PUBLIC_KEY_SHA256)
-        legacy = (repository / 'docs/factory/factory-authority.public.pem').read_bytes()
+        legacy = self.committed_public_bytes('docs/factory/factory-authority.public.pem')
         self.assertNotEqual(sha256(legacy).hexdigest(), helper.PUBLIC_KEY_SHA256)
         with tempfile.TemporaryDirectory() as temp:
             root, env = self.git_fixture(temp)
@@ -145,6 +151,31 @@ class PublicHumanTrustInputTests(unittest.TestCase):
                 '-c', 'user.email=public-fixture@example.invalid', 'commit', '--quiet', '-m',
                 'Wrong existing public key negative fixture'], check=True, capture_output=True)
             env['P5_HUMAN_CLEAN_APPROVED_HEAD'] = subprocess.check_output(command + ['rev-parse', 'HEAD']).decode().strip()
+            output = Path(temp) / 'trust'
+            with self.assertRaisesRegex(ValueError, 'human-trust-public-key-hash'):
+                prepare(root, output, env)
+            self.assertFalse(output.exists())
+            self.assertEqual(subprocess.check_output(command + ['status', '--porcelain']), b'')
+
+
+    def test_committed_crlf_key_is_refused_without_normalization(self):
+        from tools.ci import p5_human_trust_inputs as helper
+        public = self.committed_public_bytes(PUBLIC_KEY)
+        self.assertNotIn(b'\r', public)
+        self.assertEqual(sha256(public).hexdigest(), helper.PUBLIC_KEY_SHA256)
+        crlf = public.replace(b'\n', b'\r\n')
+        self.assertNotEqual(sha256(crlf).hexdigest(), helper.PUBLIC_KEY_SHA256)
+        with tempfile.TemporaryDirectory() as temp:
+            root, env = self.git_fixture(temp)
+            self.assertEqual((root / PUBLIC_KEY).read_bytes(), public)
+            (root / PUBLIC_KEY).write_bytes(crlf)
+            command = ['git', '-C', str(root)]
+            subprocess.run(command + ['add', PUBLIC_KEY], check=True, capture_output=True)
+            subprocess.run(command + ['-c', 'commit.gpgsign=false', '-c', 'user.name=Public fixture',
+                '-c', 'user.email=public-fixture@example.invalid', 'commit', '--quiet', '-m',
+                'Changed public key byte representation negative fixture'], check=True, capture_output=True)
+            env['P5_HUMAN_CLEAN_APPROVED_HEAD'] = subprocess.check_output(command + ['rev-parse', 'HEAD']).decode().strip()
+            self.assertEqual(subprocess.check_output(command + ['show', 'HEAD:' + PUBLIC_KEY]), crlf)
             output = Path(temp) / 'trust'
             with self.assertRaisesRegex(ValueError, 'human-trust-public-key-hash'):
                 prepare(root, output, env)

@@ -735,6 +735,20 @@ def _retained_stage3_projection(
     if not (project_root / record_path).exists():
         return dict(actual)
     record = _read(project_root / record_path)
+    successor_path = ROOT_PATH / "stage3-retained-rebinding-2026-10-28.json"
+    if (project_root / successor_path).exists():
+        predecessor = dict(path=record_path.as_posix(),
+            logical_sha256="d11949c59ef32bd5b2427ca6853e389598d58ae66f4260b836b334c5b1799c84",
+            content_sha256="aff4c15546ddd4be3dadc2f1a9620363a14e3fe5776cb0cdb36349e0e5d4b30e")
+        if (source_hashes(project_root / record_path)[0] != predecessor["logical_sha256"]
+                or record.get("content_sha256") != predecessor["content_sha256"]
+                or content_hash(record) != predecessor["content_sha256"]):
+            raise ValueError("MS70 rebinding predecessor changed")
+        successor = _read(project_root / successor_path)
+        if (successor.get("supersedes") != predecessor
+                or successor.get("original_artifacts") != record.get("original_artifacts")):
+            raise ValueError("MS70 rebinding successor lineage mismatch")
+        record = successor
     names = {WORK_PACKAGE_PATH.name, CALIBRATION_PATH.name, COVERAGE_PATH.name,
              DIVERGENCE_PATH.name, INDETERMINATE_PATH.name, PROVENANCE_PATH.name,
              RECEIPT_PATH.name}

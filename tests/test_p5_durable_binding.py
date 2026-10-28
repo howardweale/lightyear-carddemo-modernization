@@ -152,8 +152,9 @@ class DurableBindingTests(unittest.TestCase):
                 path = args[-1]
                 if path == gate.DURABLE_BINDING:
                     return b'present' if pending or active else b''
-                if path.endswith('/transport_journal.py'):
-                    return b'present' if 'new-preimage' in faults else b''
+                if (path in gate.DURABLE_RUNTIME and gate.DURABLE_RUNTIME[path]['before'] is None
+                        and args[1:4] == ('-z', base, '--')):
+                    return b'present' if ('new-preimage' in faults or 'new-preimage:'+path in faults) else b''
                 raise AssertionError(args)
             if args[:3] == ('show', '-s', '--format=%P'):
                 return base.encode()
@@ -192,6 +193,15 @@ class DurableBindingTests(unittest.TestCase):
             stack.enter_context(patch.object(gate.subprocess, 'run', side_effect=process))
             result = gate.inspect('synthetic-repo', base, head, event, env, query)
         return result, queries
+
+
+    def test_dispatch_refuses_preexisting_blob_for_every_new_companion(self):
+        new_paths = [path for path, row in gate.DURABLE_RUNTIME.items() if row['before'] is None]
+        self.assertTrue(new_paths)
+        self.assertIn('src/lightyear_factory/controller_count_accounting.py', new_paths)
+        for path in new_paths:
+            with self.subTest(path=path), self.assertRaisesRegex(ValueError, 'durable-preimage-not-absent'):
+                self.inspect_fixture(active=True, faults=('new-preimage:'+path,))
 
     def test_dispatch_pending_and_absent_bindings_preserve_legacy_profile(self):
         reports = []

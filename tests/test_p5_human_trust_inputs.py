@@ -126,5 +126,31 @@ class PublicHumanTrustInputTests(unittest.TestCase):
             self.assertFalse(output.exists())
 
 
+
+    def test_committed_legacy_key_is_refused_and_installed_key_path_is_exact(self):
+        from tools.ci import p5_human_trust_inputs as helper
+        self.assertEqual(PUBLIC_KEY,
+            'docs/factory/posttran-key-change-2026-10-23/authority.public.pem')
+        repository = Path(__file__).resolve().parents[1]
+        public = (repository / PUBLIC_KEY).read_bytes()
+        self.assertEqual(sha256(public).hexdigest(), helper.PUBLIC_KEY_SHA256)
+        legacy = (repository / 'docs/factory/factory-authority.public.pem').read_bytes()
+        self.assertNotEqual(sha256(legacy).hexdigest(), helper.PUBLIC_KEY_SHA256)
+        with tempfile.TemporaryDirectory() as temp:
+            root, env = self.git_fixture(temp)
+            (root / PUBLIC_KEY).write_bytes(legacy)
+            command = ['git', '-C', str(root)]
+            subprocess.run(command + ['add', PUBLIC_KEY], check=True, capture_output=True)
+            subprocess.run(command + ['-c', 'commit.gpgsign=false', '-c', 'user.name=Public fixture',
+                '-c', 'user.email=public-fixture@example.invalid', 'commit', '--quiet', '-m',
+                'Wrong existing public key negative fixture'], check=True, capture_output=True)
+            env['P5_HUMAN_CLEAN_APPROVED_HEAD'] = subprocess.check_output(command + ['rev-parse', 'HEAD']).decode().strip()
+            output = Path(temp) / 'trust'
+            with self.assertRaisesRegex(ValueError, 'human-trust-public-key-hash'):
+                prepare(root, output, env)
+            self.assertFalse(output.exists())
+            self.assertEqual(subprocess.check_output(command + ['status', '--porcelain']), b'')
+
+
 if __name__ == '__main__':
     unittest.main()

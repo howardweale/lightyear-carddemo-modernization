@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import subprocess
 
-PUBLIC_KEY = 'docs/factory/factory-authority.public.pem'
+PUBLIC_KEY = 'docs/factory/posttran-key-change-2026-10-23/authority.public.pem'
 PUBLIC_KEY_SHA256 = '658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a'
 PLAN = 'docs/factory/p5-human-clean-control/plan.json'
 REPOSITORY = 'howardweale/lightyear-carddemo-modernization'

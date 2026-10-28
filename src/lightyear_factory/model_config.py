@@ -33,6 +33,17 @@ def configured_models(config, *, secret_store=None):
             or not 1 <= prices["max_output_tokens"] <= 65536
         ):
             raise ValueError("finite positive prices and output token cap required")
+        explicit_billing = {}
+        if 'service_tier' in c or 'billing_policy' in c:
+            if (c['provider'] != 'openai' or
+                    set(c).intersection({'service_tier', 'billing_policy'}) != {'service_tier', 'billing_policy'}):
+                raise ValueError('explicit tier and billing policy require the OpenAI provider and both fields')
+            from .flex_billing import validate_flex_billing
+            # Reject invalid bindings before requesting a credential lease.
+            bound_policy = validate_flex_billing(c['billing_policy'], model=c['model'],
+                input_price=prices['input_usd_per_million'], output_price=prices['output_usd_per_million'],
+                token_preflight=True, max_retries=0, service_tier=c['service_tier'])
+            explicit_billing = dict(service_tier='flex', billing_policy=bound_policy)
         from .model_versions import require_snapshot
         require_snapshot(c["model"])
         from .provider_secrets import NAMES
@@ -45,6 +56,7 @@ def configured_models(config, *, secret_store=None):
                 key,
                 model=c["model"],
                 max_retries=0,
+                **explicit_billing,
                 **prices,
             )
             p.manage_failure_budget = True

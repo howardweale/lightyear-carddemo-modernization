@@ -173,6 +173,7 @@ class FactoryOrchestrator:
         self._validate_attempt_budget(order)
         self._receipt_started = time.monotonic()
         self._receipt_transports = []
+        self._receipt_count_account = None
         self._receipt_pending = False
         self._receipt_journal = None
         lease = None
@@ -575,8 +576,11 @@ class FactoryOrchestrator:
             __import__('os').fsync(stream.fileno())
         self._receipt_identity = identity
         self._receipt_journal = RunLedger(run_dir/'attempt-accounting.jsonl')
+        from .controller_count_accounting import bind_controller_counts
+        count_header = bind_controller_counts(self)
         self._receipt_journal.append('READY', 'model_reservations', dict(
-            attempt_identity_sha256=identity['content_sha256'], protocol=4))
+            attempt_identity_sha256=identity['content_sha256'],
+            protocol=5 if count_header is not None else 4, **(count_header or {})))
         self._checkpoint_accounting()
         self._bind_reservation_journal()
 
@@ -597,18 +601,23 @@ class FactoryOrchestrator:
         journal = self._receipt_journal
         persisted = RunLedger(journal.path)
         identity = self._receipt_identity['content_sha256']
+        from .controller_count_accounting import live_count_header
+        count_header = live_count_header(self)
+        expected = dict(attempt_identity_sha256=identity,
+            protocol=5 if count_header is not None else 4, **(count_header or {}))
         if (not persisted.verify() or persisted.events != journal.events
                 or not persisted.events
                 or persisted.events[0]['state'] != 'READY'
                 or persisted.events[0]['kind'] != 'model_reservations'
-                or persisted.events[0]['payload'] != {
-                    'attempt_identity_sha256': identity, 'protocol': 4}):
-            raise TransportJournalError('Live transport requires a current protocol-4 journal')
+                or persisted.events[0]['payload'] != expected):
+            raise TransportJournalError('Live transport requires the current bound journal protocol')
         return persisted.events
+
 
     def _live_transport_accounting(self):
         return _reconcile_accounting_journal(
             self._live_journal_events(), self._receipt_identity['content_sha256'])
+
 
     def _reserve_model_transport(self, reservation):
         from .transport_journal import TransportJournalError
@@ -621,6 +630,9 @@ class FactoryOrchestrator:
                        if item['reservation']['invocation']['call_sequence']
                        == reservation['invocation']['call_sequence']]
             _validate_count_preflight(reservation, current)
+            if 'count_financial_accounting' in accounting:
+                from .controller_count_accounting import validate_live_count_generation
+                validate_live_count_generation(accounting, reservation)
         physical = [event for event in self._receipt_journal.events
                     if event['kind'] in ('model_transport_reserved', 'model_transport_observed')]
         if physical and physical[-1]['kind'] != 'model_transport_observed':
@@ -1080,6 +1092,8 @@ class FactoryOrchestrator:
         }
         if state == "BLOCKED":
             receipt["failure_accounting"] = self._failure_accounting()
+        if getattr(self, '_receipt_count_account', None) is not None:
+            receipt['count_financial_accounting'] = self._receipt_count_account.report()
         from .graph_tools import graph_summary
         receipt["graph"] = graph_summary(order, ledger, run_id)
         if candidate_authorship is not None:
@@ -1308,6 +1322,9 @@ def _validate_model_reservation(value):
 
 
 def _reconcile_accounting_journal(events, identity_sha256):
+    if events and events[0]['payload'].get('protocol') == 5:
+        from .controller_count_accounting import reconcile_controller_counts
+        return reconcile_controller_counts(events, identity_sha256, _reconcile_physical_accounting_journal)
     if (events and events[0]['kind'] == 'model_reservations'
             and events[0]['payload'].get('protocol') in (2, 4)):
         return _reconcile_physical_accounting_journal(events, identity_sha256)

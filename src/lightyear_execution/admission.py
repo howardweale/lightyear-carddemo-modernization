@@ -31,6 +31,8 @@ def sign_work_order(
     expires_at: str,
     nonce: str,
 ) -> dict[str, Any]:
+    if policy.signature_algorithm != "HMAC-SHA256":
+        raise ExecutionContractError("HMAC authority refuses public-proof policy")
     _validate_key(signing_key)
     issued = parse_timestamp(issued_at)
     expiry = parse_timestamp(expires_at)
@@ -65,6 +67,8 @@ def verify_work_order(
     now: str,
     nonce_store: "AdmissionNonceStore | None" = None,
 ) -> tuple[WorkOrder, dict[str, Any]]:
+    if policy.signature_algorithm != "HMAC-SHA256":
+        raise ExecutionContractError("HMAC authority refuses public-proof policy")
     if envelope.get("schema_version") != EXECUTION_SCHEMA_VERSION:
         raise ExecutionContractError("Unsupported signed work-order schema")
     if envelope.get("envelope_type") != "lightyear-signed-work-order":

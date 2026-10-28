@@ -236,6 +236,12 @@ class FactoryOrchestrator:
                 security_binding = self.execution_context.bind(order.content_sha256, started_at)
                 ledger.append(state, "hardened_admission_bound", security_binding)
             self._begin_reconciliation_evidence(run_dir, run_id, order)
+            from lightyear_execution.tower_drill_context import HumanDrillExecutionContext
+            if type(self.execution_context) is HumanDrillExecutionContext:
+                from lightyear_execution.public_drill_runtime import PublicDrillProvider
+                if type(self.agents) is not ModelAgentSet or type(self.agents.provider) is not PublicDrillProvider:
+                    raise ContractError('human-drill-native-provider-required')
+                self.agents.provider.bind_controller(self,order,ledger,run_dir)
             workspace.create()
             if self.prepare_workspace:
                 self.prepare_workspace(workspace, order)
@@ -803,6 +809,12 @@ class FactoryOrchestrator:
             raise ContractError('isolation-scan-agent-reuse')
         canaries = dict(workspace.canaries)
         def expected_values():
+            from lightyear_execution.tower_drill_context import HumanDrillExecutionContext
+            if type(self.execution_context) is HumanDrillExecutionContext:
+                from lightyear_execution.public_drill_runtime import PublicDrillProvider
+                if type(self.agents.provider) is not PublicDrillProvider:
+                    raise ContractError('human-drill-public-isolation-provider')
+                return self.execution_context.public_expected_values(order)
             if self.model_admission is None:
                 if self.candidate_signing_paths is not None:
                     raise ContractError('factory-private-expected-values-required')

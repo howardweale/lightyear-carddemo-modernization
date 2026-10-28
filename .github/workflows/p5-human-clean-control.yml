@@ -1,0 +1,119 @@
+name: Human-admitted public clean-control component
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p5-human-clean-control.yml'
+      - 'tools/ci/p5_human_*.py'
+      - 'tests/test_p5_human_*.py'
+      - 'tests/fixtures/p5_public/human-clean-control/**'
+      - 'docs/factory/p5-human-clean-control/**'
+      - 'src/lightyear_execution/**'
+      - 'src/lightyear_factory/**'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: human-public-clean-control-single-case
+  cancel-in-progress: false
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTHONPATH: src:.:tests
+jobs:
+  unsigned-inputs:
+    if: github.event.pull_request.head.repo.full_name == github.repository && vars.P5_HUMAN_CLEAN_APPROVED_HEAD != github.event.pull_request.head.sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install 'cryptography>=46,<47'
+      - name: Test unsigned input and external trust refusal boundaries
+        run: python -B -m unittest test_p5_human_case_inputs test_p5_human_trust_inputs -v
+      - name: Capture native planner format only; no provider or controller execution
+        run: python -B -m tools.ci.p5_human_case_inputs --source-root "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/human-unsigned-inputs"
+      - name: Test unsigned signing-pack construction and refusals
+        run: python -B -m unittest test_p5_human_signing_pack -v
+      - name: Seal unsigned signing inputs only when the public request is committed
+        if: hashFiles('docs/factory/p5-human-clean-control/signing-request.json') != ''
+        env:
+          PUBLIC_EXECUTABLE: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          from tools.ci.p5_human_signing_pack import main
+          root = Path(os.environ['GITHUB_WORKSPACE'])
+          request = json.loads((root / 'docs/factory/p5-human-clean-control/signing-request.json').read_text(encoding='utf-8'))
+          if (type(request) is not dict or set(request) != {'schema', 'window_start', 'window_end', 'nonce_sha256'}
+                  or request['schema'] != 'factory-public-signing-request/1'):
+              raise SystemExit('unsigned-signing-request-shape')
+          raise SystemExit(main(['--source-root', str(root), '--executable', os.environ['PUBLIC_EXECUTABLE'],
+              '--window-start', request['window_start'], '--window-end', request['window_end'],
+              '--nonce-sha256', request['nonce_sha256'],
+              '--output', str(Path(os.environ['RUNNER_TEMP']) / 'human-unsigned-inputs' / 'signing-pack')]))
+          PY
+      - uses: actions/upload-artifact@v6
+        with:
+          name: human-clean-unsigned-inputs
+          path: ${{ runner.temp }}/human-unsigned-inputs
+          if-no-files-found: error
+          retention-days: 30
+  human-clean-control:
+    name: human-clean-control
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.run_attempt == 1 && vars.P5_HUMAN_CLEAN_APPROVED_HEAD == github.event.pull_request.head.sha && vars.P5_HUMAN_CLEAN_APPROVED_PLAN != '' && vars.P5_HUMAN_CLEAN_JOURNAL_HEAD != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install 'cryptography>=46,<47'
+      - name: Obtain the runner-selected workflow revision for exact signed-byte comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]]
+          git fetch --no-tags origin "$GITHUB_WORKFLOW_SHA"
+      - name: Provision existing public image before the irreversible reservation
+        run: docker pull python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0
+      - name: Prepare public trust inputs from independent operator configuration
+        env:
+          P5_HUMAN_CLEAN_APPROVED_HEAD: ${{ vars.P5_HUMAN_CLEAN_APPROVED_HEAD }}
+          P5_HUMAN_CLEAN_APPROVED_PLAN: ${{ vars.P5_HUMAN_CLEAN_APPROVED_PLAN }}
+          P5_HUMAN_CLEAN_JOURNAL_HEAD: ${{ vars.P5_HUMAN_CLEAN_JOURNAL_HEAD }}
+        run: python -B -m tools.ci.p5_human_trust_inputs --source-root "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/human-public-trust"
+      - name: Genuine human-proof preflight and exactly one native scripted controller invocation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -B -m tools.ci.p5_human_positive \
+            --source-root "$GITHUB_WORKSPACE" \
+            --work-order tests/fixtures/p5_public/human-clean-control/work-order.json \
+            --execution-policy docs/factory/p5-human-clean-control/execution-policy.json \
+            --factory-plan docs/factory/p5-human-clean-control/plan.json \
+            --factory-contract docs/factory/p5-human-clean-control/contract.json \
+            --factory-approval docs/factory/p5-human-clean-control/proof.json \
+            --factory-trust "$RUNNER_TEMP/human-public-trust/trust.json" \
+            --public-output-plan docs/factory/p5-human-clean-control/public-outputs.json \
+            --public-isolation-plan docs/factory/p5-human-clean-control/public-isolation.json \
+            --runs-root "$RUNNER_TEMP/human-clean-evidence" \
+            --execution-runtime docker
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: human-clean-component-evidence
+          path: ${{ runner.temp }}/human-clean-evidence
+          if-no-files-found: error
+          retention-days: 90

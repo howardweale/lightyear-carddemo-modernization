@@ -6,16 +6,17 @@ import unittest
 from unittest.mock import patch
 from lightyear_data import idempiere_triage as triage
 from lightyear_data.contracts import seal
-from test_ms70_retained_rebinding import RetainedRebindingTests, ROOT, RECORD
+import test_ms70_retained_rebinding as retained_rebinding
+from test_ms70_retained_rebinding import ROOT, RECORD
 
 SUCCESSOR=triage.ROOT_PATH/'stage3-retained-rebinding-2026-10-28.json'
 
 class RetainedSuccessorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        RetainedRebindingTests.setUpClass()
-        cls.actual=RetainedRebindingTests.actual
-        cls.expected=RetainedRebindingTests.expected
+        retained_rebinding.RetainedRebindingTests.setUpClass()
+        cls.actual=retained_rebinding.RetainedRebindingTests.actual
+        cls.expected=retained_rebinding.RetainedRebindingTests.expected
         cls.record=json.loads((ROOT/SUCCESSOR).read_text(encoding='utf-8'))
 
     def test_successor_preserves_originals_and_predecessor(self):
@@ -44,5 +45,26 @@ class RetainedSuccessorTests(unittest.TestCase):
         def present(path):return False if path==ROOT/SUCCESSOR else exists(path)
         with patch.object(Path,'exists',present),self.assertRaisesRegex(ValueError,'identity mismatch'):
             triage._retained_stage3_projection(ROOT,self.actual,self.expected)
+
+    def test_discovery_keeps_original_tests_once_in_their_defining_module(self):
+        import sys
+        def identities(suite):
+            for item in suite:
+                if isinstance(item, unittest.TestSuite):
+                    yield from identities(item)
+                else:
+                    yield item.id()
+        loader = unittest.TestLoader()
+        original = list(identities(loader.loadTestsFromModule(retained_rebinding)))
+        successor = list(identities(loader.loadTestsFromModule(sys.modules[__name__])))
+        expected = {retained_rebinding.__name__ + '.RetainedRebindingTests.' + name
+                    for name in loader.getTestCaseNames(retained_rebinding.RetainedRebindingTests)}
+        self.assertTrue(expected)
+        self.assertEqual(set(original), expected)
+        self.assertEqual(len(original), len(expected))
+        self.assertTrue(successor)
+        self.assertTrue(all(name.startswith(__name__ + '.RetainedSuccessorTests.') for name in successor))
+        combined = original + successor
+        self.assertEqual(len(combined), len(set(combined)))
 
 if __name__=='__main__':unittest.main()

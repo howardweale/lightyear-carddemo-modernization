@@ -269,10 +269,22 @@ class DurableBindingTests(unittest.TestCase):
         self.assertIn(gate.EXECUTION_GATES, accepted)
         self.assertEqual(gate.DURABLE_RUNTIME[gate.EXECUTION_GATES]['after'],
                          accepted[gate.EXECUTION_GATES]['after'])
-        # The approved count/Flex integration expanded the seven-file binding to twelve.
+        # The approved human-admission integration binds exactly 24 runtime paths.
         expected_paths = {
+            'src/lightyear_execution/admission.py',
+            'src/lightyear_execution/contracts.py',
+            'src/lightyear_execution/human_drill_dispatch.py',
+            'src/lightyear_execution/identity.py',
+            'src/lightyear_execution/integration.py',
+            'src/lightyear_execution/public_drill_outputs.py',
+            'src/lightyear_execution/public_drill_runtime.py',
+            'src/lightyear_execution/tower_drill_admission.py',
+            'src/lightyear_execution/tower_drill_context.py',
+            'src/lightyear_execution/tower_drill_reservation.py',
+            'src/lightyear_execution/tower_drill_roles.py',
             'src/lightyear_factory/additional_providers.py',
             'src/lightyear_factory/budgeted_providers.py',
+            'src/lightyear_factory/cli.py',
             'src/lightyear_factory/controller_count_accounting.py',
             'src/lightyear_factory/count_charge_account.py',
             'src/lightyear_factory/count_request_bound.py',
@@ -285,7 +297,7 @@ class DurableBindingTests(unittest.TestCase):
             'src/lightyear_factory/transport_journal.py',
         }
         companions = result['accepted_durable_companions']
-        self.assertEqual(12, len(companions))
+        self.assertEqual(24, len(companions))
         self.assertEqual(expected_paths, {entry['path'] for entry in companions})
         self.assertEqual(expected_paths, set(gate.DURABLE_RUNTIME))
         for entry in companions:

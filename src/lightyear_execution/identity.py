@@ -14,6 +14,8 @@ class IdentityAuthority:
     """Issues short-lived, action-scoped credentials for replaceable worker roles."""
 
     def __init__(self, policy: ExecutionPolicy, signing_key: bytes) -> None:
+        if policy.signature_algorithm != "HMAC-SHA256":
+            raise ExecutionContractError("HMAC authority refuses public-proof policy")
         if len(signing_key) < 32:
             raise ExecutionContractError("Identity signing key must contain at least 32 bytes")
         self.policy = policy

@@ -37,6 +37,14 @@ jobs:
       - name: Measure real boundaries with disposable authority and stub provider
         env: {PYTHONPATH: '.'}
         run: python -B tools/ci/p5_drills.py --output work/p5-public
+      - name: Retain original physical count and generation component journals
+        if: always()
+        env: {PYTHONPATH: '.'}
+        run: python -B tools/ci/p5_physical_exit_collector.py --output work/p5-public/physical-transports
+      - name: Retain configured-loader count and generation component journals
+        if: always()
+        env: {PYTHONPATH: '.'}
+        run: python -B tools/ci/p5_configured_exit_collector.py --output work/p5-public/configured-transports
       - name: Require complete evidence and no unaccepted gaps
         if: always()
         env: {PYTHONPATH: '.'}

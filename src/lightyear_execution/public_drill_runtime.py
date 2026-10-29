@@ -4,6 +4,7 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from weakref import WeakKeyDictionary, ref
 
 from lightyear_factory.contracts import ContractError, canonical_hash
 from lightyear_factory.ledger import RunLedger
@@ -11,6 +12,75 @@ from lightyear_factory.model_admission import _bounded_regular_bytes
 from lightyear_factory.providers import ProviderResult, _validate_schema
 from .tower_drill_context import HumanDrillExecutionContext
 from .public_drill_outputs import validate_public_output_plan
+
+
+# Historical lineage is deliberately separate from the live authorization registry.
+# Entries exist only after a native live controller bind, and cannot reconstruct a
+# context, authorize a call, or survive a process boundary. Weak references avoid
+# keeping the provider/controller alive merely to retain diagnostic authority.
+_TERMINAL_LINEAGE = WeakKeyDictionary()
+
+
+def _lineage_state(context):
+    return canonical_hash(dict(admission=context.admission_receipt,
+        runtime=context._runtime, review=context._review, workflow=context._workflow,
+        public_outputs=context._public_outputs, public_values=context._public_values,
+        policy=context.policy.to_dict(), source_root=str(context._root),
+        backend=dict(policy=context.backend.policy.to_dict(),runtime=context.backend.runtime,
+                     execute_enabled=context.backend.execute_enabled,backend_id=context.backend.backend_id),
+        ci={k:os.environ.get(k) for k in ('GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT','GITHUB_REPOSITORY',
+                                         'GITHUB_WORKFLOW_REF','GITHUB_WORKFLOW_SHA')},
+        inputs={k:str(v) for k,v in context._inputs.items()}, manifest=context._manifest))
+
+
+def _capture_terminal_lineage(provider):
+    from lightyear_factory.orchestrator import FactoryOrchestrator
+    if type(provider) is not PublicDrillProvider:
+        raise ContractError('public-drill-terminal-lineage-bind')
+    context=provider.context
+    if (type(context) is not HumanDrillExecutionContext
+            or type(provider.controller) is not FactoryOrchestrator
+            or type(provider.ledger) is not RunLedger or not context._controller_bound
+            or provider.controller.execution_context is not context
+            or provider.controller.agents.provider is not provider
+            or provider.controller.agents.bounded_provider.provider is not provider
+            or provider.controller.agents.bounded_provider.order is not context._order):
+        raise ContractError('public-drill-terminal-lineage-bind')
+    context._live()
+    if type(provider) is not PublicDrillProvider or provider.controller is None:
+        raise ContractError('public-drill-terminal-lineage-bind')
+    if provider in _TERMINAL_LINEAGE:
+        raise ContractError('public-drill-terminal-lineage-rebind')
+    _TERMINAL_LINEAGE[provider]=dict(pid=os.getpid(),context=ref(context),
+        controller=ref(provider.controller),ledger=ref(provider.ledger),
+        admission=ref(context._admission),backend=ref(context.backend),
+        order=ref(context._order),run_dir=provider.run_dir,
+        ledger_path=provider.ledger.path,model=provider.model,
+        state_sha256=_lineage_state(context),script_sha256=canonical_hash(provider.script))
+
+
+def _require_terminal_lineage(provider):
+    # No _live(), role authorization, Tower call or nonce operation occurs here.
+    # Historical validation never changes the context's closed/live state.
+    if type(provider) is not PublicDrillProvider:
+        raise ContractError('public-drill-terminal-lineage-refused')
+    saved=_TERMINAL_LINEAGE.get(provider)
+    context=provider.context;controller=provider.controller
+    if (type(provider) is not PublicDrillProvider or saved is None
+            or saved['pid']!=os.getpid() or saved['context']() is not context
+            or saved['controller']() is not controller or saved['ledger']() is not provider.ledger
+            or saved['admission']() is not context._admission or saved['backend']() is not context.backend
+            or saved['order']() is not context._order or saved['run_dir']!=provider.run_dir
+            or saved['ledger_path']!=provider.ledger.path or provider.ledger.path!=provider.run_dir/'events.jsonl'
+            or saved['model']!=provider.model or provider.model!=provider.script['model']
+            or saved['state_sha256']!=_lineage_state(context)
+            or saved['script_sha256']!=canonical_hash(provider.script)
+            or controller.execution_context is not context or controller.agents.provider is not provider
+            or controller.agents.bounded_provider.provider is not provider
+            or controller.agents.bounded_provider.order is not context._order):
+        raise ContractError('public-drill-terminal-lineage-refused')
+    return saved
+
 
 
 def _bytes(value):
@@ -173,6 +243,7 @@ class PublicDrillProvider:
             admission_receipt_sha256=self.context.admission_receipt['content_sha256'],
             work_order_sha256=order.content_sha256,provider=self.provider_id,model=self.model))
         self.context._controller_bound=True
+        _capture_terminal_lineage(self)
 
     def _live(self):
         self.context._live()
@@ -279,5 +350,62 @@ class PublicDrillProvider:
             production_qualified=False,qualifies_for_factory_receipt=False,
             gaps=['full-production-build-receipt-route-not-integrated']+
                 ([] if complete else ['public-output-plan-incomplete']))
+        result['content_sha256']=canonical_hash(result)
+        return result
+
+    def retained_terminal_lineage(self,receipt):
+        """Retain same-process blocked-run lineage, never current authority.
+
+        This is not normal live provenance, accounting replay, expected-refusal
+        qualification or a successful build. Abruptly killed processes cannot
+        use this method; their recovery evidence remains a separate obligation.
+        """
+        _require_terminal_lineage(self)
+        if receipt.get('status')!='blocked':
+            raise ContractError('public-drill-terminal-blocked-only')
+        receipt_raw=_bounded_regular_bytes(self.run_dir/'receipt.json',1024*1024,'public-drill-terminal-receipt')
+        summary_raw=_bounded_regular_bytes(self.run_dir/'summary.json',1024*1024,'public-drill-terminal-summary')
+        identity_raw=_bounded_regular_bytes(self.run_dir/'attempt-identity.json',65536,'public-drill-terminal-identity')
+        retained=json.loads(receipt_raw);summary=json.loads(summary_raw);identity=json.loads(identity_raw)
+        admission=self.context.admission_receipt
+        if (retained!=receipt or receipt.get('receipt_type')!='lightyear-autonomous-factory-run'
+                or receipt.get('content_sha256')!=canonical_hash(receipt,{'content_sha256'})
+                or receipt.get('work_order_sha256')!=self.context._order.content_sha256
+                or summary.get('receipt_sha256')!=receipt['content_sha256'] or summary.get('status')!='blocked'
+                or identity.get('schema')!='factory-attempt-identity/1'
+                or identity.get('content_sha256')!=canonical_hash(identity,{'content_sha256'})
+                or identity.get('attempt_id')!=self.run_dir.name
+                or identity.get('work_order_sha256')!=receipt['work_order_sha256']
+                or identity.get('admission_receipt_sha256')!=admission['content_sha256']
+                or identity.get('consumed_nonce_sha256')!=admission['nonce_sha256']):
+            raise ContractError('public-drill-terminal-receipt-binding')
+        events=RunLedger(self.ledger.path).events
+        if events!=self.ledger.events:raise ContractError('public-drill-terminal-ledger')
+        snapshot=verify_receipt_tail(receipt,summary,events)
+        accounting=self.controller._live_journal_events()
+        if any(e['payload'].get('attempt_identity_sha256')!=identity['content_sha256'] for e in accounting):
+            raise ContractError('public-drill-terminal-accounting-identity')
+        trace=verify_recorded_trace(self.script,events,accounting,
+            self.context.authorization_receipts,self.controller.agents.bounded_provider.calls,
+            self.run_dir,admission)
+        if len(self.observed)!=trace['completed_public_calls']:
+            raise ContractError('public-drill-terminal-observed-count')
+        result=dict(schema='factory-human-drill-terminal-lineage/1',status='retained-blocked-lineage',
+            same_process_controller_lineage_verified=True,
+            trust_boundary='native-controller-bound-process; historical-lineage-only',
+            admission_receipt_sha256=admission['content_sha256'],
+            attempt_identity_sha256=identity['content_sha256'],
+            receipt_sha256=receipt['content_sha256'],receipt_file_sha256=sha256(receipt_raw).hexdigest(),
+            summary_file_sha256=sha256(summary_raw).hexdigest(),identity_file_sha256=sha256(identity_raw).hexdigest(),
+            ledger_head_sha256=self.ledger.head_sha256,receipt_ledger_snapshot_sha256=receipt['ledger_head_sha256'],
+            post_receipt_scan_events=len(events)-snapshot,
+            output_plan_sha256=self.script['content_sha256'],
+            output_plan_complete=trace['output_plan_complete'],
+            completed_public_calls=trace['completed_public_calls'],unfinished_public_calls=trace['unfinished_public_calls'],
+            accounted_calls=trace['accounted_calls'],external_model_calls=0,signatures_created=0,
+            controller_origin_verified=False,execution_authorized=False,resume_allowed=False,retry_allowed=False,
+            production_qualified=False,qualifies_for_factory_receipt=False,
+            accounting_semantics_verified=False,expected_refusal_verified=False,
+            gaps=['full-production-build-receipt-route-not-integrated','terminal-drill-outcome-not-qualified'])
         result['content_sha256']=canonical_hash(result)
         return result

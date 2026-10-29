@@ -74,6 +74,54 @@ def _write(path,value):
         stream.flush();os.fsync(stream.fileno())
 
 
+
+def _retain_optional_terminal_lineage(root,provider,receipt,receipt_file_sha256):
+    # A diagnostic failure must not replace or soften the original refusal.
+    # No live authorization is retried and no context is reconstructed here.
+    from .public_drill_runtime import PublicDrillProvider
+    if type(provider) is not PublicDrillProvider:
+        return dict(status='not-supported',file_sha256=None)
+    try:
+        value=provider.retained_terminal_lineage(receipt)
+        if (type(value) is not dict or value.get('schema')!='factory-human-drill-terminal-lineage/1'
+                or value.get('status')!='retained-blocked-lineage'
+                or value.get('content_sha256')!=canonical_hash(value,{'content_sha256'})
+                or value.get('receipt_sha256')!=receipt.get('content_sha256')
+                or value.get('receipt_file_sha256')!=receipt_file_sha256
+                or value.get('same_process_controller_lineage_verified') is not True
+                or any(value.get(k) is not False for k in ('controller_origin_verified',
+                    'execution_authorized','resume_allowed','retry_allowed','production_qualified',
+                    'qualifies_for_factory_receipt','accounting_semantics_verified','expected_refusal_verified'))):
+            raise ContractError('human-drill-terminal-lineage-record-refused')
+        _write(Path(root)/'controller-terminal-lineage.json',value)
+        raw=(json.dumps(value,sort_keys=True,separators=(',',':'))+'\n').encode('utf-8')
+        return dict(status='retained',file_sha256=sha256(raw).hexdigest())
+    except Exception:
+        return dict(status='unavailable',file_sha256=None)
+
+
+
+def _retain_controller_provenance(root,run_dir,provider,receipt):
+    # Failure evidence preserves original bytes; it does not recover authority.
+    try:
+        provenance=provider.provenance(receipt)
+    except Exception:
+        original=_bounded_regular_bytes(Path(run_dir)/'receipt.json',1024*1024,
+                                        'human-drill-refusal-original-receipt')
+        terminal=_retain_optional_terminal_lineage(root,provider,receipt,sha256(original).hexdigest())
+        refusal=dict(schema='factory-human-drill-provenance-refusal/1',
+            status='refused',reason='controller-output-provenance-unavailable',
+            receipt_file_sha256=sha256(original).hexdigest(),
+            terminal_lineage_status=terminal['status'],terminal_lineage_file_sha256=terminal['file_sha256'],
+            controller_origin_verified=False,execution_authorized=False,
+            production_qualified=False,qualifies_for_factory_receipt=False,
+            resume_allowed=False)
+        refusal['content_sha256']=canonical_hash(refusal)
+        _write(Path(root)/'controller-output-provenance-refusal.json',refusal)
+        raise
+    _write(Path(root)/'controller-output-provenance.json',provenance)
+    return provenance
+
 def dispatch_human_drill(args):
     from lightyear_factory.agents import ModelAgentSet
     from lightyear_factory.orchestrator import FactoryOrchestrator
@@ -117,8 +165,7 @@ def dispatch_human_drill(args):
         except ContractError:
             failure=True
             receipt=json.loads(_bounded_regular_bytes(root/run_id/'receipt.json',1024*1024,'human-drill-blocked-receipt'))
-        provenance=provider.provenance(receipt)
-        _write(root/'controller-output-provenance.json',provenance)
+        provenance=_retain_controller_provenance(root,root/run_id,provider,receipt)
         result=dict(schema='factory-human-drill-dispatch/1',run_id=run_id,controller_status=receipt['status'],
             controller_raised_refusal=failure,receipt_sha256=receipt['content_sha256'],
             provenance_sha256=provenance['content_sha256'],external_model_calls=0,signatures_created=0,

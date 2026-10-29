@@ -210,6 +210,185 @@ class RequestDerivedCountBoundTests(unittest.TestCase):
             self.assertFalse(report['billing_final'])
 
 
+class PhysicalCountGenerationExitTests(unittest.TestCase):
+    """Abrupt component exits, not admitted FactoryOrchestrator.run coverage.
+
+    Reuse the existing request-derived fixture without inheriting its TestCase
+    (which would rediscover all its tests). Child processes execute only in CI.
+    The configured adapter and controller journal are real; HTTP is a stub,
+    identity is synthetic, and no signing or admission authority is created.
+    """
+    CHILD = r'''
+import hashlib, json, os, runpy, sys
+from pathlib import Path
+from unittest.mock import patch
+assert os.environ.get('GITHUB_ACTIONS') == 'true'
+namespace = runpy.run_path(sys.argv[1], run_name='p5_count_fixture_child')
+case = namespace['RequestDerivedCountBoundTests']()
+case.setUp()
+mode, directory = sys.argv[2], Path(sys.argv[3])
+allowed = {'before-count-reserve', 'after-count-reserve',
+           'before-generation-reserve', 'after-generation-reserve',
+           'generation-send', 'after-generation-observed', 'normal'}
+assert mode in allowed
+controller, sends, invoke = case.controller(directory=str(directory))
+budget = controller.agents.bounded_provider
+real_reserve = budget.transport_reservation_checkpoint
+real_observe = budget.transport_observed_checkpoint
+real_open = budget.provider.opener
+
+def reserved(record):
+    target = 'count' if record['transport_kind'] == 'input-token-count' else 'generation'
+    if mode == 'before-' + target + '-reserve':
+        os._exit(86)
+    ticket = real_reserve(record)
+    if mode == 'after-' + target + '-reserve':
+        # The real sink has returned only after appending and fsyncing.
+        os._exit(86)
+    return ticket
+
+def observed(ticket, observation):
+    result = real_observe(ticket, observation)
+    if mode == 'after-generation-observed' and ticket['transport_sequence'] == 2:
+        # Retain the returned usage through the real sink before abrupt exit;
+        # the logical budget has not appended its completed call yet.
+        os._exit(86)
+    return result
+
+def opened(request, **kwargs):
+    from lightyear_factory.ledger import RunLedger
+    ledger = RunLedger(controller._receipt_journal.path)
+    assert ledger.verify()
+    last = ledger.events[-1]
+    assert last['kind'] == 'model_transport_reserved'
+    reservation = last['payload']['reservation']
+    assert reservation['request_sha256'] == hashlib.sha256(request.data).hexdigest()
+    row = dict(kind=reservation['transport_kind'], request_sha256=reservation['request_sha256'],
+               reservation_event_sha256=last['event_sha256'])
+    with (directory/'stub-sends.jsonl').open('ab') as stream:
+        stream.write((json.dumps(row, sort_keys=True)+'\n').encode())
+        stream.flush(); os.fsync(stream.fileno())
+    if mode == 'generation-send' and reservation['transport_kind'] == 'responses':
+        os._exit(86)
+    return real_open(request, **kwargs)
+
+budget.transport_reservation_checkpoint = reserved
+budget.transport_observed_checkpoint = observed
+budget.provider.opener = opened
+with patch('socket.socket', side_effect=AssertionError('network forbidden')):
+    result = invoke()
+assert mode == 'normal'
+(directory/'result.json').write_text(json.dumps(result.content), encoding='utf-8')
+case.doCleanups()
+'''
+
+    def setUp(self):
+        self.assertEqual(os.environ.get('GITHUB_ACTIONS'), 'true')
+
+    def child(self, mode):
+        with tempfile.TemporaryDirectory(prefix='p5-physical-exit-') as temp:
+            result = subprocess.run([sys.executable, '-B', '-c', self.CHILD,
+                                     str(Path(__file__).resolve()), mode, temp],
+                                    capture_output=True, timeout=60)
+            self.assertEqual(result.returncode, 0 if mode == 'normal' else 86,
+                             result.stderr.decode(errors='replace'))
+            path = Path(temp)/'attempt.jsonl'
+            original = path.read_bytes()
+            journal = RunLedger(path)
+            self.assertTrue(journal.verify())
+            self.assertEqual(journal.events[0]['payload']['protocol'], 5)
+            self.assertEqual(journal.events[0]['payload']['count_bound_profile'], 'request-bytes-v1')
+            report = _reconcile_accounting_journal(journal.events, 'a'*64)
+            self.assertEqual(path.read_bytes(), original)
+            sent_path = Path(temp)/'stub-sends.jsonl'
+            sent = [json.loads(line) for line in sent_path.read_bytes().splitlines()] if sent_path.exists() else []
+            reservations = [e for e in journal.events if e['kind'] == 'model_transport_reserved']
+            by_hash = {e['event_sha256']: e['payload']['reservation'] for e in reservations}
+            for row in sent:
+                self.assertIn(row['reservation_event_sha256'], by_hash)
+                reservation = by_hash[row['reservation_event_sha256']]
+                self.assertEqual(row['kind'], reservation['transport_kind'])
+                self.assertEqual(row['request_sha256'], reservation['request_sha256'])
+            self.assertIs(report['billing_final'], False)
+            self.assertIs(report['count_financial_accounting']['actual_provider_cost_usd'], None)
+            if mode == 'normal':
+                self.assertEqual(json.loads((Path(temp)/'result.json').read_text()), {'ok': True})
+            return journal.events, report, sent
+
+    def test_abrupt_count_reserve_boundaries_distinguish_hold_from_send(self):
+        for mode, physical_count in [('before-count-reserve', 0), ('after-count-reserve', 1)]:
+            with self.subTest(mode=mode):
+                events, report, sent = self.child(mode)
+                self.assertEqual(sent, [])
+                self.assertEqual(sum(e['kind'] == 'model_transport_reserved' for e in events), physical_count)
+                self.assertFalse(any(e['kind'] == 'model_transport_observed' for e in events))
+                row = report['count_financial_accounting']['count_account']['calls'][0]
+                self.assertEqual(row['state'], 'reserved-unknown')
+                self.assertEqual(row['charge_usd'], row['reserved_cost_usd'])
+                self.assertGreater(Decimal(row['charge_usd']), 0)
+
+    def test_abrupt_generation_reserve_boundaries_keep_completed_count_and_pending_hold(self):
+        for mode, physical_count in [('before-generation-reserve', 1), ('after-generation-reserve', 2)]:
+            with self.subTest(mode=mode):
+                events, report, sent = self.child(mode)
+                self.assertEqual([row['kind'] for row in sent], ['input-token-count'])
+                self.assertEqual(sum(e['kind'] == 'model_transport_reserved' for e in events), physical_count)
+                self.assertEqual(sum(e['kind'] == 'model_transport_observed' for e in events), 1)
+                finance = report['count_financial_accounting']
+                self.assertEqual(finance['count_account']['calls'][0]['state'], 'counted-conservative-charge')
+                self.assertEqual(finance['count_account']['count_exposure_usd'], '0.0000935')
+                self.assertGreater(Decimal(finance['pending_generation_reserve_usd']), 0)
+                if mode == 'after-generation-reserve':
+                    unresolved = report['unresolved_model_transports'][-1]
+                    self.assertEqual(unresolved['reservation']['transport_kind'], 'responses')
+                    self.assertEqual(unresolved['reservation']['input_token_preflight']['input_tokens'], 17)
+
+    def test_abrupt_generation_send_keeps_unknown_outcome_and_original_reservation(self):
+        events, report, sent = self.child('generation-send')
+        self.assertEqual([row['kind'] for row in sent], ['input-token-count', 'responses'])
+        self.assertEqual(sum(e['kind'] == 'model_transport_observed' for e in events), 1)
+        unresolved = report['unresolved_model_transports'][-1]
+        self.assertEqual(unresolved['reservation']['transport_kind'], 'responses')
+        self.assertEqual(unresolved['reservation']['request_sha256'], sent[-1]['request_sha256'])
+        self.assertGreater(unresolved['reservation']['bounds']['estimated_cost_usd'], 0)
+        self.assertEqual(report['calls'], 0)  # No completed logical generation.
+        self.assertEqual(report['in_flight_final_usage'], 'unknown; reserved upper bound recorded')
+
+    def test_normal_component_control_observes_both_transports_without_authority_claim(self):
+        events, report, sent = self.child('normal')
+        self.assertEqual([row['kind'] for row in sent], ['input-token-count', 'responses'])
+        self.assertEqual(sum(e['kind'] == 'model_transport_reserved' for e in events), 2)
+        self.assertEqual(sum(e['kind'] == 'model_transport_observed' for e in events), 2)
+        self.assertNotIn('unresolved_model_transports', report)
+        self.assertEqual(report['count_financial_accounting']['count_account']['count_exposure_usd'], '0.0000935')
+
+    def test_abrupt_exit_after_observation_retains_usage_without_double_charging(self):
+        events, report, sent = self.child('after-generation-observed')
+        self.assertEqual([row['kind'] for row in sent], ['input-token-count', 'responses'])
+        self.assertEqual(sum(e['kind'] == 'model_transport_observed' for e in events), 2)
+        self.assertEqual(report['calls'], 0)
+        self.assertNotIn('unresolved_model_transports', report)
+        pending = report['uncheckpointed_model_transports']
+        self.assertEqual(len(pending), 2)
+        generation = pending[-1]
+        self.assertEqual(generation['reservation']['transport_kind'], 'responses')
+        self.assertEqual(generation['reservation']['request_sha256'], sent[-1]['request_sha256'])
+        self.assertEqual(generation['observation']['outcome'], 'returned')
+        self.assertEqual(generation['observation']['response_usage'], dict(input_tokens=17, output_tokens=1))
+        self.assertEqual(generation['observation']['estimated_cost_usd'], 0.00011825)
+        finance = report['count_financial_accounting']
+        logical = Decimal(finance['generation_logical_cost_usd'])
+        held = Decimal(finance['pending_generation_reserve_usd'])
+        counted = Decimal(finance['count_account']['count_exposure_usd'])
+        self.assertEqual(logical, 0)
+        self.assertGreater(held, 0)
+        self.assertEqual(counted, Decimal('0.0000935'))
+        self.assertEqual(Decimal(finance['combined_conservative_cost_usd']), logical+held+counted)
+        self.assertIs(finance['actual_provider_cost_usd'], None)
+        self.assertIs(finance['billing_final'], False)
+
+
+
 if __name__=='__main__':
     if len(sys.argv)==4 and sys.argv[1]=='--count-kill-child':
         case=RequestDerivedCountBoundTests();case.setUp()

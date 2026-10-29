@@ -39,11 +39,23 @@ class DurableBindingGitTests(unittest.TestCase):
                               env=self.env, check=True, capture_output=True).stdout
 
     def commit(self, files, parent=None):
-        # No checkout, hooks, signing, network, or ref updates; disposable CI objects only.
+        # Same real Git objects; cache immutable blobs and batch only index input.
+        # No checkout, hooks, signing, network, or ref updates.
         self.git('read-tree', '--empty')
+        blobs = getattr(self, '_fixture_blob_oids', None)
+        if blobs is None:
+            blobs = self._fixture_blob_oids = {}
+        records = []
         for path, (mode, raw) in sorted(files.items()):
-            oid = self.git('hash-object', '-w', '--stdin', data=raw).decode().strip()
-            self.git('update-index', '--add', '--cacheinfo', mode, oid, path)
+            if '\x00' in path:
+                raise ValueError('NUL in fixture path')
+            oid = blobs.get(raw)
+            if oid is None:
+                oid = self.git('hash-object', '-w', '--stdin', data=raw).decode().strip()
+                blobs[raw] = oid
+            records.append((mode + ' ' + oid + '\t' + path + '\x00').encode('utf-8'))
+        if records:
+            self.git('update-index', '-z', '--index-info', data=b''.join(records))
         tree = self.git('write-tree').decode().strip()
         parents = ['-p', parent] if parent else []
         return self.git('commit-tree', tree, *parents, '--no-gpg-sign',
@@ -124,3 +136,51 @@ class DurableBindingGitTests(unittest.TestCase):
                 with self.subTest(path=path, prefixes=prefixes), self.assertRaisesRegex(
                         ValueError, 'judge-or-posttran-exception-refused'):
                     gate.inspect_durable_companions(self.repo, base, head, binding, excluded, prefixes)
+
+    def test_batched_fixture_objects_match_original_git_construction(self):
+        def reference_commit(self, files, parent=None):
+            # No checkout, hooks, signing, network, or ref updates; disposable CI objects only.
+            self.git('read-tree', '--empty')
+            for path, (mode, raw) in sorted(files.items()):
+                oid = self.git('hash-object', '-w', '--stdin', data=raw).decode().strip()
+                self.git('update-index', '--add', '--cacheinfo', mode, oid, path)
+            tree = self.git('write-tree').decode().strip()
+            parents = ['-p', parent] if parent else []
+            return self.git('commit-tree', tree, *parents, '--no-gpg-sign',
+                            '-m', 'Synthetic binding CI fixture').decode().strip()
+
+        cases = [
+            {},
+            {'a.txt': ('100644', b'same'), 'nested/b.txt': ('100755', b'same')},
+            {'space name.txt': ('100644', b'changed'),
+             'tab\tand\nnewline.txt': ('100644', b'raw\x00bytes')},
+            {'a.txt': ('100755', b'same')},
+            {},
+        ]
+        parent = None
+        for files in cases:
+            with self.subTest(paths=sorted(files)):
+                expected = reference_commit(self, files, parent)
+                actual = self.commit(files, parent)
+                self.assertEqual(actual, expected)
+                self.assertEqual(self.git('cat-file', '-p', actual),
+                                 self.git('cat-file', '-p', expected))
+                parent = actual
+
+    def test_batched_fixture_reuses_blobs_but_writes_each_real_tree(self):
+        from unittest import mock
+        files = {'one': ('100644', b'shared'), 'two': ('100755', b'shared')}
+        with mock.patch.object(self, 'git', wraps=self.git) as observed:
+            first = self.commit(files)
+            second = self.commit({'one': ('100755', b'shared'),
+                                  'three': ('100644', b'new')}, first)
+        calls = observed.call_args_list
+        self.assertEqual(sum(c.args[0] == 'hash-object' for c in calls), 2)
+        self.assertEqual(sum(c.args[0] == 'update-index' for c in calls), 2)
+        self.assertEqual(sum(c.args[0] == 'read-tree' for c in calls), 2)
+        self.assertEqual(sum(c.args[0] == 'write-tree' for c in calls), 2)
+        self.assertEqual(sum(c.args[0] == 'commit-tree' for c in calls), 2)
+        self.assertNotEqual(first, second)
+        self.assertEqual(self.git('show', second + ':one'), b'shared')
+        self.assertEqual(self.git('show', second + ':three'), b'new')
+        self.assertEqual(self.git('ls-tree', second, 'two'), b'')

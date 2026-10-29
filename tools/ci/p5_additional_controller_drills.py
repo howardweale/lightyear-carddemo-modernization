@@ -17,6 +17,10 @@ from tools.ci import p5_terminal_deadline as deadline_probe
 
 
 SOURCES = (
+    'tools/ci/p5_workspace_replacement.py',
+    'tests/test_p5_workspace_replacement.py',
+    'tests/test_p5_additional_collection.py',
+    'src/lightyear_factory/contracts.py',
     'tests/test_p5_deadline_retention.py',
     'tools/ci/p5_drills.py',
     'tools/ci/p5_additional_controller_drills.py',
@@ -164,6 +168,17 @@ def collect(repository, output):
             try:
                 row['observed'] = deadline_probe.observe(parent/row['id'], expired)
                 row['expectation_met'] = deadline_valid(row['observed'])
+            except Exception as exc:
+                row['harness_error'] = type(exc).__name__ + ': ' + str(exc)
+            report['cases'].append(row)
+        # Additional native-controller observations retain all original bytes.
+        # They do not replace any existing row or change strict qualification.
+        from tools.ci import p5_workspace_replacement as workspace_probe
+        for case in workspace_probe.CASES:
+            row = dict(id='controller-workspace-'+case, expectation_met=False)
+            try:
+                row['observed'] = workspace_probe.observe_controller_case(parent/row['id'], case)
+                row['expectation_met'] = workspace_probe.validate_controller_case(row['observed'])
             except Exception as exc:
                 row['harness_error'] = type(exc).__name__ + ': ' + str(exc)
             report['cases'].append(row)

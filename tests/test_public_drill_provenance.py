@@ -161,5 +161,49 @@ class PublicDrillProvenanceTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             verify_receipt_tail(receipt,{},[dict(event_sha256='a'*64),dict(event_sha256='b'*64)])
 
+    def test_self_rehashed_authorization_cannot_substitute_admitted_bindings(self):
+        original = deepcopy(self.auth)
+        original_start = deepcopy(self.events[1])
+        for field in ('work_order_sha256', 'execution_policy_sha256', 'plan_sha256',
+                      'decision_sha256', 'trusted_journal_head', 'nonce_sha256'):
+            with self.subTest(field=field):
+                self.auth = deepcopy(original)
+                self.events[1] = deepcopy(original_start)
+                self.auth[0][field] = '0' * 64
+                self.auth[0]['content_sha256'] = canonical_hash(self.auth[0], {'content_sha256'})
+                self.events[1]['payload']['authorization_sha256'] = self.auth[0]['content_sha256']
+                with self.assertRaisesRegex(ContractError, 'reservation-or-role'):
+                    self.verify()
+        self.auth = original
+        self.events[1] = original_start
+        result = self.verify()
+        self.assertTrue(result['output_plan_complete'])
+        self.assertFalse(result['controller_origin_verified'])
+
+    def test_failed_call_accounting_cannot_become_completed_public_output(self):
+        self.events.pop()
+        failed = dict(provider='p5-scripted', model=self.script['model'], role='planner',
+                      call_sequence=1, status='failed', usage='reserved-upper-bound')
+        failed['content_sha256'] = canonical_hash(failed)
+        self.calls = [failed]
+        result = self.verify()
+        self.assertFalse(result['output_plan_complete'])
+        self.assertFalse(result['controller_origin_verified'])
+        self.assertEqual(result['completed_public_calls'], 0)
+        self.assertEqual(result['unfinished_public_calls'], 1)
+        self.assertEqual(result['accounted_calls'], 1)
+        for field, value in (('status', 'completed'), ('usage', 'observed'),
+                             ('provider', 'other'), ('model', 'other'),
+                             ('call_sequence', True), ('call_sequence', 2)):
+            with self.subTest(field=field, value=value):
+                changed = deepcopy(failed)
+                changed[field] = value
+                changed['content_sha256'] = canonical_hash(changed, {'content_sha256'})
+                self.calls = [changed]
+                with self.assertRaisesRegex(ContractError, 'unmatched-call'):
+                    self.verify()
+        self.calls = [failed]
+        self.assertFalse(self.verify()['output_plan_complete'])
+
 
 if __name__=='__main__':unittest.main()

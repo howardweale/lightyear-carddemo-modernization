@@ -350,7 +350,10 @@ def observe_controller_case(parent, case, *, baseline_first=False):
             error = str(exc)
 
     def retain(path):
-        raw = path.read_bytes()
+        try:
+            raw = path.read_bytes()
+        except OSError as exc:
+            raise ValueError('p5-controller-replacement-invalid') from exc
         if not 0 < len(raw) <= 2 * 1024 * 1024:
             raise ValueError('p5-controller-replacement-size')
         return dict(utf8=raw.decode('utf-8'), sha256=digest(raw))

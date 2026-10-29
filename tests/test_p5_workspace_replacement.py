@@ -140,3 +140,24 @@ class WorkspaceReplacementTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'p5-controller-replacement-invalid'):
                 probe.observe_controller_case(Path(temp)/'negative', 'clean', baseline_first=True)
         self.assertEqual(refusals, ['isolation-breach: candidate-container-required'])
+
+    def test_missing_original_controller_documents_fail_closed_after_real_run(self):
+        from lightyear_factory.orchestrator import FactoryOrchestrator
+        real_run = FactoryOrchestrator.run
+        for filename in ('work-order.json', 'receipt.json', 'summary.json', 'events.jsonl'):
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory() as temp:
+                parent = Path(temp)/'missing-original'
+                removed = []
+                def forward(controller, *args, **kwargs):
+                    result = real_run(controller, *args, **kwargs)
+                    path = parent/'runs/p5-keyless-controller-clean'/filename
+                    self.assertTrue(path.is_file())
+                    removed.append(path.read_bytes())
+                    path.unlink()
+                    return result
+                with patch.object(FactoryOrchestrator, 'run', forward):
+                    with self.assertRaisesRegex(ValueError, 'p5-controller-replacement-invalid'):
+                        probe.observe_controller_case(parent, 'clean')
+                self.assertEqual(len(removed), 1)
+                self.assertGreater(len(removed[0]), 0)
+                self.assertEqual((parent/'source/worker.py').read_bytes(), b'print("original")\n')

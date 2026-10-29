@@ -56,6 +56,9 @@ class DurableBindingGitTests(unittest.TestCase):
             records.append((mode + ' ' + oid + '\t' + path + '\x00').encode('utf-8'))
         if records:
             self.git('update-index', '-z', '--index-info', data=b''.join(records))
+        expected_index = b''.join(record.replace(b'\t', b' 0\t', 1) for record in records)
+        if self.git('ls-files', '--stage', '-z') != expected_index:
+            raise ValueError('fixture-index-mismatch')
         tree = self.git('write-tree').decode().strip()
         parents = ['-p', parent] if parent else []
         return self.git('commit-tree', tree, *parents, '--no-gpg-sign',
@@ -153,7 +156,7 @@ class DurableBindingGitTests(unittest.TestCase):
             {},
             {'a.txt': ('100644', b'same'), 'nested/b.txt': ('100755', b'same')},
             {'space name.txt': ('100644', b'changed'),
-             'tab\tand\nnewline.txt': ('100644', b'raw\x00bytes')},
+             ('portable name-\u03bb.txt' if os.name == 'nt' else 'tab\tand\nnewline.txt'): ('100644', b'raw\x00bytes')},
             {'a.txt': ('100755', b'same')},
             {},
         ]
@@ -184,3 +187,27 @@ class DurableBindingGitTests(unittest.TestCase):
         self.assertEqual(self.git('show', second + ':one'), b'shared')
         self.assertEqual(self.git('show', second + ':three'), b'new')
         self.assertEqual(self.git('ls-tree', second, 'two'), b'')
+
+    def test_control_character_path_preserves_platform_refusal_for_both_constructors(self):
+        path = 'tab\tand\nnewline.txt'
+        raw = b'raw\x00bytes'
+        oid = self.git('hash-object', '-w', '--stdin', data=raw).decode().strip()
+        self.git('read-tree', '--empty')
+        if os.name == 'nt':
+            # Keep Windows path protection enabled; object-only fixtures do not
+            # justify disabling it. Exercise both original and batched forms.
+            with self.assertRaises(subprocess.CalledProcessError) as original:
+                self.git('update-index', '--add', '--cacheinfo', '100644', oid, path)
+            self.assertIn(b'invalid path', original.exception.stderr.lower())
+            from unittest import mock
+            with mock.patch.object(self, 'git', wraps=self.git) as observed:
+                with self.assertRaisesRegex(ValueError, 'fixture-index-mismatch'):
+                    self.commit({path: ('100644', raw)})
+            self.assertFalse(any(call.args[0] == 'commit-tree' for call in observed.call_args_list))
+            self.assertEqual(self.git('ls-files', '-z'), b'')
+        else:
+            self.git('update-index', '--add', '--cacheinfo', '100644', oid, path)
+            expected_tree = self.git('write-tree').decode().strip()
+            actual = self.commit({path: ('100644', raw)})
+            self.assertEqual(self.git('rev-parse', actual+'^{tree}').decode().strip(), expected_tree)
+            self.assertEqual(self.git('show', actual+':'+path), raw)

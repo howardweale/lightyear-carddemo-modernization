@@ -1,0 +1,41 @@
+{
+  "schema": "posttran-compiler-preservation/1",
+  "preservation_only": true,
+  "execution_authorized": false,
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "original_artifact": {
+    "id": 12052649453,
+    "name": "posttran-phase2-compiler-image",
+    "size_in_bytes": 177127016,
+    "digest": "sha256:43138bbcd2010f9f55570bead3ec2323bd27889f5386666e0f34792cdd8dad6a",
+    "workflow_run": {
+      "id": 38917806865,
+      "head_sha": "e3ee73d8bff7e18491724d377ea9329e96896f71"
+    },
+    "created_at": "2026-10-16T14:46:14Z",
+    "expires_at": "2026-10-30T14:46:00Z"
+  },
+  "retrieval_started_at": "2026-10-29T15:54:24.865116+00:00",
+  "retrieved_at": "2026-10-29T15:56:24.409780+00:00",
+  "archive_sha256": "43138bbcd2010f9f55570bead3ec2323bd27889f5386666e0f34792cdd8dad6a",
+  "image_sha256": "bac290dafdb7342822f51a4b40822c8a232cb3ae61b4de490c0127ac1c6484a2",
+  "image_size_in_bytes": 426930688,
+  "image_id": "sha256:c88e45c7d65cf9392819fb0b048c1802dba2e2e7df4762f2df889528236c16e7",
+  "release": {
+    "tag": "compiler-preservation-12052649453",
+    "asset_name": "posttran-phase2-compiler-image-original.zip",
+    "download_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/compiler-preservation-12052649453/posttran-phase2-compiler-image-original.zip"
+  },
+  "public_content_review_sha256": "b59d2121192a8b7bf49c36847ddd7de7b641b77fefbaa978fcb3d6e391d6dcc2",
+  "original_metadata_sha256": "a94ed922a87d53a682ac900ef4d18123def54673d5f396e84978da8e474b3911",
+  "no_changes": [
+    "original artifact bytes",
+    "original plan and seal",
+    "original executable",
+    "POSTTRAN workflow",
+    "checker",
+    "gates",
+    "authorization",
+    "attempt namespace"
+  ]
+}

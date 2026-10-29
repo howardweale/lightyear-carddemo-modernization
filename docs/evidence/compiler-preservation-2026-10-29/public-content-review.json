@@ -1,0 +1,32 @@
+{
+  "schema": "compiler-public-content-review/1",
+  "reviewed_at": "2026-10-29T16:05:30.413564+00:00",
+  "public_only": true,
+  "scope": "All six retained layers, including deleted lower-layer files; config, environment, history, ZIP members, package/installer provenance.",
+  "layers": 6,
+  "layer_entries": 8776,
+  "regular_files": 6969,
+  "base_image": "ubuntu@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b",
+  "source_head": "e3ee73d8bff7e18491724d377ea9329e96896f71",
+  "source_paths": [
+    "tools/legacy_twin/reproducible.Containerfile",
+    "tools/legacy_twin/install-pinned.sh",
+    ".github/workflows/posttran-phase2.yml"
+  ],
+  "findings_resolved": [
+    "GnuTLS embedded key-format/self-test material exactly matches the public Ubuntu snapshot package; no operator key.",
+    "libssh match is a NUL-terminated PEM format label; no key body.",
+    "libunistring AKIA-pattern match spans a concatenated Unicode character-name table, not an account ID.",
+    "System shadow/gshadow entries are locked or empty; machine-id is empty; home/root files are distribution shell skeletons.",
+    "Only repository COPY is the public install-pinned.sh, byte matched. No application source, customer data, workspace, private verifier/answer key, provider account configuration, credentials or excluded company data found."
+  ],
+  "public_package_verification": {
+    "url": "https://snapshot.ubuntu.com/ubuntu/20261001T000000Z/pool/main/g/gnutls28/libgnutls30t64_3.8.3-1.1ubuntu3.6_amd64.deb",
+    "deb_sha256": "b8944756260c5ea6b7fac019745f931f905aa7a4df0763676b1b25c911b692e2",
+    "library_sha256": "ddbae2995750875c07bc218d12a062d73f8250678f54dedda7e9be5068781c98",
+    "matches_retained_library_exactly": true,
+    "private_key_markers": "embedded public distribution library bytes; not operator credentials"
+  },
+  "archive_loaded_or_executed": false,
+  "layer_inventory_sha256": "66d002809e9d9ba642c587697a076e6cf0d0454d57163495e8b319924e359448"
+}

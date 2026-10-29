@@ -115,6 +115,27 @@ class PublicTerminalLineageRegistryTests(unittest.TestCase):
                 _require_terminal_lineage(self.provider)
         self.assertIs(_require_terminal_lineage(self.provider)['controller'](), self.controller)
 
+    def test_malformed_script_refuses_without_reopening_closed_context(self):
+        self.capture_unit_fixture()
+        self.context.close()
+        original = self.provider.script
+        saved = _TERMINAL_LINEAGE[self.provider]
+        for changed in (None, [], 'public malformed script', {},
+                        {'model': None}, {'model': 'different-public-model'}):
+            try:
+                self.provider.script = changed
+                with self.subTest(script=changed):
+                    with patch.object(HumanDrillExecutionContext, '_live',
+                                      side_effect=AssertionError('historical read reopened context')):
+                        with self.assertRaisesRegex(ContractError, 'terminal-lineage-refused'):
+                            _require_terminal_lineage(self.provider)
+                self.assertTrue(self.context._closed)
+                self.assertIs(_TERMINAL_LINEAGE[self.provider], saved)
+            finally:
+                self.provider.script = original
+        self.assertIs(_require_terminal_lineage(self.provider), saved)
+        self.assertTrue(self.context._closed)
+
     def test_non_native_context_or_wrong_controller_cannot_capture_lineage(self):
         original = self.provider.context
         self.provider.context = FixtureNode(_controller_bound=True)

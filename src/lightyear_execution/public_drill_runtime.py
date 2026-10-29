@@ -72,7 +72,8 @@ def _require_terminal_lineage(provider):
             or saved['admission']() is not context._admission or saved['backend']() is not context.backend
             or saved['order']() is not context._order or saved['run_dir']!=provider.run_dir
             or saved['ledger_path']!=provider.ledger.path or provider.ledger.path!=provider.run_dir/'events.jsonl'
-            or saved['model']!=provider.model or provider.model!=provider.script['model']
+            or type(provider.script) is not dict
+            or saved['model']!=provider.model or provider.model!=provider.script.get('model')
             or saved['state_sha256']!=_lineage_state(context)
             or saved['script_sha256']!=canonical_hash(provider.script)
             or controller.execution_context is not context or controller.agents.provider is not provider

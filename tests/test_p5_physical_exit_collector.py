@@ -78,3 +78,36 @@ class PhysicalExitCollectorTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'ci-exclusive-output'):
                     collector.collect(Path(temp), output)
             observed.assert_not_called()
+
+    def test_normal_originals_cannot_substitute_for_requested_interruption_modes(self):
+        self.assertEqual(os.environ.get('GITHUB_ACTIONS'), 'true')
+        repository = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as temp:
+            original = probe.observe(repository, Path(temp)/'normal-original', 'normal')
+            self.assertTrue(probe.validate(original))
+            def substitute(repository, directory, mode):
+                directory.mkdir(parents=True)
+                for name, document in original['documents'].items():
+                    (directory/name).write_bytes(document['utf8'].encode())
+                return original
+            output = Path(temp)/'substituted'
+            with patch.object(probe, 'observe', side_effect=substitute) as observed:
+                self.assertFalse(collector.collect(repository, output))
+            report = json.loads((output/'observations.json').read_bytes())
+            self.assertEqual([call.args[2] for call in observed.call_args_list], list(probe.MODES))
+            self.assertEqual([row['mode'] for row in report['cases']], list(probe.MODES))
+            self.assertIs(report['expectations_met'], False)
+            self.assertIs(report['strict_qualified'], False)
+            self.assertEqual(report['content_sha256'], canonical_hash(report, {'content_sha256'}))
+            for row in report['cases']:
+                self.assertNotIn('harness_error', row)
+                self.assertNotIn('retention_errors', row)
+                self.assertIs(row['expectation_met'], row['mode'] == 'normal')
+                self.assertEqual(row['observed'], original)
+                self.assertTrue(probe.validate(row['observed']))
+                for name, document in original['documents'].items():
+                    raw = document['utf8'].encode()
+                    retained = report['original_documents'][row['mode']+'/'+name]
+                    self.assertEqual(base64.b64decode(retained['base64'], validate=True), raw)
+                    self.assertEqual(retained['sha256'], hashlib.sha256(raw).hexdigest())
+                    self.assertEqual(retained['bytes'], len(raw))

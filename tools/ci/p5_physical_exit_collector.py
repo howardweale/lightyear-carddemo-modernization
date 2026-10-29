@@ -49,7 +49,8 @@ def collect(repository, output):
         directory = output/mode
         try:
             row['observed'] = probe.observe(repository, directory, mode)
-            row['expectation_met'] = probe.validate(row['observed'])
+            row['expectation_met'] = (probe.validate(row['observed']) is True
+                                      and row['observed'].get('mode') == mode)
         except Exception as error:
             row['harness_error'] = type(error).__name__+': '+str(error)
         # Retain diagnostics even when observe refuses. The child uses only fixed

@@ -453,7 +453,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     # The 3,436-test suite takes about 16 minutes on Linux and 40 on Windows;
     # preserve the complete suite and leave time for setup and differential runs.
-    timeout-minutes: ${{ matrix.os == 'windows-2025' && 90 || 35 }}
+    timeout-minutes: ${{ matrix.os == 'windows-2025' && 120 || 35 }}
 
     steps:
       - name: Check out source

@@ -27,6 +27,7 @@ from lightyear_factory.contracts import ContractError
 from lightyear_factory.isolation_scan import scan
 from lightyear_factory.providers import ProviderResult
 from tools.ci.p5_fixture import Fixture
+from tools.ci.p5_network_evidence import run_positive_control, timeout_diagnostic
 
 DRILLS = ('kill-mid-build', 'worker-network', 'budget-exhausted', 'tower-unreachable',
           'workspace-changed', 'answer-fragment', 'wall-and-window', 'duplicate-attempt')
@@ -100,10 +101,9 @@ def worker_network(f):
                 " data=s.recv(32);s.close();sys.exit(0 if data==b'P5-REACHABLE' else 43)\n"
                 "except OSError:sys.exit(42)\n")
         # Positive control is explicitly outside the networkless worker, on CI's bridge.
-        positive = subprocess.run(['docker', 'run', '--rm', '--network', 'bridge', '--read-only',
+        positive = run_positive_control('positive-before', ['docker', 'run', '--rm', '--network', 'bridge', '--read-only',
             '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true', '--user', f.policy.run_as_user,
-            f.policy.image_reference, 'python3', '-c', code, gateway, str(port)],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30, check=False)
+            f.policy.image_reference, 'python3', '-c', code, gateway, str(port)])
         backend = OCIContainerBackend(f.policy, 'docker', execute=True)
         result = backend.execute(('python3', '-c', code, gateway, str(port)), f.root, {}, 15)
         observed = dict(positive_exit=positive.returncode, worker_exit=result.exit_code,
@@ -111,8 +111,7 @@ def worker_network(f):
             backend_evidence_sha256=hashlib.sha256(canonical(result.evidence)).hexdigest(),
             policy_sha256=f.policy.content_sha256)
         # Recheck reachability after denial so a dead positive-control server cannot pass.
-        restored = subprocess.run(positive.args, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                  timeout=30, check=False)
+        restored = run_positive_control('positive-after', positive.args)
         from tools.ci.p5_network_evidence import retain as retain_network
         observed['retained_network_evidence'] = retain_network(
             positive, result, restored, f.policy, code, gateway, port)
@@ -384,6 +383,9 @@ def collect(repository, output):
                 # Type only: never traceback, credential, authority bytes or synthetic answer values.
                 row = dict(id=name, expectation_met=False, harness_error=True,
                            error_type=type(error).__name__, gaps=['Harness incomplete; no accepted drill result.'])
+                diagnostic = timeout_diagnostic(error)
+                if name == 'worker-network' and diagnostic is not None:
+                    row['network_timeout_diagnostic'] = diagnostic
             finally:
                 if fixture is not None and hasattr(fixture, 'service'):
                     fixture.close()

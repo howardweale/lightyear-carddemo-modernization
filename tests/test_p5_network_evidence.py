@@ -69,3 +69,57 @@ class NetworkEvidenceTests(unittest.TestCase):
         self.assertIs(matched, True)
         self.assertTrue(evidence.validate(observed['retained_network_evidence']))
         self.assertEqual(gaps, ['OCI denial is measured directly; the factory controller post-denial receipt path is not exercised.'])
+
+
+    def test_positive_timeout_retains_only_stage_and_never_retries(self):
+        import subprocess
+        for stage in ('positive-before', 'positive-after'):
+            failure = subprocess.TimeoutExpired(['private-command-not-retained'], 30,
+                output=b'private-output-not-retained', stderr=b'private-stderr-not-retained')
+            with self.subTest(stage=stage), patch.object(subprocess, 'run', side_effect=failure) as run:
+                with self.assertRaises(evidence.NetworkControlTimeout) as caught:
+                    evidence.run_positive_control(stage, ['public-fixture'])
+                run.assert_called_once_with(['public-fixture'], stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE, timeout=30, check=False)
+                diagnostic = evidence.timeout_diagnostic(caught.exception)
+                self.assertEqual(diagnostic, dict(schema='p5-network-timeout-diagnostic/1',
+                    stage=stage, timeout_seconds=30, accepted_drill_result=False))
+                self.assertNotIn('private', json.dumps(diagnostic))
+
+    def test_timeout_diagnostic_refuses_untyped_or_mutated_errors(self):
+        self.assertIsNone(evidence.timeout_diagnostic(TimeoutError('positive-before')))
+        for stage in ('isolated-worker', '', None):
+            with self.subTest(stage=stage), self.assertRaises(ValueError):
+                evidence.NetworkControlTimeout(stage)
+        error = evidence.NetworkControlTimeout('positive-before')
+        error.stage = 'untrusted-message'
+        self.assertIsNone(evidence.timeout_diagnostic(error))
+
+    def test_timeout_collector_retains_failure_and_does_not_qualify(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/'observations'
+            class NoAuthorityFixture:
+                def __init__(self, *args):
+                    self.envelope = {'signature': {'value': 'synthetic-invalid'}}
+                def verify_order(self, **kwargs):
+                    raise drills.ExecutionContractError('synthetic-negative-control')
+            def fail(fixture):
+                raise evidence.NetworkControlTimeout('positive-after')
+            with patch.object(drills, 'Fixture', NoAuthorityFixture), patch.object(
+                    drills, 'FUNCTIONS', {name: fail for name in drills.DRILLS}):
+                # Drive the collector's actual failure path without creating authority.
+                self.assertFalse(drills.collect(Path(__file__).resolve().parents[1], output))
+            summary = json.loads((output/'summary.json').read_bytes())
+            self.assertTrue(summary['complete'])
+            self.assertTrue(drills.inventory_ok(summary['drills']))
+            row = next(row for row in summary['drills'] if row['id'] == 'worker-network')
+            self.assertTrue(row['harness_error'])
+            self.assertFalse(row['expectation_met'])
+            self.assertEqual(row['gaps'], ['Harness incomplete; no accepted drill result.'])
+            self.assertEqual(row['network_timeout_diagnostic']['stage'], 'positive-after')
+            self.assertFalse(row['network_timeout_diagnostic']['accepted_drill_result'])
+            self.assertTrue(all('network_timeout_diagnostic' not in other
+                for other in summary['drills'] if other['id'] != 'worker-network'))
+            self.assertFalse(drills.qualify(output))

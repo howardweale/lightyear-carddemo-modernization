@@ -72,3 +72,34 @@ def retain(before, result, after, policy, code, gateway, port):
                       evidence_sha256=hashlib.sha256(canonical(result.evidence)).hexdigest()))
     validate(value)
     return value
+
+
+class NetworkControlTimeout(TimeoutError):
+    """Public stage label only; never retain command, output or exception text."""
+
+    def __init__(self, stage):
+        if stage not in ('positive-before', 'positive-after'):
+            raise ValueError('p5-network-timeout-stage')
+        self.stage = stage
+        super().__init__('p5-network-positive-control-timeout')
+
+
+def run_positive_control(stage, argv):
+    # Same command, timeout and pass criteria; no retry after an ambiguous timeout.
+    import subprocess
+    if stage not in ('positive-before', 'positive-after'):
+        raise ValueError('p5-network-timeout-stage')
+    try:
+        return subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              timeout=30, check=False)
+    except subprocess.TimeoutExpired:
+        raise NetworkControlTimeout(stage) from None
+
+
+def timeout_diagnostic(error):
+    if type(error) is not NetworkControlTimeout:
+        return None
+    if error.stage not in ('positive-before', 'positive-after'):
+        return None
+    return dict(schema='p5-network-timeout-diagnostic/1', stage=error.stage,
+                timeout_seconds=30, accepted_drill_result=False)

@@ -107,6 +107,40 @@ def deadline_valid(value):
         return False
 
 
+
+def network_controls_valid(value, policy):
+    """Bind both real connectivity controls to the exact isolated gate experiment."""
+    try:
+        controller = value['controller']
+        if not network_probe.validate(controller):
+            return False
+        command = controller['command']
+        if (not isinstance(command, list) or len(command) != 5
+                or command[:2] != ['python3', '-c']
+                or not all(isinstance(part, str) for part in command)):
+            return False
+        expected = ['docker', 'run', '--rm', '--network', 'bridge', '--read-only',
+                    '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true',
+                    '--user', policy.run_as_user, policy.image_reference, *command]
+        for name in ('positive_before', 'positive_after'):
+            row = value[name]
+            if type(row['exit_code']) is not int or row['exit_code'] != 0 or row['argv'] != expected:
+                return False
+            for stream_name in ('stdout', 'stderr'):
+                stream = row[stream_name]
+                raw = base64.b64decode(stream['base64'], validate=True)
+                if (type(stream['bytes']) is not int or len(raw) != stream['bytes']
+                        or hashlib.sha256(raw).hexdigest() != stream['sha256']):
+                    return False
+        reports = [json.loads(item['utf8']) for item in controller['artifacts']
+                   if json.loads(item['utf8'])['artifact_type'] == 'verification-report']
+        if len(reports) != 1:
+            return False
+        execution = reports[0]['content']['gates'][0]['execution']
+        return execution['image'] == policy.image_reference and execution['network_mode'] == 'none'
+    except (KeyError, ValueError, TypeError, IndexError, AttributeError):
+        return False
+
 def network_case(parent, policy):
     class Probe(socketserver.BaseRequestHandler):
         def handle(self):
@@ -140,7 +174,7 @@ def network_case(parent, policy):
         except ValueError as exc:
             valid = False
             observed['validation_error'] = str(exc)
-        observed['expectation_met'] = valid and before.returncode == 0 and after.returncode == 0
+        observed['expectation_met'] = valid and before.returncode == 0 and after.returncode == 0 and network_controls_valid(observed, policy)
     except Exception as exc:
         observed['harness_error'] = type(exc).__name__ + ': ' + str(exc)
     finally:

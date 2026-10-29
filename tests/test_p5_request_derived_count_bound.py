@@ -209,6 +209,103 @@ class RequestDerivedCountBoundTests(unittest.TestCase):
             self.assertEqual(row['state'],'reserved-unknown');self.assertEqual(row['charge_usd'],row['reserved_cost_usd'])
             self.assertFalse(report['billing_final'])
 
+    def test_generation_connection_loss_preserves_count_charge_and_unknown_generation(self):
+        from urllib.error import URLError
+        from lightyear_factory.providers import ProviderError
+        controller, sends, invoke = self.controller()
+        provider = controller.agents.bounded_provider.provider
+        original_open = provider.opener
+
+        def lost_generation(request, **kwargs):
+            if request.full_url.endswith('/input_tokens'):
+                return original_open(request, **kwargs)
+            journal = RunLedger(controller._receipt_journal.path)
+            self.assertTrue(journal.verify())
+            last = journal.events[-1]
+            self.assertEqual(last['kind'], 'model_transport_reserved')
+            self.assertEqual(last['payload']['reservation']['transport_kind'], 'responses')
+            self.assertEqual(last['payload']['reservation']['request_sha256'],
+                             hashlib.sha256(request.data).hexdigest())
+            sends.append(request.full_url)
+            raise URLError('public synthetic generation connection loss')
+
+        provider.opener = lost_generation
+        with self.assertRaises(ProviderError):
+            invoke()
+        self.assertEqual(len(sends), 2)
+        self.assertTrue(sends[0].endswith('/input_tokens'))
+        self.assertTrue(sends[1].endswith('/responses'))
+        original = controller._receipt_journal.path.read_bytes()
+        events = RunLedger(controller._receipt_journal.path).events
+        observations = [e['payload']['observation'] for e in events
+                        if e['kind'] == 'model_transport_observed']
+        self.assertEqual(len(observations), 2)
+        self.assertEqual(observations[-1]['outcome'], 'failed')
+        self.assertEqual(observations[-1]['failure_type'], 'URLError')
+        self.assertIsNone(observations[-1]['response_usage'])
+        self.assertIsNone(observations[-1]['estimated_cost_usd'])
+        report = _reconcile_accounting_journal(events, 'a' * 64)
+        self.assertEqual(controller._receipt_journal.path.read_bytes(), original)
+        unresolved = report['unresolved_model_transports'][-1]
+        self.assertEqual(unresolved['reservation']['transport_kind'], 'responses')
+        self.assertEqual(unresolved['observation']['failure_type'], 'URLError')
+        self.assertGreater(unresolved['reservation']['bounds']['estimated_cost_usd'], 0)
+        finance = report['count_financial_accounting']
+        self.assertEqual(finance['count_account']['calls'][0]['state'], 'counted-conservative-charge')
+        self.assertEqual(finance['count_account']['count_exposure_usd'], '0.0000935')
+        self.assertGreater(Decimal(finance['pending_generation_reserve_usd']), 0)
+        self.assertEqual(Decimal(finance['combined_conservative_cost_usd']),
+                         Decimal(finance['generation_logical_cost_usd'])
+                         + Decimal(finance['pending_generation_reserve_usd'])
+                         + Decimal('0.0000935'))
+        self.assertFalse(report['billing_final'])
+        self.assertFalse(finance['billing_final'])
+        self.assertIsNone(finance['actual_provider_cost_usd'])
+
+
+    def test_count_timeout_retains_full_hold_and_stops_before_any_second_send(self):
+        from lightyear_factory.providers import ProviderError
+        controller, sends, invoke = self.controller('unknown')
+        with self.assertRaises(ProviderError):
+            invoke()
+        self.assertEqual(len(sends), 1)
+        self.assertTrue(sends[0].endswith('/input_tokens'))
+        journal = RunLedger(controller._receipt_journal.path)
+        self.assertTrue(journal.verify())
+        original = journal.path.read_bytes()
+        reservations = [e['payload']['reservation'] for e in journal.events
+                        if e['kind'] == 'model_transport_reserved']
+        observations = [e['payload']['observation'] for e in journal.events
+                        if e['kind'] == 'model_transport_observed']
+        self.assertEqual(len(reservations), 1)
+        self.assertEqual(len(observations), 1)
+        self.assertEqual(reservations[0]['transport_kind'], 'input-token-count')
+        self.assertEqual(observations[0]['outcome'], 'failed')
+        self.assertEqual(observations[0]['failure_type'], 'TimeoutError')
+        self.assertIsNone(observations[0]['response_usage'])
+        self.assertIsNone(observations[0]['estimated_cost_usd'])
+        report = _reconcile_accounting_journal(journal.events, 'a' * 64)
+        finance = report['count_financial_accounting']
+        account = finance['count_account']
+        self.assertTrue(account['stopped'])
+        self.assertEqual(len(account['calls']), 1)
+        row = account['calls'][0]
+        self.assertEqual(row['state'], 'observed-unknown-held')
+        self.assertIsNone(row['counted_input_tokens'])
+        self.assertGreater(Decimal(row['reserved_cost_usd']), 0)
+        self.assertEqual(row['charge_usd'], row['reserved_cost_usd'])
+        self.assertEqual(Decimal(row['charge_usd']),
+                         Decimal(row['reserved_input_tokens']) * Decimal('5.50') / 1000000)
+        self.assertEqual(account['count_exposure_usd'], row['charge_usd'])
+        self.assertFalse(finance['billing_final'])
+        self.assertIsNone(finance['actual_provider_cost_usd'])
+        self.assertEqual(journal.path.read_bytes(), original)
+        with self.assertRaises(ContractError):
+            invoke()
+        self.assertEqual(len(sends), 1)
+        self.assertEqual(controller._receipt_journal.path.read_bytes(), original)
+
+
 
 class PhysicalCountGenerationExitTests(unittest.TestCase):
     """Abrupt component exits, not admitted FactoryOrchestrator.run coverage.

@@ -162,5 +162,73 @@ class InterruptedRecordTests(unittest.TestCase):
         self.assertEqual(before,(self.run/'events.jsonl').read_bytes())
 
 
+    def test_retained_abort_replays_original_bytes_without_authority(self):
+        from tools.ci.p5_controller_probe import retain_abort_journals, validate_retained_abort
+        event = self.reconcile()
+        before = {p.name: p.read_bytes() for p in self.run.iterdir() if p.is_file()}
+        # An unrelated file must never be swept into the retained evidence.
+        (self.run/'unrelated-private-placeholder.txt').write_text('synthetic excluded content')
+        value = retain_abort_journals(self.run, self.root/'admission-nonces.sha256', event)
+        self.assertTrue(validate_retained_abort(value))
+        self.assertEqual(set(value['documents']), {'attempt-identity.json', 'attempt-accounting.jsonl', 'events.jsonl'})
+        self.assertFalse(value['production_controller_receipt'])
+        self.assertFalse(value['human_attestation_verified'])
+        self.assertEqual(value['interrupted_record']['payload']['accounting'], self.accounting)
+        for name, raw in before.items():
+            self.assertEqual((self.run/name).read_bytes(), raw)
+        for name, row in value['documents'].items():
+            self.assertEqual(row['utf8'].encode(), before[name])
+
+    def test_retained_abort_missing_corrupt_or_cross_attempt_bytes_refuse(self):
+        import copy
+        from tools.ci.p5_controller_probe import retain_abort_journals, validate_retained_abort
+        value = retain_abort_journals(self.run, self.root/'admission-nonces.sha256', self.reconcile())
+        mutations = []
+        for name in value['documents']:
+            bad = copy.deepcopy(value); del bad['documents'][name]; mutations.append(bad)
+            bad = copy.deepcopy(value); bad['documents'][name]['utf8'] += ' '; mutations.append(bad)
+        bad = copy.deepcopy(value); bad['run_id'] = 'another-attempt'; mutations.append(bad)
+        bad = copy.deepcopy(value)
+        bad['nonce_store'] = dict(utf8='0'*64+'\n', sha256=hashlib.sha256(('0'*64+'\n').encode()).hexdigest())
+        mutations.append(bad)
+        for bad in mutations:
+            with self.subTest(fields=list(bad['documents'])):
+                with self.assertRaisesRegex(ValueError, 'p5-retained-abort-invalid'):
+                    validate_retained_abort(bad)
+
+    def test_retained_abort_self_rehashed_accounting_and_authority_claims_refuse(self):
+        import copy
+        from tools.ci.p5_controller_probe import retain_abort_journals, validate_retained_abort
+        value = retain_abort_journals(self.run, self.root/'admission-nonces.sha256', self.reconcile())
+        for field, replacement in (('calls', 2), ('input_tokens', 999), ('billing_final', True)):
+            bad = copy.deepcopy(value)
+            events = [json.loads(line) for line in bad['documents']['events.jsonl']['utf8'].splitlines()]
+            events[-1]['payload']['accounting'][field] = replacement
+            events[-1]['event_sha256'] = canonical_hash(events[-1], {'event_sha256'})
+            raw = ''.join(json.dumps(event, sort_keys=True, separators=(',', ':'))+'\n' for event in events)
+            bad['documents']['events.jsonl'] = dict(utf8=raw, sha256=hashlib.sha256(raw.encode()).hexdigest())
+            bad['interrupted_record'] = events[-1]
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'p5-retained-abort-invalid'):
+                validate_retained_abort(bad)
+        for field in ('production_controller_receipt', 'human_attestation_verified'):
+            bad = copy.deepcopy(value); bad[field] = True
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'p5-retained-abort-invalid'):
+                validate_retained_abort(bad)
+
+    def test_retained_abort_truncated_reordered_and_duplicate_key_journals_refuse(self):
+        import copy
+        from tools.ci.p5_controller_probe import retain_abort_journals, validate_retained_abort
+        value = retain_abort_journals(self.run, self.root/'admission-nonces.sha256', self.reconcile())
+        original = value['documents']['events.jsonl']['utf8']
+        lines = original.splitlines(keepends=True)
+        duplicate = lines[0].replace('{', '{"sequence":999,', 1) + ''.join(lines[1:])
+        for raw in (original.rstrip('\n'), ''.join(reversed(lines)), duplicate):
+            bad = copy.deepcopy(value)
+            bad['documents']['events.jsonl'] = dict(utf8=raw, sha256=hashlib.sha256(raw.encode()).hexdigest())
+            with self.assertRaisesRegex(ValueError, 'p5-retained-abort-invalid'):
+                validate_retained_abort(bad)
+
+
+
 if __name__=='__main__':
     unittest.main()

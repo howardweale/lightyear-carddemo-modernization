@@ -115,6 +115,122 @@ def inspect_receipt(path):
                 factory_build_receipt_present='factory_build_receipt' in value)
 
 
+RETAINED_ABORT_FILES = ('attempt-identity.json', 'attempt-accounting.jsonl', 'events.jsonl')
+ABORT_FILE_LIMIT = 2 * 1024 * 1024
+
+
+def validate_retained_abort(value):
+    """Check original journal relationships; never grant admission or qualification."""
+    from lightyear_factory.orchestrator import _reconcile_accounting_journal
+
+    def require(condition):
+        if not condition:
+            raise ValueError('p5-retained-abort-invalid')
+
+    def unique(pairs):
+        result = {}
+        for key, item in pairs:
+            require(key not in result)
+            result[key] = item
+        return result
+
+    def document(raw):
+        return json.loads(raw, object_pairs_hook=unique)
+
+    def raw(row):
+        require(set(row) == {'utf8', 'sha256'})
+        data = row['utf8'].encode('utf-8')
+        require(0 < len(data) <= ABORT_FILE_LIMIT)
+        require(hashlib.sha256(data).hexdigest() == row['sha256'])
+        return data
+
+    def chain(data):
+        require(data.endswith(b'\n'))
+        events = [document(line) for line in data.splitlines()]
+        require(bool(events))
+        previous = None
+        for sequence, event in enumerate(events, 1):
+            require(type(event['sequence']) is int and event['sequence'] == sequence)
+            require(event['previous_sha256'] == previous)
+            require(event['event_sha256'] == canonical_hash(event, {'event_sha256'}))
+            previous = event['event_sha256']
+        return events
+
+    try:
+        require(set(value) == {'schema', 'scope', 'run_id', 'documents', 'nonce_store',
+                              'interrupted_record', 'production_controller_receipt',
+                              'human_attestation_verified'})
+        require(value['schema'] == 'p5-retained-abort-journals/1')
+        require(value['scope'] == 'disposable stub controller; retained bytes and replay only')
+        require(value['production_controller_receipt'] is False)
+        require(value['human_attestation_verified'] is False)
+        docs = value['documents']
+        require(set(docs) == set(RETAINED_ABORT_FILES))
+        identity = document(raw(docs['attempt-identity.json']))
+        require(identity['schema'] == 'factory-attempt-identity/1')
+        require(identity['content_sha256'] == canonical_hash(identity, {'content_sha256'}))
+        require(identity['attempt_id'] == value['run_id'])
+        accounting = chain(raw(docs['attempt-accounting.jsonl']))
+        events = chain(raw(docs['events.jsonl']))
+        event = events[-1]
+        require(event == value['interrupted_record'])
+        require(event['state'] == 'INTERRUPTED' and event['kind'] == 'interrupted_attempt')
+        require(not any(e['state'] in ('PASSED', 'BLOCKED', 'INTERRUPTED') for e in events[:-1]))
+        payload = event['payload']
+        require(payload['schema'] == 'factory-interrupted-attempt/1')
+        require(payload['status'] == 'interrupted; awaiting human attestation')
+        require(payload['unsigned'] is True and payload['human_attestation'] is None)
+        for flag in ('qualifies_for_factory_receipt', 'resume_allowed', 'retry_allowed', 'new_admission_allowed'):
+            require(payload[flag] is False)
+        for key in ('attempt_id', 'work_order_sha256', 'consumed_nonce_sha256',
+                    'sealed_workspace_sha256', 'admission_receipt_sha256'):
+            require(payload[key] == identity[key])
+        require(payload['attempt_identity_sha256'] == identity['content_sha256'])
+        require(payload['accounting_ledger_head_sha256'] == accounting[-1]['event_sha256'])
+        for kind, field, expected in (
+                ('work_order_accepted', 'work_order_sha256', identity['work_order_sha256']),
+                ('hardened_admission_bound', 'admission_receipt_sha256', identity['admission_receipt_sha256']),
+                ('workspace_read_manifest', 'sha256', identity['workspace_inventory_sha256'])):
+            require(any(e['kind'] == kind and e['payload'].get(field) == expected for e in events[:-1]))
+        nonces = raw(value['nonce_store'])
+        require(nonces.endswith(b'\n'))
+        lines = nonces.decode('ascii').splitlines()
+        require(all(len(line) == 64 and all(c in '0123456789abcdef' for c in line) for line in lines))
+        require(identity['consumed_nonce_sha256'] in lines)
+        # The unchanged production replay is applied to the original retained bytes.
+        replayed = _reconcile_accounting_journal(accounting, identity['content_sha256'])
+        require(replayed == payload['accounting'] and replayed['billing_final'] is False)
+        return True
+    except (KeyError, TypeError, ValueError, IndexError, AttributeError, UnicodeError, ContractError):
+        raise ValueError('p5-retained-abort-invalid') from None
+
+
+def retain_abort_journals(run_dir, nonce_path, event):
+    """Retain only three sanitized documents and nonce hashes, never fixture keys/artifacts."""
+    import stat
+
+    def retain(path):
+        before = path.lstat()
+        if not stat.S_ISREG(before.st_mode) or path.is_symlink() or not 0 < before.st_size <= ABORT_FILE_LIMIT:
+            raise ValueError('p5-retained-abort-file')
+        data = path.read_bytes()
+        after = path.lstat()
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) !=
+                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
+                or len(data) != before.st_size):
+            raise ValueError('p5-retained-abort-file-changed')
+        return dict(utf8=data.decode('utf-8'), sha256=hashlib.sha256(data).hexdigest())
+
+    value = dict(schema='p5-retained-abort-journals/1',
+        scope='disposable stub controller; retained bytes and replay only',
+        run_id=run_dir.name, documents={name: retain(run_dir/name) for name in RETAINED_ABORT_FILES},
+        nonce_store=retain(nonce_path), interrupted_record=event,
+        production_controller_receipt=False, human_attestation_verified=False)
+    validate_retained_abort(value)
+    return value
+
+
+
 def observe(fixture, repository):
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         raise ValueError('p5-ci-only')
@@ -216,6 +332,8 @@ def observe(fixture, repository):
             interrupted_record=event, interrupted_record_sha256=canonical_hash(event),
             consumed_nonce_unchanged=(runs/'admission-nonces.sha256').read_bytes()==nonce_before,
             terminal_abort_refused=True, human_attestation_verified=False)
+        result['retained_abort_journals'] = retain_abort_journals(
+            run_dir, runs/'admission-nonces.sha256', event)
         if receipt_exists:
             result['post_kill_receipt'] = inspect_receipt(run_dir/'receipt.json')
         gaps = ['Existing human Tower path has not attested the interrupted record; no gap acceptance is inferred.',

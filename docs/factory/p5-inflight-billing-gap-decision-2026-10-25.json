@@ -1,0 +1,70 @@
+{
+  "schema": "p5-inflight-billing-gap-decision/1",
+  "decided_on": "2026-10-25",
+  "approver": "Howard Weale",
+  "decision": "Conditionally accepted for the first COPAU run only [operator-chat receipt](p5-inflight-billing-chat-receipt-2026-10-25.json#sha256=0d2d1aeef8047e4a713b215f2b546203812f5a762d2f2ea1583d7da467688824)",
+  "approval_source": {
+    "kind": "direct-human-operator-chat",
+    "receipt": {
+      "path": "docs/factory/p5-inflight-billing-chat-receipt-2026-10-25.json",
+      "sha256": "0d2d1aeef8047e4a713b215f2b546203812f5a762d2f2ea1583d7da467688824"
+    },
+    "transcription": {
+      "path": "docs/factory/p5-inflight-billing-chat-transcription-2026-10-25.txt",
+      "sha256": "69017fd156efefd360e6a18b9d7ab8774a03d2ecf61da02a6dc0b7e6d4b45cb0"
+    },
+    "reported_local_time": "2026-10-25 approximately 15:45 America/Los_Angeles",
+    "independent_human_authentication": false
+  },
+  "accepted_item": "Final billed usage and cost of the model call in flight when an attempt is interrupted are unknown at reconciliation time.",
+  "applies_to": {
+    "program": "COPAU",
+    "run_scope": "first COPAU run only",
+    "later_runs": false,
+    "other_programs": false,
+    "automatic_reuse": false,
+    "first_run_identity_must_be_bound_before_qualification": true
+  },
+  "mandatory_conditions": {
+    "interrupted_record": {
+      "required": true,
+      "in_flight_reserved_upper_bound_usage_required": true,
+      "in_flight_reserved_upper_bound_cost_required": true,
+      "observed_usage_of_every_completed_call_required": true
+    },
+    "billing_final": false,
+    "in_flight_marker": "unknown; reserved upper bound recorded",
+    "budget": {
+      "run_cap_usd": 10,
+      "cap_unchanged": true,
+      "reservation_logic_unchanged": true,
+      "budget_drill_must_prove_reservation_before_each_call_sent": true
+    },
+    "invoice_reconciliation": {
+      "receipt_statement_required": true,
+      "responsible_operator": "Howard Weale",
+      "source": "provider's invoice",
+      "statement": "The actual cost will be reconciled by Howard from the provider's invoice."
+    }
+  },
+  "excluded": [
+    "Missing reservation",
+    "Missing interrupted record",
+    "Missing completed-call accounting",
+    "Any other controller gap",
+    "A claim that final billing is known",
+    "Any subsequent COPAU run"
+  ],
+  "existing_human_attestation_acceptance": "Separate first-run human-attestation acceptance is unchanged; this decision does not supply attestation.",
+  "qualifier_constraint": "Only this item is eligible for conditional treatment through this exact decision and its bound operator-chat receipt, after every mandatory condition and first-run scope is evidenced. No other qualify() pass criterion is relaxed.",
+  "publication_constraint": "Exact-hash approval is required before publishing these records or any qualifier or gap-text change that cites them. This human decision approves the conditional scope, not unseen implementation bytes.",
+  "authority": {
+    "conditional_gap_acceptance": true,
+    "merge": false,
+    "factory_run": false,
+    "spend": false,
+    "signing": false,
+    "production_change": false
+  },
+  "current_evidence": "This record does not assert that the accounting, pre-send reservation, invoice-statement or qualification conditions are already met."
+}

@@ -1,0 +1,215 @@
+def _finish(
+    self,
+    run_dir: Path,
+    run_id: str,
+    order: WorkOrder,
+    state: str,
+    attempts: int,
+    started_at: str,
+    ledger: RunLedger,
+    artifacts: list[dict[str, Any]],
+    initial_snapshot: dict[str, str],
+    final_snapshot: dict[str, str],
+    verification: dict[str, Any],
+    limitation: str,
+    context: dict[str, Any],
+    candidate_authorship: dict[str, Any] | None = None,
+    candidate_package_check: Callable[[], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    changed_paths = sorted(
+        path
+        for path in set(initial_snapshot) | set(final_snapshot)
+        if initial_snapshot.get(path) != final_snapshot.get(path)
+    )
+    required_actions = {
+        ("planner", "factory:plan"),
+        ("verifier", "factory:verify"),
+    }
+    if attempts:
+        required_actions.add(("builder", "factory:build"))
+    if any(item.get("artifact_type") == "failure-diagnosis" for item in artifacts):
+        required_actions.add(("failure_analyst", "factory:analyze-failure"))
+    execution_security = (
+        self.execution_context.summary(required_actions)
+        if self.execution_context
+        else {
+            "status": "advisory",
+            "production_ready": False,
+            "backend": "host-process",
+            "secrets_persisted": False,
+            "gaps": ["hardened-execution-not-configured"],
+        }
+    )
+    summary_method = getattr(self.agents, "intelligence_summary", None)
+    intelligence = (
+        summary_method()
+        if callable(summary_method)
+        else {
+            "mode": "unreported",
+            "provider": self.agents.name,
+            "calls": 0,
+            "limitations": ["Agent set did not emit intelligence provenance."],
+        }
+    )
+    security_limitations = (
+        ["Acceptance gates ran inside the admitted OCI security policy."]
+        if execution_security.get("production_ready")
+        else [
+            "Local copy isolation is not an OS container security boundary.",
+            "Network-deny is advisory until a live container backend enforces it.",
+        ]
+    )
+    receipt = {
+        "schema_version": RUN_RECEIPT_SCHEMA_VERSION,
+        "receipt_type": "lightyear-autonomous-factory-run",
+        "run_id": run_id,
+        "work_order_id": order.order_id,
+        "work_order_sha256": order.content_sha256,
+        "status": state.lower(),
+        "attempts": attempts,
+        "repair_loops": max(0, attempts-1),
+        "started_at": started_at,
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "ledger_head_sha256": ledger.head_sha256,
+        "event_count": len(ledger.events),
+        "changed_paths": changed_paths,
+        "initial_snapshot_sha256": canonical_hash(initial_snapshot),
+        "final_snapshot_sha256": canonical_hash(final_snapshot),
+        "verification": {
+            "status": verification.get("status"),
+            "gates": [
+                {
+                    "id": item["id"],
+                    "status": item["status"],
+                    "output_sha256": item["output_sha256"],
+                }
+                for item in verification.get("gates", [])
+            ],
+        },
+        "artifacts": artifacts,
+        "execution_security": execution_security,
+        "intelligence": intelligence,
+        "limitations": [
+            limitation,
+            *security_limitations,
+        ],
+    }
+    from .graph_tools import graph_summary
+    receipt["graph"] = graph_summary(order, ledger, run_id)
+    if candidate_authorship is not None:
+        receipt['candidate_authorship'] = dict(
+            candidate_commit=candidate_authorship['candidate_commit'],
+            final_package_tree_sha256=candidate_authorship['final_package_tree_sha256'],
+            audit_sha256=candidate_authorship['content_sha256'],
+            signature_and_provenance_verified=candidate_authorship['qualifies_for_factory_receipt'])
+    if context.get("schema_version") == "1.1":
+        receipt["annotation_context"] = dict(annotation_ids=context["annotation_ids"],
+            context_sha256=context["content_sha256"], context_projection_sha256=context["context_projection_sha256"])
+    if intelligence.get("routing"):
+        receipt["routing"] = intelligence["routing"]
+    deferred_memory = self.memory_store is not None and (
+        candidate_package_check is not None or candidate_authorship is not None
+        or self.candidate_signing_paths is not None)
+    prepared_memory = None
+    self._scan_controller_value('run-receipt-before-memory', receipt)
+    if self.memory_store:
+        try:
+            if deferred_memory:
+                prepared_memory = self.memory_store.prepare_run(
+                    run_dir, order, receipt, context, artifacts)
+                self._scan_controller_value('prepared-semantic-memory', prepared_memory)
+                memory_decision = dict(schema_version="1.0", run_id=run_id,
+                    disposition="deferred", reason="awaiting-final-receipt-publication",
+                    experience_sha256=None)
+                memory_decision["content_sha256"] = canonical_hash(memory_decision)
+            else:
+                memory_decision = self.memory_store.observe_run(
+                    run_dir, order, receipt, context, artifacts)
+        except (ContractError, OSError, ValueError) as exc:
+            prepared_memory = None
+            memory_decision = {
+                "schema_version": "1.0",
+                "memory_type": "lightyear-semantic-memory-decision",
+                "run_id": run_id,
+                "disposition": "quarantined",
+                "reason": f"memory-controller-error:{type(exc).__name__}",
+                "experience_sha256": None,
+            }
+            memory_decision["content_sha256"] = canonical_hash(memory_decision)
+        receipt["semantic_memory"] = {
+            "retrieval_sha256": (
+                self.memory_retrieval.get("content_sha256")
+                if self.memory_retrieval else None
+            ),
+            "retrieved_experiences": (
+                len(self.memory_retrieval.get("cards", []))
+                if self.memory_retrieval else 0
+            ),
+            "decision": memory_decision,
+        }
+    if candidate_package_check is not None:
+        receipt['candidate_package_finalization'] = candidate_package_check()
+        receipt['ledger_head_sha256'] = ledger.head_sha256
+        receipt['event_count'] = len(ledger.events)
+    elif candidate_authorship is not None and candidate_authorship.get('qualifies_for_factory_receipt'):
+        raise ContractError('candidate-package-finalization-required')
+    if self.candidate_signing_paths is not None:
+        from .build_receipt import compute_build_receipt
+        from lightyear_execution.integration import HardenedExecutionContext
+        from lightyear_execution.backend import OCIContainerBackend
+        bound = self.agents.bounded_provider
+        transport = getattr(self.agents.provider, 'transport_recorder', None)
+        if (type(self.agents) is not ModelAgentSet or type(bound) is not AccountedModelProvider
+                or bound.order is not order or bound.provider is not self.agents.provider
+                or type(transport) is not ModelTransportRecorder
+                or transport.ledger is not ledger or transport.pending is not None or transport.failed
+                or transport.require_model_admission is not True
+                or type(self.execution_context) is not HardenedExecutionContext
+                or type(self.execution_context.backend) is not OCIContainerBackend):
+            raise ContractError('factory-build-receipt-controller-binding')
+        runtime = self._verify_runtime_admission(order)
+        build_receipt = compute_build_receipt(order, ledger, receipt, bound.calls, runtime, run_dir)
+        self._scan_controller_value('factory-build-receipt', build_receipt)
+        ledger.append('VERIFYING', 'factory_build_receipt_computed', build_receipt)
+        receipt['factory_build_receipt'] = build_receipt
+        if not build_receipt['qualifies_for_factory_receipt']:
+            receipt['status'] = 'blocked'
+        receipt['ledger_head_sha256'] = ledger.head_sha256
+        receipt['event_count'] = len(ledger.events)
+    receipt["content_sha256"] = canonical_hash(receipt)
+    summary = {
+        "run_id": run_id,
+        "status": receipt["status"],
+        "attempts": attempts,
+        "title": order.title,
+        "receipt_sha256": receipt["content_sha256"],
+        "intelligence_mode": intelligence.get("mode"),
+        "model_calls": intelligence.get("calls", 0),
+        "updated_at": receipt["completed_at"],
+    }
+    self._scan_controller_value('run-receipt', receipt)
+    self._scan_controller_value('run-summary', summary)
+    write_json(receipt, run_dir / "receipt.json")
+    write_json(summary, run_dir / "summary.json")
+    if deferred_memory and prepared_memory is not None:
+        # Qualification and both receipt files are committed before optional memory
+        # delivery. Delivery failures cannot downgrade that immutable final result.
+        try:
+            memory_decision = self.memory_store.publish_finalized_run(
+                prepared_memory, run_dir, order, receipt,
+                lambda record: self._scan_controller_value('semantic-memory-record', record),
+                require_factory_receipt=self.candidate_signing_paths is not None)
+        except Exception as exc:
+            memory_decision = dict(schema_version="1.0", run_id=run_id,
+                disposition="quarantined", reason=f"memory-controller-error:{type(exc).__name__}",
+                experience_sha256=None)
+        publication = dict(schema_version="1.0", run_id=run_id,
+            receipt_sha256=receipt["content_sha256"], decision=memory_decision)
+        try:
+            publication["content_sha256"] = canonical_hash(publication)
+            self._scan_controller_value('semantic-memory-publication', publication)
+            write_json(publication, run_dir / "semantic-memory-publication.json")
+        except Exception:
+            # Receipt still truthfully says deferred; a delivery receipt is optional.
+            pass
+    return receipt

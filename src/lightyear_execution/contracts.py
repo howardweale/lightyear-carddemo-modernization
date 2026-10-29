@@ -112,7 +112,8 @@ class ExecutionPolicy:
             raise ExecutionContractError("Invalid allowed environment variable")
         if admission.get("required") is not True:
             raise ExecutionContractError("Hardened execution requires signed admission")
-        if admission.get("signature_algorithm") != "HMAC-SHA256":
+        signature_algorithm = admission.get("signature_algorithm")
+        if not isinstance(signature_algorithm, str) or signature_algorithm not in {"HMAC-SHA256", "FACTORY-TOWER-PROOF"}:
             raise ExecutionContractError("Unsupported work-order signature algorithm")
         key_ids = tuple(str(item) for item in admission.get("trusted_key_ids", []))
         if not key_ids:
@@ -138,6 +139,11 @@ class ExecutionPolicy:
             raise ExecutionContractError("Invalid secret name in execution policy")
         if secrets.get("persist_values") is not False:
             raise ExecutionContractError("Secret values must never be persisted")
+        if signature_algorithm == "FACTORY-TOWER-PROOF":
+            # This names an authorization route, not a replacement signature
+            # algorithm. The genuine FactoryDecisions verifier checks the proof.
+            if secret_names or len(key_ids) != 1 or not _SHA256.fullmatch(key_ids[0]):
+                raise ExecutionContractError("Tower drill policy requires one public PEM hash and no secrets")
         return cls(
             safe_name(payload.get("id"), "execution policy id"),
             str(payload.get("version", "")),
@@ -157,7 +163,7 @@ class ExecutionPolicy:
             commands,
             environment,
             True,
-            "HMAC-SHA256",
+            signature_algorithm,
             key_ids,
             ttl,
             identity_ttl,

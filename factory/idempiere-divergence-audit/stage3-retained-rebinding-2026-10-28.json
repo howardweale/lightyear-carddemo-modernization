@@ -1,0 +1,72 @@
+{
+  "approval_scope": "Proposal only; separate exact-hash approval required. No historical artifact or predecessor rewrite.",
+  "claims": {
+    "all_flagged_pairs_triaged": false,
+    "application_equivalence": false,
+    "audit_complete": false,
+    "bounded_sample_selected": true,
+    "deterministic_sweep_complete": true,
+    "live_model_triage_complete": false,
+    "native_execution": false,
+    "production_ready": false,
+    "role_contract_calibration_complete": true
+  },
+  "content_sha256": "98a2569867b2817928e802eafaf0e91bb50f5b2c130aad66fe2a2e1de4d591b1",
+  "evidence_kind": "deterministic-binding-projection",
+  "implementation_logical_sha256": {
+    "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+    "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+    "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+    "src/lightyear_data/idempiere_triage.py": "1c4a124fcb9794871473601f0ab8cedcf797670a1cf53bdd451b7cd021694f7c",
+    "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+    "src/lightyear_factory/providers.py": "abf9d76275c99a9057c64264bb94dffbb8f852f6218891a21d5f79b15da59612"
+  },
+  "model_calls": 0,
+  "new_execution": false,
+  "original_artifacts": {
+    "stage3-calibration.json": {
+      "content_sha256": "f592c518a34ad894d6a99380582299a987e21f34bc62c1184de30f3486ec877f",
+      "logical_sha256": "ab76b7ed767eb7beb550b02ddbb037e2d432e173ea1f641fbc5f886afafd0a56"
+    },
+    "stage3-work-package.json": {
+      "content_sha256": "1cec108870563a5de5116517523e046366944caa935d01565352957ba571d5ce",
+      "logical_sha256": "dc77fb78dd9eba54728230435a767604bb8ada1fbc425ee1ba91dc80e2d05320"
+    },
+    "stage4-coverage.json": {
+      "content_sha256": "d3c1db79a22ba3f858007584caceaab8847feaa768ec0e602cad4133bab42db9",
+      "logical_sha256": "b262294ff946f1ef76e86234d70ad3276972a6c7187549f7b040cb294739f202"
+    },
+    "stage4-divergence-register.json": {
+      "content_sha256": "15dd3ceeaa4d01a80fd7ff4a2d53be638ebd7d763e5535c0e08ed12183cc2fa4",
+      "logical_sha256": "cc846288db390d6709c252ecabe630458a079d6f743aa683e6ef1302a7da48b6"
+    },
+    "stage4-indeterminate-register.json": {
+      "content_sha256": "a21e97c47adc9fdb2b361e7048ac49fe5d1c9ddb939f20aa0ad53ff8a992b51a",
+      "logical_sha256": "0ec52d1785ef353350d4f06957a1fae49c0fb6925c23bbbf4209332affae7f02"
+    },
+    "stage4-provenance-register.json": {
+      "content_sha256": "fc26031947a641a9dbf57b066f1155ebdfde712e9dbcdc0400fa025cd2a99d0f",
+      "logical_sha256": "da2ee94223fcb23616034e1b8749801d125a49070ac768bba090ed2044cb7e0a"
+    },
+    "stage4.receipt.json": {
+      "content_sha256": "753a66e62a983172fab9667d19613b103d199414574e771c579dd46e5306701e",
+      "logical_sha256": "6c2c38e7f8ef8cbad5e5ee076182d147357a17197478dbb20dadff2c0126721c"
+    }
+  },
+  "projected_content_sha256": {
+    "stage3-calibration.json": "f1defd36191aed9be5bc1662b04d3d78c62b6ff4732612a08554fabd8e5feb52",
+    "stage3-work-package.json": "f9476d1a5dfd252667aad97249a03cb650305a9e5f67b7f6bda2bf241a6d4132",
+    "stage4-coverage.json": "c6f90bd8d7fc724e28a2929da53a519ada55e4bcc901033751bb65dfc934466b",
+    "stage4-divergence-register.json": "c4be71be1783fa55151445003d07151e914a8807ef95071a95dc00ec6999548c",
+    "stage4-indeterminate-register.json": "ead90dd377a38f398073c6f80af74be24353be0d343d32d5b0e3879cf088ed6b",
+    "stage4-provenance-register.json": "7aea985588f17a61a1c5d6a3a16f4567826645240cbb1aed6f6599efc63a5158",
+    "stage4.receipt.json": "9e4de8783f4618734a2dc769d01ef79af5c057d050eda254b7d05547251ef239"
+  },
+  "schema": "ms70-retained-rebinding/1",
+  "scope": "Current-source deterministic binding projection after the approved Flex/count provider change. Supersedes only the current comparison projection; original MS70 records and the 27 October rebinding remain unchanged. No new runtime/model evidence, gap acceptance or MS94 completion.",
+  "supersedes": {
+    "content_sha256": "aff4c15546ddd4be3dadc2f1a9620363a14e3fe5776cb0cdb36349e0e5d4b30e",
+    "logical_sha256": "d11949c59ef32bd5b2427ca6853e389598d58ae66f4260b836b334c5b1799c84",
+    "path": "factory/idempiere-divergence-audit/stage3-retained-rebinding-2026-10-27.json"
+  }
+}

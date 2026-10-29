@@ -42,6 +42,8 @@ class SnapshotOpenAIResponsesProvider(OpenAIResponsesProvider):
                 yield response
                 return
             raw = response.read()
+            from .transport_journal import report_transport_payload
+            report_transport_payload(raw)
             try:
                 verify_response(self, json.loads(raw.decode('utf-8')))
             except ValueError as exc:

@@ -19,6 +19,18 @@ on:
       - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
+      - 'src/lightyear_factory/transport_journal.py'
+      - 'src/lightyear_factory/controller_count_accounting.py'
+      - 'src/lightyear_factory/count_charge_account.py'
+      - 'src/lightyear_factory/count_request_bound.py'
+      - 'src/lightyear_factory/flex_billing.py'
+      - 'src/lightyear_execution/human_drill_dispatch.py'
+      - 'src/lightyear_execution/public_drill_outputs.py'
+      - 'src/lightyear_execution/public_drill_runtime.py'
+      - 'src/lightyear_execution/tower_drill_admission.py'
+      - 'src/lightyear_execution/tower_drill_context.py'
+      - 'src/lightyear_execution/tower_drill_reservation.py'
+      - 'src/lightyear_execution/tower_drill_roles.py'
   push:
     branches: [main]
     paths:
@@ -38,6 +50,18 @@ on:
       - "tests/test_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
+      - 'src/lightyear_factory/transport_journal.py'
+      - 'src/lightyear_factory/controller_count_accounting.py'
+      - 'src/lightyear_factory/count_charge_account.py'
+      - 'src/lightyear_factory/count_request_bound.py'
+      - 'src/lightyear_factory/flex_billing.py'
+      - 'src/lightyear_execution/human_drill_dispatch.py'
+      - 'src/lightyear_execution/public_drill_outputs.py'
+      - 'src/lightyear_execution/public_drill_runtime.py'
+      - 'src/lightyear_execution/tower_drill_admission.py'
+      - 'src/lightyear_execution/tower_drill_context.py'
+      - 'src/lightyear_execution/tower_drill_reservation.py'
+      - 'src/lightyear_execution/tower_drill_roles.py'
   workflow_dispatch:
 
 permissions:

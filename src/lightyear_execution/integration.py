@@ -19,6 +19,8 @@ class HardenedExecutionContext:
         identity_key: bytes,
         secret_values: dict[str, str] | None = None,
     ) -> None:
+        if policy.signature_algorithm != "HMAC-SHA256":
+            raise ExecutionContractError("HMAC execution context refuses public-proof policy")
         if admission_receipt.get("status") != "passed":
             raise ExecutionContractError("Hardened execution requires successful admission")
         self.policy = policy

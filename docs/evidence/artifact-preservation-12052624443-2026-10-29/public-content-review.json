@@ -1,0 +1,25 @@
+{
+  "schema": "public-artifact-content-review/1",
+  "artifact_id": 12052624443,
+  "reviewed_at": "2026-10-29T18:04:34.658534+00:00",
+  "public_only": true,
+  "scope": "Both JSON members: exact original plan already committed publicly, plus unsigned preparation-not-authorization request.",
+  "findings": [
+    "Plan bytes equal docs/factory/posttran-phase2-original-ci-plan-2026-10-17.json at58a799a9; SHA-2562a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c.",
+    "Unsigned request contains scope/plan hash/workflow and null executable head; approved/effective false. No signing key, credential or customer data.",
+    "No execution, qualification or release authority inferred."
+  ],
+  "members": [
+    {
+      "name": "posttran-phase2-plan-2026-10-16.json",
+      "bytes": 54337,
+      "sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+    },
+    {
+      "name": "preparation-not-authorization.json",
+      "bytes": 615,
+      "sha256": "74fc836cc9c4e9681d56cda750e5efda645978563abcb7f9872d043b74edcfc4"
+    }
+  ],
+  "archive_executed": false
+}

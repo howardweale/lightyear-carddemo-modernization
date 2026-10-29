@@ -1,0 +1,63 @@
+{
+  "schema": "github-actions-artifact-preservation/1",
+  "preservation_only": true,
+  "execution_authorized": false,
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "original_artifact": {
+    "id": 12052624443,
+    "node_id": "MDg6QXJ0aWZhY3QxMjA1MjYyNDQ0Mw==",
+    "name": "posttran-phase2-plan",
+    "size_in_bytes": 11573,
+    "url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052624443",
+    "archive_download_url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052624443/zip",
+    "expired": false,
+    "digest": "sha256:5869fafe8188352e5cfbe9de16e9f5f8b74782e7ba32a064b70f9ef60d0402c0",
+    "created_at": "2026-10-16T14:46:15Z",
+    "updated_at": "2026-10-16T14:46:15Z",
+    "expires_at": "2026-10-30T14:46:14Z",
+    "workflow_run": {
+      "id": 38917806865,
+      "repository_id": 1329380897,
+      "head_repository_id": 1329380897,
+      "head_branch": "codex/oct16-factory-followups",
+      "head_sha": "e3ee73d8bff7e18491724d377ea9329e96896f71"
+    }
+  },
+  "archive_sha256": "5869fafe8188352e5cfbe9de16e9f5f8b74782e7ba32a064b70f9ef60d0402c0",
+  "size_in_bytes": 11573,
+  "retrieved_at": "2026-10-29T17:57:39.473466+00:00",
+  "retrieval_origin": {
+    "kind": "GitHub Actions artifact download",
+    "api": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052624443/zip"
+  },
+  "metadata_capture": "live API response 2026-10-29",
+  "release": {
+    "tag": "artifact-preservation-12052624443",
+    "asset_name": "12052624443-original.zip",
+    "download_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/artifact-preservation-12052624443/12052624443-original.zip"
+  },
+  "public_content_review_sha256": "5e0f2b4a224a92e28e36d5ddafef718b8fe481fe4806876ade708ebeccef5c17",
+  "original_metadata_sha256": "18d6ba5beb9e0934f830cd7c8949dff9a8b5a0c11049e39c9351644fb511e376",
+  "members": [
+    {
+      "name": "posttran-phase2-plan-2026-10-16.json",
+      "bytes": 54337,
+      "sha256": "2a2eab7bf0753b344e1f13ed2c39e46e1eb207dd491008ff143003d7dc49f47c"
+    },
+    {
+      "name": "preparation-not-authorization.json",
+      "bytes": 615,
+      "sha256": "74fc836cc9c4e9681d56cda750e5efda645978563abcb7f9872d043b74edcfc4"
+    }
+  ],
+  "unchanged": [
+    "original bytes",
+    "original pins",
+    "checks",
+    "workflows",
+    "POSTTRAN execution",
+    "gates",
+    "fence",
+    "approvals"
+  ]
+}

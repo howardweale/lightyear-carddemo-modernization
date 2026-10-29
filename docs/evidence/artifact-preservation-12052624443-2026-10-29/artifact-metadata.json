@@ -1,0 +1,20 @@
+{
+  "id": 12052624443,
+  "node_id": "MDg6QXJ0aWZhY3QxMjA1MjYyNDQ0Mw==",
+  "name": "posttran-phase2-plan",
+  "size_in_bytes": 11573,
+  "url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052624443",
+  "archive_download_url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052624443/zip",
+  "expired": false,
+  "digest": "sha256:5869fafe8188352e5cfbe9de16e9f5f8b74782e7ba32a064b70f9ef60d0402c0",
+  "created_at": "2026-10-16T14:46:15Z",
+  "updated_at": "2026-10-16T14:46:15Z",
+  "expires_at": "2026-10-30T14:46:14Z",
+  "workflow_run": {
+    "id": 38917806865,
+    "repository_id": 1329380897,
+    "head_repository_id": 1329380897,
+    "head_branch": "codex/oct16-factory-followups",
+    "head_sha": "e3ee73d8bff7e18491724d377ea9329e96896f71"
+  }
+}

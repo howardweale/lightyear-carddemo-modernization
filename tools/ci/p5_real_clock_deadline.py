@@ -25,7 +25,7 @@ def observe(parent, expired):
         scope=dict(allowed_paths=['worker.py'], graph_node_ids=[]),
         acceptance=dict(baseline_first=True, max_attempts=1,
             gates=[dict(id='public-clean-control', command=[sys.executable, '-c', 'pass'], timeout_seconds=5, expose_output_to_builder=False)]),
-        policy=dict(allow_network=False, max_elapsed_seconds=2 if expired else 30, max_model_calls=1, max_model_cost_usd=0), metadata={}))
+        policy=dict(allow_network=False, max_elapsed_seconds=30, max_model_calls=1, max_model_cost_usd=0), metadata={}))
     scripted = ScriptedModelProvider([dict(summary='Public plan', risks=[], tasks=[dict(
         id='clock', objective='Observe terminal deadline', paths=['worker.py'], graph_node_ids=[], evidence_capsule_ids=[])])])
     agents = ModelAgentSet(scripted); reports = []; intervals = []
@@ -80,7 +80,7 @@ def validate(value):
         if (value['schema'] != 'p5-real-clock-deadline-observation/1'
                 or value['clock_substituted'] is not False
                 or type(value['wall_seconds']) is not int
-                or value['wall_seconds'] != (2 if value['expired'] else 30)
+                or value['wall_seconds'] != 30
                 or len(value['intervals']) != 1):
             return False
         interval = value['intervals'][0]

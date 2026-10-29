@@ -77,3 +77,23 @@ class ConfiguredExitRetentionTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'exclusive-output'):
                 probe.observe(ROOT, output, 'normal')
             self.assertEqual((output/'child-result.json').read_bytes(), original)
+
+    def test_replayed_accounting_preserves_json_types_after_rehash(self):
+        with tempfile.TemporaryDirectory() as temp:
+            row = probe.observe(ROOT, Path(temp)/'typed-normal', 'normal')
+        original = copy.deepcopy(row)
+        self.assertTrue(probe.validate(row))
+        fields = ('billing_final', 'calls', 'input_tokens', 'output_tokens', 'duration_ms')
+        for field in fields:
+            wrong = copy.deepcopy(row)
+            old = wrong['replayed_accounting'][field]
+            replacement = 0 if field == 'billing_final' else float(old)
+            self.assertEqual(old, replacement)
+            self.assertIsNot(type(old), type(replacement))
+            wrong['replayed_accounting'][field] = replacement
+            wrong['content_sha256'] = canonical_hash(wrong, {'content_sha256'})
+            self.assertEqual(wrong['documents'], row['documents'])
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                probe.validate(wrong)
+        self.assertEqual(row, original)
+        self.assertTrue(probe.validate(row))

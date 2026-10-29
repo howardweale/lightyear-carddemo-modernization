@@ -108,3 +108,21 @@ class PhysicalExitRetentionTests(unittest.TestCase):
                     self.assertEqual(base64.b64decode(diagnostic[key]['base64'], validate=True), raw)
                     self.assertEqual(diagnostic[key]['sha256'], hashlib.sha256(raw).hexdigest())
                 self.assertFalse((directory/'attempt.jsonl').exists())
+
+    def test_replayed_accounting_preserves_json_types_after_rehash(self):
+        row = self.rows(['normal'])[0]
+        original = copy.deepcopy(row)
+        self.assertTrue(probe.validate(row))
+        fields = ('billing_final', 'calls', 'input_tokens', 'output_tokens', 'duration_ms')
+        for field in fields:
+            wrong = copy.deepcopy(row)
+            old = wrong['replayed_accounting'][field]
+            replacement = 0 if field == 'billing_final' else float(old)
+            self.assertEqual(old, replacement)
+            self.assertIsNot(type(old), type(replacement))
+            wrong['replayed_accounting'][field] = replacement
+            self.assertEqual(wrong['documents'], row['documents'])
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                probe.validate(wrong)
+        self.assertEqual(row, original)
+        self.assertTrue(probe.validate(row))

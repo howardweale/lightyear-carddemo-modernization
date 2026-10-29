@@ -104,6 +104,7 @@ def validate(value):
             require(sent['request_sha256'] == reservation['request_sha256'])
         replay = _reconcile_accounting_journal(events, 'a' * 64)
         require(replay == value['replayed_accounting'] and replay['billing_final'] is False)
+        require(canonical_hash(replay) == canonical_hash(value['replayed_accounting']))
         finance = replay['count_financial_accounting']
         require(finance['billing_final'] is False and finance['actual_provider_cost_usd'] is None)
         count = finance['count_account']['calls'][0]

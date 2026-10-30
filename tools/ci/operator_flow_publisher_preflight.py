@@ -19,6 +19,8 @@ from tools.ci.operator_flow_review_workflow import _trust_bytes
 from tools.ci.operator_flow_handoff import _original_producer
 from tools.ci.operator_flow_consumer import clean_root,git,check_metadata,check_native_review,METADATA
 from tools.ci.operator_flow_metadata import PREFIX,object_id,require
+from tools.ci import operator_flow_tree_guards as tree_guards
+from tools.ci.operator_flow_native_inputs import REPOSITORY
 
 EXTRA_SOURCES=(
     ('tools.ci.operator_flow_review_cli','tools/ci/operator_flow_review_cli.py'),
@@ -75,6 +77,31 @@ def _public_materials(executable_root,metadata_root,trust_path,values):
     _prepared_trust(executable_root,metadata_root,trust_path,files)
     return files
 
+def _main_identity(row,expected):
+    require(type(expected) is str and re.fullmatch('[0-9a-f]{40}',expected),'publisher-main-expectation')
+    require(type(row) is dict and row.get('ref')=='refs/heads/main'
+        and type(row.get('object')) is dict and row['object'].get('type')=='commit'
+        and row['object'].get('sha')==expected,'publisher-current-main-changed')
+    return expected
+
+def _publication_tree(root,values,base,files):
+    require(type(files) is dict and set(files)==set(METADATA),'publisher-tree-original-metadata')
+    return tree_guards.check_tree_composition(root,values['executable'],values['metadata_head'],base,
+        {path:files[name] for name,path in METADATA.items()})
+
+def _tree_source(root,executable):
+    relative='tools/ci/operator_flow_tree_guards.py';path=root/relative
+    require(type(tree_guards) is types.ModuleType
+        and all(type(value) is str and Path(value)==path and Path(value).is_absolute()
+            for value in (getattr(tree_guards,'__file__',None),getattr(getattr(tree_guards,'__spec__',None),'origin',None))),
+        'publisher-tree-source-origin')
+    raw=_source_bytes(path);ref=executable+':'+relative
+    size=git(root,'cat-file','-s',ref).decode().strip()
+    require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-tree-source-size')
+    committed=git(root,'show',ref)
+    require(len(committed)==int(size) and raw==committed,'publisher-tree-source-bytes')
+    return hashlib.sha256(raw).hexdigest()
+
 def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_run_id,reviewer_job_id,
         pr_number,base,tested_merge,values):
     require(type(values) is dict and set(values)==set(SCALARS),'publisher-independent-values')
@@ -87,11 +114,14 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
         require(not (root/'.git/commondir').exists() and not (root/'.git/objects/info/http-alternates').exists()
             and git(root,'rev-parse','HEAD').decode().strip()==head,'publisher-prepared-E-M')
     source=_source_snapshot(executable_root,values['executable'])
+    tree_source=_tree_source(executable_root,values['executable'])
+    _main_identity(_GitHubAPI().request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     materials=_public_materials(executable_root,metadata_root,trust_path,values)
     candidate,requests,observed=read_reviewed_publication(executable_root,reviewer_run_id=reviewer_run_id,
         reviewer_job_id=reviewer_job_id,pr_number=pr_number,base=base,tested_merge=tested_merge,values=values)
     files=_metadata_files(candidate,values)
     check_metadata(metadata_root,values,files)
+    tree=_publication_tree(metadata_root,values,base,files)
     order=WorkOrder.load(metadata_root/'tests/fixtures/p5_public/human-clean-control/work-order.json')
     policy=ExecutionPolicy.load(metadata_root/(PREFIX+'execution-policy.json'))
     admission=FactoryModelAdmission.from_external_trust(metadata_root,PREFIX+'plan.json',PREFIX+'proof.json',
@@ -113,6 +143,9 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     require(_public_materials(executable_root,metadata_root,trust_path,values)==materials,'publisher-public-trust-changed')
     require(verify_human_drill_plan(admission,order,policy)==review,'publisher-current-native-trust-changed')
     require(_source_snapshot(executable_root,values['executable'])==source,'publisher-source-changed')
+    require(_tree_source(executable_root,values['executable'])==tree_source,'publisher-tree-source-changed')
+    require(_publication_tree(metadata_root,values,base,files)==tree,'publisher-tree-changed')
+    _main_identity(api.request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     # Native proof verification is not controller admission. Original false
     # publication flags stay false; exact full guards and approval remain owed.
     return candidate,requests,observed

@@ -95,6 +95,7 @@
     "test_operator_flow_review_workflow",
     "test_operator_flow_review_observation",
     "test_operator_flow_completed_review",
-    "test_operator_flow_publisher_preflight"
+    "test_operator_flow_publisher_preflight",
+    "test_operator_flow_publisher_tree_guards"
   ]
 }

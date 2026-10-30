@@ -21,9 +21,11 @@ from tools.ci.operator_flow_consumer import clean_root,git,check_metadata,check_
 from tools.ci.operator_flow_metadata import PREFIX,object_id,require
 from tools.ci import operator_flow_tree_guards as tree_guards
 from tools import check_java_quality_fence as java_fence
+from tools import check_intcalc_m1_triage as posttran
 from tools.ci.operator_flow_native_inputs import REPOSITORY
 
 EXTRA_SOURCES=(
+    ('tools.check_intcalc_m1_triage','tools/check_intcalc_m1_triage.py'),
     ('tools.ci.operator_flow_review_cli','tools/ci/operator_flow_review_cli.py'),
     ('tools.ci.operator_flow_review_workflow','tools/ci/operator_flow_review_workflow.py'),
     ('tools.ci.operator_flow_completed_review','tools/ci/operator_flow_completed_review.py'),
@@ -156,8 +158,66 @@ def _raw_fence(root,base,head,expected_sha256):
     # Original report remains a path check, never publication/merge authority.
     return report
 
+# Five public paths retained by the original 192-path preservation record,
+# beyond the original current-plan derivation. No caller-supplied omission list.
+POSTTRAN_RETAINED=(
+    '.github/workflows/posttran-key-change-proof.yml',
+    '.github/workflows/posttran-review.yml',
+    'docs/factory/factory-authority.public.pem',
+    'tests/test_posttran_review.py',
+    'tools/check_posttran_key_change.py',
+)
+POSTTRAN_HISTORY_ANCHOR='f267fc9ee8d1329529debf4b5edd72bb026b63a5'
+POSTTRAN_APPROVED_ARCHIVE_MAIN='253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c'
+POSTTRAN_APPROVED_ARCHIVE_PATHS=frozenset((
+    '.github/workflows/posttran-key-change-proof.yml','tools/check_posttran_key_change.py'))
+
+def _posttran_inventory(root,base,expected_sha256):
+    require(type(expected_sha256) is str and re.fullmatch('[0-9a-f]{64}',expected_sha256),
+        'publisher-independent-posttran-digest')
+    require(type(base) is str and re.fullmatch('[0-9a-f]{40}',base),'publisher-posttran-base')
+    ref=base+':'+posttran.PLAN;size=git(root,'cat-file','-s',ref).decode().strip()
+    require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-posttran-plan-size')
+    raw=git(root,'show',ref);require(len(raw)==int(size),'publisher-posttran-plan-size')
+    names=git(root,'ls-tree','-rz','--name-only',base).decode('utf-8').split('\0')
+    require(names[-1]=='','publisher-posttran-tree-termination')
+    protected=posttran.posttran_paths(json.loads(raw),names[:-1])|set(POSTTRAN_RETAINED)
+    ordered=sorted(protected)
+    require(len(ordered)==235 and hashlib.sha256(json.dumps(ordered,separators=(',',':')).encode()).hexdigest()
+        ==expected_sha256,'publisher-posttran-exact-inventory')
+    return frozenset(protected)
+
+def _protected_history(root,base,head,protected):
+    require(all(type(x) is str and re.fullmatch('[0-9a-f]{40}',x) for x in (base,head)),
+        'publisher-protected-history-revisions')
+    require(type(protected) is frozenset and protected and all(type(x) is str and posttran.safe_path(x)==x for x in protected),
+        'publisher-protected-history-paths')
+    git(root,'merge-base','--is-ancestor',base,head)
+    # Full history and per-parent merge diffs retain changes later reverted.
+    raw=git(root,'log','--full-history','-m','--format=','--no-renames','--name-only','-z',base+'..'+head)
+    touched=set(raw.decode('utf-8').split('\0'))-{''}
+    endpoint=set(git(root,'diff','--no-renames','--name-only','-z',base,head).decode('utf-8').split('\0'))-{''}
+    return frozenset(protected.intersection(touched|endpoint))
+
+def _posttran_guard(executable_root,metadata_root,base,head,expected_sha256):
+    # Original module origin and E bytes are checked by _source_snapshot.
+    # Bind the same source to independently expected main before invocation.
+    relative='tools/check_intcalc_m1_triage.py'
+    raw=_source_bytes(executable_root/relative);ref=base+':'+relative
+    size=git(metadata_root,'cat-file','-s',ref).decode().strip()
+    require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-posttran-source-size')
+    committed=git(metadata_root,'show',ref)
+    require(len(committed)==int(size) and committed==raw,'publisher-posttran-trusted-source')
+    protected=_posttran_inventory(metadata_root,base,expected_sha256)
+    require(_protected_history(metadata_root,POSTTRAN_HISTORY_ANCHOR,POSTTRAN_APPROVED_ARCHIVE_MAIN,protected)
+        ==POSTTRAN_APPROVED_ARCHIVE_PATHS,'publisher-posttran-approved-history')
+    require(not _protected_history(metadata_root,POSTTRAN_APPROVED_ARCHIVE_MAIN,base,protected),
+        'publisher-posttran-later-main-history')
+    require(not _protected_history(metadata_root,base,head,protected),'publisher-posttran-candidate-history')
+    return expected_sha256
+
 def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_run_id,reviewer_job_id,
-        pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None,expected_java_fence_sha256=None):
+        pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None,expected_java_fence_sha256=None,expected_posttran_inventory_sha256=None):
     require(type(values) is dict and set(values)==set(SCALARS),'publisher-independent-values')
     _independent_expectations(**values)
     executable_root=Path(executable_root);metadata_root=Path(metadata_root)
@@ -171,6 +231,7 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     tree_source=_tree_source(executable_root,values['executable'])
     fence_source=_fence_source(executable_root,values['executable'],base)
     fence=_raw_fence(metadata_root,base,values['metadata_head'],expected_java_fence_sha256)
+    posttran_guard=_posttran_guard(executable_root,metadata_root,base,values['metadata_head'],expected_posttran_inventory_sha256)
     protection=_protection_snapshot(expected_main_protection_sha256,expected_main_rules_sha256)
     _main_identity(_GitHubAPI().request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     materials=_public_materials(executable_root,metadata_root,trust_path,values)
@@ -208,6 +269,8 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     require(_fence_source(executable_root,values['executable'],base)==fence_source,'publisher-fence-source-changed')
     require(_raw_fence(metadata_root,base,values['metadata_head'],expected_java_fence_sha256)==fence,
         'publisher-raw-fence-changed')
+    require(_posttran_guard(executable_root,metadata_root,base,values['metadata_head'],expected_posttran_inventory_sha256)
+        ==posttran_guard,'publisher-posttran-history-changed')
     # Native proof verification is not controller admission. Original false
     # publication flags stay false; exact full guards and approval remain owed.
     return candidate,requests,observed

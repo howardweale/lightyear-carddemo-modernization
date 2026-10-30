@@ -1,6 +1,7 @@
 package ai.lightyear.carddemo.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ai.lightyear.carddemo.domain.Records.Account;
 import ai.lightyear.carddemo.domain.Records.CardXref;
@@ -86,6 +87,31 @@ class InterestCalculationServiceTest {
                 "source-faithful");
         assertThat(result.transactions()).isEmpty();
         assertThat(result.observations().zeroRateRows()).isEqualTo(1);
+    }
+
+    @Test
+    void duplicateAccountAlternateKeyFailsClearlyWithoutSelectingEitherCard() {
+        var otherCard = new CardXref("4333333333333333", "000000003", "00000000001", "");
+        for (var input : List.of(
+                List.of(xrefs.get(0), otherCard, xrefs.get(1)),
+                List.of(otherCard, xrefs.get(0), xrefs.get(1)))) {
+            assertThatThrownBy(() -> service.calculate(
+                    balances, disclosures, input, accounts,
+                    "2022071800", "2022-07-18-00.00.00.000000", "source-faithful"))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("INTCALC duplicate XREF account key: multiple cards require z/OS confirmation");
+        }
+        assertThat(accounts.get(0).currentBalance()).isEqualByComparingTo("1000.00");
+    }
+
+    @Test
+    void duplicateAccountKeyRefusesEvenBeforeAnEmptyBalanceRun() {
+        var otherCard = new CardXref("4333333333333333", "000000003", "00000000001", "");
+        assertThatThrownBy(() -> service.calculate(
+                List.of(), disclosures, List.of(xrefs.get(0), otherCard), accounts,
+                "2022071800", "2022-07-18-00.00.00.000000", "source-faithful"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("INTCALC duplicate XREF account key: multiple cards require z/OS confirmation");
     }
 
     private static Account account(

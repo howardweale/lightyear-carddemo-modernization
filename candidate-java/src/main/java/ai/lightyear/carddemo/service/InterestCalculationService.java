@@ -43,7 +43,16 @@ public class InterestCalculationService {
                 value -> value,
                 (left, right) -> left,
                 LinkedHashMap::new));
-        Map<String, CardXref> xrefByAccount = xrefs.stream().collect(Collectors.toMap(CardXref::accountId, value -> value));
+        // The COBOL SELECT declares this alternate key unique, while the JCL
+        // defines NONUNIQUEKEY. Until z/OS confirms the mismatch, never choose
+        // one of several cards and imply that it matches the legacy job.
+        Map<String, CardXref> xrefByAccount = xrefs.stream().collect(Collectors.toMap(
+                CardXref::accountId,
+                value -> value,
+                (left, right) -> {
+                    throw new IllegalStateException(
+                            "INTCALC duplicate XREF account key: multiple cards require z/OS confirmation");
+                }));
         Map<DisclosureKey, Disclosure> disclosureByKey = disclosures.stream().collect(Collectors.toMap(
                 value -> new DisclosureKey(value.groupId(), value.typeCode(), value.categoryCode()),
                 value -> value));

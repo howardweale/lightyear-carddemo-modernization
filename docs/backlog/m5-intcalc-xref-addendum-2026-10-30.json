@@ -1,0 +1,39 @@
+{
+  "schema": "keep-or-fix-addendum/1",
+  "recorded_on": "2026-10-30",
+  "items": [
+    {
+      "id": "KF-006",
+      "program": "CBACT04C",
+      "classification": "source-index-contract-mismatch",
+      "status": "open",
+      "cobol_alternate_key": "FD-XREF-ACCT-ID; no WITH DUPLICATES",
+      "jcl_alternate_index": "KEYS(11,25); NONUNIQUEKEY",
+      "native_zos_outcome": "unknown",
+      "possible_outcomes": [
+        "open-time file status",
+        "abend",
+        "other outcome"
+      ],
+      "interim_java_behavior": "explicit refusal on duplicate account alternate keys; no silent selection",
+      "selection_change": "held-pending-corrected-source-or-index-evidence",
+      "source_bindings": [
+        {
+          "path": "spec/mainframe/public-source/CBACT04C.cbl",
+          "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        {
+          "path": "spec/modernization/carddemo-data/upstream/app/jcl/XREFFILE.jcl",
+          "sha256": "ae0edd90056cccacd26412fad2cf3d95656c2a2810b66d8c316cbaac9e81248f"
+        },
+        {
+          "path": "src/lightyear_mainframe/legacy_twin.py",
+          "sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea"
+        }
+      ],
+      "confirmation_question": "M4-INTCALC-XREF-001",
+      "legacy_equivalence_claim": false,
+      "release_authorized": false
+    }
+  ]
+}

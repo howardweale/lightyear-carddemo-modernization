@@ -43,3 +43,15 @@ ledger and separates source merges, historical observations and open work.
 Related milestone drafts: [MS-120](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-120.md).
 These links are navigation to proposed records, with no new program qualification
 or run result. The MS-122 placeholder remains empty.
+
+## KF-006 - INTCALC account alternate-key mismatch - OPEN
+
+CBACT04C declares the account alternate key unique, while XREFFILE.jcl defines
+NONUNIQUEKEY. The actual z/OS outcome for two cards on one account is unknown.
+The interim Java policy is a clear refusal, with no silent selection and no
+legacy-equivalence claim. The duplicate-selection change stays held.
+
+[Exact finding and source hashes](https://github.com/howardweale/lightyear-carddemo-modernization/blob/258bfc58297925aa370c22732e9e2d7580b7caf2/docs/backlog/m5-intcalc-xref-addendum-2026-10-30.json#sha256=efcdef76f1e9d2bf0fcd101e0788eef06ec2aea9340e6508c0690ac32dc65420) and
+[M4-INTCALC-XREF-001 native confirmation question](https://github.com/howardweale/lightyear-carddemo-modernization/blob/258bfc58297925aa370c22732e9e2d7580b7caf2/docs/backlog/m4-zos-confirmation-2026-10-30.md).
+The M4 result and keep-or-fix decision remain UNFILLED / OPEN. Draft [#476](https://github.com/howardweale/lightyear-carddemo-modernization/pull/476)
+contains the interim refusal; CI feedback is separate from native confirmation.

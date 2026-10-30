@@ -91,7 +91,7 @@ and infer independent verification from the wrapper alone.
 | Later-head test/CI status | The opening receipt binds the inspected main snapshot only. Planned: full CI before merge after the run, with no new workload for this draft. |
 | Independent security/compliance assurance | Not yet: no external audit, penetration-test report or certification is supplied. |
 | Customer-scale generality and production fitness | Not yet: public fixture and twin results do not establish these properties. |
-| Source repository visibility transition | Option A: existing repository to become private after the run closes, with a minimal separate public evidence repository or site. Names, plan and window remain Howard's decision in [#464](https://github.com/howardweale/lightyear-carddemo-modernization/pull/464). No settings change accompanies this pack. |
+| Source repository visibility transition | Hybrid: this repository stays public. Option A full transition is deferred until after the seed round; a small private engagement repository is proposed, with customer data excluded from both repositories. Names, plan and window remain Howard's decision in [#464](https://github.com/howardweale/lightyear-carddemo-modernization/pull/464). No settings change accompanies this pack. |
 | Final customer wording | The Thursday register wording has Howard's approval in [#473](https://github.com/howardweale/lightyear-carddemo-modernization/pull/473). Every run outcome and receipt slot stays UNFILLED. |
 
 ## Investor materials (provided privately)

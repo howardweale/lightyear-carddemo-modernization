@@ -111,6 +111,8 @@
     "test_operator_flow_ref_acknowledgement",
     "test_operator_flow_git_transport",
     "test_operator_flow_operation_scope",
-    "test_operator_flow_windows_job_contract"
+    "test_operator_flow_windows_job_contract",
+    "test_supervised_intcalc_boundary",
+    "test_supervised_flex_exchange"
   ]
 }

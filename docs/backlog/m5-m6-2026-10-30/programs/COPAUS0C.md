@@ -34,3 +34,11 @@ Fresh exact-package evidence: [UNFILLED]
 Reviewer disposition: [UNFILLED]
 
 [Program index](README.md) · [M5 keep-or-fix view](../keep-or-fix.md)
+
+## Milestone links
+
+[Dated catch-up in draft #467](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/README.md) provides the delivery
+ledger and separates source merges, historical observations and open work.
+Related milestone drafts: [MS-117](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-117.md), [MS-122](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-122.md).
+These links are navigation to proposed records, with no new program qualification
+or run result. The MS-122 placeholder remains empty.

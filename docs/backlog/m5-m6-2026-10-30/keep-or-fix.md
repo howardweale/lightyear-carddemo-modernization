@@ -42,3 +42,11 @@ Do not treat an argued equivalent mutant, compiler identity or existing scenario
 comparison as controlled proof of this unobserved failure path.
 
 Review disposition: [UNFILLED]
+
+## Milestone links
+
+[Dated catch-up in draft #467](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/README.md) provides the delivery
+ledger and separates source merges, historical observations and open work.
+Related milestone drafts: [MS-116](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-116.md), [MS-120](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-120.md), [MS-121](https://github.com/howardweale/lightyear-carddemo-modernization/blob/2c8a86bd115265e7b644afd1732305d749588c78/docs/milestones/drafts/catch-up-2026-10-30/MS-121.md).
+These links are navigation to proposed records, with no new program qualification
+or run result. The MS-122 placeholder remains empty.

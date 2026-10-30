@@ -977,6 +977,11 @@ class FactoryOrchestrator:
         return report
 
     def _context(self, order: WorkOrder, workspace_root: Path) -> dict[str, Any]:
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        from lightyear_execution.configured_receipt_case import is_answer_order
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext and is_answer_order(order):
+            from lightyear_execution.configured_receipt_answer_stimulus import prepare_original_answer_fragment
+            prepare_original_answer_fragment(self,order,workspace_root)
         context = GraphContextAssembler(
             self.graph_path,
             self.evidence_path,

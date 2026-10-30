@@ -59,14 +59,22 @@ def record_original_context_scan_failure(controller,surface,error):
         from .configured_receipt_scan_match import classify_stopping_view
         match=classify_stopping_view(scan_frame.f_locals.get('tokens'),
             scan_frame.f_locals.get('windows'),scan_frame.f_locals.get('normalized'))
+        from .configured_receipt_case import is_answer_order
+        intended=None
+        if is_answer_order(controller.execution_context._order):
+            from .configured_receipt_answer_stimulus import describe_original_answer_match
+            intended=describe_original_answer_match(controller,caller.f_locals.get('value'),
+                scan_frame.f_locals.get('normalized'))
         if 'context_scan_failure' in saved:
             # Multiple observations are ambiguous, never overwrite with a later
             # apparently good result. Existing registry cleanup removes this too.
             saved['context_scan_failure']=None
             saved.pop('context_scan_stopping_view_match',None)
+            saved.pop('answer_context_match',None)
             raise ContractError('configured-context-scan-duplicate-observation')
         saved['context_scan_failure']=descriptor
         saved['context_scan_stopping_view_match']=match
+        if intended is not None:saved['answer_context_match']=intended
     finally:
         # Do not add traceback/frame ownership to existing key lifetime roots.
         del caller,trace,inspect_frame,scan_frame
@@ -90,6 +98,15 @@ def emit_original_context_scan_failure(controller):
     match=saved.get('context_scan_stopping_view_match')
     if type(match) is not str or match not in ('canary','expected-window','canary-and-expected-window'):
         raise ContractError('configured-context-scan-match-unavailable')
+    suffix=''
+    from .configured_receipt_case import is_answer_order
+    if is_answer_order(controller.execution_context._order):
+        intended=saved.get('answer_context_match')
+        if (type(intended) is not tuple or len(intended)!=3 or intended!=saved.get('answer_stimulus')
+                or any(type(intended[i]) is not str or not re.fullmatch('[0-9a-f]{64}',intended[i]) for i in (0,2))
+                or type(intended[1]) is not int or not 0<intended[1]<=20000):
+            raise ContractError('configured-answer-intended-match-unavailable')
+        suffix=' copied-worker-sha256='+intended[0]+' intended-fragment-sha256='+intended[2]
     sys.stderr.write('configured-original-controller-context-scan-breach '
-        +'sha256='+digest+' bytes='+str(size)+' stopping-view-match='+match+'\n')
+        +'sha256='+digest+' bytes='+str(size)+' stopping-view-match='+match+suffix+'\n')
     return True

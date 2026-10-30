@@ -1,0 +1,38 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+  "evidence_sha256": "5a622383a5cef8bba9e812f046bb0a55281f23d8c816343c0261bfb73ddeac70",
+  "observed_at": "2026-10-27T15:39:12Z",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40532820863",
+  "original_path": "docs/factory/posttran-phase2-authorization-proof-2026-10-16.json",
+  "original_bytes": 119886,
+  "original_public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07/docs/factory/posttran-phase2-authorization-proof-2026-10-16.json",
+  "decision_sha256": "cae3e9ae78da2f3bddda195f7da7a5484f71f2fcc8ebbf570be69bafddb32e03",
+  "journal_head_sha256": "5a802dde46c80b4663e3692eb7ed66f8683149fbcc9b7ddb9903e33a2a9aef7d",
+  "verification_jobs": [
+    {
+      "name": "reserve",
+      "job_id": 122289959974,
+      "raw_log_sha256": "5f32516e6d7e5544204bdd0b9404c78bdaf6d48e0a07472e75b6386d35710959"
+    },
+    {
+      "name": "compare",
+      "job_id": 122290273035,
+      "raw_log_sha256": "6ea072b86cd973a1475fb68753957bb37e7fd2137db8e7f4990df7f887bdcaa9"
+    }
+  ],
+  "verification_source_paths": [
+    "tools/run_posttran_phase2.py",
+    "tools/posttran_phase2_authorization.py"
+  ],
+  "signature_label": "Service countersignature of authenticated operator intent",
+  "limits": [
+    "One historical POSTTRAN operator-review path.",
+    "Successful CI enforcement plus the immutable verification source support this observation.",
+    "No new cryptographic verification occurred during this static documentation preparation.",
+    "No independent third-party attestation or blanket COPAU qualification follows."
+  ]
+}

@@ -22,6 +22,18 @@ def require(value,reason):
     if not value:raise ValueError(reason)
 
 
+def _review_workflow_entry(raw,job):
+    # Text consistency only. Native main identity and committed-workflow proof
+    # remain mandatory; this does not authenticate a workflow or run it.
+    require(type(raw) is bytes and job=='configured-build-control',
+            'configured-pack-reviewed-workflow-job')
+    jobs=re.findall(rb'^  configured-build-control:[ \t]*\r?$',raw,re.M)
+    commands=re.findall(rb'^ +python -B -m ([A-Za-z0-9_.]+)(?:[ \t]|\r?$)',raw,re.M)
+    require(len(jobs)==1 and commands.count(b'tools.ci.p5_configured_receipt_supervisor')==1
+            and b'tools.ci.p5_configured_receipt_positive' not in commands,
+            'configured-pack-reviewed-workflow-job')
+
+
 def build_unsigned_documents(order,policy,models,executable,bound,isolation,model_binding,
                              order_binding,observer_sha256,window,nonce_sha256,workflow,job,public_bindings):
     from lightyear_factory.contracts import canonical_hash
@@ -117,8 +129,7 @@ def prepare(root,executable,window,nonce_sha256,workflow,job):
     isolation=json.loads(committed(DOCUMENTS+'public-isolation.json'))
     validate_configured_isolation_document(isolation,order.content_sha256)
     workflow_raw=committed(workflow)
-    require(re.search(rb'^  '+re.escape(job.encode())+rb':\s*$',workflow_raw,re.M)
-        and b'tools.ci.p5_configured_receipt_positive' in workflow_raw,'configured-pack-reviewed-workflow-job')
+    _review_workflow_entry(workflow_raw,job)
     bound={k:binding(DOCUMENTS+n) for k,n in [('scope','scope.json'),('freeze','freeze.json'),
         ('workspace','workspace.json'),('execution_policy','receipt-execution-policy.json')]}
     from lightyear_execution.configured_receipt_materials import SIGNERS,KEY_ID,validate_public_material_bytes

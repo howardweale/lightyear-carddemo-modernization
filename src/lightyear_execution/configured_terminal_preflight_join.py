@@ -9,8 +9,7 @@ from lightyear_factory.contracts import ContractError, canonical_hash
 from lightyear_factory.model_admission import _bounded_regular_bytes
 from .configured_receipt_terminal import _original_json, _ledger_bytes
 from .configured_abort_preflight_join import match_abort_preflight
-from .configured_consumption_evidence import consumption_message_bytes, check_consumption_admission_relations
-from .configured_consumption_observation import observe_existing_consumption
+from .configured_receipt_case import review_case,consumption_tools
 
 TERMINAL_LIMITS = {'receipt.json': 1024*1024, 'summary.json': 1024*1024,
     'attempt-identity.json': 65536, 'events.jsonl': 32*1024*1024,
@@ -115,7 +114,8 @@ def match_terminal_failure_accounting(receipt, accounting):
     return None
 
 
-def read_terminal_candidate_files(runs_root):
+def read_terminal_candidate_files(runs_root,*,_case_id='configured-build-control'):
+    consumption_message_bytes,check_consumption_admission_relations,_=consumption_tools(_case_id)
     root = Path(runs_root)
     _require(root.is_absolute() and root.is_dir()
         and not any(p.casefold() == 'onedrive' for p in root.parts), 'root')
@@ -163,12 +163,14 @@ def read_terminal_candidate_files(runs_root):
 
 
 def read_preflight_bound_terminal(runs_root, review, live_ci, *, runtime):
-    raw = read_terminal_candidate_files(runs_root)
+    case=review_case(review)
+    _,_,observe_existing_consumption=consumption_tools(case)
+    raw = read_terminal_candidate_files(runs_root,_case_id=case)
     admission = _original_json(raw['human-admission.json'])
-    match_abort_preflight(admission, review, live_ci)
+    match_abort_preflight(admission, review, live_ci,_case_id=case)
     from .configured_terminal_runtime_join import match_terminal_runtime
     match_terminal_runtime(_original_json(raw['receipt.json']),admission,
         _original_json(raw['attempt-identity.json']),runtime)
     observed = observe_existing_consumption(_original_json(raw['human-consumption.json']), admission)
-    _require(read_terminal_candidate_files(runs_root) == raw, 'changed-during-service-read')
+    _require(read_terminal_candidate_files(runs_root,_case_id=case) == raw, 'changed-during-service-read')
     return {'original_files': raw, 'service_observations': observed}

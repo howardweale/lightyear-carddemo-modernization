@@ -6,10 +6,10 @@ them. No signature, new schema, retry, reservation, context or strict result.
 """
 from .configured_abort_evidence import read_abort_candidate_files,_require
 from .configured_receipt_terminal import _original_json
-from .configured_consumption_observation import observe_existing_consumption
+from .configured_receipt_case import review_case,consumption_tools
 from lightyear_factory.contracts import canonical_hash
 
-def match_abort_preflight(admission,review,live_ci):
+def match_abort_preflight(admission,review,live_ci,*,_case_id='configured-build-control'):
     """Relationship predicate only. A successful return supplies no authority."""
     _require(type(admission) is dict and type(review) is dict and type(live_ci) is dict,'preflight-shape')
     _require(review.get('schema')=='factory-human-drill-plan-review/1'
@@ -20,7 +20,8 @@ def match_abort_preflight(admission,review,live_ci):
         and review.get('content_sha256')==canonical_hash(review,{'content_sha256'}),'preflight-review')
     verified=review.get('verified_model_admission');binding=review.get('drill_binding')
     _require(type(verified) is dict and type(binding) is dict,'preflight-binding-shape')
-    _require(binding.get('case_id')=='configured-build-control','preflight-case')
+    _require(type(_case_id) is str and _case_id in ('configured-build-control','answer-fragment')
+        and binding.get('case_id')==_case_id,'preflight-case')
     for name in ('plan_sha256','decision_sha256','trusted_journal_head','work_order_sha256'):
         _require(name in verified and admission.get(name)==verified[name],'preflight-'+name)
     for name in ('nonce_sha256','execution_policy_sha256','work_order_sha256'):
@@ -43,9 +44,11 @@ def read_preflight_bound_abort(runs_root,review,live_ci):
     No proof API is reentered after expiry, no missing admission reconstructed.
     Service metadata plus hashes remain observations, not signed outcome trust.
     """
-    raw=read_abort_candidate_files(runs_root)
+    case=review_case(review)
+    _,_,observe_existing_consumption=consumption_tools(case)
+    raw=read_abort_candidate_files(runs_root,_case_id=case)
     admission=_original_json(raw['human-admission.json'])
-    match_abort_preflight(admission,review,live_ci)
+    match_abort_preflight(admission,review,live_ci,_case_id=case)
     observed=observe_existing_consumption(_original_json(raw['human-consumption.json']),admission)
-    _require(read_abort_candidate_files(runs_root)==raw,'preflight-files-changed')
+    _require(read_abort_candidate_files(runs_root,_case_id=case)==raw,'preflight-files-changed')
     return {'original_files':raw,'service_observations':observed}

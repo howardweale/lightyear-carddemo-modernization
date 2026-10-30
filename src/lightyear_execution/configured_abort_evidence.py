@@ -21,14 +21,15 @@ def _require(ok,reason):
 def _digest(value):
     return type(value) is str and re.fullmatch('[0-9a-f]{64}',value) is not None
 
-def check_abort_file_relations(raw):
+def check_abort_file_relations(raw,*,_case_id='configured-build-control'):
     """Pure structural checks; successful return supplies no authority."""
     _require(type(raw) is dict and set(raw)==set(LIMITS),'file-set')
     _require(all(type(raw[k]) is bytes and 0<len(raw[k])<=v for k,v in LIMITS.items()),'size')
     admission=_original_json(raw['human-admission.json'])
     identity=_original_json(raw['attempt-identity.json'])
     consumption=_original_json(raw['human-consumption.json'])
-    from .configured_consumption_evidence import consumption_message_bytes,check_consumption_admission_relations
+    from .configured_receipt_case import consumption_tools
+    consumption_message_bytes,check_consumption_admission_relations,_=consumption_tools(_case_id)
     from .contracts import ExecutionContractError
     try:
         _require(consumption_message_bytes(consumption)==raw['human-consumption.json'],'consumption-original-message')
@@ -73,7 +74,7 @@ def check_abort_file_relations(raw):
     _reconcile_accounting_journal(journal,identity['content_sha256'])
     return None
 
-def read_abort_candidate_files(runs_root):
+def read_abort_candidate_files(runs_root,*,_case_id='configured-build-control'):
     root=Path(runs_root)
     _require(root.is_absolute() and root.is_dir(),'absolute-root')
     _require(not any(p.casefold()=='onedrive' for p in root.parts),'onedrive')
@@ -91,7 +92,7 @@ def read_abort_candidate_files(runs_root):
     no_terminal()
     raw={name:_bounded_regular_bytes(paths[name],limit,'configured-abort-file') for name,limit in LIMITS.items()}
     _require(raw['human-admission.json']==first,'admission-changed')
-    check_abort_file_relations(raw)
+    check_abort_file_relations(raw,_case_id=_case_id)
     no_terminal()
     _require(all(_bounded_regular_bytes(paths[k],LIMITS[k],'configured-abort-file')==v for k,v in raw.items()),'changed-during-read')
     # Read stability is not a lease or proof that the process has exited. The

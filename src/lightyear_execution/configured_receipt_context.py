@@ -1,7 +1,7 @@
 """Separate genuine main receipt context and one-use host broker proposal.
 
-Not wired to controller/CLI/workflow. The old controller exact-type checks still
-refuse this context. No publication/execution/nonce/secret authority is implied.
+The existing exact context class serves the two fixed native case routes.
+No publication/execution/nonce/secret authority is implied by this source.
 SSH signer files require separate external provisioning; closing this context
 revokes its live authority but makes no Python-memory zeroization claim.
 """
@@ -23,6 +23,7 @@ from .configured_receipt_policy import TRANSPORT_SECRET
 from .configured_receipt_models import review_configured_receipt_models
 from .configured_receipt_isolation import review_configured_receipt_isolation
 from .tower_drill_context import _workflow_source
+from .configured_receipt_case import is_answer_order,review_case,reservation_entry,consumption_tools,role_verifier
 
 _LIVE=WeakKeyDictionary()
 
@@ -48,6 +49,10 @@ def _preflight(admission,order,policy,backend,source_root,input_paths,manifest,m
         raise ExecutionContractError('configured-human-native-context-required')
     if any(part.casefold()=='onedrive' for part in Path(source_root).parts):
         raise ExecutionContractError('configured-human-onedrive-refused')
+    if is_answer_order(order):
+        from .configured_receipt_answer_preflight import review_answer_receipt_preflight
+        return review_answer_receipt_preflight(admission,order,policy,backend,source_root,
+            input_paths,manifest,model_path,isolation_path)
     review=verify_configured_receipt_plan(admission,order,policy)
     runtime=verify_configured_receipt_runtime(admission,order,policy,source_root=source_root,
         input_paths=input_paths,read_manifest=manifest)
@@ -77,16 +82,17 @@ def admit_configured_receipt_context(admission,order,policy,backend,*,source_roo
         input_paths,read_manifest,model_config_path,public_isolation_path,evidence_path):
     bound=_preflight(admission,order,policy,backend,source_root,input_paths,read_manifest,
                      model_config_path,public_isolation_path)
+    case=review_case(bound['review'])
     target=_exclusive_evidence_path(evidence_path,admission.root)
     retained=_exclusive_evidence_path(target.parent/'human-consumption.json',admission.root)
     if retained==target:
         raise ExecutionContractError('configured-human-evidence-path-collision')
     # All read-only checks precede this irreversible, genuine-proof reservation.
     # No supplied API, consumption record or resume flag is accepted.
-    consumption=reserve_configured_receipt_main_plan(admission,order,policy)
+    consumption=reservation_entry(case)(admission,order,policy)
     record=consumption['record'];review=bound['review'];model=review['verified_model_admission']
     if (consumption['status']!='consumed-only' or record['consumed_before_execution'] is not True
-            or record['case_id']!='configured-build-control'
+            or record['case_id']!=case
             or record['work_order_sha256']!=order.content_sha256
             or record['execution_policy_sha256']!=policy.content_sha256
             or record['nonce_sha256']!=review['drill_binding']['nonce_sha256']
@@ -99,7 +105,7 @@ def admit_configured_receipt_context(admission,order,policy,backend,*,source_roo
     # Same serialization as the original annotated tag message, with no newline.
     # Preserve the native returned record before any admission/context can exist.
     # A failure after consumption never retries, removes or resumes the nonce.
-    from .configured_consumption_evidence import consumption_message_bytes
+    consumption_message_bytes,_,_=consumption_tools(case)
     message=consumption_message_bytes(record)
     with retained.open('xb') as stream:
         stream.write(message);stream.flush();os.fsync(stream.fileno())
@@ -184,7 +190,7 @@ class ConfiguredReceiptExecutionContext:
         if not self._bound or not self._controller_bound:
             self.close();raise ExecutionContractError('configured-human-controller-not-bound')
         try:
-            scope=verify_configured_receipt_role(self._admission,self._order,self.policy,role,action)
+            scope=role_verifier(self._order)(self._admission,self._order,self.policy,role,action)
             from .configured_receipt_security import observe_authorization
             observe_authorization(self,scope)
             self.authorization_receipts.append(deepcopy(scope));return scope
@@ -200,7 +206,7 @@ class ConfiguredReceiptExecutionContext:
             self.close();raise ExecutionContractError('configured-human-secret-scope-or-reuse')
         self._lease_started=True
         try:
-            scope=verify_configured_receipt_role(self._admission,self._order,self.policy,
+            scope=role_verifier(self._order)(self._admission,self._order,self.policy,
                                                'provider','secret:lease:OPENAI_API_KEY')
             self._live()
             value=os.environ.get('OPENAI_API_KEY','')
@@ -244,7 +250,7 @@ class ConfiguredReceiptExecutionContext:
                 raise ExecutionContractError('configured-receipt-original-key-owner-required')
             original_scanner_relations(controller,self._order,workspace,ledger,controller.agents.isolation_scan)
             self._transport_lease_started=True
-            scope=verify_configured_receipt_role(self._admission,self._order,self.policy,
+            scope=role_verifier(self._order)(self._admission,self._order,self.policy,
                 'recorder','secret:lease:FACTORY_TRANSPORT_KEY')
             self._live()
             value=_decode_transport_key(os.environ.get(TRANSPORT_SECRET,''))

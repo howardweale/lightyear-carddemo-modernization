@@ -20,19 +20,19 @@ def _live(context):
 
 def observe_authorization(context,scope):
     _live(context)
-    from .configured_receipt_scopes import verify_configured_receipt_role
-    current=verify_configured_receipt_role(context._admission,context._order,context.policy,scope['role'],scope['action'])
+    from .configured_receipt_case import role_verifier
+    current=role_verifier(context._order)(context._admission,context._order,context.policy,scope['role'],scope['action'])
     if current!=scope:raise ExecutionContractError('configured-security-original-role-required')
     _AUTH.setdefault(context,[]).append(deepcopy(scope))
 
 
 def observe_lease(context,scope,receipt):
     _live(context)
-    from .configured_receipt_scopes import verify_configured_receipt_role
+    from .configured_receipt_case import role_verifier
     pairs={'OPENAI_API_KEY':'provider','FACTORY_TRANSPORT_KEY':'recorder'}
     name=receipt.get('name');role=pairs.get(name)
     if role is None:raise ExecutionContractError('configured-security-secret-scope')
-    current=verify_configured_receipt_role(context._admission,context._order,context.policy,role,'secret:lease:'+name)
+    current=role_verifier(context._order)(context._admission,context._order,context.policy,role,'secret:lease:'+name)
     expected=dict(name=name,role=role,work_order_sha256=context._order.content_sha256,
         execution_policy_sha256=context.policy.content_sha256,
         admission_receipt_sha256=context.admission_receipt['content_sha256'],

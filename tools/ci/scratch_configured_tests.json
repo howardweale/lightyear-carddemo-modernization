@@ -83,6 +83,7 @@
     "test_operator_flow_tree_guards"
   ],
   "integration_modules": [
-    "test_configured_controller_context_inputs"
+    "test_configured_controller_context_inputs",
+    "test_configured_answer_route_integration"
   ]
 }

@@ -15,6 +15,7 @@ from .configured_receipt_admission import verify_configured_receipt_plan
 from .configured_receipt_controller import create_configured_human_router
 from .configured_receipt_terminal import read_original_configured_terminal
 from .human_drill_dispatch import _fresh_directory,_public_path
+from .configured_receipt_case import policy_parser,plan_verifier,review_case,signer_path
 
 
 def _independent_source(value):
@@ -45,9 +46,9 @@ def _prepare(args):
     admission=FactoryModelAdmission.from_external_trust(source,args.factory_plan,
         args.factory_approval,args.factory_contract,args.factory_trust)
     order=WorkOrder.load(args.work_order)
-    policy=parse_configured_receipt_policy(json.loads(
+    policy=policy_parser(order)(json.loads(
         _bounded_regular_bytes(args.execution_policy,1024*1024,'configured-dispatch-policy')))
-    review=verify_configured_receipt_plan(admission,order,policy)
+    review=plan_verifier(order)(admission,order,policy)
     plan=admission._committed_json(admission.paths[0])
     inputs={key:admission.root/row['path'] for key,row in plan['bound_inputs'].items()}
     manifest=admission._committed_json(plan['bound_inputs']['workspace']['path'])
@@ -73,7 +74,7 @@ def review_configured_receipt_dispatch(args):
 
 def _dispatch_paths(args,bundle):
     from lightyear_factory.authorship import CICommitSigner
-    from .configured_receipt_materials import SIGNERS
+    SIGNERS=signer_path(review_case(bundle['review']))
     source=bundle['admission'].root
     requested=Path(args.runs_root)
     if any(part.casefold()=='onedrive' for part in requested.parts):

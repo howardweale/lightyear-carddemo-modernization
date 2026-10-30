@@ -7,7 +7,7 @@ from .configured_human_lifecycle import original_scanner_relations
 
 def verify_receipt_signer_inputs(controller):
     from lightyear_factory.authorship import CICommitSigner
-    from .configured_receipt_materials import SIGNERS
+    from .configured_receipt_case import review_case,signer_path
     context=controller.execution_context
     paths=controller.candidate_signing_paths
     if type(paths) is not tuple or len(paths)!=2:
@@ -22,7 +22,7 @@ def verify_receipt_signer_inputs(controller):
                 or resolved.is_relative_to(Path(controller.source_root).resolve())
                 or resolved.is_relative_to(controller.runs_root.resolve())):
             raise ContractError('configured-receipt-external-signer-only')
-    expected=context._binding['public_materials'][SIGNERS]['raw'].encode('ascii')
+    expected=context._binding['public_materials'][signer_path(review_case(context._binding['review']))]['raw'].encode('ascii')
     if _bounded_regular_bytes(signer.allowed_signers,4096,'configured-receipt-signer-trust')!=expected:
         raise ContractError('configured-receipt-signed-signer-trust-mismatch')
 

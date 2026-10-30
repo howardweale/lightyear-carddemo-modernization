@@ -33,3 +33,28 @@ def exact_ref_lease(candidate,*,executable,metadata_head,branch_ref):
     # Never use tracking refs, an empty expect, '+' or a general --force option.
     return ('--porcelain','--no-follow-tags','--recurse-submodules=no','--signed=false',
         '--force-with-lease='+branch_ref+':'+executable,metadata_head+':'+branch_ref)
+
+
+def verify_ref_push_acknowledgement(candidate,stdout,returncode,*,executable,metadata_head,branch_ref):
+    """Accept only one original native fast-forward acknowledgement.
+
+    A successful exit with an already-up-to-date ref is NOT this operation's
+    E-to-M transition. Caller owns the exact native process, isolated config,
+    original source/proof/intent/host checks and direct post-M service readback.
+    This pure parser does not authenticate supplied output or grant approval.
+    """
+    arguments=exact_ref_lease(candidate,executable=executable,metadata_head=metadata_head,branch_ref=branch_ref)
+    require(type(returncode) is int and returncode==0,'ref-ack-process-result')
+    require(type(stdout) is bytes and 0<len(stdout)<=16384,'ref-ack-output-size')
+    try:lines=stdout.decode('utf-8').splitlines()
+    except UnicodeError:raise ValueError('ref-ack-output-encoding') from None
+    require(len(lines)==3 and lines[0].startswith('To ') and len(lines[0])>3
+        and lines[-1]=='Done','ref-ack-single-transport')
+    fields=lines[1].split('\t')
+    require(len(fields)==3 and fields[0]==' ' and fields[1]==arguments[-1],
+        'ref-ack-exact-fast-forward-only')
+    match=re.fullmatch(r'([0-9a-f]{7,40})\.\.([0-9a-f]{7,40})',fields[2])
+    require(match is not None and executable.startswith(match.group(1))
+        and metadata_head.startswith(match.group(2)),'ref-ack-original-E-M-range')
+    return dict(executable=executable,metadata_head=metadata_head,branch_ref=branch_ref,
+        publication_authorized=False,qualification_evidence=False)

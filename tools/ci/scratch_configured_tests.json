@@ -107,6 +107,8 @@
     "test_operator_flow_prepared_publication_reader",
     "test_operator_flow_host_tree_kernel",
     "test_operator_flow_published_review",
-    "test_operator_flow_ref_lease"
+    "test_operator_flow_ref_lease",
+    "test_operator_flow_ref_acknowledgement",
+    "test_operator_flow_git_transport"
   ]
 }

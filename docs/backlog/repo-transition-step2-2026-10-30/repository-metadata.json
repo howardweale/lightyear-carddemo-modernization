@@ -1,0 +1,239 @@
+{
+  "actions_permissions": {
+    "data": {
+      "allowed_actions": "all",
+      "enabled": true,
+      "sha_pinning_required": false
+    },
+    "status": "read-only-metadata"
+  },
+  "branch_protection": {
+    "data": {
+      "allow_deletions": {
+        "enabled": false
+      },
+      "allow_force_pushes": {
+        "enabled": false
+      },
+      "enforce_admins": {
+        "enabled": true,
+        "url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/branches/main/protection/enforce_admins"
+      },
+      "required_pull_request_reviews": {
+        "dismiss_stale_reviews": true,
+        "require_code_owner_reviews": false,
+        "required_approving_review_count": 0
+      },
+      "required_status_checks": {
+        "checks": [
+          {
+            "app_id": 15368,
+            "context": "documentation-and-lint"
+          },
+          {
+            "app_id": 15368,
+            "context": "required-ci"
+          }
+        ],
+        "contexts": [
+          "documentation-and-lint",
+          "required-ci"
+        ],
+        "contexts_url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/branches/main/protection/required_status_checks/contexts",
+        "strict": false,
+        "url": "https://api.github.com/repos/howardweale/lightyear-carddemo-modernization/branches/main/protection/required_status_checks"
+      }
+    },
+    "status": "read-only-metadata"
+  },
+  "ci_inventory": {
+    "event_counts": {
+      "pull_request": 62,
+      "pull_request_target": 1,
+      "push": 58,
+      "schedule": 5,
+      "workflow_dispatch": 23,
+      "workflow_run": 3
+    },
+    "workflow_files": 73,
+    "workflow_source_bytes": {
+      ".github/workflows/b06-host-review.yml": "1dc7eb2edf9437ce94d506b4a4c715ceb5dc0b41ee7ca5c297f361e620123146",
+      ".github/workflows/b06-provenance-offline.yml": "726efddc57802355db9ee3d1491391fa18b892a3c2a96fc8ce0c9b3a850b2027",
+      ".github/workflows/business-rules.yml": "18be73c3d9aab46a96c12b29919bf8ebbae7bb07090e134996f63c41ee2dffb4",
+      ".github/workflows/carddemo-account-view.yml": "27fde240f4b4a60f6353cc84c244f38a5452954511743e2904068109749e53d1",
+      ".github/workflows/carddemo-data.yml": "bcdd023e7ae8062fc86c0cdf30887b212153370c688d07d1c6e5090c59b662f5",
+      ".github/workflows/carddemo-feedback.yml": "89e81911c7bb24700238b7dbf4b1d96ae9ad025c9ab483dad5067597d3c5578c",
+      ".github/workflows/carddemo-gap-proof.yml": "8d8522a2365680a8186b02176b27b7f341c1ae74ffc52494e7d6ddf1a93ca720",
+      ".github/workflows/carddemo-map.yml": "f9cd8b2b1025070efd758d920ec89bff56d692117976366689dc555f3bb68099",
+      ".github/workflows/carddemo-menu-annotations.yml": "8989b89fa32e784bea3c29f7ae8f6aea98cbc343e629647fbecb5d56797f8f4d",
+      ".github/workflows/carddemo-paragraph-scope.yml": "0e28e75b500ecbed556c793d289b4e23f0274988ae96416a26f1a35915bc7968",
+      ".github/workflows/carddemo-phone-date.yml": "8bdc214c3e6eda8e6fa1776a3718c0445d8aa02839c8c74763c915561ab60efc",
+      ".github/workflows/carddemo-proof-retention.yml": "a14554d6d71fde0a8e941812321e93856ffd816f7aa903863cb11c7dd0c513cc",
+      ".github/workflows/carddemo-render.yml": "b889422b6e6e4bfe3fe6395aa11897886893f5f9db5e239d6ad31e07a3526ec4",
+      ".github/workflows/carddemo-web.yml": "c03175df6e4bd44369825702e3e083b1159939b1177077a4c7792e61398728a7",
+      ".github/workflows/carddemo-zos-intake.yml": "dc69a967bdb6008795c01857132d754bf079e8f2531f84a248676d2badcf1811",
+      ".github/workflows/ci-import-paths.yml": "b4358e70f6a5d75536da20aea42fd5bcbf7185e1c0835a70ff25e36da1c1c3f6",
+      ".github/workflows/ci-postgres-mirror.yml": "806a87e105709c0a25ca51133afc24149485cd73121eb53daf259ee59635006c",
+      ".github/workflows/cloud-runner-launch.yml": "78117f688c63ac69ab616e485c806d25ddfae8c82b5f25ecf8a1581e360ff3b8",
+      ".github/workflows/cloud-runner-offline.yml": "ba9e85b1670bbeb90561e2acaa91887295c0bebcb1835a9fb5b015d976a4c592",
+      ".github/workflows/control-tower-decisions.yml": "0eea297c2cf0eb573a0a58fb5006d4b7133dbb3a4db78f4fa1642b2cf6e520b8",
+      ".github/workflows/copau-factory-judge.yml": "db5f7a1232f6488e4e73589e75e59d8ed09bcdbb3b6ffd78f05cef7d9a54700e",
+      ".github/workflows/copau-heldout-helper.yml": "516e3fa2901dcf048c286312dffd41adfc6ba473189cd6a46beb850dd0dff4e7",
+      ".github/workflows/copau-private-prerequisites.yml": "4badebd9b7e10e61f375d5298adbfbced1d91fe758b0a4589d57bc59055105c3",
+      ".github/workflows/copau-run-boundary.yml": "7422e5d73043c2bec56c10729205f09913b41d3964a581908ce6a1ef039bb311",
+      ".github/workflows/decidability.yml": "231498a8eafb5634033c590182e78edd2df044c2ded2850131a62318a9361020",
+      ".github/workflows/equivalence-automation.yml": "5c210fea38d2bd2bfc9e8d119566a66539cbbf2018cee5a77dc93b9d918fba07",
+      ".github/workflows/equivalence-storage.yml": "4741c1b06aca6ab58187437a08c238342b97e133b0eaa803bfde5d74ed6ec2fd",
+      ".github/workflows/evidence-roadmap.yml": "94177c2e07fa7431b704db5e582449d45b8685482493bb96c702d569bcb8609a",
+      ".github/workflows/f8-request.yml": "360525d826e89c622908000316f2b94b7fb90624eeeb4e5d36da03092991baa0",
+      ".github/workflows/f8-worker-bundle.yml": "6e3451d700875f9b2fb287a455690e9aa3bb4e7b5da099fdc1fcd9275412ccaa",
+      ".github/workflows/f8-worker-retention.yml": "7d77baad67ce45e0094f4af248768adaebbe2278c3a91eb27e4a68959c587c88",
+      ".github/workflows/factory-allowlist-feedback.yml": "e84593d7d84286a63d6192f9a059489612b2d03327d557a713e70240e1bcd508",
+      ".github/workflows/factory-first-install.yml": "df50267af493564c6753c4b7541239545a9b49024925621d3c6eb8bc88ad17b7",
+      ".github/workflows/factory-generated-scenarios.yml": "d5a87ef3db6c034a3f3b1d9393bb8d9eba93d09674833eff3c45f39558e17c19",
+      ".github/workflows/factory-legacy-twin.yml": "edae323b2fddb7d02f3cb8ca64acf35ad4bae3907ec08c7cf85e2e229f4951e8",
+      ".github/workflows/factory-main-packages.yml": "a344a67aa9ca624b741d50f91437cb23e32fea91da30358fc6995a3bcda91c03",
+      ".github/workflows/factory-reconciliation.yml": "60d46104795375f0f2dc16787334068048bc0ee31740ec83846c9c178e072b3a",
+      ".github/workflows/factory-scenario-coverage.yml": "205cfac7ea306952344959a04cb01bdc223b8bb0339cbc3bce7a56be4006370e",
+      ".github/workflows/factory-scenario-policy.yml": "bd7c6c93df2e02def70096c59b40803d88b7e3d9362baa713ac4658eb55149e9",
+      ".github/workflows/factory-systematic-review.yml": "cc4ff23d2562f0aa3f0b82e8b36c1fe989b8bb51d1849f21edaf968d9a21ee95",
+      ".github/workflows/factory-twin-reproducibility.yml": "9630ec8b667a6a452700c46889812f911a6dfe1cb33ed5c59181b37292ca24b3",
+      ".github/workflows/intcalc-m1-triage.yml": "be76fd3c4408ed9d7f700bce3455a21af3b75f568dd4e8e8fa841ca0b8ba3dc2",
+      ".github/workflows/intcalc-retained-verdict.yml": "290e8803234ca80e9227551457804fd38b7e3d654889168e81fee20764871dc8",
+      ".github/workflows/intcalc-review-packet.yml": "7cd532b3c6f5911425997770acf73c390c214ece06083dee0fe32ee3f1348f42",
+      ".github/workflows/java-unfenced-format.yml": "6e07d7b9498282c9232954b08a739f20597a2250c392dafff7484b1489fc9162",
+      ".github/workflows/judge-qualification.yml": "e8b1ed658c83aa6f7eff6b493b77200ae5097e333f7825050a58b0d0c5bf160d",
+      ".github/workflows/lightyear-verify-mcp.yml": "6e0a9e9464e1f0d68d36dbd721d7e2443f2a0c80077c9b5e93b5f79da2b08a11",
+      ".github/workflows/local-agent.yml": "7090786214069c5c01594151a6406a24ef60700fa39a5d03d7efd647d803c2b2",
+      ".github/workflows/mainframe-arrival.yml": "72f784515505187ec722c794df3495c24e7cbfec6131c19d9f758284cd304b21",
+      ".github/workflows/milestone-documentation-pages.yml": "3ee3121b88ab1765151b521bba1a5568668f6802c1e2a4e7b63599554bf27a9f",
+      ".github/workflows/ms71-alloydb.yml": "7015d5d5f0c698e9870705ecd14d01b62fa80178c0f763f917435fb29ab826c5",
+      ".github/workflows/ms77-batch.yml": "ad9b09b05e3fa87c43060fd23689f6cb0dbe69797d4db734db4d9be0d616e8fe",
+      ".github/workflows/p3-operational-claims.yml": "9b408a456204196df879ef0c2198074c7241394bd58f3a180fe7228986a2d587",
+      ".github/workflows/posttran-attempt1-phase1.yml": "aabb65fba35f08f4ddaf30cff28cadc32a35ff324445175eb735d6e2b840638f",
+      ".github/workflows/posttran-handoff-deadline.yml": "8d5c6d16df306e0eb716f09b3acedc3878b1a6ae1a3dbb16e9842b3c08453c57",
+      ".github/workflows/posttran-key-change-proof.yml": "27c98e0148da3f617344ad525c7955adcb78344abe1ff7f744a8a13b243331e3",
+      ".github/workflows/posttran-phase2.yml": "9cb3924ac70ae92ee24b4db73f5f7b4e9767da760b681254e4969b32aba7d994",
+      ".github/workflows/posttran-review.yml": "771c6675e576c5c93a456a2a79709e3caafacb52d7018370124f59a3654b38f2",
+      ".github/workflows/posttran-second-opinion.yml": "54a878838d00edb0ea204e2750ceb6cac31f3cca6f084b4309bbbe999e399ae9",
+      ".github/workflows/public-evidence-retention.yml": "cac8b076ca194094af53bf1eb3e3ec4ac675763131640e999145503c458431ab",
+      ".github/workflows/rebuild-main-status.yml": "c3615f47c8a899a28b25570eb28e635ec326149cb4d4f07b1621e4388fd23a7e",
+      ".github/workflows/repository-map.yml": "bc98dc1b96efca21bf25620568bbc1ee5d8709c8d7e83cd379c8a91cc23f69f2",
+      ".github/workflows/required-ci.yml": "b3729d2fed82e3b441786106ed7409f8f5ba08b65fa9cd475236a931df136252",
+      ".github/workflows/review-projections.yml": "8b3d8f2f8c70f345c63c980adca3553c74784aa800054e66877097613ce0d831",
+      ".github/workflows/service-packs.yml": "7ed7599b4128305aee4e3bf4bfaae26b950c947d4e25d58539122e63f03fa357",
+      ".github/workflows/stranded-work.yml": "084d6aa25db527047b0c0e4cc79faafe45b27a4d94f7bcd4cd02c3b6d24cdcb6",
+      ".github/workflows/tsql-procedures.yml": "9e4f8bbe440611c99351419992445eb3951c98ebd9d5caed951d153b557abc48",
+      ".github/workflows/tsql-r9-reverification.yml": "795cc8b9dc40261b9dd637c93bba7d800ed0348f3164ac9d5eebc64df3842981",
+      ".github/workflows/twin-index-order.yml": "8f957d8cd82cd60e8ea4caae3d6da6e240cb7562a0e7fdc3682e76b433137f75",
+      ".github/workflows/verifier-qualification.yml": "c96fb5372247209fabec55d0b22a40207934e9022ddb9a8a4c870aa46b8449fa",
+      ".github/workflows/verify-graph-context.yml": "a2ae2868fc0f3eff50dd57a8cd65500bd8d12cc3bd97eaa58960119b8c5d6151",
+      ".github/workflows/verify-graph-retention.yml": "567f8b2d9aec16bf9a5e90d492a6081d434d417d949e7fed7f55005a0aa1bf1e",
+      ".github/workflows/verify.yml": "1736424d5716880a0eb5dc941fcafc085d58faa04e4838c4eb7a8834ad1dbd1b"
+    }
+  },
+  "collaborator_roles": {
+    "data": {
+      "count": 1,
+      "roles": [
+        {
+          "count": 1,
+          "role": "admin"
+        }
+      ],
+      "roster_names_omitted": true
+    },
+    "status": "read-only-metadata"
+  },
+  "environments": {
+    "data": {
+      "environments": [
+        {
+          "name": "github-pages",
+          "protection_types": [
+            "branch_policy"
+          ]
+        }
+      ],
+      "total_count": 1
+    },
+    "status": "read-only-metadata"
+  },
+  "inspection": {
+    "changes_performed": false,
+    "collaborator_names_omitted": true,
+    "date": "2026-10-30",
+    "observed_at": "2026-10-30T18:06:25.686162+00:00",
+    "repository_id": 1329380897,
+    "secrets_read": false,
+    "source_ref": "origin/main",
+    "webhook_urls_read_by_reviewer": false
+  },
+  "inventory_files": {
+    "external-actions.csv": {
+      "bytes": 909,
+      "sha256": "923cb3ad98b51204313a973f1f6df9658d29cb65b8427571a5bc59d9f56b1fa3"
+    },
+    "public-reader-links.csv": {
+      "bytes": 154730,
+      "sha256": "5b82f185e88ada2e86fc65eefa569596e0b2e71ab40a9c51beb48288e6aba4c3"
+    },
+    "releases.jsonl": {
+      "bytes": 564031,
+      "sha256": "08194ee34e6f5d102b9f79edb365bb9b5d0b2c18ae9d76837005519fe7b92b88"
+    }
+  },
+  "link_inventory": {
+    "link_occurrences": 1689,
+    "scope": "Tracked public Markdown/HTML and root entrypoints; binary documents, non-document source, JSON payload links and external consumer configurations are not enumerated.",
+    "source_files": 410,
+    "types": {
+      "actions": 42,
+      "pages": 17,
+      "raw-source": 212,
+      "release": 5,
+      "release-asset": 4,
+      "source-pr-issue": 1409
+    },
+    "unique_urls": 670
+  },
+  "pages": {
+    "data": {
+      "build_type": "workflow",
+      "cname": null,
+      "html_url": "https://howardweale.github.io/lightyear-carddemo-modernization/",
+      "https_enforced": true,
+      "public": true,
+      "source": {
+        "branch": "main",
+        "path": "/"
+      },
+      "status": null
+    },
+    "status": "read-only-metadata"
+  },
+  "release_inventory": {
+    "assets": 1731,
+    "content_not_downloaded": true,
+    "draft_releases_excluded": true,
+    "missing_digest_count": 0,
+    "pagination_complete": true,
+    "published_releases": 262,
+    "total_bytes": 8295754269
+  },
+  "unknowns": [
+    "Account plan and private security entitlement",
+    "Installed GitHub Apps/OAuth grants and their repository access",
+    "Deploy keys, credentials and private integration configuration not read",
+    "External anonymous clients/caches/forks not exhaustively enumerated",
+    "Customer intake remains prohibited here"
+  ],
+  "webhook_metadata": {
+    "data": {
+      "configuration_and_urls_omitted": true,
+      "count": 0,
+      "hooks": []
+    },
+    "status": "read-only-metadata"
+  }
+}

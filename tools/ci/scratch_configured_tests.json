@@ -88,6 +88,7 @@
     "test_configured_answer_stimulus",
     "test_configured_clean_control_observation",
     "test_configured_pack_workflow_binding",
-    "test_configured_original_context_caller"
+    "test_configured_original_context_caller",
+    "test_operator_flow_current_reviewer"
   ]
 }

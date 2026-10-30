@@ -49,7 +49,7 @@ def record_original_clean_context(controller,order,workspace_root,value):
         _require(caller.f_code is FactoryOrchestrator._context.__code__
             and caller.f_locals.get('self') is controller and caller.f_locals.get('order') is order
             and caller.f_locals.get('workspace_root') is workspace_root and caller.f_locals.get('context') is value
-            and parent is not None and parent.f_code is FactoryOrchestrator.run.__code__
+            and parent is not None and parent.f_code is FactoryOrchestrator._run.__code__
             and parent.f_locals.get('self') is controller and parent.f_locals.get('order') is order,'original-boundary')
         _require('clean_context' not in saved,'repeat-refused')
         saved['clean_context']=None

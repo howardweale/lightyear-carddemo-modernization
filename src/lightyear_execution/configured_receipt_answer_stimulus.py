@@ -87,7 +87,7 @@ def prepare_original_answer_fragment(controller,order,workspace_root):
         _require(caller.f_code is FactoryOrchestrator._context.__code__
             and caller.f_locals.get('self') is controller and caller.f_locals.get('order') is order
             and caller.f_locals.get('workspace_root') is workspace_root
-            and parent is not None and parent.f_code is FactoryOrchestrator.run.__code__
+            and parent is not None and parent.f_code is FactoryOrchestrator._run.__code__
             and parent.f_locals.get('self') is controller and parent.f_locals.get('order') is order,'original-boundary')
         from .configured_receipt_terminal import _require_origin,_ledger_bytes
         from .configured_receipt_controller import verify_configured_controller

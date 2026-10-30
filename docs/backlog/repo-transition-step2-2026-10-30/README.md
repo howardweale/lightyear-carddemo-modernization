@@ -2,12 +2,15 @@
 
 Backlog lane â€” draft snapshot, 30 October 2026. No settings change.
 
-Operator direction: keep the existing source repository and make it private,
-with a minimal separate public evidence repository or site. Timing is the week
-after the 5 November run closes, before any mLogica pilot data reaches this
-infrastructure. Names, account plan and exact maintenance window remain Howard's
-decision. If closeout is on 5 November, the planning week is 9â€“13 November;
-a delayed closeout requires a fresh date decision, not an automatic switch.
+**Current disposition: Option A full transition is deferred until after the seed round.**
+The existing repository stays public as the reference implementation and public
+evidence. The [hybrid engagement-repository plan](../../customer-engagement-repository-plan-2026-10-30.md)
+is the current direction. This inventory remains the starting point for a later
+full-transition review, with no scheduled visibility change.
+
+The earlier direction was an Option A switch in the week after run closeout.
+That timing is superseded. All measured metadata and exact-byte bindings below
+remain unchanged.
 
 [Run-sheet proposal](../../factory/thursday-run-sheet-2026-11-05.md) Â·
 [Earlier option analysis](../../repo-private-transition-2026-10-30.md)
@@ -65,11 +68,11 @@ does not mean this inventory downloaded or independently rehashed its payload.
 | Actual post-change clone, CI and public-reader checks | Separate maintenance review | [UNFILLED] |
 | Exact maintenance window and recovery actions | Howard after run closeout | [UNFILLED] |
 
-Planned: no mLogica/customer data intake, transfer or fixture creation precedes
-the completed private boundary and separate intake decision. No source/private
-material is copied to the proposed public evidence destination.
+Customer data stays in the customer's or separately private infrastructure under separate approval,
+never either Git repository. The hybrid plan defines the configuration, agreement
+and hash boundary. No source/private material is copied by this inventory.
 
-## Quick-switch checklist for the later decision
+## Deferred full-transition checklist - after the seed round
 
 1. Planned: close out the run and retain its original evidence before any change.
 2. Planned: Howard selects names, plan and window using this inventory and resolves

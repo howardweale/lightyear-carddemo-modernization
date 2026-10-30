@@ -80,7 +80,9 @@ window, relax a gate or treat another case's result as a substitute.
 
 Planned: retain the exact run evidence before any repository transition or backlog
 merge decision. A completed process alone does not establish successful qualification.
-Use the [updated private-repository decision packet](../repo-private-transition-2026-10-30.md).
+Use the [hybrid engagement-repository decision packet](../customer-engagement-repository-plan-2026-10-30.md).
+The existing repository stays public; Option A full transition is deferred until
+after the seed round. Preserve its inventory for that later decision.
 Visibility, access, branch rules, Pages, CI and public evidence publication each
 remain separate operator decisions. No private customer intake enters this public
 repository while a decision or required verification is missing.
@@ -95,4 +97,6 @@ Howard's go/no-go and execution decision references: [UNFILLED]
 
 Actual start, stop and result receipts: [UNFILLED]
 
-Post-run transition decision: [UNFILLED]
+Private engagement-repository setup decision: [UNFILLED]
+
+Public visibility: remains public; full transition deferred until after the seed round.

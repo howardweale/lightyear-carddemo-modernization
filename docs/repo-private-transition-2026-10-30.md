@@ -1,6 +1,8 @@
-# Private source repository transition — decision draft
+# Private source repository transition - DEFERRED
 
-Backlog lane — 30 October 2026. For Howard's decision after the 5 November run.
+Backlog lane - 30 October 2026. **Option A full transition is deferred until after the seed round.**
+The existing repository stays public. The [hybrid engagement-repository plan](customer-engagement-repository-plan-2026-10-30.md)
+is the current direction. This document retains the earlier option analysis.
 This adds to the [earlier transition plan](repo-private-transition-plan.md), which
 remains historical. No visibility, access, Pages, workflow or repository setting
 changes accompany this draft.
@@ -29,8 +31,8 @@ consulted 30 October 2026.
 | B — new private source repository; original public repository becomes an evidence landing/archive | Clean future source/access boundary | New repository identity and CI/trust references need separate migration; old public history is still public unless separately addressed; more provenance/link work | [UNFILLED] |
 | C — defer transition until the evidence/access audit is complete | Avoids a rushed change during run closeout | No customer/private source intake into the public repository; explicit owner and revised decision date needed | [UNFILLED] |
 
-Proposed preference: A, after run closeout and a measured evidence/access rehearsal.
-No option is selected by this document. No repository name, account plan or new
+Historical preference: A. Current disposition: deferred until after the seed round.
+The hybrid plan above supersedes this full-transition proposal. No repository name, account plan or new
 visibility is invented. Howard chooses the exact destination, access and timing.
 
 ## Proposed source/evidence split
@@ -74,7 +76,9 @@ a redacted derivative is a different object with an explicit relationship.
 
 ## Decision and sign-off fields
 
-Chosen option and exact repositories: [UNFILLED]
+Current direction: hybrid; existing repository stays public.
+
+Option A: deferred until after the seed round. Future repositories: [UNFILLED]
 
 Account plan, Pages/custom-domain and security entitlement findings: [UNFILLED]
 

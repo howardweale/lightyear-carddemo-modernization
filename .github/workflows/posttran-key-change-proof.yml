@@ -36,8 +36,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052649453 > work/compiler-metadata.json
-          gh api repos/howardweale/lightyear-carddemo-modernization/actions/artifacts/12052649453/zip > work/compiler.zip
+          gh api -H 'Accept: application/vnd.github.raw+json' 'repos/howardweale/lightyear-carddemo-modernization/contents/docs/evidence/compiler-preservation-2026-10-29/preservation-provenance.json?ref=008cf01d3497f9ef5a964f1915171d622afdb969' > work/compiler-metadata.json
+          gh release download compiler-preservation-12052649453 --repo howardweale/lightyear-carddemo-modernization --pattern posttran-phase2-compiler-image-original.zip --output work/compiler.zip
           python -B tools/check_posttran_key_change.py --artifact-metadata work/compiler-metadata.json --archive work/compiler.zip > work/key-change-proof.json
       - uses: actions/upload-artifact@v4
         with:

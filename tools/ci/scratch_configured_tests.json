@@ -81,5 +81,8 @@
     "test_operator_flow_publication_review",
     "test_operator_flow_review_source",
     "test_operator_flow_tree_guards"
+  ],
+  "integration_modules": [
+    "test_configured_controller_context_inputs"
   ]
 }

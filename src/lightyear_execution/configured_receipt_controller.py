@@ -85,6 +85,31 @@ def create_configured_human_router(context):
         raise ContractError('configured-controller-router-construction-refused') from None
 
 
+def _require_original_context_inputs(controller):
+    """Check native configuration only; a return supplies no admission authority.
+
+    The fixed dispatcher supplies none of these optional context inputs. Keep
+    actual assembler/memory inputs tied to that route before any context scan.
+    This catches changed instance configuration, not arbitrary Python mutation.
+    """
+    from lightyear_factory.orchestrator import FactoryOrchestrator
+    from lightyear_factory import orchestrator as native_controller
+    from lightyear_factory.context import GraphContextAssembler
+    if type(controller) is not FactoryOrchestrator:
+        raise ContractError('configured-controller-native-context-input-owner')
+    if any(not hasattr(controller,name) or getattr(controller,name) is not None for name in (
+            'graph_path','evidence_path','memory_store','approved_projection',
+            'prepare_workspace','feedback_vocabulary')):
+        raise ContractError('configured-controller-original-context-inputs-required')
+    for name in ('_context','_scan_controller_value'):
+        method=getattr(controller,name,None)
+        if (getattr(method,'__self__',None) is not controller
+                or getattr(method,'__func__',None) is not getattr(FactoryOrchestrator,name)):
+            raise ContractError('configured-controller-original-context-method-required')
+    if native_controller.GraphContextAssembler is not GraphContextAssembler:
+        raise ContractError('configured-controller-original-context-assembler-required')
+
+
 def verify_configured_controller(controller,order):
     from lightyear_factory.orchestrator import FactoryOrchestrator
     from lightyear_factory.agents import ModelAgentSet
@@ -92,6 +117,7 @@ def verify_configured_controller(controller,order):
         raise ContractError('configured-controller-native-controller-required')
     context=controller.execution_context
     _live_context(context)
+    _require_original_context_inputs(controller)
     if (order is not context._order or controller.model_admission is not context._admission
             or type(controller.agents) is not ModelAgentSet
             or Path(controller.source_root).resolve()!=Path(context._source_root).resolve()

@@ -1,8 +1,8 @@
-"""CI-only read-only composition of original handoff and native candidate checks.
+"""CI-only local metadata preparation and original native publication review.
 
-Both independent checkouts and external public trust must already be prepared.
-No caller API/verifier/clock, authority receipt, CLI, publisher, object write,
-reservation, context or controller is provided. Returned objects retain every
+Both independent checkouts must start at E; external public trust is prepared.
+Only the separate temporary checkout receives local metadata objects/files.
+No caller API/verifier/clock, CLI, remote publisher, reservation or controller. Returned objects retain every
 original false authority/readiness flag. Full publisher guards remain owed.
 """
 import os,re
@@ -116,6 +116,68 @@ def _review_current_identity(root,executable):
         event_sha256=sha256(raw).hexdigest())
 
 
+def _materialize_review_checkout(executable_root,metadata_root,files,*,executable,metadata_head,commit_epoch):
+    """Local disposable checkout primitive; no proof or publication authority.
+
+    Production invokes this only after original current reviewer/producer
+    observations. Inert component bytes may exercise it without becoming proof.
+    Failure leaves the one-shot intent and partial clone; never retry or repair.
+    """
+    from tools.ci.operator_flow_consumer import git,METADATA
+    from tools.ci.operator_flow_metadata import prepare_candidate
+    require(os.environ.get('GITHUB_ACTIONS')=='true','review-checkout-ci-only')
+    executable_root=Path(executable_root);metadata_root=Path(metadata_root)
+    temporary=Path(os.environ['RUNNER_TEMP']).resolve(strict=True)
+    require(metadata_root.is_absolute() and metadata_root.resolve(strict=True)==metadata_root
+        and metadata_root!=temporary and metadata_root.is_relative_to(temporary)
+        and not metadata_root.is_relative_to(executable_root)
+        and not executable_root.is_relative_to(metadata_root),'review-checkout-separate-temporary')
+    clean_root(executable_root);clean_root(metadata_root)
+    require(git(executable_root,'rev-parse','HEAD').decode().strip()==executable
+        and git(metadata_root,'rev-parse','HEAD').decode().strip()==executable,'review-checkout-exact-E')
+    require(git(metadata_root,'rev-parse','--abbrev-ref','HEAD').decode().strip()=='HEAD'
+        and git(metadata_root,'config','--get','core.autocrlf').decode().strip()=='false',
+        'review-checkout-prepared-detached')
+    intent=metadata_root/'.git/operator-review-materialization-intent.txt'
+    hooks=metadata_root/'.git/operator-review-empty-hooks'
+    require(not intent.exists() and not hooks.exists(),'review-checkout-one-shot')
+    metadata={path:files[name] for name,path in METADATA.items()}
+    # The unchanged original builder checks exact clean E, independent Git,
+    # fixed new paths and complete object construction without writing objects.
+    candidate=prepare_candidate(metadata_root,executable,metadata,commit_epoch)
+    require(candidate['commit']==metadata_head,'review-checkout-exact-M')
+    for path in (metadata_root/'.git').rglob('*'):
+        require(not path.is_symlink() and not getattr(path.lstat(),'st_file_attributes',0)&0x400,
+            'review-checkout-metadata-reparse')
+        if path.is_file():require(path.stat().st_nlink==1,'review-checkout-no-hardlinked-metadata')
+    # No new authority schema; fixed text is a local non-reusable intent only.
+    text=('DISPOSABLE LOCAL METADATA PREPARATION; NO AUTHORITY\nE='+executable+'\nM='+metadata_head+'\n').encode()
+    with intent.open('xb') as stream:stream.write(text);stream.flush();os.fsync(stream.fileno())
+    hooks.mkdir()
+    import subprocess
+    for oid,(kind,body) in candidate['objects'].items():
+        result=subprocess.run(['git','--no-optional-locks','-C',str(metadata_root),'-c','core.hooksPath='+str(hooks),
+            'hash-object','-w','-t',kind,'--stdin'],input=body,capture_output=True,timeout=45)
+        require(result.returncode==0 and result.stdout.decode().strip()==oid,'review-checkout-object-readback')
+    # Only three fixed NEW files. No checkout, filter, hook, remote or branch
+    # command is used. Original E files stay in place byte-for-byte.
+    for relative,body in metadata.items():
+        path=metadata_root/relative
+        require(path.parent.is_dir() and not path.exists()
+            and all(not p.is_symlink() and not getattr(p.lstat(),'st_file_attributes',0)&0x400
+                for p in (path.parent,*path.parent.parents)),'review-checkout-new-metadata-path')
+        with path.open('xb') as stream:stream.write(body);stream.flush();os.fsync(stream.fileno())
+    require(not list(hooks.iterdir()) and not hooks.is_symlink(),'review-checkout-empty-hooks')
+    git(metadata_root,'-c','core.hooksPath='+str(hooks),'read-tree',metadata_head)
+    git(metadata_root,'-c','core.hooksPath='+str(hooks),'update-ref','--no-deref','HEAD',metadata_head,executable)
+    check_metadata(metadata_root,dict(metadata_head=metadata_head,executable=executable),files)
+    require(git(metadata_root,'rev-parse','--abbrev-ref','HEAD').decode().strip()=='HEAD'
+        and intent.read_bytes()==text,'review-checkout-final-intent')
+    clean_root(executable_root)
+    require(git(executable_root,'rev-parse','HEAD').decode().strip()==executable,'review-checkout-source-changed')
+    return candidate
+
+
 def _independent_expectations(*,executable,metadata_head,producer_run_id,artifact_id,
         archive_sha256,plan_sha256,decision_sha256,journal_head_sha256,public_key_sha256,
         nonce_sha256,commit_epoch):
@@ -175,6 +237,8 @@ def review_publication(executable_root,metadata_root,trust_path,*,executable,met
     _prepared_trust(executable_root,metadata_root,trust_path,files)
     candidate,requests=reconstruct_publication_objects(executable_root,files,
         expected_executable=executable,expected_candidate=metadata_head,commit_epoch=commit_epoch)
+    require(_materialize_review_checkout(executable_root,metadata_root,files,executable=executable,
+        metadata_head=metadata_head,commit_epoch=commit_epoch)==candidate,'publication-review-prepared-candidate-mismatch')
     check_metadata(metadata_root,expected,files)
     order=WorkOrder.load(metadata_root/'tests/fixtures/p5_public/human-clean-control/work-order.json')
     policy=ExecutionPolicy.load(metadata_root/(PREFIX+'execution-policy.json'))

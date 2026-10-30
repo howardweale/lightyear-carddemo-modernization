@@ -102,6 +102,7 @@
     "test_operator_flow_publisher_posttran_history",
     "test_operator_flow_publication_intent",
     "test_operator_flow_object_readback",
-    "test_operator_flow_host_native_review"
+    "test_operator_flow_host_native_review",
+    "test_operator_flow_approved_sync_history"
   ]
 }

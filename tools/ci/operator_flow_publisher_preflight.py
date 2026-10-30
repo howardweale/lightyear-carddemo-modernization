@@ -198,6 +198,66 @@ def _protected_history(root,base,head,protected):
     endpoint=set(git(root,'diff','--no-renames','--name-only','-z',base,head).decode('utf-8').split('\0'))-{''}
     return frozenset(protected.intersection(touched|endpoint))
 
+# Exact already-approved main-sync import; never a caller-supplied exemption.
+POSTTRAN_APPROVED_SYNC='ca8b302737d6fb0924ec982320bc0fa89c1b434e'
+POSTTRAN_APPROVED_SYNC_PARENT='9431fe67cf289fa19c817502d13f5bc01ef23283'
+
+def _approved_sync_import(root,commit,parent,parents,protected,relevant):
+    # Only these immutable edges import existing anchor/archive entries.
+    # New commits with identical trees or messages receive no exemption.
+    old_paths=POSTTRAN_APPROVED_ARCHIVE_PATHS|frozenset(
+        'docs/factory/posttran-key-change-2026-10-23/'+name for name in
+        ('README.md','amendment.json','authority.public.pem','seven-bindings-not-adopted.json','unsigned-request.json'))
+    imports={
+        (POSTTRAN_APPROVED_SYNC,POSTTRAN_APPROVED_SYNC_PARENT):
+            ([POSTTRAN_APPROVED_SYNC_PARENT,POSTTRAN_APPROVED_ARCHIVE_MAIN],POSTTRAN_APPROVED_ARCHIVE_MAIN,POSTTRAN_APPROVED_ARCHIVE_PATHS),
+        ('5f32004b1383385890335864d734a7653b066b52','f5190ccac950803389552ea7d2b646611debe414'):
+            (['f5190ccac950803389552ea7d2b646611debe414','929bff1dfb746ea27da5c302ebdb05be2d853389'],POSTTRAN_HISTORY_ANCHOR,old_paths),
+        ('1d773a3841e933fbf03675f56183b56a59b28e62','aa3aa6988bbee28c87aa8089969076d1fb232f75'):
+            ([POSTTRAN_HISTORY_ANCHOR,'aa3aa6988bbee28c87aa8089969076d1fb232f75'],POSTTRAN_HISTORY_ANCHOR,old_paths),
+    }
+    inherited=imports.get((commit,parent))
+    if inherited is None:
+        return False
+    expected_parents,source,expected_paths=inherited
+    require(parents==expected_parents,'publisher-approved-sync-parents')
+    require(relevant==expected_paths and len(protected)==235
+        and hashlib.sha256(json.dumps(sorted(protected),separators=(',',':')).encode()).hexdigest()
+        =='ea2b22bfb7465d3dee5b0286d7770a60df4cf62869d3cb7f9c84c6708810d27d',
+        'publisher-approved-sync-inventory')
+    inventories=[]
+    for revision in (source,commit):
+        rows=git(root,'ls-tree','-rz',revision).decode('utf-8').split('\0')
+        require(rows[-1]=='','publisher-approved-sync-tree-termination')
+        inventory={}
+        for row in rows[:-1]:
+            entry,path=row.split('\t',1)
+            require(path not in inventory,'publisher-approved-sync-duplicate-path')
+            inventory[path]=entry
+        require(protected<=inventory.keys(),'publisher-approved-sync-missing-path')
+        inventories.append({path:inventory[path] for path in protected})
+    require(inventories[0]==inventories[1],'publisher-approved-sync-original-blobs-modes')
+    return True
+
+def _provenance_protected_history(root,base,head,protected):
+    # Preserve the original full-history/endpoint detector and its refusals.
+    raw_changes=_protected_history(root,base,head,protected)
+    if not raw_changes:
+        return raw_changes
+    remaining=set()
+    for row in git(root,'rev-list','--parents',base+'..'+head).decode().splitlines():
+        commit,*parents=row.split()
+        require(parents and all(re.fullmatch('[0-9a-f]{40}',x) for x in [commit]+parents),
+            'publisher-main-history-edge')
+        for parent in parents:
+            names=set(git(root,'diff','--no-renames','--name-only','-z',parent,commit).decode('utf-8').split('\0'))-{''}
+            relevant=protected.intersection(names)
+            if relevant and not _approved_sync_import(root,commit,parent,parents,protected,relevant):
+                remaining.update(relevant)
+    endpoint=set(git(root,'diff','--no-renames','--name-only','-z',base,head).decode('utf-8').split('\0'))-{''}
+    remaining.update(protected.intersection(endpoint))
+    return frozenset(remaining)
+
 def _posttran_guard(executable_root,metadata_root,base,head,expected_sha256):
     relative='tools/check_intcalc_m1_triage.py';path=executable_root/relative
     require(type(posttran) is types.ModuleType
@@ -213,9 +273,9 @@ def _posttran_guard(executable_root,metadata_root,base,head,expected_sha256):
         committed=git(metadata_root,'show',ref)
         require(len(committed)==int(size) and committed==raw,'publisher-posttran-trusted-source')
     protected=_posttran_inventory(metadata_root,base,expected_sha256)
-    require(_protected_history(metadata_root,POSTTRAN_HISTORY_ANCHOR,POSTTRAN_APPROVED_ARCHIVE_MAIN,protected)
+    require(_provenance_protected_history(metadata_root,POSTTRAN_HISTORY_ANCHOR,POSTTRAN_APPROVED_ARCHIVE_MAIN,protected)
         ==POSTTRAN_APPROVED_ARCHIVE_PATHS,'publisher-posttran-approved-history')
-    require(not _protected_history(metadata_root,POSTTRAN_APPROVED_ARCHIVE_MAIN,base,protected),
+    require(not _provenance_protected_history(metadata_root,POSTTRAN_APPROVED_ARCHIVE_MAIN,base,protected),
         'publisher-posttran-later-main-history')
     require(not _protected_history(metadata_root,base,head,protected),'publisher-posttran-candidate-history')
     return expected_sha256

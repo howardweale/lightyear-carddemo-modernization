@@ -1,0 +1,32 @@
+{
+  "schema": "intcalc-abend-policy/1",
+  "recorded_on": "2026-10-30",
+  "original_abcode": 999,
+  "original_timing": 0,
+  "engineering_twin_process_exit": 12,
+  "java_process_exit": 12,
+  "diagnostic": "INTCALC ABENDING PROGRAM: CEE3ABD=999 TIMING=0 PROCESS-EXIT=12",
+  "scope": "INTCALC required-record and dataset I/O failures corresponding to the abend path; not native z/OS status mapping.",
+  "other_application_failure_exit": 1,
+  "completed_job_exit": 0,
+  "native_zos_outcome": "not-established",
+  "reference_scenario": "intcalc-missing-disclosure",
+  "reference_mode": "retained COBOL twin result; no new twin execution in this draft preparation",
+  "data_limit": "The reference case has unchanged persistent input state and no transactions. General later-abend partial state is outside this process-status change.",
+  "release_authorized": false,
+  "measurement_credit": false,
+  "source_bindings": [
+    {
+      "path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "path": "src/lightyear_mainframe/legacy_twin.py",
+      "sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea"
+    },
+    {
+      "path": "docs/factory/gnucobol-twin-result.json",
+      "sha256": "7dec7d4354065d6145f69dd6b60fa1649ad15c3a696bfdf91d6b4f971f03c390"
+    }
+  ]
+}

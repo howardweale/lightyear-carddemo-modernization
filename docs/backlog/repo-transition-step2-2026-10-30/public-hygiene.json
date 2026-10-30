@@ -1,0 +1,29 @@
+{
+  "schema": "public-repository-hygiene/1",
+  "prepared_on": "2026-10-30",
+  "method": "Static root/text inventory and exact-byte hashes only.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3693,
+      "sha256": "9eba4ec4b22863183f36b8af3ba14b03070beff670fab0d2e6833d7529266285",
+      "finding": "README clarity gap: no direct original-source no-grant sentence."
+    },
+    {
+      "path": "LICENSES/README.md",
+      "bytes": 1473,
+      "sha256": "9ea31d5a064c4f6cb5aaff567e8712024f613c16357960616a60f47af5ad8307",
+      "finding": "Third-party notice explicitly excludes original LIGHTYEAR source."
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 3433,
+      "sha256": "332abd3814c9bd1a1f317c8ac7589cb13e2f43e719a1f1a56b85fe41ef46fbea",
+      "finding": "Third-party notice explicitly excludes original LIGHTYEAR source."
+    }
+  ],
+  "root_license_file_found": false,
+  "readme_status": "open-pending-counsel",
+  "notice_location": "Outside Git; no notice text committed.",
+  "legal_effect": "No source licence change."
+}

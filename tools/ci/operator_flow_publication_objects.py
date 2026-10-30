@@ -114,3 +114,89 @@ def object_requests(candidate,metadata,base_trees,*,expected_executable,expected
     # REST may normalize a commit even when fields are explicit. Exact returned
     # IDs and original object readback remain mandatory in the future caller.
     return tuple(requests)
+
+
+def verify_object_readback(candidate, expected_oid, response):
+    """Check untrusted original Git REST readback against original object bytes.
+
+    This is a relationship check only. Caller owns authenticated GET, original
+    candidate provenance, current proof, operation approval and host guards.
+    No write, retry, repair, callback or authority result is provided.
+    """
+    require(type(candidate) is dict and type(candidate.get('objects')) is dict
+        and type(expected_oid) is str and re.fullmatch('[0-9a-f]{40}', expected_oid),
+        'readback-exact-expectation')
+    value = candidate['objects'].get(expected_oid)
+    require(type(value) is tuple and len(value) == 2 and value[0] in ('blob','tree','commit')
+        and type(value[1]) is bytes and len(value[1]) <= 2*1024*1024
+        and object_id(*value) == expected_oid, 'readback-original-object')
+    kind, original = value
+    require(type(response) is dict and response.get('sha') == expected_oid,
+        'readback-returned-id')
+    if kind == 'blob':
+        from base64 import b64decode
+        content = response.get('content')
+        require(response.get('encoding') == 'base64' and type(content) is str
+            and len(content) <= 3*1024*1024 and type(response.get('size')) is int
+            and response['size'] == len(original), 'readback-blob-shape')
+        # GitHub wraps base64 with newlines. No other normalization is allowed.
+        try:
+            raw = b64decode(content.replace('\n',''), validate=True)
+        except (ValueError, UnicodeError):
+            raise ValueError('readback-blob-encoding') from None
+    elif kind == 'tree':
+        rows = response.get('tree')
+        require(response.get('truncated') is False and type(rows) is list
+            and len(rows) <= len(original)//23, 'readback-complete-tree')
+        parsed = []; total_bytes = 0
+        for row in rows:
+            require(type(row) is dict and type(row.get('path')) is str
+                and type(row.get('mode')) is str and type(row.get('sha')) is str
+                and re.fullmatch('[0-9a-f]{40}', row['sha']), 'readback-tree-row')
+            mode = row['mode']
+            require(mode in ('040000','100644','100755','120000','160000')
+                and row.get('type') == MODES[mode.lstrip('0')], 'readback-tree-mode-type')
+            name = row['path'].encode('utf-8')
+            total_bytes += len(mode.lstrip('0')) + 1 + len(name) + 1 + 20
+            require(total_bytes <= 2*1024*1024, 'readback-tree-byte-budget')
+            parsed.append((name, mode.lstrip('0'), row['sha']))
+        raw = tree_bytes(parsed)
+        tree_entries(raw)  # Refuse duplicate/noncanonical/order/path encodings.
+    else:
+        require(type(response.get('tree')) is dict
+            and response['tree'].get('sha') == candidate.get('tree')
+            and type(response.get('parents')) is list
+            and len(response['parents']) == 1
+            and type(response['parents'][0]) is dict
+            and response['parents'][0].get('sha') == candidate.get('parent')
+            and response.get('message') == MESSAGE, 'readback-commit-links-message')
+        identities = []
+        for name in ('author','committer'):
+            who = response.get(name)
+            require(type(who) is dict and who.get('name') == 'Codex'
+                and who.get('email') == 'codex@openai.com'
+                and type(who.get('date')) is str, 'readback-commit-identity')
+            try:
+                moment = datetime.fromisoformat(who['date'].replace('Z','+00:00'))
+            except ValueError:
+                raise ValueError('readback-commit-date') from None
+            require(moment.tzinfo is not None and moment.utcoffset().total_seconds() == 0
+                and moment.microsecond == 0 and type(candidate.get('commit_epoch')) is int
+                and moment.timestamp() == candidate['commit_epoch'], 'readback-commit-time')
+            identities.append('Codex <codex@openai.com> '+str(candidate['commit_epoch'])+' +0000')
+        raw = ('tree '+candidate['tree']+'\nparent '+candidate['parent']+
+            '\nauthor '+identities[0]+'\ncommitter '+identities[1]+'\n\n'+MESSAGE).encode()
+    require(raw == original and object_id(kind,raw) == expected_oid, 'readback-original-bytes')
+    return expected_oid
+
+
+def verify_ref_readback(response, *, branch_ref, metadata_head):
+    """Exact branch/commit relationship only; never permission to update a ref."""
+    require(type(branch_ref) is str and re.fullmatch(r'refs/heads/codex/[A-Za-z0-9_-]+',branch_ref)
+        and type(metadata_head) is str and re.fullmatch('[0-9a-f]{40}',metadata_head),
+        'readback-ref-expectation')
+    require(type(response) is dict and response.get('ref') == branch_ref
+        and type(response.get('object')) is dict
+        and response['object'].get('type') == 'commit'
+        and response['object'].get('sha') == metadata_head, 'readback-exact-ref')
+    return metadata_head

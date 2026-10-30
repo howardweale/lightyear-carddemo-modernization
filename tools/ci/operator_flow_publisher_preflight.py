@@ -25,7 +25,6 @@ from tools import check_intcalc_m1_triage as posttran
 from tools.ci.operator_flow_native_inputs import REPOSITORY
 
 EXTRA_SOURCES=(
-    ('tools.check_intcalc_m1_triage','tools/check_intcalc_m1_triage.py'),
     ('tools.ci.operator_flow_review_cli','tools/ci/operator_flow_review_cli.py'),
     ('tools.ci.operator_flow_review_workflow','tools/ci/operator_flow_review_workflow.py'),
     ('tools.ci.operator_flow_completed_review','tools/ci/operator_flow_completed_review.py'),
@@ -200,14 +199,19 @@ def _protected_history(root,base,head,protected):
     return frozenset(protected.intersection(touched|endpoint))
 
 def _posttran_guard(executable_root,metadata_root,base,head,expected_sha256):
-    # Original module origin and E bytes are checked by _source_snapshot.
-    # Bind the same source to independently expected main before invocation.
-    relative='tools/check_intcalc_m1_triage.py'
-    raw=_source_bytes(executable_root/relative);ref=base+':'+relative
-    size=git(metadata_root,'cat-file','-s',ref).decode().strip()
-    require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-posttran-source-size')
-    committed=git(metadata_root,'show',ref)
-    require(len(committed)==int(size) and committed==raw,'publisher-posttran-trusted-source')
+    relative='tools/check_intcalc_m1_triage.py';path=executable_root/relative
+    require(type(posttran) is types.ModuleType
+        and all(type(value) is str and Path(value)==path and Path(value).is_absolute()
+            for value in (getattr(posttran,'__file__',None),getattr(getattr(posttran,'__spec__',None),'origin',None))),
+        'publisher-posttran-source-origin')
+    raw=_source_bytes(path)
+    executable=git(executable_root,'rev-parse','HEAD').decode().strip()
+    for revision in (executable,base):
+        require(type(revision) is str and re.fullmatch('[0-9a-f]{40}',revision),'publisher-posttran-source-revision')
+        ref=revision+':'+relative;size=git(metadata_root,'cat-file','-s',ref).decode().strip()
+        require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-posttran-source-size')
+        committed=git(metadata_root,'show',ref)
+        require(len(committed)==int(size) and committed==raw,'publisher-posttran-trusted-source')
     protected=_posttran_inventory(metadata_root,base,expected_sha256)
     require(_protected_history(metadata_root,POSTTRAN_HISTORY_ANCHOR,POSTTRAN_APPROVED_ARCHIVE_MAIN,protected)
         ==POSTTRAN_APPROVED_ARCHIVE_PATHS,'publisher-posttran-approved-history')

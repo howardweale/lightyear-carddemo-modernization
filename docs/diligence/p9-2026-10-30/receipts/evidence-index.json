@@ -1,0 +1,143 @@
+{
+  "schema": "p9-public-evidence-index/1",
+  "prepared_on": "2026-10-30",
+  "source_snapshot": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+  "sources": [
+    {
+      "path": "docs/modernization/carddemo-slice-1-2026-10-18.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 112018,
+      "sha256": "958741da798d0e30e1527afbd88236f3a999dc6fe5952f00e925092f1ce09cc4",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/docs/modernization/carddemo-slice-1-2026-10-18.json"
+    },
+    {
+      "path": "docs/factory/equivalence-scorecard-2026-10-22.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 14672,
+      "sha256": "e097d978f5e5035f4113b970b3f8e40d7a1469ab901003c3ab7135c5b81a2140",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/docs/factory/equivalence-scorecard-2026-10-22.json"
+    },
+    {
+      "path": "docs/factory/intcalc-releasability-2026-10-21.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 5814,
+      "sha256": "fda840f9d2f4ac37537c574f09518bb039f90834ec557baae4c2a30f54c2e4b6",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/docs/factory/intcalc-releasability-2026-10-21.json"
+    },
+    {
+      "path": "knowledge/graph.receipt.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 3836,
+      "sha256": "21a61a8e7b1a2a7847ba3096e1d6a04fed8a80320ec5ce426f363038cff382e6",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/knowledge/graph.receipt.json"
+    },
+    {
+      "path": "reference-estates/idempiere/inventory.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 11778,
+      "sha256": "ecb5a8b989587249ba837a4ff30319d1440e52ceb9ab7a3f16feb7429b3ec73d",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/reference-estates/idempiere/inventory.json"
+    },
+    {
+      "path": "reference-estates/cloudbank/inventory.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 7826,
+      "sha256": "12892f58f8688ab9ddb0293ca7a391080b4086cc91ec8516515264fd634c0978",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/reference-estates/cloudbank/inventory.json"
+    },
+    {
+      "path": "docs/factory/keep-or-fix-register.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 4340,
+      "sha256": "d92053ed3ba1d715df87c9a07e640c0f404bee2823a65c6bd9e38775c853a28a",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/docs/factory/keep-or-fix-register.json"
+    },
+    {
+      "path": "docs/factory/fault-posttran-review311.json",
+      "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "bytes": 762302,
+      "sha256": "f2f8a3fa162b1602767a514c77d0d3b34a36e4562b7981d7eaf00333cf71ffbc",
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/blob/253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c/docs/factory/fault-posttran-review311.json"
+    }
+  ],
+  "intcalc": {
+    "original_public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/intcalc-verdict-run39685093189-attempt1/intcalc-releasability-2026-10-18.json",
+    "original_bytes": 470567,
+    "original_sha256": "9845872e85e6557960cff0f3dc0030c8767aa49650f56eaaeea2c131198aeb0a",
+    "raw_mutation_counts": {
+      "killed-failure": 162,
+      "killed-divergent": 149,
+      "evidence-gap": 113
+    },
+    "raw_kill_rate": "311/424",
+    "evidence_gap_count": 113,
+    "effective": false,
+    "release_authorized": false,
+    "zos_confirmation": false,
+    "blockers": [
+      "qualified-oracle-required",
+      "release-run-required",
+      "protected-main-campaign-required",
+      "production-review-proofs-required",
+      "current-ordered-decision-proof-not-supplied"
+    ]
+  },
+  "screen_proof": {
+    "case_count": 120,
+    "interactions": 678,
+    "programs": 6,
+    "mutation": {
+      "denominator": "every PIT mutation in configured screen-handler/helper scope; timeout, no-coverage and errors are not counted killed",
+      "killed": 701,
+      "missing_screen_handlers": [],
+      "passed": true,
+      "percent": 91.27604166666667,
+      "report": {
+        "path": "work/carddemo-proof-artifacts/carddemo-proof-mutation/pit-reports/mutations.xml",
+        "sha256": "949c9a77a5d53b1b2f02b82424c0f18dbb106b387e2e448f0de530e1a60265b9"
+      },
+      "status_counts": {
+        "KILLED": 701,
+        "NO_COVERAGE": 17,
+        "SURVIVED": 49,
+        "TIMED_OUT": 1
+      },
+      "threshold": 90,
+      "total": 768
+    }
+  },
+  "equivalence_scorecard": {
+    "denominator": 227,
+    "resolved_after_pending_signatures": 185,
+    "resolved_now": 8
+  },
+  "discovery": {
+    "carddemo": {
+      "nodes": 11336,
+      "edges": 13491,
+      "cobol_programs": 55,
+      "copybooks": 75,
+      "jcl_jobs": 46
+    },
+    "idempiere": {
+      "java_source_units": 4520,
+      "internal_java_dependency_edges": 36819,
+      "tracked_files": 12565,
+      "oracle_sql_files": 2823
+    },
+    "cloudbank": {
+      "tracked_files": 189,
+      "java_source_units": 70,
+      "maven_modules": 10,
+      "runtime_service_modules": 8,
+      "sql_files": 9
+    },
+    "scope": "CardDemo graph plus separately pinned iDempiere dependency inventory and CloudBank source inventory; no combined all-estate runtime graph.",
+    "limits": [
+      "Static structural discovery only.",
+      "iDempiere excludes runtime dispatch, reflection-only dependencies and dictionary runtime relationships.",
+      "CloudBank excludes runtime database metadata, API traces, observed transaction outcomes and target equivalence."
+    ]
+  },
+  "review_method": "Static parsing and hashing of public Git objects, existing CI logs and retained artifacts only."
+}

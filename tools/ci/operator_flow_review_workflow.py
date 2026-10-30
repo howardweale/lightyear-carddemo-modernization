@@ -75,6 +75,49 @@ def _clone_checkout(root,metadata,empty,executable):
     require(git(metadata,'rev-parse','HEAD').decode().strip()==executable,'review-workflow-clone-E')
 
 
+def _review_observation(candidate,requests,values,identity):
+    """Hash-only disposable diagnostic, not approval or authenticated evidence.
+
+    Pure inputs grant no origin. Only the fixed caller emits after original
+    native review and final source checks; a reader must authenticate that job.
+    """
+    from tools.ci.operator_flow_publication_review import _independent_expectations
+    expected={key:values[key] for key in SCALARS}
+    _independent_expectations(**expected)
+    require(type(candidate) is dict and candidate.get('parent')==expected['executable']
+        and candidate.get('commit')==expected['metadata_head']
+        and candidate.get('commit_epoch')==expected['commit_epoch'],'review-observation-candidate')
+    for flag in ('native_proof_verified','full_guards_passed','publish_ready','publication_authorized',
+                 'full_route_passed','real_pack_ready'):
+        require(candidate.get(flag) is False,'review-observation-no-authority')
+    require(type(requests) is tuple and 1<=len(requests)<=8
+        and all(type(row) is tuple and len(row)==3 and row[0] in ('blobs','trees','commits')
+            and type(row[1]) is str and len(row[1])==40 and all(c in '0123456789abcdef' for c in row[1])
+            and type(row[2]) is dict for row in requests),'review-observation-requests')
+    require(requests[-1][0:2]==('commits',expected['metadata_head'])
+        and requests[-1][2].get('tree')==candidate.get('tree')
+        and requests[-1][2].get('parents')==[expected['executable']],
+        'review-observation-final-commit')
+    fields={'pr','run','job','workflow','executable','tested_merge','base','workflow_revision',
+            'workflow_sha256','event_sha256'}
+    require(type(identity) is dict and set(identity)==fields
+        and all(type(identity[k]) is int and 0<identity[k]<10**20 for k in ('pr','run','job','workflow'))
+        and identity['executable']==expected['executable'],'review-observation-identity')
+    for key,width in (('executable',40),('tested_merge',40),('base',40),('workflow_revision',40),
+                      ('workflow_sha256',64),('event_sha256',64)):
+        value=identity[key]
+        require(type(value) is str and len(value)==width and all(c in '0123456789abcdef' for c in value),
+            'review-observation-identity-hash')
+    def digest(value):
+        return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),
+            ensure_ascii=False,allow_nan=False).encode()).hexdigest()
+    # No raw proof, object bodies, public-key contents, paths or environment.
+    return ('DISPOSABLE_REVIEW_BINDING E='+expected['executable']+' M='+expected['metadata_head']
+        +' reviewer_run='+str(identity['run'])+' reviewer_job='+str(identity['job'])
+        +' expectations_sha256='+digest(expected)+' identity_sha256='+digest(identity)
+        +' requests_sha256='+digest(requests)+' request_count='+str(len(requests))
+        +' publication_authorized=false admission_authorized=false qualification_evidence=false')
+
 def main():
     require(os.environ.get('GITHUB_ACTIONS')=='true'
         and os.environ.get('GITHUB_REPOSITORY')==REPOSITORY
@@ -98,8 +141,9 @@ def main():
     _write_new(trust/'public.pem',public)
     _write_new(trust/'trust.json',_trust_bytes(values['journal_head_sha256']))
     require(_review_current_identity(root,executable)==identity,'review-workflow-identity-changed')
-    review_publication(root,**values)
+    candidate,requests=review_publication(root,**values)
     require((_source(root,executable),_caller_source(root,executable))==source,'review-workflow-source-changed')
+    print(_review_observation(candidate,requests,values,identity),flush=True)
     print('DISPOSABLE NATIVE REVIEW RETURNED; NO PUBLICATION, ADMISSION OR QUALIFICATION AUTHORITY')
     return 0
 

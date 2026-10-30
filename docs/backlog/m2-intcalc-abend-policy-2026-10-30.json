@@ -6,10 +6,10 @@
   "engineering_twin_process_exit": 12,
   "java_process_exit": 12,
   "diagnostic": "INTCALC ABENDING PROGRAM: CEE3ABD=999 TIMING=0 PROCESS-EXIT=12",
-  "scope": "INTCALC required-record and dataset I/O failures corresponding to the abend path; not native z/OS status mapping.",
+  "scope": "INTCALC engineering-twin process convention only; native CEE3ABD 999 termination and scheduler interpretation remain unconfirmed.",
   "other_application_failure_exit": 1,
   "completed_job_exit": 0,
-  "native_zos_outcome": "not-established",
+  "native_zos_outcome": "unknown: U0999 user abend versus ordinary return code or other termination",
   "reference_scenario": "intcalc-missing-disclosure",
   "reference_mode": "retained COBOL twin result; no new twin execution in this draft preparation",
   "data_limit": "The reference case has unchanged persistent input state and no transactions. General later-abend partial state is outside this process-status change.",
@@ -28,5 +28,17 @@
       "path": "docs/factory/gnucobol-twin-result.json",
       "sha256": "7dec7d4354065d6145f69dd6b60fa1649ad15c3a696bfdf91d6b4f971f03c390"
     }
+  ],
+  "mapping_basis": "twin convention, pending z/OS confirmation",
+  "legacy_faithful_claim": false,
+  "native_confirmation_required": true,
+  "scheduler_observation": "unknown; raw native completion and scheduler interpretation require separate capture",
+  "native_confirmation_question": "M4-INTCALC-ABEND-002",
+  "native_confirmation_list": "docs/backlog/m4-zos-confirmation-list.md",
+  "keep_or_fix_trigger": "If z/OS shows U0999, revisit the Java process mapping and twin shim together under a keep-or-fix decision before any implementation or comparison-contract change.",
+  "joint_review_targets": [
+    "candidate-java/src/main/java/ai/lightyear/carddemo/batch/IntcalcProcessStatus.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/service/IntcalcAbendException.java",
+    "src/lightyear_mainframe/legacy_twin.py"
   ]
 }

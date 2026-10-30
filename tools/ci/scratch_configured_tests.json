@@ -97,6 +97,7 @@
     "test_operator_flow_completed_review",
     "test_operator_flow_publisher_preflight",
     "test_operator_flow_publisher_tree_guards",
-    "test_operator_flow_publisher_protection"
+    "test_operator_flow_publisher_protection",
+    "test_operator_flow_publisher_raw_fence"
   ]
 }

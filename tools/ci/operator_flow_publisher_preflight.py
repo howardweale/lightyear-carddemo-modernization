@@ -20,6 +20,7 @@ from tools.ci.operator_flow_handoff import _original_producer
 from tools.ci.operator_flow_consumer import clean_root,git,check_metadata,check_native_review,METADATA
 from tools.ci.operator_flow_metadata import PREFIX,object_id,require
 from tools.ci import operator_flow_tree_guards as tree_guards
+from tools import check_java_quality_fence as java_fence
 from tools.ci.operator_flow_native_inputs import REPOSITORY
 
 EXTRA_SOURCES=(
@@ -127,8 +128,36 @@ def _protection_snapshot(protection_sha256,rules_sha256):
     rules=api.request('GET','/repos/'+REPOSITORY+'/rules/branches/main')
     return _check_repository_protection(protection,rules,protection_sha256,rules_sha256)
 
+def _fence_source(root,executable,base):
+    relative='tools/check_java_quality_fence.py';path=root/relative
+    require(type(java_fence) is types.ModuleType
+        and all(type(value) is str and Path(value)==path and Path(value).is_absolute()
+            for value in (getattr(java_fence,'__file__',None),getattr(getattr(java_fence,'__spec__',None),'origin',None))),
+        'publisher-fence-source-origin')
+    raw=_source_bytes(path)
+    for revision in (executable,base):
+        require(type(revision) is str and re.fullmatch('[0-9a-f]{40}',revision),'publisher-fence-source-revision')
+        ref=revision+':'+relative;size=git(root,'cat-file','-s',ref).decode().strip()
+        require(re.fullmatch('[1-9][0-9]{0,7}',size) and int(size)<=LIMIT,'publisher-fence-source-size')
+        committed=git(root,'show',ref)
+        require(len(committed)==int(size) and raw==committed,'publisher-fence-source-bytes')
+    return hashlib.sha256(raw).hexdigest()
+
+def _raw_fence(root,base,head,expected_sha256):
+    require(type(expected_sha256) is str and re.fullmatch('[0-9a-f]{64}',expected_sha256),
+        'publisher-independent-raw-fence-digest')
+    require(all(type(value) is str and re.fullmatch('[0-9a-f]{40}',value) for value in (base,head)),
+        'publisher-raw-fence-revisions')
+    report=java_fence.inspect(root,base,head)
+    require(report['schema']=='java-quality-fence/1' and report['base']==base and report['head']==head
+        and report['fence_sha256']==expected_sha256,'publisher-raw-fence-binding')
+    require(report['automatic_expiry'] is False and report['blocked_paths']==[]
+        and report['merge_permitted'] is True,'publisher-raw-fence-blocked')
+    # Original report remains a path check, never publication/merge authority.
+    return report
+
 def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_run_id,reviewer_job_id,
-        pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None):
+        pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None,expected_java_fence_sha256=None):
     require(type(values) is dict and set(values)==set(SCALARS),'publisher-independent-values')
     _independent_expectations(**values)
     executable_root=Path(executable_root);metadata_root=Path(metadata_root)
@@ -140,6 +169,8 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
             and git(root,'rev-parse','HEAD').decode().strip()==head,'publisher-prepared-E-M')
     source=_source_snapshot(executable_root,values['executable'])
     tree_source=_tree_source(executable_root,values['executable'])
+    fence_source=_fence_source(executable_root,values['executable'],base)
+    fence=_raw_fence(metadata_root,base,values['metadata_head'],expected_java_fence_sha256)
     protection=_protection_snapshot(expected_main_protection_sha256,expected_main_rules_sha256)
     _main_identity(_GitHubAPI().request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     materials=_public_materials(executable_root,metadata_root,trust_path,values)
@@ -174,6 +205,9 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     _main_identity(api.request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     require(_protection_snapshot(expected_main_protection_sha256,expected_main_rules_sha256)==protection,
         'publisher-repeated-protection-changed')
+    require(_fence_source(executable_root,values['executable'],base)==fence_source,'publisher-fence-source-changed')
+    require(_raw_fence(metadata_root,base,values['metadata_head'],expected_java_fence_sha256)==fence,
+        'publisher-raw-fence-changed')
     # Native proof verification is not controller admission. Original false
     # publication flags stay false; exact full guards and approval remain owed.
     return candidate,requests,observed

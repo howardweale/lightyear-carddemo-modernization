@@ -32,6 +32,15 @@ def check_tree_composition(root,executable,head,main,metadata=None):
     workspace=Path(os.environ['GITHUB_WORKSPACE']).resolve(strict=True)
     require(root.is_absolute() and root.is_relative_to(temp) and root!=temp
         and root!=workspace and not root.is_relative_to(workspace),'tree-independent-temporary-clone')
+    return _checked_tree_composition(root,executable,head,main,metadata)
+
+def _checked_tree_composition(root,executable,head,main,metadata):
+    """Original complete-tree/actual-merge kernel, not an environment guard.
+
+    CI entry retains its original checks. Actual-host caller must supply its
+    independently prepared clone, live originals, native authentication and
+    complete guards. This kernel never grants publication permission.
+    """
     clean_root(root)
     require(not (root/'.git/objects/info/http-alternates').exists(),'tree-no-http-alternates')
     def git(*args):

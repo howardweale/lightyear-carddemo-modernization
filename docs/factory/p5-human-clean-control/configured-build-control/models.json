@@ -1,0 +1,40 @@
+{
+  "default": "control",
+  "models": {
+    "control": {
+      "billing_policy": {
+        "api_origin": "https://api.openai.com/v1",
+        "automatic_tier_fallback": false,
+        "billing_final": false,
+        "cached_discount_used_for_reservation": false,
+        "content_sha256": "c3d93db3d26c1d959d92d3c3582d18a2846fc5f49237d4cba10a75a46259ec86",
+        "count_billing_status": "unknown",
+        "count_charge_basis": "operator-conservative-input-token-rate",
+        "currency": "USD",
+        "flex_source_url": "https://developers.openai.com/api/docs/guides/flex-processing",
+        "input_reservation_rate": "5.50",
+        "long_context_input_multiplier": "2",
+        "long_context_output_multiplier": "1.5",
+        "model": "gpt-5.4-2026-03-05",
+        "output_reservation_rate": "24.75",
+        "per_tokens": 1000000,
+        "rate_card_checked_date": "2026-10-27",
+        "rate_card_url": "https://developers.openai.com/api/docs/models/gpt-5.4",
+        "reasoning_included_in_output": true,
+        "reasoning_source_url": "https://developers.openai.com/api/docs/guides/reasoning",
+        "regional_multiplier": "1.10",
+        "schema": "factory-flex-billing-policy/1",
+        "service_tier": "flex",
+        "standard_cached_input": "0.25",
+        "standard_input": "2.50",
+        "standard_output": "15.00"
+      },
+      "input_usd_per_million": 5.5,
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4-2026-03-05",
+      "output_usd_per_million": 24.75,
+      "provider": "openai",
+      "service_tier": "flex"
+    }
+  }
+}

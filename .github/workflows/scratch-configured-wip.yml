@@ -1,0 +1,39 @@
+name: Scratch configured route WIP (never merge)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+concurrency:
+  group: scratch-configured-route-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  configured-components:
+    if: github.event.pull_request.draft == true && github.head_ref == 'codex/scratch-configured-route-wip' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install public test dependency
+        run: python -m pip install 'cryptography>=46,<47'
+      - name: Run all configured component tests without network or credentials
+        env:
+          SCRATCH_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/scratch-test-home"
+          sudo unshare --net --setgid="$(id -g)" --setuid="$(id -u)" \
+            env -i PATH="$PATH" HOME="$RUNNER_TEMP/scratch-test-home" \
+            PYTHONPATH="src:.:tests" PYTHONDONTWRITEBYTECODE=1 \
+            GITHUB_ACTIONS=true CI=true GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            GITHUB_HEAD_REF="codex/scratch-configured-route-wip" GITHUB_SHA="$SCRATCH_HEAD" \
+            python -B tools/ci/scratch_configured_tests.py
+      - name: Check tracked source preservation
+        if: always()
+        run: git diff --exit-code && git diff --cached --exit-code

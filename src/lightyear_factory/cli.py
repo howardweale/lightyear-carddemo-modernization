@@ -46,8 +46,75 @@ from lightyear_execution.integration import HardenedExecutionContext
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="LIGHTYEAR autonomous modernization factory")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    human_review = subparsers.add_parser("human-drill-public-proof-review", allow_abbrev=False,
+        help="Read-only genuine human-proof/public-output preflight; never execute or consume")
+    human_review.add_argument("--source-root", type=Path, required=True)
+    human_review.add_argument("--work-order", type=Path, required=True)
+    human_review.add_argument("--execution-policy", type=Path, required=True)
+    human_review.add_argument("--factory-plan", required=True)
+    human_review.add_argument("--factory-approval", required=True)
+    human_review.add_argument("--factory-contract", required=True)
+    human_review.add_argument("--factory-trust", type=Path, required=True)
+    human_review.add_argument("--public-output-plan", required=True)
+
+    human_execute = subparsers.add_parser("human-drill-execute", allow_abbrev=False,
+        help="CI-only human-approved public stub dispatch; incomplete qualification fails closed")
+    human_execute.add_argument("--source-root", type=Path, required=True)
+    human_execute.add_argument("--work-order", type=Path, required=True)
+    human_execute.add_argument("--execution-policy", type=Path, required=True)
+    human_execute.add_argument("--factory-plan", required=True)
+    human_execute.add_argument("--factory-approval", required=True)
+    human_execute.add_argument("--factory-contract", required=True)
+    human_execute.add_argument("--factory-trust", type=Path, required=True)
+    human_execute.add_argument("--public-output-plan", required=True)
+    human_execute.add_argument("--public-isolation-plan", required=True)
+    human_execute.add_argument("--runs-root", type=Path, required=True)
+    human_execute.add_argument("--execution-runtime", choices=["docker", "podman"], required=True)
+
+    for name,help_text in (
+        ("human-configured-proof-review","CI-only read-only genuine configured input preflight; never consume"),
+        ("human-configured-execute","CI-only genuine human configured dispatch; not production qualification")):
+        configured = subparsers.add_parser(name, allow_abbrev=False, help=help_text)
+        configured.add_argument("--source-root", type=Path, required=True)
+        configured.add_argument("--work-order", type=Path, required=True)
+        configured.add_argument("--execution-policy", type=Path, required=True)
+        configured.add_argument("--factory-plan", required=True)
+        configured.add_argument("--factory-approval", required=True)
+        configured.add_argument("--factory-contract", required=True)
+        configured.add_argument("--factory-trust", type=Path, required=True)
+        configured.add_argument("--model-config", required=True)
+        configured.add_argument("--public-isolation-plan", required=True)
+        configured.add_argument("--execution-runtime", choices=["docker","podman"], required=True)
+        if name == "human-configured-execute":
+            configured.add_argument("--runs-root", type=Path, required=True)
+
+    for name,help_text in (
+        ("human-configured-receipt-proof-review","CI-only read-only genuine configured input preflight; never consume"),
+        ("human-configured-receipt-execute","CI-only genuine human configured dispatch; not production qualification")):
+        configured = subparsers.add_parser(name, allow_abbrev=False, help=help_text)
+        configured.add_argument("--source-root", type=Path, required=True)
+        configured.add_argument("--work-order", type=Path, required=True)
+        configured.add_argument("--execution-policy", type=Path, required=True)
+        configured.add_argument("--factory-plan", required=True)
+        configured.add_argument("--factory-approval", required=True)
+        configured.add_argument("--factory-contract", required=True)
+        configured.add_argument("--factory-trust", type=Path, required=True)
+        configured.add_argument("--model-config", required=True)
+        configured.add_argument("--public-isolation-plan", required=True)
+        configured.add_argument("--execution-runtime", choices=["docker","podman"], required=True)
+        configured.add_argument("--runs-root", type=Path, required=True)
+        configured.add_argument("--candidate-signing-key", type=Path, required=True)
+        configured.add_argument("--candidate-allowed-signers", type=Path, required=True)
+
     from .annotation_cli import parser as annotation_parser
     annotation_parser(subparsers)
+
+    reconcile = subparsers.add_parser("reconcile-interrupted", allow_abbrev=False, help="Append an unsigned abort record; never resume or retry")
+    reconcile.add_argument("--runs-root", type=Path, required=True)
+    reconcile.add_argument("--run-id", required=True)
+    reconcile.add_argument("--work-order-sha256", required=True)
+    reconcile.add_argument("--consumed-nonce-sha256", required=True)
+    reconcile.add_argument("--sealed-workspace-sha256", required=True)
 
     run = subparsers.add_parser("run", help="Execute one approved factory work order")
     run.add_argument("--work-order", type=Path)
@@ -338,6 +405,58 @@ def main(argv: list[str] | None = None) -> int:
     import sys
     supplied_options = list(sys.argv[1:] if argv is None else argv)
     args = build_parser().parse_args(supplied_options)
+    if args.command == "human-configured-receipt-proof-review":
+        from lightyear_execution.configured_receipt_dispatch import review_configured_receipt_dispatch
+        print(json.dumps(review_configured_receipt_dispatch(args),indent=2,sort_keys=True))
+        return 0
+    if args.command == "human-configured-receipt-execute":
+        from lightyear_execution.configured_receipt_dispatch import dispatch_configured_receipt
+        print(json.dumps(dispatch_configured_receipt(args),indent=2,sort_keys=True))
+        # Full native receipt is necessary; unchanged strict case joins are still
+        # independently required. This entry cannot advertise strict success.
+        return 1
+    if args.command == "human-configured-proof-review":
+        from lightyear_execution.configured_human_dispatch import review_configured_human_dispatch
+        print(json.dumps(review_configured_human_dispatch(args),indent=2,sort_keys=True))
+        return 0
+    if args.command == "human-configured-execute":
+        from lightyear_execution.configured_human_dispatch import dispatch_configured_human
+        print(json.dumps(dispatch_configured_human(args),indent=2,sort_keys=True))
+        # Native completion alone does not establish strict/production qualification.
+        return 1
+    if args.command == "human-drill-public-proof-review":
+        from .model_admission import FactoryModelAdmission
+        from lightyear_execution.public_drill_outputs import review_public_drill_outputs
+        admission = FactoryModelAdmission.from_external_trust(args.source_root,args.factory_plan,
+            args.factory_approval,args.factory_contract,args.factory_trust)
+        order = WorkOrder.load(args.work_order)
+        policy = ExecutionPolicy.load(args.execution_policy)
+        result = review_public_drill_outputs(admission,order,policy,args.public_output_plan)
+        print(json.dumps(result,indent=2,sort_keys=True))
+        return 0
+    if args.command == "human-drill-execute":
+        from lightyear_execution.human_drill_dispatch import dispatch_human_drill
+        result = dispatch_human_drill(args)
+        print(json.dumps(result,indent=2,sort_keys=True))
+        # A complete public trace is not a production-qualified build receipt.
+        return 1
+    if args.command == "reconcile-interrupted":
+        try:
+            record = FactoryOrchestrator.reconcile_interrupted(args.runs_root, args.run_id,
+                work_order_sha256=args.work_order_sha256,
+                consumed_nonce_sha256=args.consumed_nonce_sha256,
+                sealed_workspace_sha256=args.sealed_workspace_sha256)
+        except ContractError as exc:
+            import re
+            code = str(exc)
+            print(code if re.fullmatch(r"reconciliation-[a-z-]{1,80}", code)
+                  else "reconciliation-refused")
+            return 1
+        except Exception:
+            print("reconciliation-refused")
+            return 1
+        print(json.dumps(record, indent=2, sort_keys=True))
+        return 0
     if args.command == "annotate":
         from .annotation_cli import run
         print(json.dumps(run(args), indent=2, sort_keys=True))

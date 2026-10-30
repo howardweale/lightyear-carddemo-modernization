@@ -1,0 +1,49 @@
+{
+  "acceptance": {
+    "baseline_first": true,
+    "gates": [
+      {
+        "command": [
+          "python3",
+          "tests/fixtures/p5_public/human-public-build-control/worker.py"
+        ],
+        "expose_output_to_builder": false,
+        "id": "public-arithmetic",
+        "timeout_seconds": 60
+      }
+    ],
+    "max_attempts": 1
+  },
+  "goal": "Repair the public arithmetic fixture using its unchanged gate.",
+  "id": "configured-build-control",
+  "metadata": {
+    "context_schema": "1.0",
+    "graph": "packed"
+  },
+  "non_goals": [
+    "No external models, customer data or production qualification."
+  ],
+  "policy": {
+    "allow_network": false,
+    "audience": "implementer",
+    "max_changed_lines": 10,
+    "max_context_bytes": 20000,
+    "max_elapsed_seconds": 300,
+    "max_file_bytes": 20000,
+    "max_files_changed": 1,
+    "max_model_calls": 3,
+    "max_model_cost_usd": 1.0,
+    "max_model_input_bytes": 100000,
+    "max_model_output_bytes": 10000,
+    "max_model_tokens": 100000,
+    "max_patch_bytes": 1024
+  },
+  "schema_version": "1.0",
+  "scope": {
+    "allowed_paths": [
+      "tests/fixtures/p5_public/human-public-build-control/worker.py"
+    ],
+    "graph_node_ids": []
+  },
+  "title": "Public three-role build control"
+}

@@ -1,0 +1,32 @@
+"""Scratch-only component runner. Results never grant execution or qualification."""
+import json
+import os
+from pathlib import Path
+import sys
+import unittest
+
+def main():
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        raise SystemExit("scratch-ci-only")
+    if os.environ.get("GITHUB_HEAD_REF") != "codex/scratch-configured-route-wip":
+        raise SystemExit("scratch-branch-required")
+    for name in ("GH_TOKEN", "GITHUB_TOKEN", "OPENAI_API_KEY", "FACTORY_TRANSPORT_KEY",
+                 "FACTORY_CANDIDATE_SIGNING_KEY"):
+        if os.environ.get(name):
+            raise SystemExit("scratch-credential-present")
+    root = Path(__file__).resolve().parents[2]
+    manifest = json.loads((root / "tools/ci/scratch_configured_tests.json").read_bytes())
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite(loader.loadTestsFromName(name) for name in manifest["modules"])
+    count = suite.countTestCases()
+    suite.addTests(loader.loadTestsFromName('test_scratch_disposable_trust'))
+    total = suite.countTestCases()
+    print(f"DISPOSABLE SCRATCH ONLY: configured={count}/419; trust regressions={total-count}/2; no qualification authority", flush=True)
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    print(json.dumps({"scratch_only": True, "discovered": count, "run": result.testsRun,
+                      "failures": len(result.failures), "errors": len(result.errors),
+                      "skipped": len(result.skipped), "qualification_evidence": False}), flush=True)
+    return 0 if result.wasSuccessful() and count == 419 and total == 421 and not loader.errors else 1
+
+if __name__ == "__main__":
+    raise SystemExit(main())

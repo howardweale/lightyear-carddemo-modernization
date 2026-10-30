@@ -82,14 +82,17 @@ def admit_configured_receipt_context(admission,order,policy,backend,*,source_roo
         input_paths,read_manifest,model_config_path,public_isolation_path,evidence_path):
     bound=_preflight(admission,order,policy,backend,source_root,input_paths,read_manifest,
                      model_config_path,public_isolation_path)
-    case=review_case(bound['review'])
+    case='answer-fragment' if is_answer_order(order) else 'configured-build-control'
     target=_exclusive_evidence_path(evidence_path,admission.root)
     retained=_exclusive_evidence_path(target.parent/'human-consumption.json',admission.root)
     if retained==target:
         raise ExecutionContractError('configured-human-evidence-path-collision')
     # All read-only checks precede this irreversible, genuine-proof reservation.
     # No supplied API, consumption record or resume flag is accepted.
-    consumption=reservation_entry(case)(admission,order,policy)
+    if case=='answer-fragment':
+        consumption=reservation_entry(case)(admission,order,policy)
+    else:
+        consumption=reserve_configured_receipt_main_plan(admission,order,policy)
     record=consumption['record'];review=bound['review'];model=review['verified_model_admission']
     if (consumption['status']!='consumed-only' or record['consumed_before_execution'] is not True
             or record['case_id']!=case

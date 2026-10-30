@@ -74,7 +74,6 @@ def review_configured_receipt_dispatch(args):
 
 def _dispatch_paths(args,bundle):
     from lightyear_factory.authorship import CICommitSigner
-    SIGNERS=signer_path(review_case(bundle['review']))
     source=bundle['admission'].root
     requested=Path(args.runs_root)
     if any(part.casefold()=='onedrive' for part in requested.parts):
@@ -90,6 +89,7 @@ def _dispatch_paths(args,bundle):
                 or resolved.is_relative_to(source.resolve())
                 or resolved.is_relative_to(root.resolve())):
             raise ContractError('configured-receipt-external-signer-only')
+    SIGNERS=signer_path(review_case(bundle['review']))
     expected=bundle['public_materials'][SIGNERS]['raw'].encode('ascii')
     if _bounded_regular_bytes(signer.allowed_signers,4096,'configured-receipt-signer-trust')!=expected:
         raise ContractError('configured-receipt-signed-signer-trust-mismatch')

@@ -93,6 +93,7 @@
     "test_operator_flow_review_checkout",
     "test_operator_flow_review_cli",
     "test_operator_flow_review_workflow",
-    "test_operator_flow_review_observation"
+    "test_operator_flow_review_observation",
+    "test_operator_flow_completed_review"
   ]
 }

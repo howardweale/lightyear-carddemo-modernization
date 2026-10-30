@@ -116,6 +116,10 @@ def _review_observation(candidate,requests,values,identity):
         +' reviewer_run='+str(identity['run'])+' reviewer_job='+str(identity['job'])
         +' expectations_sha256='+digest(expected)+' identity_sha256='+digest(identity)
         +' requests_sha256='+digest(requests)+' request_count='+str(len(requests))
+        +' pr='+str(identity['pr'])+' workflow='+str(identity['workflow'])
+        +' base='+identity['base']+' tested_merge='+identity['tested_merge']
+        +' workflow_revision='+identity['workflow_revision']
+        +' workflow_sha256='+identity['workflow_sha256']+' event_sha256='+identity['event_sha256']
         +' publication_authorized=false admission_authorized=false qualification_evidence=false')
 
 def main():

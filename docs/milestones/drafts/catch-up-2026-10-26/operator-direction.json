@@ -1,0 +1,19 @@
+{
+  "schema": "operator-chat-milestone-direction/1",
+  "recorded_on": "2026-10-26",
+  "source": "Direct Howard message in this task; transcribed for the requested draft PR.",
+  "verbatim": [
+    "Backlog item 7 (after the CI fixes and items 1–6): milestone catch-up, draft only.",
+    "Draft the next milestones (MS-115 onward) in the existing catalog format. Mark MS94 (iDempiere runtime observation) as closed by my decision to move on, with no claim of completion.",
+    "Leave a placeholder milestone for the first judged COPAU factory run; its status and result will be filled in after Friday.",
+    "Every customer-facing sentence must trace to a merged commit or receipt. List any new public claims for the Friday claim-wording batch.",
+    "Use a separate draft PR. Do not touch main, status pages or documentation hashes before the run. Merge only after the run, with my approval."
+  ],
+  "ms94_disposition": "closed_by_operator_decision_to_move_on",
+  "completion_claim": false,
+  "new_measurement": false,
+  "merge_permission": false,
+  "canonical_catalog_mutation": false,
+  "friday_run_placeholder_status": null,
+  "friday_run_placeholder_result": null
+}

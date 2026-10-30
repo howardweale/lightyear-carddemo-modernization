@@ -1,0 +1,10 @@
+{
+  "number": 94,
+  "canonical_path": "docs/milestones/MS-94/MS-94.md",
+  "status": "Closed by Howard’s decision to move on; no claim of completion",
+  "reason": "Operator disposition, not technical success",
+  "completion": false,
+  "new_runtime_observation": false,
+  "evidence": "operator-direction.json",
+  "apply_to_canonical_catalog_after_run_only": true
+}

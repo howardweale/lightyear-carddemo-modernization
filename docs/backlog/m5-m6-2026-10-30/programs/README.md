@@ -32,4 +32,3 @@ No new credit, release authority or native/customer claim is introduced.
 
 Planned: add later results as new dated evidence after the critical-path closeout.
 All backlog changes remain draft and unmerged until the 5 November run completes.
-

@@ -42,4 +42,3 @@ Do not treat an argued equivalent mutant, compiler identity or existing scenario
 comparison as controlled proof of this unobserved failure path.
 
 Review disposition: [UNFILLED]
-

@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/scratch-test-home"
           sudo unshare --net --setgid="$(id -g)" --setuid="$(id -u)" \
-            env -i PATH="$PATH" HOME="$RUNNER_TEMP/scratch-test-home" \
+            env -i PATH="$PATH" HOME="$RUNNER_TEMP/scratch-test-home" RUNNER_TEMP="$RUNNER_TEMP" \
             PYTHONPATH="src:.:tests" PYTHONDONTWRITEBYTECODE=1 \
             GITHUB_ACTIONS=true CI=true GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             GITHUB_HEAD_REF="codex/scratch-configured-route-wip" GITHUB_SHA="$SCRATCH_HEAD" \

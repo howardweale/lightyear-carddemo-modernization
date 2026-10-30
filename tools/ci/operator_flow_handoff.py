@@ -124,6 +124,13 @@ def fetch_producer_handoff(expected):
         'handoff-download-stop-no-retry')
     files=read_public_archive(original_bytes,expected['archive_sha256'])
     require(_original_producer(api,expected)==observed,'handoff-producer-changed')
+    _reported_public_handoff(files,observed)
+    # Native proof, source/runtime, live consumer and current trust checks are
+    # deliberately still owed. Never return an admission, context or passed GO.
+    return files,observed
+
+
+def _reported_public_handoff(files,observed):
     report=strict_json(files['producer.json']);trust=strict_json(files['trust.json'])
     require(type(report) is dict and report.get('producer_stage_passed') is True
         and report.get('fixture_only') is True and report.get('full_route_passed') is False
@@ -137,6 +144,3 @@ def fetch_producer_handoff(expected):
         and trust.get('scope')=='factory' and trust.get('public_key')=='public.pem'
         and type(trust.get('journal_head_sha256')) is str
         and re.fullmatch('[0-9a-f]{64}',trust['journal_head_sha256']),'handoff-public-trust-shape')
-    # Native proof, source/runtime, live consumer and current trust checks are
-    # deliberately still owed. Never return an admission, context or passed GO.
-    return files,observed

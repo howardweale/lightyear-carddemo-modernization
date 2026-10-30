@@ -140,4 +140,4 @@ def read_reviewed_publication(executable_root,*,reviewer_run_id,reviewer_job_id,
     clean_root(root);require(git(root,'rev-parse','HEAD').decode().strip()==values['executable'],
         'completed-review-source-changed')
     # Original false flags remain. No current proof/trust/full guards or grant.
-    return candidate,requests,dict(observed,log_sha256=hashlib.sha256(raw).hexdigest(),identity=identity,producer=producer)
+    return candidate,requests,dict(observed,log_sha256=hashlib.sha256(raw).hexdigest(),identity=identity,producer=producer,handoff_files=files)

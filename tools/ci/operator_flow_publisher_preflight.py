@@ -23,6 +23,7 @@ from tools.ci import operator_flow_tree_guards as tree_guards
 from tools import check_java_quality_fence as java_fence
 from tools import check_intcalc_m1_triage as posttran
 from tools.ci.operator_flow_native_inputs import REPOSITORY
+from tools.ci.operator_flow_publication_reconstruction import read_prepared_publication
 
 EXTRA_SOURCES=(
     ('tools.ci.operator_flow_review_cli','tools/ci/operator_flow_review_cli.py'),
@@ -324,11 +325,14 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
         reviewer_job_id=reviewer_job_id,pr_number=pr_number,base=base,tested_merge=tested_merge,values=values)
     files=_metadata_files(candidate,values)
     check_metadata(metadata_root,values,files)
+    require(read_prepared_publication(executable_root,metadata_root,observed['handoff_files'],
+        expected_executable=values['executable'],expected_candidate=values['metadata_head'],
+        commit_epoch=values['commit_epoch'])==(candidate,requests),'publisher-prepared-original-requests')
     tree=_publication_tree(metadata_root,values,base,files)
     order,policy,admission,review,plan,runtime=_native_current_review(metadata_root,trust_path,values)
     api=_GitHubAPI()
     expected={k:observed[k] for k in ('run','job','pr','executable','base','tested_merge')}
-    service={k:v for k,v in observed.items() if k not in ('log_sha256','identity','producer')}
+    service={k:v for k,v in observed.items() if k not in ('log_sha256','identity','producer','handoff_files')}
     require(_snapshot(api,expected)==service,'publisher-reviewer-changed')
     handoff={k:values[k] for k in ('executable','producer_run_id','artifact_id','archive_sha256')}
     require(_original_producer(api,handoff)==observed['producer'],'publisher-producer-changed')

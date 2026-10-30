@@ -14,6 +14,11 @@ from tools.ci.operator_flow_publication_objects import object_requests
 
 
 def reconstruct_publication_objects(root,files,*,expected_executable,expected_candidate,commit_epoch):
+    metadata,summary=_reconstruction_inputs(files,expected_executable,expected_candidate,commit_epoch)
+    candidate=prepare_candidate(root,expected_executable,metadata,commit_epoch)
+    return _reconstructed_requests(root,candidate,metadata,summary,expected_executable,expected_candidate)
+
+def _reconstruction_inputs(files,expected_executable,expected_candidate,commit_epoch):
     require(all(type(v) is str and re.fullmatch('[0-9a-f]{40}',v)
         for v in (expected_executable,expected_candidate)),'reconstruction-independent-heads')
     require(type(commit_epoch) is int and 1<=commit_epoch<10**11,'reconstruction-independent-epoch')
@@ -32,9 +37,9 @@ def reconstruct_publication_objects(root,files,*,expected_executable,expected_ca
         and type(summary.get('commit_epoch')) is int and summary['commit_epoch']==commit_epoch,
         'reconstruction-reported-heads-epoch')
     metadata={PREFIX+name:files[name] for name in ('plan.json','contract.json','proof.json')}
-    # Original builder enforces CI-only, exact clean E, independent source paths,
-    # three NEW metadata paths and native read-only object hash checks.
-    candidate=prepare_candidate(root,expected_executable,metadata,commit_epoch)
+    return metadata,summary
+
+def _reconstructed_requests(root,candidate,metadata,summary,expected_executable,expected_candidate):
     require(candidate['commit']==expected_candidate,'reconstruction-candidate-mismatch')
     for field in ('base_tree','tree','files'):
         require(summary.get(field)==candidate[field],'reconstruction-candidate-summary')
@@ -61,3 +66,52 @@ def reconstruct_publication_objects(root,files,*,expected_executable,expected_ca
     # Preserve the original builder's false authority/readiness flags. A report
     # asserting native verification cannot convert this reconstruction to proof.
     return candidate,requests
+
+
+def read_prepared_publication(executable_root,metadata_root,files,*,expected_executable,expected_candidate,commit_epoch):
+    """Read existing independent E/M objects; no construction or authority.
+
+    Original producer provenance, current native proof/trust and actual-host
+    preservation belong to the guarded caller. This reader never invokes the
+    CI-only builder, creates objects, writes files or changes an environment.
+    """
+    from tools.ci.operator_flow_consumer import clean_root,check_metadata,git
+    from tools.ci.operator_flow_metadata import object_id
+    metadata,summary=_reconstruction_inputs(files,expected_executable,expected_candidate,commit_epoch)
+    eroot=Path(executable_root);mroot=Path(metadata_root)
+    clean_root(eroot);clean_root(mroot)
+    require(not eroot.is_relative_to(mroot) and not mroot.is_relative_to(eroot),'prepared-reader-independent-E-M')
+    for root in (eroot,mroot):
+        require(not (root/'.git/commondir').exists() and not (root/'.git/objects/info/http-alternates').exists(),
+            'prepared-reader-independent-git')
+    require(git(eroot,'rev-parse','HEAD').decode().strip()==expected_executable,'prepared-reader-exact-E')
+    approval=dict(executable=expected_executable,metadata_head=expected_candidate)
+    check_metadata(mroot,approval,files)
+    objects={}
+    def read(kind,revision):
+        oid=git(mroot,'rev-parse',revision).decode().strip()
+        require(re.fullmatch('[0-9a-f]{40}',oid),'prepared-reader-object-id')
+        size=git(mroot,'cat-file','-s',oid).decode().strip()
+        require(size.isdecimal() and 0<int(size)<=2*1024*1024,'prepared-reader-object-size')
+        raw=git(mroot,'cat-file',kind,oid)
+        require(len(raw)==int(size) and object_id(kind,raw)==oid,'prepared-reader-original-object')
+        require(oid not in objects or objects[oid]==(kind,raw),'prepared-reader-object-collision')
+        objects[oid]=(kind,raw);return oid,raw
+    changes=[]
+    for path,raw in sorted(metadata.items()):
+        oid,body=read('blob',expected_candidate+':'+path)
+        require(body==raw,'prepared-reader-handoff-bytes')
+        changes.append(dict(path=path,before=None,git_blob=oid,sha256=sha256(raw).hexdigest()))
+    tree=None
+    for prefix in ('','docs/','docs/factory/',PREFIX):
+        oid,body=read('tree',expected_candidate+(':'+prefix.rstrip('/') if prefix else '^{tree}'))
+        if prefix=='':tree=oid
+    read('commit',expected_candidate)
+    base_tree=git(eroot,'rev-parse',expected_executable+'^{tree}').decode().strip()
+    candidate=dict(parent=expected_executable,base_tree=base_tree,tree=tree,commit=expected_candidate,
+        commit_epoch=commit_epoch,files=changes,objects=objects,native_proof_verified=False,
+        full_guards_passed=False,publish_ready=False,publication_authorized=False,full_route_passed=False,real_pack_ready=False)
+    result=_reconstructed_requests(eroot,candidate,metadata,summary,expected_executable,expected_candidate)
+    check_metadata(mroot,approval,files)
+    clean_root(eroot);require(git(eroot,'rev-parse','HEAD').decode().strip()==expected_executable,'prepared-reader-final-E')
+    return result

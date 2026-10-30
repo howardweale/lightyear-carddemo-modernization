@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CardDemoCandidateApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CardDemoCandidateApplication.class, args);
+        System.exit(SpringApplication.exit(
+                SpringApplication.run(CardDemoCandidateApplication.class, args)));
     }
 }
 

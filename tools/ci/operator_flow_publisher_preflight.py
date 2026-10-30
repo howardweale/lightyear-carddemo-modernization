@@ -220,6 +220,27 @@ def _posttran_guard(executable_root,metadata_root,base,head,expected_sha256):
     require(not _protected_history(metadata_root,base,head,protected),'publisher-posttran-candidate-history')
     return expected_sha256
 
+def _native_current_review(metadata_root,trust_path,values):
+    """Original native proof/runtime sequence; no admission or publication authority.
+
+    Callers own exact prepared metadata, external current trust, source/host
+    guards, original reviewer/producer provenance and operation approval.
+    No caller verifier, clock, API, provider, context or cached proof accepted.
+    """
+    order=WorkOrder.load(metadata_root/'tests/fixtures/p5_public/human-clean-control/work-order.json')
+    policy=ExecutionPolicy.load(metadata_root/(PREFIX+'execution-policy.json'))
+    admission=FactoryModelAdmission.from_external_trust(metadata_root,PREFIX+'plan.json',PREFIX+'proof.json',
+        PREFIX+'contract.json',trust_path)
+    review=verify_human_drill_plan(admission,order,policy)
+    check_native_review(values,review)
+    plan=admission._committed_json(PREFIX+'plan.json')
+    runtime=admission.verify_runtime(order,source_root=metadata_root,
+        input_paths={key:metadata_root/row['path'] for key,row in plan['bound_inputs'].items()},policy=policy)
+    require(plan['executable_commit']==values['executable'] and runtime['executable_commit']==values['metadata_head'],
+        'publisher-native-E-M')
+    return order,policy,admission,review,plan,runtime
+
+
 def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_run_id,reviewer_job_id,
         pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None,expected_java_fence_sha256=None,expected_posttran_inventory_sha256=None):
     require(type(values) is dict and set(values)==set(SCALARS),'publisher-independent-values')
@@ -244,17 +265,7 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     files=_metadata_files(candidate,values)
     check_metadata(metadata_root,values,files)
     tree=_publication_tree(metadata_root,values,base,files)
-    order=WorkOrder.load(metadata_root/'tests/fixtures/p5_public/human-clean-control/work-order.json')
-    policy=ExecutionPolicy.load(metadata_root/(PREFIX+'execution-policy.json'))
-    admission=FactoryModelAdmission.from_external_trust(metadata_root,PREFIX+'plan.json',PREFIX+'proof.json',
-        PREFIX+'contract.json',trust_path)
-    review=verify_human_drill_plan(admission,order,policy)
-    check_native_review(values,review)
-    plan=admission._committed_json(PREFIX+'plan.json')
-    runtime=admission.verify_runtime(order,source_root=metadata_root,
-        input_paths={key:metadata_root/row['path'] for key,row in plan['bound_inputs'].items()},policy=policy)
-    require(plan['executable_commit']==values['executable'] and runtime['executable_commit']==values['metadata_head'],
-        'publisher-native-E-M')
+    order,policy,admission,review,plan,runtime=_native_current_review(metadata_root,trust_path,values)
     api=_GitHubAPI()
     expected={k:observed[k] for k in ('run','job','pr','executable','base','tested_merge')}
     service={k:v for k,v in observed.items() if k not in ('log_sha256','identity','producer')}

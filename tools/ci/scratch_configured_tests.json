@@ -109,6 +109,7 @@
     "test_operator_flow_published_review",
     "test_operator_flow_ref_lease",
     "test_operator_flow_ref_acknowledgement",
-    "test_operator_flow_git_transport"
+    "test_operator_flow_git_transport",
+    "test_operator_flow_operation_scope"
   ]
 }

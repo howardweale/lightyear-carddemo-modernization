@@ -59,3 +59,22 @@ def reserve_intent(root,*,executable,metadata_head,request_sha256,branch_ref):
         stream.write(expected);stream.flush();os.fsync(stream.fileno())
     return verify_intent(root,executable=executable,metadata_head=metadata_head,
         request_sha256=request_sha256,branch_ref=branch_ref)
+
+
+# Pure scope comparison data, never approval, a reusable receipt or a schema.
+def operation_scope(intent_root, executable_root, metadata_root, trust_path, empty_hooks, *, values, reviewer_run_id, reviewer_job_id, pr_number, base, tested_merge, branch_ref, expected_request_sha256, expected_main_protection_sha256, expected_main_rules_sha256, expected_java_fence_sha256, expected_posttran_inventory_sha256):
+    _require(type(values) is dict and set(values) == set(('executable', 'metadata_head', 'producer_run_id', 'artifact_id', 'archive_sha256', 'plan_sha256', 'decision_sha256', 'journal_head_sha256', 'public_key_sha256', 'nonce_sha256', 'commit_epoch')), 'host-one-shot-exact-public-inputs')
+    _require(all((type(values[k]) is int and 0 < values[k] < 10 ** 20 for k in ('producer_run_id', 'artifact_id', 'commit_epoch'))), 'host-one-shot-public-integer-types')
+    _require(all((type(values[k]) is str and re.fullmatch('[0-9a-f]{40}', values[k]) for k in ('executable', 'metadata_head'))) and all((type(values[k]) is str and re.fullmatch('[0-9a-f]{64}', values[k]) for k in ('archive_sha256', 'plan_sha256', 'decision_sha256', 'journal_head_sha256', 'public_key_sha256', 'nonce_sha256'))), 'host-one-shot-public-digest-types')
+    public = tuple(((k, type(values[k]).__name__, values[k]) for k in ('executable', 'metadata_head', 'producer_run_id', 'artifact_id', 'archive_sha256', 'plan_sha256', 'decision_sha256', 'journal_head_sha256', 'public_key_sha256', 'nonce_sha256', 'commit_epoch')))
+    identity = dict(reviewer_run_id=reviewer_run_id, reviewer_job_id=reviewer_job_id, pr_number=pr_number)
+    _require(all((type(v) is int and 0 < v < 10 ** 20 for v in identity.values())), 'host-one-shot-reviewer-integer-types')
+    commits = dict(base=base, tested_merge=tested_merge)
+    _require(all((type(v) is str and re.fullmatch('[0-9a-f]{40}', v) for v in commits.values())), 'host-one-shot-reviewer-commit-types')
+    digests = dict(expected_request_sha256=expected_request_sha256, expected_main_protection_sha256=expected_main_protection_sha256, expected_main_rules_sha256=expected_main_rules_sha256, expected_java_fence_sha256=expected_java_fence_sha256, expected_posttran_inventory_sha256=expected_posttran_inventory_sha256)
+    _require(all((type(v) is str and re.fullmatch('[0-9a-f]{64}', v) for v in digests.values())), 'host-one-shot-independent-guard-digests')
+    _require(type(branch_ref) is str and re.fullmatch('refs/heads/codex/[A-Za-z0-9_-]+', branch_ref), 'host-one-shot-exact-branch')
+    paths = dict(intent_root=intent_root, executable_root=executable_root, metadata_root=metadata_root, trust_path=trust_path, empty_hooks=empty_hooks)
+    _require(all((type(v) in (str, type(Path())) and Path(v).is_absolute() for v in paths.values())), 'host-one-shot-bound-path-types')
+    wanted = (('values', public), ('identity', tuple(sorted(identity.items()))), ('commits', tuple(sorted(commits.items()))), ('digests', tuple(sorted(digests.items()))), ('branch_ref', branch_ref), ('paths', tuple(((k, str(Path(v))) for k, v in sorted(paths.items())))))
+    return wanted

@@ -20,12 +20,50 @@ def save(path,value):
     path.write_text(json.dumps(value,indent=2,sort_keys=True)+'\n',encoding='utf-8')
 
 
+# Original Actions bytes; this archive changes storage only, never measurement.
+POSTTRAN_ARCHIVE_URL = 'https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/artifact-preservation-11991139660/11991139660-original.zip'
+POSTTRAN_PROVENANCE_URL = 'https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/23263e056585e1314a85be5b3d8e933901f466f9/docs/evidence/artifact-preservation-11991139660-2026-10-29/preservation-provenance.json'
+POSTTRAN_PROVENANCE_SHA256 = '615fbae8bf06c797d413cc26dba9cbde2e5c7bf4990d7f1748ff91939a723e93'
+
+
+def _verify_preserved_posttran(raw, provenance_raw):
+    if sha256(provenance_raw).hexdigest() != POSTTRAN_PROVENANCE_SHA256:
+        raise ValueError('POSTTRAN-archived-provenance')
+    provenance = json.loads(provenance_raw)
+    artifact = provenance['original_artifact']
+    if (provenance['schema'] != 'github-actions-artifact-preservation/1'
+            or artifact['id'] != 11991139660
+            or artifact['name'] != 'factory-review-records-POSTTRAN-0'
+            or artifact['workflow_run']['id'] != 38763552148
+            or artifact['workflow_run']['head_sha'] != HEAD
+            or provenance['release']['download_url'] != POSTTRAN_ARCHIVE_URL
+            or provenance['preservation_only'] is not True
+            or provenance['execution_authorized'] is not False):
+        raise ValueError('POSTTRAN-archived-provenance')
+    if len(raw) != artifact['size_in_bytes'] or len(raw) != 2175361:
+        raise ValueError('POSTTRAN-original-archive-size')
+    if sha256(raw).hexdigest() != '24ea12fe7a16fea5bb06999e6a409e36cfc3fba59646701ebfd453ed3eff343c':
+        raise ValueError('POSTTRAN-original-archive-hash')
+    return raw
+
+
+def _preserved_posttran_bytes():
+    try:
+        with urllib.request.urlopen(POSTTRAN_PROVENANCE_URL, timeout=120) as response:
+            provenance = response.read()
+        with urllib.request.urlopen(POSTTRAN_ARCHIVE_URL, timeout=120) as response:
+            raw = response.read()
+    except OSError as error:
+        raise ValueError('POSTTRAN-preserved-copy-unavailable') from error
+    return _verify_preserved_posttran(raw, provenance)
+
+
 def sources():
     url=f'https://github.com/{REPO}/releases/download/evidence-2026-10-15-intcalc/factory-review-records-INTCALC-0-mutation-results.json'
     with urllib.request.urlopen(url,timeout=120) as response: raw=response.read()
     if sha256(raw).hexdigest()!='ad4ab419496debd0a8d62beaf9ff7a265fd21832521277bbcd8462ae2b7bbfba': raise ValueError('INTCALC-original-receipt-hash')
     intcalc=json.loads(raw)
-    raw=subprocess.check_output(['gh','api',f'repos/{REPO}/actions/artifacts/11991139660/zip'])
+    raw=_preserved_posttran_bytes()
     if sha256(raw).hexdigest()!='24ea12fe7a16fea5bb06999e6a409e36cfc3fba59646701ebfd453ed3eff343c': raise ValueError('POSTTRAN-original-archive-hash')
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
         posttran=json.loads(archive.read('factory-review-POSTTRAN/mutation-results.json'))

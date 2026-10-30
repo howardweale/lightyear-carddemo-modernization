@@ -14,7 +14,7 @@ a delayed closeout requires a fresh date decision, not an automatic switch.
 
 ## Measured metadata inventory
 
-[Exact metadata snapshot](repository-metadata.json#sha256=df4f9c3bc732d123081250402642d0438e889c408f23a46de945d4764b1df37a).
+[Exact metadata snapshot](repository-metadata.json#sha256=6d55455b403b79adf715f2917ec1146591fdf26ce5e59675a5a9cca772537fcf).
 
 | Area | Read-only snapshot | Required transition preparation |
 | --- | --- | --- |

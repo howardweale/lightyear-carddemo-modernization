@@ -171,12 +171,12 @@
   },
   "inventory_files": {
     "external-actions.csv": {
-      "bytes": 909,
-      "sha256": "923cb3ad98b51204313a973f1f6df9658d29cb65b8427571a5bc59d9f56b1fa3"
+      "bytes": 882,
+      "sha256": "b59921ceacfa8816b0bc5a426974bf1b4d447d4e33403c48f869b83a4c260eba"
     },
     "public-reader-links.csv": {
-      "bytes": 154730,
-      "sha256": "5b82f185e88ada2e86fc65eefa569596e0b2e71ab40a9c51beb48288e6aba4c3"
+      "bytes": 154059,
+      "sha256": "1f8e5f78383a67022d92b65e4377312881258afed5b4dd9b64f0151b0078b765"
     },
     "releases.jsonl": {
       "bytes": 564031,

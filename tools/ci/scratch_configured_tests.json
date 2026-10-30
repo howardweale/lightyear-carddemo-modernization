@@ -91,6 +91,7 @@
     "test_configured_original_context_caller",
     "test_operator_flow_current_reviewer",
     "test_operator_flow_review_checkout",
-    "test_operator_flow_review_cli"
+    "test_operator_flow_review_cli",
+    "test_operator_flow_review_workflow"
   ]
 }

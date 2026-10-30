@@ -34,3 +34,20 @@ The historical F8 CI result entry points to run 39536105114 and the raw
 retention record above. It is not a current whole-repository test result.
 
 No investor deck or commercial material is an input to this index.
+
+## Opening evidence revision
+
+The [public evidence index](receipts/evidence-index.json#sha256=9ca9192213779d17f2d03c5e74f0cbc95afd3e757f881f5d398405cae2add14d)
+binds eight additional exact source objects, the retained INTCALC verdict bytes,
+and each measurement denominator. The three operational wrappers bind original
+public evidence and CI jobs for independent review in this draft; they confer
+no new authority and do not replace original artifacts.
+
+- [posttran-comparison.json](receipts/posttran-comparison.json#sha256=b15b224b768acc754b1496c35d7ca4529c52e8b78c381e57140f76b574552923): 1213 bytes; sha256=b15b224b768acc754b1496c35d7ca4529c52e8b78c381e57140f76b574552923.
+- [main-ci.json](receipts/main-ci.json#sha256=ecea7e0f96919f196eeea3a3b8cd5b06d7eee92542b0b949372c78ab057402c3): 1599 bytes; sha256=ecea7e0f96919f196eeea3a3b8cd5b06d7eee92542b0b949372c78ab057402c3.
+- [posttran-human-decision.json](receipts/posttran-human-decision.json#sha256=60f421e30a6f98d99ba99d6ae44a3a65d36a349520a2d4a13083e85dd46d961e): 1821 bytes; sha256=60f421e30a6f98d99ba99d6ae44a3a65d36a349520a2d4a13083e85dd46d961e.
+- [evidence-index.json](receipts/evidence-index.json#sha256=9ca9192213779d17f2d03c5e74f0cbc95afd3e757f881f5d398405cae2add14d): 6323 bytes; sha256=9ca9192213779d17f2d03c5e74f0cbc95afd3e757f881f5d398405cae2add14d.
+
+CI is intentionally skipped for this documentation draft. Planned: full CI
+before any merge after the 5 November run closes. Static JSON, link, digest and
+P3 citation checks are the present validation method.

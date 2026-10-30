@@ -1,0 +1,37 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/diligence/p9-2026-10-30/receipts/evidence-index.json",
+      "reference": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "role": "source",
+      "source_path": "docs/platform/p3-operational-claims.md",
+      "source_sha256": "57ad661029a58c3205bd3dd29f748f357b2f6835014464e0be0d9ee1885d2aa3"
+    },
+    {
+      "record": "docs/diligence/p9-2026-10-30/receipts/main-ci.json",
+      "reference": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+      "role": "source",
+      "source_path": "docs/platform/p3-operational-claims.md",
+      "source_sha256": "57ad661029a58c3205bd3dd29f748f357b2f6835014464e0be0d9ee1885d2aa3"
+    },
+    {
+      "record": "docs/diligence/p9-2026-10-30/receipts/posttran-comparison.json",
+      "reference": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "commit": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "role": "source",
+      "source_path": "docs/factory/posttran-phase2-authorization-proof-2026-10-16.json",
+      "source_sha256": "5a622383a5cef8bba9e812f046bb0a55281f23d8c816343c0261bfb73ddeac70"
+    },
+    {
+      "record": "docs/diligence/p9-2026-10-30/receipts/posttran-human-decision.json",
+      "reference": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "commit": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+      "role": "source",
+      "source_path": "docs/factory/posttran-phase2-authorization-proof-2026-10-16.json",
+      "source_sha256": "5a622383a5cef8bba9e812f046bb0a55281f23d8c816343c0261bfb73ddeac70"
+    }
+  ]
+}

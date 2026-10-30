@@ -105,6 +105,7 @@
     "test_operator_flow_host_native_review",
     "test_operator_flow_approved_sync_history",
     "test_operator_flow_prepared_publication_reader",
-    "test_operator_flow_host_tree_kernel"
+    "test_operator_flow_host_tree_kernel",
+    "test_operator_flow_published_review"
   ]
 }

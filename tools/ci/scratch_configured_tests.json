@@ -85,6 +85,7 @@
   "integration_modules": [
     "test_configured_controller_context_inputs",
     "test_configured_answer_route_integration",
-    "test_configured_answer_stimulus"
+    "test_configured_answer_stimulus",
+    "test_configured_clean_control_observation"
   ]
 }

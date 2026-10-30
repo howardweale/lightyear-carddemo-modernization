@@ -998,6 +998,9 @@ class FactoryOrchestrator:
                 context, self.memory_retrieval, order
             )
         self._scan_controller_value('controller-context', context)
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext and order.order_id=='configured-build-control':
+            from lightyear_execution.configured_receipt_clean_control import record_original_clean_context
+            record_original_clean_context(self,order,workspace_root,context)
         return context
 
     @staticmethod

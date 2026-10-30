@@ -51,6 +51,8 @@ def verify_original_configured_success(controller):
     from lightyear_factory.orchestrator import _reconcile_accounting_journal
     saved=_require_origin(controller)
     original=read_original_configured_terminal(controller)
+    from .configured_receipt_clean_control import require_original_clean_context
+    require_original_clean_context(controller,_ledger_bytes(original['events.jsonl']))
     receipt=_original_json(original['receipt.json']);context=controller.execution_context
     order=context._order;budget=saved['budget']()
     if (receipt.get('status')!='passed' or receipt.get('work_order_id')!='configured-build-control'

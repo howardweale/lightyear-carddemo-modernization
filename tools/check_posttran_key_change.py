@@ -1,6 +1,6 @@
 """Read-only verification of the original executable plus a public-key replacement."""
 import argparse
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
@@ -13,6 +13,10 @@ PLAN = 'docs/factory/posttran-phase2-plan-2026-10-16.json'
 KEY = 'docs/factory/factory-authority.public.pem'
 SEAL = 'bcccc1d3b05922108cbb6017abfe124b2fa4779613af0f20a5b43fd99c317126'
 PEM = '658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a'
+
+# Canonical JSON digest of the committed preservation record at
+# 008cf01d3497f9ef5a964f1915171d622afdb969; original compiler pins unchanged.
+PRESERVED_PROVENANCE = 'ac92a82742ed27f61ddcbe87a27df8821558a15c8d535ab743c281d04183c35e'
 
 
 def require(condition, reason):
@@ -67,13 +71,21 @@ def inspect(root):
     return record, plan
 
 
-def image_check(record, plan, metadata, archive):
-    require(metadata['id'] == record['compiler_artifact_id'] and not metadata['expired'], 'image-id-or-expiry')
+def image_check(record, plan, provenance, archive):
+    require(provenance.get('schema') == 'posttran-compiler-preservation/1', 'archived-provenance-schema')
+    require(sha(json.dumps(provenance, sort_keys=True, separators=(',', ':')).encode())
+            == PRESERVED_PROVENANCE, 'archived-provenance')
+    require(provenance['preservation_only'] is True
+            and provenance['execution_authorized'] is False, 'preservation-only')
+    metadata = provenance['original_artifact']
+    require(metadata['id'] == record['compiler_artifact_id'], 'image-id')
     require(metadata['workflow_run']['id'] == plan['preparation_run']
             and metadata['workflow_run']['head_sha'] == plan['preparation_head'], 'image-provenance')
     require(metadata['name'] == plan['compiler_image_artifact'], 'image-name')
+    retrieved = datetime.fromisoformat(provenance['retrieved_at'].replace('Z', '+00:00'))
     expires = datetime.fromisoformat(metadata['expires_at'].replace('Z', '+00:00'))
-    require(expires - datetime.now(timezone.utc) >= timedelta(hours=24), 'image-retention')
+    require(retrieved < expires, 'retrieved-before-original-expiry')
+    require(Path(archive).is_file(), 'archived-copy-missing')
     require(Path(archive).stat().st_size == metadata['size_in_bytes'], 'archive-size')
     digest = hashlib.sha256()
     with Path(archive).open('rb') as stream:
@@ -88,9 +100,10 @@ def image_check(record, plan, metadata, archive):
             for chunk in iter(lambda: stream.read(1024*1024), b''):
                 digest.update(chunk)
     require(digest.hexdigest() == plan['twin']['image_archive_sha256'], 'image-bytes')
-    require(expires - datetime.now(timezone.utc) >= timedelta(hours=24), 'remaining-retention')
-    return {'artifact_id':metadata['id'], 'image_sha256':digest.hexdigest(), 'expires_at':metadata['expires_at']}
-
+    return {'artifact_id':metadata['id'], 'image_sha256':digest.hexdigest(),
+            'expires_at':metadata['expires_at'], 'source':'preserved-archive',
+            'preservation_provenance_sha256':PRESERVED_PROVENANCE,
+            'retrieved_at':provenance['retrieved_at']}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

@@ -29,6 +29,9 @@ from .contracts import ContractError
 
 class SnapshotOpenAIResponsesProvider(OpenAIResponsesProvider):
     def __init__(self, *args, **kwargs):
+        # Remember explicit opener injection before the native base assigns it.
+        # Default construction alone may enter the guarded recorded transport.
+        self._injected_opener = len(args) > 2 or "opener" in kwargs
         super().__init__(*args, **kwargs)
         require_snapshot(self.model)
         self.require_snapshot_response = True

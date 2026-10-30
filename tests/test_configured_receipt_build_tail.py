@@ -10,8 +10,10 @@ def hashed(value):
 
 def scan(name,value):
     raw=json.dumps(value,sort_keys=True,ensure_ascii=False).encode('utf-8')
-    return dict(kind='model_isolation_scan_passed',state='RUNNING',
+    row=dict(kind='model_isolation_scan_passed',state='RUNNING',
         payload=dict(status='passed',scanned=[dict(artifact=name,sha256=sha256(raw).hexdigest())]))
+    row['event_sha256']=canonical_hash(row)
+    return row
 
 def records(passed=True):
     events=[dict(kind='untrusted-prefix',state='VERIFYING',payload={},event_sha256='a'*64)]

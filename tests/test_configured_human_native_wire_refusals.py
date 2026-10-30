@@ -23,6 +23,7 @@ class ConfiguredNativeWireRefusalTests(unittest.TestCase):
         self.assertIsNone(value.transport_recorder)
         self.assertIsNone(value.last_transport_record)
         self.assertFalse(value._recorded_call_active)
+        self.assertIs(value._injected_opener,False)
 
     def test_dictionary_recorder_is_refused_without_transport(self):
         value=provider()

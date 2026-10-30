@@ -23,7 +23,7 @@ class AbortPreflightRelations(unittest.TestCase):
         self.assertNotIn('status',args[0])
     def test_different_original_proof_order_nonce_or_policy_refused(self):
         for key in ('plan_sha256','decision_sha256','trusted_journal_head','work_order_sha256','nonce_sha256','execution_policy_sha256'):
-            a,r,c=self.mappings();a[key]='f'*64
+            a,r,c=self.mappings();self.assertNotEqual(a[key],'0'*64);a[key]='0'*64
             with self.subTest(key=key),self.assertRaises(ContractError):match_abort_preflight(a,r,c)
     def test_other_case_refused(self):
         a,r,c=self.mappings();r['drill_binding']['case_id']='other';r['content_sha256']=canonical_hash(r,{'content_sha256'})

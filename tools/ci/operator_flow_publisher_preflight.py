@@ -4,7 +4,7 @@ Requires separately prepared independent E/M and public trust. Historical
 review success cannot replace original current native proof/trust/runtime
 verification. No clock, verifier, API, old-claim or context injection.
 """
-import hashlib,re,sys,types
+import hashlib,json,re,sys,types
 from pathlib import Path
 from lightyear_factory.contracts import WorkOrder
 from lightyear_factory.model_admission import FactoryModelAdmission,_bounded_regular_bytes
@@ -102,8 +102,33 @@ def _tree_source(root,executable):
     require(len(committed)==int(size) and raw==committed,'publisher-tree-source-bytes')
     return hashlib.sha256(raw).hexdigest()
 
+def _expected_protection(protection_sha256,rules_sha256):
+    require(all(type(x) is str and re.fullmatch('[0-9a-f]{64}',x)
+        for x in (protection_sha256,rules_sha256)),'publisher-independent-protection-digests')
+    return protection_sha256,rules_sha256
+
+def _protection_digest(value):
+    # Canonical JSON preserves Boolean/integer and list-order distinctions.
+    return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),
+        ensure_ascii=False,allow_nan=False).encode('utf-8')).hexdigest()
+
+def _check_repository_protection(protection,rules,protection_sha256,rules_sha256):
+    expected=_expected_protection(protection_sha256,rules_sha256)
+    require(type(protection) is dict and type(rules) is list,'publisher-native-protection-shapes')
+    actual=(_protection_digest(protection),_protection_digest(rules))
+    require(actual==expected,'publisher-main-protection-or-rules-changed')
+    # Relationship check only: expected digests must be independently reviewed.
+    return actual
+
+def _protection_snapshot(protection_sha256,rules_sha256):
+    _expected_protection(protection_sha256,rules_sha256)
+    api=_GitHubAPI()
+    protection=api.request('GET','/repos/'+REPOSITORY+'/branches/main/protection')
+    rules=api.request('GET','/repos/'+REPOSITORY+'/rules/branches/main')
+    return _check_repository_protection(protection,rules,protection_sha256,rules_sha256)
+
 def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_run_id,reviewer_job_id,
-        pr_number,base,tested_merge,values):
+        pr_number,base,tested_merge,values,expected_main_protection_sha256=None,expected_main_rules_sha256=None):
     require(type(values) is dict and set(values)==set(SCALARS),'publisher-independent-values')
     _independent_expectations(**values)
     executable_root=Path(executable_root);metadata_root=Path(metadata_root)
@@ -115,6 +140,7 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
             and git(root,'rev-parse','HEAD').decode().strip()==head,'publisher-prepared-E-M')
     source=_source_snapshot(executable_root,values['executable'])
     tree_source=_tree_source(executable_root,values['executable'])
+    protection=_protection_snapshot(expected_main_protection_sha256,expected_main_rules_sha256)
     _main_identity(_GitHubAPI().request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
     materials=_public_materials(executable_root,metadata_root,trust_path,values)
     candidate,requests,observed=read_reviewed_publication(executable_root,reviewer_run_id=reviewer_run_id,
@@ -146,6 +172,8 @@ def preflight_publication(executable_root,metadata_root,trust_path,*,reviewer_ru
     require(_tree_source(executable_root,values['executable'])==tree_source,'publisher-tree-source-changed')
     require(_publication_tree(metadata_root,values,base,files)==tree,'publisher-tree-changed')
     _main_identity(api.request('GET','/repos/'+REPOSITORY+'/git/ref/heads/main'),base)
+    require(_protection_snapshot(expected_main_protection_sha256,expected_main_rules_sha256)==protection,
+        'publisher-repeated-protection-changed')
     # Native proof verification is not controller admission. Original false
     # publication flags stay false; exact full guards and approval remain owed.
     return candidate,requests,observed

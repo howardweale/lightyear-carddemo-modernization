@@ -66,5 +66,20 @@
     "test_p5_public_build_inputs"
   ],
   "authored_tests": 419,
-  "scratch_only": true
+  "scratch_only": true,
+  "publisher_modules": [
+    "test_operator_flow_ci_prerequisite",
+    "test_operator_flow_consumer",
+    "test_operator_flow_consumer_metadata",
+    "test_operator_flow_download",
+    "test_operator_flow_handoff",
+    "test_operator_flow_metadata",
+    "test_operator_flow_pr_observation",
+    "test_operator_flow_producer_pr",
+    "test_operator_flow_publication_objects",
+    "test_operator_flow_publication_reconstruction",
+    "test_operator_flow_publication_review",
+    "test_operator_flow_review_source",
+    "test_operator_flow_tree_guards"
+  ]
 }

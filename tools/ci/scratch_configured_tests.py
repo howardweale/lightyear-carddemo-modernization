@@ -20,13 +20,17 @@ def main():
     suite = unittest.TestSuite(loader.loadTestsFromName(name) for name in manifest["modules"])
     count = suite.countTestCases()
     suite.addTests(loader.loadTestsFromName('test_scratch_disposable_trust'))
+    trust_count = suite.countTestCases() - count
+    publisher_suite = unittest.TestSuite(loader.loadTestsFromName(name) for name in manifest["publisher_modules"])
+    publisher_count = publisher_suite.countTestCases()
+    suite.addTests(publisher_suite)
     total = suite.countTestCases()
-    print(f"DISPOSABLE SCRATCH ONLY: configured={count}/419; trust regressions={total-count}/2; no qualification authority", flush=True)
+    print(f"DISPOSABLE SCRATCH ONLY: configured={count}/419; trust regressions={trust_count}/2; publisher components={publisher_count}/120; no qualification authority", flush=True)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
-    print(json.dumps({"scratch_only": True, "discovered": count, "run": result.testsRun,
+    print(json.dumps({"scratch_only": True, "discovered": count, "publisher_discovered": publisher_count, "run": result.testsRun,
                       "failures": len(result.failures), "errors": len(result.errors),
                       "skipped": len(result.skipped), "qualification_evidence": False}), flush=True)
-    return 0 if result.wasSuccessful() and count == 419 and total == 421 and not loader.errors else 1
+    return 0 if result.wasSuccessful() and count == 419 and trust_count == 2 and publisher_count == 120 and total == 541 and not loader.errors else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())

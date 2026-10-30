@@ -1,0 +1,343 @@
+# FUTURE PACK TEMPLATE: unsealed; a fresh reviewed manifest hash is required.
+# ExportAndVerify authenticates once and exports public bundle bytes; no decision, nonce, CI variables or execution.
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory=$true)][ValidateSet('Preflight','Prepare','ExportAndVerify','VerifyExport')][string]$Stage,
+    [Parameter(Mandatory=$true)][string]$Manifest,
+    [string]$Proof,
+    [string]$CredentialFile,
+    [string]$DecisionSha256
+)
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+$stageClock = [Diagnostics.Stopwatch]::StartNew()
+$stageStartedAt = [DateTimeOffset]::UtcNow
+$exportStartedAt = $null
+$exportFinishedAt = $null
+$exportElapsedSeconds = $null
+$CaseId = '__CASE_ID__'
+$ReviewedManifestSha256 = '<UNSET_REVIEWED_MANIFEST_SHA256>'
+
+function Require([bool]$Condition, [string]$Message) {
+    if (-not $Condition) { throw $Message }
+}
+
+function NoOneDrive([string]$Path) {
+    Require ($Path -notmatch '(?i)(^|[\\/])OneDrive([\\/]|$)') 'OneDrive path refused.'
+}
+function InspectPathStrings($Value) {
+    if ($null -eq $Value) { return }
+    if ($Value -is [string]) { NoOneDrive $Value; return }
+    if ($Value -is [System.Collections.IDictionary]) {
+        foreach ($v in $Value.Values) { InspectPathStrings $v }; return
+    }
+    if ($Value -is [System.Collections.IEnumerable]) {
+        foreach ($v in $Value) { InspectPathStrings $v }; return
+    }
+    if ($Value -is [System.Management.Automation.PSCustomObject]) {
+        foreach ($p in $Value.PSObject.Properties) { InspectPathStrings $p.Value }
+    }
+}
+function UnredirectedPath([string]$Path) {
+    NoOneDrive $Path
+    Require ([IO.Path]::IsPathRooted($Path)) 'Absolute path required.'
+    $absolute = [IO.Path]::GetFullPath($Path)
+    NoOneDrive $absolute
+    $part = $absolute
+    while (-not (Test-Path -LiteralPath $part)) {
+        $parent = [IO.Path]::GetDirectoryName($part)
+        Require (-not [string]::IsNullOrEmpty($parent) -and $parent -ne $part) 'No existing path ancestor.'
+        $part = $parent
+    }
+    $item = Get-Item -LiteralPath $part -Force
+    while ($null -ne $item) {
+        Require (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'Redirected path refused.'
+        NoOneDrive $item.FullName
+        if ($item -is [IO.FileInfo]) { $item = $item.Directory } else { $item = $item.Parent }
+    }
+}
+function IndependentRepository($Config) {
+    $expected = '__REPOSITORY_ROOT__'
+    UnredirectedPath $Config.repository
+    Require ([IO.Path]::GetFullPath($Config.repository).TrimEnd([char]92) -ieq $expected.TrimEnd([char]92)) 'Wrong execution repository.'
+    foreach ($name in @('GIT_DIR','GIT_COMMON_DIR','GIT_WORK_TREE','GIT_INDEX_FILE','GIT_OBJECT_DIRECTORY','GIT_ALTERNATE_OBJECT_DIRECTORIES','GIT_CONFIG','GIT_CONFIG_COUNT','GIT_CONFIG_PARAMETERS')) {
+        Require ([string]::IsNullOrEmpty([Environment]::GetEnvironmentVariable($name))) 'Git environment override refused.'
+    }
+    $metadata = Join-Path $expected '.git'
+    UnredirectedPath $metadata
+    Require ((Get-Item -LiteralPath $metadata -Force).PSIsContainer) 'Linked Git metadata refused.'
+    foreach ($relative in @('commondir','objects/info/alternates','objects/info/http-alternates')) {
+        Require (-not (Test-Path -LiteralPath (Join-Path $metadata $relative))) 'Shared Git metadata/objects refused.'
+    }
+    $gitProgram = (Get-Command git -CommandType Application -ErrorAction Stop).Source
+    UnredirectedPath $gitProgram
+    $actualGit = Native $gitProgram @('-C',$expected,'rev-parse','--absolute-git-dir')
+    $actualCommon = Native $gitProgram @('-C',$expected,'rev-parse','--path-format=absolute','--git-common-dir')
+    $actualTop = Native $gitProgram @('-C',$expected,'rev-parse','--show-toplevel')
+    foreach ($actual in @($actualGit,$actualCommon)) {
+        UnredirectedPath $actual
+        Require ([IO.Path]::GetFullPath($actual).TrimEnd([char]92) -ieq $metadata.TrimEnd([char]92)) 'Git metadata is not independent.'
+    }
+    UnredirectedPath $actualTop
+    Require ([IO.Path]::GetFullPath($actualTop).TrimEnd([char]92) -ieq $expected.TrimEnd([char]92)) 'Unexpected Git working tree.'
+    Require ((Native $gitProgram @('-C',$expected,'rev-parse','HEAD')) -ceq $Config.executable_commit) 'Execution checkout is not the sealed executable.'
+    Require ([string]::IsNullOrEmpty((Native $gitProgram @('-C',$expected,'status','--porcelain=v1','--untracked-files=all')))) 'Execution checkout is not clean/materialized.'
+    Write-Host ('Independent execution repository verified: ' + $expected)
+    Write-Host ('Git directory/common directory verified: ' + $metadata + '; OneDrive paths refused.')
+}
+
+function Regular([string]$Path) {
+    UnredirectedPath $Path
+    Require ([IO.Path]::IsPathRooted($Path)) 'Absolute path required.'
+    $item = Get-Item -LiteralPath $Path -Force
+    Require (-not $item.PSIsContainer) 'Regular file required.'
+    $part = $item
+    while ($null -ne $part) {
+        Require (($part.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'Redirected path refused.'
+        if ($part -is [IO.FileInfo]) { $part = $part.Directory } else { $part = $part.Parent }
+    }
+}
+function Digest([string]$Path) {
+    Regular $Path
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+function Native([string]$Program, [string[]]$Arguments) {
+    $value = (& $Program @Arguments | Out-String).Trim()
+    $code = $LASTEXITCODE
+    Require ($code -eq 0) ('Native command refused (exit ' + $code + '). Stop; no automatic retry.')
+    return $value
+}
+function SigningWindow($Config) {
+    $now = [DateTimeOffset]::UtcNow
+    $start = [DateTimeOffset]::Parse($Config.signing_window.start)
+    $end = [DateTimeOffset]::Parse($Config.signing_window.end)
+    $executionEnd = [DateTimeOffset]::Parse($Config.execution_window.end)
+    Require ($start -lt $end -and $end -le $executionEnd) 'Invalid reviewed windows.'
+    Require ($now -ge $start -and $now -lt $end -and $now -lt $executionEnd) 'Outside reviewed signing/verification window. Stop.'
+}
+
+function PreparationWindow($Config) {
+    $now = [DateTimeOffset]::UtcNow
+    $signStart = [DateTimeOffset]::Parse($Config.signing_window.start)
+    Require ($now -lt $signStart) 'Preparation must finish before signing begins. Defer a new pack; do not extend this pack.'
+}
+function StageWindow($Config) {
+    if ($Stage -cin @('Preflight','Prepare')) { PreparationWindow $Config }
+    else { SigningWindow $Config }
+}
+
+NoOneDrive $Manifest
+if (-not [string]::IsNullOrEmpty($Proof)) { NoOneDrive $Proof }
+Require ($ReviewedManifestSha256 -cmatch '^[0-9a-f]{64}$') 'DRAFT ONLY: exact reviewed manifest hash is not sealed. Do not fill values yourself.'
+Require ((Digest $Manifest) -ceq $ReviewedManifestSha256) 'Manifest differs from exact reviewed bytes.'
+$m = Get-Content -LiteralPath $Manifest -Raw | ConvertFrom-Json
+InspectPathStrings $m
+UnredirectedPath $m.repository
+UnredirectedPath $m.output_directory
+Require ($m.case_id -ceq $CaseId -and $m.ready -eq $true) 'Wrong case or pack not ready.'
+Require ($m.executable_commit -cmatch '^[0-9a-f]{40}$') 'Exact executable missing.'
+Require ($m.contract_sha256 -cmatch '^[0-9a-f]{64}$') 'Exact contract missing.'
+Require ($m.runtime_root -ceq '__RUNTIME_ROOT__') 'Unexpected installed runtime.'
+Require ($m.factory_root -ceq '__FACTORY_ROOT__') 'Unexpected Factory root.'
+Require ($m.factory_url -cin @('__FACTORY_URL__','__FACTORY_URL__')) 'Unexpected Factory address.'
+StageWindow $m
+foreach ($row in $m.files) {
+    Require ($row.sha256 -cmatch '^[0-9a-f]{64}$') 'Unsealed file hash.'
+    Require ((Digest $row.path) -ceq $row.sha256) ('File hash mismatch: ' + $row.label)
+}
+foreach ($label in @('plan','contract','public-key','python','entry','journal-head','runtime-source-inventory')) {
+    Require (@($m.files | Where-Object { $_.label -ceq $label }).Count -eq 1) ('Missing unique reviewed file: ' + $label)
+}
+function BoundPath([string]$Label) { return ($m.files | Where-Object { $_.label -ceq $Label }).path }
+$python = BoundPath 'python'
+$entry = BoundPath 'entry'
+$journalReader = BoundPath 'journal-head'
+$publicKey = BoundPath 'public-key'
+$contract = BoundPath 'contract'
+Require ($python -ceq (Join-Path $m.runtime_root 'python\python.exe')) 'Wrong Python runtime.'
+Require ($entry -ceq (Join-Path $m.runtime_root 'app\tools\factory_install\entry.py')) 'Wrong installed entry.'
+Require ($journalReader -ceq (Join-Path $m.runtime_root 'app\tools\factory_install\journal_head.py')) 'Wrong journal verifier.'
+$runtimeInventory = Get-Content -LiteralPath (BoundPath 'runtime-source-inventory') -Raw | ConvertFrom-Json
+Require ($runtimeInventory.complete -eq $true -and @($runtimeInventory.files).Count -gt 0) 'Runtime source inventory is incomplete.'
+foreach ($row in $runtimeInventory.files) {
+    Require ($row.sha256 -cmatch '^[0-9a-f]{64}$') 'Unsealed runtime source hash.'
+    Require ((Digest $row.path) -ceq $row.sha256) 'Installed source differs from reviewed inventory.'
+}
+Require ((Digest $contract) -ceq $m.contract_sha256) 'Contract bytes differ from reviewed canonical contract.'
+$planValue = Get-Content -LiteralPath (BoundPath 'plan') -Raw | ConvertFrom-Json
+$contractValue = Get-Content -LiteralPath $contract -Raw | ConvertFrom-Json
+Require ($planValue.executable_commit -ceq $m.executable_commit -and $planValue.drill_admission.case_id -ceq $CaseId) 'Plan case/executable mismatch.'
+Require ($contractValue.kind -ceq 'engineering-run-approval' -and $contractValue.details.executable_commit -ceq $m.executable_commit -and $contractValue.details.request_seal -ceq $planValue.content_sha256) 'Contract/plan binding mismatch.'
+$contractStart = [DateTimeOffset]::Parse($contractValue.details.window.start)
+$contractEnd = [DateTimeOffset]::Parse($contractValue.details.window.end)
+$signStart = [DateTimeOffset]::Parse($m.signing_window.start)
+$signEnd = [DateTimeOffset]::Parse($m.signing_window.end)
+$executeStart = [DateTimeOffset]::Parse($m.execution_window.start)
+$executeEnd = [DateTimeOffset]::Parse($m.execution_window.end)
+Require ($contractStart -le $signStart -and $signStart -lt $signEnd -and $signEnd -le $executeStart -and $executeStart -lt $executeEnd -and $executeEnd -le $contractEnd) 'Reviewed signing and execution subwindows must be distinct and inside the exact hash-bound contract window.'
+InspectPathStrings $planValue
+InspectPathStrings $contractValue
+IndependentRepository $m
+$null = Native 'git' @('-C',$m.repository,'cat-file','-e',($m.executable_commit + '^{commit}'))
+Require ([IO.Path]::IsPathRooted($m.output_directory)) 'Absolute output directory required.'
+$output = [IO.Path]::GetFullPath($m.output_directory)
+foreach ($protectedRoot in @($m.factory_root,$m.runtime_root,$m.repository)) {
+    $protectedAbsolute = [IO.Path]::GetFullPath($protectedRoot).TrimEnd('\')
+    Require ($output -ine $protectedAbsolute -and -not $output.StartsWith(($protectedAbsolute + '\'),[StringComparison]::OrdinalIgnoreCase)) 'Output must be outside Factory data, runtime and repository.'
+}
+if ($Stage -ceq 'Preflight') {
+    PreparationWindow $m
+    [ordered]@{status='preflight-only';case_id=$CaseId;manifest_sha256=$ReviewedManifestSha256;started_at=$stageStartedAt.ToString('o');finished_at=[DateTimeOffset]::UtcNow.ToString('o');elapsed_seconds=$stageClock.Elapsed.TotalSeconds;signing_authorized=$false;execution_authorized=$false;note='Read-only local checks only. Separate full publication/main/fence/originals guards and terminal CI receipts are still required.'} | ConvertTo-Json
+    return
+}
+$bound = Join-Path $output 'independent-bound.json'
+$statePath = Join-Path $output 'prepared-state.json'
+$readerPath = Join-Path $output 'read-independent-bound.py'
+$boundReader = @'
+import json, os, re, sys
+from pathlib import Path
+app = Path(r'__RUNTIME_ROOT__\app').resolve(strict=True)
+root = Path(r'__FACTORY_ROOT__').resolve(strict=True)
+mode, expected, output = sys.argv[1:]
+assert mode in ('create', 'check') and re.fullmatch('[0-9a-f]{64}', expected)
+target = Path(output)
+assert target.is_absolute() and target.parent.is_dir() and not target.resolve().is_relative_to(root)
+assert all(not p.is_symlink() and not getattr(p, 'is_junction', lambda: False)() for p in (target,*target.parents))
+sys.path.insert(0, str(app / 'src')); sys.path.insert(1, str(app))
+from lightyear_control_tower.factory_policy import FactoryInbox, factory_registry
+item = FactoryInbox(root, 'factory', factory_registry()).item('factory-' + expected)
+assert item['kind'] == 'engineering-run-approval' and item['scope'] == 'factory'
+bound = item['bound']
+assert set(bound) == {'contract','request'} and bound['contract'] == expected
+assert all(isinstance(v,str) and re.fullmatch('[0-9a-f]{64}',v) for v in bound.values())
+if mode == 'create':
+    with target.open('x',encoding='utf-8',newline='\n') as stream:
+        stream.write(json.dumps(bound,sort_keys=True,separators=(',',':'))+'\n')
+        stream.flush(); os.fsync(stream.fileno())
+else:
+    assert json.loads(target.read_bytes()) == bound
+print(json.dumps(dict(status='bound-verified',**bound)))
+'@
+if ($Stage -ceq 'Prepare') {
+    Require (-not (Test-Path -LiteralPath $output)) 'Output already exists. Stop and inspect; do not re-import blindly.'
+    $parent = Get-Item -LiteralPath (Split-Path -Parent $output)
+    while ($null -ne $parent) {
+        Require (($parent.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'Redirected output parent refused.'
+        $parent = $parent.Parent
+    }
+    $null = New-Item -ItemType Directory -Path $output
+    [IO.File]::WriteAllText($readerPath,$boundReader,[Text.UTF8Encoding]::new($false))
+    # The exact import route verifies contract source bindings; import is not a decision.
+    # Hashing the full runtime inventory can take time. Recheck at the import boundary.
+    StageWindow $m
+    $importText = Native $python @('-I','-B',$entry,'import','--repository',$m.repository,'--root',$m.factory_root,'--contract',$contract)
+    $imported = $importText | ConvertFrom-Json
+    Require ($imported.schema -ceq 'tower-request/1' -and $imported.scope -ceq 'factory' -and $imported.kind -ceq 'engineering-run-approval') 'Imported request kind/scope mismatch.'
+    Require ($imported.id -ceq ('factory-' + $m.contract_sha256) -and $imported.bound.contract -ceq $m.contract_sha256) 'Imported contract binding mismatch.'
+    $independent = (Native $python @('-I','-B',$readerPath,'create',$m.contract_sha256,$bound)) | ConvertFrom-Json
+    Require ($independent.status -ceq 'bound-verified') 'Independent bound failed.'
+    $state = [ordered]@{preparation_started_at=$stageStartedAt.ToString('o');preparation_elapsed_seconds=$stageClock.Elapsed.TotalSeconds;case_id=$CaseId;manifest_sha256=$ReviewedManifestSha256;contract=$independent.contract;request=$independent.request;bound_sha256=(Digest $bound);reader_sha256=(Digest $readerPath);prepared_at=[DateTimeOffset]::UtcNow.ToString('o')}
+    [IO.File]::WriteAllText($statePath,($state | ConvertTo-Json),[Text.UTF8Encoding]::new($false))
+    # Do not invite a human decision if preparation used up the reviewed window.
+    StageWindow $m
+    Write-Output ($state | ConvertTo-Json)
+    Write-Output 'STOP HERE. In existing Tower 8769, compare this request and record ONE campaign-authorizer approval. There is no Tower UI export button. Invoke this SAME sealed script with -Stage ExportAndVerify WITHIN the approved signing/verification window -Manifest <same reviewed manifest> -Proof <new absolute human-proof-bundle.json> -CredentialFile <existing operator credential file> -DecisionSha256 <exact decision SHA>. This authenticates once, exports the complete tower-decision-proof/1 bundle and immediately verifies it. Never export the bare event. Do not sign another decision or log in/out between export and verification. No execution is authorized.'
+    return
+}
+Require (-not [string]::IsNullOrWhiteSpace($Proof)) 'Exported raw proof path required.'
+Regular $statePath
+$state = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
+Require ($state.case_id -ceq $CaseId -and $state.manifest_sha256 -ceq $ReviewedManifestSha256) 'Wrong prepared state.'
+Require ((Digest $bound) -ceq $state.bound_sha256 -and (Digest $readerPath) -ceq $state.reader_sha256) 'Prepared bound/reader changed.'
+$expectedReaderBytes = [Text.Encoding]::UTF8.GetBytes($boundReader)
+$hasher = [Security.Cryptography.SHA256]::Create()
+try { $readerHash = ([BitConverter]::ToString($hasher.ComputeHash($expectedReaderBytes))).Replace('-','').ToLowerInvariant() } finally { $hasher.Dispose() }
+Require ((Digest $readerPath) -ceq $readerHash) 'Independent reader differs from this reviewed wrapper.'
+$independent = (Native $python @('-I','-B',$readerPath,'check',$m.contract_sha256,$bound)) | ConvertFrom-Json
+Require ($independent.status -ceq 'bound-verified' -and $independent.contract -ceq $state.contract -and $independent.request -ceq $state.request) 'Current imported bound changed.'
+
+if ($Stage -ceq 'ExportAndVerify') {
+    Require ($DecisionSha256 -cmatch '^[0-9a-f]{64}$') 'Exact decision SHA required.'
+    Require ($m.factory_url -ceq '__FACTORY_URL__') 'Only existing local Factory 8769 is allowed.'
+    Regular $CredentialFile
+    UnredirectedPath $Proof
+    Require (-not (Test-Path -LiteralPath $Proof)) 'Export already exists; stop, do not overwrite or retry.'
+    Require ([IO.Path]::GetDirectoryName([IO.Path]::GetFullPath($Proof)) -ieq $output) 'Export must be in the reviewed external output directory.'
+    Require ([IO.Path]::GetFileName($Proof) -ceq 'human-proof-bundle.json') 'Expected human-proof-bundle.json.'
+    StageWindow $m
+    $exportStartedAt = [DateTimeOffset]::UtcNow
+    $exportClock = [Diagnostics.Stopwatch]::StartNew()
+    $handler = [System.Net.Http.HttpClientHandler]::new()
+    $handler.AllowAutoRedirect = $false
+    $handler.UseProxy = $false
+    $http = [System.Net.Http.HttpClient]::new($handler)
+    $http.Timeout = [TimeSpan]::FromSeconds(10)
+    $http.MaxResponseContentBufferSize = 8388608
+    $loginBody = $null; $loginResponse = $null; $bundleResponse = $null; $session = $null; $credential = $null
+    try {
+        $credential = [IO.File]::ReadAllText($CredentialFile).Trim()
+        Require ($credential.Length -gt 0 -and $credential.Length -le 300) 'Credential format refused.'
+        $loginBody = [System.Net.Http.StringContent]::new((@{credential=$credential} | ConvertTo-Json -Compress), [Text.Encoding]::UTF8, 'application/json')
+        $http.DefaultRequestHeaders.Add('Origin', $m.factory_url)
+        StageWindow $m
+        $loginResponse = $http.PostAsync(($m.factory_url + '/api/tower/session'), $loginBody).GetAwaiter().GetResult()
+        Require ([int]$loginResponse.StatusCode -eq 200) 'Session refused; stop without retry.'
+        $session = $loginResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult() | ConvertFrom-Json
+        Require (-not [string]::IsNullOrWhiteSpace($session.token)) 'Missing session token.'
+        $http.DefaultRequestHeaders.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new('Bearer', $session.token)
+        StageWindow $m
+        $bundleResponse = $http.GetAsync(($m.factory_url + '/api/tower/proof?sha256=' + $DecisionSha256)).GetAwaiter().GetResult()
+        Require ([int]$bundleResponse.StatusCode -eq 200) 'Bundle export refused; stop without retry.'
+        $bundleBytes = $bundleResponse.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult()
+        Require ($bundleBytes.Length -gt 0 -and $bundleBytes.Length -le 8388608) 'Bundle size refused.'
+        $candidate = [Text.Encoding]::UTF8.GetString($bundleBytes) | ConvertFrom-Json
+        Require ($candidate.schema -ceq 'tower-decision-proof/1' -and $candidate.decision_sha256 -ceq $DecisionSha256) 'Expected complete proof bundle for the exact decision.'
+        Require ($null -ne $candidate.journal.events -and $null -ne $candidate.journal.signature) 'Signed journal required.'
+        $stream = [IO.File]::Open($Proof, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+        try { $stream.Write($bundleBytes,0,$bundleBytes.Length); $stream.Flush($true) } finally { $stream.Dispose() }
+        $exportClock.Stop()
+        $exportElapsedSeconds = $exportClock.Elapsed.TotalSeconds
+        $exportFinishedAt = [DateTimeOffset]::UtcNow
+        # Preserve HTTP body bytes. Do not serialize JSON, logout or authenticate again.
+    } catch {
+        throw 'Export failed. Stop for inspection; no automatic retry, second decision or credential output.'
+    } finally {
+        if ($null -ne $loginBody) { $loginBody.Dispose() }
+        if ($null -ne $loginResponse) { $loginResponse.Dispose() }
+        if ($null -ne $bundleResponse) { $bundleResponse.Dispose() }
+        $http.Dispose(); $handler.Dispose()
+        $session = $null; $credential = $null
+        # Clearing references is not a zeroization claim. No logout journal mutation.
+    }
+    StageWindow $m
+}
+$verificationStartedAt = [DateTimeOffset]::UtcNow
+$verificationClock = [Diagnostics.Stopwatch]::StartNew()
+$bundleShape = Get-Content -LiteralPath $Proof -Raw | ConvertFrom-Json
+Require ($bundleShape.schema -ceq 'tower-decision-proof/1') 'Bare events are not proof bundles.'
+
+$proofHash = Digest $Proof
+# Deliberately obtain trust AFTER export, from the independently verified local journal.
+$head = Native $python @('-I','-B',$journalReader,'--root',$m.factory_root,'--public-key',$publicKey)
+Require ($head -cmatch '^[0-9a-f]{64}$') 'Independent journal head refused.'
+StageWindow $m
+$verification = (Native $python @('-I','-B',$entry,'tower','verify-decision','--record',$Proof,'--trusted-public-key',$publicKey,'--kind','engineering-run-approval','--scope','factory','--bound',$bound,'--journal-head',$head)) | ConvertFrom-Json
+Require ($verification.status -ceq 'verified') 'Proof not verified.'
+$proofValue = Get-Content -LiteralPath $Proof -Raw | ConvertFrom-Json
+$events = @($proofValue.journal.events | Where-Object { $_.content_sha256 -ceq $proofValue.decision_sha256 })
+Require ($events.Count -eq 1) 'Expected one matching verified decision.'
+$event = $events[0]
+Require ($event.payload.outcome -ceq 'approve' -and ($event.payload.validation.execution_authorized -is [bool]) -and $event.payload.validation.execution_authorized -eq $false) 'Expected decision-only approval; no execution authority.'
+Require ('campaign-authorizer' -cin @($event.payload.roles_held) -and $event.actor.kind -ceq 'human') 'Expected human campaign-authorizer.'
+$decisionTime = [DateTimeOffset]::Parse($event.occurred_at)
+Require ($decisionTime -ge [DateTimeOffset]::Parse($m.signing_window.start) -and $decisionTime -lt [DateTimeOffset]::Parse($m.signing_window.end)) 'Decision outside reviewed signing window.'
+Require ((Digest $Proof) -ceq $proofHash) 'Proof changed during verification.'
+$headAfter = Native $python @('-I','-B',$journalReader,'--root',$m.factory_root,'--public-key',$publicKey)
+Require ($headAfter -ceq $head) 'Journal changed after export/verification. Stop for review; do not create another decision.'
+StageWindow $m
+$verificationClock.Stop()
+$verificationFinishedAt = [DateTimeOffset]::UtcNow
+$summary = [ordered]@{export_elapsed_seconds=$exportElapsedSeconds;verification_started_at=$verificationStartedAt;verification_finished_at=$verificationFinishedAt;verification_elapsed_seconds=$verificationClock.Elapsed.TotalSeconds;verified_at=[DateTimeOffset]::UtcNow.ToString('o');stage_started_at=$stageStartedAt.ToString('o');stage_elapsed_seconds=$stageClock.Elapsed.TotalSeconds;decision_to_verified_seconds=([DateTimeOffset]::UtcNow-$decisionTime).TotalSeconds;export_started_at=$exportStartedAt;export_finished_at=$exportFinishedAt;status='verified-decision-only';case_id=$CaseId;decision_sha256=$proofValue.decision_sha256;decision_time=$event.occurred_at;outcome=$event.payload.outcome;contract=$independent.contract;request=$independent.request;executable_commit=$m.executable_commit;proof_path=$Proof;proof_sha256=$proofHash;independent_journal_head=$head;execution_authorized=$false;nonce_consumed_by_wrapper=$false}
+Write-Output 'PASTE THE FOLLOWING PUBLIC SUMMARY BACK TO THE OPERATOR CHAT:'
+Write-Output ($summary | ConvertTo-Json -Depth 5)
+Write-Output 'STOP. Separate approval is required before CI variables, reservation or execution. No automatic retry.'

@@ -68,3 +68,12 @@ The previous README is preserved byte-for-byte in
 [the historical README](docs/history/README-history-2026-10-17.md).
 Its original relative links resolve from the repository root; see the
 [forwarding note](docs/history/README-forwarding-2026-10-18.md).
+
+## Tower public verification key
+
+The [current Tower public key](docs/security/tower-authority/current.public.pem)
+and its [fingerprints and provenance](docs/security/tower-authority/fingerprint.json)
+identify the public bytes for human Tower decisions. The PEM SHA-256 is
+`658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a`.
+Historical keys and retained proofs remain unchanged. Publication alone does not
+activate trust or designate a machine-receipt signer or encryption identity.

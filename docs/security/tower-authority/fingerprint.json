@@ -1,0 +1,19 @@
+{
+  "schema": "tower-public-key-publication/1",
+  "public_key": "docs/security/tower-authority/current.public.pem",
+  "pem_bytes_sha256": "658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a",
+  "der_spki_sha256": "4c7cc58ceb4a72cd27a1095d0d8047e545c8ee363936885cd4d14c3d9805df80",
+  "fingerprint_convention": "Tower key_id is SHA256 of exact PEM bytes; DER SPKI hash is separately labelled.",
+  "source": {
+    "commit": "e7204abacad22cc7b809657f6e702e312ad16684",
+    "path": "docs/factory/posttran-key-change-2026-10-23/authority.public.pem",
+    "sha256": "658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a"
+  },
+  "purpose": "Human Tower decision verification only; not machine-receipt signer or encryption recipient.",
+  "historical_key": {
+    "path": "docs/factory/factory-authority.public.pem",
+    "sha256": "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61",
+    "retained_unchanged": true
+  },
+  "trust": "Publication locates public bytes. It does not designate a new trusted journal head or activate a consumer. Exact-hash approval and external operator trust remain required."
+}

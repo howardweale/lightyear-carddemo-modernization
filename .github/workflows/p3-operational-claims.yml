@@ -32,6 +32,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
+          retention-days: 90
           name: p3-historical-claim-audit
           path: work/p3-public/historical-audit.json
           if-no-files-found: error

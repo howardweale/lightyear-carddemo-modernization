@@ -117,6 +117,10 @@
     "test_supervised_session_reservation",
     "test_supervised_fixed_tls",
     "test_supervised_send_kernel",
-    "test_supervised_native_observation"
+    "test_supervised_native_observation",
+    "test_supervised_reservation_service",
+    "test_supervised_reservation_readback",
+    "test_supervised_reservation_handoff",
+    "test_supervised_reservation_preflight"
   ]
 }

@@ -1,0 +1,32 @@
+{
+  "schema": "qualified-run-evidence-rule/1",
+  "prepared_on": "2026-10-30",
+  "status": "proposed exact packet; not run approval",
+  "executable_binding": "Every qualifying receipt must bind the exact validated executable E and its actual tested revision; later merge/main commits are distinct identities.",
+  "permitted_frozen_references": [
+    "Repository blob at an immutable commit with committed SHA-256 of exact evidence bytes.",
+    "GitHub Release asset with committed SHA-256, byte length, provenance, independent read-back verification and public-content review.",
+    "For material barred from public publication: independently retained custody-approved private bytes with committed public digest and reviewed retention/provenance receipt; never an Actions-only private copy."
+  ],
+  "forbidden": "A live Actions artifact, log URL, run listing or expiring download URL cannot be the only retrievable source of required frozen evidence. A committed digest alone does not preserve missing bytes.",
+  "actions_provenance": "Original Actions run/job/attempt/artifact IDs and URLs remain source provenance only; frozen-package replay must not download from Actions.",
+  "archive_manifest_fields": [
+    "logical evidence ID and case/gate contribution",
+    "E and actual tested revision",
+    "workflow path/revision, source run/job/attempt and original conclusion",
+    "source artifact ID, name, creation/expiry and original service digest where present",
+    "archive Release tag/asset ID or immutable repository commit/blob",
+    "exact archive SHA-256 and length",
+    "member inventory and per-member hashes where selected",
+    "public-content review hash or private custody designation",
+    "retrieval and independent read-back timestamps",
+    "native verification result and source pins"
+  ],
+  "seal_gate": "All required evidence must have complete archival closure and read-back before package sealing or GO; any missing, mismatched, ambiguous or private-leaking item blocks sealing. Never substitute a component pass or fabricate a completed receipt.",
+  "source_retention": "Explicit 90-day retention on selected upload steps is an ingestion buffer only, not final archival closure. Final new/admitted workflow packets must include that setting when uploading evidence.",
+  "unchanged_live_checks": "Fresh authority/revocation/source/window/nonce checks at admission remain live and unchanged. This archive rule governs retained evidence, not permission to reuse expired authority.",
+  "historical_items": "Use verified existing committed/Release copies for historical B06, INTCALC and POSTTRAN phase1. Do not rearchive or rerun merely because original Actions links expire. Graph-memory proposals are excluded unless explicitly selected.",
+  "invalidation": "Any changed E or input must be reconciled under original provenance rules. Never relabel earlier evidence as testing a different executable.",
+  "verification_plan": "Before sealing, resolve every manifest entry only through immutable repository blobs, Release assets or approved non-Actions private custody, with exact digest/size checks; deny Actions artifact/log downloads in this evidence replay. Preserve live admission checks separately.",
+  "authorization": "No signing, key generation, nonce consumption, model call, merge, workflow activation or historical rerun is authorized by this policy packet."
+}

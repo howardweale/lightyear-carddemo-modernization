@@ -125,7 +125,7 @@ class GateRunner:
                 or execution.get('candidate_build_root') != '/tmp/factory-build'
                 or execution.get('workspace_read_only') is not True):
             raise ContractError('isolation-breach: candidate-container-evidence')
-        execution["content_sha256"] = canonical_hash(execution)
+        execution["content_sha256"] = canonical_hash(execution, {"content_sha256"})
         return {
             "id": gate.gate_id,
             "status": "passed" if exit_code == 0 and not timed_out else "failed",

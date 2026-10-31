@@ -1,0 +1,52 @@
+name: Disposable native publication review
+on:
+  pull_request:
+    types: [labeled]
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  operator-publication-review:
+    name: operator-publication-review
+    if: github.event.label.name == 'operator-rehearsal-publication-review' && github.event.pull_request.head.repo.full_name == github.repository && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONPATH: 'src:.'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install native public verification dependency
+        run: python -m pip install cryptography
+      - name: Fetch original tested merge and workflow revision
+        shell: bash
+        env:
+          TESTED_MERGE: ${{ github.sha }}
+          WORKFLOW_REVISION: ${{ github.workflow_sha }}
+        run: |
+          [[ "$TESTED_MERGE" =~ ^[0-9a-f]{40}$ && "$WORKFLOW_REVISION" =~ ^[0-9a-f]{40}$ ]]
+          git fetch --no-tags origin "$TESTED_MERGE" "$WORKFLOW_REVISION"
+      - name: Original disposable native publication review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OPERATOR_REVIEW_EXECUTABLE: ${{ vars.OPERATOR_REVIEW_EXECUTABLE }}
+          OPERATOR_REVIEW_METADATA_HEAD: ${{ vars.OPERATOR_REVIEW_METADATA_HEAD }}
+          OPERATOR_REVIEW_PRODUCER_RUN_ID: ${{ vars.OPERATOR_REVIEW_PRODUCER_RUN_ID }}
+          OPERATOR_REVIEW_ARTIFACT_ID: ${{ vars.OPERATOR_REVIEW_ARTIFACT_ID }}
+          OPERATOR_REVIEW_ARCHIVE_SHA256: ${{ vars.OPERATOR_REVIEW_ARCHIVE_SHA256 }}
+          OPERATOR_REVIEW_PLAN_SHA256: ${{ vars.OPERATOR_REVIEW_PLAN_SHA256 }}
+          OPERATOR_REVIEW_DECISION_SHA256: ${{ vars.OPERATOR_REVIEW_DECISION_SHA256 }}
+          OPERATOR_REVIEW_JOURNAL_HEAD_SHA256: ${{ vars.OPERATOR_REVIEW_JOURNAL_HEAD_SHA256 }}
+          OPERATOR_REVIEW_PUBLIC_KEY_SHA256: ${{ vars.OPERATOR_REVIEW_PUBLIC_KEY_SHA256 }}
+          OPERATOR_REVIEW_NONCE_SHA256: ${{ vars.OPERATOR_REVIEW_NONCE_SHA256 }}
+          OPERATOR_REVIEW_COMMIT_EPOCH: ${{ vars.OPERATOR_REVIEW_COMMIT_EPOCH }}
+          OPERATOR_REVIEW_PUBLIC_KEY_BASE64: ${{ vars.OPERATOR_REVIEW_PUBLIC_KEY_BASE64 }}
+        run: python -B -m tools.ci.operator_flow_review_workflow

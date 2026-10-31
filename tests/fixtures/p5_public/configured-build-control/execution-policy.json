@@ -1,0 +1,70 @@
+{
+  "admission": {
+    "max_ttl_seconds": 3600,
+    "required": true,
+    "signature_algorithm": "FACTORY-TOWER-PROOF",
+    "trusted_key_ids": [
+      "658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a"
+    ]
+  },
+  "id": "lightyear:public:configured-build-control",
+  "identities": {
+    "credential_ttl_seconds": 900,
+    "roles": {
+      "builder": {
+        "actions": [
+          "factory:build"
+        ]
+      },
+      "failure_analyst": {
+        "actions": [
+          "factory:analyze-failure"
+        ]
+      },
+      "planner": {
+        "actions": [
+          "factory:plan"
+        ]
+      },
+      "verifier": {
+        "actions": [
+          "factory:verify"
+        ]
+      }
+    }
+  },
+  "isolation": {
+    "cap_drop_all": true,
+    "cpus": 1.0,
+    "memory_mb": 512,
+    "network_mode": "none",
+    "no_new_privileges": true,
+    "pids_limit": 128,
+    "read_only_root": true,
+    "run_as_user": "65532:65532",
+    "tmpfs_mb": 64,
+    "workspace_read_only": true
+  },
+  "runtime": {
+    "allowed": [
+      "docker",
+      "podman"
+    ],
+    "allowed_commands": [
+      "python3"
+    ],
+    "allowed_environment": [
+      "LIGHTYEAR_FACTORY_WORKSPACE",
+      "LIGHTYEAR_NETWORK_POLICY",
+      "PYTHONPATH"
+    ],
+    "image": "python:3.13-alpine",
+    "image_digest": "399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0"
+  },
+  "schema_version": "1.0",
+  "secrets": {
+    "allowed_names": [],
+    "persist_values": false
+  },
+  "version": "1.0"
+}

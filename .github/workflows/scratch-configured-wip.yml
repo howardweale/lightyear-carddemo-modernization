@@ -28,7 +28,16 @@ jobs:
           SCRATCH_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           mkdir -p "$RUNNER_TEMP/scratch-test-home"
-          sudo unshare --net --setgid="$(id -g)" --setuid="$(id -u)" \
+          sudo unshare --net -- bash -euc '
+            test "$(ls -1 /sys/class/net)" = lo
+            ip -j link show dev lo
+            ip link set dev lo up
+            test -z "$(ip -4 route show table main)"
+            test -z "$(ip -6 route show table main)"
+            ip -j address show dev lo
+            uid="$1"; gid="$2"; shift 2
+            exec setpriv --reuid="$uid" --regid="$gid" --clear-groups --no-new-privs "$@"
+          ' scratch-loopback "$(id -u)" "$(id -g)" \
             env -i PATH="$PATH" HOME="$RUNNER_TEMP/scratch-test-home" RUNNER_TEMP="$RUNNER_TEMP" \
             PYTHONPATH="src:.:tests" PYTHONDONTWRITEBYTECODE=1 \
             GITHUB_ACTIONS=true CI=true GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \

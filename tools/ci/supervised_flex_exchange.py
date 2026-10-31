@@ -84,6 +84,10 @@ def _exchange_once(connection, candidate, authorization, deadline):
             result.extend(block)
             if len(result) > BODY_LIMIT:
                 raise ContractError('supervised-exchange-response-size')
+            # read1 closes its file/socket when the declared body is complete.
+            # Do not touch that closed descriptor on a redundant next iteration.
+            if length is not None and len(result) == length:
+                break
         _remaining(deadline)
         if not result or length is not None and len(result) != length:
             raise ContractError('supervised-exchange-response-truncated')

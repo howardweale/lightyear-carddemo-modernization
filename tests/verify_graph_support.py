@@ -46,16 +46,16 @@ class GraphFixture(unittest.TestCase):
         tower=self.root/("tower-"+uuid.uuid4().hex)
         tower.mkdir()
         authority=self.root/(tower.name+"-authority")/"authority.json"
-        credential=provision(authority,"verify-graph","howard","Howard").read_text().strip()
+        credential=provision(authority,"verify-graph","ci-fixture","Synthetic CI fixture").read_text().strip()
         console=ConsoleService(tower,authority)
         self.addCleanup(console.close)
-        console.grant_roles("howard",["operator","qualification-approver"],reason="Fixture")
+        console.grant_roles("ci-fixture",["operator","qualification-approver"],reason="Fixture")
         token=console.login(credential)["token"]
         report=read(self.out/"leak-check.json")
         request(tower,"verify-graph",self.out,self.policy,self.lane,manifest,report)
         item=console.review(token,"graph-"+manifest["projection_sha256"][:24])
         e=console.decide(token,dict(item_id=item["id"],bound=item["bound"],outcome=outcome,
-            reason=reason,named_owner="Howard",review_after=(datetime.now(timezone.utc)+timedelta(days=10)).date().isoformat(),
+            reason=reason,named_owner="ci-fixture",review_after=(datetime.now(timezone.utc)+timedelta(days=10)).date().isoformat(),
             previous_decision_sha256=None,request_id=str(uuid.uuid4())))
         proof=console.proof(token,e["content_sha256"])
         # The console exposes the authority key through its signed export.

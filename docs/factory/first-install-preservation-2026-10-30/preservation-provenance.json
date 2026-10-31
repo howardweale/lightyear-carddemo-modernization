@@ -1,0 +1,49 @@
+{
+  "schema": "first-install-bundle-preservation/1",
+  "preservation_only": true,
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "original_artifact": {
+    "id": 12384763102,
+    "name": "factory-first-install-2a82934b47f3a5953e266c683f60c25f4ecfb517",
+    "size_in_bytes": 48478983,
+    "digest": "sha256:53adecc5ed614a43eb9a5f13499465c49168b073ba55a38bfd3087a8b13dc7d1",
+    "created_at": "2026-10-21T22:01:37Z",
+    "expires_at": "2026-11-04T22:01:32Z"
+  },
+  "source": {
+    "commit": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+    "run_id": 39682920021,
+    "run_attempt": 1,
+    "event": "pull_request",
+    "workflow_path": ".github/workflows/factory-first-install.yml",
+    "conclusion": "success",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/39682920021"
+  },
+  "accepted_record": {
+    "path": "docs/factory/first-install-accepted-2026-10-23.json",
+    "acceptance_scope": "First installation and observed automatic startup; public trust handoff only.",
+    "manifest_sha256": "3b68c83ce45de2b1251d4d648ec1506de318a9bd01b54f0e1e4f462d230e25b0"
+  },
+  "archive_sha256": "53adecc5ed614a43eb9a5f13499465c49168b073ba55a38bfd3087a8b13dc7d1",
+  "archive_bytes": 48478983,
+  "release": {
+    "tag": "first-install-preservation-12384763102",
+    "target_commit": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+    "asset_name": "first-install-bundle-original.zip",
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/first-install-preservation-12384763102/first-install-bundle-original.zip"
+  },
+  "public_content_review_sha256": "a96d85e888ad4aa903ae42a907edac12cd901077acaeaa7cb5e807ffdd227578",
+  "publication_state": "Prepared; no Release or tag created. Independent Release read-back is required in an additive completion receipt after approved publication.",
+  "unchanged": [
+    "original ZIP and all1595 payload bytes",
+    "acceptance record",
+    "installed Tower",
+    "original commit",
+    "gates",
+    "permissions",
+    "execution/signing/model authority"
+  ],
+  "execution_authorized": false,
+  "signing_authorized": false,
+  "model_calls_authorized": false
+}

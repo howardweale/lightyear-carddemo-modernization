@@ -1,6 +1,6 @@
 import copy,tempfile,unittest
 from contextlib import ExitStack
-from datetime import datetime,timezone
+from datetime import datetime,timezone,timedelta
 from pathlib import Path
 from unittest.mock import Mock,patch
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -11,6 +11,13 @@ from lightyear_calibration.journey_order import save
 from tools.ms94_b05_review import review_reasons,validate_decision,write_decision,wait_for_review,require_review_clear,summarize_trial,verify_trial_review,REVIEW
 from tools.ms94_b05_stops import IMMEDIATE,record_failure
 from tools.ms94_b05_admission import CAMPAIGN,CONFIG,APPROVED
+
+class ReviewFixtureClock(datetime):
+ # Scoped to the review unit fixture only; production UTC and period_guard stay real.
+ @classmethod
+ def now(cls,tz=None):
+  value=datetime(2026,10,15,12,0,tzinfo=timezone.utc)
+  return value.astimezone(tz) if tz is not None else value.replace(tzinfo=None)
 
 class ReviewTests(unittest.TestCase):
  def setUp(self):
@@ -26,6 +33,7 @@ class ReviewTests(unittest.TestCase):
   save(self.trial/'receipt.json',self.receipt);save(self.trial/'supervision-receipt.json',self.signer.sign({'complete':True}))
   self.stack=ExitStack();self.addCleanup(self.stack.close)
   for module in ('review','stops'):self.stack.enter_context(patch('tools.ms94_b05_'+module+'.JourneySigner',return_value=self.signer))
+  self.stack.enter_context(patch('tools.ms94_b05_review.datetime',ReviewFixtureClock))
  def test_same_trial_attempts_never_match(self):
   self.assertEqual(review_reasons('a','business-failure',['x','x'],[{'trial_directory':'a','fingerprints':['x']}]),([],[]))
  def test_cross_trial_repeat_pauses(self):
@@ -82,6 +90,41 @@ class ReviewTests(unittest.TestCase):
  def test_decision_cannot_be_replaced(self):
   self.decide_after_wait('continue')
   with self.assertRaises(CalibrationError):write_decision(self.root,self.root/CAMPAIGN/'reviews/cohort-01/pause.json','continue','reason','approval')
+
+ def test_real_period_guard_refuses_exact_cutoff(self):
+  from tools.ms94_b05_plan import period_guard,PERIOD_END,MAX_SECONDS
+  cutoff=PERIOD_END-timedelta(seconds=MAX_SECONDS)
+  self.assertEqual(period_guard(cutoff-timedelta(microseconds=1)),cutoff-timedelta(microseconds=1))
+  for value in (cutoff,cutoff+timedelta(microseconds=1)):
+   with self.subTest(value=value),self.assertRaisesRegex(CalibrationError,'Full declared campaign duration could cross period boundary'):
+    period_guard(value)
+ def test_expired_review_refuses_before_wait_or_decision(self):
+  from tools.ms94_b05_plan import PERIOD_END,MAX_SECONDS
+  summarize_trial(self.root,self.trial,self.receipt)
+  with patch.object(ReviewFixtureClock,'now',return_value=PERIOD_END-timedelta(seconds=MAX_SECONDS)),patch('tools.ms94_b05_review.time.sleep') as sleep:
+   with self.assertRaisesRegex(CalibrationError,'Full declared campaign duration could cross period boundary'):
+    wait_for_review(self.root,self.trial,0,10**20)
+  sleep.assert_not_called()
+  folder=self.root/CAMPAIGN/'reviews/cohort-01'
+  self.assertFalse((folder/'decision.json').exists());self.assertFalse((folder/'resolution.json').exists())
+  self.assertEqual(read_json(self.trial/'receipt.json'),self.receipt)
+ def test_cutoff_during_wait_refuses_even_signed_continue(self):
+  from tools.ms94_b05_plan import PERIOD_END,MAX_SECONDS
+  cutoff=PERIOD_END-timedelta(seconds=MAX_SECONDS);summarize_trial(self.root,self.trial,self.receipt)
+  now=Mock(return_value=cutoff-timedelta(microseconds=1));folder=self.root/CAMPAIGN/'reviews/cohort-01'
+  def on_sleep(seconds):
+   write_decision(self.root,folder/'pause.json','continue','Fixture before cutoff','Fixture only')
+   now.return_value=cutoff
+  with patch.object(ReviewFixtureClock,'now',now),patch('tools.ms94_b05_review.time.sleep',side_effect=on_sleep) as sleep,patch('tools.ms94_b05_admission.bindings') as bindings:
+   with self.assertRaisesRegex(CalibrationError,'Full declared campaign duration could cross period boundary'):
+    wait_for_review(self.root,self.trial,0,10**20)
+  sleep.assert_called_once_with(5);bindings.assert_not_called()
+  self.assertTrue((folder/'decision.json').exists());self.assertFalse((folder/'resolution.json').exists())
+  self.assertEqual(read_json(self.trial/'receipt.json'),self.receipt)
+ def test_in_window_deadline_and_hard_stop_keep_specific_refusals(self):
+  summarize_trial(self.root,self.trial,self.receipt)
+  with self.assertRaisesRegex(CalibrationError,'Campaign deadline reached while awaiting operator'):
+   wait_for_review(self.root,self.trial,0,0)
 
 class CampaignReviewTests(unittest.TestCase):
  def campaign(self,actions,status='halted-no-supported-repair'):

@@ -1,7 +1,5 @@
 name: POSTTRAN handoff deadline and documentation
 on:
-  schedule:
-    - cron: '46 14 * * *'
   workflow_dispatch:
   pull_request:
     paths:

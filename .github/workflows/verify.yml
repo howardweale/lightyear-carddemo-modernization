@@ -371,6 +371,7 @@ jobs:
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 90
           name: cloudbank-source-build-${{ github.sha }}
           path: work/cloudbank-source-build.receipt.json
           if-no-files-found: error
@@ -415,6 +416,7 @@ jobs:
       - name: Publish attested build evidence
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 90
           name: pli-build-attestation-${{ github.sha }}
           path: work/pli-build-attestation-ci-build/
           if-no-files-found: error
@@ -566,4 +568,4 @@ jobs:
           name: python-test-execution-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: work/ci/test-execution/
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 90

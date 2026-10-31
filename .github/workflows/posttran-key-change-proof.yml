@@ -43,4 +43,4 @@ jobs:
         with:
           name: posttran-key-change-proof
           path: work/key-change-proof.json
-          retention-days: 14
+          retention-days: 90

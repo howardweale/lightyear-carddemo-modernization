@@ -23,6 +23,7 @@ jobs:
           python -m tools.carddemo_account_scope --out work/carddemo-paragraph-scope/counts.json
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 90
           name: carddemo-paragraph-scope-${{ github.sha }}
           path: work/carddemo-paragraph-scope/counts.json
           if-no-files-found: error

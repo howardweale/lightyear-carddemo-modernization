@@ -64,6 +64,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-data-plan
           path: work/carddemo-data
           if-no-files-found: error
@@ -104,6 +105,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-data-proof
           path: work/carddemo-data-proof
           if-no-files-found: error

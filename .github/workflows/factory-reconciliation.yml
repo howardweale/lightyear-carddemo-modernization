@@ -62,6 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 90
           name: public-three-way-engineering
           path: work/factory-reconciliation-ci
           if-no-files-found: warn

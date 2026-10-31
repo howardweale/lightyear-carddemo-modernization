@@ -35,6 +35,7 @@ jobs:
           cp -r work/carddemo-account-publication/docs work/carddemo-status-render/
       - uses: actions/upload-artifact@v7
         with:
+          retention-days: 90
           name: carddemo-status-render
           path: work/carddemo-status-render
           if-no-files-found: error
@@ -66,6 +67,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-web-foundation
           path: |
             work/carddemo-web-bindings
@@ -126,6 +128,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-compose-smoke
           path: work/carddemo-compose
           if-no-files-found: error
@@ -202,6 +205,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-proof-${{ matrix.mode }}
           path: work/carddemo-proof
           if-no-files-found: error
@@ -236,6 +240,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
+          retention-days: 90
           name: carddemo-unsigned-receipt
           path: work/carddemo-unsigned-receipt
           if-no-files-found: error

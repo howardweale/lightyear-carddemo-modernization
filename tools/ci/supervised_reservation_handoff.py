@@ -56,6 +56,8 @@ def bind_job_output(encoded,digest,binding,readback):
         return out
     def constant(value):raise ValueError('nonfinite')
     try:value=json.loads(raw,object_pairs_hook=pairs,parse_constant=constant)
+    except ContractError:
+        raise
     except (ValueError,UnicodeError,RecursionError):
         raise ContractError('supervised-handoff-json') from None
     _require(type(value) is dict and set(value)==FIELDS and _canonical(value)==raw,'canonical')

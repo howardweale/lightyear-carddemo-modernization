@@ -113,6 +113,10 @@
     "test_operator_flow_operation_scope",
     "test_operator_flow_windows_job_contract",
     "test_supervised_intcalc_boundary",
-    "test_supervised_flex_exchange"
+    "test_supervised_flex_exchange",
+    "test_supervised_session_reservation",
+    "test_supervised_fixed_tls",
+    "test_supervised_send_kernel",
+    "test_supervised_native_observation"
   ]
 }

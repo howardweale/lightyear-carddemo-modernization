@@ -29,7 +29,8 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/scratch-test-home"
           sudo unshare --net -- bash -euc '
-            test "$(ls -1 /sys/class/net)" = lo
+            ip -j link show
+            test "$(ip -o link show | cut -d: -f2 | tr -d " ")" = lo
             ip -j link show dev lo
             ip link set dev lo up
             test -z "$(ip -4 route show table main)"

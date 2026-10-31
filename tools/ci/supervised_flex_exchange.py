@@ -2,11 +2,12 @@
 
 This is not operation authorization, a global two-send limiter, or qualification
 evidence. A future approved caller must own durable send reservation, supervision,
-the fixed TLS connection, whole-process containment, and retained round receipts.
+the reviewed public TLS roots, whole-process containment, and retained round receipts.
 """
 import hashlib
 import http.client
 import math
+import ssl
 import time
 
 from lightyear_factory.contracts import ContractError
@@ -24,11 +25,46 @@ def _remaining(deadline):
     return remaining
 
 
+def _fixed_provider_connection(ca_pem, expected_ca_sha256, deadline):
+    """Build an unconnected fixed-host TLS client from exact public trust bytes.
+
+    This grants no run authority. The future native sender must validate approval,
+    service reservation and exclusive intent before passing this to the exchange.
+    No OS/default/environment trust loading, client certificate, proxy or tunnel.
+    """
+    if (type(ca_pem) is not bytes or not 1 <= len(ca_pem) <= 2097152
+            or type(expected_ca_sha256) is not str
+            or len(expected_ca_sha256) != 64
+            or hashlib.sha256(ca_pem).hexdigest() != expected_ca_sha256):
+        raise ContractError('supervised-exchange-public-trust-pin')
+    remaining = _remaining(deadline)
+    try:
+        pem = ca_pem.decode('ascii')
+        # This input is a reviewed public CA bundle, never a credential container.
+        if 'PRIVATE KEY' in pem or 'BEGIN CERTIFICATE' not in pem:
+            raise ValueError('public certificates required')
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        if context.cert_store_stats()['x509'] != 0:
+            raise ValueError('implicit trust')
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
+        context.verify_mode = ssl.CERT_REQUIRED
+        context.check_hostname = True
+        context.set_alpn_protocols(['http/1.1'])
+        context.load_verify_locations(cadata=pem)
+        if context.cert_store_stats()['x509_ca'] == 0:
+            raise ValueError('no authority')
+        return http.client.HTTPSConnection('api.openai.com', 443,
+                                           timeout=remaining, context=context)
+    except (ValueError, UnicodeError, ssl.SSLError, OSError):
+        raise ContractError('supervised-exchange-public-trust-invalid') from None
+
+
+
 def _exchange_once(connection, candidate, authorization, deadline):
     """One POST, no redirect handling/retry/reconnect loop; close on every exit.
 
     Only offline loopback CI invokes this kernel currently. There is deliberately
-    no production endpoint factory, credential lookup, command line or run gate.
+    no credential lookup, command line or run gate. A fixed TLS factory is unconnected.
     Socket timeouts are not an aggregate header-read or OS scheduling guarantee.
     """
     # Freeze public source into the existing exact request before any network IO.

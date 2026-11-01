@@ -25,7 +25,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install pinned direct dependency
-        run: python -m pip install --only-binary=:all: -r requirements/public-evidence-verifier.txt
+        run: |
+          python -m pip install --only-binary=:all: -r requirements/public-evidence-verifier.txt
       - name: Download only an existing public fixture and verify its pinned bytes
         env:
           RELEASE_TAG: ${{ inputs.release_tag }}

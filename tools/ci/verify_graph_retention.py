@@ -44,7 +44,7 @@ def checkout_revision(raw, job):
         if (not 0 < info.file_size <= MI or info.flag_bits & 1
                 or stat.S_IFMT(info.external_attr >> 16) not in (0, stat.S_IFREG)):
             raise ValueError('checkout-log-entry')
-        text = archive.read(info).decode('utf-8')
+        text = archive.read(info).decode('utf-8-sig')
     lines = []
     for line in text.splitlines():
         match = re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z (.*)', line)

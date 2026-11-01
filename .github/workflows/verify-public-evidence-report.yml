@@ -1,7 +1,22 @@
-# DORMANT DRAFT. Review findings and qualification prerequisites before activation.
+# Draft verifier: hosted tests report real skips; known limitations remain disclosed.
 # Intended destination: .github/workflows/verify-public-evidence-report.yml
 name: Public evidence report (informational)
 on:
+  pull_request:
+    paths:
+      - 'tools/verify_public_evidence.py'
+      - 'public_verifier_tests/test_public_evidence.py'
+      - 'docs/verify.md'
+      - 'requirements/public-evidence-verifier.txt'
+      - '.github/workflows/verify-public-evidence-report.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/verify_public_evidence.py'
+      - 'public_verifier_tests/test_public_evidence.py'
+      - 'docs/verify.md'
+      - 'requirements/public-evidence-verifier.txt'
+      - '.github/workflows/verify-public-evidence-report.yml'
   workflow_dispatch:
     inputs:
       release_tag:
@@ -13,8 +28,46 @@ on:
           - verify-graph-run41077873304-attempt1
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
+  unit-tests:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # retained main v7 pin
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # retained main v7 pin
+        with:
+          python-version: '3.11'
+      - name: Install standalone test dependency
+        run: |
+          python -m pip install --only-binary=:all: -r requirements/public-evidence-verifier.txt
+      - name: Run supplied tests with explicit unavailable-fixture skip reasons
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s public_verifier_tests -p test_public_evidence.py -v 2>&1 | tee "$RUNNER_TEMP/public-verifier-unittest.txt"
+      - name: Publish actual unittest summary without counting skips as passes
+        if: always()
+        shell: bash
+        run: |
+          {
+            printf '### Standalone verifier tests\n\n'
+            printf 'The test log includes each unavailable fixture and its unittest skip reason. The Ran total includes skipped cases; it is not a passed-test count. Tests do not establish public trust, admission or qualification.\n\n'
+            printf '```text\n'
+            if test -f "$RUNNER_TEMP/public-verifier-unittest.txt"; then
+              sed -n '/^Ran [0-9]/p; /^OK/p; /^FAILED/p' "$RUNNER_TEMP/public-verifier-unittest.txt"
+            else
+              printf 'No unittest result was produced; inspect setup failures.\n'
+            fi
+            printf '```\n'
+          } >> "$GITHUB_STEP_SUMMARY"
   report:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

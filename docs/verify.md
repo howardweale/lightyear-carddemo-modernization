@@ -2,7 +2,7 @@
 
 This is an unqualified draft adapted from the supplied `lightyear-verifier.zip`.
 Static review counted 33 test methods; no tests, verifier commands, key operations,
-signature checks, dependency installations or workflows were run for this draft.
+signature checks, dependency installations or workflows were run during local preparation.
 The supplied sample output is historical attachment data, not validation of this
 adaptation. Resolve the static-review findings before operational use.
 
@@ -94,23 +94,27 @@ fixture signing key remains unverified; do not substitute the Tower key.
 
 ## Tests and report-only CI proposal
 
-The 33 supplied test methods were preserved with only filename, tools-path and
-module-import adaptations. Their evidence path constants remain historical
+All 33 supplied test bodies and assertions are preserved. Filename, tools-path
+and module-import adaptations remain; fixture decorators now gate unrelated
+Release and public-key cases independently. Their evidence path constants remain historical
 attachment data; no evidence was accessed at those paths during preparation.
 Most tests are conditional on externally supplied fixtures. An eventual run must
 report pass/fail/skip counts and actual fixtures used; discovery of 33 methods is
-not evidence that 33 tests executed or passed. No authorization to run the tests
-is implied by this draft.
+not evidence that 33 tests executed or passed. Hosted PR/push CI runs the
+standalone suite with verbose unittest output; no local execution was performed.
 
-The proposed `.github/workflows/verify-public-evidence-report.yml` job reads one of two existing public Release
+The manual `report` job in `.github/workflows/verify-public-evidence-report.yml`
+reads one of two existing public Release
 fixture assets, checks its full pinned SHA-256, and records `all --strict --json`
 output. It neither creates evidence nor runs the test suite. This small report
 covers only the selected asset, not a complete Release. Signature SKIP is expected
 without its original fixture key. The verifier's original exit code is preserved
 in the log and job summary even though it is not used as a required merge gate.
-Dependency/download errors remain infrastructure failures. There are no push,
-pull-request, scheduled or release-event triggers in that proposal. The file is intended for the unmerged draft PR. Review and merge remain required;
-no workflow dispatch or report run has occurred.
+Dependency/download errors remain infrastructure failures. The Release report
+job is gated to workflow_dispatch and does not run on PR/push. A separate
+unit-tests job runs on PR changes or main pushes touching the five verifier
+files. There is no schedule or release-event trigger. No manual dispatch or
+Release report run was performed during this correction.
 
 ## Unresolved static findings
 
@@ -126,13 +130,32 @@ This report does not establish qualified-run admission, fixture exclusion,
 production authorization, promotion eligibility or a complete evidence inventory.
 The example Release inputs are synthetic fixtures and remain labelled as such.
 The proposed job has no secrets or signing credentials and uses unauthenticated
-HTTPS to read the selected already-existing public asset. No workflow was dispatched or run during drafting. Publishing the manual-only
-file in a draft PR does not dispatch it.
+HTTPS to read the selected already-existing public asset. No workflow was dispatched or run during local preparation. Publishing this
+correction enables its PR test trigger but does not dispatch the manual Release
+report.
 
 The standalone tests live in `public_verifier_tests/test_public_evidence.py`,
-outside the existing `tests/` discovery roots. A future explicitly authorized
-command is `python -B -m unittest discover -s public_verifier_tests -p test_public_evidence.py -v`
+outside the existing `tests/` discovery roots. The new isolated hosted CI job uses `python -B -m unittest discover -s public_verifier_tests -p test_public_evidence.py -v`
 in its own Python environment with the exact pinned dependency. Existing
 repository extras such as `.[verify]` require cryptography>=46,<47 and must not
-be coinstalled with the standalone 50.0.1 pin. The new report workflow does not
-run the test suite. Existing workflows and dependencies remain unchanged.
+be coinstalled with the standalone 50.0.1 pin. The manual Release report job does not
+run the test suite; its separate PR/push unit-tests job does. Other workflows
+and existing dependency pins remain unchanged.
+
+The test job uses Python 3.11 and only cryptography==50.0.1. It has read-only
+contents permission, no secrets or protected environment, and no Release
+download or fixture generation. Missing external fixture roots retain the
+existing unittest.skipUnless reason, `evidence not available: <path>`. The
+retained published tree contains neither the default repo/ nor downloads/
+fixture root. Under that absent-fixture condition, AST inspection predicts
+31 skipped tests and two executed tests, not 33 passes. The two ungated tests
+check a fake private-key marker and an unsafe manifest path; neither generates
+or signs keys. This is a prediction, not a hosted execution result. The actual
+unittest log and summary remain authoritative. Available fixtures do not cause
+skips and all original assertions remain active. Some fixture-backed tests use
+disposable in-memory keys if explicitly supplied fixtures make them runnable;
+those test signatures never establish public trust or qualification.
+
+Concurrency uses the repository's required branch/main pattern. All earlier
+static verifier limitations remain disclosed while a hardened replacement is
+awaited. This correction adds no qualification or fixture-exclusion claim.

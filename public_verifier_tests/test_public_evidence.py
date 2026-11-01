@@ -143,8 +143,8 @@ class RealIdempiereSignedReceipt(unittest.TestCase):
         self.assertEqual(statuses(out, "signature"), ["PASS"] * 5)
 
 
-@needs(REPO / TOWER_TEST_PROOF)
 class RealTowerProofBundle(unittest.TestCase):
+    @needs(REPO / TOWER_TEST_PROOF)
     def test_committed_tower_test_proof(self):
         code, out, _ = run("decision", REPO / TOWER_TEST_PROOF, "--public-key", REPO / TOWER_TEST_KEY,
                            "--key-sha256", TOWER_TEST_KEY_FP)
@@ -152,20 +152,22 @@ class RealTowerProofBundle(unittest.TestCase):
         for check in ("event-signatures", "chain", "journal-head", "decision-sha256", "decision-semantics"):
             self.assertEqual(statuses(out, check), ["PASS"], check)
 
+    @needs(REPO / TOWER_TEST_PROOF)
     def test_correct_expected_head(self):
         head = json.loads((REPO / TOWER_TEST_PROOF).read_text())["journal"]["journal_head_sha256"]
         code, out, _ = run("decision", REPO / TOWER_TEST_PROOF, "--public-key", REPO / TOWER_TEST_KEY,
                            "--key-sha256", TOWER_TEST_KEY_FP, "--expected-head", head)
         self.assertEqual(code, 0, out)
 
+    @needs(REPO / FACTORY_TOWER_KEY)
     def test_published_factory_tower_key_fingerprint(self):
         code, out, _ = run("keyinfo", REPO / FACTORY_TOWER_KEY)
         self.assertEqual(code, 0)
         self.assertIn(FACTORY_TOWER_KEY_FP, out["results"][0]["detail"])
 
 
-@needs(DOWNLOADS / "artifact-preservation-12052624443")
 class RealReleaseDownloads(unittest.TestCase):
+    @needs(DOWNLOADS / "artifact-preservation-12052624443")
     def test_sha256sums_and_archive_members(self):
         code, out, _ = run("manifest", DOWNLOADS / "artifact-preservation-12052624443")
         self.assertEqual(code, 0, out)

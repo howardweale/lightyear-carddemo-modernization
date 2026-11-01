@@ -1,0 +1,165 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/binding-inventory.json",
+      "reference": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e",
+      "commit": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e",
+      "role": "source",
+      "source_path": "src/lightyear_execution/admission.py",
+      "source_sha256": "5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "1f463c337e2e6aefe5f9774304fdf81195c301b8",
+      "commit": "1f463c337e2e6aefe5f9774304fdf81195c301b8",
+      "role": "source",
+      "source_path": "src/lightyear_factory/providers.py",
+      "source_sha256": "8d3809a6c86e37d804705f91e43b9c877b977a2f98653446eebf5809eb0b6fc7"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e",
+      "commit": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e",
+      "role": "source",
+      "source_path": "src/lightyear_execution/admission.py",
+      "source_sha256": "5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "91294940925b151e32676bb8d94c905976fa2045",
+      "commit": "91294940925b151e32676bb8d94c905976fa2045",
+      "role": "source",
+      "source_path": "src/lightyear_execution/admission.py",
+      "source_sha256": "5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
+      "commit": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
+      "role": "source",
+      "source_path": "src/lightyear_execution/admission.py",
+      "source_sha256": "939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "reference": "e1c934d7b3041480e555007dfea0106c6210b144",
+      "commit": "e1c934d7b3041480e555007dfea0106c6210b144",
+      "role": "source",
+      "source_path": "tools/ci/p5_drills.py",
+      "source_sha256": "0a8fb56a6fd8c2637fb4556cd78768e43bd3f66e38ee290fabcb985f937c4a99"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-decision-2026-10-24.json",
+      "reference": "588dd5f24425a5eaa651ce12d538bdebdfb33043",
+      "commit": "588dd5f24425a5eaa651ce12d538bdebdfb33043",
+      "role": "publication",
+      "publication_path": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+      "publication_sha256": "2ec7157cb45c509b9b015cffea787cf0edea5b021a6ea02effe9528ad8280d01"
+    },
+    {
+      "record": "docs/factory/p5-boundary-exception-decision-2026-10-24.json",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    },
+    {
+      "record": "docs/factory/p5-operator-chat-receipt-2026-10-24.json",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    },
+    {
+      "record": "docs/factory/p5-operator-chat-transcription-2026-10-24.txt",
+      "reference": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "role": "source",
+      "source_path": "src/lightyear_factory/budgeted_providers.py",
+      "source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+    },
+    {
+      "record": "docs/factory/p5-recovery-publication-approval-2026-10-24.json",
+      "reference": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "commit": "94c98b053080af3e705eb160104142e4e74ff70a",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+      "reference": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "commit": "0cfb95a0b168e8dea79797831f6c50f1b4f7f9f7",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+      "reference": "60109162cae232db50d24b9469ed7b47d6d3a464",
+      "commit": "60109162cae232db50d24b9469ed7b47d6d3a464",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+      "reference": "790deb46650454bb2e3870221e6aa4f6c3c06155",
+      "commit": "790deb46650454bb2e3870221e6aa4f6c3c06155",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+      "reference": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
+      "commit": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/exception.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/exception.json",
+      "reference": "790deb46650454bb2e3870221e6aa4f6c3c06155",
+      "commit": "790deb46650454bb2e3870221e6aa4f6c3c06155",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    },
+    {
+      "record": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/exception.json",
+      "reference": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
+      "commit": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    }
+  ]
+}

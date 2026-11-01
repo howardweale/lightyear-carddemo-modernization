@@ -1,0 +1,52 @@
+{
+  "schema": "p5-boundary-exception-decision/1",
+  "decided_on": "2026-10-24",
+  "decision": "approved-exact-file-exception-only [operator-chat transcription receipt](p5-operator-chat-receipt-2026-10-24.json#sha256=5158c625c4702e68c3bbd6d53a2d63e1b846ab5b933b9f6db7ca41970e795b80)",
+  "approver": "Howard Weale",
+  "approval_source": {
+    "kind": "direct-human-chat-reply",
+    "question_item_sha256": "101b35ff58f1475b252f0d792817a7f370b5b889aa9c58a7cafb3bd165525588",
+    "github_comment_url": null,
+    "attribution": "Approval supplied directly in this chat; no GitHub approval-comment URL was supplied or inferred."
+  },
+  "scope": {
+    "path": "src/lightyear_factory/budgeted_providers.py",
+    "commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+    "final_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"
+  },
+  "proposal": {
+    "path": "docs/factory/p5-boundary-exception-2026-10-23/exception.json",
+    "commit": "588dd5f24425a5eaa651ce12d538bdebdfb33043",
+    "publication_sha256": "2ec7157cb45c509b9b015cffea787cf0edea5b021a6ea02effe9528ad8280d01",
+    "sha256_scope": "Current content-digest-only record; commit and publication_sha256 identify the original publication.",
+    "sha256": "5adc5bb7a11dd13fde2cb27344e49bc56d982dc2aa1871dad929fe19425e2726"
+  },
+  "reason": "The P5 wall-and-window drill found a call admitted exactly at the time cap; this fix refuses it.",
+  "conditions": [
+    "Any further change to this file or any other fenced path requires new approval.",
+    "The fence checker is unchanged.",
+    "src/lightyear_factory/providers.py stays byte-identical to main.",
+    "Recompute F2 bindings from the exact merge commit after merge."
+  ],
+  "authority": {
+    "fence_exception": true,
+    "merge": false,
+    "signing": false,
+    "spend": false,
+    "factory_run": false,
+    "gap_acceptance": false
+  },
+  "merge_conditions": [
+    "A final green head including disposable-drills.",
+    "Separate Howard exact-head merge approval after fresh checks."
+  ],
+  "preservation": {
+    "judge_freeze_changed_paths": [],
+    "historical_exception_record_rewritten": false,
+    "checker_override": false
+  },
+  "f2": {
+    "recomputation": "Planned: after exact approved merge",
+    "request_ready": false
+  }
+}

@@ -1,0 +1,54 @@
+# DORMANT DRAFT. Review findings and qualification prerequisites before activation.
+# Intended destination: .github/workflows/verify-public-evidence-report.yml
+name: Public evidence report (informational)
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing public fixture Release (one asset only)
+        required: true
+        type: choice
+        options:
+          - verify-graph-run41115300918-attempt1
+          - verify-graph-run41077873304-attempt1
+permissions:
+  contents: read
+jobs:
+  report:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # retained main v7 pin
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # retained main v7 pin
+        with:
+          python-version: '3.11'
+      - name: Install pinned direct dependency
+        run: python -m pip install --only-binary=:all: -r requirements/public-evidence-verifier.txt
+      - name: Download only an existing public fixture and verify its pinned bytes
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$RELEASE_TAG" in
+            verify-graph-run41115300918-attempt1) expected=579c5e08dd93b42e44d334a591327f4b65b47db54e23cd23f65b63986e74e037 ;;
+            verify-graph-run41077873304-attempt1) expected=1a8f21085658322f1fa4b7c982ce502a5df3ea89956226f59df7a0680d21cb65 ;;
+            *) exit 2 ;;
+          esac
+          mkdir -p "$RUNNER_TEMP/public-evidence-input" "$RUNNER_TEMP/public-evidence-report"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' --max-time 60 --max-filesize 1048576 --output "$RUNNER_TEMP/public-evidence-input/ci-fixture-approval-proof.json" "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/$RELEASE_TAG/ci-fixture-approval-proof.json"
+          printf '%s  %s\n' "$expected" "$RUNNER_TEMP/public-evidence-input/ci-fixture-approval-proof.json" | sha256sum --check
+      - name: Collect report without treating verifier status as a merge gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          result=0
+          python -I tools/verify_public_evidence.py all "$RUNNER_TEMP/public-evidence-input" --strict --json > "$RUNNER_TEMP/public-evidence-report/report.json" 2> "$RUNNER_TEMP/public-evidence-report/stderr.txt" || result=$?
+          printf '%s\n' "$result" > "$RUNNER_TEMP/public-evidence-report/exit-code.txt"
+          printf 'Verifier exit code: %s (informational; see report and stderr below)\n' "$result"
+          # Prefix untrusted lines so they cannot become runner workflow commands.
+          sed 's/^/REPORT | /' "$RUNNER_TEMP/public-evidence-report/report.json"
+          sed 's/^/STDERR | /' "$RUNNER_TEMP/public-evidence-report/stderr.txt"
+          printf '### Informational public evidence report\n\nVerifier exit code: `%s`. This job is not a required verification gate. Inspect the full JSON and stderr in the log. Only one pinned fixture asset was examined; its signature is not trusted without its original key.\n' "$result" >> "$GITHUB_STEP_SUMMARY"

@@ -54,3 +54,42 @@ class TestedGraphRevision(unittest.TestCase):
         with self.assertRaises(ValueError):revision_relationship(run,self.merge,self.commit)
     def test_unknown_event_refuses(self):
         with self.assertRaises(ValueError):revision_relationship(dict(self.run,event='workflow_dispatch'),self.merge,self.commit)
+
+
+class CheckoutLogBomTests(unittest.TestCase):
+    """Service UTF-8 BOM is framing, not an alternate checkout identity."""
+    def fixture(self, prefix=b'', inside=b''):
+        revision='a'*40
+        lines=['  ref: '+revision,
+               '[command]/usr/bin/git checkout --progress --force '+revision,
+               '[command]/usr/bin/git log -1 --format=%H',revision]
+        parts=[('2026-11-01T03:19:25.7411455Z '+s+'\n').encode() for s in lines]
+        raw=prefix+parts[0]+inside+b''.join(parts[1:])
+        out=io.BytesIO()
+        with zipfile.ZipFile(out,'w') as archive:
+            info=zipfile.ZipInfo('isolated-judge/2_Run actions_checkout@v7.txt')
+            info.external_attr=(stat.S_IFREG|0o644)<<16
+            archive.writestr(info,raw)
+        job=dict(steps=[dict(number=2,name='Run actions/checkout@v7',
+                            status='completed',conclusion='success')])
+        return out.getvalue(),job,revision
+
+    def test_single_leading_bom_and_no_bom_bind_same_revision(self):
+        for prefix in (b'',b'\xef\xbb\xbf'):
+            with self.subTest(prefix=prefix):
+                raw,job,expected=self.fixture(prefix)
+                self.assertEqual(checkout_revision(raw,job),expected)
+
+    def test_repeated_or_embedded_bom_remains_refused(self):
+        for prefix,inside in ((b'\xef\xbb\xbf'*2,b''),
+                              (b'',b'\xef\xbb\xbf'),
+                              (b'\xef\xbb\xbf',b'\xef\xbb\xbf')):
+            with self.subTest(prefix=prefix,inside=inside):
+                raw,job,_=self.fixture(prefix,inside)
+                with self.assertRaisesRegex(ValueError,'^checkout-log-framing$'):
+                    checkout_revision(raw,job)
+
+    def test_invalid_utf8_is_not_replaced_or_ignored(self):
+        raw,job,_=self.fixture(b'\xff')
+        with self.assertRaises(UnicodeDecodeError):
+            checkout_revision(raw,job)

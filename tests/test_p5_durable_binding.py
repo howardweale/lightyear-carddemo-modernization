@@ -326,3 +326,24 @@ class DurableBindingTests(unittest.TestCase):
         bad['approval']['exact_sha256'][gate.EXECUTION_GATES] = '0'*64
         with self.assertRaisesRegex(ValueError, 'durable-approval-hashes'):
             gate.validate_durable_binding(bad)
+
+
+    def test_november_pacific_approval_timestamp(self):
+        # Synthetic parser fixture only; no proof, signing, activation or authority.
+        value = self.synthetic_approved()
+        old = value['approval']['recorded_at_pt']
+        stamp = '2026-11-17T08:00:00-08:00'
+        value['approval']['recorded_at_pt'] = stamp
+        value['approval']['statement'] = value['approval']['statement'].replace(old, stamp)
+        self.assertEqual(value, gate.validate_durable_binding(value))
+
+    def test_pacific_timestamp_refuses_invalid_offset_date_and_naive_time(self):
+        for stamp in ('2026-11-17T08:00:00-07:00', '2026-11-31T08:00:00-08:00',
+                      '2026-11-17T08:00:00', '2026-03-08T02:30:00-08:00'):
+            with self.subTest(stamp=stamp), self.assertRaisesRegex(ValueError, 'time'):
+                gate.pacific_timestamp(stamp, 'time')
+
+    def test_fall_back_accepts_each_real_instant_and_keeps_legacy_october(self):
+        for stamp in ('2026-10-27T00:00:00-07:00', '2026-11-01T01:30:00-07:00',
+                      '2026-11-01T01:30:00-08:00'):
+            self.assertEqual(stamp, gate.pacific_timestamp(stamp, 'time').isoformat())

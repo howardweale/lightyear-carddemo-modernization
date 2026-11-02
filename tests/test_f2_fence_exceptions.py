@@ -521,5 +521,5 @@ class FencePolicyIntegrationTests(unittest.TestCase):
         entry = policy.validate_manifest(value)
         self.assertEqual(policy.APPROVED_SHA, entry['final_sha256'])
         self.assertEqual('operator-chat', entry['provenance']['source'])
-        checker_sha = 'e520d6a7290a949839c38ae2407c20e67c3bc8fe9ea4a75fc9489737ba063339'
+        checker_sha = '59b502e62a27e7f64f2fad5902bbbe669d842c1beb0ad457bc014f5bddbbbd58'
         self.assertEqual(checker_sha, policy.sha((root / policy.CHECKER).read_bytes()))

@@ -17,6 +17,7 @@ import stat
 
 from .contracts import ContractError, canonical_hash
 from .ledger import RunLedger
+from .process_environment import _without_provider_credentials
 from .workspace import IsolatedWorkspace
 
 FACTORY_NAME = "LIGHTYEAR Factory"
@@ -45,7 +46,7 @@ class CandidateHistory:
              identity: tuple[str, str] | None = None,
              work_tree: bool = True) -> bytes:
         # No inherited alternate object database, config injection, hooks or signer.
-        env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        env = {k: v for k, v in _without_provider_credentials().items() if not k.startswith("GIT_")}
         env.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull,
                    GIT_CONFIG_COUNT="0", GIT_TERMINAL_PROMPT="0")
         name, email = identity or (FACTORY_NAME, FACTORY_EMAIL)

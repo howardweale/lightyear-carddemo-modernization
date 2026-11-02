@@ -19,8 +19,18 @@ _REPOSITORY = 'howardweale/lightyear-carddemo-modernization'
 _PREFIX = '/repos/' + _REPOSITORY
 
 
+def _github_subprocess_environment():
+    # Exclude these names BEFORE looking up values. Other entries, including
+    # existing GitHub authentication, PATH and proxy configuration, are copied
+    # only into the child environment. No environment values are logged or
+    # persisted. This does not erase the caller's environment or memory.
+    excluded = {'openai_api_key', 'factory_transport_key'}
+    return {name: os.environ[name] for name in os.environ
+            if name.casefold() not in excluded}
+
+
 class _GitHubAPI:
-    """Use existing job authentication; never read or emit a credential value."""
+    """Use existing job authentication; never emit or persist credential values."""
 
     def request(self, method, path, payload=None):
         if method not in {'GET', 'POST'} or not path.startswith(_PREFIX + '/'):
@@ -33,7 +43,8 @@ class _GitHubAPI:
             data = json.dumps(payload, sort_keys=True, separators=(',', ':')).encode()
         try:
             result = subprocess.run(command, input=data, capture_output=True,
-                                    timeout=45, check=False)
+                                    timeout=45, check=False,
+                                    env=_github_subprocess_environment())
             if result.returncode != 0 or len(result.stdout) > 2 * 1024 * 1024:
                 raise ValueError('request refused')
             return json.loads(result.stdout)

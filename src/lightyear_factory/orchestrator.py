@@ -216,8 +216,10 @@ class FactoryOrchestrator:
         started_at = datetime.now(timezone.utc).isoformat()
         started_monotonic = time.monotonic()
 
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
         try:
-            if isinstance(self.agents, ModelAgentSet) and self.candidate_signing_paths is None:
+            if isinstance(self.agents, ModelAgentSet) and (self.candidate_signing_paths is None
+                    or type(self.execution_context) is ConfiguredReceiptExecutionContext):
                 from .providers import ScriptedModelProvider
                 from .routing import TaskRouter
                 if type(self.agents.provider) is not ScriptedModelProvider:
@@ -242,6 +244,13 @@ class FactoryOrchestrator:
                 if type(self.agents) is not ModelAgentSet or type(self.agents.provider) is not PublicDrillProvider:
                     raise ContractError('human-drill-native-provider-required')
                 self.agents.provider.bind_controller(self,order,ledger,run_dir)
+            from lightyear_execution.configured_human_context import ConfiguredHumanExecutionContext
+            if type(self.execution_context) is ConfiguredHumanExecutionContext:
+                from lightyear_execution.configured_human_controller import bind_configured_controller
+                bind_configured_controller(self,order,ledger,run_dir)
+            if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+                from lightyear_execution.configured_receipt_controller import bind_configured_controller as bind_receipt_controller
+                bind_receipt_controller(self,order,ledger,run_dir)
             workspace.create()
             if self.prepare_workspace:
                 self.prepare_workspace(workspace, order)
@@ -262,8 +271,14 @@ class FactoryOrchestrator:
                     "agent_set": self.agents.name,
                 },
             )
-            if self.candidate_signing_paths is not None:
+            if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+                from lightyear_execution.configured_receipt_lifecycle import finalize_receipt_controller
+                history,recorder=finalize_receipt_controller(self,order,workspace,artifacts,ledger,run_dir)
+            elif self.candidate_signing_paths is not None:
                 history, recorder = self._bind_candidate_run(order, workspace, run_dir, artifacts, ledger)
+            if type(self.execution_context) is ConfiguredHumanExecutionContext:
+                from lightyear_execution.configured_human_lifecycle import finalize_configured_controller
+                finalize_configured_controller(self,order,workspace,artifacts,ledger,run_dir)
             initial_snapshot = workspace.snapshot()
             ledger.append(
                 state,
@@ -645,6 +660,14 @@ class FactoryOrchestrator:
             raise TransportJournalError('Unobserved transport must not be overwritten')
         sequence = 1 + sum(event['kind'] == 'model_transport_reserved' for event in physical)
         identity = self._receipt_identity['content_sha256']
+        from lightyear_execution.configured_human_context import ConfiguredHumanExecutionContext
+        if type(self.execution_context) is ConfiguredHumanExecutionContext:
+            from lightyear_execution.configured_human_transport import require_configured_transport
+            require_configured_transport(self,reservation)
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+            from lightyear_execution.configured_receipt_transport import require_configured_transport as require_receipt_transport
+            require_receipt_transport(self,reservation)
         event = self._receipt_journal.append('RESERVED', 'model_transport_reserved', dict(
             attempt_identity_sha256=identity, transport_sequence=sequence,
             reservation=reservation))
@@ -794,6 +817,14 @@ class FactoryOrchestrator:
                     'reason': 'factory-isolation-run-refused'}, run_dir/'summary.json')
 
     def _verify_runtime_admission(self, order):
+        from lightyear_execution.configured_human_context import ConfiguredHumanExecutionContext
+        if type(self.execution_context) is ConfiguredHumanExecutionContext:
+            from lightyear_execution.configured_human_controller import verify_configured_controller
+            return verify_configured_controller(self,order)
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+            from lightyear_execution.configured_receipt_controller import verify_configured_controller as verify_receipt_controller
+            return verify_receipt_controller(self,order)
         from .model_admission import FactoryModelAdmission
         if type(self.model_admission) is not FactoryModelAdmission or self.execution_context is None:
             raise ContractError('factory-model-runtime-required')
@@ -814,6 +845,16 @@ class FactoryOrchestrator:
                 from lightyear_execution.public_drill_runtime import PublicDrillProvider
                 if type(self.agents.provider) is not PublicDrillProvider:
                     raise ContractError('human-drill-public-isolation-provider')
+                return self.execution_context.public_expected_values(order)
+            from lightyear_execution.configured_human_context import ConfiguredHumanExecutionContext
+            if type(self.execution_context) is ConfiguredHumanExecutionContext:
+                from lightyear_execution.configured_human_controller import verify_configured_controller
+                verify_configured_controller(self,order)
+                return self.execution_context.public_expected_values(order)
+            from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+            if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+                from lightyear_execution.configured_receipt_controller import verify_configured_controller as verify_receipt_controller
+                verify_receipt_controller(self,order)
                 return self.execution_context.public_expected_values(order)
             if self.model_admission is None:
                 if self.candidate_signing_paths is not None:
@@ -862,7 +903,13 @@ class FactoryOrchestrator:
     def _candidate_response_ids(self, ledger, start, run_id, attempt):
         events = [event for event in ledger.events[start:] if event['kind']=='model-transport-finished'
                   and event['payload'].get('role')=='builder']
-        last = self.agents.provider.last_transport_record or {}
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+            from lightyear_execution.configured_receipt_controller import _provider_binding
+            provider=_provider_binding(self.execution_context,self.agents.provider)
+        else:
+            provider=self.agents.provider
+        last = provider.last_transport_record or {}
         if (len(events)!=1 or last.get('end_event_sha256')!=events[0]['event_sha256']
                 or events[0]['payload'].get('run_id')!=run_id
                 or events[0]['payload'].get('attempt')!=attempt
@@ -890,7 +937,16 @@ class FactoryOrchestrator:
         if scanner is not None:
             try:
                 scanner(surface, json.dumps(value, sort_keys=True, ensure_ascii=False).encode('utf-8'))
-            except Exception:
+            except Exception as error:
+                # Observe only the original configured context scan failure.
+                # Diagnostics cannot replace the native refusal or grant authority.
+                try:
+                    from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+                    if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+                        from lightyear_execution.configured_receipt_scan_observation import record_original_context_scan_failure
+                        record_original_context_scan_failure(self, surface, error)
+                except Exception:
+                    pass
                 raise ContractError('controller-isolation-refused') from None
 
     def _scan_workspace(self, workspace, surface):
@@ -902,13 +958,18 @@ class FactoryOrchestrator:
     def _run_gates(self, workspace: IsolatedWorkspace, order: WorkOrder) -> dict[str, Any]:
         self._scan_workspace(workspace, 'pre-gate-workspace')
         if self.workspace_read_manifest is not None:workspace.verify_read_boundary()
-        report = GateRunner(
-            workspace.root,
-            allow_network=order.allow_network,
-            backend=self.execution_context.backend if self.execution_context else None,
-            require_container=self.workspace_read_manifest is not None,
-            isolation_scan=self._isolation_scanner(),
-        ).run(order.gates)
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+            from lightyear_execution.configured_receipt_gates import run_original_receipt_gates
+            report=run_original_receipt_gates(self,workspace,order)
+        else:
+            report = GateRunner(
+                workspace.root,
+                allow_network=order.allow_network,
+                backend=self.execution_context.backend if self.execution_context else None,
+                require_container=self.workspace_read_manifest is not None,
+                isolation_scan=self._isolation_scanner(),
+            ).run(order.gates)
         self._scan_workspace(workspace, 'post-gate-workspace')
         if self.workspace_read_manifest is not None:workspace.verify_read_boundary()
         if self.execution_context:
@@ -916,6 +977,11 @@ class FactoryOrchestrator:
         return report
 
     def _context(self, order: WorkOrder, workspace_root: Path) -> dict[str, Any]:
+        from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+        from lightyear_execution.configured_receipt_case import is_answer_order
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext and is_answer_order(order):
+            from lightyear_execution.configured_receipt_answer_stimulus import prepare_original_answer_fragment
+            prepare_original_answer_fragment(self,order,workspace_root)
         context = GraphContextAssembler(
             self.graph_path,
             self.evidence_path,
@@ -932,6 +998,9 @@ class FactoryOrchestrator:
                 context, self.memory_retrieval, order
             )
         self._scan_controller_value('controller-context', context)
+        if type(self.execution_context) is ConfiguredReceiptExecutionContext and order.order_id=='configured-build-control':
+            from lightyear_execution.configured_receipt_clean_control import record_original_clean_context
+            record_original_clean_context(self,order,workspace_root,context)
         return context
 
     @staticmethod
@@ -1169,16 +1238,21 @@ class FactoryOrchestrator:
             from .build_receipt import compute_build_receipt
             from lightyear_execution.integration import HardenedExecutionContext
             from lightyear_execution.backend import OCIContainerBackend
-            bound = self.agents.bounded_provider
-            transport = getattr(self.agents.provider, 'transport_recorder', None)
-            if (type(self.agents) is not ModelAgentSet or type(bound) is not AccountedModelProvider
-                    or bound.order is not order or bound.provider is not self.agents.provider
-                    or type(transport) is not ModelTransportRecorder
-                    or transport.ledger is not ledger or transport.pending is not None or transport.failed
-                    or transport.require_model_admission is not True
-                    or type(self.execution_context) is not HardenedExecutionContext
-                    or type(self.execution_context.backend) is not OCIContainerBackend):
-                raise ContractError('factory-build-receipt-controller-binding')
+            from lightyear_execution.configured_receipt_context import ConfiguredReceiptExecutionContext
+            if type(self.execution_context) is ConfiguredReceiptExecutionContext:
+                from lightyear_execution.configured_receipt_final import original_receipt_budget
+                bound=original_receipt_budget(self,order,ledger,run_dir)
+            else:
+                bound = self.agents.bounded_provider
+                transport = getattr(self.agents.provider, 'transport_recorder', None)
+                if (type(self.agents) is not ModelAgentSet or type(bound) is not AccountedModelProvider
+                        or bound.order is not order or bound.provider is not self.agents.provider
+                        or type(transport) is not ModelTransportRecorder
+                        or transport.ledger is not ledger or transport.pending is not None or transport.failed
+                        or transport.require_model_admission is not True
+                        or type(self.execution_context) is not HardenedExecutionContext
+                        or type(self.execution_context.backend) is not OCIContainerBackend):
+                    raise ContractError('factory-build-receipt-controller-binding')
             runtime = self._verify_runtime_admission(order)
             build_receipt = compute_build_receipt(order, ledger, receipt, bound.calls, runtime, run_dir)
             self._scan_controller_value('factory-build-receipt', build_receipt)

@@ -17,6 +17,7 @@ import subprocess
 from weakref import WeakKeyDictionary
 
 from lightyear_factory.model_admission import FactoryModelAdmission
+from lightyear_factory.process_environment import _without_provider_credentials
 from .backend import OCIContainerBackend
 from .contracts import ExecutionContractError, ExecutionPolicy, canonical_hash
 from .tower_drill_admission import verify_human_drill_plan
@@ -47,7 +48,8 @@ def _workflow_source(root, review, environment):
         raise ExecutionContractError('human-drill-workflow-source-identity')
     def blob(ref):
         return subprocess.check_output(['git','--no-optional-locks','-C',str(root),
-            'show',ref+':'+path],stderr=subprocess.DEVNULL)
+            'show',ref+':'+path],stderr=subprocess.DEVNULL,
+            env=_without_provider_credentials())
     try:
         signed, running = blob(executable), blob(revision)
     except (OSError,subprocess.CalledProcessError):

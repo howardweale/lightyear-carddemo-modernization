@@ -71,6 +71,41 @@ def build_parser() -> argparse.ArgumentParser:
     human_execute.add_argument("--runs-root", type=Path, required=True)
     human_execute.add_argument("--execution-runtime", choices=["docker", "podman"], required=True)
 
+    for name,help_text in (
+        ("human-configured-proof-review","CI-only read-only genuine configured input preflight; never consume"),
+        ("human-configured-execute","CI-only genuine human configured dispatch; not production qualification")):
+        configured = subparsers.add_parser(name, allow_abbrev=False, help=help_text)
+        configured.add_argument("--source-root", type=Path, required=True)
+        configured.add_argument("--work-order", type=Path, required=True)
+        configured.add_argument("--execution-policy", type=Path, required=True)
+        configured.add_argument("--factory-plan", required=True)
+        configured.add_argument("--factory-approval", required=True)
+        configured.add_argument("--factory-contract", required=True)
+        configured.add_argument("--factory-trust", type=Path, required=True)
+        configured.add_argument("--model-config", required=True)
+        configured.add_argument("--public-isolation-plan", required=True)
+        configured.add_argument("--execution-runtime", choices=["docker","podman"], required=True)
+        if name == "human-configured-execute":
+            configured.add_argument("--runs-root", type=Path, required=True)
+
+    for name,help_text in (
+        ("human-configured-receipt-proof-review","CI-only read-only genuine configured input preflight; never consume"),
+        ("human-configured-receipt-execute","CI-only genuine human configured dispatch; not production qualification")):
+        configured = subparsers.add_parser(name, allow_abbrev=False, help=help_text)
+        configured.add_argument("--source-root", type=Path, required=True)
+        configured.add_argument("--work-order", type=Path, required=True)
+        configured.add_argument("--execution-policy", type=Path, required=True)
+        configured.add_argument("--factory-plan", required=True)
+        configured.add_argument("--factory-approval", required=True)
+        configured.add_argument("--factory-contract", required=True)
+        configured.add_argument("--factory-trust", type=Path, required=True)
+        configured.add_argument("--model-config", required=True)
+        configured.add_argument("--public-isolation-plan", required=True)
+        configured.add_argument("--execution-runtime", choices=["docker","podman"], required=True)
+        configured.add_argument("--runs-root", type=Path, required=True)
+        configured.add_argument("--candidate-signing-key", type=Path, required=True)
+        configured.add_argument("--candidate-allowed-signers", type=Path, required=True)
+
     from .annotation_cli import parser as annotation_parser
     annotation_parser(subparsers)
 
@@ -370,6 +405,25 @@ def main(argv: list[str] | None = None) -> int:
     import sys
     supplied_options = list(sys.argv[1:] if argv is None else argv)
     args = build_parser().parse_args(supplied_options)
+    if args.command == "human-configured-receipt-proof-review":
+        from lightyear_execution.configured_receipt_dispatch import review_configured_receipt_dispatch
+        print(json.dumps(review_configured_receipt_dispatch(args),indent=2,sort_keys=True))
+        return 0
+    if args.command == "human-configured-receipt-execute":
+        from lightyear_execution.configured_receipt_dispatch import dispatch_configured_receipt
+        print(json.dumps(dispatch_configured_receipt(args),indent=2,sort_keys=True))
+        # Full native receipt is necessary; unchanged strict case joins are still
+        # independently required. This entry cannot advertise strict success.
+        return 1
+    if args.command == "human-configured-proof-review":
+        from lightyear_execution.configured_human_dispatch import review_configured_human_dispatch
+        print(json.dumps(review_configured_human_dispatch(args),indent=2,sort_keys=True))
+        return 0
+    if args.command == "human-configured-execute":
+        from lightyear_execution.configured_human_dispatch import dispatch_configured_human
+        print(json.dumps(dispatch_configured_human(args),indent=2,sort_keys=True))
+        # Native completion alone does not establish strict/production qualification.
+        return 1
     if args.command == "human-drill-public-proof-review":
         from .model_admission import FactoryModelAdmission
         from lightyear_execution.public_drill_outputs import review_public_drill_outputs

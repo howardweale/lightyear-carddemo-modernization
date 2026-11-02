@@ -9,7 +9,7 @@ adaptation. Resolve the static-review findings before operational use.
 The proposed `tools/verify_public_evidence.py` reads public evidence and reports
 SHA-256 comparisons, receipt self-digests, hash-chain consistency and Ed25519
 signature results. It does not establish that the recorded engineering result is
-correct or that an actor personally signed a Tower decision. A service signature
+correct or prove personal authorship of a Tower decision. A service signature
 records what Tower attested. Fingerprint publication alone does not establish
 trust in a key, a journal head or a decision.
 
@@ -21,7 +21,7 @@ a complete transitive dependency lock or a vulnerability attestation. The suppli
 code requires cryptography at startup even for manifest-only commands. No package
 availability, compatibility or vulnerability checks were made in this draft.
 
-The following commands are examples for a later authorized qualification or use.
+The following commands are examples for later qualification or use, subject to separate approval.
 Use a separate directory containing only the intended public evidence. Do not
 point this draft at private data or rely on its exclusion guard as a sandbox.
 
@@ -100,7 +100,7 @@ Release and public-key cases independently. Their evidence path constants remain
 attachment data; no evidence was accessed at those paths during preparation.
 Most tests are conditional on externally supplied fixtures. An eventual run must
 report pass/fail/skip counts and actual fixtures used; discovery of 33 methods is
-not evidence that 33 tests executed or passed. Hosted PR/push CI runs the
+not evidence of execution or passing results for all 33 tests. Hosted PR/push CI runs the
 standalone suite with verbose unittest output; no local execution was performed.
 
 The manual `report` job in `.github/workflows/verify-public-evidence-report.yml`
@@ -148,7 +148,7 @@ download or fixture generation. Missing external fixture roots retain the
 existing unittest.skipUnless reason, `evidence not available: <path>`. The
 retained published tree contains neither the default repo/ nor downloads/
 fixture root. Under that absent-fixture condition, AST inspection predicts
-31 skipped tests and two executed tests, not 33 passes. The two ungated tests
+31 skips and two test invocations, not 33 passes. The two ungated tests
 check a fake private-key marker and an unsafe manifest path; neither generates
 or signs keys. This is a prediction, not a hosted execution result. The actual
 unittest log and summary remain authoritative. Available fixtures do not cause

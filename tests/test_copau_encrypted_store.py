@@ -73,9 +73,20 @@ class EncryptedStoreTests(unittest.TestCase):
     def test_failed_or_timed_out_encryption_writes_nothing(self):
         for result in (subprocess.CompletedProcess([], 1, b'partial'),
                        subprocess.TimeoutExpired('age', 30)):
-            with patch('tools.copau_encrypted_store.subprocess.run',
-                       **({'side_effect': result} if isinstance(result, Exception) else {'return_value': result})):
+            # subprocess is shared with the Windows ACL checker. Inject only
+            # the age launch; all custody/permissions checks keep executing.
+            real_run = subprocess.run
+            age_calls = []
+            def injected(argv, *args, **kwargs):
+                if Path(argv[0]) == self.age:
+                    age_calls.append(argv)
+                    if isinstance(result, Exception):
+                        raise result
+                    return result
+                return real_run(argv, *args, **kwargs)
+            with patch('tools.copau_encrypted_store.subprocess.run', side_effect=injected):
                 with self.assertRaises(custody.Refused): self.store.write('expected-source.json', b'x')
+            self.assertEqual(len(age_calls), 1)
             self.assertEqual(list(self.store.root.iterdir()), [])
 
     def test_seed_reuse_is_encrypted_and_bound_to_index(self):

@@ -12,6 +12,7 @@ import subprocess
 ORIGINAL = 'docs/factory/copau-factory-judge-freeze-2026-10-18.json'
 AMENDMENT = 'docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json'
 F2 = 'docs/factory/copau-f2-preparation-2026-10-22/request.json'
+RUN_SELECTION = 'docs/factory/copau-run-request-selection.json'
 
 
 def git(repo, *args):
@@ -61,22 +62,41 @@ def derive(read, names):
         if '/service/src/test/' in path:
             prefixes.add(path.split('/src/test/')[0] + '/src/test/')
 
-    request = document(F2)
-    if request['schema'] != 'copau-f2-preparation/1':
-        raise ValueError('unreviewed-f2-schema')
-    for binding in request['engineering_source_bindings'].values():
-        paths.add(safe_path(binding['path']))
-    for binding in request['bindings'].values():
-        document(binding['path'], binding['sha256'])
-    scope = json.loads(read(request['bindings']['scope']['path']))
-    prefixes.add(safe_path(scope['candidate_directory']) + '/')
-    paths.add(safe_path(scope['interfaces']['source_path']))
-    for path in request['work_order']['scope']['allowed_paths']:
-        prefixes.add(safe_path(path).rstrip('/') + '/')
-    workspace = json.loads(read(request['bindings']['workspace']['path']))
-    if not isinstance(workspace, dict) or not workspace:
-        raise ValueError('empty-worker-binding')
-    paths.update(safe_path(path) for path in workspace)
+    # Historical protections remain in the union. Selection comes from BASE only.
+    # Fence the selector even before it exists, so a PR cannot self-select.
+    paths.add(RUN_SELECTION)
+    requests = [(F2, None)]
+    if RUN_SELECTION in names:
+        selection = document(RUN_SELECTION)
+        if (not isinstance(selection, dict)
+                or set(selection) != {'schema', 'request'}
+                or selection['schema'] != 'copau-run-request-selection/1'):
+            raise ValueError('unreviewed-run-selection')
+        binding = selection['request']
+        if (not isinstance(binding, dict) or set(binding) != {'path', 'sha256'}
+                or not isinstance(binding['sha256'], str)
+                or len(binding['sha256']) != 64
+                or any(c not in '0123456789abcdef' for c in binding['sha256'])
+                or not safe_path(binding['path']).startswith('docs/factory/')):
+            raise ValueError('invalid-run-selection')
+        requests.append((binding['path'], binding['sha256']))
+    for request_path, request_sha in requests:
+        request = document(request_path, request_sha)
+        if request['schema'] != 'copau-f2-preparation/1':
+            raise ValueError('unreviewed-f2-schema')
+        for binding in request['engineering_source_bindings'].values():
+            paths.add(safe_path(binding['path']))
+        for binding in request['bindings'].values():
+            document(binding['path'], binding['sha256'])
+        scope = json.loads(read(request['bindings']['scope']['path']))
+        prefixes.add(safe_path(scope['candidate_directory']) + '/')
+        paths.add(safe_path(scope['interfaces']['source_path']))
+        for path in request['work_order']['scope']['allowed_paths']:
+            prefixes.add(safe_path(path).rstrip('/') + '/')
+        workspace = json.loads(read(request['bindings']['workspace']['path']))
+        if not isinstance(workspace, dict) or not workspace:
+            raise ValueError('empty-worker-binding')
+        paths.update(safe_path(path) for path in workspace)
 
     # Include all retained support inventories, including additive proposals.
     # Unioning prevents a later record from silently removing a fenced path.

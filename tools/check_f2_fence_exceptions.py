@@ -4,6 +4,8 @@ This does not change the raw Java fence report or authorize a merge or run.
 Human approval is recorded provenance, not machine authentication of the human.
 """
 import argparse
+from datetime import datetime
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import hashlib
 import json
 import os
@@ -166,6 +168,21 @@ def validate_entry(entry):
 
 
 
+def pacific_timestamp(value, code):
+    """Parse a real Pacific wall time; never authenticate an approval."""
+    require(isinstance(value, str) and
+            re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}", value),
+            code)
+    try:
+        stamp = datetime.fromisoformat(value)
+        local = stamp.astimezone(ZoneInfo("America/Los_Angeles"))
+    except (ValueError, OverflowError, ZoneInfoNotFoundError):
+        raise ValueError(code) from None
+    require(local.replace(tzinfo=None) == stamp.replace(tzinfo=None)
+            and local.utcoffset() == stamp.utcoffset(), code)
+    return stamp
+
+
 def validate_durable_binding(value):
     """Pending review is inert; approved bytes still require trusted-base loading."""
     fields(value, {'schema', 'repository', 'pr', 'status', 'base_anchor',
@@ -204,9 +221,7 @@ def validate_durable_binding(value):
             and approval['approved_by'] == 'Howard Weale'
             and approval['github_identity_is_human_proof'] is False,
             'durable-approval-identity')
-    require(isinstance(approval['recorded_at_pt'], str)
-            and re.fullmatch(r'2026-10-\d{2}T\d{2}:\d{2}:\d{2}-07:00',
-                             approval['recorded_at_pt']), 'durable-approval-time')
+    pacific_timestamp(approval['recorded_at_pt'], 'durable-approval-time')
     expected = {path: row['after']['sha256'] for path, row in DURABLE_RUNTIME.items()}
     require(approval['exact_sha256'] == expected, 'durable-approval-hashes')
     exact = sha(json.dumps(expected, sort_keys=True, separators=(',', ':')).encode())

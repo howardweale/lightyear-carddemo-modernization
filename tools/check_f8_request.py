@@ -1,5 +1,7 @@
 """Offline unsigned F8 preparation checks. Never signs, exports, or runs a model."""
 from copy import deepcopy
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -10,7 +12,7 @@ from lightyear_factory.contracts import WorkOrder, canonical_hash
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD = "docs/factory/copau-f2-preparation-2026-10-22/request.json"
-WINDOW = {"start": "2026-10-30T08:00:00-07:00", "end": "2026-10-30T20:00:00-07:00"}
+RUN_SELECTION = "docs/factory/copau-run-request-selection.json"
 MODEL = {"provider": "openai-responses", "model": "gpt-5.4-2026-03-05"}
 SHA = re.compile(r"[0-9a-f]{64}")
 WRITE_ROOT = "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/authorization"
@@ -19,6 +21,32 @@ WRITE_ROOT = "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/a
 def require(value, code):
     if not value:
         raise ValueError(code)
+
+
+def pacific_timestamp(value, code):
+    """Parse a real Pacific wall time; never authenticate an approval."""
+    require(isinstance(value, str) and
+            re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}", value),
+            code)
+    try:
+        stamp = datetime.fromisoformat(value)
+        local = stamp.astimezone(ZoneInfo("America/Los_Angeles"))
+    except (ValueError, OverflowError, ZoneInfoNotFoundError):
+        raise ValueError(code) from None
+    require(local.replace(tzinfo=None) == stamp.replace(tzinfo=None)
+            and local.utcoffset() == stamp.utcoffset(), code)
+    return stamp
+
+
+def request_window(request):
+    require(request["timezone"] == "America/Los_Angeles", "window")
+    window = request["window"]
+    require(isinstance(window, dict) and set(window) == {"start", "end"}, "window")
+    start = pacific_timestamp(window["start"], "window").astimezone(timezone.utc)
+    end = pacific_timestamp(window["end"], "window").astimezone(timezone.utc)
+    # Preserve the old 12-hour maximum; no multi-day authorization or renewal.
+    require(0 < (end - start).total_seconds() <= 12 * 3600, "window")
+    return window
 
 
 def bound_bytes(root, binding):
@@ -40,6 +68,39 @@ def bound_bytes(root, binding):
     return raw
 
 
+def preparation_record(root, record=None):
+    """Select unsigned preparation data only; never grant runtime authority."""
+    def read_public(path):
+        require(isinstance(path, str) and path.startswith("docs/factory/")
+                and all(p not in {"", ".", ".."} for p in path.split("/"))
+                and ":" not in path and "\\" not in path, "preparation-path")
+        target = Path(root) / path
+        cursor = target
+        while cursor != Path(root):
+            require(not cursor.is_symlink() and not getattr(cursor, "is_junction", lambda: False)(),
+                    "preparation-link")
+            cursor = cursor.parent
+        require(target.is_file() and target.stat().st_size <= 262144, "preparation-size")
+        with target.open("rb") as stream:
+            raw = stream.read(262145)
+        require(len(raw) <= 262144, "preparation-size")
+        return raw
+    if record is None and (Path(root)/RUN_SELECTION).exists():
+        selected = json.loads(read_public(RUN_SELECTION))
+        require(isinstance(selected, dict) and set(selected) == {"schema", "request"}
+                and selected["schema"] == "copau-run-request-selection/1", "preparation-selection")
+        binding = selected["request"]
+        require(isinstance(binding, dict), "preparation-selection")
+        raw = bound_bytes(root, binding)
+        record = binding["path"]
+    else:
+        record = RECORD if record is None else record
+        raw = read_public(record)
+    request = json.loads(raw)
+    require(request["record_path"] == record, "preparation-record-identity")
+    return record, raw, request
+
+
 def public_fingerprint(pem):
     # SHA-256 of exact published PEM bytes, also parse and require the Tower key type.
     from cryptography.hazmat.primitives.serialization import load_pem_public_key
@@ -55,10 +116,11 @@ def review(request, root=ROOT, public_pem=None):
     require(request["schema"] == "copau-f2-preparation/1", "request-schema")
     require(request["scope"] == "first-copau-factory-run"
             and request["g3_included"] is False, "first-run-only")
-    require(request["window"] == WINDOW and request["timezone"] == "America/Los_Angeles", "window")
+    request_window(request)
     require(request["roles"] == {r: MODEL for r in ("planner", "builder", "analyst")}, "roles")
     require(type(request["request_ready"]) is bool and request["run_authorized"] is False, "unsigned-preparation")
     order = WorkOrder.from_dict(request["work_order"])
+    require(order.order_id == "copau-first-factory-run-2026-10-30", "first-run-identity")
     require(order.to_dict() == request["work_order"], "work-order-roundtrip")
     require(order.allowed_paths == (WRITE_ROOT,) and order.max_attempts == 3
             and order.max_model_calls == 8 and order.max_model_cost_usd == 10
@@ -169,7 +231,7 @@ def validate_final(request, final, root):
     caps = {"max_attempts": 3, "max_repair_loops": 2, "max_elapsed_seconds": 28800,
             "max_model_calls": 8, "max_model_tokens": 1100000, "cost_cap_microusd": 10000000}
     require(plan["caps"] == caps and contract["details"]["caps"] == caps
-            and contract["details"]["window"] == WINDOW
+            and contract["details"]["window"] == request_window(request)
             and contract["details"]["request_seal"] == plan["content_sha256"], "final-seal")
     require(plan["executable_commit"] == contract["details"]["executable_commit"], "final-executable")
     import subprocess
@@ -199,9 +261,10 @@ def validate_final(request, final, root):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--record", default=RECORD)
+    parser.add_argument("--record")
     parser.add_argument("--public-pem")
     args = parser.parse_args()
     pem = Path(args.public_pem).read_bytes() if args.public_pem else None
-    result = review(json.loads((ROOT / args.record).read_bytes()), public_pem=pem)
+    _, _, request = preparation_record(ROOT, args.record)
+    result = review(request, public_pem=pem)
     print(json.dumps(result, indent=2))

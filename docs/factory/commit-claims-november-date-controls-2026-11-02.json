@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-11-02",
+  "claims": [
+    {
+      "record": "docs/factory/november-date-controls.json",
+      "reference": "6ebccb8607678b437fedaa1ffd0bd8948d0cf06e",
+      "commit": "6ebccb8607678b437fedaa1ffd0bd8948d0cf06e",
+      "role": "source",
+      "source_path": ".github/workflows/verify.yml",
+      "source_sha256": "079c2f37192b5dc4aa446cbc22f7f9b2cb50a9e355d4d13699df1979971f83fc"
+    }
+  ]
+}

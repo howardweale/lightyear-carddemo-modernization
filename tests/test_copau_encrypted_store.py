@@ -14,6 +14,20 @@ from tests import test_copau_answer_key as fixtures
 
 
 class EncryptedStoreTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if os.environ.get('GITHUB_ACTIONS') != 'true':
+            return
+        names = ('SYNTHETIC_AGE', 'SYNTHETIC_AGE_KEYGEN', 'SYNTHETIC_AGE_SHA256')
+        configured = [bool(os.environ.get(name)) for name in names]
+        if any(configured) and not all(configured):
+            raise RuntimeError('Incomplete pinned synthetic age environment')
+        if not any(configured):
+            # Full discovery has no dedicated installer step. Use exactly the
+            # same pinned installer; setup failure is an error, never a skip.
+            from tools.ci.install_synthetic_age import install
+            os.environ.update(install())
+
     def setUp(self):
         if os.environ.get('GITHUB_ACTIONS') != 'true':
             self.skipTest('CI-only synthetic crypto qualification')

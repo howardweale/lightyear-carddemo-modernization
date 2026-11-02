@@ -429,6 +429,8 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);source=root/'source';source.mkdir()
             agents=Mock(name='agent-object');agents.name='fixture-agent'
+            # This pre-agent failure has no bound accounting provider.
+            agents.bounded_provider = None
             order=SimpleNamespace(max_attempts=1,max_elapsed_seconds=120,allowed_paths=('candidate',),
                 content_sha256='a'*64,order_id=private,to_dict=Mock(return_value={'title':private}))
             controller=FactoryOrchestrator(source,root/'runs',agents,
@@ -476,6 +478,8 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d); source = root/'source'; source.mkdir()
             agents = Mock(); agents.name = 'fixture-agent'
+            # This pre-agent failure has no bound accounting provider.
+            agents.bounded_provider = None
             order = SimpleNamespace(max_attempts=1, max_elapsed_seconds=120, allowed_paths=('candidate',),
                 content_sha256='a'*64, to_dict=Mock())
             controller = FactoryOrchestrator(source, root/'runs', agents,

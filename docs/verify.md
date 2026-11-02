@@ -1,4 +1,4 @@
-# Public evidence verifier â€” draft
+# Public evidence verifier - draft
 
 This is an unqualified draft adapted from the supplied `lightyear-verifier.zip`.
 Static review counted 33 test methods; no tests, verifier commands, key operations,

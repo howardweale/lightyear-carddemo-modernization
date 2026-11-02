@@ -57,6 +57,7 @@ class ConfiguredCountComponentTests(unittest.TestCase):
         self.assertTrue(provider.manage_failure_budget)
         self.assertEqual(leases, ['OPENAI_API_KEY'])
         controller = FactoryOrchestrator.__new__(FactoryOrchestrator)
+        controller.execution_context = None  # Isolated component fixture, never admission.
         controller.agents = SimpleNamespace(bounded_provider=routed)
         controller._receipt_identity = {'content_sha256': 'a'*64}
         controller._receipt_journal = RunLedger(root/'attempt.jsonl')

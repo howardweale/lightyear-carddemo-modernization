@@ -30,6 +30,7 @@ class ProtocolLiveBoundaryTests(unittest.TestCase):
     def sink(self, protocol=4):
         self.serial += 1
         sink = FactoryOrchestrator.__new__(FactoryOrchestrator)
+        sink.execution_context = None  # Isolated component fixture, never admission.
         sink._receipt_identity = dict(content_sha256=IDENTITY)
         sink._receipt_journal = RunLedger(self.root/str(self.serial)/'accounting.jsonl')
         sink._receipt_journal.append('READY', 'model_reservations',

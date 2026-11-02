@@ -39,6 +39,7 @@ class ControllerCountAccountingTests(unittest.TestCase):
             max_output_tokens=16, max_retries=0, service_tier='flex', billing_policy=flex_billing_policy())
         self.budget = AccountedModelProvider(self.provider, SimpleNamespace(max_model_cost_usd=10))
         self.controller = FactoryOrchestrator.__new__(FactoryOrchestrator)
+        self.controller.execution_context = None  # Isolated component fixture, never admission.
         c = self.controller
         c.agents = SimpleNamespace(bounded_provider=self.budget)
         c._receipt_identity = {'content_sha256': 'a'*64}

@@ -38,6 +38,7 @@ class ControllerTransportFsyncTests(unittest.TestCase):
         self.serial += 1
         path = self.root/str(self.serial)/'attempt-accounting.jsonl'
         sink = FactoryOrchestrator.__new__(FactoryOrchestrator)
+        sink.execution_context = None  # Isolated component fixture, never admission.
         sink._receipt_identity = {'content_sha256': IDENTITY}
         sink._receipt_journal = RunLedger(path)
         ledger = sink._receipt_journal

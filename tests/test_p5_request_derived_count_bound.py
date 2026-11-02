@@ -122,6 +122,7 @@ class RequestDerivedCountBoundTests(unittest.TestCase):
             temp=SimpleNamespace(name=directory)
         sends=[]
         c=FactoryOrchestrator.__new__(FactoryOrchestrator)
+        c.execution_context = None  # Isolated component fixture, never admission.
         def opened(req,**kwargs):
             retained=RunLedger(c._receipt_journal.path);self.assertTrue(retained.verify())
             physical=retained.events[-1]['payload']['reservation']

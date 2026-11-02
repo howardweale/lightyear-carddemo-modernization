@@ -1,5 +1,5 @@
 """CI-only original file/checkout observations. No API or verifier substitute."""
-import os,subprocess,tempfile,unittest
+import json,os,subprocess,sys,tempfile,unittest
 from pathlib import Path
 from tools.ci.operator_flow_review_source import _source_bytes,check_review_source,LIMIT
 # Ensure the original direct review module is loaded, as in the real entry.
@@ -34,16 +34,48 @@ class ReviewSourceBoundaries(unittest.TestCase):
     def test_directory_and_relative_paths_refuse(self):
         with self.assertRaisesRegex(ValueError,'review-source-file'):_source_bytes(self.root)
         with self.assertRaisesRegex(ValueError,'review-source-absolute'):_source_bytes(Path('source.py'))
+    def _in_clean_checkout(self, code):
+        # Other full-suite tests create files in GITHUB_WORKSPACE. Exercise
+        # the unchanged clean-source gate in an independent exact-HEAD clone.
+        source=Path(os.environ['GITHUB_WORKSPACE']).resolve(strict=True)
+        head=git(source,'rev-parse','HEAD').decode().strip()
+        checkout=self.root/'checkout';hooks=self.root/'empty-clone-hooks';hooks.mkdir()
+        subprocess.run(['git','-c','core.hooksPath='+str(hooks),'clone','--quiet',
+            '--no-local','--no-hardlinks','--no-checkout',str(source),str(checkout)],
+            check=True,capture_output=True,timeout=120)
+        subprocess.run(['git','-C',str(checkout),'-c','core.hooksPath='+str(hooks),
+            'checkout','--quiet','--detach',head],check=True,capture_output=True,timeout=120)
+        env=dict(os.environ,GITHUB_WORKSPACE=str(checkout),
+            PYTHONPATH=os.pathsep.join((str(checkout/'src'),str(checkout))),
+            PYTHONDONTWRITEBYTECODE='1')
+        imports="""import json,sys
+from pathlib import Path
+from tools.ci.operator_flow_review_source import check_review_source
+from tools.ci import operator_flow_publication_review
+from lightyear_factory import contracts,model_admission
+from lightyear_execution import contracts as execution_contracts,tower_drill_admission,tower_drill_reservation
+root=Path.cwd()
+head=sys.argv[1]
+"""
+        result=subprocess.run([sys.executable,'-B','-c',imports+code,head],
+            cwd=checkout,env=env,check=True,capture_output=True,text=True,timeout=120)
+        return json.loads(result.stdout)
+
     def test_actual_ci_checkout_modules_match_current_commit(self):
-        root=Path(os.environ['GITHUB_WORKSPACE']).resolve(strict=True)
-        head=git(root,'rev-parse','HEAD').decode().strip()
-        first=check_review_source(root,head)
+        first,second=self._in_clean_checkout(
+            'print(json.dumps([check_review_source(root,head),check_review_source(root,head)]))')
         self.assertEqual(len(first),13)
-        self.assertEqual(first,check_review_source(root,head))
+        self.assertEqual(first,second)
         self.assertTrue(all(len(value)==64 for value in first.values()))
     def test_wrong_exact_commit_refuses_before_module_review(self):
-        root=Path(os.environ['GITHUB_WORKSPACE']).resolve(strict=True)
-        with self.assertRaisesRegex(ValueError,'review-source-exact-E'):check_review_source(root,'0'*40)
+        message=self._in_clean_checkout("""try:
+    check_review_source(root,'0'*40)
+except ValueError as error:
+    print(json.dumps(str(error)))
+else:
+    raise AssertionError('wrong exact commit accepted')
+""")
+        self.assertEqual(message,'review-source-exact-E')
     def test_other_clean_git_root_refuses_actual_loaded_origins(self):
         other=self.root/'other';other.mkdir();hooks=self.root/'empty-hooks';hooks.mkdir()
         subprocess.run(['git','init','--quiet',str(other)],check=True,capture_output=True)

@@ -94,3 +94,12 @@ Tests live in `tests/test_<area>*.py` and run with `PYTHONPATH=src:.:tests pytho
 - Every merge into `main` needs Howard's approval of that exact commit.
 
 Work orders from Howard live outside the repository and are pasted into your task. Follow the one you were given, and nothing more.
+
+## Human YubiKey ceremony and operator rehearsal
+
+- Use the superseding [3 November procedure](docs/factory/key-ceremony-20261103/PROCEDURE.md) and its display-only `ceremony-notes` script mode. Preserve older dated records.
+- Howard reports the two public-canary independent decryptions complete. Record only the public recipients and the human report; this does not establish production-controller, in-window ownership or signer qualification.
+- For these keys, new-key setup required admin installation of ykman, then the human-only management-key compatibility command `ykman piv access change-management-key --algorithm TDES --generate --protect` before age-plugin-yubikey in the standard ceremony account. Never execute this from agents or CI.
+- The plugin first asks for the CURRENT PIN, then current PUK, then one new value for both PIN and PUK. Key A's pre-generation reset after a mis-entry is historical, not permission to reset established keys.
+- Actual reported settings are PIN `once`, touch `always`, names `lightyear-A` / `lightyear-B`. Do not claim PIN `always` or silently weaken any production custody requirement. Reconcile the actual policy in the native qualification packet.
+- Never request or export PINs, PUKs, serials, identity files or private keys. Keep all private operations in Howard's ceremony account. Encryption recipients do not designate Tower or receipt signers.

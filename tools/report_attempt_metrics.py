@@ -10,6 +10,19 @@ from lightyear_factory.journal_metrics import (
     JournalBinding, MAX_JOURNAL_BYTES, MetricsError, _constant, _object,
     collect_cases, write_report,
 )
+from lightyear_factory.contracts import canonical_hash
+from lightyear_factory.human_metrics import collect_human_events
+
+
+def _read_source(root, name):
+    relative = Path(name)
+    if relative.is_absolute() or relative.drive or ".." in relative.parts:
+        raise MetricsError("metrics-source-path")
+    target = (root / relative).resolve()
+    if not target.is_relative_to(root):
+        raise MetricsError("metrics-source-outside-inventory")
+    with target.open("rb") as stream:
+        return stream.read(MAX_JOURNAL_BYTES + 1)
 
 
 def render_inventory(inventory_path, output_path):
@@ -19,8 +32,9 @@ def render_inventory(inventory_path, output_path):
     if len(raw) > 1024 * 1024:
         raise MetricsError("metrics-inventory-size")
     inventory = json.loads(raw, object_pairs_hook=_object, parse_constant=_constant)
-    if (not isinstance(inventory, dict) or set(inventory) !=
-            {"schema", "case_ids", "exact_e", "journals"} or
+    required = {"schema", "case_ids", "exact_e", "journals"}
+    if (not isinstance(inventory, dict) or not required <= set(inventory) or
+            set(inventory) - required - {"human_events"} or
             inventory["schema"] != "factory-metrics-inventory/1" or
             not isinstance(inventory["journals"], list) or len(inventory["journals"]) > 1000):
         raise MetricsError("metrics-inventory-shape")
@@ -30,20 +44,24 @@ def render_inventory(inventory_path, output_path):
     for row in inventory["journals"]:
         if not isinstance(row, dict) or set(row) != {"path", "binding"}:
             raise MetricsError("metrics-inventory-journal")
-        relative = Path(row["path"])
-        if relative.is_absolute() or relative.drive or ".." in relative.parts:
-            raise MetricsError("metrics-source-path")
-        target = (root / relative).resolve()
-        if not target.is_relative_to(root):
-            raise MetricsError("metrics-source-outside-inventory")
-        with target.open("rb") as stream:
-            data = stream.read(MAX_JOURNAL_BYTES + 1)
+        data = _read_source(root, row["path"])
         total_bytes += len(data)
         if total_bytes > 64 * 1024 * 1024:
             raise MetricsError("metrics-inventory-source-size")
         sources.append((JournalBinding(**row["binding"]), data))
-    return write_report(Path(output_path),
-                        collect_cases(inventory["case_ids"], inventory["exact_e"], sources))
+    report = collect_cases(inventory["case_ids"], inventory["exact_e"], sources)
+    if "human_events" in inventory:
+        human = inventory["human_events"]
+        if not isinstance(human, dict) or set(human) != {"path", "source_sha256", "campaign_id"}:
+            raise MetricsError("metrics-human-inventory")
+        data = _read_source(root, human["path"])
+        if total_bytes + len(data) > 64 * 1024 * 1024:
+            raise MetricsError("metrics-inventory-source-size")
+        report["human_observations"] = collect_human_events(
+            data, source_sha256=human["source_sha256"], campaign_id=human["campaign_id"],
+            exact_e=inventory["exact_e"], case_ids=inventory["case_ids"])
+        report["content_sha256"] = canonical_hash(report, {"content_sha256"})
+    return write_report(Path(output_path), report)
 
 
 def main():

@@ -1,6 +1,7 @@
 """CI-only disposable handoff fault regressions; no production keys or execution."""
 import base64
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 import hashlib
 import json
 import os
@@ -43,7 +44,8 @@ class PublicSigningHandoffTests(unittest.TestCase):
         return request, payload, self.controller.envelope(payload)
 
     def row(self):
-        with sqlite3.connect(self.path) as connection:
+        # SQLite's transaction context does not close the connection.
+        with closing(sqlite3.connect(self.path)) as connection:
             return connection.execute(
                 "SELECT request, payload, status, reply FROM handoffs WHERE purpose='controller-receipt'").fetchone()
 

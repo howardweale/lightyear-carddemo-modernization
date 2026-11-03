@@ -25,14 +25,14 @@ operator signing command, Tower delivery/outbox, native qualification or P5 clos
    including tree, single parent, author, committer and provenance trailers.
    The human returns the same commit with its OpenSSH `gpgsig` header added.
    Verification accepts only the single designated `factory@lightyear.invalid`
-   ssh-ed25519 allowed-signers entry and SSHSIG namespace `git`.
+   OpenSSH Ed25519 allowed-signers entry and SSHSIG namespace `git`.
 4. Reply verification compares bytes and bindings, verifies the signature and
    checks both deadlines before and after verification. The caller receives a
    payload digest or commit object ID. This is signature validity only; it is
    not a controller-origin attestation, admission, ownership proof or GO verdict.
 
 The SSHSIG reader follows the [OpenSSH protocol](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig)
-with a deliberately narrow profile: version 1, ssh-ed25519, namespace `git`, empty
+with a deliberately narrow profile: version 1, Ed25519 keys, namespace `git`, empty
 reserved field, SHA-256 or SHA-512, no trailing binary data, and bounded armor.
 Commit requests accept four headers (tree, one parent, author, committer), with
 no merge parents, pre-existing signature or extra headers. Supporting other

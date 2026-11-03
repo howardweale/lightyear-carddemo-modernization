@@ -6,12 +6,12 @@ chain, and projects bounded public fields. It does not authenticate a signer,
 admit a request, reconcile the full controller protocol, or qualify P5.
 
 The inventory uses schema `factory-metrics-inventory/1`, `case_ids` (nineteen
-unique IDs from the approved case inventory), `exact_e` (the source commit),
+unique IDs from the case inventory requiring separate approval), `exact_e` (the source commit),
 and `journals`. Each journal entry contains a relative `path` and `binding`:
 `case_id`, `exact_e`, `execution_id`, `workflow_run_id`,
 `workflow_run_attempt`, `attempt_identity_sha256`, `source_sha256` and
 `journal_head_sha256`. These associations need independent authentication
-against the signed receipt inventory. A hash alone establishes no authority.
+against the receipt inventory and its signatures. A hash alone establishes no authority.
 
 The emitter is `tools/report_attempt_metrics.py INVENTORY NEW_OUTPUT`.
 It refuses an existing output, source drift, conflicting snapshots of one
@@ -53,5 +53,5 @@ collector retains the original rows, rejects correction forks, and counts the
 latest version once globally and on each affected case. Empty streams and
 unreferenced cases have zero *observed* events, but their actual intervention
 counts remain unknown. Complete coverage, human identity authentication and
-joins to authorized execution receipts are still outstanding. The report cannot
+joins to execution receipts and their authorization are still outstanding. The report cannot
 attest them from self-described metadata or hashes.

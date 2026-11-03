@@ -6,7 +6,7 @@ Keep work small and targeted. Most of this repository is evidence you never need
 
 ## Current priority
 
-- **Track B, the qualified run, is the only priority.** It covers 19 cases under eight strict gates, all unchanged. Planning basis: freeze on 13 November, run on 19 November or later. If the freeze slips past 13 November, the run moves to the week of 30 November, never 23–27 November.
+- **Track B, the qualified run, is the only priority.** It covers 19 cases under eight strict gates, all unchanged. Planned complete-freeze target: 20 November at 17:00 Pacific; run in the week beginning 30 November, conditional on capacity, P5 closure, all other evidence and freshness. No execution, qualification, continuation or recovery on 23–27 November. See the [3 November decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf); it supersedes the 13 November freeze planning basis.
 - **Critical-path work comes first.** That means the #455 rebind, encryption of held-out answers, the run checkers' date fixes, and anything the run depends on. Backlog work happens only when a lane is idle.
 - **Track A is retired.** Do not schedule it.
 
@@ -25,6 +25,7 @@ Keep work small and targeted. Most of this repository is evidence you never need
 ## Approvals and decisions
 
 - **Every merge into `main` needs Howard's approval of that exact commit.** Run-bound source, workflows, fences, manifests, Tower or authority code, and main repair PRs need exact-hash approval.
+- **Custody design:** PIN once / touch always; unplug after every window, then log out; freshly insert next window. Planned implementation is option A for signing and Mac/Tower: external human-held Ed25519 signers, supervised isolated Mac owner, direct authenticated Tower append and fail-stop immutable outbox. The [scope decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf) does not authorize provisioning, private operations, signatures, admissions, spend or merges. Retain original deadlines, all-process cleanup and no automatic resend/retry. Heartbeat monitors remain read-only.
 - **Any estimate over 2 days comes to Howard as a decision with options,** not as a plan already under way. The same goes for any date slip of more than 2 days.
 - **Batch your questions.** Howard's time is the scarcest resource. Each request to him must be dated, decision-ready, and list what he must physically do.
 - **Every Monday,** post a 14-day look-ahead of everything that depends on Howard:

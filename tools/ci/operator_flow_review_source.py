@@ -29,6 +29,20 @@ MODULES=(
 LIMIT=4*1024*1024
 
 
+def _require_stable_source(before,opened,after,final,size,*,windows):
+    # CPython Windows stat(path) reports creation time as ctime, while
+    # fstat(handle) can report metadata-change time (CPython #157671).
+    # Keep both clocks stable within their own API; never discard ctime.
+    def common(s):
+        values=(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns)
+        return values+(s.st_birthtime_ns,) if windows else values+(s.st_ctime_ns,)
+    def full(s):return common(s)+(s.st_ctime_ns,)
+    require(common(before)==common(opened)==common(after)==common(final)
+        and full(before)==full(final) and full(opened)==full(after)
+        and all(stat.S_ISREG(s.st_mode) and s.st_nlink==1 for s in (before,opened,after,final))
+        and size==before.st_size,'review-source-changed')
+
+
 def _source_bytes(path):
     path=Path(path)
     require(path.is_absolute() and path.resolve(strict=True)==path,'review-source-absolute')
@@ -40,9 +54,7 @@ def _source_bytes(path):
         and 0<before.st_size<=LIMIT,'review-source-file')
     with path.open('rb') as stream:
         opened=os.fstat(stream.fileno());raw=stream.read(LIMIT+1);after=os.fstat(stream.fileno())
-    def identity(s):return (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
-    require(identity(before)==identity(opened)==identity(after)==identity(path.stat())
-        and len(raw)==before.st_size,'review-source-changed')
+    _require_stable_source(before,opened,after,path.stat(),len(raw),windows=os.name=='nt')
     return raw
 
 

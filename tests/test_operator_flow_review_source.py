@@ -1,7 +1,8 @@
 """CI-only original file/checkout observations. No API or verifier substitute."""
 import json,os,subprocess,sys,tempfile,unittest
 from pathlib import Path
-from tools.ci.operator_flow_review_source import _source_bytes,check_review_source,LIMIT
+from types import SimpleNamespace
+from tools.ci.operator_flow_review_source import _source_bytes,check_review_source,LIMIT,_require_stable_source
 # Ensure the original direct review module is loaded, as in the real entry.
 from tools.ci import operator_flow_publication_review
 from lightyear_factory import contracts,model_admission
@@ -57,8 +58,11 @@ from lightyear_execution import contracts as execution_contracts,tower_drill_adm
 root=Path.cwd()
 head=sys.argv[1]
 """
-        result=subprocess.run([sys.executable,'-B','-c',imports+code,head],
-            cwd=checkout,env=env,check=True,capture_output=True,text=True,timeout=120)
+        try:
+            result=subprocess.run([sys.executable,'-B','-c',imports+code,head],
+                cwd=checkout,env=env,check=True,capture_output=True,text=True,timeout=120)
+        except subprocess.CalledProcessError as error:
+            self.fail('clean-checkout source check failed: '+error.stderr)
         return json.loads(result.stdout)
 
     def test_actual_ci_checkout_modules_match_current_commit(self):
@@ -86,3 +90,45 @@ else:
         head=git(other,'rev-parse','HEAD').decode().strip()
         with self.assertRaisesRegex(ValueError,'review-source-module-origin'):
             check_review_source(other,head)
+
+
+class SourceStatIdentityTests(unittest.TestCase):
+    def observations(self,windows=True):
+        def item(ctime):
+            return SimpleNamespace(st_dev=1,st_ino=2,st_size=12,st_mtime_ns=300,
+                st_ctime_ns=ctime,st_birthtime_ns=100,st_mode=0o100644,st_nlink=1)
+        return [item(100),item(200 if windows else 100),
+                item(200 if windows else 100),item(100)]
+
+    def test_windows_distinct_stable_creation_and_change_times_are_valid(self):
+        _require_stable_source(*self.observations(),12,windows=True)
+
+    def test_posix_cross_api_ctime_mismatch_still_refuses(self):
+        with self.assertRaisesRegex(ValueError,'review-source-changed'):
+            _require_stable_source(*self.observations(),12,windows=False)
+        _require_stable_source(*self.observations(False),12,windows=False)
+
+    def test_windows_each_api_ctime_drift_still_refuses(self):
+        for index in range(4):
+            samples=self.observations();samples[index].st_ctime_ns+=1
+            with self.subTest(index=index),self.assertRaisesRegex(ValueError,'review-source-changed'):
+                _require_stable_source(*samples,12,windows=True)
+
+    def test_every_identity_size_mtime_and_birthtime_observation_is_checked(self):
+        for field in ('st_dev','st_ino','st_size','st_mtime_ns','st_birthtime_ns'):
+            for index in range(4):
+                samples=self.observations();setattr(samples[index],field,getattr(samples[index],field)+1)
+                with self.subTest(field=field,index=index),self.assertRaisesRegex(ValueError,'review-source-changed'):
+                    _require_stable_source(*samples,12,windows=True)
+
+    def test_hardlink_and_nonregular_observations_still_refuse(self):
+        for field,value in (('st_nlink',2),('st_mode',0o040755)):
+            for index in range(4):
+                samples=self.observations();setattr(samples[index],field,value)
+                with self.subTest(field=field,index=index),self.assertRaisesRegex(ValueError,'review-source-changed'):
+                    _require_stable_source(*samples,12,windows=True)
+
+    def test_short_and_overlong_reads_still_refuse(self):
+        for size in (11,13):
+            with self.subTest(size=size),self.assertRaisesRegex(ValueError,'review-source-changed'):
+                _require_stable_source(*self.observations(),size,windows=True)

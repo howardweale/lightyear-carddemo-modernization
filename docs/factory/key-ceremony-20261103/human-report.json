@@ -1,0 +1,52 @@
+{
+  "schema": "human-reported-key-ceremony/1",
+  "reporter": "Howard",
+  "evidence_basis": "Direct human report in this chat; no agent observation or hardware inspection",
+  "ceremony_start": "2026-11-03T06:30:00-08:00",
+  "ceremony_end": "2026-11-03T08:20:00-08:00",
+  "account_type": "dedicated standard ceremony account",
+  "recipients": [
+    {
+      "label": "A",
+      "name": "lightyear-A",
+      "recipient": "age1yubikey1qg8fhksrg4ww0ana8dqcd5z7na2r239jywqnwa9y3elqhrkl2rvd24zxdxw",
+      "pin_policy": "once",
+      "touch_policy": "always",
+      "individual_test_file_decryption": true,
+      "shared_ciphertext_decryption_with_this_key_alone": true
+    },
+    {
+      "label": "B",
+      "name": "lightyear-B",
+      "recipient": "age1yubikey1qfsdprmqgcf70su076n04vf4xjxf0nn8z7mw6fwnjkzn37fy3tvfcazq329",
+      "pin_policy": "once",
+      "touch_policy": "always",
+      "individual_test_file_decryption": true,
+      "shared_ciphertext_decryption_with_this_key_alone": true
+    }
+  ],
+  "account_logged_out_afterwards": true,
+  "private_material_exported": false,
+  "management_key_compatibility": {
+    "initial_algorithm_reported": "AES-192",
+    "plugin_error": "custom unprotected non-TDES management keys are not supported",
+    "human_command_before_plugin": "ykman piv access change-management-key --algorithm TDES --generate --protect",
+    "ykman_install_account": "admin",
+    "installed_ykman_version": "not supplied"
+  },
+  "prompt_sequence": [
+    "current PIN (factory default for an untouched key)",
+    "current PUK",
+    "one new value for both PIN and PUK"
+  ],
+  "key_a_pre_generation_reset_after_misentry": true,
+  "qualification": {
+    "production_controller": false,
+    "private_answer_bundle": false,
+    "in_window_process_ownership": false,
+    "post_logout_uid_process_enumeration": false,
+    "tower_or_receipt_signer_designation": false,
+    "final_E_binding": false
+  },
+  "limits": "Public-canary decryption report only; not machine-verifiable production qualification. No PINs, PUKs, serials, identity files, private keys or plaintext expected answers requested or retained."
+}

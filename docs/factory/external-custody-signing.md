@@ -69,7 +69,7 @@ Not yet: human transport, exact public signer designations, revocation checks,
 timeout ownership or all-process quiescence. The Mac owner and Tower adapter must
 enforce those separately, including an immutable outbox and hash/case/attempt-bound
 authenticated acknowledgment. A late response, late import, missing acknowledgment
-or ambiguous result must never upgrade failure. Crash recovery is not authorized.
+or ambiguous result must never upgrade failure. Not authorized: crash recovery.
 
 Before any private input, the native owner must establish exclusive process
 control and prove cleanup against the original deadline. Callback assertions,

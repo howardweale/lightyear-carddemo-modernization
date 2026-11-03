@@ -104,4 +104,3 @@ cmp -s "$record/dummy.txt" "$record/restored.txt" || fail 'roundtrip differs'
 cleanup
 printf 'Roundtrip PASS. Ceremony UID: %s\nReceipt directory: %s\n' "$(id -u)" "$record"
 printf 'Now LOG OUT via Apple menu. Verify from the admin account before logging back in.\n'
-

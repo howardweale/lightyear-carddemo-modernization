@@ -24,7 +24,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Build pinned clean toolchain environment
-        run: docker build --platform linux/amd64 -f tools/legacy_twin/reproducible.Containerfile -t twin-repro-toolchain .
+        run: python3 -B tools/ci/twin_build_retry.py
       - name: Clean public twins and mixed-key discriminator
         env:
           EXACT_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}

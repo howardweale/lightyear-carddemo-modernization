@@ -1,0 +1,15 @@
+{
+  "case_id": "configured-build-control",
+  "controller_calls": 3,
+  "execution_authorized": false,
+  "expected_changed_paths": [
+    "tests/fixtures/p5_public/human-public-build-control/worker.py"
+  ],
+  "external_model_calls": 3,
+  "provider": "openai-responses",
+  "public_data_only": true,
+  "schema": "factory-public-drill-scope/1",
+  "workspace_paths": [
+    "tests/fixtures/p5_public/human-public-build-control/worker.py"
+  ]
+}

@@ -2,6 +2,7 @@
   "schema": "ci-test-skip-policy/1",
   "scope": "verify full Python unittest discovery only",
   "sources": {
+    "tests/test_operator_flow_windows_job_native.py": "b267e3a50a6793b377f2a1b02faf6a232cb976d5cf98af3b59d111ab70ae0baf",
   "tests/test_agent_mcp.py": "225a9cf583de5d040ea94ad9760ecbe48c5e385a48de9446251f96d52f420d6a",
   "tests/test_agent_workflow.py": "d24fd0bc3eedc1706f5ca0fd6c8c53c82d2ae5ce72cbc7f579e9faa0653ca22c",
   "tests/test_b06_bounded_format.py": "0c3c15d5f0eea865e195c597b84457dc24b41f61bfe1de9b6ddebea8fe5aba91",
@@ -116,6 +117,16 @@
     {"selector": "test_verify_mcp.PublicToolkitTests.test_symlink_fifo_and_directory_refused", "scope": "test", "reason": "POSIX special-file assertions", "platforms": ["Windows"], "rationale": "POSIX-specific assertion; must execute on Linux."},
     {"selector": "test_verify_smoke.CandidateBuildTests", "scope": "class", "reason": "Build the public candidate with Maven first", "platforms": ["Linux", "Windows"], "rationale": "Full Python discovery precedes candidate packaging; the built-candidate/dedicated acceptance checks are separate."},
     {"selector": "test_zos_intake.IntakeCase.test_divergent_java_verdict_emits_closed_tower_request", "scope": "test", "reason": "Build the Java candidate for the public divergence rehearsal", "platforms": ["Linux", "Windows"], "rationale": "Full Python discovery precedes candidate packaging; the built-candidate/dedicated acceptance checks are separate."},
-    {"selector": "test_zos_intake.IntakeCase.test_java_execution_signed_verdict_offline_replay_and_output_tamper", "scope": "test", "reason": "Build the Java candidate to exercise the public-only subprocess rehearsal", "platforms": ["Linux", "Windows"], "rationale": "Full Python discovery precedes candidate packaging; the built-candidate/dedicated acceptance checks are separate."}
+    {"selector": "test_zos_intake.IntakeCase.test_java_execution_signed_verdict_offline_replay_and_output_tamper", "scope": "test", "reason": "Build the Java candidate to exercise the public-only subprocess rehearsal", "platforms": ["Linux", "Windows"], "rationale": "Full Python discovery precedes candidate packaging; the built-candidate/dedicated acceptance checks are separate."},
+    {
+      "selector": "test_operator_flow_windows_job_native.WindowsJobNativeTests",
+      "scope": "class",
+      "reason": "requires native Windows Job Objects",
+      "platforms": [
+        "Linux",
+        "Darwin"
+      ],
+      "rationale": "New native Windows Job Object tests run without skips on the existing Windows verification job; Linux/Darwin cannot execute Win32 APIs. No existing test allowance or assertion changes, and Linux success is not native Windows evidence."
+    }
   ]
 }

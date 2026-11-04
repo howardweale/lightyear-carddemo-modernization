@@ -48,12 +48,28 @@ preserve model provenance and every existing audit, and bind the revised message
 and receipt schema into the final source candidate. The new helpers must not be
 used to reconstruct an expected request from a returned packet.
 
-Not yet: a durable one-attempt journal, crash recovery, human transport, designated
-signers, revocation checks, timeout ownership or all-process quiescence. These
-stateless functions cannot prevent a caller from trying twice. The Mac owner and
-Tower adapter must enforce that separately, including an immutable outbox and
-hash/case/attempt-bound authenticated acknowledgment. A late response, late
-import, missing acknowledgment or ambiguous result must never upgrade failure.
+`PublicSigningHandoff` adds a persistent public handoff for one live owner. It
+requires distinct public keys for the two roles and retains each exact request
+before returning it for export. The reply slot is consumed before size checks,
+deadline checks or signature verification. Invalid replies and uncertain writes
+stop the object; an existing database cannot be reopened to resume. Each role has
+one export and one reply under the original deadlines. This is a component API,
+not yet a production controller path or usable operator command.
+
+The local SQLite profile uses rollback journals, `synchronous=EXTRA` and
+`fullfsync=ON`, following the [SQLite synchronization documentation](https://www.sqlite.org/pragma.html#pragma_synchronous).
+Not yet: native power-loss qualification, exclusive filesystem ownership or
+protection from hostile database rollback. The controller must authenticate the
+designation and bind exactly one database to its admitted attempt; a caller can
+otherwise choose another path. No caller-supplied digest establishes that trust.
+`SIGNATURE_VERIFIED` records cryptographic validity only: a final deadline failure
+can prevent delivery even after that row is stored. It is never a GO receipt.
+
+Not yet: human transport, exact public signer designations, revocation checks,
+timeout ownership or all-process quiescence. The Mac owner and Tower adapter must
+enforce those separately, including an immutable outbox and hash/case/attempt-bound
+authenticated acknowledgment. A late response, late import, missing acknowledgment
+or ambiguous result must never upgrade failure. Not authorized: crash recovery.
 
 Before any private input, the native owner must establish exclusive process
 control and prove cleanup against the original deadline. Callback assertions,
@@ -61,6 +77,9 @@ PID scans, EOF and process-group emptiness do not establish that proof. No
 disposable result may be relabeled as a production-controller receipt.
 
 ## Human actions and limits
+
+Howard is the Mac operator and custodian of both separate dedicated signing keys,
+with A/A and PIN once / touch always retained, under the [operator decision](custody-operators-20261103/decision.json#sha256=09e8e80db3cf62302a98ed627ce306749197c28bd2e9a51e8efc7b823389c19d).
 
 Planned later: designate separate controller-envelope and candidate-commit public
 keys, fingerprints, scope and revocation terms; retain Tower authority solely
@@ -79,3 +98,8 @@ CI regressions cover valid signatures, altered payloads, key/context replay,
 duplicate or malformed data, deadline exhaustion during verification, and an
 independent OpenSSH verification of disposable test signatures. Not yet: CI
 results for this change, real signer handling or native qualification.
+
+The handoff regressions cover persistent export/consumption order, duplicate and
+concurrent replies, expiry after a verified commit, ambiguous commit results,
+context/payload/state tampering, changed owner PID, hardlinks, existing sidecars
+and refusal to resume. Not yet: host crash/power-cut tests or complete-route proof.

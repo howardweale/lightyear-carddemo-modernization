@@ -7,10 +7,12 @@ RUN dpkg-deb -x /tmp/bootstrap-ca.deb /tmp/bootstrap-ca \
  && mkdir -p /etc/ssl/certs \
  && cat /tmp/bootstrap-ca/usr/share/ca-certificates/mozilla/*.crt > /etc/ssl/certs/ca-certificates.crt \
  && rm -r /tmp/bootstrap-ca /tmp/bootstrap-ca.deb
+COPY tools/legacy_twin/update-snapshot-indexes.sh /tmp/update-snapshot-indexes.sh
 # Pin transitive build packages as well as the four checksum-pinned COBOL packages.
 RUN sed -i -E 's@http://(archive|security).ubuntu.com/ubuntu/?@https://snapshot.ubuntu.com/ubuntu/20261001T000000Z/@g' /etc/apt/sources.list.d/ubuntu.sources \
  && printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAPT::Update::Error-Mode "any";\n' > /etc/apt/apt.conf.d/99snapshot \
- && apt-get update \
+ && bash /tmp/update-snapshot-indexes.sh \
+ && rm /tmp/update-snapshot-indexes.sh \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates curl python3 sudo
 COPY tools/legacy_twin/install-pinned.sh /tmp/install-pinned.sh
 RUN bash /tmp/install-pinned.sh && rm /tmp/install-pinned.sh

@@ -1,0 +1,710 @@
+{
+  "schema": "milestone-merge-reconciliation/1",
+  "recorded_on": "2026-10-26",
+  "draft": true,
+  "integration": {
+    "baseline_ms114_publication": "a105036035ad06539ce25de07454ee95c66807c8",
+    "main_snapshot": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+    "new_integration_commit": null,
+    "scope": "All 47 first-parent merges after MS114 publication through frozen main; separately cited operator decisions through the 17:00 packet."
+  },
+  "pull_requests": [
+    {
+      "number": 380,
+      "title": "[Define and evaluate release-grade evidence requirements](https://github.com/howardweale/lightyear-carddemo-modernization/pull/380)",
+      "headRefOid": "727ab05e60a7fba37ff006e536e65ea838785022",
+      "mergeCommit": {
+        "oid": "14f75d63c479a91bbed19c2dada4b7034912b639"
+      },
+      "mergedAt": "2026-10-21T13:31:43Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/380"
+    },
+    {
+      "number": 414,
+      "title": "[G1: graph-on Verify acceptance and full projection leak scan](https://github.com/howardweale/lightyear-carddemo-modernization/pull/414)",
+      "headRefOid": "a1c1223470cb4f5ccb0f24faa5dfd9469aa15b3f",
+      "mergeCommit": {
+        "oid": "577b55cc6b8b000da14d607da108ac1c0a5d76fb"
+      },
+      "mergedAt": "2026-10-21T14:45:32Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/414"
+    },
+    {
+      "number": 412,
+      "title": "[status: rebuild after 4aab2828c3eccff16d435d65e9437bee408e60cb](https://github.com/howardweale/lightyear-carddemo-modernization/pull/412)",
+      "headRefOid": "9815705a4b10555dbf41356df68f860eb3d72a16",
+      "mergeCommit": {
+        "oid": "030a8e2a2d51bb0988d4b96ab941b8039ca04ed3"
+      },
+      "mergedAt": "2026-10-21T15:06:05Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/412"
+    },
+    {
+      "number": 386,
+      "title": "[fix: separate IMS replay-local coverage and traverse child segments](https://github.com/howardweale/lightyear-carddemo-modernization/pull/386)",
+      "headRefOid": "33b23a2a543b9c54cc54c87415dd9d3a6fe5a405",
+      "mergeCommit": {
+        "oid": "682a6f8e876c07abe1e935bcd58a9b00ed6fbb76"
+      },
+      "mergedAt": "2026-10-21T15:26:53Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/386"
+    },
+    {
+      "number": 387,
+      "title": "[ci: cover CardDemo readiness and B06 PowerShell path changes](https://github.com/howardweale/lightyear-carddemo-modernization/pull/387)",
+      "headRefOid": "881232cde2c74a6d31f25af7a32bf8b96c8d134d",
+      "mergeCommit": {
+        "oid": "46543134741e52e742094980bd2acac010b96654"
+      },
+      "mergedAt": "2026-10-21T18:17:04Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/387"
+    },
+    {
+      "number": 416,
+      "title": "[feat(factory): add bounded on-demand graph tools for Planner and Analyst](https://github.com/howardweale/lightyear-carddemo-modernization/pull/416)",
+      "headRefOid": "768f5e76ae384ced1d23ade3ffe8d74734c449e8",
+      "mergeCommit": {
+        "oid": "2857d2c467ad9b73d8a878bd5099bd8f90a535dc"
+      },
+      "mergedAt": "2026-10-21T18:17:46Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/416"
+    },
+    {
+      "number": 391,
+      "title": "[test: independently check CardDemo layouts with disclosed synthetic bounds](https://github.com/howardweale/lightyear-carddemo-modernization/pull/391)",
+      "headRefOid": "d4c6063a5068c7a5e9bd8f8329286003abb44069",
+      "mergeCommit": {
+        "oid": "1000dca88eadd55cea9ea0e2ba6021111e6d013e"
+      },
+      "mergedAt": "2026-10-21T19:38:52Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/391"
+    },
+    {
+      "number": 418,
+      "title": "[ci: report stranded merged work and maintain one audit issue](https://github.com/howardweale/lightyear-carddemo-modernization/pull/418)",
+      "headRefOid": "d047ec4fec5409eb894898e5f1b4b526431e0d1f",
+      "mergeCommit": {
+        "oid": "9f1f97aa5a82605e52950bd7c407318e2ad52ddc"
+      },
+      "mergedAt": "2026-10-21T20:28:59Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/418"
+    },
+    {
+      "number": 417,
+      "title": "[docs(factory): preregister combined COPAU and three-arm graph comparison](https://github.com/howardweale/lightyear-carddemo-modernization/pull/417)",
+      "headRefOid": "e8956d8154be5663896eacf107442bbcf0873f04",
+      "mergeCommit": {
+        "oid": "88a012f22b9918770350b344f0d202b95f0bd933"
+      },
+      "mergedAt": "2026-10-21T21:50:10Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/417"
+    },
+    {
+      "number": 420,
+      "title": "[Prepare Factory Tower first installation and correct MS-106 claims](https://github.com/howardweale/lightyear-carddemo-modernization/pull/420)",
+      "headRefOid": "2a82934b47f3a5953e266c683f60c25f4ecfb517",
+      "mergeCommit": {
+        "oid": "9dfffd96fd846ab8a5eb3957ab8469aaf6f26487"
+      },
+      "mergedAt": "2026-10-21T23:22:26Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/420"
+    },
+    {
+      "number": 421,
+      "title": "[feat(factory): add G3 plain search and zero-model parity CI](https://github.com/howardweale/lightyear-carddemo-modernization/pull/421)",
+      "headRefOid": "ad236732711e76448767909080308f269bb288d6",
+      "mergeCommit": {
+        "oid": "7bddb8c09fe4673e04bcc94b0589a3f1b775bc19"
+      },
+      "mergedAt": "2026-10-22T06:27:10Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/421"
+    },
+    {
+      "number": 373,
+      "title": "[Disclose CardDemo work-order proof gaps and enforce byte-key SQL ordering](https://github.com/howardweale/lightyear-carddemo-modernization/pull/373)",
+      "headRefOid": "a0fa67128b40f2dc412085baa39eefe86e2bf6ca",
+      "mergeCommit": {
+        "oid": "d2b000f162cddad268f8fac2bc2095f8cda88135"
+      },
+      "mergedAt": "2026-10-22T06:28:20Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/373"
+    },
+    {
+      "number": 392,
+      "title": "[docs: correct the historical backfill supersession explanation](https://github.com/howardweale/lightyear-carddemo-modernization/pull/392)",
+      "headRefOid": "30fcdf050a35f73650f15951e7dcfe31c89cdbe5",
+      "mergeCommit": {
+        "oid": "2f005517b12e4e326fda920870ba7445b4e78133"
+      },
+      "mergedAt": "2026-10-22T06:29:06Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/392"
+    },
+    {
+      "number": 419,
+      "title": "[feat(carddemo): translate COACTUP phone and date validation](https://github.com/howardweale/lightyear-carddemo-modernization/pull/419)",
+      "headRefOid": "1fd463ed1c358020a4abc0877c5879edd08bf31f",
+      "mergeCommit": {
+        "oid": "7cd9b590368d223ed13d7c167ac0a51ac6f480b8"
+      },
+      "mergedAt": "2026-10-22T06:31:37Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/419"
+    },
+    {
+      "number": 422,
+      "title": "[refactor(carddemo): type account feedback with per-class mutation proof](https://github.com/howardweale/lightyear-carddemo-modernization/pull/422)",
+      "headRefOid": "8445d970a40f513a05585ec46f485b38670e6dfc",
+      "mergeCommit": {
+        "oid": "489605f3be80ee3b41c8fb69086c2c8b0183fb52"
+      },
+      "mergedAt": "2026-10-22T06:39:19Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/422"
+    },
+    {
+      "number": 423,
+      "title": "[test(tsql): stage R3 parser checks and reviewed revision-9 export](https://github.com/howardweale/lightyear-carddemo-modernization/pull/423)",
+      "headRefOid": "eaee74841f84f8d2d91f72ede893d02569df4418",
+      "mergeCommit": {
+        "oid": "77d14ae016e654fed9d026d2847b35c64b75c3d6"
+      },
+      "mergedAt": "2026-10-22T06:40:21Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/423"
+    },
+    {
+      "number": 381,
+      "title": "[Derive current INTCALC verdict from retained campaign](https://github.com/howardweale/lightyear-carddemo-modernization/pull/381)",
+      "headRefOid": "67719ec53fe50384b37341581ec8aa4d8887fe92",
+      "mergeCommit": {
+        "oid": "f7301fe45be844952a5fcfb01a9f864c4655383d"
+      },
+      "mergedAt": "2026-10-22T14:14:11Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/381"
+    },
+    {
+      "number": 425,
+      "title": "[ci: report actual unittest outcomes and enforce explicit skip allowances](https://github.com/howardweale/lightyear-carddemo-modernization/pull/425)",
+      "headRefOid": "22f230325d79581854232cb1ef70066843907062",
+      "mergeCommit": {
+        "oid": "1259518ebfa5ce28cbbcc4aad478adcae3575a8e"
+      },
+      "mergedAt": "2026-10-22T14:15:04Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/425"
+    },
+    {
+      "number": 426,
+      "title": "[ci: guard transitive Python imports against missing workflow triggers](https://github.com/howardweale/lightyear-carddemo-modernization/pull/426)",
+      "headRefOid": "77a1f0500bb896a429e6928e9db1e008b2538ee2",
+      "mergeCommit": {
+        "oid": "ee80c4d11d207f2d39e570b173b35063c16ee982"
+      },
+      "mergedAt": "2026-10-22T14:16:04Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/426"
+    },
+    {
+      "number": 427,
+      "title": "[docs: retain exact final-run phone/date and feedback proof receipts](https://github.com/howardweale/lightyear-carddemo-modernization/pull/427)",
+      "headRefOid": "436c4784e71ffe347d3042ca6ae3812de1ebb441",
+      "mergeCommit": {
+        "oid": "0448f93c22201cc2d258e317bf41b4ca46a5155d"
+      },
+      "mergedAt": "2026-10-22T14:17:07Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/427"
+    },
+    {
+      "number": 428,
+      "title": "[carddemo: type account receive and validation orchestration](https://github.com/howardweale/lightyear-carddemo-modernization/pull/428)",
+      "headRefOid": "980e88e83fe88fb252868b2e44f2ce47cc31a269",
+      "mergeCommit": {
+        "oid": "577a777fd68ecceacc5c9b54be7ae2c0bb74fd5e"
+      },
+      "mergedAt": "2026-10-22T14:18:10Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/428"
+    },
+    {
+      "number": 431,
+      "title": "[R3: prepare offline re-verification of all 108 native pairs](https://github.com/howardweale/lightyear-carddemo-modernization/pull/431)",
+      "headRefOid": "f5c7072c859fd772e574df692774cace6c57845d",
+      "mergeCommit": {
+        "oid": "9730dc02bb4466de9c907703cad873c6fcd5bc6d"
+      },
+      "mergedAt": "2026-10-22T18:56:42Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/431"
+    },
+    {
+      "number": 433,
+      "title": "[I5: document the INTCALC release plan and required gates](https://github.com/howardweale/lightyear-carddemo-modernization/pull/433)",
+      "headRefOid": "80a3de697fa706fedf2951301ff50413cc585c6b",
+      "mergeCommit": {
+        "oid": "d4a64caaf8a8401a8b7f2a1058eae5d15ed74674"
+      },
+      "mergedAt": "2026-10-22T18:57:32Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/433"
+    },
+    {
+      "number": 434,
+      "title": "[I3: prepare the unsigned six-request INTCALC review packet](https://github.com/howardweale/lightyear-carddemo-modernization/pull/434)",
+      "headRefOid": "b0711aa3c056591043aebcfd5ee7c2df24fd6fd5",
+      "mergeCommit": {
+        "oid": "b69e4c8a5ddd680d5ff527aa753e99bad671d024"
+      },
+      "mergedAt": "2026-10-22T18:58:11Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/434"
+    },
+    {
+      "number": 415,
+      "title": "[F8: retain receipts and prepare unsigned first COPAU request](https://github.com/howardweale/lightyear-carddemo-modernization/pull/415)",
+      "headRefOid": "157600754eaa724d77eb5147c1de0af82818ab59",
+      "mergeCommit": {
+        "oid": "710e23fc252bc4d1eed028127cc918fc2595a34e"
+      },
+      "mergedAt": "2026-10-22T19:38:09Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/415"
+    },
+    {
+      "number": 435,
+      "title": "[R5: check bare named documentation paths and explicit examples](https://github.com/howardweale/lightyear-carddemo-modernization/pull/435)",
+      "headRefOid": "8a63125becc1573c0960ce78d12b482b70a30e46",
+      "mergeCommit": {
+        "oid": "86ac6d2c60687b7951f408487aeeb24bbf4eac33"
+      },
+      "mergedAt": "2026-10-22T20:06:09Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/435"
+    },
+    {
+      "number": 439,
+      "title": "[test: enforce storage-type binding through dataflow callers](https://github.com/howardweale/lightyear-carddemo-modernization/pull/439)",
+      "headRefOid": "01bf46728b3e73daa0562195c94465a2d2d105e0",
+      "mergeCommit": {
+        "oid": "1a65c13f769de8a7e6f8d6480a1827f7f4f87d13"
+      },
+      "mergedAt": "2026-10-22T21:58:12Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/439"
+    },
+    {
+      "number": 437,
+      "title": "[fix: correct held-out TRANREPT scorecard accounting](https://github.com/howardweale/lightyear-carddemo-modernization/pull/437)",
+      "headRefOid": "9a07ed7fc9bfce81035ca11355dbc2e241c016c1",
+      "mergeCommit": {
+        "oid": "732d527e39704780871afb522bd7ae57e29367ae"
+      },
+      "mergedAt": "2026-10-22T22:37:18Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/437"
+    },
+    {
+      "number": 440,
+      "title": "[docs: retain final-head account-map proof evidence](https://github.com/howardweale/lightyear-carddemo-modernization/pull/440)",
+      "headRefOid": "17136f949dfd85d768ea087157a58a8705c8ff5a",
+      "mergeCommit": {
+        "oid": "2ca6725e8f42b0265d1f5d20e236b048730f3995"
+      },
+      "mergedAt": "2026-10-22T22:56:44Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/440"
+    },
+    {
+      "number": 438,
+      "title": "[fix: derive current status CI and deadlines from fresh observations](https://github.com/howardweale/lightyear-carddemo-modernization/pull/438)",
+      "headRefOid": "b35fb03d4c870a65bda5e10f64b599f13ee6db30",
+      "mergeCommit": {
+        "oid": "e57326a34756b359cc74389dffa271aab1fa5af5"
+      },
+      "mergedAt": "2026-10-22T23:33:37Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/438"
+    },
+    {
+      "number": 432,
+      "title": "[J2: account for every COACTUP and sign-on paragraph](https://github.com/howardweale/lightyear-carddemo-modernization/pull/432)",
+      "headRefOid": "90193b19d7608dbe5418ae15f226d3f60ef88827",
+      "mergeCommit": {
+        "oid": "a7c7b9474d98f58ba1098fb39ee1793263b1dbed"
+      },
+      "mergedAt": "2026-10-23T00:42:59Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/432"
+    },
+    {
+      "number": 430,
+      "title": "[F8: prepare private COPAU prerequisites with an operator helper](https://github.com/howardweale/lightyear-carddemo-modernization/pull/430)",
+      "headRefOid": "625a4cfbbedcbc57b1c5f9f424e18b8d098c3024",
+      "mergeCommit": {
+        "oid": "a34e0adce4f75a401d9eaa0e70b72191e090d9e8"
+      },
+      "mergedAt": "2026-10-23T01:29:46Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/430"
+    },
+    {
+      "number": 442,
+      "title": "[carddemo: type account-view record projection](https://github.com/howardweale/lightyear-carddemo-modernization/pull/442)",
+      "headRefOid": "5fd8334ed50d9172be9df317a92beeee021c721d",
+      "mergeCommit": {
+        "oid": "21e2ccfe7695458624cec39d9cfd51c6c7273156"
+      },
+      "mergedAt": "2026-10-23T16:50:15Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/442"
+    },
+    {
+      "number": 443,
+      "title": "[carddemo: bind menu source annotations](https://github.com/howardweale/lightyear-carddemo-modernization/pull/443)",
+      "headRefOid": "396cd08917a2421cb27ea0584525e93ec2eaa00f",
+      "mergeCommit": {
+        "oid": "e6a3747e6bc837096a4a4cc2a05491ddbe5b3143"
+      },
+      "mergedAt": "2026-10-23T16:51:37Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/443"
+    },
+    {
+      "number": 444,
+      "title": "[factory: record accepted first Tower installation](https://github.com/howardweale/lightyear-carddemo-modernization/pull/444)",
+      "headRefOid": "110423dfe776dfe3a414322d9e622a72987ab3b6",
+      "mergeCommit": {
+        "oid": "e8fcdebcec133e0eb994909cd5c0b66beea66d7c"
+      },
+      "mergedAt": "2026-10-23T18:15:29Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/444"
+    },
+    {
+      "number": 445,
+      "title": "[POSTTRAN: original sealed executable with new Tower key only](https://github.com/howardweale/lightyear-carddemo-modernization/pull/445)",
+      "headRefOid": "1f4b868067c69768e028af48b4bbff71c7e6306e",
+      "mergeCommit": {
+        "oid": "f267fc9ee8d1329529debf4b5edd72bb026b63a5"
+      },
+      "mergedAt": "2026-10-23T18:29:23Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/445"
+    },
+    {
+      "number": 446,
+      "title": "[COPAU: prepare held-out private answer keys with corpus qualification](https://github.com/howardweale/lightyear-carddemo-modernization/pull/446)",
+      "headRefOid": "aa3aa6988bbee28c87aa8089969076d1fb232f75",
+      "mergeCommit": {
+        "oid": "1d773a3841e933fbf03675f56183b56a59b28e62"
+      },
+      "mergedAt": "2026-10-23T21:06:44Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/446"
+    },
+    {
+      "number": 447,
+      "title": "[K-work: enforce the current COPAU freeze and F2 path fence](https://github.com/howardweale/lightyear-carddemo-modernization/pull/447)",
+      "headRefOid": "c95f93290498f04f5295d9cb3df34c6d944485cd",
+      "mergeCommit": {
+        "oid": "dbf5925c8a2fe13cc9f3a24b95347c50bc656de3"
+      },
+      "mergedAt": "2026-10-23T21:07:25Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/447"
+    },
+    {
+      "number": 448,
+      "title": "[K1: correct Java source text and gate UTF-8 hygiene](https://github.com/howardweale/lightyear-carddemo-modernization/pull/448)",
+      "headRefOid": "d11b8698fa596c8789dc8283653ffa127c07f72c",
+      "mergeCommit": {
+        "oid": "929bff1dfb746ea27da5c302ebdb05be2d853389"
+      },
+      "mergedAt": "2026-10-23T21:39:23Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/448"
+    },
+    {
+      "number": 454,
+      "title": "[P4: propose approval tiers without changing merge authority](https://github.com/howardweale/lightyear-carddemo-modernization/pull/454)",
+      "headRefOid": "b7d68efed68de85d4592d44eb7b14e4a26a05a29",
+      "mergeCommit": {
+        "oid": "0d169e31c94d4e3be752ada712a8aac616e9c64c"
+      },
+      "mergedAt": "2026-10-23T22:58:56Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/454"
+    },
+    {
+      "number": 453,
+      "title": "[P3: bind new operational claims to public receipts](https://github.com/howardweale/lightyear-carddemo-modernization/pull/453)",
+      "headRefOid": "27f36ee1a455eecf9dfbde3e47ea44ec8206299a",
+      "mergeCommit": {
+        "oid": "eaae770a742a4720e1106468e59a82d84d46d9a8"
+      },
+      "mergedAt": "2026-10-24T00:28:40Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/453"
+    },
+    {
+      "number": 441,
+      "title": "[carddemo: type COACTUP screen rendering and attributes](https://github.com/howardweale/lightyear-carddemo-modernization/pull/441)",
+      "headRefOid": "5f32004b1383385890335864d734a7653b066b52",
+      "mergeCommit": {
+        "oid": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e"
+      },
+      "mergedAt": "2026-10-24T00:32:12Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/441"
+    },
+    {
+      "number": 456,
+      "title": "[M1: retain all 113 survivor arguments without mutation credit](https://github.com/howardweale/lightyear-carddemo-modernization/pull/456)",
+      "headRefOid": "383bd9a74e2adb6590e768682ff5138c4802fab9",
+      "mergeCommit": {
+        "oid": "5d674cb7d5666ddd13a88e9c1d6d8c10affc5dd8"
+      },
+      "mergedAt": "2026-10-24T15:32:45Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/456"
+    },
+    {
+      "number": 457,
+      "title": "[K1 draft: prepare unfenced Java formatting under exact scope](https://github.com/howardweale/lightyear-carddemo-modernization/pull/457)",
+      "headRefOid": "21fd2a691fa8bd029aa802522a0b25a858c94ae4",
+      "mergeCommit": {
+        "oid": "967d1ede0819c5d1569bb166a044163c089dc8d0"
+      },
+      "mergedAt": "2026-10-24T18:25:30Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/457"
+    },
+    {
+      "number": 459,
+      "title": "[COPAU: bind a disabled graph and packed-context-only run boundary](https://github.com/howardweale/lightyear-carddemo-modernization/pull/459)",
+      "headRefOid": "5b07783c008e478de6dd029a7988d8d3470a50ed",
+      "mergeCommit": {
+        "oid": "3bc468666be34faf69796a6cfece9fe59f9f8939"
+      },
+      "mergedAt": "2026-10-24T20:58:29Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/459"
+    },
+    {
+      "number": 461,
+      "title": "[ci: validate exact operator-approved F2 fence exceptions](https://github.com/howardweale/lightyear-carddemo-modernization/pull/461)",
+      "headRefOid": "89f592ab19dd6d5d48ce3833ff54b1eb2d6f49ea",
+      "mergeCommit": {
+        "oid": "b9729cb16795d78865e7f92d5a5e92f9bde75180"
+      },
+      "mergedAt": "2026-10-25T04:01:46Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/461"
+    },
+    {
+      "number": 463,
+      "title": "[Bind PR 455 Windows verification timeout to exact workflow bytes](https://github.com/howardweale/lightyear-carddemo-modernization/pull/463)",
+      "headRefOid": "93bb305f2f0a363cf02c3aed1eb406fd9c9b1790",
+      "mergeCommit": {
+        "oid": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef"
+      },
+      "mergedAt": "2026-10-25T16:14:59Z",
+      "state": "MERGED",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/463"
+    }
+  ],
+  "milestones": [
+    {
+      "number": 115,
+      "pull_requests": [
+        420,
+        444
+      ],
+      "sources": [
+        {
+          "path": "tools/factory_install/entry.py",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "9b556b5ee287b4bf8e18d257861ea6a58c44cd603ae6200a782b96d956daecf1"
+        }
+      ],
+      "claim": "C115",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 116,
+      "pull_requests": [
+        445
+      ],
+      "sources": [
+        {
+          "path": "docs/factory/posttran-key-change-2026-10-23/README.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "da1439764174c689acad963182f12a42714f5c3cacad956f6d65513078c52e93"
+        }
+      ],
+      "claim": "C116",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 117,
+      "pull_requests": [
+        415,
+        430,
+        446,
+        459,
+        461,
+        463
+      ],
+      "sources": [
+        {
+          "path": "docs/factory/copau-run-visible-boundary-2026-10-24.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "2ba1517482121996d83768a544327899593553d1ea2ed14e82d1cd801831dd78"
+        }
+      ],
+      "claim": "C117",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 118,
+      "pull_requests": [
+        453,
+        454
+      ],
+      "sources": [
+        {
+          "path": "docs/platform/p3-operational-claims.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "57ad661029a58c3205bd3dd29f748f357b2f6835014464e0be0d9ee1885d2aa3"
+        }
+      ],
+      "claim": "C118",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 119,
+      "pull_requests": [
+        447,
+        448,
+        457
+      ],
+      "sources": [
+        {
+          "path": "docs/modernization/java-quality-k1-text.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "fe15f83cd1944752b54323ffcba979d25f0842dd6f6b08baeb24d19fc10b5a68"
+        }
+      ],
+      "claim": "C119",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 120,
+      "pull_requests": [
+        381,
+        433,
+        434,
+        456
+      ],
+      "sources": [
+        {
+          "path": "docs/factory/intcalc-m1-triage-2026-10-23.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "6a1f3da6142c3a45866b2934493eec93c93b099c7f5ade41b5c7dc0ef667f79f"
+        }
+      ],
+      "claim": "C120",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 121,
+      "pull_requests": [
+        380,
+        414,
+        412,
+        386,
+        387,
+        416,
+        391,
+        418,
+        417,
+        421,
+        373,
+        392,
+        419,
+        422,
+        423,
+        425,
+        426,
+        427,
+        428,
+        431,
+        435,
+        439,
+        437,
+        440,
+        438,
+        432,
+        442,
+        443,
+        441
+      ],
+      "sources": [
+        {
+          "path": "docs/milestones/MS-114/MS-114.md",
+          "commit": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef",
+          "sha256": "555533b255d28911d3c433ffe592ed6e8656283aafe1e44ef3401cd3e3ba03b3"
+        }
+      ],
+      "claim": "C121",
+      "result": "See bounded draft record"
+    },
+    {
+      "number": 122,
+      "pull_requests": [],
+      "sources": [],
+      "claim": "C122",
+      "result": null
+    }
+  ],
+  "public_receipts": [
+    {
+      "id": 6399834543,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6399834543",
+      "updated_at": "2026-10-27T00:00:45Z",
+      "body_sha256": "2ca8a691e124ca42dfde9ed7d6876abfaf83bb4b15af6fea823a829eedeb1b19"
+    },
+    {
+      "id": 6424943134,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6424943134",
+      "updated_at": "2026-10-26T19:33:04Z",
+      "body_sha256": "81fb7fe2d8a4b434d93b36e13911f4a1c1b508360a9165d7642aa61d833dbc32"
+    },
+    {
+      "id": 6430233511,
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6430233511",
+      "updated_at": "2026-10-27T00:00:13Z",
+      "body_sha256": "399344ae686fdcc4c865ad5f51dec2b91cd83ce5dc59d47ec962c0100630672c"
+    }
+  ],
+  "canonical_catalog_updated": false,
+  "documentation_manifest_updated": false,
+  "status_pages_updated": false,
+  "signing_performed": false,
+  "release_authorized": false,
+  "native_execution_performed": false
+}

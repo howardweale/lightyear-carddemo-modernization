@@ -1,0 +1,51 @@
+{
+  "schema": "milestone-catchup-evidence/1",
+  "recorded_on": "2026-10-30",
+  "draft": true,
+  "source_snapshot": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+  "baseline_ms114_publication": "a105036035ad06539ce25de07454ee95c66807c8",
+  "first_parent_merge_count": 48,
+  "earlier_merge_count": 47,
+  "additional_merge_pr": 470,
+  "inventory_files": [
+    {
+      "path": "delivery-ledger.csv",
+      "bytes": 17791,
+      "sha256": "8214e0b590bb26c7e78c9bbeeda8645c82adf18ec392b4a376e73d2a151e4cdb"
+    },
+    {
+      "path": "source-index.csv",
+      "bytes": 5997,
+      "sha256": "4663e1bc3c4b3e15fd770205c6a49e94b7c84e8829f8b37b277c73ecb065c95e"
+    },
+    {
+      "path": "open-work.csv",
+      "bytes": 1145,
+      "sha256": "629736db945ab5c67cdad36e67e2a3a8f0290fbe4cbb4dd427590a9818ce64c6"
+    }
+  ],
+  "prior_reconciliation": {
+    "path": "../catch-up-2026-10-26/reconciliation-2026-10-26.json",
+    "sha256": "18bed79d3193bba185e653bd6ab0f7f9d99ac7b9863f02423afdade6bc85b88f"
+  },
+  "proposed_numbers": [
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122
+  ],
+  "canonical_catalog_updated": false,
+  "november_5_result": null,
+  "ms122_status": null,
+  "ms122_result": null,
+  "limits": [
+    "Merged source delivery is not a measurement of every behavior.",
+    "Each original CI/receipt keeps its own scope, denominator and authority.",
+    "The public main CI snapshot does not give current green status to open drafts.",
+    "The prior dated reconciliation and original records remain unchanged."
+  ]
+}

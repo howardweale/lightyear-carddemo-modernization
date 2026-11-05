@@ -1,5 +1,8 @@
 """CI-only disposable fixtures: no token imports, real signatures or native proof."""
 import base64
+from contextlib import ExitStack
+import os
+import stat
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -193,17 +196,42 @@ class HumanSigningTests(unittest.TestCase):
         with self.assertRaises(SigningRefused):
             self.packet("candidate-commit", dict(request, payload_base64=b64(raw), payload_sha256=sha(raw)))
 
-    @unittest.skipUnless(__import__("os").name == "posix", "POSIX journal semantics")
     def test_durable_intent_blocks_changed_context_request_and_expiry(self):
         packet = self.packet()
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory() as temp, ExitStack() as seams:
             root = Path(temp) / "journal"
+            if os.name != "posix":
+                # Windows exercises real exclusive file/directory creation.
+                # Only POSIX ownership, no-follow and directory-fsync seams
+                # are synthetic; Linux retains the unpatched native path.
+                original_lstat = Path.lstat
+
+                def owned_lstat(path, *args, **kwargs):
+                    result = original_lstat(path, *args, **kwargs)
+                    if path == root:
+                        fields = list(result)
+                        fields[0], fields[4] = stat.S_IFDIR | 0o700, 42
+                        return os.stat_result(fields)
+                    return result
+
+                seams.enter_context(patch.object(Path, "lstat", owned_lstat))
+                seams.enter_context(patch.object(command.os, "getuid", return_value=42, create=True))
+                seams.enter_context(patch.object(command.os, "O_NOFOLLOW", 0, create=True))
+                seams.enter_context(patch.object(command, "sync_dir"))
             attempt = command.reserve_attempt(root, packet)
-            self.assertTrue((attempt / "intent.json").is_file())
+            intent = attempt / "intent.json"
+            original = intent.read_bytes()
+            record = json.loads(original)
+            self.assertEqual(record["state"], "CONSUMED_BEFORE_HARDWARE")
+            self.assertEqual(record["request_sha256"], packet.request_sha256)
+            self.assertEqual(record["context_sha256"], packet.context_sha256)
             changed = replace(packet, context_sha256="d" * 64, request_sha256="e" * 64,
                               binding=replace(packet.binding, expires_at="2099-01-01T00:00:00Z"))
             with self.assertRaises(FileExistsError):
                 command.reserve_attempt(root, changed)
+            with self.assertRaises(FileExistsError):
+                command.write_new(intent, b"replacement")
+            self.assertEqual(intent.read_bytes(), original)
 
     def test_policy_and_public_key_mismatch_refused(self):
         role = "controller-receipt"

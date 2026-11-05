@@ -4,6 +4,7 @@ from hashlib import sha256
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from tools.carddemo_java_proof import summarize
+from tools.carddemo_common_area_proof import restore_service
 SCOPE='spec/modernization/carddemo-screens/idiomatic-account-view-scope.json'
 JAVA='factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/'
 CLASSES=('AccountViewRendering',)
@@ -41,6 +42,7 @@ def check_scope(root,scope=None):
     if '@CobolSource(program="COACTVWC", paragraph="1200-SETUP-SCREEN-VARS", lines="460-535")' not in code:raise ValueError('view-annotation')
     if 'account_view_projection' in code or re.search(r'\b(?:JsonNode|SourceEdits)\b',code):raise ValueError('view-generic-route')
     service=(root/JAVA/'AccountViewService.java').read_text(encoding='utf-8')
+    service=restore_service(root,service)
     if service.count('@CobolSource(program="COACTVWC", paragraph="0000-MAIN", lines="262-393")')!=1:raise ValueError('view-service-annotation')
     replacements=[('private final AccountViewRendering projection','private final ScreenProjection projection'),
                   ('projection=new AccountViewRendering(bindings)','projection=new ScreenProjection(bindings)'),

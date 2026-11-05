@@ -1,8 +1,176 @@
 {
-  "manual_sha256": "b5fb434d2c2db28bc18c74d62be7f6d54015b15d849fb7b0ccb5da233588edd0",
-  "markdown_sha256": "15c50bf70e97f11119bee1218b82d99cbf82fa42390a5d97fd099f7ad51f6bf8",
-  "pages": 11,
-  "renderer": "Microsoft Word read-only PDF export and bundled Poppler; packaged LibreOffice unavailable",
+  "manual_sha256": "3d98976dfce06e7e093e1d9c8a4cc442082c5ffb17af47d7948e1bd7154c4328",
+  "markdown_sha256": "b43543aa093f26d7a086c85620ff10333f94ba7a1899b4fbbc0dde7b0c97efad",
+  "pages": 14,
+  "renderer": "Microsoft Word 2021 UI PDF export; bundled Poppler rasterization at 1400-pixel page height",
   "all_pages_visually_inspected": true,
-  "revision_note": "2026-10-12 Howard-directed Factory port 8769 and B06 row 8768"
+  "revision_note": "2026-11-05 front page, Discovery, estate licences and Factory decision prerequisites",
+  "source_commit": "57a80c41513c4206205b010fe675e9a021144c12",
+  "pdf_sha256": "3c5d10490415527cac3d8e12a93dd0e27154c2bdf3057af631ec25aa7afcb7ec",
+  "visual_review": {
+    "page_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "result": "All 14 full-size page images inspected; readable text and tables, no clipped or overlapping body text. Existing builder typography retained. Screenshots remain hyperlinks in the Word edition.",
+    "page_image_sha256": {
+      "page-01.png": "fd41e7c8fca82ba3d406fa49c3b9862f24719c5d93d3a452386eaf45a811774d",
+      "page-02.png": "470d0f831b85301ede92fd481d086e0b2b13459e1dfe0ffe7096e16ce1855636",
+      "page-03.png": "2f5285dfa70fc637a9feed86aa978e4d70f3a42857a8d85c135f36cc5ceeab8d",
+      "page-04.png": "4bc1b7618db885bd9107ce10dd141f3d4ae4e356f43831be3d104cd79d59ec94",
+      "page-05.png": "bb0f930435c5c5160b68baa4a06ebdec6e53becd4c6513d92087419ae5a3762f",
+      "page-06.png": "5616a3aeba52f84a6fcae49968707fa9c55c596a6063d2ac4827b91c266a243b",
+      "page-07.png": "d2da5fae1730c8bc2f832e8ac0141738eab8194b91c824bbe9cba4957142995e",
+      "page-08.png": "790035afebb9f219c26249a3b879d5c6b5323b96340055dde550e705f6ef49af",
+      "page-09.png": "10d1ded43e07582c93b57cd0e089042fac60cc47123197f386e1d71140d463e1",
+      "page-10.png": "1d6677ca8c7c52b82f5b6eb7abb26cf7d6517ca4291cd5888b79110d3aeb0487",
+      "page-11.png": "f98282075b90e84eb5975d9cd391cf4afb344a53f1778bed3b11552448e331a6",
+      "page-12.png": "bfbbb1125363844493d58b8e563833982dad46641fe48b2cce6291ef5c2e8b58",
+      "page-13.png": "eb261705df568e4b13701fe53f185b42cd3d6c314c12e6f858896673d029f65c",
+      "page-14.png": "09218620197880788eb39f8b37369989f4e8f97bd6fc37ad74b12f23a186624c"
+    }
+  },
+  "screenshots": [
+    {
+      "file": "audit-posture.jpg",
+      "sha256": "d1af6d2bb103dbd67e0eb1842e7d88c129b4f30c4b9bf5e8e6a6045618c96fa8",
+      "pixels": [
+        1275,
+        1147
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "convergence-empty.jpg",
+      "sha256": "3991ed8839995500c0fcb20a59343d540dc5ebd26705928774d6166a4e13c08b",
+      "pixels": [
+        1275,
+        944
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "discovery-ask.jpg",
+      "sha256": "15aa57cf85cbd9934a80b4c8b9bde0375e1a29ff55ac42f9a872cde4099380c5",
+      "pixels": [
+        1275,
+        1147
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "discovery-inspect.jpg",
+      "sha256": "917ef9e536f68ba4f8cd68ec900734892b83ba01decebed9ddc28e44d03f5ad4",
+      "pixels": [
+        1275,
+        1147
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "discovery-trace.jpg",
+      "sha256": "e14396ccd013b9681077f4537b460b460c0eb6e8a1245dd8f4aea42e81f7e0ed",
+      "pixels": [
+        1275,
+        1147
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "estate-selector.jpg",
+      "sha256": "7124f403f0434d42f7d8cc9aebff278a65359f1f8cc3dd0ebdccefad1ba35dcd",
+      "pixels": [
+        1275,
+        1147
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "front-page.jpg",
+      "sha256": "52d7de0c92a448fbc23430329c58a7747480939abd5ff1f34d6ca83d9c5ba126",
+      "pixels": [
+        1275,
+        1059
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "INTCALC.png",
+      "sha256": "326277cf11acfaed585d69644363fb52049fd06588c04fda9f6b5de623d7be41",
+      "pixels": [
+        1440,
+        2932
+      ],
+      "source": "existing disposable public Factory browser fixture",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "POSTTRAN.png",
+      "sha256": "830980333a0ffa90e5a0c26e8974fdedf531fdd810374178ce263dbbc1aff75f",
+      "pixels": [
+        1440,
+        3247
+      ],
+      "source": "existing disposable public Factory browser fixture",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "run-empty.jpg",
+      "sha256": "f732e86e279d5f47d8f289cde25c1b4b069db97155a27edfd876f467b0c89a20",
+      "pixels": [
+        1275,
+        944
+      ],
+      "source": "local 8765 reference view, no operator authority",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "status.png",
+      "sha256": "7540a02c6efe9dd5c7baaad347dd81924f8a279d56e1602d9e32a59efbcc97e4",
+      "pixels": [
+        1440,
+        1643
+      ],
+      "source": "existing disposable public Factory browser fixture",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    },
+    {
+      "file": "unresolved.png",
+      "sha256": "91509e62374022009acb14b2d3ee6541834dd65112ed036c66072a3fa5c03f99",
+      "pixels": [
+        1440,
+        17614
+      ],
+      "source": "existing disposable public Factory browser fixture",
+      "visual_review": "overview inspected; scrolling panels and graph labels can extend beyond the captured viewport"
+    }
+  ],
+  "capture_tools": [
+    "tests/browser/factory-console.mjs with Chromium 1243",
+    "in-app browser screenshot API"
+  ],
+  "limits": [
+    "Public reference and disposable fixture views only; no live operator journal or production qualification.",
+    "Run-history fetch failure is visible and does not establish zero activity.",
+    "No verifier unlock, Ask submission, model call or port 8768 interaction."
+  ]
 }

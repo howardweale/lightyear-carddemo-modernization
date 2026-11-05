@@ -1,36 +1,57 @@
 # Control Tower user manual
 
-Revision October 11, 2026. Operator review; not independent attestation.
-This manual describes the scoped Decision Console, the CardDemo z/OS intake and
-the Factory scope for public development evidence (sections 10–14). It replaces
-the older normalization-only navigation instructions for this workflow. The legacy
-Discovery viewer (`./live-control-tower.sh serve`, port 8765) remains a separate
-read-only view; it is not the Decision Console.
+Revision November 5, 2026. Operator guide; not independent attestation.
 
-> **Release status.** Sections 1–9 describe the Console as it exists today.
-> Sections 10–14 describe the Factory scope added by the October 11 work order.
-> Until that release is merged and its acceptance tests pass, Factory decisions
-> are still recorded as dated decision files from chat and are not Tower-signed.
-> The three deliveries implement scoped decisions, Programs, Business rules,
-> Status and Unresolved. They still require green final-head CI and exact-commit
-> approval before merging. No live
-> Factory service is provisioned by this change. Signed-only consumption starts
-> only after Howard signs the backfill and an administrator installs its trust
-> setting. Historical evidence files remain unchanged.
+Changelog: replaces the obsolete 8765 description; adds Discovery navigation,
+reference-estate licences and empty-state guidance; reconciles Factory backfill,
+APPL overlap, threshold evidence, T2 constants and ordered-release prerequisites.
+The numbered intake sections remain stable for existing links.
+
+The Control Tower front page is `http://127.0.0.1:8765/`, opened by
+`./graph-explorer.sh --no-browser`. Its workspaces are **Work queue**, **The run**,
+**Convergence** and **Discovery**, with **Campaigns and decisions** and
+**Sign in to decide** in the navigation. Discovery is one workspace of this
+front page, not a separate legacy product. The scoped Decision Consoles below
+remain distinct authorities. Source baseline: `57a80c41513c4206205b010fe675e9a021144c12`.
+
+> **Release status.** Factory decisions, Programs, Business rules, Status and
+> Unresolved are in main; the October 11 deliveries and October 12 port correction
+> are no longer pending merge. See commits [1e3d4c04](https://github.com/howardweale/lightyear-carddemo-modernization/commit/1e3d4c04),
+> [4c9144bd](https://github.com/howardweale/lightyear-carddemo-modernization/commit/4c9144bd),
+> [903c8323](https://github.com/howardweale/lightyear-carddemo-modernization/commit/903c8323)
+> and [643adda8](https://github.com/howardweale/lightyear-carddemo-modernization/commit/643adda8).
+> Code availability is separate from local authority, evidence-index trust,
+> current journal trust, effective decisions and release prerequisites.
+> The historical seven-record backfill has later evidence corrections (section 13);
+> it does not establish today's installation or permission for another run.
+> Not yet established by this guide: current production signing interoperability,
+> native qualification, customer equivalence or release authority.
 
 ## 1. Open the correct Tower
 
 | Work | Scope | Where to open it |
 | --- | --- | --- |
+| Estate context, run history and Discovery | Selected reference estate; local decision service only when configured | Control Tower front page, `http://127.0.0.1:8765/` |
 | Incoming Maintec files | `carddemo-zos` | Intake Console, normally `http://127.0.0.1:8767/` |
-| B06 | `ms94-b06` | Its separately installed Console, currently port 8768 |
+| B06 (documentation only) | `ms94-b06` | Port 8768 is reserved; do not start, stop or alter it for this guide |
 | Public Verify graph | Separately provisioned Verify scope | Its configured Console; no automatic activation |
 | Factory evidence: programs, scenarios, mutation, twin, keep-or-fix, model-spend approvals | `factory` | Factory Console, port 8769. See section 10 |
 
 Signing in to B06 does not expose CardDemo or Verify requests. Selecting a graph
 or workload in Discovery does not switch the authority. Use a separate data root,
-authority and journal for each engagement. Keep the current B06 service running.
+authority and journal for each engagement. Reuse the existing Factory root;
+do not create a second Factory root or use a OneDrive checkout for run-bound work.
 The Console records decisions; it does not run Java, Docker, models or z/OS jobs.
+
+On 8765, the server enables its decision service when
+`work/control-tower/authority.json` exists, or when an explicit `--decision-config`
+names an existing authority. It requires loopback binding and individual sign-in.
+Without authority, **Sign in to decide** is disabled and the queue explains that
+the decision service is not configured. The **Campaigns and decisions** link
+points to the standalone console on 8766 by default; it does not provision that
+service or replace the explicitly scoped 8767/8769 consoles. See
+[front-page server](../src/lightyear_knowledge_graph/explorer.py) and
+[navigation markup](../knowledge/viewer/index.html).
 
 Before delivery, have an administrator complete the
 [CardDemo workspace and identity setup](mainframe/carddemo-zos-tower.md#workspace-and-identities).
@@ -43,7 +64,7 @@ For an already configured intake, use a separate PowerShell terminal and actual
 installed paths (the example checkout path is not proof it exists):
 
 ```powershell
-$IntakeRoot = 'C:\Users\howar\OneDrive\Documents\ChatGPT\lightyear-carddemo-modernization\work\carddemo-zos-intake'
+$IntakeRoot = '<existing-reviewed-local-intake-root>'
 Set-Location -LiteralPath $IntakeRoot
 $env:PYTHONPATH = 'src;.'
 $env:PYTHONUTF8 = '1'
@@ -64,6 +85,133 @@ normalization, difference disposition and evidence release. The Factory scope ad
 Programs, Status and Unresolved (section 10). CardDemo's **Customer workspace**
 is the read-only arrivals view.
 Never paste a private key, dataset, SYSOUT or record value into any login or note.
+
+## 1A. Explore the estate in Discovery
+
+### Header and evidence boundary
+
+Open **Estate** to choose **Company** and **Business problem**. The companies are
+**CardDemo Reference Estate**, **iDempiere Reference Estate (Large)** and
+**CloudBank Reference Estate**. They are reference evidence, not customer estates.
+The header then narrows **Workload**, **Technology scope** and **Operator lens**.
+CardDemo's account-and-card-servicing context offers interest calculation and
+CICS/VSAM account view; the workload choices depend on the estate and problem.
+
+Technology scope offers **Unified estate**, **Mainframe** and **Database
+modernization**. It changes emphasis without deleting explanatory cross-platform
+dependencies. **SAP estate · planned** is disabled. Operator lens offers
+**Dependencies**, **Data flow**, **Modernization**, **Runtime evidence** and
+**Qualification evidence**. **Security vulnerabilities · planned** is disabled.
+
+Read **DISCOVERY VIEW · NOT LIVE EQUIVALENCE** before interpreting the graph.
+The snapshot/entities/relationships/rules/extensions strip describes the selected
+projection. Counts are snapshot-specific, not production activity or equivalence
+measurements; the separate live graph binding may include additional graph nodes.
+The projection combines discovery and development evidence without promoting a
+live-mainframe or production claim.
+
+### Left rail and readable graph
+
+The current CardDemo **Perspective** presets are:
+
+- INTCALC workload; Monthly-interest rule; INTCALC job lineage.
+- Account data contract; Final-account behavior; AUTHFRDS data lineage.
+- CICS/VSAM account view; IMS authorization purge; HLASM date service.
+- PL/I authorization-risk lineage.
+
+**Depth** selects 1–4 hops. **Implementer** applies the public/implementer evidence
+boundary. **Verifier** opens a session-token challenge before verifier-audience
+evidence, including verifier-private artifacts and holdout output, becomes
+available. Selecting the label alone does not grant access. Keep that token out
+of documents and screenshots; this guide requires no verifier unlock.
+**Search selected estate** finds programs, fields and rules; `/` focuses search.
+
+**Evidence planes** shows the Knowledge Graph identity and Factory, Portfolio,
+Recovery, Quality, Memory, Data, Runtime and Audit signals. **unavailable · no
+signal** means the corresponding evidence source has no observed signal in this
+view. It does not mean a successful check, zero defects or zero activity, and
+does not erase separately retained snapshots. A live graph connection alone
+does not establish live evidence in every plane.
+
+The readable limit is **70 nodes**. Above it, the UI may collapse implementation
+packages automatically when that brings the selection under the limit. Otherwise
+the reduction dialog offers **Collapse implementation packages**, **Rules and
+proof only**, **Legacy ↔ modern paths**, or **Render all nodes anyway**. Use
+**Restore selection** to undo a reduction and **Fit** to frame the graph. Rendering
+all nodes is a picture option, not additional evidence. A narrower perspective,
+lower depth or focused entity is usually easier to read.
+
+### Inspect, Trace and Ask
+
+**Inspect** shows an entity's properties, source-linked evidence, **Runtime
+truth**, and incoming/outgoing relationships. Select a relationship to inspect
+its own evidence. **STATIC ONLY**, zero observations and **No runtime evidence
+attached** must remain static claims; a displayed trust percentage is not a
+qualification verdict. **Focus subgraph** and **Set as trace start** operate on
+the selected entity.
+
+**Trace** distinguishes **Directed flow**, following source-to-target edges,
+from **Related evidence**, which may traverse either direction and is not a
+transaction path. The current proven example chips are:
+
+| Example | What the static path means |
+| --- | --- |
+| COBOL → DB2 update | COPAUS2C paragraph containment, SQL issuance and WRITES_TABLE to CARDDEMO.AUTHFRDS |
+| COBOL → IMS dependency | CBPAUP0C through PSB/PCB to DBD; dependency alone does not prove an update |
+| COBOL → IMS delete | CBPAUP0C DLI DLET to the PSB-bound PAUTDTL1 segment |
+| PL/I → DB2 read | ACCTPL1 SQL read path to CARDDEMO.AUTHFRDS |
+| PL/I → DB2 write · reference | AUTHUPD1 non-customer reference fixture and its UPDATE extraction |
+
+A result reports hops, platform sequence and static-evidence limits. Missing
+fragments, integration edges or mutation edges produce an evidence gap, not an
+invented route. Oracle nodes in a composite projection do not by themselves
+establish an Oracle-to-IMS update; SAP ASE and other absent paths need their own
+governed fragments and integration evidence. Read the coverage badges and the
+result's actual boundary, not just a platform name.
+
+**Ask** offers **Grounded local**, a deterministic answer assembled from visible
+graph facts, and **OpenAI high-quality**, which makes model calls and requires
+`OPENAI_API_KEY`. **Do not use OpenAI mode without Howard's explicit spend
+approval.** The UI disables it without the key, but selects it automatically when
+available; check the provider before submitting a question. A configured key is
+not spend permission. Answers remain limited to the selected audience and
+retrieved evidence. No key belongs in this guide or a screenshot.
+
+### Alert and empty states
+
+The header **1 alert · The latest release promotion decision is blocked** comes
+from the audit trust posture. The inspected posture has open gaps
+`hardened-execution-enforcement` and `mainframe-equivalence`. It is a release
+promotion block, not proof that every graph relationship is wrong. The policy
+requires the corresponding execution-enforcement and mainframe evidence; hiding
+an alert or selecting another lens cannot close a gap.
+Open the **Audit** evidence plane to inspect this posture. The alert button itself
+opens the read-only Recovery panel; it does not clear the release-promotion block.
+The Audit panel labels its scope **GLOBAL EVIDENCE PLANE · NOT ESTATE-FILTERED**.
+
+With no CardDemo run adapter, **The run** says **No run adapter is recorded for
+this estate**. **Convergence** says **No completed runs recorded yet**, with the
+explicit limit that no indexed runs is not a measurement of zero activity.
+The run selector may instead report history unavailable or a fetch failure;
+no history totals should be inferred from that error. **Work queue** without
+authority says the decision service is not configured and disables sign-in.
+Its zero badge and empty normalization list do not close scientific reviews.
+Historical proof runs belong to the headless engine; viewing this page does not
+start execution or issue a qualification receipt.
+
+Source references: [viewer controls](../knowledge/viewer/index.html),
+[viewer behavior](../knowledge/viewer/app.js),
+[operator context](../knowledge/viewer/context.js),
+[audit policy](../src/lightyear_audit/policy.py), and
+[licence scope](../LICENSES/README.md). The [front page](control-tower-screenshots/front-page.jpg),
+[estate selector](control-tower-screenshots/estate-selector.jpg),
+[Inspect](control-tower-screenshots/discovery-inspect.jpg),
+[Trace](control-tower-screenshots/discovery-trace.jpg),
+[Ask](control-tower-screenshots/discovery-ask.jpg),
+[audit posture](control-tower-screenshots/audit-posture.jpg),
+[The run](control-tower-screenshots/run-empty.jpg) and
+[Convergence](control-tower-screenshots/convergence-empty.jpg) screenshots show a
+local reference-only view without operator authority, not a production run.
 
 ## 2. Prepare for the arriving folder
 
@@ -232,8 +380,10 @@ reviewed safe files staged. Signed evidence is not automatically safe to publish
 
 ## 8. Graph context and graph memory
 
-Verify graph context is limited to the approved **public CardDemo reference**.
-It is not an interface to Maintec files. Confidential mode redacts all literals;
+The governed Verify graph adapter is limited to **public CardDemo reference**
+context. This adapter is distinct from the three-estate Discovery selector in
+section 1A; selecting an estate there does not expand a Verify grant. Neither
+interface admits private customer files. Confidential mode redacts all literals;
 field mode requires the separate public-overlap review. Neither allows a
 protected-value leak. The graph review card lists required `source-literal:<hash>`
 acknowledgments; approval without every exact token is refused. Acknowledge only
@@ -288,13 +438,20 @@ B06 root. Sign in with your individual credential. The Factory tabs are:
 | Tab | What it is for |
 | --- | --- |
 | **Programs** | One page per converted program: is it releasable, and why (section 11) |
-| **Status** | Generated current status across programs, campaigns and pending decisions; replaces reading milestones |
-| **Unresolved** | Every open difference, unresolved twin limit, unexplained survivor and pending review, across programs |
+| **Status** | Pinned program evidence, historical campaign states and the current scoped queue; read its source commit and time |
+| **Unresolved** | Recorded differences, twin limits, survivors and reviews in the scoped evidence; not an exhaustive inventory of unknown gaps |
 | **Work queue** | Factory decisions waiting on you (section 12) |
 | **Business rules** | Rules with evidence strength and scenario adequacy |
-| **Decision history** | Every signed Factory decision, including the October backfill |
+| **Decision history** | Events in this Factory journal, including any backfill actually present there; dated repository narratives alone do not populate it |
 
 ## 11. Programs: read a program's evidence
+
+The refreshed [INTCALC](control-tower-screenshots/INTCALC.png),
+[POSTTRAN](control-tower-screenshots/POSTTRAN.png),
+[Status](control-tower-screenshots/status.png) and
+[Unresolved](control-tower-screenshots/unresolved.png) images use the existing
+disposable public browser fixture. Their historical evidence values illustrate
+the interface; they are not new run measurements or a live authority journal.
 
 Select **Programs**, then a program, for example POSTTRAN (CBTRN02C). The page
 header distinguishes the experiment head from the imported evidence commit.
@@ -317,8 +474,9 @@ decisions are made only in **Work queue**.
 
 ## 12. Factory decisions
 
-Factory decisions use the same signed-journal mechanism in their own isolated authority. Codex
-and the factory act only on a signed decision bound to exact hashes, not on chat.
+Factory decision consumers use their isolated journal authority and require
+cryptographic proof bound to exact hashes and current external trust. A chat
+instruction alone is not a substitute for a consumer's required Tower proof.
 
 | Decision | What you approve | Role |
 | --- | --- | --- |
@@ -351,14 +509,35 @@ Points to watch:
 - **Engineering runs.** Approval names one commit and one window. A later commit
   or a missed window needs a new request.
 
-## 13. October 2026 decisions made in chat
+## 13. Historical backfill and current prerequisites
 
-Decisions given in chat between October 10 and the Factory release were recorded
-as dated decision files (`docs/factory/howard-decisions-*.json`). They are not
-Tower-signed. The release converts them into one backfill request in **Work
-queue**, listing each decision with its original date and bound hashes. Review
-and sign it once. After signature and the administrator’s activation of signed-only consumption,
-unsigned files no longer authorize consumers; ask for a Work queue item instead.
+Preserve the dated `docs/factory/howard-decisions-*.json` sources and original
+conditions. The October 14 importer binds the complete dated inventory, original
+record contents and dates, exact byte hashes and **one source commit**. The
+historical seven-record source commit in the October 17 correction is
+`5e36903a162c032179be2c97e6cc0cd88e6dcfb3`; the publication snapshot is a different
+identity. Do not substitute one for the other.
+
+Both `tower-backfill-request-2026-10-12.json` and
+`tower-backfill-request-2026-10-14.json` are retired. The first has the earlier
+two-record inventory; the second mixes two source commits and fails current
+single-commit validation. Do not re-import or sign either. See the
+[supersession clarification](factory/tower-backfill-supersession-clarification-2026-10-18.md)
+and [import validation](../src/lightyear_control_tower/factory_import.py).
+
+The October 21 [MS-106 evidence correction](factory/first-install-2026-10-21/ms106-correction.md)
+supersedes treating the October 14/17 activation narratives as substantiated
+installation, backfill-signature or consumer-enforcement deployment facts. A historical
+JSON field or decision hash is not a current cryptographic proof. The correction
+does not assert that no installation ever existed elsewhere.
+
+Not yet established by those historical records: a current installation, new
+seven-record proof at an independently trusted current journal head, or current
+consumer trust configuration. A future operator review must preserve original
+dates and conditions while recording the actual new action time. It must not
+backdate signing, renew spend, lift a new merge hold or permit B06 activity.
+Use the existing deployment only after its separate installation and trust
+prerequisites are evidenced; this manual does not create another Factory root.
 
 ## 14. What the Factory scope does not do
 
@@ -374,7 +553,7 @@ For complete contracts see [CardDemo Tower](mainframe/carddemo-zos-tower.md),
 [Factory scope administration](control-tower-factory-scope.md).
 
 
-## Factory administration and migration (delivery 1)
+## Factory administration and evidence prerequisites
 
 See [Factory scope administration](control-tower-factory-scope.md). The seven
 Factory kinds are joined by `factory-decision-backfill` for the one-time dated
@@ -382,9 +561,10 @@ record inventory. It requires qualification-approver, campaign-authorizer and
 business-owner together. Its signature records historical intent; it does not
 turn past conditional approval into a new run or model-spend authorization.
 
-The backfill contract is `docs/factory/tower-backfill-request-2026-10-12.json`.
-Each dated source document is included in full with its original date and byte
-hash. The unsigned POSTTRAN review is a separate `twin-human-review` request;
+For backfill, use a newly reviewed complete single-commit inventory, subject to
+the retired-request checks in section 13. Each source document must retain its
+original date, complete content and byte hash. The unsigned POSTTRAN review is a
+separate `twin-human-review` request;
 its suggested outcomes and reasons remain unsigned until confirmed in the queue.
 MCP `propose_factory_decision` annotates a Factory request; it cannot approve.
 
@@ -397,7 +577,55 @@ automatically treated as satisfied. Existing frozen plans remain historical and
 must be amended and approved before using changed verifier bytes.
 
 
-### Programs evidence delivery
+### APPL overlap, thresholds and ordered release
+
+APPL-RESULT intake checks every intersecting `equivalence-review` item set for
+the same program, including subsets, supersets and partial overlaps. It compares
+the current public selection, live requests and latest decisions against a
+verified Factory journal. A renamed request does not escape that check. A
+version-2 supersession record must bind **all** predecessors, their live/selected/
+decided states, request and normalized contract hashes, decision hashes where
+applicable, and the exact successor. The old version-1 exact-set form works only
+for its sole matching predecessor, never partial or multiple overlaps. Source:
+[supersession contract](../src/lightyear_control_tower/factory_supersessions.py).
+
+Threshold/2 has four typed conditions: B1 compiler/class evidence and targeted
+attempts; remaining individual reviews; a fresh current-head compiled campaign;
+and keep-or-fix register dependencies. An effective policy needs every condition
+met with the exact evidence source. Hash shape alone is insufficient: evidence
+must have the right schema, program, head, population and scope. Nested review
+proofs must cover the exact required item set and remain valid against current
+external trust; later replacements or keep-to-fix changes can invalidate them.
+An empty condition list cannot turn a conditional policy into an effective one.
+Sources: [conditions](../src/lightyear_control_tower/threshold_conditions.py) and
+[typed evidence](../src/lightyear_control_tower/threshold_evidence.py).
+
+Threshold/3 permits only the seven exact INTCALC constant-field diversity
+exemptions. It retains the other policy criteria and binds field, source path,
+source hash, source line and line hash. Each constant still needs observed
+comparison, complete mutant evidence and at least one caught mutant. The T2
+correction adds constant-output mutations for the three merchant fields whose
+deletion mutants did not establish a caught value change; fresh measured outcomes
+are necessary before credit. A refusal, timeout or argued equivalent is not a
+kill. Sources: [constant exemption validator](../src/lightyear_factory/threshold3.py),
+[constant evidence builder](../src/lightyear_mainframe/constant_evidence.py) and
+[T2 correction](factory/intcalc-constant-evidence-correction-2026-10-17.md).
+
+The INTCALC ordered packet has six steps: loader-domain disposition; APPL-RESULT
+class review; individual/compiler reviews; threshold/3 policy; line-189 I/O
+exception; effective threshold last. Later steps bind the immediately preceding
+decision, same packet and program, correct outcome and unsuperseded journal
+sequence. Intake, decision recording and consumption all enforce the chain.
+The published sixth template has unmet typed conditions; a predecessor hash
+alone cannot make it signable. The binding tool checks the complete packet before
+producing output. Rounds 2–6 require new public request bytes and the separate
+review/merge process described in the [ordered runbook](factory/intcalc-ordered-signing-runbook.md).
+No ordered signature sequence alone grants release or POSTTRAN Phase 2 execution.
+See [order validator](../src/lightyear_control_tower/factory_order.py),
+[packet](factory/intcalc-signing-order-2026-10-17.json) and
+[release evidence requirements](factory/release-grade-evidence-2026-10-18.md).
+
+### Programs evidence display
 
 The Programs tab uses `/api/tower/programs` and `/api/tower/program?id=INTCALC`
 (or POSTTRAN). An administrator imports a public Git snapshot and pins its index
@@ -416,12 +644,14 @@ program. Business rules displays rule evidence strength plus scenario adequacy
 and reasons without hiding the original rule-evidence classification.
 
 
-## Status and Unresolved (delivery 3)
+## Status and Unresolved
 
-Status uses `/api/tower/status`, the same `factory_status.status` model as the
-committed `docs/factory/current-status.md`. The offline document is a pinned
-snapshot, not a live queue: zero installed pending requests does not mean all
-scientific reviews are complete. The live view adds verified decisions and queue
+Status uses `/api/tower/status` and the `factory_status.status` model. The
+committed `docs/factory/current-status.md` has its own generator and input records;
+do not assume it is a live mirror of this Console or that their counts share a
+denominator. The Console uses its pinned evidence index and scoped queue: zero
+queue items does not mean all scientific reviews are complete. It adds decision
+overlays and queue
 ages. Old requests without timestamps show “not reported”; no age is invented.
 B06 hold and B07 planning are historical receipt states, not execution permission.
 

@@ -208,8 +208,15 @@ authorization, auditing, and signed context and answer receipts.
 
 The v0.46 operator controls answer three separate questions:
 
-1. **Customer:** which engagement evidence is being viewed. The bundled option is the CardDemo
-   reference estate and is labeled reference evidence; it is not customer evidence.
+1. **Estate (Company + Business problem):** which evidence boundary is being viewed. The Company
+   selector offers **CardDemo Reference Estate**, **iDempiere Reference Estate (Large)** and
+   **CloudBank Reference Estate**. All three are reference evidence, not customer estates.
+   Workload choices follow the selected company and business problem. CardDemo retains its
+   Apache-2.0 attribution; iDempiere uses GPL-2.0-only and CloudBank uses the UPL. The committed
+   iDempiere/CloudBank summaries are distinct from complete structural graphs generated on demand.
+   A separately distributed iDempiere derived graph must retain its source pin and applicable
+   GPL-2.0-only licence; CloudBank projections must retain Oracle's copyright notice and a UPL
+   reference. See [third-party licence scope](../LICENSES/README.md).
 2. **Technology scope:** which part of the unified graph should receive visual emphasis. Unified
    estate, mainframe, and database modernization are available. Scope does not delete connected
    nodes, because those nodes may explain a cross-platform dependency. SAP estate is planned.

@@ -23,9 +23,10 @@ scope substitution and noncanonical bytes fail closed.
 original deadlines, attempt identity, actual designation approval, revocation
 freshness and all native evidence. No existing production call site changes.
 
-Not yet integrated into CandidateHistory, CICommitSigner, the orchestrator or
-the human Mac signing command. Not yet demonstrated on hardware or qualified
-for P5. Existing gates, fences and required checks remain unchanged.
+The registered public keys and the separate human-only command are described
+in [the command guide](human-signing-command.md). Not yet integrated into
+CandidateHistory, CICommitSigner or the orchestrator. Not yet demonstrated
+signing interoperability on hardware or qualified for P5. Existing gates, fences and required checks remain unchanged.
 
 Earlier signatures remain cryptographically verifiable with their original
 public keys and signed bytes. Historical trust after compromise additionally

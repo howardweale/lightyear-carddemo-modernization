@@ -43,8 +43,8 @@ Python can import its SDK. Resolve packaging in an attended preparation step;
 do not change keys, credentials or management-key configuration.
 
 Obtain the original sealed `external-signing-request/1` packet, its digest,
-context digest, approved scoped designation/digest, and current revocation
-snapshot/digest through an independently authenticated public channel.
+context digest, reviewed scoped designation/digest, and current revocation
+snapshot/digest. Use a separate public channel whose origin Howard must verify.
 Review the exact payload and approval before typing the command's confirmation.
 Never derive the expected hashes solely from the untrusted packet being checked.
 
@@ -71,7 +71,7 @@ PYTHONPATH=src:. python3 -m tools.human_signing sign \
   --output controller-reply.json
 ```
 
-For the separately approved candidate request use `--role candidate-commit`
+For a candidate request, obtain separate approval, then use `--role candidate-commit`
 and a new output filename. The command wraps a Git SSHSIG namespace `git`
 signature into the exact retained commit bytes; it never runs Git or updates
 a ref. Controller signatures cover the raw canonical envelope payload.

@@ -28,10 +28,9 @@ in [the command guide](human-signing-command.md). Not yet integrated into
 CandidateHistory, CICommitSigner or the orchestrator. Not yet demonstrated
 signing interoperability on hardware or qualified for P5. Existing gates, fences and required checks remain unchanged.
 
-Earlier signatures remain cryptographically verifiable with their original
-public keys and signed bytes. Historical trust after compromise additionally
-depends on preserved designation/revocation records and reliable timing; this
-module neither erases old signatures nor retroactively declares them trusted.
+For future verification, retain the original public keys and exact message
+bytes. Historical trust after compromise also requires designation/revocation
+records and reliable timing. This module provides no retroactive trust decision.
 
 Validation: CI discovery includes public RFC8032 fixtures for role separation,
 format compatibility, fingerprint identity, scope/digest binding, revocation,

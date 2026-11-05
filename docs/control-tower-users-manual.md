@@ -1,10 +1,11 @@
 # Control Tower user manual
 
-Revision November 5, 2026. Operator guide; not independent attestation.
+Revision November 5, 2026 · illustrated edition. Operator guide; not independent attestation.
 
 Changelog: replaces the obsolete 8765 description; adds Discovery navigation,
 reference-estate licences and empty-state guidance; reconciles Factory backfill,
 APPL overlap, threshold evidence, T2 constants and ordered-release prerequisites.
+Adds embedded screen guides, four navigation and workflow diagrams, and LOOK / CHECK / STOP reading cues.
 The numbered intake sections remain stable for existing links.
 
 The Control Tower front page is `http://127.0.0.1:8765/`, opened by
@@ -26,6 +27,22 @@ remain distinct authorities. Source baseline: `57a80c41513c4206205b010fe675e9a02
 > it does not establish today's installation or permission for another run.
 > Not yet established by this guide: current production signing interoperability,
 > native qualification, customer equivalence or release authority.
+
+## Quick visual route
+
+Use **LOOK** to locate a control, **CHECK** to interpret its evidence, and
+**STOP** for a permission or evidence boundary. These labels are reading aids,
+not additional UI states.
+
+- **Find the right place:** section 1 and the Tower map below.
+- **Read a graph:** section 1A and screens 02–08.
+- **Review public Factory evidence:** sections 10–12 and screens 09–12.
+- **Check a release prerequisite:** section 13 and the ordered-packet diagram.
+
+
+![Tower map showing separate front-page, intake and Factory surfaces](control-tower-screenshots/guide-navigation.png)
+
+**Tower map.** Ports identify surfaces; authority and scope still need their own checks. See section 1 for configuration and source references.
 
 ## 1. Open the correct Tower
 
@@ -76,6 +93,17 @@ if (!(Test-Path -LiteralPath $Python) -or !(Test-Path -LiteralPath $TowerAuthori
 & $Python -m lightyear_control_tower serve --root $IntakeRoot --authority $TowerAuthority --port 8767
 ```
 
+
+### Screen 01 Front page and Work queue
+
+![Front page and Work queue](control-tower-screenshots/front-page.jpg)
+
+**LOOK** The four workspace tabs sit below the estate header; sign-in is on the right.
+
+**CHECK** The queue message says the decision service is not configured. The history area separately shows a fetch failure.
+
+**STOP** Neither an empty queue nor an unavailable history proves that reviews are complete.
+
 Open the printed loopback URL. Sign in using **Individual credential**. Confirm
 the scope and operator identity, then select **Work queue**. The tabs are
 Campaigns, Work queue, Catalogue, Customer workspace, Decision history, Graph
@@ -87,6 +115,12 @@ is the read-only arrivals view.
 Never paste a private key, dataset, SYSOUT or record value into any login or note.
 
 ## 1A. Explore the estate in Discovery
+
+![Four-step Discovery reading route](control-tower-screenshots/guide-discovery.png)
+
+**Reading route.** Frame the question, narrow the graph, inspect evidence, then trace or ask within its limits. The controls are described below.
+
+
 
 ### Header and evidence boundary
 
@@ -109,6 +143,17 @@ projection. Counts are snapshot-specific, not production activity or equivalence
 measurements; the separate live graph binding may include additional graph nodes.
 The projection combines discovery and development evidence without promoting a
 live-mainframe or production claim.
+
+
+### Screen 02 Choose an estate
+
+![Choose an estate](control-tower-screenshots/estate-selector.jpg)
+
+**LOOK** Use the Estate menu for Company and Business problem, then choose Workload.
+
+**CHECK** The selector distinguishes the three reference estates. Technology scope and Operator lens refine the view.
+
+**STOP** A reference estate is not customer evidence; a selector change grants no authority.
 
 ### Left rail and readable graph
 
@@ -141,6 +186,17 @@ proof only**, **Legacy ↔ modern paths**, or **Render all nodes anyway**. Use
 all nodes is a picture option, not additional evidence. A narrower perspective,
 lower depth or focused entity is usually easier to read.
 
+
+### Screen 03 Inspect a graph entity
+
+![Inspect a graph entity](control-tower-screenshots/discovery-inspect.jpg)
+
+**LOOK** Perspective, depth and search are on the left; Inspect is on the right.
+
+**CHECK** Read Runtime truth below the evidence links. This capture shows STATIC ONLY and zero observations.
+
+**STOP** The graph picture and trust percentage do not establish runtime equivalence.
+
 ### Inspect, Trace and Ask
 
 **Inspect** shows an entity's properties, source-linked evidence, **Runtime
@@ -169,6 +225,17 @@ establish an Oracle-to-IMS update; SAP ASE and other absent paths need their own
 governed fragments and integration evidence. Read the coverage badges and the
 result's actual boundary, not just a platform name.
 
+
+### Screen 04 Follow a trace
+
+![Follow a trace](control-tower-screenshots/discovery-trace.jpg)
+
+**LOOK** Choose Directed flow or Related evidence, then a start and target or an example chip.
+
+**CHECK** Read the path semantics, hop count and evidence boundary with the result.
+
+**STOP** A missing edge is an evidence gap. Related evidence is not a transaction path.
+
 **Ask** offers **Grounded local**, a deterministic answer assembled from visible
 graph facts, and **OpenAI high-quality**, which makes model calls and requires
 `OPENAI_API_KEY`. **Do not use OpenAI mode without Howard's explicit spend
@@ -176,6 +243,17 @@ approval.** The UI disables it without the key, but selects it automatically whe
 available; check the provider before submitting a question. A configured key is
 not spend permission. Answers remain limited to the selected audience and
 retrieved evidence. No key belongs in this guide or a screenshot.
+
+
+### Screen 05 Ask about visible evidence
+
+![Ask about visible evidence](control-tower-screenshots/discovery-ask.jpg)
+
+**LOOK** Check the provider selector before using the question field.
+
+**CHECK** Grounded local assembles visible graph facts; OpenAI high-quality makes model calls when available.
+
+**STOP** Do not use OpenAI mode without Howard’s explicit spend approval.
 
 ### Alert and empty states
 
@@ -189,6 +267,17 @@ Open the **Audit** evidence plane to inspect this posture. The alert button itse
 opens the read-only Recovery panel; it does not clear the release-promotion block.
 The Audit panel labels its scope **GLOBAL EVIDENCE PLANE · NOT ESTATE-FILTERED**.
 
+
+### Screen 06 Read the audit posture
+
+![Read the audit posture](control-tower-screenshots/audit-posture.jpg)
+
+**LOOK** Open the Audit evidence plane to read the release-promotion posture.
+
+**CHECK** The gaps named here are hardened-execution-enforcement and mainframe-equivalence. This panel is global, not estate-filtered.
+
+**STOP** Changing the lens or hiding the alert does not close either gap.
+
 With no CardDemo run adapter, **The run** says **No run adapter is recorded for
 this estate**. **Convergence** says **No completed runs recorded yet**, with the
 explicit limit that no indexed runs is not a measurement of zero activity.
@@ -198,6 +287,28 @@ authority says the decision service is not configured and disables sign-in.
 Its zero badge and empty normalization list do not close scientific reviews.
 Historical proof runs belong to the headless engine; viewing this page does not
 start execution or issue a qualification receipt.
+
+
+### Screen 07 The run with no adapter
+
+![The run with no adapter](control-tower-screenshots/run-empty.jpg)
+
+**LOOK** Read the run panel and the separate recorded-run selector.
+
+**CHECK** The panel’s no-adapter state and a history fetch failure describe different missing inputs.
+
+**STOP** Do not infer execution, a verdict or history totals from either absence.
+
+
+### Screen 08 Convergence with no indexed runs
+
+![Convergence with no indexed runs](control-tower-screenshots/convergence-empty.jpg)
+
+**LOOK** Look for the convergence summary beneath the workspace navigation.
+
+**CHECK** No completed runs recorded yet means no indexed runs in this view.
+
+**STOP** It is not a measurement of zero activity.
 
 Source references: [viewer controls](../knowledge/viewer/index.html),
 [viewer behavior](../knowledge/viewer/app.js),
@@ -468,11 +579,39 @@ a measured failure, and a passing rate is not release approval.
 | **Answer key** | `oracle_class` (for example `executable-twin (provisional)`), z/OS confirmation, and the twin limits that apply to this program |
 | **Keep or fix** | Legacy behaviours the conversion must reproduce, with your decision and any equivalence arguments that depend on it |
 
+
+### Screen 09 INTCALC program evidence
+
+![INTCALC program evidence](control-tower-screenshots/INTCALC.png)
+
+**LOOK** Start with the program identity, experiment head and evidence-import commit.
+
+**CHECK** Read the releasability checklist before the scenario and mutation panels. Word shows the upper screen excerpt; use the linked full capture for the remaining panels.
+
+**STOP** This public fixture contains historical values, not a new run or live journal.
+
 Raw figures are always shown beside figures after exclusions. A percentage is
 never shown without its denominator. Nothing on this page changes evidence;
 decisions are made only in **Work queue**.
 
+
+### Screen 10 POSTTRAN program evidence
+
+![POSTTRAN program evidence](control-tower-screenshots/POSTTRAN.png)
+
+**LOOK** Compare the program header and checklist with INTCALC; keep each program’s evidence separate.
+
+**CHECK** Read raw counts, exclusions and denominators together. Word shows the upper screen excerpt; use the linked full capture for the remaining panels.
+
+**STOP** A passing rate is not release approval or z/OS confirmation.
+
 ## 12. Factory decisions
+
+![Human decision review from request to current proof](control-tower-screenshots/guide-decisions.png)
+
+**Decision route.** Review first, record once, then inspect Decision history. Current consumer proof and trust remain separate checks.
+
+
 
 Factory decision consumers use their isolated journal authority and require
 cryptographic proof bound to exact hashes and current external trust. A chat
@@ -625,6 +764,11 @@ See [order validator](../src/lightyear_control_tower/factory_order.py),
 [packet](factory/intcalc-signing-order-2026-10-17.json) and
 [release evidence requirements](factory/release-grade-evidence-2026-10-18.md).
 
+
+![Six INTCALC ordered-packet prerequisites](control-tower-screenshots/guide-release-order.png)
+
+**Ordered-packet route.** Follow 1–6; the arrows express prerequisite order, not execution permission. Unmet conditions still block the last step.
+
 ### Programs evidence display
 
 The Programs tab uses `/api/tower/programs` and `/api/tower/program?id=INTCALC`
@@ -665,9 +809,31 @@ overlays while preserving raw arguments. Programs and these two routes are
 unavailable outside Factory. The original Console tabs remain present; views
 without an installed adapter say unavailable rather than showing another scope.
 
+### Screen 11 Factory Status
+
+![Factory Status](control-tower-screenshots/status.png)
+
+**LOOK** Status summarises program criteria, campaign states and the scoped queue.
+
+**CHECK** Read the evidence commit and time. Word shows the upper screen excerpt; use the linked full capture for lower sections.
+
+**STOP** This disposable fixture is not the current live authority journal.
+
 Future pages are designs only: [dual-run monitor](factory/tower-dual-run-plan.md),
 [ZD&T calibration](factory/tower-zdt-plan.md) and [B07 campaigns](factory/tower-b07-plan.md).
 No dispatch, native run or new decision kind is enabled by those pages.
+
+
+### Screen 12 Factory Unresolved
+
+![Factory Unresolved](control-tower-screenshots/unresolved.png)
+
+**LOOK** Use the Unresolved tab for recorded differences, limitations, survivors and reviews.
+
+**CHECK** Inspect each item’s source and disposition. Word shows the upper screen excerpt; use the linked full capture for the full list.
+
+**STOP** The list is not an exhaustive inventory of unknown gaps.
+
 
 ## Closed API and vocabulary reference
 

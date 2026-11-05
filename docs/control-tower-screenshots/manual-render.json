@@ -1,12 +1,12 @@
 {
-  "manual_sha256": "3d98976dfce06e7e093e1d9c8a4cc442082c5ffb17af47d7948e1bd7154c4328",
-  "markdown_sha256": "b43543aa093f26d7a086c85620ff10333f94ba7a1899b4fbbc0dde7b0c97efad",
-  "pages": 14,
+  "manual_sha256": "8f1ea0472f6e2493b091b1fb3db1a4358fee3ef8e944947cbb704b1c3caaeb21",
+  "markdown_sha256": "cbea3a3f47797230766e9ade7504588640ba34f33ce852cc080c373d5ea87d90",
+  "pages": 28,
   "renderer": "Microsoft Word 2021 UI PDF export; bundled Poppler rasterization at 1400-pixel page height",
   "all_pages_visually_inspected": true,
-  "revision_note": "2026-11-05 front page, Discovery, estate licences and Factory decision prerequisites",
+  "revision_note": "2026-11-05 illustrated operator edition: twelve screen guides, four diagrams and LOOK/CHECK/STOP cues",
   "source_commit": "57a80c41513c4206205b010fe675e9a021144c12",
-  "pdf_sha256": "3c5d10490415527cac3d8e12a93dd0e27154c2bdf3057af631ec25aa7afcb7ec",
+  "pdf_sha256": "2197339eb9c165ccc0389aadeefba6d73ca1709e8db5d0ce81baa0d58056a2f5",
   "visual_review": {
     "page_numbers": [
       1,
@@ -22,24 +22,52 @@
       11,
       12,
       13,
-      14
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
     ],
-    "result": "All 14 full-size page images inspected; readable text and tables, no clipped or overlapping body text. Existing builder typography retained. Screenshots remain hyperlinks in the Word edition.",
+    "result": "All 28 full-size page images inspected. Readable text, tables, diagrams and captions; no overlapping or clipped body text. Twelve screenshots embedded. Four long Factory screenshots show explicitly labelled upper-screen excerpts with full-capture links. Empty reference-view areas reflect the captured UI.",
     "page_image_sha256": {
-      "page-01.png": "fd41e7c8fca82ba3d406fa49c3b9862f24719c5d93d3a452386eaf45a811774d",
-      "page-02.png": "470d0f831b85301ede92fd481d086e0b2b13459e1dfe0ffe7096e16ce1855636",
-      "page-03.png": "2f5285dfa70fc637a9feed86aa978e4d70f3a42857a8d85c135f36cc5ceeab8d",
-      "page-04.png": "4bc1b7618db885bd9107ce10dd141f3d4ae4e356f43831be3d104cd79d59ec94",
-      "page-05.png": "bb0f930435c5c5160b68baa4a06ebdec6e53becd4c6513d92087419ae5a3762f",
-      "page-06.png": "5616a3aeba52f84a6fcae49968707fa9c55c596a6063d2ac4827b91c266a243b",
-      "page-07.png": "d2da5fae1730c8bc2f832e8ac0141738eab8194b91c824bbe9cba4957142995e",
-      "page-08.png": "790035afebb9f219c26249a3b879d5c6b5323b96340055dde550e705f6ef49af",
-      "page-09.png": "10d1ded43e07582c93b57cd0e089042fac60cc47123197f386e1d71140d463e1",
-      "page-10.png": "1d6677ca8c7c52b82f5b6eb7abb26cf7d6517ca4291cd5888b79110d3aeb0487",
-      "page-11.png": "f98282075b90e84eb5975d9cd391cf4afb344a53f1778bed3b11552448e331a6",
-      "page-12.png": "bfbbb1125363844493d58b8e563833982dad46641fe48b2cce6291ef5c2e8b58",
-      "page-13.png": "eb261705df568e4b13701fe53f185b42cd3d6c314c12e6f858896673d029f65c",
-      "page-14.png": "09218620197880788eb39f8b37369989f4e8f97bd6fc37ad74b12f23a186624c"
+      "final-page-01.png": "fde2af6124ce0bb4c02a0294e70d01bc3782f0d4e791e4c6751a5b397e4fda01",
+      "final-page-02.png": "d71f7b9ef2643d063214775591e7f9698ec7cff4c6fb9ef410961a1f2df93ac5",
+      "final-page-03.png": "3e0243505a3f48439229e982c6c02a8ce018566c039521b28182f01a178c915d",
+      "final-page-04.png": "54d0cae48c27c4f1334bc00d2142e92fbb050bea3b58b898ef3c4bf98b42a716",
+      "final-page-05.png": "a09ecaf0574e38c33d5e711f45cbcaf471876c432fa7af4f80c2e504f963866c",
+      "final-page-06.png": "25f047955fa6e499ae40e0b8322c5539dce3cb0b5e3c0cf4b0a73fe42e6442f8",
+      "final-page-07.png": "26fde09715612e259e4f08f7d33bbb0a4ecdea60c555a595f40eec52d12de073",
+      "final-page-08.png": "20744bd3824a18a5536ba3f45c321d384fbb51b470c57b0fc024413f577ebaab",
+      "final-page-09.png": "28540c7c2e9b5269e325c623ea0d5d9ba21d3aa058bc46d08f448316a7835c9a",
+      "final-page-10.png": "d54cc5ba3b8d0808f31e916cab7b81138be5b2aeff0560cc7d8fa028b34b6840",
+      "final-page-11.png": "50558aea310c740668728fad2000d7c6e0f18718f30a84f362df91b5894f61a4",
+      "final-page-12.png": "1b12c2bcccb569fc2680da8ccec3c5d202305bf2663e1f81cb2170f5882db55c",
+      "final-page-13.png": "4f7e8383359b7512c0c4a426c29aa5b5eac6b46ad3b83517d1fdfd52626eff61",
+      "final-page-14.png": "ca78e5537f7d9cc81e1782b56d73ea0ce142edb3e3589606c9d96de1f2da9e81",
+      "final-page-15.png": "bfa2650a03b75626ea17d3ac2dd5e397c5cfb741a8c4165915a796e53fb50971",
+      "final-page-16.png": "61944e82138ca78e678363bf4076b347d891a64827f51ab5a7d263e9a3c6e7d6",
+      "final-page-17.png": "0ae60ca5f3f055e626601dfc0804bd27a699e56cc47154714a1aecacccee4441",
+      "final-page-18.png": "fd5968c6c4c366e26cd4738ad20aa00d40ffa96be262b7be3b207ac427185137",
+      "final-page-19.png": "19b68e7581a447773701d34370ab1ba1bec70ec52cdb037cba7bf7abebf6d04d",
+      "final-page-20.png": "4333d1857f2cb816bbf78858864ce046caab779357550233176e26cfee72896d",
+      "final-page-21.png": "1d3e397cb380dbe378080c14df4ae93b122865aa1bf592e172f78f1503c6dd06",
+      "final-page-22.png": "ca8e9a40b3cfd61c8969232fb2770d1d420eb49af7268cc7d995c239cfebdfdb",
+      "final-page-23.png": "722589cf4ddce5989d4ee78f44d250f7ca1099e7037f879969ebb67de29090e5",
+      "final-page-24.png": "3add2d0560b0a0ee98392ed74a5b3dcc62ee71c3e658d30c02cd907de5e9828e",
+      "final-page-25.png": "8a524c4a808226bc7dfcd2b0d3905e41e01cb280411da1beb3dff53fda4d10e1",
+      "final-page-26.png": "56928b8156c2fd5c15ef60c677a81f955f4ff440dc19b38352e2f99fdd215710",
+      "final-page-27.png": "a28642d41ebd634108a586005e7549229ac8325d1d04ff1b95e02b11d2f85a53",
+      "final-page-28.png": "647393858c6a5491c9de2a4aac3d095dc928d067b83ee7b2fda86aabc52ddb56"
     }
   },
   "screenshots": [
@@ -172,5 +200,54 @@
     "Public reference and disposable fixture views only; no live operator journal or production qualification.",
     "Run-history fetch failure is visible and does not establish zero activity.",
     "No verifier unlock, Ask submission, model call or port 8768 interaction."
+  ],
+  "document_build": {
+    "base_builder": "tools/build_tower_manual_docx.py (unchanged)",
+    "postprocessing": "Task-local OOXML figure embedding, labelled picture crops, typography, table shading and pagination after the base builder.",
+    "rebuild_limit": "The unchanged base builder alone produces screenshot links; reproducing the illustrated edition also requires the figure and style postprocessing.",
+    "embedded_screenshots": 12,
+    "embedded_diagrams": 4
+  },
+  "diagrams": [
+    {
+      "file": "guide-decisions.png",
+      "sha256": "d609610bdd418d26b498d9e7c953e2a01ff1d7a5332e08d9034a89be2b172695",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-decisions.svg",
+      "sha256": "1bfb9fc803f22161d0e90aa11a0457a824ed20d4b3d0f02fc521e2c6877c9fdd",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-discovery.png",
+      "sha256": "d70112b6a6dbf80d881a4c181797f85a64b03359ecabf6567e819229b2d7f7c4",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-discovery.svg",
+      "sha256": "80338277a873ab289f4adf7a03d0c044e1dfc900470cbf434f97944612052dfe",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-navigation.png",
+      "sha256": "6e7761279247aafb537e04325f1d417f04a8187aad7d02b55f134a4b9408c399",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-navigation.svg",
+      "sha256": "90be95e893d4ef673ac0be33bf964a141e5341e2085fb294e20a8f50c7f5e966",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-release-order.png",
+      "sha256": "6d6a9b15989bcae1d6cbb255570f83d5caa2fddb7b202896a704c3c127f31756",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    },
+    {
+      "file": "guide-release-order.svg",
+      "sha256": "54b1025dcd1bc041304dd2b1dedd75792eb00c7b053eeee0ab12368af81f3dbd",
+      "purpose": "Operator navigation and evidence-bound decision guidance; schematic, not a UI capture."
+    }
   ]
 }

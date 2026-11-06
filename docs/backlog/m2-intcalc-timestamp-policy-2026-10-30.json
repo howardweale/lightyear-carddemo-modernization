@@ -1,0 +1,104 @@
+{
+  "schema": "intcalc-timestamp-policy/1",
+  "recorded_on": "2026-10-30",
+  "preparation_method": "Static source, AST literal, ledger and byte-hash inspection only.",
+  "cobol_policy": {
+    "clock": "FUNCTION CURRENT-DATE inside each generated transaction",
+    "orig_equals_proc_within_record": true,
+    "fraction_format": "two hundredths digits followed by four zeroes",
+    "live_record_to_record_variation": "possible; no live-clock equivalence observation supplied"
+  },
+  "java_policy": {
+    "clock": "single caller-supplied timestamp per calculate invocation",
+    "length": 26,
+    "orig_equals_proc_within_record": true
+  },
+  "bounded_comparison_policy": {
+    "clock": "same deterministic fixed instant supplied to both sides",
+    "current_twin_fraction": "000000",
+    "both_timestamp_fields": "exact within the declared right-padding normalization",
+    "source_faithful_live_clock_claim": false
+  },
+  "comparator": {
+    "ignored_fields": [
+      "filler"
+    ],
+    "rules": [
+      {
+        "id": "decimal-canonical-text",
+        "scope": "all decimal fields",
+        "behavior": "format Decimal values without exponent notation"
+      },
+      {
+        "id": "fixed-width-right-padding",
+        "scope": "all text fields",
+        "behavior": "ignore right-padding spaces added by fixed-width rendering"
+      },
+      {
+        "id": "copybook-filler",
+        "scope": "account.filler and transaction.filler",
+        "behavior": "exclude non-business filler bytes"
+      }
+    ],
+    "ledger_matches_runtime_literals": true,
+    "original_timestamp": "compared",
+    "processing_timestamp": "compared",
+    "tolerance": "none",
+    "field_deletion": "none"
+  },
+  "metadata_discrepancy": {
+    "path": "spec/carddemo-intcalc.json",
+    "field": "equivalence.timestamps",
+    "text": "ignored by the comparator",
+    "finding": "contradicts active comparator and normalization ledger",
+    "disposition": "additive correction; original metadata unchanged in this draft"
+  },
+  "existing_test_targets": [
+    "ComparatorEscapeTests.test_differing_or_blank_timestamp_is_rejected",
+    "ComparatorEscapeTests.test_nonbusiness_filler_is_the_only_excluded_dataclass_field",
+    "ComparatorEscapeTests.test_normalization_ledger_matches_runtime_rules",
+    "OracleTests.test_comparator_requires_same_injected_timestamp"
+  ],
+  "source_bindings": [
+    {
+      "path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "path": "src/lightyear_mainframe/legacy_twin.py",
+      "sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea"
+    },
+    {
+      "path": "candidate-java/src/main/java/ai/lightyear/carddemo/service/InterestCalculationService.java",
+      "sha256": "975dc89e9f57c1b93aa3eeca6fab860be18e972877b34b10efda6bbffde01486"
+    },
+    {
+      "path": "src/carddemo_oracle/compare.py",
+      "sha256": "aa7ef3f1ca93ca9a40f4ce9e5f0027f5b7395db9b389c7edf5e738599577d452"
+    },
+    {
+      "path": "src/carddemo_oracle/records.py",
+      "sha256": "36cadb354b8345456da751619fa63827151e403b800831375a81aa0dc1473d61"
+    },
+    {
+      "path": "spec/comparison-normalizations.json",
+      "sha256": "7112c0a689aae33b8c8ff28e0a52e1aad28c06b2ddf65cf49e6744ceaa09413e"
+    },
+    {
+      "path": "spec/carddemo-intcalc.json",
+      "sha256": "5e04b2ad3cba98f8a12239a375fdd2c29f617ec6936a9cfb552098c444b1173b"
+    },
+    {
+      "path": "tests/test_comparator_escape.py",
+      "sha256": "370d77086f601524bf86122c848a8ac97901e75249a1b61475a9979687cfde53"
+    },
+    {
+      "path": "tests/test_oracle.py",
+      "sha256": "74521ab9ff5ea9c341964bd368a056bec39158282f87033da0fa10345f7c8e06"
+    }
+  ],
+  "ci_execution_in_this_draft": false,
+  "native_confirmation": false,
+  "measurement_credit": false,
+  "release_authorized": false
+}

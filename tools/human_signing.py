@@ -25,6 +25,109 @@ from lightyear_execution.human_signing_packet import REQUEST_LIMIT, prepare_pack
 from lightyear_execution.signing_key_a import PUBLIC_KEYS, prepare_key_a_designation
 
 
+# Only fixed public identifiers may cross IPC or reach the terminal.
+PUBLIC_REASON_CODES = frozenset({
+    'operation-failed',
+    'operator-interrupted',
+    'attempt-or-output-already-exists',
+    'attended-DarkFactory-standard-account-terminal-required',
+    'base64-string-required',
+    'candidate-commit-headers',
+    'candidate-commit-size-or-encoding',
+    'candidate-commit-structure',
+    'candidate-custody-binding',
+    'candidate-encoding',
+    'candidate-message-format',
+    'candidate-payload-substitution',
+    'candidate-request-binding',
+    'candidate-signature-invalid',
+    'candidate-structure',
+    'canonical-base64-required',
+    'canonical-ed25519-public-pem-required',
+    'canonical-object-required',
+    'controller-body-already-wrapped',
+    'controller-payload-substitution',
+    'controller-reply-fields',
+    'controller-request-binding',
+    'controller-signature-format',
+    'controller-signature-invalid',
+    'current-revocations-required',
+    'designated-allowed-signers-mismatch',
+    'designated-public-key-mismatch',
+    'designation-binding-required',
+    'designation-digest-mismatch',
+    'designation-distinct-role-keys-required',
+    'designation-fields',
+    'designation-noncanonical-profile',
+    'designation-public-label',
+    'designation-public-pem-required',
+    'designation-role-pair-required',
+    'designation-scope-mismatch',
+    'designation-shared-device-revoked',
+    'device-slot-public-key-or-policy-mismatch',
+    'direct-ed25519-size-not-qualified',
+    'duplicate-git-signature',
+    'duplicate-json-key',
+    'duplicate-revocation-id',
+    'ed25519-required',
+    'exactly-one-key-required',
+    'explicit-revocation-snapshot-required',
+    'finite-original-deadline-required',
+    'hardware-failed-no-retry-unplug-key',
+    'hardware-signature-size',
+    'human-confirmation-required',
+    'human-signing-window-closed',
+    'independent-packet-digest-mismatch',
+    'invalid-attempt',
+    'invalid-binding-digest',
+    'invalid-canonical-json',
+    'invalid-case-or-run',
+    'invalid-public-pem',
+    'invalid-ssh-public-key',
+    'invalid-timestamp',
+    'noncanonical-ssh-public-key',
+    'offset-timestamp-required',
+    'original-signing-window-closed',
+    'private-owned-journal-required',
+    'public-file-size',
+    'public-packet-size',
+    'registered-key-a-designation-required',
+    'regular-public-file-required',
+    'request-binding',
+    'request-designated-material',
+    'request-independent-binding',
+    'request-schema-context-or-role',
+    'reviewed-firmware-5.8.0-required',
+    'reviewed-yubikey-manager-5.9.2-required',
+    'revocations-expired',
+    'signing-refused',
+    'single-factory-ed25519-signer-required',
+    'ssh-armor-base64',
+    'ssh-armor-format',
+    'ssh-armor-lines',
+    'ssh-signature-algorithm',
+    'ssh-signature-domain',
+    'ssh-signature-key-or-version',
+    'ssh-signature-length',
+    'trailing-ssh-data',
+    'truncated-ssh-signature',
+    'unexpected-git-continuation',
+    'unsupported-signing-purpose',
+    'worker-cleanup-unconfirmed-unplug-key',
+    'worker-start-failed',
+})
+
+
+def public_reason(error):
+    if isinstance(error, SigningRefused) and str(error) in PUBLIC_REASON_CODES:
+        return str(error)
+    if isinstance(error, KeyboardInterrupt):
+        return "operator-interrupted"
+    if isinstance(error, FileExistsError):
+        return "attempt-or-output-already-exists"
+    return "operation-failed"
+
+
 def require_human_host():
     if (sys.platform != "darwin" or os.geteuid() == 0 or 80 in os.getgroups()
             or socket.gethostname().split(".")[0].casefold() != "darkfactory"
@@ -99,7 +202,7 @@ def require_slot(metadata, purpose):
         raise SigningRefused("device-slot-public-key-or-policy-mismatch")
 
 
-def hardware_worker(pipe, purpose, message, wall_deadline, monotonic_deadline):
+def hardware_worker(pipe, purpose, message, wall_deadline, monotonic_deadline, preflight=False):
     """No key export, certificate, management authentication or configuration."""
     try:
         # Suppress library diagnostic dumps: they may contain device identifiers.
@@ -127,6 +230,9 @@ def hardware_worker(pipe, purpose, message, wall_deadline, monotonic_deadline):
                                ("candidate-commit", SLOT.AUTHENTICATION)):
                 require_slot(piv.get_slot_metadata(slot), role)
             live()
+            if preflight:
+                pipe.send_bytes(b"READY_FOR_PIN")
+                return
             # Read the current PIN only from the controlling terminal. Refuse
             # getpass's echoing fallback. No arguments/environment/files/IPC PIN.
             with open("/dev/tty", "w") as terminal, warnings.catch_warnings():
@@ -143,11 +249,11 @@ def hardware_worker(pipe, purpose, message, wall_deadline, monotonic_deadline):
                 slot = SLOT.SIGNATURE if purpose == "controller-receipt" else SLOT.AUTHENTICATION
                 signature = piv.sign(slot, KEY_TYPE.ED25519, message, None)
                 live()
-        pipe.send_bytes(signature)
-    except BaseException:
+        pipe.send_bytes(b"OK:" + signature)
+    except BaseException as error:
         # Deliberately do not serialize exception text, PINs, serials or dumps.
         try:
-            pipe.send_bytes(b"")
+            pipe.send_bytes(b"REFUSED:" + public_reason(error).encode("ascii"))
         except (OSError, EOFError):
             pass
     finally:
@@ -166,7 +272,7 @@ def stop_worker(process):
     process.close()
 
 
-def hardware_signature(packet):
+def hardware_signature(packet, *, preflight=False):
     packet.check()
     context = multiprocessing.get_context("spawn")
     receive, send = context.Pipe(duplex=False)
@@ -175,11 +281,14 @@ def hardware_signature(packet):
                    - datetime.now(timezone.utc)).total_seconds())
     wall_deadline = min(_time(packet.binding.expires_at), _time(packet.revocations_expires_at)).isoformat()
     process = context.Process(target=hardware_worker, args=(
-        send, packet.purpose, packet.signing_bytes(), wall_deadline, deadline))
+        send, packet.purpose, packet.signing_bytes(), wall_deadline, deadline, preflight))
     process.daemon = True
     started = False
     try:
-        process.start()
+        try:
+            process.start()
+        except Exception:
+            raise SigningRefused("worker-start-failed") from None
         started = True
         send.close()
         # Bounded joins keep the parent responsive to cancellation and both clocks.
@@ -189,15 +298,25 @@ def hardware_signature(packet):
                 raise SigningRefused("human-signing-window-closed")
             process.join(min(0.1, max(0, deadline - time.monotonic())))
         packet.check()
-        signature = receive.recv_bytes(64) if receive.poll() else b""
-        if process.exitcode != 0 or len(signature) != 64:
-            raise SigningRefused("hardware-failed-no-retry-unplug-key")
-        return signature
+        response = receive.recv_bytes(160) if receive.poll() else b""
+        if response.startswith(b"REFUSED:"):
+            code = response[8:].decode("ascii", errors="replace")
+            if code not in PUBLIC_REASON_CODES:
+                code = "hardware-failed-no-retry-unplug-key"
+            raise SigningRefused(code)
+        if process.exitcode == 0:
+            if preflight and response == b"READY_FOR_PIN":
+                return None
+            if not preflight and response.startswith(b"OK:") and len(response) == 67:
+                return response[3:]
+        raise SigningRefused("hardware-failed-no-retry-unplug-key")
     finally:
         send.close()
         receive.close()
         if started:
             stop_worker(process)
+        else:
+            process.close()
 
 
 def execute(packet, output, journal):
@@ -206,7 +325,8 @@ def execute(packet, output, journal):
     print("Run/case/attempt:", packet.binding.run_id, packet.binding.case_id, packet.binding.attempt)
     print("Source:", packet.binding.source_commit, "work order:", packet.binding.work_order_sha256)
     print("Payload SHA256:", _sha(packet.payload), "expires:", packet.binding.expires_at)
-    phrase = "SIGN " + packet.purpose + " " + packet.request_sha256
+    role = "controller-envelope" if packet.purpose == "controller-receipt" else packet.purpose
+    phrase = role + " " + packet.request_sha256[:8]
     if input("After reviewing the exact payload and approval, type " + phrase + ":\n") != phrase:
         raise SigningRefused("human-confirmation-required")
     packet.check()
@@ -237,15 +357,18 @@ def main(argv=None):
     sub = parser.add_subparsers(dest="command", required=True)
     prepare = sub.add_parser("prepare-designation", help="public-only unsigned scoped record")
     sign = sub.add_parser("sign", help="Howard-only attended one-shot PIV signing")
-    for part in (prepare, sign):
+    preflight = sub.add_parser("preflight", help="Howard-only no-PIN, no-reservation device check")
+    for part in (prepare, sign, preflight):
         part.add_argument("--source-commit", required=True)
         part.add_argument("--work-order-sha256", required=True)
+    for part in (prepare, sign):
         part.add_argument("--output", type=Path, required=True)
-    for name in ("request", "designation", "revocations"):
-        sign.add_argument("--" + name, type=Path, required=True)
-        sign.add_argument("--" + name + "-sha256", required=True)
-    sign.add_argument("--context-sha256", required=True)
-    sign.add_argument("--role", choices=("controller-envelope", "candidate-commit"), required=True)
+    for part in (sign, preflight):
+        for name in ("request", "designation", "revocations"):
+            part.add_argument("--" + name, type=Path, required=True)
+            part.add_argument("--" + name + "-sha256", required=True)
+        part.add_argument("--context-sha256", required=True)
+        part.add_argument("--role", choices=("controller-envelope", "candidate-commit"), required=True)
     args = parser.parse_args(argv)
     os.umask(0o077)
     try:
@@ -264,10 +387,16 @@ def main(argv=None):
             purpose="controller-receipt" if args.role == "controller-envelope" else args.role,
             source_commit=args.source_commit, work_order_sha256=args.work_order_sha256,
             context_sha256=args.context_sha256)
+        if args.command == "preflight":
+            hardware_signature(packet, preflight=True)
+            print("READY_FOR_PIN: both slots checked; no PIN, signature, output or reservation.")
+            print("Preflight grants no signing authority; sign repeats all checks.")
+            return 0
         journal = Path.home() / "Library/Application Support/Lightyear/human-signing-attempts"
         execute(packet, args.output, journal)
         return 0
-    except (Exception, KeyboardInterrupt):
+    except (Exception, KeyboardInterrupt) as error:
+        print("Reason: " + public_reason(error), file=sys.stderr)
         print("STOP: no retry or automatic return. Retain intent; unplug all keys. "
               "A partial reply is not completion.", file=sys.stderr)
         return 1

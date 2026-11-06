@@ -92,7 +92,7 @@ different message. Candidate signing covers the defined SSHSIG SHA512 framing.
 
 The tool checks the entire packet before hardware access, prints role and
 public bindings, and requires the role plus the first eight request-hash hex
-digits, for example `controller-envelope 1234abcd`. Full independent hashes
+digits, written as `controller-envelope <first-eight-hex>`. Full independent hashes
 remain mandatory command arguments. It verifies
 both slots' keys, GENERATED origin and PIN ONCE/touch ALWAYS before requesting
 the current PIN once through /dev/tty, then one physical touch. No PIN argument,

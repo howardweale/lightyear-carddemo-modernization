@@ -1,0 +1,38 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "ci",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "253fb9daf389b5f2b853918cb62fc3eb4a4f7e0c",
+  "evidence_sha256": "6f0ab9ce76fae42c72227b3138fb06c11578138c878a69b55ef38691ac88f24f",
+  "observed_at": "2026-10-30T15:52:15Z",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/41077873381",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "platform": "windows",
+      "job_id": 124138808294,
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/41077873381/job/124138808294",
+      "raw_log_bytes": 1209215,
+      "raw_log_sha256": "6f0ab9ce76fae42c72227b3138fb06c11578138c878a69b55ef38691ac88f24f",
+      "discovered": 4238,
+      "skipped": 105
+    },
+    {
+      "platform": "linux",
+      "job_id": 124138808755,
+      "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/41077873381/job/124138808755",
+      "raw_log_bytes": 1176142,
+      "raw_log_sha256": "6c79066cc9112bd2969bc781e57fc872477bcfaae01ea3526c4262cbe0ccc4bb",
+      "discovered": 4238,
+      "skipped": 96
+    }
+  ],
+  "required_ci_run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/41077873515",
+  "limits": [
+    "Point-in-time main snapshot only.",
+    "Two platforms exercise the same discovered suite; do not add them together.",
+    "Later targeted groups in the logs overlap and are not added to 4238.",
+    "No workflow was started for this documentation revision."
+  ]
+}

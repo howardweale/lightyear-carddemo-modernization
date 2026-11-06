@@ -1,0 +1,31 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "execution",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "227560cb3da580cdaa9c5a8c0dcfcb2f81e13a07",
+  "evidence_sha256": "1285aeffa8244ac563f8bd4d88dd2a3d5ce19c5f7667ab4aa89579904f6b10df",
+  "observed_at": "2026-10-27T15:39:12Z",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40532820863/artifacts/12747063428",
+  "original_schema": "posttran-phase2-results/1",
+  "original_member": "results.json",
+  "original_bytes": 133371,
+  "artifact_zip_sha256": "2e93bacd2141cafb9e9168a589f35526ea001f064d2fc66cedddc1ef6594192b",
+  "case_count": 29,
+  "counts": {
+    "divergent": 0,
+    "equivalent": 29,
+    "indeterminate": 0
+  },
+  "generation_attempt": 1,
+  "model_calls": 0,
+  "candidate_edited": false,
+  "release_authorized": false,
+  "zos_confirmation": false,
+  "oracle_status": "provisional",
+  "limits": [
+    "One unchanged attempt-1 comparison against the provisional COBOL twin.",
+    "The rewrite-109 failure path has no completion credit from this comparison.",
+    "Artifact storage is time limited; this metadata is a pointer, not a replacement for original bytes."
+  ]
+}

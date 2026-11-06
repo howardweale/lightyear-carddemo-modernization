@@ -199,7 +199,11 @@ class HumanSigningTests(unittest.TestCase):
     def test_durable_intent_blocks_changed_context_request_and_expiry(self):
         packet = self.packet()
         with tempfile.TemporaryDirectory() as temp, ExitStack() as seams:
+            # Windows temporary paths can contain 8.3 aliases; supply a
+            # canonical fixture without bypassing the production path guard.
             root = Path(temp) / "journal"
+            root.mkdir(mode=0o700)
+            root = root.resolve(strict=True)
             if os.name != "posix":
                 # Windows exercises real exclusive file/directory creation.
                 # Only POSIX ownership, no-follow and directory-fsync seams
@@ -218,6 +222,14 @@ class HumanSigningTests(unittest.TestCase):
                 seams.enter_context(patch.object(command.os, "getuid", return_value=42, create=True))
                 seams.enter_context(patch.object(command.os, "O_NOFOLLOW", 0, create=True))
                 seams.enter_context(patch.object(command, "sync_dir"))
+            self.assertEqual(root.resolve(strict=True), root.absolute(), "journal path")
+            st = root.lstat()
+            self.assertTrue(stat.S_ISDIR(st.st_mode), "journal directory")
+            self.assertEqual(st.st_uid, os.getuid(), "journal owner")
+            self.assertEqual(st.st_mode & 0o077, 0, "journal permissions")
+            with self.assertRaisesRegex(SigningRefused, "private-owned-journal-required"):
+                command.reserve_attempt(root / ".." / "journal", packet)
+            self.assertEqual(list(root.iterdir()), [], "refused path must not consume intent")
             attempt = command.reserve_attempt(root, packet)
             intent = attempt / "intent.json"
             original = intent.read_bytes()

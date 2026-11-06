@@ -158,10 +158,42 @@ class GraphOnAcceptance(VerifyAcceptance):
         stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
         scan_name = "graph-inventory-scan-" + stamp + ".json"
         scan_raw = canonical(self.inventory_report)
+        # Public CI output is an explicitly non-authorizing synthetic record.
+        # The nested proof tests human-role policy using a simulated identity;
+        # its disposable trust must never become production trust.
+        internal_proof = json.loads(self.graph_proof.read_bytes())
+        fixture_record = dict(schema="synthetic-ci-fixture-proof/1",
+            actor=dict(id="ci-fixture", kind="service", name="Synthetic CI fixture"),
+            synthetic=True, human_approval=False, activation_authorized=False,
+            qualified_run_admissible=False,
+            simulated_control_path_proof=internal_proof,
+            simulated_proof_sha256=self.proof_hash,
+            run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"])
+        from lightyear_control_tower.verification import verify_decision, DecisionVerificationError
+        event = next(e for e in internal_proof["journal"]["events"]
+                     if e["content_sha256"] == internal_proof["decision_sha256"])
+        self.assertEqual("ci-fixture", event["actor"]["id"])
+        self.assertEqual("Synthetic CI fixture", event["actor"]["name"])
+        source_root = Path(__file__).resolve().parents[1]
+        for key_path, expected_key in (
+            ("docs/factory/posttran-key-change-2026-10-23/authority.public.pem",
+             "658ba69010237ebc143a1e6d2c519f7d2adb1843993bc171c1d015e7b86b0c8a"),
+            ("docs/factory/factory-authority.public.pem",
+             "7e1fc72cf3d4d66e6e269a1b73c7e5a215cfa537824a28ceb9861ce006b12f61")):
+            public_key = (source_root / key_path).read_bytes()
+            self.assertEqual(expected_key, hashlib.sha256(public_key).hexdigest())
+            for rejected in (internal_proof, fixture_record):
+                with self.assertRaises(DecisionVerificationError):
+                    verify_decision(rejected, public_key, "verify-graph-projection",
+                        event["payload"]["bound"], scope="verify-graph",
+                        expected_head=internal_proof["journal"]["journal_head_sha256"],
+                        outcomes=["approved"])
+        fixture_raw = canonical(fixture_record)
+        fixture_hash = hashlib.sha256(fixture_raw).hexdigest()
         report = dict(schema="verify-graph-on-acceptance/1", status="passed",
                       observed_at=datetime.now(timezone.utc).isoformat(), tools_exercised=16,
                       graph_tools=sorted(self.graph_calls), projection_sha256=self.projection_hash,
-                      approval_proof_sha256=self.proof_hash, leak_scan_sha256=hashlib.sha256(scan_raw).hexdigest(),
+                      approval_proof_sha256=fixture_hash, leak_scan_sha256=hashlib.sha256(scan_raw).hexdigest(),
                       actual_native_submissions=5, offline_replays=5, model_calls=0,
                       authority="ephemeral-CI-fixture", live_activation=False,
                       run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"],
@@ -169,7 +201,7 @@ class GraphOnAcceptance(VerifyAcceptance):
         report_raw = canonical(report)
         request = dict(schema="verify-graph-activation-preparation/1", unsigned=True,
                        importable=False, activation_authorized=False,
-                       projection_sha256=self.projection_hash, approval_proof_sha256=self.proof_hash,
+                       projection_sha256=self.projection_hash, approval_proof_sha256=fixture_hash,
                        leak_scan_sha256=hashlib.sha256(scan_raw).hexdigest(),
                        acceptance_sha256=hashlib.sha256(report_raw).hexdigest(),
                        run_id=report["run_id"], run_attempt=report["run_attempt"], commit=report["commit"],
@@ -181,6 +213,6 @@ class GraphOnAcceptance(VerifyAcceptance):
         # watch report are exported. The synthetic public proof is retained as proof.
         for name, raw in ((scan_name, scan_raw), ("graph-on-acceptance.json", report_raw),
                           ("unsigned-activation-preparation.json", canonical(request)),
-                          ("ci-fixture-approval-proof.json", self.graph_proof.read_bytes())):
+                          ("ci-fixture-approval-proof.json", fixture_raw)):
             with (folder / name).open("xb") as stream:
                 stream.write(raw)

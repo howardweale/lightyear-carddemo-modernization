@@ -10,6 +10,7 @@ import ai.lightyear.carddemo.domain.Records.CategoryBalance;
 import ai.lightyear.carddemo.domain.Records.Disclosure;
 import ai.lightyear.carddemo.io.DatasetIo;
 import ai.lightyear.carddemo.service.InterestCalculationService;
+import ai.lightyear.carddemo.service.IntcalcAbendException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -53,6 +54,15 @@ public class InterestCalculationTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        try {
+            return executeIntcalc(contribution);
+        } catch (IOException failure) {
+            throw new IntcalcAbendException("INTCALC DATASET I/O FAILURE", failure);
+        }
+    }
+
+    private RepeatStatus executeIntcalc(StepContribution contribution)
+            throws IOException, NoSuchAlgorithmException {
         var balances = DatasetIo.read(inputDir.resolve("tcatbal.txt"), CardDemoRecordCodec::parseCategoryBalance);
         var disclosures = DatasetIo.read(inputDir.resolve("discgrp.txt"), CardDemoRecordCodec::parseDisclosure);
         var xrefs = DatasetIo.read(inputDir.resolve("cardxref.txt"), CardDemoRecordCodec::parseCardXref);

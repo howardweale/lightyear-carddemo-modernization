@@ -126,7 +126,7 @@ public class InterestCalculationService {
 
     private static <T> T required(T value, String message) {
         if (value == null) {
-            throw new IllegalStateException(message);
+            throw new IntcalcAbendException(message);
         }
         return value;
     }

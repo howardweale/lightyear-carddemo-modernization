@@ -56,6 +56,17 @@ Use an explicitly reviewed current list (possibly empty), never an assumed
 empty list. Timestamps and hashes above are placeholders, not runnable values.
 Revocation of either key stops both roles. No revocation service is contacted.
 
+## No-PIN preflight
+
+Planned preflight: use the same reviewed arguments as `sign` below, replace
+`sign` with `preflight`, and omit `--output`. This uses the real launcher and
+spawn worker to check the SDK, device, firmware and both public slot policies.
+It stops before opening the PIN prompt: no PIN, touch, signature, output file
+or attempt reservation. `READY_FOR_PIN` grants no signing authority; the later
+`sign` command repeats every check. A failure prints a fixed public reason code
+before STOP; exception text and device identifiers are never printed.
+Not yet native-qualified; CI uses disposable fake hardware only.
+
 ## One explicit operation
 
 ```sh
@@ -80,7 +91,9 @@ native interoperability; larger messages stop, never silently hash/sign a
 different message. Candidate signing covers the defined SSHSIG SHA512 framing.
 
 The tool checks the entire packet before hardware access, prints role and
-public bindings, and requires a typed request-digest confirmation. It verifies
+public bindings, and requires the role plus the first eight request-hash hex
+digits, for example `controller-envelope 1234abcd`. Full independent hashes
+remain mandatory command arguments. It verifies
 both slots' keys, GENERATED origin and PIN ONCE/touch ALWAYS before requesting
 the current PIN once through /dev/tty, then one physical touch. No PIN argument,
 environment variable, file or IPC field exists. No management authentication,

@@ -10,15 +10,15 @@ Dependency filenames, source URLs and SHA-256 values are in DEPENDENCIES.json.
 The bundle receipt supplies the exact source commit and outer archive SHA-256.
 
 Keep every key unplugged. In the standard ceremony account, use Finder to copy
-lightyear504.zip from USB to Downloads. Compare the hash with the value supplied
+lightyear505.zip from USB to Downloads. Compare the hash with the value supplied
 separately in chat. Stop on any mismatch, error, administrator prompt or security
 block; do not remove quarantine, change security settings or repair by guessing.
 Use a fresh destination; setup refuses an existing runtime/site directory.
 
 1. Open Terminal and type: `cd ~/Downloads`
-2. Type: `shasum -a 256 lightyear504.zip` and compare all 64 digits with chat.
-3. Only after a match: `ditto -x -k lightyear504.zip ~/`
-4. Type: `cd ~/lightyear504`
+2. Type: `shasum -a 256 lightyear505.zip` and compare all 64 digits with chat.
+3. Only after a match: `ditto -x -k lightyear505.zip ~/`
+4. Type: `cd ~/lightyear505`
 5. Type: `/bin/bash setup.sh` and confirm UNPLUGGED.
 6. Type: `/bin/bash sign.sh --help`
 

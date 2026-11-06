@@ -100,4 +100,3 @@ class PolicyRouterLoadingTests(unittest.TestCase):
             clock.now.return_value = self.now + timedelta(days=11)
             router = self.load(config)
         self.assertEqual({"default"}, set(router.providers))
-

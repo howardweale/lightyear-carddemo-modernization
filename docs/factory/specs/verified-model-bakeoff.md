@@ -157,3 +157,15 @@ counting and unknown holds. No repairs, retries, cross-provider fallback or
 automatic dispatch. The final packet needs Howard's exact approval and a slot.
 It cannot alter the qualified packet, freeze, admissions or select a production
 route. Before that success receipt, this remains a conditional design only.
+
+Not approved: the full routing matrix or its spend. Planned repricing must wait
+for the one-case $10 preview and the $30 three-provider mini bake-off to supply
+observed per-call usage and costs for all three providers. Retain failed attempts
+and unknown-charge holds alongside observed charges, rather than treating missing
+billing evidence as zero. A new exact matrix packet must reconcile those receipts
+with workload-specific input sizes and caps before any spend decision.
+
+Planned full matrix readiness remains on hold behind critical-path chunks. The
+20–32 engineering-hour estimate is a decision, not work in progress. Propose it
+only as bounded, draft-only, no-spend overnight filler when capacity remains,
+with its own explicit task approval. Unused capacity is not dispatch authority.

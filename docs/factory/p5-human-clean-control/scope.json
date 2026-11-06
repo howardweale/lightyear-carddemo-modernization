@@ -1,0 +1,13 @@
+{
+  "case_id": "human-clean-control",
+  "controller_calls": 1,
+  "execution_authorized": false,
+  "expected_changed_paths": [],
+  "external_model_calls": 0,
+  "provider": "p5-scripted",
+  "public_data_only": true,
+  "schema": "factory-public-drill-scope/1",
+  "workspace_paths": [
+    "tests/fixtures/p5_public/human-clean-control/worker.py"
+  ]
+}

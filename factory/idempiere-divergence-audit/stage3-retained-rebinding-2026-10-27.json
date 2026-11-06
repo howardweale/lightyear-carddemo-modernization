@@ -1,0 +1,67 @@
+{
+  "approval_scope": "Proposal only; requires separate exact-hash checker and record approval before publication.",
+  "claims": {
+    "all_flagged_pairs_triaged": false,
+    "application_equivalence": false,
+    "audit_complete": false,
+    "bounded_sample_selected": true,
+    "deterministic_sweep_complete": true,
+    "live_model_triage_complete": false,
+    "native_execution": false,
+    "production_ready": false,
+    "role_contract_calibration_complete": true
+  },
+  "content_sha256": "aff4c15546ddd4be3dadc2f1a9620363a14e3fe5776cb0cdb36349e0e5d4b30e",
+  "evidence_kind": "deterministic-binding-projection",
+  "implementation_logical_sha256": {
+    "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+    "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+    "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+    "src/lightyear_data/idempiere_triage.py": "208ffd7619c3ae4d7f60a03d1753cd6f2ae0a5b06f77c42ac96c1ffd21d72d48",
+    "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+    "src/lightyear_factory/providers.py": "d61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88"
+  },
+  "model_calls": 0,
+  "new_execution": false,
+  "original_artifacts": {
+    "stage3-calibration.json": {
+      "content_sha256": "f592c518a34ad894d6a99380582299a987e21f34bc62c1184de30f3486ec877f",
+      "logical_sha256": "ab76b7ed767eb7beb550b02ddbb037e2d432e173ea1f641fbc5f886afafd0a56"
+    },
+    "stage3-work-package.json": {
+      "content_sha256": "1cec108870563a5de5116517523e046366944caa935d01565352957ba571d5ce",
+      "logical_sha256": "dc77fb78dd9eba54728230435a767604bb8ada1fbc425ee1ba91dc80e2d05320"
+    },
+    "stage4-coverage.json": {
+      "content_sha256": "d3c1db79a22ba3f858007584caceaab8847feaa768ec0e602cad4133bab42db9",
+      "logical_sha256": "b262294ff946f1ef76e86234d70ad3276972a6c7187549f7b040cb294739f202"
+    },
+    "stage4-divergence-register.json": {
+      "content_sha256": "15dd3ceeaa4d01a80fd7ff4a2d53be638ebd7d763e5535c0e08ed12183cc2fa4",
+      "logical_sha256": "cc846288db390d6709c252ecabe630458a079d6f743aa683e6ef1302a7da48b6"
+    },
+    "stage4-indeterminate-register.json": {
+      "content_sha256": "a21e97c47adc9fdb2b361e7048ac49fe5d1c9ddb939f20aa0ad53ff8a992b51a",
+      "logical_sha256": "0ec52d1785ef353350d4f06957a1fae49c0fb6925c23bbbf4209332affae7f02"
+    },
+    "stage4-provenance-register.json": {
+      "content_sha256": "fc26031947a641a9dbf57b066f1155ebdfde712e9dbcdc0400fa025cd2a99d0f",
+      "logical_sha256": "da2ee94223fcb23616034e1b8749801d125a49070ac768bba090ed2044cb7e0a"
+    },
+    "stage4.receipt.json": {
+      "content_sha256": "753a66e62a983172fab9667d19613b103d199414574e771c579dd46e5306701e",
+      "logical_sha256": "6c2c38e7f8ef8cbad5e5ee076182d147357a17197478dbb20dadff2c0126721c"
+    }
+  },
+  "projected_content_sha256": {
+    "stage3-calibration.json": "7c841e76c0a562a519423cfcf23e7c9b08d05607bc9d800811a4ff68997d65b2",
+    "stage3-work-package.json": "cbb6299c032274267597d456305c8eddfe54b5e4d2ee37ac9b2978b792826484",
+    "stage4-coverage.json": "7c1411d3810e13f8145ef81733c349ce3221493e5b6113278f960684c138752c",
+    "stage4-divergence-register.json": "095e5b8316aa89d73eef6f82ebdcf8339c327977e0fc4e3e9ef39bdf3ae89b46",
+    "stage4-indeterminate-register.json": "75a268512fbc7d21af2be0e42e4ab23cbd7307429c7dd8086e87033f32ed3007",
+    "stage4-provenance-register.json": "787e7e0a0fb0964c02fb18a7c32c5132d08e50a731665bebab492790d6e1b1ad",
+    "stage4.receipt.json": "10664bc864eb4fd03fe282543d4719abb9d408b1327bf15e572851134e575647"
+  },
+  "schema": "ms70-retained-rebinding/1",
+  "scope": "Current-source deterministic comparison of the exact retained MS70 records. Original artifacts and their historical implementation bindings remain authoritative and unchanged. This record is not new runtime/model evidence or MS94 completion."
+}

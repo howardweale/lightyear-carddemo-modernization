@@ -1,0 +1,29 @@
+Gap acceptance, first COPAU run only, in addition to the human-attestation gap.
+Recorded as approved by Howard in the operator chat, 25 Oct 2026, ~15:45 PT.
+
+I accept that the FINAL billed usage and cost of a model call that is in flight when
+an attempt is interrupted is unknown at reconciliation time, ON CONDITION that:
+(a) the interrupted record carries the RESERVED upper-bound usage and cost for that
+    in-flight call, plus the observed usage of every completed call;
+(b) billing_final stays false, and the in-flight call is marked exactly
+    "unknown; reserved upper bound recorded";
+(c) the run's USD 10 cap and the reservation logic are unchanged, and the budget
+    drill shows the reservation is taken BEFORE each call is sent;
+(d) the receipt states that the actual cost will be reconciled by me from the
+    provider's invoice.
+
+Scope limits:
+- This accepts only the unknowability of the final bill for an in-flight call. It
+  does not accept a missing reservation, a missing interrupted record, missing
+  accounting for completed calls, or any other controller gap.
+- Record it as an additive dated decision with an operator-chat receipt (path and
+  SHA-256), the same pattern as the attestation gap. Gap text changes that cite it
+  need my exact-hash approval, as usual.
+- The strict qualifier may treat this one item as accepted only through that bound
+  decision record. No other relaxation of qualify().
+
+Then, by Tue 27 Oct 18:00 PT, post a re-estimated plan for strict P5 green with this
+gap accepted: per drill, the remaining work, hours, risk and order. Work highest-risk
+first: Tower/control-service append outage, workspace changed during execution, then
+kill/recovery, worker network and wall-clock. If it won't fit before the
+Wed 28 Oct 18:00 PT go/no-go, say so on Tuesday and propose the next window.

@@ -13,7 +13,7 @@ import test_graph_memory_routing as routing_fixtures
 from lightyear_factory.agents import ModelAgentSet
 from lightyear_factory.benchmark import benchmark_work_order
 from lightyear_factory.contracts import ContractError
-from lightyear_factory.model_config import load_router
+from lightyear_factory.routing_config import load_router
 
 
 class DefaultRouterLoadingTests(unittest.TestCase):
@@ -72,7 +72,7 @@ class PolicyRouterLoadingTests(unittest.TestCase):
         # journal bindings, expiry and version admission use production code.
         def construct(active, *, secret_store):
             return {name: routing_fixtures.FakeProvider(row["model"]) for name, row in active["models"].items()}
-        with patch("lightyear_factory.model_config.configured_models", side_effect=construct):
+        with patch("lightyear_factory.routing_config.configured_models", side_effect=construct):
             return load_router(path, secret_store=Mock())
 
     def test_valid_policy_loads_only_default_and_named_routes(self):

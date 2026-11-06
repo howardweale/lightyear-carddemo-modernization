@@ -113,9 +113,13 @@ providers. The orchestrator binds the order, runtime verifier and model admissio
 before a model call. Routing rechecks policy on each call, and the accounted
 provider checks the concrete provider/role against runtime and model admission.
 
-Planned loader change: validate the existing policy before leasing any optional
-provider credentials. Without a valid policy, construct only the default. With
-a valid policy, construct the default and named primary/fallback providers, not
+Planned CLI loader change: use `routing_config.load_router` to validate the
+existing policy before leasing any optional provider credentials. The original
+`model_config` provider constructors and all bound prompt/context source bytes
+remain unchanged; the new loader only selects which configured providers to
+construct, without changing prompts or per-call admission. Without a valid
+policy, construct only the default. With a valid policy, construct the default
+and named primary/fallback providers, not
 unused configured providers. Keep per-call expiry and version checks intact.
 A policy becoming valid after loading needs an explicit configuration reload,
 not automatic acquisition of additional credentials during a run. An expiring

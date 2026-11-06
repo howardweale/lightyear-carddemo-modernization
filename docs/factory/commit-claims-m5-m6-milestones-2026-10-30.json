@@ -1,0 +1,117 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/keep-or-fix.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/CBACT04C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/CBSTM03A.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/CBSTM03B.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/CBTRN02C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/CBTRN03C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COACTUPC.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COACTVWC.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COMEN01C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COPAUS0C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COPAUS1C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COPAUS2C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/COSGN00C.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    },
+    {
+      "record": "docs/backlog/m5-m6-2026-10-30/programs/README.md",
+      "reference": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "commit": "2c8a86bd115265e7b644afd1732305d749588c78",
+      "role": "source",
+      "source_path": "docs/milestones/drafts/catch-up-2026-10-30/README.md",
+      "source_sha256": "ef2ac2a903e63b4231d0490fb725f18e7d6bcf1d263fd9306f9628a9e17d7b60"
+    }
+  ]
+}

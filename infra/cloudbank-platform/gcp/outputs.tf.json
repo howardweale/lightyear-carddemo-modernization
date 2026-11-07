@@ -1,0 +1,47 @@
+{
+  "output": {
+    "platform_infrastructure": {
+      "value": {
+        "schema": "cloudbank-iac-infrastructure/1",
+        "project": "${var.project_id}",
+        "region": "${google_container_cluster.estate.location}",
+        "cluster": "${google_container_cluster.estate.name}",
+        "namespace": "${var.namespace}",
+        "zones": "${google_container_cluster.estate.node_locations}",
+        "dataplane": "${google_container_cluster.estate.datapath_provider}",
+        "private_nodes": "${google_container_cluster.estate.private_cluster_config[0].enable_private_nodes}",
+        "workload_pool": "${google_container_cluster.estate.workload_identity_config[0].workload_pool}",
+        "prometheus": "${google_container_cluster.estate.monitoring_config[0].managed_prometheus[0].enabled}",
+        "logging": "${google_container_cluster.estate.logging_config[0].enable_components}",
+        "sql": {
+          "instance": "${google_sql_database_instance.postgres.name}",
+          "availability": "${google_sql_database_instance.postgres.settings[0].availability_type}",
+          "private": "${!google_sql_database_instance.postgres.settings[0].ip_configuration[0].ipv4_enabled}",
+          "pitr": "${google_sql_database_instance.postgres.settings[0].backup_configuration[0].point_in_time_recovery_enabled}",
+          "retained_backups": "${google_sql_database_instance.postgres.settings[0].backup_configuration[0].backup_retention_settings[0].retained_backups}",
+          "transaction_log_days": "${google_sql_database_instance.postgres.settings[0].backup_configuration[0].transaction_log_retention_days}"
+        },
+        "secrets": "${{ for s, r in google_secret_manager_secret.service : s => r.secret_id }}",
+        "secret_reader": "${google_secret_manager_secret_iam_member.reader[\"creditscore\"].member}",
+        "telemetry_roles": "${[for r in google_project_iam_member.telemetry : r.role]}",
+        "hostname": "${trimsuffix(google_dns_record_set.ingress.name, \".\")}",
+        "google_api_addresses": "${google_dns_record_set.api_vip.rrdatas}",
+        "bootstrap_sha256": "${local.bootstrap_sha256}",
+        "rollout": {
+          "owner": "existing deploy.sh and Kubernetes manifests; not Terraform",
+          "addons_template_sha256": "${filesha256(\"${path.module}/../../../factory/cloudbank/platform-qualification/gke/kubernetes/addons-template.yaml\")}",
+          "network_policy_baseline": "unchanged default-deny and bounded egress in rollout manifests; Dataplane V2 is infrastructure prerequisite",
+          "external_secrets_controller": "existing separately pinned Helm release; no secret versions in Terraform"
+        },
+        "live_drills": "NOT RUN",
+        "qualified": false
+      }
+    },
+    "ingress_ip": {
+      "value": "${google_compute_address.ingress.address}"
+    },
+    "public_nameservers": {
+      "value": "${google_dns_managed_zone.public.name_servers}"
+    }
+  }
+}

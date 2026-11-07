@@ -1,0 +1,381 @@
+{
+  "locals": {
+    "services": [
+      "azn-server",
+      "customer",
+      "account",
+      "transfer",
+      "checks",
+      "testrunner",
+      "creditscore",
+      "chatbot"
+    ],
+    "apis": [
+      "artifactregistry.googleapis.com",
+      "cloudbuild.googleapis.com",
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "compute.googleapis.com",
+      "container.googleapis.com",
+      "dns.googleapis.com",
+      "iam.googleapis.com",
+      "iamcredentials.googleapis.com",
+      "serviceusage.googleapis.com",
+      "logging.googleapis.com",
+      "monitoring.googleapis.com",
+      "secretmanager.googleapis.com",
+      "servicenetworking.googleapis.com",
+      "sqladmin.googleapis.com",
+      "cloudtrace.googleapis.com"
+    ],
+    "telemetry_roles": [
+      "roles/monitoring.metricWriter",
+      "roles/logging.logWriter",
+      "roles/cloudtrace.agent"
+    ],
+    "bootstrap_sha256": "a7f82bd9d18a394474b3274fd8ca1d25cc86dae57879085c46470613d0223c67",
+    "common_sha256": "100eb8897cb21908960829338f76fe1853b1f37f7ad2421e545088e826e8282d"
+  },
+  "resource": {
+    "terraform_data": {
+      "approval": {
+        "lifecycle": {
+          "precondition": [
+            {
+              "condition": "${var.live_apply_approved}",
+              "error_message": "Offline-only: no live apply without separate exact approval, cost estimate and destroy plan."
+            }
+          ]
+        }
+      }
+    },
+    "google_project_service": {
+      "api": {
+        "for_each": "${toset(local.apis)}",
+        "project": "${var.project_id}",
+        "service": "${each.value}",
+        "disable_on_destroy": false,
+        "depends_on": [
+          "terraform_data.approval"
+        ]
+      }
+    },
+    "google_compute_network": {
+      "estate": {
+        "name": "${var.prefix}",
+        "auto_create_subnetworks": false,
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_compute_subnetwork": {
+      "estate": {
+        "name": "${var.prefix}",
+        "region": "${var.region}",
+        "network": "${google_compute_network.estate.id}",
+        "ip_cidr_range": "10.67.0.0/20",
+        "private_ip_google_access": true,
+        "secondary_ip_range": [
+          {
+            "range_name": "cloudbank-pods",
+            "ip_cidr_range": "10.68.0.0/16"
+          },
+          {
+            "range_name": "cloudbank-services",
+            "ip_cidr_range": "10.69.0.0/20"
+          }
+        ]
+      }
+    },
+    "google_compute_router": {
+      "estate": {
+        "name": "${var.prefix}",
+        "region": "${var.region}",
+        "network": "${google_compute_network.estate.id}"
+      }
+    },
+    "google_compute_router_nat": {
+      "estate": {
+        "name": "${var.prefix}",
+        "router": "${google_compute_router.estate.name}",
+        "region": "${var.region}",
+        "nat_ip_allocate_option": "AUTO_ONLY",
+        "source_subnetwork_ip_ranges_to_nat": "ALL_SUBNETWORKS_ALL_IP_RANGES"
+      }
+    },
+    "google_compute_global_address": {
+      "sql": {
+        "name": "${var.prefix}-sql",
+        "purpose": "VPC_PEERING",
+        "address_type": "INTERNAL",
+        "prefix_length": 16,
+        "network": "${google_compute_network.estate.id}"
+      }
+    },
+    "google_service_networking_connection": {
+      "sql": {
+        "network": "${google_compute_network.estate.id}",
+        "service": "servicenetworking.googleapis.com",
+        "reserved_peering_ranges": [
+          "${google_compute_global_address.sql.name}"
+        ]
+      }
+    },
+    "google_dns_managed_zone": {
+      "googleapis": {
+        "name": "cloudbank-googleapis",
+        "dns_name": "googleapis.com.",
+        "visibility": "private",
+        "private_visibility_config": {
+          "networks": [
+            {
+              "network_url": "${google_compute_network.estate.id}"
+            }
+          ]
+        }
+      },
+      "public": {
+        "name": "${var.prefix}",
+        "dns_name": "${var.delegated_dns_name}.",
+        "description": "Delegated non-production CloudBank qualification zone",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_dns_record_set": {
+      "api_vip": {
+        "name": "restricted.googleapis.com.",
+        "managed_zone": "${google_dns_managed_zone.googleapis.name}",
+        "type": "A",
+        "ttl": 300,
+        "rrdatas": [
+          "199.36.153.8",
+          "199.36.153.9",
+          "199.36.153.10",
+          "199.36.153.11"
+        ]
+      },
+      "api_alias": {
+        "name": "*.googleapis.com.",
+        "managed_zone": "${google_dns_managed_zone.googleapis.name}",
+        "type": "CNAME",
+        "ttl": 300,
+        "rrdatas": [
+          "restricted.googleapis.com."
+        ]
+      },
+      "ingress": {
+        "name": "${var.tls_hostname}.",
+        "managed_zone": "${google_dns_managed_zone.public.name}",
+        "type": "A",
+        "ttl": 60,
+        "rrdatas": [
+          "${google_compute_address.ingress.address}"
+        ]
+      }
+    },
+    "google_container_cluster": {
+      "estate": {
+        "name": "${var.prefix}",
+        "location": "${var.region}",
+        "node_locations": "${var.zones}",
+        "network": "${google_compute_network.estate.id}",
+        "subnetwork": "${google_compute_subnetwork.estate.id}",
+        "deletion_protection": true,
+        "release_channel": {
+          "channel": "REGULAR"
+        },
+        "datapath_provider": "ADVANCED_DATAPATH",
+        "enable_shielded_nodes": true,
+        "private_cluster_config": {
+          "enable_private_nodes": true
+        },
+        "control_plane_endpoints_config": {
+          "dns_endpoint_config": {
+            "allow_external_traffic": true
+          },
+          "ip_endpoints_config": {
+            "enabled": false
+          }
+        },
+        "ip_allocation_policy": {
+          "cluster_secondary_range_name": "cloudbank-pods",
+          "services_secondary_range_name": "cloudbank-services"
+        },
+        "workload_identity_config": {
+          "workload_pool": "${var.project_id}.svc.id.goog"
+        },
+        "logging_config": {
+          "enable_components": [
+            "SYSTEM_COMPONENTS",
+            "WORKLOADS"
+          ]
+        },
+        "monitoring_config": {
+          "enable_components": [
+            "SYSTEM_COMPONENTS"
+          ],
+          "managed_prometheus": {
+            "enabled": true
+          }
+        },
+        "cluster_autoscaling": {
+          "enabled": false
+        },
+        "node_pool": [
+          {
+            "name": "default-pool",
+            "initial_node_count": 1,
+            "autoscaling": {
+              "min_node_count": 1,
+              "max_node_count": 2
+            },
+            "node_config": {
+              "machine_type": "e2-standard-4",
+              "disk_type": "pd-balanced",
+              "disk_size_gb": 50,
+              "workload_metadata_config": {
+                "mode": "GKE_METADATA"
+              }
+            }
+          }
+        ],
+        "resource_labels": {
+          "environment": "non-production",
+          "milestone": "ms67"
+        }
+      }
+    },
+    "google_artifact_registry_repository": {
+      "images": {
+        "location": "${var.region}",
+        "repository_id": "${var.prefix}",
+        "format": "DOCKER",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_sql_database_instance": {
+      "postgres": {
+        "name": "${var.prefix}-postgres",
+        "database_version": "POSTGRES_16",
+        "region": "${var.region}",
+        "deletion_protection": true,
+        "settings": {
+          "tier": "db-custom-2-7680",
+          "edition": "ENTERPRISE",
+          "availability_type": "REGIONAL",
+          "disk_type": "PD_SSD",
+          "disk_size": 20,
+          "disk_autoresize": true,
+          "ip_configuration": {
+            "ipv4_enabled": false,
+            "private_network": "${google_compute_network.estate.id}"
+          },
+          "backup_configuration": {
+            "enabled": true,
+            "start_time": "02:00",
+            "point_in_time_recovery_enabled": true,
+            "transaction_log_retention_days": 7,
+            "backup_retention_settings": {
+              "retained_backups": 7,
+              "retention_unit": "COUNT"
+            }
+          },
+          "database_flags": [
+            {
+              "name": "cloudsql.iam_authentication",
+              "value": "on"
+            }
+          ]
+        },
+        "depends_on": [
+          "google_service_networking_connection.sql"
+        ]
+      }
+    },
+    "google_compute_address": {
+      "ingress": {
+        "name": "${var.prefix}-ingress",
+        "region": "${var.region}",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_kms_key_ring": {
+      "images": {
+        "name": "${var.prefix}",
+        "location": "${var.region}",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_kms_crypto_key": {
+      "images": {
+        "name": "image-signing",
+        "key_ring": "${google_kms_key_ring.images.id}",
+        "purpose": "ASYMMETRIC_SIGN",
+        "version_template": {
+          "algorithm": "EC_SIGN_P256_SHA256",
+          "protection_level": "SOFTWARE"
+        },
+        "lifecycle": {
+          "prevent_destroy": true
+        }
+      }
+    },
+    "google_kms_crypto_key_iam_member": {
+      "image_signer": {
+        "crypto_key_id": "${google_kms_crypto_key.images.id}",
+        "role": "roles/cloudkms.signerVerifier",
+        "member": "${var.image_signer_member}"
+      }
+    },
+    "google_secret_manager_secret": {
+      "service": {
+        "for_each": "${toset(local.services)}",
+        "secret_id": "cloudbank-${each.key}-external",
+        "replication": {
+          "user_managed": {
+            "replicas": [
+              {
+                "location": "${var.region}"
+              }
+            ]
+          }
+        },
+        "labels": {
+          "environment": "non-production",
+          "milestone": "ms67"
+        },
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_secret_manager_secret_iam_member": {
+      "reader": {
+        "for_each": "${google_secret_manager_secret.service}",
+        "secret_id": "${each.value.id}",
+        "role": "roles/secretmanager.secretAccessor",
+        "member": "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${var.namespace}/sa/cloudbank-secret-reader"
+      }
+    },
+    "google_project_iam_member": {
+      "telemetry": {
+        "for_each": "${toset(local.telemetry_roles)}",
+        "project": "${var.project_id}",
+        "role": "${each.value}",
+        "member": "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/observability/sa/otel-collector",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    }
+  }
+}

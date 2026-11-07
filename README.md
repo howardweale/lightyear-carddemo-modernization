@@ -1,3 +1,11 @@
+# Review the evidence first
+
+Start with [DILIGENCE.md](DILIGENCE.md) for bounded public results, exact receipts,
+unfinished work and the retained #472/#466 backlog.
+See [SECRET-SCAN-REPORT.json](SECRET-SCAN-REPORT.json) for the history-scan scope
+and [BRANCHES.md](BRANCHES.md) for the close-only review queue.
+The existing orientation below is retained in full; no earlier content is removed.
+
 ![LIGHTYEAR](brand/assets/lightyear-primary.svg)
 
 # LIGHTYEAR modernization factory

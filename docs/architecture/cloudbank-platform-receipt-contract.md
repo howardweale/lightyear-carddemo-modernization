@@ -14,7 +14,8 @@ Terraform owns infrastructure; existing controllers own rollout and drill action
 No Secret objects or expected private answers belong in the public rollout.
 
 Planned operator prerequisite: supply the raw plan and rollout to
-`tools/cloudbank_platform_receipt.py expectations` with external approval of the exact commit/digests. It rejects incomplete, destructive, deferred,
+`tools/cloudbank_platform_receipt.py expectations` with external approval of the
+exact commit/digests. It rejects incomplete, destructive, deferred,
 sensitive or unresolved required inputs. It recomputes expectations from resource
 values and the bound rollout. The plan's existence does not establish provenance:
 the operator must approve the exact plan and source bindings out of band.
@@ -68,7 +69,7 @@ The code envelope uses `cloudbank-code-qualification/1`: run ID, code commit,
 rollout digest, verifier receipt digest, evidence class and PASS/FAIL/NOT RUN.
 Planned code envelope: a separately signed public attestation about the code result, not a rewrite
 of the original code evidence. `judge` verifies it and all supplied observations,
-recomputes the seven comparisons and prepares one compound body containing the
+recomputes the seven comparisons and prepares one compound body.
 Planned compound contents: the signed code envelope and platform verdict.
 Planned human-only step: Howard must sign that whole body externally.
 `verify` authenticates the compound envelope and recomputes it from all inputs.

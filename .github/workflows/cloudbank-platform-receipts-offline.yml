@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/lightyear_data/cloudbank_platform_*.py'
       - 'src/lightyear_cloud_runner/signing.py'
+      - 'src/lightyear_cloud_runner/__init__.py'
+      - 'src/lightyear_data/__init__.py'
       - 'tools/cloudbank_platform_receipt.py'
       - 'tests/test_cloudbank_platform_receipt.py'
       - 'factory/cloudbank/platform-qualification/platform-contract.json'
@@ -13,10 +15,15 @@ on:
     paths:
       - 'src/lightyear_data/cloudbank_platform_*.py'
       - 'src/lightyear_cloud_runner/signing.py'
+      - 'src/lightyear_cloud_runner/__init__.py'
+      - 'src/lightyear_data/__init__.py'
       - 'tools/cloudbank_platform_receipt.py'
       - 'tests/test_cloudbank_platform_receipt.py'
       - 'factory/cloudbank/platform-qualification/platform-contract.json'
       - '.github/workflows/cloudbank-platform-receipts-offline.yml'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 jobs:

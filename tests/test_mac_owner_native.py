@@ -6,7 +6,7 @@ import unittest
 from lightyear_execution.external_signing import SigningRefused
 from lightyear_execution.mac_owner_native import (
     MacOwnerNativeAdapter, NativeProcessOwner, ProcessScopeObservation)
-from test_mac_owner_lifecycle import MacOwnerLifecycleTests
+import test_mac_owner_lifecycle as fixture_support
 
 
 class FixtureOwner(NativeProcessOwner):
@@ -34,7 +34,7 @@ class FixtureOwner(NativeProcessOwner):
 
 class MacOwnerNativeTests(unittest.TestCase):
     def setUp(self):
-        self.fixture = MacOwnerLifecycleTests()
+        self.fixture = fixture_support.MacOwnerLifecycleTests()
         self.fixture.setUp()
         self.observation = ProcessScopeObservation(
             self.fixture.binding, "a"*64, self.fixture.processes, True, False, False)

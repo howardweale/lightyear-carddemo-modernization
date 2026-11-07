@@ -37,5 +37,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          retention-days: 90
           name: public-generated-scenarios
           path: work/generated-scenarios

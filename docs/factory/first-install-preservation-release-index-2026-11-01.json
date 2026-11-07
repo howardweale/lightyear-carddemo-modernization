@@ -1,0 +1,50 @@
+{
+  "schema": "first-install-preservation-release-index/1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "source_artifact_id": 12384763102,
+  "source_artifact_digest": "sha256:53adecc5ed614a43eb9a5f13499465c49168b073ba55a38bfd3087a8b13dc7d1",
+  "source_artifact_expires_at": "2026-11-04T22:01:32Z",
+  "release_id": 429980859,
+  "release_tag": "first-install-preservation-12384763102",
+  "release_published_at": "2026-10-31T14:19:29Z",
+  "release_url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/tag/first-install-preservation-12384763102",
+  "post_upload_independent_readback": {
+    "all_four_assets_size_and_sha256_match": true,
+    "source_artifact_and_release_zip_sha256_equal": true,
+    "public_receipt_url": "https://github.com/howardweale/lightyear-carddemo-modernization/pull/484"
+  },
+  "assets": [
+    {
+      "name": "first-install-bundle-original.zip",
+      "id": 695576763,
+      "bytes": 48478983,
+      "sha256": "53adecc5ed614a43eb9a5f13499465c49168b073ba55a38bfd3087a8b13dc7d1",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/first-install-preservation-12384763102/first-install-bundle-original.zip"
+    },
+    {
+      "name": "preservation-provenance.json",
+      "id": 695576765,
+      "bytes": 2182,
+      "sha256": "b4a7b9676afc5f0e8028eadb80e82815f86b11bdf26168a4045db8ab92af3d6f",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/first-install-preservation-12384763102/preservation-provenance.json"
+    },
+    {
+      "name": "public-content-review.json",
+      "id": 695576764,
+      "bytes": 3054,
+      "sha256": "a96d85e888ad4aa903ae42a907edac12cd901077acaeaa7cb5e807ffdd227578",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/first-install-preservation-12384763102/public-content-review.json"
+    },
+    {
+      "name": "SHA256SUMS",
+      "id": 695576766,
+      "bytes": 288,
+      "sha256": "89272bfb16f4ade29bfbf26762ec3ce97bd38e2e32ae9eb5c168855b2cd222ff",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/first-install-preservation-12384763102/SHA256SUMS"
+    }
+  ],
+  "historical_records_location": "unchanged Release assets",
+  "current_execution_authority": false,
+  "new_installation": false,
+  "qualification_evidence": false
+}

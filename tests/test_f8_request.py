@@ -67,5 +67,59 @@ class F8RequestTests(unittest.TestCase):
             self.assertFalse(review(self.request)["request_ready"])
 
 
+    def test_november_request_window_remains_unsigned_and_blocked(self):
+        self.request["window"] = {"start": "2026-11-17T08:00:00-08:00",
+                                  "end": "2026-11-17T20:00:00-08:00"}
+        result = review(self.request)
+        self.assertFalse(result["request_ready"])
+        self.assertFalse(result["run_authorized"])
+
+    def test_wrong_november_offset_and_multiday_window_refuse(self):
+        for window in (
+            {"start": "2026-11-17T08:00:00-07:00", "end": "2026-11-17T20:00:00-07:00"},
+            {"start": "2026-11-17T08:00:00-08:00", "end": "2026-11-21T20:00:00-08:00"},
+            {"start": "2026-11-17T20:00:00-08:00", "end": "2026-11-17T08:00:00-08:00"}):
+            self.request["window"] = window
+            with self.subTest(window=window), self.assertRaisesRegex(ValueError, "window"):
+                review(self.request)
+
+
+    def test_selected_request_is_exact_unsigned_data_and_wrong_pin_refuses(self):
+        import hashlib
+        import tempfile
+        from tools.check_f8_request import preparation_record, RUN_SELECTION
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            selected_path = "docs/factory/copau-run-request-2026-11/request.json"
+            request = copy.deepcopy(self.request)
+            request["record_path"] = selected_path
+            request["window"] = {"start": "2026-11-17T08:00:00-08:00",
+                                 "end": "2026-11-17T20:00:00-08:00"}
+            raw = json.dumps(request).encode()
+            target = root/selected_path
+            target.parent.mkdir(parents=True)
+            target.write_bytes(raw)
+            binding = {"path": selected_path, "sha256": hashlib.sha256(raw).hexdigest()}
+            (root/RUN_SELECTION).write_text(json.dumps(
+                {"schema": "copau-run-request-selection/1", "request": binding}))
+            path, observed, document = preparation_record(root)
+            self.assertEqual((selected_path, raw, request), (path, observed, document))
+            self.assertFalse(document["run_authorized"])
+            target.write_bytes(raw+b" ")
+            with self.assertRaisesRegex(ValueError, "record-digest"):
+                preparation_record(root)
+
+    def test_default_historical_preparation_stays_identical(self):
+        from tools.check_f8_request import preparation_record
+        path, raw, request = preparation_record(ROOT, RECORD)
+        self.assertEqual(RECORD, path)
+        self.assertEqual((ROOT/RECORD).read_bytes(), raw)
+        self.assertEqual(self.request, request)
+
+    def test_rewindowing_cannot_rename_away_required_copau_boundary(self):
+        self.request["work_order"]["id"] = "different-run"
+        with self.assertRaisesRegex(ValueError, "first-run-identity"):
+            review(self.request)
+
 if __name__ == "__main__":
     unittest.main()

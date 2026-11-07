@@ -3,6 +3,10 @@ name: Publish milestone documentation
 on:
   pull_request:
     paths:
+      - 'src/lightyear_execution/candidate_human_signer.py'
+      - 'src/lightyear_execution/external_signing.py'
+      - 'src/lightyear_execution/signing_designation.py'
+      - 'src/lightyear_execution/signing_handoff.py'
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"
@@ -22,6 +26,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/lightyear_execution/candidate_human_signer.py'
+      - 'src/lightyear_execution/external_signing.py'
+      - 'src/lightyear_execution/signing_designation.py'
+      - 'src/lightyear_execution/signing_handoff.py'
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"

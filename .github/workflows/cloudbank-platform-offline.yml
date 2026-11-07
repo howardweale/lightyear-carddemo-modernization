@@ -1,0 +1,60 @@
+name: CloudBank platform offline
+on:
+  pull_request:
+    paths:
+      - 'infra/cloudbank-platform/**'
+      - 'infra/cloud-runner/gcp/**'
+      - 'factory/cloudbank/platform-qualification/gke/bootstrap.sh'
+      - 'factory/cloudbank/platform-qualification/gke/common.sh'
+      - 'factory/cloudbank/platform-qualification/gke/kubernetes/**'
+      - 'tools/check_cloudbank_iac_parity.py'
+      - 'tests/test_cloudbank_iac_parity.py'
+      - '.github/workflows/cloudbank-platform-offline.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'infra/cloudbank-platform/**'
+      - 'infra/cloud-runner/gcp/**'
+      - 'factory/cloudbank/platform-qualification/gke/bootstrap.sh'
+      - 'factory/cloudbank/platform-qualification/gke/common.sh'
+      - 'factory/cloudbank/platform-qualification/gke/kubernetes/**'
+      - 'tools/check_cloudbank_iac_parity.py'
+      - 'tests/test_cloudbank_iac_parity.py'
+      - '.github/workflows/cloudbank-platform-offline.yml'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      TF_IN_AUTOMATION: 'true'
+      CHECKPOINT_DISABLE: '1'
+      GCE_METADATA_HOST: '127.0.0.1:9'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Static parity and negative controls
+        env:
+          PYTHONPATH: .:src:tests
+        run: python -B -m unittest test_cloudbank_iac_parity -v
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: '1.13.3'
+          terraform_wrapper: false
+      - name: Format and validate without backend or credentials
+        working-directory: infra/cloudbank-platform/gcp
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false -input=false -lockfile=readonly
+          terraform validate -no-color
+      - name: Mock provider plans only; never apply
+        working-directory: infra/cloudbank-platform/gcp
+        run: terraform test -no-color -verbose

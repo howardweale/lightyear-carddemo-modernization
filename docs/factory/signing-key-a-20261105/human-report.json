@@ -1,0 +1,50 @@
+{
+  "schema": "human-signing-key-return/1",
+  "date": "2026-11-05",
+  "basis": "Howard direct human report and public terminal photograph; not independent hardware attestation",
+  "device": "lightyear-A",
+  "host": "DarkFactory",
+  "custodian": "Howard",
+  "revocation_contact": "Howard",
+  "created_at_approximate": [
+    "2026-11-05T11:10:00-08:00",
+    "2026-11-05T11:16:00-08:00"
+  ],
+  "roles": [
+    {
+      "role": "controller-envelope",
+      "protocol_purpose": "controller-receipt",
+      "slot": "9c",
+      "pem_sha256": "58c97a1c25b649a8d61b4b36afe5ae8099d953720892f97764021a343e533c8c"
+    },
+    {
+      "role": "candidate-commit",
+      "protocol_purpose": "candidate-commit",
+      "slot": "9a",
+      "pem_sha256": "a0627e8ffe1c74f610b92175b0486e37ef0552b503976fba5a983f268eaa677a"
+    }
+  ],
+  "human_report": {
+    "both_slots_empty_before": true,
+    "algorithm": "ED25519",
+    "origin": "GENERATED",
+    "pin_policy": "ONCE",
+    "touch_policy": "ALWAYS",
+    "both_public_readbacks_matched": true,
+    "inventory_diff_only_allowed_changes": true,
+    "age_recipient_unchanged": true,
+    "canary_B_A_before_A_after_match": true
+  },
+  "canary": {
+    "sha256": "e60c647b0fc47d67c7d9ecdea7ff5f4c7e765d1c4adeb1c97a5c4f52546c49ae",
+    "precommitted_at": "2026-11-05T09:39:00-08:00"
+  },
+  "static_public_transcription": {
+    "both_pem_file_hashes_reproduced": true,
+    "encoding": "ASCII, LF, final newline"
+  },
+  "signing_interoperability": "not yet performed",
+  "native_qualified": false,
+  "production_admission": false,
+  "limits": "This unsigned public identity report is not a final-source/work-order scoped designation approval, signature-possession proof, native ownership proof or P5 closure. Reported creation is later than previously confirmed10:30PT end; no retroactive extension inferred."
+}

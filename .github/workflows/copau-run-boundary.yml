@@ -48,6 +48,7 @@ jobs:
       - uses: actions/upload-artifact@v6
         if: always()
         with:
+          retention-days: 90
           name: copau-public-run-boundary
           path: C:/Users/howar/Lightyear/COPAUReview-v1/public
           if-no-files-found: error

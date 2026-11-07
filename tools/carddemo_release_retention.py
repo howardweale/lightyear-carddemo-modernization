@@ -106,7 +106,8 @@ class Github:
     def download(self,path):
         # Actions returns a ZIP redirect through its JSON API; Release assets
         # require the binary media type. Never apply one header to both routes.
-        if re.fullmatch(r'actions/artifacts/[1-9][0-9]*/zip',path):
+        if (re.fullmatch(r'actions/artifacts/[1-9][0-9]*/zip',path)
+                or re.fullmatch(r'actions/runs/[1-9][0-9]*/attempts/[1-9][0-9]*/logs',path)):
             accept='application/json'
         elif re.fullmatch(r'releases/assets/[1-9][0-9]*',path):
             accept='application/octet-stream'

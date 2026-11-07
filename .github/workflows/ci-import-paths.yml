@@ -38,4 +38,4 @@ jobs:
           name: import-path-coverage-${{ github.run_id }}-${{ github.run_attempt }}
           path: work/ci/import-path-coverage.json
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90

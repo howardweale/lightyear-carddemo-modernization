@@ -1,0 +1,32 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "3d5159858a88b2bca56326ecbd2ebc10b5f057de",
+  "evidence_sha256": "cfca811fa05776414575f1da04ef91299f7923e0244ecf9b76898289ea7c38a3",
+  "observed_at": "2026-10-26T17:16:58-07:00",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6430478431",
+  "provenance_source": "operator-chat",
+  "operator": "Howard Weale",
+  "scope": "Exact seven runtime files: publication to PR 455 and CI only. Unified fence route remains a separate proposal.",
+  "exact_sha256": {
+    "src/lightyear_factory/additional_providers.py": "b76c37c6359cd1af0710033bb87dd4050f0d4ab36f6aa31cd75004b69216b1fc",
+    "src/lightyear_factory/budgeted_providers.py": "885b383a0daae7636c26a8218836e3f9202a1894723abbb55c75a1160de38289",
+    "src/lightyear_factory/gates.py": "5257a3da78e325ec46a6e70a5c6b24fdbb0287758279084acb3cd3fc4388c262",
+    "src/lightyear_factory/model_versions.py": "ac31255a9e872b09c97e7f15932f1e8bc3d398496225bfc31fa8767bbcdc61a2",
+    "src/lightyear_factory/orchestrator.py": "1a6c0fd795bd09b37b16699b6ed99c42554a37b5691a04a530b2b50e2a6c83de",
+    "src/lightyear_factory/providers.py": "d61fc665b9e3f0405a5bb7747e3d5f27ba929d5a573e8cb80bdc3e00785c2d88",
+    "src/lightyear_factory/transport_journal.py": "872754188010d07b8c03449ee076246e8969c75652b45faede60f037badf4875"
+  },
+  "processing_time_not_authenticated_message_time": true,
+  "github_identity_is_human_proof": false,
+  "identity_limitation": "The agent shares the operator GitHub identity; this is a secondary transcription, not independent human authentication.",
+  "authority": {
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false,
+    "gap_acceptance": false
+  }
+}

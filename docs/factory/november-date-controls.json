@@ -1,0 +1,12 @@
+{
+  "status": "Planned; exact-head review and native CI required",
+  "scope": "Pacific timestamps and selected request window; no authority or activation",
+  "historical_records_unchanged": true,
+  "verify_workflow": {
+    "path": ".github/workflows/verify.yml",
+    "inherited_from_main": "6ebccb8607678b437fedaa1ffd0bd8948d0cf06e",
+    "sha256": "079c2f37192b5dc4aa446cbc22f7f9b2cb50a9e355d4d13699df1979971f83fc",
+    "historical_timeout_binding": "Retained unchanged; does not authorize replacing current-main workflow"
+  },
+  "run_authorized": false
+}

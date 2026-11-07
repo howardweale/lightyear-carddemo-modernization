@@ -1,0 +1,49 @@
+{
+  "schema": "sakila-common-fields/1",
+  "mapping": {
+    "customer_list": {
+      "sqlserver": [
+        "ID",
+        "name",
+        "address",
+        "zip_code",
+        "phone",
+        "city",
+        "country",
+        "notes",
+        "SID"
+      ],
+      "postgres": [
+        "id",
+        "name",
+        "address",
+        "zip code",
+        "phone",
+        "city",
+        "country",
+        "notes",
+        "sid"
+      ]
+    },
+    "sales_by_store": {
+      "sqlserver": [
+        "store",
+        "manager",
+        "total_sales"
+      ],
+      "postgres": [
+        "store",
+        "manager",
+        "total_sales"
+      ]
+    }
+  },
+  "strict_schema": "Compare every ordered name and raw native type separately; do not rename/drop before strict comparison.",
+  "common_fields": "Explicit mapping only; SQL Server sales_by_store.store_id excluded ONLY from this common-field comparison.",
+  "rows": "Multiset of complete mapped rows, retaining multiplicity even when store/manager display names collide; order irrelevant.",
+  "nulls": "NULL distinct from empty string; no trimming or case folding.",
+  "integers": "Exact integers only for customer ID and SID.",
+  "decimals": "Exact decimal values, two fractional places; no floats or tolerance.",
+  "text": "Exact Unicode strings; no normalization.",
+  "scope": "Two public third-party view definitions over verifier-authored minimal dependencies and synthetic fixture. Not full Sakila DDL, stored procedures, arbitrary SQL, performance or customer equivalence."
+}

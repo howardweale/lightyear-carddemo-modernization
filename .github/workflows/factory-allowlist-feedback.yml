@@ -36,7 +36,7 @@ jobs:
           name: g3-zero-model-parity-${{ github.sha }}
           path: ${{ runner.temp }}/g3-parity
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 90
       - name: Pull the exact policy image for the container fixture
         run: |
           image="$(python -c 'import json; p=json.load(open("factory/execution/policy.json"))["runtime"]; print(p["image"]+"@sha256:"+p["image_digest"])')"

@@ -47,4 +47,4 @@ jobs:
         with:
           name: equivalence-storage-diagnostics
           path: work/equivalence-storage
-          retention-days: 30
+          retention-days: 90

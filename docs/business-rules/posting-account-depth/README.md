@@ -1,6 +1,6 @@
-# Posting and account-update rule depth — review draft
+# Banking reference estate: posting and account-maintenance rules
 
-Twenty-three new source-cited rules with falsifiers and proposed public cases. `COACTUP` refers to the checked-in program `COACTUPC`. This new output does not change existing mappings, verified statuses, source files or the run-bound graph. All new behavior statuses remain **untested**; source inspection cannot confer a verified execution status.
+Twenty-three source-cited rules with falsifiers and proposed public cases for transaction posting (`CBTRN02C`) and account maintenance (`COACTUPC`) in the banking reference estate. Source paths, source program identifiers and rule IDs remain unchanged. `COACTUP` is the historical alias for `COACTUPC`. This new output does not change existing mappings, verified statuses, source files or the run-bound graph. All new behavior statuses remain **untested**; source inspection cannot confer a verified execution status.
 
 Each source link pins main commit `62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef`. Full source and exact excerpt hashes are in [catalogue.json](catalogue.json). No COBOL, CICS, model, signing or test execution was performed to generate this draft.
 
@@ -35,3 +35,7 @@ Each source link pins main commit `62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef`. Fu
 Run the proposed public cases through the actual source behavior and candidate under CI, retain ordered inputs/outputs and error paths, and evaluate the predicates against independent observations. Record contradictions rather than editing a rule to match a candidate. Existing earned-status and Tower approval rules still apply; Not signed: this catalogue supplies no receipt or authority.
 
 Particular review points: CBTRN02C reason 103 overwrites reason 102; negative amounts add negatively to the debit accumulator; account rewrite failure sets 109 without an immediate abort in the caller. COACTUPC customer rewrite failure requests rollback, but end-to-end atomicity remains unmeasured. No frozen source correction is bundled here.
+
+## Current review scope
+
+Planned: docs-only review against current main, with no gate, workflow, runtime or earned-status changes. Public prose uses the banking reference estate and the descriptive program names above. Source URLs and exact source/excerpt hashes retain their original identities. Behavioral proof remains unmeasured.

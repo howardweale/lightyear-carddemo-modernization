@@ -421,6 +421,21 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
     # changed protected path, even when the raw Java report has no violations.
     require(not any(p in excluded or any(p.startswith(prefix) for prefix in prefixes)
                     for p in changed), 'judge-or-posttran-change-refused')
+    # Exact D1 registration is loaded exclusively from trusted base. A new
+    # policy registration is inert until separately reviewed and merged.
+    d1_record = "docs/factory/d1-controller-phase-exact-registration-20261107-r2.json"
+    d1_validator = "tools/check_d1_exact_registration.py"
+    if (report["blocked_paths"] == [ORCHESTRATOR] and
+            git(repo, "ls-tree", "-z", base, "--", d1_record)):
+        namespace = {"__name__": "trusted_d1_registration"}
+        _, trusted_source = blob(repo, base, d1_validator)
+        exec(compile(trusted_source, d1_validator, "exec"), namespace)
+        d1 = namespace["inspect_registration"](
+            repo, base, head, report, event or {}, environment or {}, query)
+        if d1 is not None:
+            result.update(accepted_exceptions=d1["entries"], fence_requirement_met=True,
+                          exact_d1_registration=d1)
+            return result
     durable = load_durable_binding(repo, base, head)
     durable_used = durable is not None and bool(set(changed) & set(DURABLE_RUNTIME))
     # A pending manifest never changes the historical exact-byte path.

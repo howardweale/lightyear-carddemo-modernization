@@ -27,7 +27,7 @@ Retain the P9 rule: inspect original retrievable bytes, hashes, exact input/sour
 
 ## Material carried forward before closing #466
 
-Backlog item DIL-TSQL-10: ten public SQL Server/PostgreSQL pairs, pinned at [#466](https://github.com/howardweale/lightyear-carddemo-modernization/pull/466), head d2cb28bbba6bd1480370c91de03f2bfd8baa7172. No new execution or delivery claim.
+Backlog item DIL-MLOGICA-TSQL-INTAKE: starting point for the mLogica T-SQL intake, using the ten public SQL Server/PostgreSQL pairs, pinned at [#466](https://github.com/howardweale/lightyear-carddemo-modernization/pull/466), head d2cb28bbba6bd1480370c91de03f2bfd8baa7172. No new execution or delivery claim.
 - [Harness, intake and execution contract](https://github.com/howardweale/lightyear-carddemo-modernization/blob/d2cb28bbba6bd1480370c91de03f2bfd8baa7172/docs/tsql-readiness/README.md#sha256=5215c9012b0b8c39a49d90ff73b852d584ddcccdcf37fc8b1a2a8d93d2a1280c)
 - [Exact public ten-pair selection](https://github.com/howardweale/lightyear-carddemo-modernization/blob/d2cb28bbba6bd1480370c91de03f2bfd8baa7172/docs/tsql-readiness/selection.json#sha256=93aa92f10fcd4c7129b484f1f2310375430bae272c39f21f40f3f750f816c205)
 - [Artifact integrity and retention requirements](https://github.com/howardweale/lightyear-carddemo-modernization/blob/d2cb28bbba6bd1480370c91de03f2bfd8baa7172/docs/tsql-readiness/artifact-integrity.md#sha256=6e69fc5c39f35798ff5749b8a8ca98f760b1f158ac835739a90373705afdca95)
@@ -35,6 +35,8 @@ Backlog item DIL-TSQL-10: ten public SQL Server/PostgreSQL pairs, pinned at [#46
 Preserved scope: LEN, integer division, ISNULL length, DATEDIFF day/year, negative ROUND precision, MONEY scale, BIT, UUID case and trailing VARCHAR spaces; both correct and deliberately wrong twins. Preserve typed parameters/calling conventions, session/reset settings, exact asset hashes, ordered cases/repeats, full state/errors/OUT/RETURN comparison, insufficient-evidence handling and owned-database cleanup.
 
 Still missing: separately reviewed CI provisioning/connection custody, qualified controls, native captures, independent retained-byte replay and measured effort. No credentials, provisioning, native execution or cleanup action follows from this backlog entry. Reconcile the historical blackout/date rule with the current run schedule before future adoption. Do not extrapolate ten authored public pairs into private-estate readiness.
+
+The retained branch `codex/public-tsql-ten-readiness-oct26` is the starting implementation reference. Its proposed `verify.yml` integration waits for the post-freeze window. No private mLogica input, source, fixture or result is read or copied here.
 
 Next review: after native/P5 no longer needs the hours, select a scoped implementation/rebase proposal and a separately costed native packet. Preserve the old branch and all diagnostics.
 
@@ -50,3 +52,28 @@ Next review: after native/P5 no longer needs the hours, select a scoped implemen
 ## Evidence review path
 
 Read the linked source receipt and its limitations, retrieve the exact retained bytes, verify digests, then use the receipt-specific verifier under its execution/custody rules. Local project tests/apps/compilers are not part of this review. Source-only inspection is not runtime evidence. Exact-head merges, private operations and spend remain separate decisions.
+
+
+## Candid limits, carried forward from P9 and refreshed
+
+| Question | Current bounded statement | What it does not establish |
+|---|---|---|
+| Native datatype comparison | Retained260/260 Oracle26ai–AlloyDB pairs across13families/65behaviours, linked above. | Other engine versions, exhaustive conformance or production readiness. |
+| T-SQL negatives | Retained43/43 wrong variants caught in108pairs; correct variants41equivalent and2policy decisions. | Customer/general workload correctness or readiness of the #466 intake harness. |
+| Platform results | Separate retained Cloud SQL/GKE and AlloyDB platform receipts. | Live current health, production rollout or independent HMAC verification. |
+| ERP journey | Retained745.157seconds for one declared journey. | Whole-ERP qualification or guaranteed duration. |
+| First authorization run | N1selected subject to private-input/judge contract review; no qualified run result. | A pass, native/P5 closure or a signed/admitted run. |
+| Source discovery | Structural source/dependency inventories only. | Executed behavior, equivalence or mutation credit. |
+| Historical test totals | P9's4,238-test figure belongs to its original snapshot only. | Current-main suite totals or whole-repository green status. |
+| Security | History scan2101commits/1501refs/4141reviewed findings; no real credential confirmed. | Exhaustive detection, external security audit, penetration test or certification. |
+| Human approval evidence | Each historical receipt has its own identity and scope. | Independent third-party assurance, current signer designation or blanket authority. |
+| Retention | Exact original bytes and matching digests must be retrievable. | Availability from a design note, wrapper, digest or Actions URL alone. |
+
+Claim-to-receipt structure: each measurable statement names its original source
+snapshot, numerator/denominator, direct digest-bound receipt and limits. Keep
+failures, skips, indeterminate results and missing observations visible.
+The figures above are current review references to retained results, not newly
+measured results. Never overwrite original receipts to make a current summary.
+Public source paths retain upstream naming; public prose uses descriptive estate
+and program names. The [privacy decision notes](REPO-PRIVACY-DECISIONS.md) retain
+the measured transition-inventory reference without making a visibility change.

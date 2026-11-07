@@ -2,9 +2,9 @@
 
 Review snapshot: 2026-11-07T22:53:28.341Z. Public repository: howardweale/lightyear-carddemo-modernization. Main at inspection: `695e731db0e0dd80547b409f4179a273ad931d97`.
 
-Close-only work order: Howard selected the fourteen listed drafts for closure on 7 November, after carrying useful #472/#466 material into DILIGENCE.md. Closure status is recorded separately. No branch/tag deletion, source move, merge, history rewrite or cancellation is part of this work order. Closing a PR must retain its branch, commits, discussion, diagnostics, dated records and evidence. Reopening remains possible. Do not infer that unfinished work was delivered or that an open finding was resolved.
+Close-only work order: Howard selected the thirteen listed drafts (excluding #465 under the later correction) for closure on 7 November, after carrying useful #472/#466 material into DILIGENCE.md. Closure status is recorded separately. No branch/tag deletion, source move, merge, history rewrite or cancellation is part of this work order. Closing a PR must retain its branch, commits, discussion, diagnostics, dated records and evidence. Reopening remains possible. Do not infer that unfinished work was delivered or that an open finding was resolved.
 
-The GitHub open-PR inventory contained 22 PRs in the requested range. Fourteen closure candidates are below. Staleness is a scope/schedule judgment, not a claim that the commits are already on main. Before each closure, refresh the exact head/state and check new human replies or dependencies. A changed head or disposition requires review.
+The GitHub open-PR inventory contained 22 PRs in the requested range. Thirteen closure candidates are below. Staleness is a scope/schedule judgment, not a claim that the commits are already on main. Before each closure, refresh the exact head/state and check new human replies or dependencies. A changed head or disposition requires review.
 
 ## Selected close-only queue
 
@@ -12,7 +12,6 @@ The GitHub open-PR inventory contained 22 PRs in the requested range. Fourteen c
 |---|---|---|---|
 | [#462](https://github.com/howardweale/lightyear-carddemo-modernization/pull/462) — status: rebuild after b9729cb16795d78865e7f92d5a5e92f9bde75180 | `453f2b6561f33057d380d49af7a1b8473b151d76` | 2026-10-25T04:05:11Z | Generated status snapshot for an old main; use the current generator rather than merge historical generated outputs. |
 | [#464](https://github.com/howardweale/lightyear-carddemo-modernization/pull/464) — Draft 5 November run sheet and hybrid engagement-repository plan | `af81e2cd9710541b0925ed5be008abe8921ace39` | 2026-10-30T18:29:05Z | The 5 November run sheet is obsolete under the 20 November freeze plan. Preserve the separate repository-design ideas for a later scoped proposal. |
-| [#465](https://github.com/howardweale/lightyear-carddemo-modernization/pull/465) — Draft source-cited posting and account-update rules with falsifiers | `59833122a98bb223ee789bd77a84870b68c84d1c` | 2026-10-26T23:30:03Z | Unexecuted posting/account-rule backlog, outside the present authorization/native critical path. Retain the source-cited proposal for later selection. |
 | [#466](https://github.com/howardweale/lightyear-carddemo-modernization/pull/466) — Draft public ten-pair T-SQL readiness harness and receipt contract | `d2cb28bbba6bd1480370c91de03f2bfd8baa7172` | 2026-10-27T03:25:55Z | Unmeasured ten-pair T-SQL demo backlog; provision and execution boundaries remain unresolved. Close the queue item without claiming the work delivered. |
 | [#467](https://github.com/howardweale/lightyear-carddemo-modernization/pull/467) — Draft milestone catch-up through 30 October; preserve run results | `2c8a86bd115265e7b644afd1732305d749588c78` | 2026-10-30T18:37:08Z | Historical milestone catch-up has unfilled 5 November result slots and an outdated delivery window. Preserve every dated draft as history. |
 | [#472](https://github.com/howardweale/lightyear-carddemo-modernization/pull/472) — Draft P9 public diligence: proven results and exact receipts first | `de24bf682df2c245b24279f1ae2ab88c15468889` | 2026-10-30T18:30:04Z | Older public-diligence presentation overlaps the newly authorized README/DILIGENCE work. Reuse only independently checked receipt claims; no equivalence or supersession of evidence is asserted. |
@@ -29,6 +28,7 @@ The GitHub open-PR inventory contained 22 PRs in the requested range. Fourteen c
 
 | PR | Disposition |
 |---|---|
+| [#465](https://github.com/howardweale/lightyear-carddemo-modernization/pull/465) | KEEP OPEN: docs-only current-main refresh and public naming review under the later7Novinstruction. |
 | [#455](https://github.com/howardweale/lightyear-carddemo-modernization/pull/455) | KEEP OPEN: active Track B integration overlay with unfinished F2/P5/native dependencies. Age is not grounds to discard the critical-path PR. |
 | [#468](https://github.com/howardweale/lightyear-carddemo-modernization/pull/468) | EXCLUDED: never close or delete under this plan; retained POSTTRAN comparison PR, never merge. |
 | [#471](https://github.com/howardweale/lightyear-carddemo-modernization/pull/471) | EXCLUDED: never close or delete under this plan; retained scratch PR, never merge. |
@@ -46,3 +46,5 @@ The GitHub open-PR inventory contained 22 PRs in the requested range. Fourteen c
 - No remote branch, local branch, tag, dated file, retained receipt or evidence deletion is proposed.
 - Drafts outside #455–#503 are outside this requested closure review. This document is not a complete branch ancestry/deletion audit.
 - Close-only scope is distinct from merge approval. Current merge authority for #527 and completed #525 is unaffected.
+
+Later7Novcorrection: #465 is reopened and retained for review. #466 is the mLogica intake starting backlog, with verify.yml deferred postfreeze. #472 limits/receipt structure are in DILIGENCE.md. #464 is linked from REPO-PRIVACY-DECISIONS.md. #502/#503 disposition uses the fresh main twin-build evidence in the closure receipt. Branches remain intact.

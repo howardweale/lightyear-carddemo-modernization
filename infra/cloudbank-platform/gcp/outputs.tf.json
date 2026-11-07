@@ -31,10 +31,13 @@
           "owner": "existing deploy.sh and Kubernetes manifests; not Terraform",
           "addons_template_sha256": "${filesha256(\"${path.module}/../../../factory/cloudbank/platform-qualification/gke/kubernetes/addons-template.yaml\")}",
           "network_policy_baseline": "unchanged default-deny and bounded egress in rollout manifests; Dataplane V2 is infrastructure prerequisite",
-          "external_secrets_controller": "existing separately pinned Helm release; no secret versions in Terraform"
+          "external_secrets_controller": "existing separately pinned Helm release; no secret versions in Terraform",
+          "rendered_sha256": "${var.rendered_rollout_sha256}"
         },
         "live_drills": "NOT RUN",
-        "qualified": false
+        "qualified": false,
+        "qualification_contract": "${jsondecode(file(\"${path.module}/../../../factory/cloudbank/platform-qualification/platform-contract.json\"))}",
+        "qualification_contract_sha256": "${filesha256(\"${path.module}/../../../factory/cloudbank/platform-qualification/platform-contract.json\")}"
       }
     },
     "ingress_ip": {

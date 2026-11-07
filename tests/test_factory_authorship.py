@@ -1,6 +1,8 @@
 import base64
 import copy
 import os
+import subprocess
+import sys
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 from hashlib import sha256
@@ -20,6 +22,24 @@ from lightyear_factory.workspace import IsolatedWorkspace
 
 
 class FactoryAuthorshipTests(unittest.TestCase):
+    def test_authorship_import_does_not_load_optional_human_signer(self):
+        code = """
+import sys
+class RejectOptional:
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == 'cryptography' or fullname.startswith('cryptography.'):
+            raise AssertionError('optional cryptography imported')
+        if fullname == 'lightyear_execution.candidate_human_signer':
+            raise AssertionError('optional human signer imported')
+sys.meta_path.insert(0, RejectOptional())
+from lightyear_factory.authorship import CandidateHistory, _is_human_signer
+assert not _is_human_signer(None)
+assert not _is_human_signer(object())
+"""
+        result = subprocess.run([sys.executable, "-c", code],
+                                capture_output=True, text=True, check=False)
+        self.assertEqual(0, result.returncode, result.stderr)
+
     def setup_history(self, directory):
         root = Path(directory)
         source = root / 'source'; source.mkdir()

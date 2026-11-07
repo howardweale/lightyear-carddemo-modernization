@@ -24,7 +24,15 @@ FACTORY_EMAIL = "factory@lightyear.invalid"
 REF = "refs/heads/candidate"
 
 
-from lightyear_execution.candidate_human_signer import CandidateHumanSigner
+def _is_human_signer(signer):
+    # Keep unsigned and CI histories independent of the optional public verifier.
+    # Names only avoid unnecessary imports; acceptance still requires exact type.
+    cls = type(signer)
+    if (cls.__module__, cls.__name__) != (
+            "lightyear_execution.candidate_human_signer", "CandidateHumanSigner"):
+        return False
+    from lightyear_execution.candidate_human_signer import CandidateHumanSigner
+    return cls is CandidateHumanSigner
 
 
 class CandidateHistory:
@@ -40,7 +48,7 @@ class CandidateHistory:
             raise ContractError("candidate-history-visible-to-agent")
         self.run_id, self.ledger = run_id, ledger
         self.start_commit = None
-        if signer is not None and type(signer) not in (CICommitSigner, CandidateHumanSigner):
+        if signer is not None and type(signer) is not CICommitSigner and not _is_human_signer(signer):
             raise ContractError("candidate-history-real-signer-required")
         self.signer = signer
 
@@ -249,7 +257,7 @@ class CandidateHistory:
                    f'Factory-Attempt: {attempt}\nFactory-Provenance: {proof["content_sha256"]}\n')
         commit = self.signer.sign(self, tree, parent, message.encode())
         expected_message = (self.signer.expected_message(message.encode()).decode()
-                            if type(self.signer) is CandidateHumanSigner else message)
+                            if _is_human_signer(self.signer) else message)
         # Signing adapters cannot substitute another tree or parent.
         if (self._git('show', '-s', '--format=%T %P', commit).decode().strip() != tree+' '+parent
                 or self._git('show', '-s', '--format=%B', commit).decode().strip() != expected_message.strip()):
@@ -453,7 +461,7 @@ class CandidateHistory:
                 if proof != expected:
                     raise ContractError('candidate-history-provenance-mismatch')
                 body = self._git('show', '-s', '--format=%B', commit).decode().rstrip()
-                if type(self.signer) is CandidateHumanSigner:
+                if _is_human_signer(self.signer):
                     expected_body = (f'Factory candidate attempt {record["attempt"]}\n\n'
                                      f'Factory-Run: {self.run_id}\nFactory-Attempt: {record["attempt"]}\n'
                                      f'Factory-Provenance: {proof["content_sha256"]}\n')

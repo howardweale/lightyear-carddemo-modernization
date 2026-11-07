@@ -1,0 +1,65 @@
+{
+  "schema": "sakila-demo-inputs/1",
+  "upstream_commit": "e089a5b1ec9af0df7a9c6a5d47d49fa1736a4e84",
+  "views": {
+    "tools/independent_conversion_demo/upstream/sqlserver-customer_list.sql.json": {
+      "upstream_path": "sql-server-sakila-db/sql-server-sakila-schema.sql",
+      "source_sha256": "994d6f2c71aa7c25a7d661ba59c1d8125fac7fe112724231bfebd1fa4ea7e03b",
+      "view_sha256": "2d4686f35aa90fb8cf4560580e0fe0c4352e5e8d464b8ea70a9a23f072040bb1",
+      "upstream_commit": "e089a5b1ec9af0df7a9c6a5d47d49fa1736a4e84"
+    },
+    "tools/independent_conversion_demo/upstream/sqlserver-sales_by_store.sql.json": {
+      "upstream_path": "sql-server-sakila-db/sql-server-sakila-schema.sql",
+      "source_sha256": "994d6f2c71aa7c25a7d661ba59c1d8125fac7fe112724231bfebd1fa4ea7e03b",
+      "view_sha256": "5551473d27e0201639078f0b0651b1ca2e07af0af172aa01893fb9fcfa8b647c",
+      "upstream_commit": "e089a5b1ec9af0df7a9c6a5d47d49fa1736a4e84"
+    },
+    "tools/independent_conversion_demo/upstream/postgres-customer_list.sql.json": {
+      "upstream_path": "postgres-sakila-db/postgres-sakila-schema.sql",
+      "source_sha256": "eaa8cfc2fd358e70617d31ed3638196982944749929f02e90b980457855bfa48",
+      "view_sha256": "dbeffc82373a68dab4e12e8575d9d6582ee881560fe1612252c3e0722b3e66ff",
+      "upstream_commit": "e089a5b1ec9af0df7a9c6a5d47d49fa1736a4e84"
+    },
+    "tools/independent_conversion_demo/upstream/postgres-sales_by_store.sql.json": {
+      "upstream_path": "postgres-sakila-db/postgres-sakila-schema.sql",
+      "source_sha256": "eaa8cfc2fd358e70617d31ed3638196982944749929f02e90b980457855bfa48",
+      "view_sha256": "b23a34f67e2673dbc1f0432f55d6537339ddb516e8592e75a28338fe9de7f8d3",
+      "upstream_commit": "e089a5b1ec9af0df7a9c6a5d47d49fa1736a4e84"
+    }
+  },
+  "engines": {
+    "sqlserver": {
+      "image": "mcr.microsoft.com/mssql/server@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718",
+      "platform": "linux/amd64",
+      "discovery_tag": "2022-latest",
+      "index_digest": "sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718"
+    },
+    "postgres": {
+      "image": "docker.io/library/postgres@sha256:5983db9a9c6ad225a48a46cfe2e03e6680b1826662befd0465eb05b34cb1c64e",
+      "platform": "linux/amd64",
+      "discovery_tag": "16-bookworm",
+      "index_digest": "sha256:5264710be20f409750ac6dc4e5706dcef929c87e241605463f0f9aefa932a8d9"
+    }
+  },
+  "files": {
+    "tools/independent_conversion_demo/upstream/LICENSE": "1f1f3467bc7e7ba6277f20ddd7925e2ec2165d3bd56bdaf2eb26ea84c3953279",
+    "tools/independent_conversion_demo/upstream/ATTRIBUTION.txt": "fa853b54b50bedcccc0472ce6ffe154604f4c4be5400a32a88de1df269295200",
+    "tools/independent_conversion_demo/fixture/sqlserver.sql": "c21e1e4bc73b3bb8518b78a60c7d84cfe91adf0ecb7d8fe8a20296116b519265",
+    "tools/independent_conversion_demo/controls/sqlserver-active-flip.sql": "220d0943b8fbad9a9070a6937a349c8d464e5e8f77f2367b45a5fb2cdf380773",
+    "tools/independent_conversion_demo/controls/sqlserver-payment-omission.sql": "ad31e076a6d2da6d34306f528c8655d027a4742baa28380af8655bb5e05dbcd0",
+    "tools/independent_conversion_demo/queries/sqlserver-customer_list.sql": "29be3288bba58a2c8383386a5eed64f1c1455fea5ef5388028cfbe0893a2c746",
+    "tools/independent_conversion_demo/queries/sqlserver-sales_by_store.sql": "e2979d9316035ffd4631781aac60773e13212f2352691bf4d1c383a657b2191f",
+    "tools/independent_conversion_demo/fixture/postgres.sql": "374b1f826c743a2026359189552454e43572be24ae81e42b8f0076d3a7f5a7b5",
+    "tools/independent_conversion_demo/controls/postgres-active-flip.sql": "43ba1b4f1d3394f87c00dfc41ce624b8eaec3903a2f41f3b9ebec9d1f1381221",
+    "tools/independent_conversion_demo/controls/postgres-payment-omission.sql": "ad31e076a6d2da6d34306f528c8655d027a4742baa28380af8655bb5e05dbcd0",
+    "tools/independent_conversion_demo/queries/postgres-customer_list.sql": "4be73d76dd66b52d69d7dda4f7f77097f52de360d2da837257c3c90b5caa1be1",
+    "tools/independent_conversion_demo/queries/postgres-sales_by_store.sql": "961a1e153ef7737d0f547d7848444e3f705139078771a16713b3418a8997414f",
+    "tools/independent_conversion_demo/contract.json": "e8ad382659a7fd3321e6bb3283096b0712d0aea3b97f66a7c77095b2254aaf36",
+    "tools/independent_conversion_demo/compare.py": "88483b107ad3db21ac1239941ddc64366149f65f19c15eda16f830e5e79e989e",
+    "tools/independent_conversion_demo/upstream/sqlserver-customer_list.sql.json": "314666430ab6d5bb555d6b16571a32cab481ae6726cb88c78fae59e230592209",
+    "tools/independent_conversion_demo/upstream/sqlserver-sales_by_store.sql.json": "32c5e0506f4d8777d72a27a1645faa6667f4097e51e0528a3ffa1bc70d796a22",
+    "tools/independent_conversion_demo/upstream/postgres-customer_list.sql.json": "b0515c48bba6c0b8cd5ce224510d68b9215b2e0f38808664c7a1d960575468a2",
+    "tools/independent_conversion_demo/upstream/postgres-sales_by_store.sql.json": "eb1df9361783694c7bd8ce65db9dc00333c6848b81f29f3febdb796508cccf20",
+    "tests/test_independent_conversion_sakila.py": "c4838db6fc01d61c39a9406ceb591114f4a31bae56d9add918ef38242a00f419"
+  }
+}

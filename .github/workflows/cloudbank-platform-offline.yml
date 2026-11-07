@@ -21,6 +21,9 @@ on:
       - 'tools/check_cloudbank_iac_parity.py'
       - 'tests/test_cloudbank_iac_parity.py'
       - '.github/workflows/cloudbank-platform-offline.yml'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 jobs:

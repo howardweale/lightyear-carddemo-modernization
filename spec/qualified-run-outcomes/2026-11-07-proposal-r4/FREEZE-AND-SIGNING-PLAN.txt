@@ -1,0 +1,100 @@
+Authorization behaviour catalogue proposal — 7 November 2026, revision 4
+
+Decision for Howard, due for review by 10 November
+Proposed N=31, grouped by 15 list/account, 8 detail/session and 8 fraud behaviours.
+Each case is a coherent legacy transaction/rule family; its mandatory variants
+are all-or-nothing within one scored case. More fixtures do not earn more points.
+Proposed B starts at floor(N/2)+1=16; B=16–30, C=1–15, A=31. This is a pre-result
+majority proposal, not a statistically calibrated claim about production coverage.
+No target of 19 was used. The separate 19 control drills remain prerequisites.
+This supersedes the N=1 r2 proposal as a proposal only. N=1 is not approved.
+
+Approve or revise the public IDs/definitions, grouping, mandatory variant policy,
+N and B cutoff before any private oracle output or candidate result is seen.
+The public catalogue contains no concrete private inputs, answers or seeds.
+Its source references point only to pinned upstream legacy COBOL and interfaces.
+No factory-written Java, prior factory outputs or observed result informed cases.
+The proposal schemas cannot be used by the current report loader. A later,
+separately approved executable rules version and loader/boundary-test code change
+are needed for cutoff16; PR521 still enforces cutoff10. No activation occurs here.
+
+Scope and acceptance boundaries
+All mandatory variants must match the pinned legacy twin field by field, with
+the full screen/map attributes, COMMAREA, transaction effects and complete
+before/after storage state compared by the private judge. Do not fix legacy
+quirks in the oracle or assume error paths are safe. Equivalence to a twin is
+not proof of z/OS behaviour or of desired security/business policy.
+Every case must also meet the separately frozen condition inventory, including
+mutation KILLED/all-generated >=90% with no exclusions, frozen judge and limits.
+Eight P5 drill families are not behaviour conditions. This proposal does not
+change any existing gate or select a final condition inventory.
+All19 controls must pass for A–C; a designed control stop is D, fail-open is F.
+
+Private sampling must cover every listed variant at least once with fixed
+sample counts/assignments committed before oracle output. One fixture may
+cover several clauses; no unbounded Cartesian product is assumed. No sample
+replacement, case addition/removal or denominator change after results.
+The exact private sample commitment and generator versions remain to prepare;
+public IDs/definitions alone are not a complete executable qualification packet.
+
+Readiness risks that must be resolved BEFORE the private run
+The existing private adapter covers one composite session, not this31-case
+inventory. Static source review does not establish arbitrary IMS/CICS/DB2
+status injection, duplicate-key/error behaviour, transaction rollback fidelity,
+clock control, full state capture or private-input validation for every variant.
+AUTH-L04–L10, AUTH-D02–D05/D08 and AUTH-F04–F08 particularly depend on those paths.
+No stubbed success or omitted case can replace missing twin support. Confirm
+the private reference path independently, using public capability metadata only.
+If missing support needs new implementation, estimate/seek approval; do not spend
+the next-stage allowance silently or weaken source-defined cases. Repairs remain
+unbounded until capability review. Keep native/P5 on the critical path.
+
+Remaining work: separate approval required, up to12 more focused hours
+1. Private twin contract/capability and sample commitment preparation:3–5h.
+2. Approved catalogue/rules digest/report binding and CI preparation:3–4h.
+3. Review corrections and public-only signing handoff packet:2–3h.
+Total8–12h excludes private execution runtime, CI queues, waiting and unbounded
+repairs. No second-stage engineering, private run or signing is authorized here.
+The public proposal stage has a10h cap; unused time is not automatic authority
+for the remaining stage. Human review/signing estimate1–2h is separate from
+the private run attendance/runtime allowance below, not guaranteed capacity.
+
+Proposed schedule — Pacific time; windows are requests, NOT bookings
+By10Nov: Howard reviews this proposal and separately decides the remaining
+8–12h preparation allowance. Physical action: review IDs/definitions/N/cutoff,
+accept/revise them, and confirm whether the proposed private windows fit.
+10–11Nov: approved second-lane work prepares exact helper/judge/input contracts,
+capability inventory and fixed public/private manifest commitments. No oracle
+answers or candidate results are generated during preparation.
+11Nov09:00–10:00: proposed Howard private-host preflight, without generating
+answers. Confirm exact tools, custody, no-agent access, and required capabilities;
+return only public hashes/status, never seeds, paths or private data.
+11Nov12:00 checkpoint: warn Howard if missing support, unapproved scope, capacity,
+CI or unconfirmed private/signing windows make13Nov17:00 unreachable. Do not wait
+until the deadline. The checkpoint still applies if a proposal is under review.
+Before12Nov private generation: lock public catalogue hash, private sample-set
+commitment, source/twin/judge/helper hashes and exact human execution procedure;
+Howard must separately approve that concrete private-run packet. No new cases
+or variants after any output/result. A failed private generation stops readiness;
+it does not authorize resampling, retries, scope changes or fallback.
+12Nov09:00–11:00: proposed window when Howard's private twin run is needed.
+Howard generates expected answers privately from the pinned legacy twin, with
+agents/factory/CI/candidate unable to access answers or seeds. Two hours is an
+attendance allowance, NOT a measured runtime or promise of completion. Request
+only a public completion/failure status and opaque commitments/manifest hashes;
+do not return raw frames, data values, expected rows or differences to agents.
+By13Nov12:00: reconcile only public metadata and independent private verification
+status; prepare exact immutable catalogue/rules digest and signing request.
+13Nov14:00–15:00: proposed Howard review/signing window for the final exact
+catalogue hash and approved rules version, under a separately approved packet.
+No agent key operations/signatures or reuse of an expired signing packet.
+13Nov17:00: target catalogue hash frozen AND signed. Approval, signature, private
+answer custody, final run-source binding and all other gates remain distinct.
+The overall qualified-run freeze target20Nov17:00 and week30Nov run plan remain
+conditional and unchanged; no execution/qualification/recovery23–27Nov.
+
+Fallback and stop rule
+If13Nov is not credible, report by11Nov with the concrete blocker and options.
+N=1 with B/C unavailable is only a fallback proposal and requires Howard's fresh
+explicit approval BEFORE any result. No automatic fallback, renewal, case edits,
+source activation, merge, spending, signing or qualification follows this plan.

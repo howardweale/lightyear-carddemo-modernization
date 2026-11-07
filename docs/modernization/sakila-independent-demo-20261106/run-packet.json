@@ -33,7 +33,7 @@
       "accept_eula": false,
       "human_acceptance_required": true,
       "review_url": "https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-deployment?view=sql-server-ver17",
-      "terms": "Review terms for the exact SQL Server 2022 Developer image before any ACCEPT_EULA=Y. Agent has not accepted.",
+      "terms": "Review terms for the exact SQL Server 2022 Developer image before any ACCEPT_EULA=Y. Not yet accepted: SQL Server EULA.",
       "terms_url": "https://www.microsoft.com/content/dam/microsoft/usetm/documents/sql-server/sql-server-2022-developer-express-evaluation/retail-packaged/SQLServer2022_SQLServer2022DeveloperExpressEvaluation_English.pdf",
       "terms_sha256": "1ca8ba55f5c51bd015cad0fc57c50fc29bc33104c5501821e05ddaa268da8c07",
       "terms_title": "Microsoft SQL Server 2022 Developer, Express, Evaluation",
@@ -53,7 +53,7 @@
     "Capture catalog columns/types and complete rows with the pinned queries; retain raw stdout/stderr, actual server version and runtime image identity.",
     "Repeat from fresh fixture for separately labelled active-flip and payment-omission controls; never overwrite originals.",
     "Assemble bound captures, compare strict schema separately from common fields, preserve row multiplicity and decimal exactness.",
-    "Retain successes and failures in Release assets with sha256 manifest and independent readback after separately authorized publication."
+    "Planned: retain successes and failures in Release assets with sha256 manifest and independent readback after separate Howard approval for publication."
   ],
   "stop": [
     "No exact-head CI success",

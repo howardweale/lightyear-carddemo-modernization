@@ -8,6 +8,6 @@ Planned reporting: strict schema compares original ordered names/types, includin
 
 Planned negative controls: an active-predicate flip and removal of payment 4 from the duplicate-name second store, on fresh fixtures. Both are verifier-authored sensitivity controls, not upstream defects. Unit fixtures are synthetic capture documents, not database observations.
 
-Not yet executed: database capture or native engine validation. Missing/failed capture is insufficient evidence. The immutable image identities and input hashes are in `run-packet.json` and the input manifest. SQL Server Developer license acceptance and a confirmed zero-cost standard CI allowance require Howard's separate exact-packet approval; no EULA has been accepted.
+Not yet executed: database capture or native engine validation. Missing/failed capture is insufficient evidence. The immutable image identities and input hashes are in `run-packet.json` and the input manifest. SQL Server Developer license acceptance and a confirmed zero-cost standard CI allowance require Howard's separate exact-packet approval; Not yet accepted: SQL Server EULA.
 
 Planned CI sequence and stop conditions are in the packet. No capture workflow is enabled by this draft. The comparator's CI unit tests exercise parsing and controls only; they do not demonstrate engine behavior. Scope excludes arbitrary SQL, stored procedures, performance and customer qualification.

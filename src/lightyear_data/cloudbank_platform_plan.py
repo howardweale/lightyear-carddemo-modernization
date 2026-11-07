@@ -123,6 +123,14 @@ def compile_plan(plan_bytes, rollout_bytes, *, commit, plan_sha256, rollout_sha2
     require(isinstance(services, list) and len(services) == len(set(services)) and services, "service-set-invalid")
     secrets = {name: one(r, 'google_secret_manager_secret.service["'+name+'"]')["secret_id"] for name in services}
     require(secrets == declared["secrets"], "secret-output-resource-mismatch")
+    readers = [one(r, 'google_secret_manager_secret_iam_member.reader["'+name+'"]') for name in services]
+    require(all(row["role"] == "roles/secretmanager.secretAccessor" for row in readers)
+            and len({row["member"] for row in readers}) == 1
+            and readers[0]["member"] == declared["secret_reader"], "secret-reader-output-resource-mismatch")
+    telemetry = [row for address,row in r.items() if address.startswith('google_project_iam_member.telemetry["')]
+    roles = sorted(row["role"] for row in telemetry)
+    require(roles and roles == sorted(declared["telemetry_roles"])
+            and len({row["member"] for row in telemetry}) == 1, "telemetry-output-resource-mismatch")
     require(sql["name"] == declared["sql"]["instance"] and sql["region"] == context["region"], "sql-output-resource-mismatch")
     settings = sql["settings"][0]
     backup = settings["backup_configuration"][0]
@@ -157,11 +165,11 @@ def compile_plan(plan_bytes, rollout_bytes, *, commit, plan_sha256, rollout_sha2
     expectations = {
         "NETWORK-ENFORCEMENT": {"policies": policies, "dataplane": cluster["datapath_provider"]},
         "RUNTIME-IDENTITY": {"identities": identities, "workload_pool": at(cluster, "workload_identity_config/0/workload_pool")},
-        "SECRET-ROTATION": {"external_secrets": external, "reader": declared["secret_reader"]},
+        "SECRET-ROTATION": {"external_secrets": external, "reader": readers[0]["member"]},
         "SQL-HA": {"instance": sql["name"], "availability": settings["availability_type"], "private": True},
         "SQL-RECOVERY": {"instance": sql["name"], "backup": {k:backup[k] for k in ("enabled", "start_time", "point_in_time_recovery_enabled", "transaction_log_retention_days", "backup_retention_settings")}, "limits": controls["backup_restore"]},
         "ALERT-DRILL": {"prometheus": True, "logging": sorted(at(cluster, "logging_config/0/enable_components")),
-                        "roles": sorted(declared["telemetry_roles"]), "fire_and_recovery": controls["observability"]["alert_fire_and_recovery"]},
+                        "roles": roles, "fire_and_recovery": controls["observability"]["alert_fire_and_recovery"]},
         "SUSTAINED-LOAD": {"services": sorted(services), "limits": controls["load"]},
     }
     return {"schema": "cloudbank-platform-expectations/1", "iac_commit": commit, "plan_sha256": plan_sha256,

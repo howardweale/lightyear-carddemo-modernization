@@ -38,6 +38,8 @@ def fixture():
     for name in policy["services"]:
         secrets[name] = "cloudbank-"+name+"-external"
         add('google_secret_manager_secret.service["'+name+'"]', dict(secret_id=secrets[name]))
+        add('google_secret_manager_secret_iam_member.reader["'+name+'"]',
+            dict(role="roles/secretmanager.secretAccessor", member="principal://offline/reader"))
         bundle["items"].append(dict(kind="Deployment", metadata=dict(name=name, namespace=context["namespace"]),
             spec=dict(replicas=2, template=dict(spec=dict(containers=[dict(name=name, securityContext=dict(
                 runAsUser=65532, runAsGroup=65532, runAsNonRoot=True))])))))
@@ -52,6 +54,8 @@ def fixture():
                telemetry_roles=["roles/cloudtrace.agent", "roles/logging.logWriter", "roles/monitoring.metricWriter"],
                rollout=dict(rendered_sha256=plan.digest(rollout)), qualification_contract=policy,
                qualification_contract_sha256=plan.digest(policy_raw))
+    for role in out["telemetry_roles"]:
+        add('google_project_iam_member.telemetry["'+role+'"]', dict(role=role, member="principal://offline/otel"))
     value = dict(format_version="1.2", terraform_version="1.13.3", errored=False, complete=True,
                  resource_changes=[], planned_values=dict(root_module=dict(resources=resources),
                  outputs=dict(platform_infrastructure=dict(sensitive=False, value=out))))
@@ -144,6 +148,14 @@ class PlatformPlanTests(unittest.TestCase):
         for extra in (["--project", "other"], ["--source-instance=other"], ["recover"]):
             with self.subTest(extra=extra), self.assertRaises(ValueError):
                 drills.cli_arguments(contract_fixture(), "SQL-HA", extra)
+
+    def test_iam_resource_drift_cannot_hide_in_output(self):
+        value, rollout, args = fixture()
+        rows = value["planned_values"]["root_module"]["resources"]
+        next(r for r in rows if r["address"].startswith("google_secret_manager_secret_iam_member."))["values"]["member"] = "other"
+        raw = plan.canonical(value); args["plan_sha256"] = plan.digest(raw)
+        with self.assertRaisesRegex(ValueError, "secret-reader-output-resource"):
+            plan.compile_plan(raw, rollout, **args)
 
     def test_every_drill_rejects_configuration_drift(self):
         contract = contract_fixture()

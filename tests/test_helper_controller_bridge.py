@@ -9,15 +9,16 @@ import unittest
 from lightyear_control_tower.decisions import canonical
 from lightyear_execution.helper_controller_bridge import HelperControllerBridge
 from lightyear_execution.helper_route_contract import HelperRouteRefused
-from test_helper_route_provenance import HelperRouteProvenanceTests
-from test_external_custody_signing import ExternalCustodySigningTests, digest
+import test_helper_route_provenance as provenance_fixtures
+import test_external_custody_signing as signing_fixtures
+from test_external_custody_signing import digest
 
 
 class HelperControllerBridgeTests(unittest.TestCase):
     def setUp(self):
-        self.provenance = HelperRouteProvenanceTests()
+        self.provenance = provenance_fixtures.HelperRouteProvenanceTests()
         self.provenance.setUp()
-        self.origin = ExternalCustodySigningTests()
+        self.origin = signing_fixtures.ExternalCustodySigningTests()
         self.origin.setUp()
         self.addCleanup(self.origin.doCleanups)
         self.tmp = tempfile.TemporaryDirectory()
@@ -47,6 +48,15 @@ class HelperControllerBridgeTests(unittest.TestCase):
         body.update(updates)
         signature = self.origin.key.sign(canonical(body))
         return canonical(dict(body, signature_base64=base64.b64encode(signature).decode()))
+
+    def test_journal_records_preserve_exact_lf_bytes(self):
+        self.bridge.export_once()
+        raw = self.path.read_bytes()
+        self.assertEqual(2, raw.count(b"\n"))
+        self.assertNotIn(b"\r", raw)
+        self.assertEqual(len(raw), self.bridge._size)
+        self.assertEqual(["CREATED", "EXPORTED"],
+                         [json.loads(row)["state"] for row in raw.splitlines()])
 
     def test_one_authenticated_match_returns_only_digests_and_status(self):
         result = self.bridge.consume_once(self.response())

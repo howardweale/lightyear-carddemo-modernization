@@ -61,7 +61,9 @@ class HelperControllerBridge:
         self._path = Path(journal).absolute()
         self._parents = {p: _plain(p, directory=True)
                          for p in (self._path.parent, *self._path.parent.parents)}
-        self._fd = os.open(self._path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        # Journal size and digest accounting uses exact bytes on every host.
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
+        self._fd = os.open(self._path, flags, 0o600)
         self._identity = _plain(self._path)
         self._size, self._state, self._request = 0, "new", None
         self._pid, self._lock, self._closed = os.getpid(), RLock(), False

@@ -423,7 +423,7 @@ def inspect(repo, base, head, event=None, environment=None, query=api):
                     for p in changed), 'judge-or-posttran-change-refused')
     # Exact D1 registration is loaded exclusively from trusted base. A new
     # policy registration is inert until separately reviewed and merged.
-    d1_record = "docs/factory/d1-controller-phase-exact-registration-20261107-r3.json"
+    d1_record = "docs/factory/d1-controller-phase-exact-registration-20261107-r4.json"
     d1_validator = "tools/check_d1_exact_registration.py"
     if (report["blocked_paths"] == [ORCHESTRATOR] and
             git(repo, "ls-tree", "-z", base, "--", d1_record)):

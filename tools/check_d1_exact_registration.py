@@ -11,7 +11,7 @@ import subprocess
 
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 SOURCE_ANCHOR = "c6110727c927b9aaf0bf4a2e7654948779d72482"
-RECORD = "docs/factory/d1-controller-phase-exact-registration-20261107-r3.json"
+RECORD = "docs/factory/d1-controller-phase-exact-registration-20261107-r4.json"
 VALIDATOR = "tools/check_d1_exact_registration.py"
 PARENT_VALIDATOR = "tools/check_f2_fence_exceptions.py"
 ORCHESTRATOR = "src/lightyear_factory/orchestrator.py"

@@ -13,8 +13,8 @@ NetworkPolicies and ExternalSecrets, with explicit runtime UID/GID declarations.
 Terraform owns infrastructure; existing controllers own rollout and drill actions.
 No Secret objects or expected private answers belong in the public rollout.
 
-`tools/cloudbank_platform_receipt.py expectations` takes the raw plan, rollout and
-externally approved commit/digests. It rejects incomplete, destructive, deferred,
+Planned operator prerequisite: supply the raw plan and rollout to
+`tools/cloudbank_platform_receipt.py expectations` with external approval of the exact commit/digests. It rejects incomplete, destructive, deferred,
 sensitive or unresolved required inputs. It recomputes expectations from resource
 values and the bound rollout. The plan's existence does not establish provenance:
 the operator must approve the exact plan and source bindings out of band.
@@ -44,7 +44,7 @@ network-policy compiler or proof that every possible flow is covered.
 ## Producer boundary and signatures
 
 Existing MS67 receipts use HMAC and are not converted into public signatures.
-The operator runs the existing verifier in its authorized environment and retains
+Planned operator step: run the existing verifier in its authorized environment and retain
 the original receipt. `observe` projects its result and fresh API readbacks into
 public bytes. It requires the original receipt hash, verifier digest, controller
 run ID and generated recipe hash. No expected configuration is copied into the
@@ -58,7 +58,7 @@ keys. Freshness and authenticity ultimately depend on the designated observer's
 signature. This is an explicit human attestation boundary for legacy verification,
 not independent public verification of an HMAC secret.
 
-Howard separately reviews/signs each observation with the designated Ed25519 role.
+Planned human-only step: Howard must separately review/sign each observation with the designated Ed25519 role.
 The trust policy pins each observer key and legacy verifier digest, code key,
 judge key, run/context, source/plan/rollout/policy bindings, evidence class and
 offset-bearing start/expiry timestamps. Its exact file hash is an out-of-band
@@ -66,10 +66,11 @@ input, never taken from the evidence being verified. No wildcard or renewal exis
 
 The code envelope uses `cloudbank-code-qualification/1`: run ID, code commit,
 rollout digest, verifier receipt digest, evidence class and PASS/FAIL/NOT RUN.
-It is a separately signed public attestation about the code result, not a rewrite
+Planned code envelope: a separately signed public attestation about the code result, not a rewrite
 of the original code evidence. `judge` verifies it and all supplied observations,
 recomputes the seven comparisons and prepares one compound body containing the
-signed code envelope and platform verdict. Howard signs that whole body externally.
+Planned compound contents: the signed code envelope and platform verdict.
+Planned human-only step: Howard must sign that whole body externally.
 `verify` authenticates the compound envelope and recomputes it from all inputs.
 
 Envelopes use the existing `lightyear_cloud_runner.signing.verify` canonical JSON

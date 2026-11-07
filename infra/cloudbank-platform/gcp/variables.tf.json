@@ -1,0 +1,73 @@
+{
+  "variable": {
+    "project_id": {
+      "type": "string"
+    },
+    "project_number": {
+      "type": "string",
+      "validation": [
+        {
+          "condition": "${can(regex(\"^[0-9]+$\", var.project_number))}",
+          "error_message": "Explicit public project number required; no credentialed lookup."
+        }
+      ]
+    },
+    "image_signer_member": {
+      "type": "string",
+      "validation": [
+        {
+          "condition": "${startswith(var.image_signer_member, \"user:\")}",
+          "error_message": "Bootstrap image signer is an explicit human user, not a worker."
+        }
+      ]
+    },
+    "delegated_dns_name": {
+      "type": "string"
+    },
+    "tls_hostname": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string",
+      "default": "europe-west2"
+    },
+    "prefix": {
+      "type": "string",
+      "default": "cloudbank-ms67"
+    },
+    "namespace": {
+      "type": "string",
+      "default": "cloudbank-ms67"
+    },
+    "zones": {
+      "type": "list(string)",
+      "default": [
+        "europe-west2-a",
+        "europe-west2-b",
+        "europe-west2-c"
+      ],
+      "validation": [
+        {
+          "condition": "${length(var.zones) == 3 && length(toset(var.zones)) == 3 && alltrue([for z in var.zones : startswith(z, \"${var.region}-\")])}",
+          "error_message": "Exactly three distinct zones in the selected region are required."
+        }
+      ]
+    },
+    "live_apply_approved": {
+      "type": "bool",
+      "default": false,
+      "description": "Planning guard only; never an authorization. A live apply requires a separate costed approval and destroy plan."
+    },
+    "rendered_rollout_sha256": {
+      "type": "string",
+      "default": null,
+      "description": "Public rendered rollout digest for later qualification; null means NOT RUN and cannot qualify.",
+      "validation": [
+        {
+          "condition": "${var.rendered_rollout_sha256 == null ? true : can(regex(\"^[0-9a-f]{64}$\", var.rendered_rollout_sha256))}",
+          "error_message": "Use a SHA256 of the exact public rendered rollout, never secret values."
+        }
+      ]
+    }
+  }
+}

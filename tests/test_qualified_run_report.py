@@ -12,7 +12,8 @@ from lightyear_factory.qualified_run_report import (
 
 ROOT = Path(__file__).resolve().parents[1]
 E = "a" * 40
-RULES_PATH = "spec/qualified-run-outcomes/2026-11-07/tiers.json"
+RULES_PATH = "synthetic-rules.json"
+HISTORICAL_RULES_PATH = "spec/qualified-run-outcomes/2026-11-07/tiers-2026-11-02-historical.json"
 
 
 class Bundle:
@@ -22,9 +23,13 @@ class Bundle:
         self.controls = [dict(schema="qualified-run-control/1", run_id="ci-fixture",
                               exact_e=E, control_id=x, status="PASS", reason="")
                          for x in CONTROL_IDS]
-        policy = json.loads((ROOT / RULES_PATH).read_bytes())
-        policy["case_count"] = count
-        policy["version"] = "synthetic-ci-only"
+        # Synthetic policy is independent of the non-loadable historical document.
+        names = ["Full pass", "Strong partial", "Early partial", "Clean stop", "No run", "Unexplained"]
+        policy = dict(schema="qualified-run-tier-rules/2", version="synthetic-ci-only",
+                      case_count=count, bc_cutoff=10,
+                      tiers={tier: dict(name=name, test="Synthetic rule only",
+                                        what_it_proves="Synthetic reporting fixture only")
+                             for tier, name in zip("ABCDEF", names)})
         self.rules_ref = self.save("rules.json", policy)
         self.cases = [f"synthetic-case-{i}" for i in range(count)]
         self.gates = [f"synthetic-gate-{i}" for i in range(gate_count)]
@@ -98,6 +103,14 @@ class Bundle:
 
 
 class QualifiedRunReportTests(unittest.TestCase):
+    def test_historical_tiers_rejected_even_with_matching_digest(self):
+        path = ROOT / HISTORICAL_RULES_PATH
+        raw = path.read_bytes()
+        self.assertEqual(json.loads(raw)["schema"], "qualified-run-tier-rules-historical/1")
+        self.assertFalse((path.parent / "tiers.json").exists())
+        with self.assertRaisesRegex(ReportError, "^rule-version$"):
+            load_rules(path, sha256(raw).hexdigest())
+
     def test_approved_boundaries_and_reasons(self):
         for passed, expected in [(0, "D"), (1, "C"), (9, "C"), (10, "B"), (18, "B"), (19, "A")]:
             with self.subTest(passed=passed), TemporaryDirectory() as temp:
@@ -144,7 +157,7 @@ class QualifiedRunReportTests(unittest.TestCase):
             b.rows[-1]["difference"] = ""
             self.assertEqual(b.report()["tier"], "C")
 
-    def test_all_eight_gates_required_for_each_counted_pass(self):
+    def test_every_frozen_condition_required_for_each_counted_pass(self):
         with TemporaryDirectory() as temp:
             b = Bundle(Path(temp), passed=10)
             b.rows[0]["gates"][b.gates[0]] = "FAIL"

@@ -1,5 +1,5 @@
 {
-  "schema": "qualified-run-tier-rules/1",
+  "schema": "qualified-run-tier-rules-historical/1",
   "version": "2026-11-07",
   "source_document_date": "2026-11-02",
   "case_count": 19,

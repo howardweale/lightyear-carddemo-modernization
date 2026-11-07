@@ -226,7 +226,7 @@ class QualifiedRunReportTests(unittest.TestCase):
             path.write_text('{"schema":"one","schema":"two"}')
             self.assertEqual(render_bundle(path, **b.kwargs)["tier"], "F")
             rule_path = Path(temp) / RULES_PATH
-            rule_path.parent.mkdir(parents=True)
+            rule_path.parent.mkdir(parents=True, exist_ok=True)
             rule_path.write_text("{}")
             with self.assertRaisesRegex(ReportError, "approved-tier-rules-changed"):
                 load_rules(rule_path, b.rules_ref["sha256"])

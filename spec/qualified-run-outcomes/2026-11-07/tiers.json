@@ -1,0 +1,40 @@
+{
+  "schema": "qualified-run-tier-rules/1",
+  "version": "2026-11-07",
+  "source_document_date": "2026-11-02",
+  "case_count": 19,
+  "gate_count": 8,
+  "bc_cutoff": 10,
+  "tiers": {
+    "A": {
+      "name": "Full pass",
+      "test": "All 19 held-out cases pass all eight gates; every limit held; receipts published; the open verifier says PASS",
+      "what_it_proves": "The factory wrote working code for a real legacy slice on its own, and outsiders can check it"
+    },
+    "B": {
+      "name": "Strong partial",
+      "test": "10–18 cases pass all eight gates; limits held; every failure has a judge receipt naming the difference",
+      "what_it_proves": "The factory does most of it, and the judge catches what it gets wrong"
+    },
+    "C": {
+      "name": "Early partial",
+      "test": "1–9 cases pass; limits held; failures recorded",
+      "what_it_proves": "The pipeline works end to end; the agents are the weak link, not the controls"
+    },
+    "D": {
+      "name": "Clean stop",
+      "test": "Nothing passes, or the run stops itself on a limit or control, with a receipt saying why",
+      "what_it_proves": "The controls work: it stops instead of shipping bad code"
+    },
+    "E": {
+      "name": "No run",
+      "test": "The run never starts (freeze missed, no-go, blocker)",
+      "what_it_proves": "Discipline: we don’t run unprepared"
+    },
+    "F": {
+      "name": "Unexplained",
+      "test": "A limit exceeded, answers exposed, a case or gate changed after freeze, missing evidence, or the verifier disagrees",
+      "what_it_proves": "Nothing good. Stop, investigate, publish"
+    }
+  }
+}

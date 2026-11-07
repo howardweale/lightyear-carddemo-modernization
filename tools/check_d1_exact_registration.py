@@ -11,16 +11,12 @@ import subprocess
 
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 SOURCE_ANCHOR = "061229839ca5f9a68f729c8d3fb930eb8489bfb4"
-RECORD = "docs/factory/d1-controller-phase-exact-registration-20261107.json"
+RECORD = "docs/factory/d1-controller-phase-exact-registration-20261107-r2.json"
 VALIDATOR = "tools/check_d1_exact_registration.py"
 PARENT_VALIDATOR = "tools/check_f2_fence_exceptions.py"
 ORCHESTRATOR = "src/lightyear_factory/orchestrator.py"
-PAYLOADS = {
-    ORCHESTRATOR: ("beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
-                   "f71635e613ef5aeef14923a1a16b4d4fdaf95e4b10ff8a6f713c39862996d7fd"),
-    "src/lightyear_factory/controller_phase_capture.py": (None, "dd963493c2492495f608717b282ed3f683afd480bcf6b3fd94676eea2155f4dc"),
-    "tests/test_controller_phase_capture.py": (None, "0957592bd180d1f63728ee1ee568705b5936bb818f75058049b24582163f09db"),
-}
+PAYLOADS = {'src/lightyear_factory/orchestrator.py': ('beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add', 'f71635e613ef5aeef14923a1a16b4d4fdaf95e4b10ff8a6f713c39862996d7fd'), 'src/lightyear_factory/controller_phase_capture.py': (None, 'dd963493c2492495f608717b282ed3f683afd480bcf6b3fd94676eea2155f4dc'), 'tests/test_controller_phase_capture.py': (None, '0957592bd180d1f63728ee1ee568705b5936bb818f75058049b24582163f09db'), '.github/workflows/b06-host-review.yml': ('1dc7eb2edf9437ce94d506b4a4c715ceb5dc0b41ee7ca5c297f361e620123146', 'e6bbdd182a92348bcc20fbd9433849f40d0cfeecf28eb25d84d1d32e79b182de'), '.github/workflows/b06-provenance-offline.yml': ('726efddc57802355db9ee3d1491391fa18b892a3c2a96fc8ce0c9b3a850b2027', 'a675338cf983bfc86d3d5dc33bbea93015104cb05510826762c03d7a40290573'), '.github/workflows/judge-qualification.yml': ('e8b1ed658c83aa6f7eff6b493b77200ae5097e333f7825050a58b0d0c5bf160d', 'ee40a0be19c72001a68cde31ff02d3874a624de35eacea7b0f457908b685f341'), '.github/workflows/milestone-documentation-pages.yml': ('3ee3121b88ab1765151b521bba1a5568668f6802c1e2a4e7b63599554bf27a9f', '22c4e28ff43f633818483644132d8101d953c3ca72f74d43d5d0e80c95aae602'), '.github/workflows/ms71-alloydb.yml': ('7015d5d5f0c698e9870705ecd14d01b62fa80178c0f763f917435fb29ab826c5', '1b0eb8a246f31a787f844bbdd2d1cd602017d6814db374fcb41536874f9d2d4f'), '.github/workflows/service-packs.yml': ('7ed7599b4128305aee4e3bf4bfaae26b950c947d4e25d58539122e63f03fa357', 'c5f5d141b1579a0ded85cc9327fd05a2b7b5c9ff2a09ca5e04be3f0208c95233')}
+
 AUTHORITY = dict(merge=False, run=False, signing=False, spend=False, gap_acceptance=False)
 
 

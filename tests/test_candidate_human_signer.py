@@ -12,7 +12,7 @@ from lightyear_execution.external_signing import SigningRefused
 from lightyear_execution.signing_designation import prepare_designation
 from lightyear_factory.authorship import CandidateHistory, CICommitSigner
 from lightyear_factory.contracts import ContractError
-from test_factory_authorship import FactoryAuthorshipTests
+import test_factory_authorship as fixture_support
 
 
 class CandidateHumanSignerTests(unittest.TestCase):
@@ -42,7 +42,7 @@ class CandidateHumanSignerTests(unittest.TestCase):
         self.signer = CandidateHumanSigner(self.root/"handoff.sqlite", **self.options)
         self.addCleanup(self.signer.close)
         (self.root/"history").mkdir()
-        _, _, _, self.history, _ = FactoryAuthorshipTests().setup_history(self.root/"history")
+        _, _, _, self.history, _ = fixture_support.FactoryAuthorshipTests().setup_history(self.root/"history")
         self.history._git("add", "-A", "--", "candidate")
         self.tree = self.history._git("write-tree").decode().strip()
         self.parent = self.history.start_commit

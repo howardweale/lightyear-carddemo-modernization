@@ -51,11 +51,14 @@ class MacOwnerNativeAdapter:
         from .external_signing import _hex
         _hex(launch_identity_sha256, 64)
         self._binding, self._window = binding, window
-        self._launch, self._processes = launch_identity_sha256, expected_processes
+        self._launch = launch_identity_sha256
         self._backend, self._clock = backend, clock
         self._lifecycle = MacOwnerLifecycle(binding=binding, window=window, processes=expected_processes, clock=clock)
+        # Validate first in the lifecycle; sorting must never deduplicate scope.
+        self._processes = tuple(sorted(expected_processes))
         self._pid, self._lock = os.getpid(), RLock()
         self._state, self._cleanup_consumed = "new", False
+        self._fault_cleanup = None
 
     def _live(self):
         if os.getpid() != self._pid:
@@ -63,15 +66,18 @@ class MacOwnerNativeAdapter:
         wall, mono = self._clock()
         self._window.check(self._binding.signing, wall=wall, monotonic=mono)
 
+    def _scope_matches(self, observed, *, cleaned):
+        return (type(observed) is ProcessScopeObservation
+                and observed.binding == self._binding
+                and observed.launch_identity_sha256 == self._launch
+                and type(observed.processes) is tuple
+                and all(type(p) is OwnerProcess for p in observed.processes)
+                and tuple(sorted(observed.processes)) == self._processes
+                and observed.complete is True and observed.escaped is False
+                and observed.exited_and_reaped is cleaned)
+
     def _checked(self, observed, *, cleaned):
-        if (type(observed) is not ProcessScopeObservation
-                or observed.binding != self._binding
-                or observed.launch_identity_sha256 != self._launch
-                or type(observed.processes) is not tuple
-                or any(type(p) is not OwnerProcess for p in observed.processes)
-                or observed.processes != self._processes
-                or observed.complete is not True or observed.escaped is not False
-                or observed.exited_and_reaped is not cleaned):
+        if not self._scope_matches(observed, cleaned=cleaned):
             raise SigningRefused("native-scope-unknown-incomplete-or-mixed")
         self._live()
 
@@ -112,13 +118,36 @@ class MacOwnerNativeAdapter:
                 raise
 
     def _cleanup_on_fault(self):
+        outcome = "not-attempted-process-changed"
         if not self._cleanup_consumed and os.getpid() == self._pid:
             self._cleanup_consumed = True
             try:
-                self._backend.stop_and_reap_once(
+                observed = self._backend.stop_and_reap_once(
                     self._binding, self._launch, self._window.monotonic_deadline)
+                outcome = ("scope-reaped-reported" if self._scope_matches(observed, cleaned=True)
+                           else "scope-unknown-or-incomplete")
             except BaseException:
-                pass
+                # No raw exception text/class supplied by a backend in public data.
+                outcome = "cleanup-exception"
+        elif self._cleanup_consumed:
+            outcome = "cleanup-already-consumed"
+        self._fault_cleanup = canonical(dict(
+            schema="mac-owner-fault-cleanup-diagnostic/1", binding=asdict(self._binding),
+            launch_identity_sha256=self._launch,
+            original_monotonic_deadline=self._window.monotonic_deadline,
+            cleanup_attempted=self._cleanup_consumed, outcome=outcome,
+            native_proof=False, completion_authorized=False, restart_authorized=False))
+
+    @property
+    def fault_cleanup_diagnostic(self):
+        """Immutable public bytes, or None; caller must persist, not a receipt.
+
+        Includes late cleanup reports without blessing them as in-window proof.
+        The initial failure remains the raised exception and state stays failed.
+        This memory alone cannot attest retention across owner-process death.
+        """
+        with self._lock:
+            return self._fault_cleanup
 
     def cleanup_once(self):
         with self._lock:

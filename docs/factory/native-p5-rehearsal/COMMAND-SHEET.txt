@@ -1,0 +1,136 @@
+NO-KEY REHEARSAL COMMAND SHEET — CP1 CODEX INTEGRATION DRAFT
+NOT RUNNABLE. No commands below may be used until all markers and review fields
+are bound in a new dated operator packet. This source draft is not an admission.
+Derived from Claude CP1; original queue patch/HANDOFF retained unchanged.
+
+R0 — SOURCE / BUNDLE / REVIEW
+Harness review candidate: PR530 d83350fd0850f0dd64d35b349aa4695be1a04518,
+tools/native_owner_rehearsal.py. CI and Claude delta review remain required;
+the superseded ff3119b7 head must not be used to bind a rehearsal.
+Public IO source: tools/native_rehearsal_public_io.py from this separate draft.
+Common base: aa61b96954e771636e579e638c0d16d93bb424a0. Neither draft implies a merge.
+<<CODEX-BIND:FINAL_SOURCE_HEADS_AND_TREES>>
+<<CODEX-BIND:REVIEWED_BUNDLE_AND_RUNTIME_MANIFESTS_AND_SHA256>>
+<<CODEX-BIND:ALL_FINAL_HEAD_CI_AND_CLAUDE_REVIEW>>
+Due11Nov17Pacific for12Nov preferred/13alternative,60–90minutes; no automatic retry.
+<<CODEX-BIND:EXACT_REHEARSAL_TIME>>
+
+R1 — HUMAN PHYSICAL / ACCOUNT PREFLIGHT
+ALL keys physically unplugged throughout. No device enumeration or PIN/touch.
+Use the existing standard account, never sudo/admin or Rosetta.
+Read-only commands, one at a time, cwd any:
+  /bin/hostname
+  /usr/bin/sw_vers
+  /usr/bin/uname -m
+  /usr/bin/id -un
+  /usr/bin/id -u
+  /usr/bin/id -G
+  /usr/sbin/sysctl -in sysctl.proc_translated
+Compare to <<CODEX-BIND:EXACT_HOST_ACCOUNT_UID_OS_ARCH_PROFILE>>. UID0 or group80,
+wrong account/host, translation1, or ambiguous architecture => STOP. An unavailable
+sysctl key is recorded unavailable; it is not assumed pass. Do not change settings.
+<<CODEX-BIND:EXCLUSIVE_ENV_METADATA_RECORD_OPERATION>>
+This operation is still missing; never replace it with redirection to an old file.
+
+Define only in the final reviewed sheet (these are NOT pasteable draft values):
+BUNDLE=<<CODEX-BIND:ABSOLUTE_BUNDLE_WITH_SPACE_PATH>>
+PY=<<CODEX-BIND:ABSOLUTE_REVIEWED_RUNTIME_PYTHON>>
+SESSION=<<CODEX-BIND:EXCLUSIVE_SESSION_PARENT>>
+RET=<<CODEX-BIND:ABSOLUTE_PUBLIC_RETURN_PARENT>>
+All named parents must already exist with reviewed ownership, mode and no aliases.
+F5: every final value must already be fully resolved. On macOS, /tmp and
+/var/folders are aliases; use the reviewed /private/... resolved path or a
+reviewed home-folder path instead. Never silently substitute a different path
+after the packet is bound. A resolution mismatch stops the session for review.
+<<CODEX-BIND:EXCLUSIVE_SESSION_PARENT_CREATION_OPERATION>>
+Each S1–S7 invocation creates its own new subdirectory. Never precreate those.
+
+R2 — RUNTIME / PUBLIC HASHES
+Compatibility baseline: Python3.12.16, cryptography46.0.3, yubikey-manager5.9.2.
+No silent upgrade, setup or pip. Use only the absolute reviewed PY with -I -B.
+Metadata reads dist-info only; it does not import SDKs or inspect hardware:
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" metadata --bundle "$BUNDLE" --site "$BUNDLE/site" --output "$SESSION/runtime-metadata.json"
+Expected: RECORDED, exact versions, executable inside bundle/runtime, architecture
+matches R1. Its stdout acknowledgment is not independent runtime verification.
+Public source/fixture manifest (each listed file <=8MiB; NOT a runtime archive checker):
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" manifest --root "$BUNDLE" --manifest "$BUNDLE/public-files.json" --sha256 <<CODEX-BIND:PUBLIC_MANIFEST_SHA256>> --output "$SESSION/public-manifest-check.json"
+<<CODEX-BIND:INDEPENDENT_RUNTIME_ARCHIVE_HASH_CHECK_ARGV>>
+Missing runtime manifest verification blocks use. Self-reported hashes are not trust.
+
+R3 — NAMED PATHS / SPACE
+  /bin/ls -ld "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$SESSION" "$RET"
+  /usr/bin/stat -f '%N %Su %Sp' "$SESSION" "$RET"
+  /bin/df -h "$SESSION"
+  /bin/realpath "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$PY" "$SESSION" "$RET"
+Expected: reviewed owner/mode, no symlink/reparse aliases, no group/world write,
+session owner-only, resolved paths unchanged, free space >=<<CODEX-BIND:MIN_FREE>>.
+The realpath output must print the exact fully resolved values in the packet,
+including any /private prefix. /tmp/... or /var/folders/... shorthand is refused;
+the operator must not fix a mismatch by editing commands during the session.
+No OneDrive/iCloud, production journal or private-helper directory. No recursive
+home walk, chmod repair, delete or reuse. Windows CI is not Mac permission proof.
+<<CODEX-BIND:EXCLUSIVE_PATH_METADATA_RECORD_OPERATION>>
+
+R4 — PUBLIC COPY / SAME-OPERATION NEGATIVES
+Fixtures are fixed public bytes, never private inputs. Bind names/digests/lengths:
+<<CODEX-BIND:PUBLIC_GOOD_AND_ONE_BYTE_CORRUPT_FIXTURES>>
+Positive, with exact known GOOD_SHA and GOOD_BYTES substituted in the final sheet:
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-good.txt" --destination "$RET/r4-p1.bin" --sha256 <<CODEX-BIND:GOOD_SHA>> --bytes <<CODEX-BIND:GOOD_BYTES>> --output "$SESSION/r4-p1.json"
+N1: same command with a destination containing a space and a fresh output name.
+N2: source=public-corrupt.txt and GOOD_SHA: REFUSED, no destination; then independently
+compare that source to CORRUPT_SHA under a separate planned diagnostic output.
+N3: same copy command against existing r4-p1.bin, fresh output name: REFUSED;
+independently compare retained destination to GOOD_SHA/GOOD_BYTES, unchanged.
+N4: compare good source with <<CODEX-BIND:WRONG_SHA>>: REFUSED.
+Comparison syntax:
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" compare --source <<CODEX-BIND:EXACT_PUBLIC_SOURCE>> --sha256 <<CODEX-BIND:EXPECTED_SHA>> --bytes <<CODEX-BIND:EXPECTED_BYTES>> --output <<CODEX-BIND:FRESH_COMPARISON_OUTPUT>>
+Each REFUSED returns exit2 and a fixed public reason, no traceback. Record expected
+refusals with <<CODEX-BIND:EXCLUSIVE_REFUSAL_RECORD_OPERATION>>; no shell truncation.
+Unexpected result => STOP. Preserve partial files; no retry, overwrite or deletion.
+These checks are local/public transport, never authenticated Tower append.
+
+R5 — REAL FIXED-WORKER HARNESS INTERFACE
+cwd "$SESSION" except S2 uses the reviewed unrelated cwd; absolute BUNDLE path must
+contain a space. Default proposed execution bound15seconds; final packet binds it.
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S1 --output "$SESSION/S1" --seconds 15 --keys-unplugged
+Repeat exact syntax with case/output S2, S3, S4, S5, S6, S7 only in the final schedule.
+S1 PASS: positive child completion and observed reap.
+S2 PASS: same, actual launcher path with spaces and unrelated cwd.
+S3 PASS: known child/grandchild, parent-reported grandchild reap (not OS attestation).
+S4 FAIL/initialization-failed; cleanup REAPED. Original failure remains failure.
+S5 FAIL/original-deadline-reached; cleanup REAPED, no deadline extension.
+S6 wait for READY/press-Ctrl-C-once; press once. FAIL/operator-cancelled; REAPED.
+S7 FAIL/UNKNOWN by deliberate withheld reap observation. Never upgrade to PASS.
+All cases fix execution and cleanup bounds BEFORE launch. Cleanup bound is original
+execution deadline+5seconds; it permits cleanup only, never more execution/success.
+Cleanup is internal and at most once. There is NO separate cleanup/resume command.
+Do not invent one or kill by name/PID. Unknown/forced cleanup => stop subsequent
+probes and keep the host isolated pending the separately reviewed closeout action.
+<<CODEX-BIND:S7_UNKNOWN_CLOSEOUT_AND_INDEPENDENT_SAFETY_PROCEDURE>>
+S7 expected negative does not waive the closeout requirement. This unresolved
+procedure is a rehearsal readiness blocker. No real detach/escape probe here.
+
+R6 — JOURNAL READBACK / RETURN
+For each actual Sx, read the complete retained chain through the real IO command:
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S1/events.jsonl" --output "$SESSION/S1-status.json"
+It reports journal consistency and REPORTED status only, never checks live PIDs,
+authenticates evidence or establishes no survivors. Missing/truncated result fails.
+Expected-negative FAIL remains FAIL; UNKNOWN remains UNKNOWN. Do not log out on
+unknown cleanup until the bound independent safety procedure resolves it.
+Return only RETURN-CHECKLIST.txt allowlisted files, using new names; no folders,
+raw stdout/stderr dumps, shell history, private data, signatures or credentials.
+All keys still unplugged. Preserve every attempted session, no delete/retry/resume.
+
+FORBIDDEN: human_signing preflight/sign, sign.sh, check.py, setup.sh, ykman,
+age/decryption, old request/intent folders, private helper, production controller,
+models, live Tower/network, tools/ci/p5_drills.py, setting GITHUB_ACTIONS, sudo,
+killall/pkill, unrelated process lists, env/Keychain/SSH-agent dumps, port8768.
+NO-PIN preflight touches hardware; it is NOT permitted in this NO-KEY session.
+
+LATER PRODUCTION PROOF (NOT THESE COMMANDS)
+The eight P5 families remain kill-mid-build, worker-network, budget-exhausted,
+tower-unreachable, workspace-changed, answer-fragment, wall-and-window and
+duplicate-attempt. They are not the19control IDs or N1 behavior cases. ExactE,
+admissions, original deadlines, genuine ownership/isolation/Tower/retention and
+human custody must be bound separately before17–19Nov. No production argv exists
+in this sheet. No environment result closes native/P5 or any strict gate.

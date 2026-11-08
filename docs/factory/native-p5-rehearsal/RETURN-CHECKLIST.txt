@@ -1,0 +1,39 @@
+NO-KEY REHEARSAL RETURNS — CP1 CODEX INTEGRATION DRAFT
+NOT RUNNABLE until the final command sheet/bundle/CI/Claude review and all bindings
+are complete. These are public environment diagnostics, not receipts or admission.
+
+Allowlisted files only, each under a new destination name:
+- runtime-metadata.json: interpreter/version/architecture/sqlite/allowlisted dist-info.
+- public-manifest-check.json: exact listed public-file hashes and lengths.
+- r4-p1.bin and the separately planned public copy controls: fixed public bytes only.
+- r4-p1.json and each separately named comparison output: digest/length/match flags.
+- S1/events.jsonl through S7/events.jsonl: fixed harness metadata and process events.
+- S1-status.json through S7-status.json: chain check and reported status, NOT live check.
+- <<CODEX-BIND:ENV_PATH_REFUSAL_AND_RUNTIME_ARCHIVE_RETURN_NAMES>>
+
+No private input/answer/ciphertext, hardware or key data, raw process environment,
+unrelated command lines, raw stderr/tracebacks, shell history or folder uploads.
+Never copy anything beyond the manifest/return allowlist. No overwrite/deletion.
+
+Howard before return:
+[ ] All keys still unplugged.
+[ ] Exact reviewed source/runtime/host/account/path bindings match.
+[ ] Every expected negative retained under its original diagnostic identity.
+[ ] Unknown cleanup is unresolved until the bound independent safety procedure
+    resolves it; journal-status does not inspect live processes.
+[ ] S7 remains FAIL/UNKNOWN; no reinterpretation as qualification or cleanup proof.
+[ ] Returned files contain only their allowlisted fields; originals retained.
+[ ] No logout while cleanup safety remains unknown.
+
+Codex readback (public bytes only):
+1 Verify source/runtime manifests and per-file hashes against the reviewed packet.
+2 Verify journal sequence/hash chain and final original-deadline binding; retain
+  FAIL/UNKNOWN/missing/truncated results. Hash consistency is not authentication.
+3 Distinguish child handle reap from parent-reported grandchild reap and OS proof.
+4 Record each probe PASS / FAIL / NOT TESTED / UNKNOWN and expected-refusal status.
+5 Record runtime/paths/copy findings and remaining production ownership limits.
+6 Do not admit a new attempt, resend, sign, launch private work or close a P5 control.
+
+Procedure traceability: R0 source/review; R1 physical/account; R2 runtime/hash;
+R3 named paths; R4 same-operation copy controls; R5 fixed spawn/cleanup;
+R6 public returns and independent safety closeout. Later P5 families remain separate.

@@ -9,7 +9,6 @@ Do not replace markers, edit code, paths, hashes or bounds during the session.
 
 R0 — ONE SOURCE AND REVIEW BOUNDARY
 Source commit: 8fe41d76f08c0907a38d8c97a001de09c953a56c
-Source tree: 06d670d3a14561de9c4c0115b6b6f304bbb2716e
 Every executable Python source and runtime-selection manifest in the bundle is
 from that one merged commit. operator-bundle-manifest.json binds every payload.
 This PR's exact head/tree/diff/file hashes and CI scope are in its GitHub description.
@@ -52,6 +51,8 @@ their names are not instructions to run them here. No secrets belong in the shee
 S1–S6 only on the Mac. S7 remains CI-only. No closeout procedure is included.
 On UNKNOWN/forced cleanup: stop further probes, preserve isolation and partials,
 and escalate to Howard. No separate kill, cleanup, resume, retry or logout action.
+Leave Mac and Terminal as-is; no reboot or logout; message Codex/Claude.
+Resolution is a separate reviewed step.
 
 R0T — PUBLIC TRANSFER AND FIXED PATHS
 Archive: lightyear-no-key-main-8fe41d76.tar
@@ -91,6 +92,7 @@ Fixed proposed paths work for either date; none silently changes with the date:
   S2_UNRELATED_CWD='/private/tmp/lightyear-no-key-8fe41d76-session1/unrelated-cwd'
   PY='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/runtime/bin/python3.12'
   ARCHIVE='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/archives/python.tar.gz'
+  TRANSFER_ARCHIVE='/private/tmp/lightyear-no-key-8fe41d76-session1/lightyear-no-key-main-8fe41d76.tar'
   USB_MAC_VOLUME='<<USB_MAC_VOLUME>>'
   USB_VOLUME_LABEL='<<USB_VOLUME_LABEL>>'
   USB="$USB_MAC_VOLUME/lightyear-no-key-main-8fe41d76.tar"
@@ -156,14 +158,20 @@ After the comparison passes:
   )
 Inspect the complete record against R0 again. No env/serial/key/process listings.
 
-R0T continued — verify the outer tar BEFORE any extraction
+R0T continued — copy into ROOT and verify there BEFORE any extraction
   ( set -Ce; umask 077
-    test "$(/usr/bin/stat -f '%z' "$USB")" = 32706560
-    got=$(/usr/bin/shasum -a 256 "$USB"); test "${got%% *}" = f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404
     attrs=$(/usr/bin/xattr "$USB"); case "$attrs" in *com.apple.quarantine*) exit 2;; esac
+    test ! -e "$TRANSFER_ARCHIVE" && test ! -L "$TRANSFER_ARCHIVE"
+    /bin/cat "$USB" > "$TRANSFER_ARCHIVE"
+    test "$(/bin/realpath "$TRANSFER_ARCHIVE")" = "$TRANSFER_ARCHIVE"
+    test "$(/usr/bin/stat -f '%z' "$TRANSFER_ARCHIVE")" = 32706560
+    got=$(/usr/bin/shasum -a 256 "$TRANSFER_ARCHIVE"); test "${got%% *}" = f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404
+    attrs=$(/usr/bin/xattr "$TRANSFER_ARCHIVE"); case "$attrs" in *com.apple.quarantine*) exit 2;; esac
     /bin/mkdir -m 700 "$BUNDLE"
-    /usr/bin/tar -xf "$USB" -C "$BUNDLE"
+    /usr/bin/tar -xf "$TRANSFER_ARCHIVE" -C "$BUNDLE"
   )
+The ROOT copy is exclusive and retained locally, including any partial failure;
+never overwrite/delete it or return the tar. Extraction uses only this verified copy.
 Any xattr read error/quarantine/Gatekeeper refusal stops. No xattr deletion,
 Gatekeeper exception, sudo/admin/Rosetta, runtime execution or repair in transfer.
 

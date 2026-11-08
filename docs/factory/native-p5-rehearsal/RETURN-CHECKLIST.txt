@@ -55,6 +55,8 @@ The fixed public copies RET/r4-p1.bin and RET/r4 n1.bin stay on the Mac; their
 hash/readback JSON files above are the returns. REFUSED *-result.json files and
 r4-n2.bin do not exist and must not be fabricated. Original source/fixture files
 and the 25MB runtime archive are not generated return files.
+The copied outer tar under ROOT is also LOCAL ONLY; retain any partial copy on STOP,
+but do not return the tar. No new diagnostic return file is added by that copy.
 All three environment/path/archive-hash operations are explicit in the command
 sheet. They produce exactly the three additional rows above.
 S7 is CI-only, with unchanged FAIL/UNKNOWN classification; no Mac S7 return.

@@ -1,0 +1,91 @@
+N01 REVIEW: CONTROLLED NO-KEY SPAWN REHEARSAL
+
+Planned delivery: a separately reviewed, immutable bundle and command sheet for
+the 12 November rehearsal (13 November alternative). Source/CI/runtime/host/path/
+argv/output bindings are due 11 November, 17:00 Pacific. This file is a source
+interface review, not the attended launch packet or permission to execute it.
+Not yet: final CI results, native observations, exact host paths, bundle hashes
+or a qualified production NativeProcessOwner implementation.
+
+Scope
+mac_owner_process.RehearsalProcessOwner launches only its fixed importable public
+workers using multiprocessing spawn. It does not implement NativeProcessOwner:
+that interface promises trusted complete production scope, which this diagnostic
+cannot attest. There is no arbitrary executable/module/PID input, signing import,
+hardware discovery, private helper, model call or Tower connection in the harness.
+The runtime still needs the external isolation/host review; this is not a sandbox.
+
+The separate adapter change retains immutable public fault-cleanup diagnostic
+bytes without replacing the original exception or allowing a new attempt. The
+caller must persist those bytes; an in-memory property is not crash retention.
+Exact validated inventories use canonical ordering without dropping duplicates,
+unknown identities or incomplete/escaped scope. Lifecycle receipt rules stay fixed.
+
+Executable interface to bind in the later sheet
+The absolute reviewed interpreter takes -I -B and the absolute path of
+tools/native_owner_rehearsal.py, then these required arguments:
+  --case S1|S2|S3|S4|S5|S6|S7
+  --output <exclusive-new-absolute-directory-under-reviewed-scratch-parent>
+  --seconds <integer-1-through-60-from-the-reviewed-probe-plan>
+  --keys-unplugged
+The final flag records a human acknowledgment only. No device query verifies it.
+An existing output name refuses; never delete it to retry. Parent aliases and
+POSIX wrong-owner/group-writable/world-writable parents refuse. Windows ACLs need
+separate review; Windows fixture CI cannot qualify the Mac filesystem boundary.
+The bundle must preserve the tools/ and src/ layout. The isolated launcher adds
+only its source root. Source hashes, interpreter, machine and argv digest are
+public metadata, not self-authenticating approval of their values.
+
+Cases and interpretation
+S1: child ready/completion sentinel and direct wait/reap.
+S2: same worker; the reviewed launch path itself must contain spaces and the cwd
+    must vary safely. The CI launcher test copies only three source files to such
+    a path and uses an unrelated cwd; choosing S2 alone does not prove that path.
+S3: fixed cooperative child/grandchild. Parent relationships/creation identities,
+    direct child wait and parent-reported grandchild wait are retained distinctly.
+S4: initialization failure before ready: FAIL with initialization-failed reason.
+S5: original execution deadline expires: FAIL even after successful cleanup.
+S6: Howard presses Ctrl-C after ready: FAIL/operator-cancelled, then cleanup.
+    The CLI waits up to the original deadline; missing cancellation is not pass.
+S7: cleanup really occurs but the reap observation is deliberately withheld:
+    FAIL/UNKNOWN, never reinterpret as successful cleanup evidence.
+Exit 0 means only a positive controlled diagnostic; exit 2 means FAIL. Expected
+negative cases remain FAIL in output. The reviewer checks their reason/cleanup
+outcome; a negative outcome never becomes native/P5 success.
+
+Deadline and cleanup
+Before launch, execution deadline = start + selected seconds, cleanup bound =
+that same start + selected seconds + five seconds. Both appear unchanged in every
+process event. Cleanup after expiry cannot authorize further work or PASS.
+One stop request; direct child handle join, then bounded termination only of that
+owned handle if necessary. The worker joins its own fixed grandchild; that child
+has an autonomous bound as a last resort. Forced parent loss or missing descendant
+reap is UNKNOWN. No process-name kills, arbitrary PID kills, detach/escape probe,
+resend or resume. OS scheduling/spawn/termination are not hard real-time guarantees.
+Keep the host isolated on UNKNOWN and preserve the journal for diagnosis.
+
+Public returns and limits
+Only events.jsonl is emitted per exclusive session directory. Each event has a
+sequence and previous-line digest and is fsynced. A missing/truncated final result
+is failure; the chain is not a signature or proof against privileged replacement.
+Raw worker exceptions, stderr and environment are excluded. A journal write fault
+still requests cleanup and prevents PASS. Native power-loss durability, process
+escape containment and complete arbitrary descendant enumeration remain unproven.
+Creation identity here is a spawn-instance digest, not kernel birth-time evidence.
+No production owner observation is fabricated from the diagnostic result.
+
+Critical remaining work
+The production seam expects process identities before launch. A reviewed suspended
+launch/binding protocol or another exact inventory design is still needed before
+it can safely own arbitrary candidate/helper processes. Production isolation,
+independent birth identity, escaped descendant tracking and owner-death cleanup
+must close before native/P5 qualification. These are not established by this PR.
+Do not use human_signing preflight during NO-KEY rehearsal: it accesses hardware.
+All keys remain unplugged. No signing, decryption, private inputs or live Tower.
+Frozen Python 3.12.16 / cryptography 46.0.3 / SDK 5.9.2 compatibility remains the
+review basis; this stdlib harness imports neither cryptography nor the SDK.
+
+Review order
+Claude reviews exact base/head/diff in the external pre-reviews/N01 packet.
+Not yet: Claude acceptance or final-head CI green. Any later push needs a new
+bound review. Howard's exact green-head merge decision remains separate.

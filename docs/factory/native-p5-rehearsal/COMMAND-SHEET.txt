@@ -1,42 +1,70 @@
-NO-KEY REHEARSAL COMMAND SHEET — CP1 CODEX INTEGRATION DRAFT
-NOT RUNNABLE. No commands below may be used until all markers and review fields
-are bound in a new dated operator packet. This source draft is not an admission.
-Derived from Claude CP1; original queue patch/HANDOFF retained unchanged.
+NO-KEY REHEARSAL — OPERATOR REVIEW DRAFT
+NOT RUNNABLE. Claude must approve this PR's exact head and Howard must approve
+the exact packet, public host/transfer bindings and selected attended slot before
+any command below is used. This document is not an admission or a safety closeout.
+Planned slots: 12 or 13 November 2026, 60–90 minutes; neither is booked here.
+REHEARSAL_DATE = <<HOWARD: choose 2026-11-12 or 2026-11-13>>
+That is the only operator-fill marker. Do not edit code, paths, hashes or bounds.
 
-R0 — SOURCE / BUNDLE / REVIEW
-Harness review candidate: PR530, tools/native_owner_rehearsal.py. Final-head
-CI and Claude delta review precede Howard's exact-head merge approval request.
-The rehearsal binds the merged main commit after both PR530 and PR531 merge;
-No superseded draft head is a rehearsal binding.
-Public IO source: tools/native_rehearsal_public_io.py from this separate draft.
-Common base: <<CODEX-BIND:BASE_COMMIT>>. Neither draft implies a merge.
-<<CODEX-BIND:FINAL_SOURCE_HEADS_AND_TREES>>
-<<CODEX-BIND:MERGED_MAIN_COMMIT_AND_TREE>>
-<<CODEX-BIND:REVIEWED_BUNDLE_AND_RUNTIME_MANIFESTS_AND_SHA256>>
-<<CODEX-BIND:ALL_FINAL_HEAD_CI_AND_CLAUDE_REVIEW>>
-Due11Nov17Pacific for12Nov preferred/13alternative,60–90minutes; no automatic retry.
-<<CODEX-BIND:EXACT_REHEARSAL_TIME>>
+R0 — ONE SOURCE AND REVIEW BOUNDARY
+Source commit: 8fe41d76f08c0907a38d8c97a001de09c953a56c
+Source tree: 06d670d3a14561de9c4c0115b6b6f304bbb2716e
+Every executable Python source and runtime-selection manifest in the bundle is
+from that one merged commit. operator-bundle-manifest.json binds every payload.
+This PR's exact head/tree/diff/file hashes and CI scope are in its GitHub description.
+The new command sheet and checklist are review documents, not a different runtime.
+No old draft source is an execution binding. No automatic retry or second session.
 
-R0T — BOUND TRANSFER METHOD, BEFORE THE ATTENDED SESSION
-Use a reviewed public bundle tar copied from Windows to the specifically named
-USB filesystem by ordinary file copy, then Terminal on the Mac. No browser,
-AirDrop, email attachment or browser extraction. The package contains public
-code/site files and the exact runtime archive below, with no Apple xattr entries.
-<<CODEX-BIND:USB_SOURCE_BUNDLE_TAR_AND_SHA256_AND_BYTES>>
-<<CODEX-BIND:FRESH_ABSOLUTE_BUNDLE_DESTINATION_AND_TRANSFER_ARGV>>
-Final transfer argv must check the bundle tar's size/SHA256 and absence of
-com.apple.quarantine BEFORE extraction, create BUNDLE exclusively (mkdir, no -p),
-and extract only into that new directory. No runtime execution during transfer.
-R2 independently checks the runtime archive before extracting it into the new
-BUNDLE/runtime. Archive hash and unquarantined delivery are separate requirements.
-Do not clear xattrs, use xattr -d/-c, disable Gatekeeper or approve an exception.
-Any quarantine flag or Gatekeeper refusal => STOP and return the bound diagnostic;
-prepare a new reviewed transfer outside the session, never repair it in place.
+BLOCKING PUBLIC IDENTITY BINDINGS
+The host is Howard's accepted DarkFactory Mac, existing dedicated standard account,
+macOS26.3.1, arm64 only. Exact hostname/account short name/UID/OS build and Windows
+USB drive/Mac volume path have been requested together. They are not supplied in
+the retained record. Proposed USB path below is NOT an observed or approved path.
+R0 cannot pass until a later reviewed revision binds those exact public values;
+do not infer them from a host label, discover devices, or substitute paths in-session.
+No command below is runnable while this paragraph remains blocking.
 
-R1 — HUMAN PHYSICAL / ACCOUNT PREFLIGHT
-ALL keys physically unplugged throughout. No device enumeration or PIN/touch.
-Use the existing standard account, never sudo/admin or Rosetta.
-Read-only commands, one at a time, cwd any:
+All keys physically unplugged throughout. No enumeration, PIN, touch or signature.
+Signing/key operations are separate Howard-only steps, outside this NO-KEY packet;
+their names are not instructions to run them here. No secrets belong in the sheet.
+S1–S6 only on the Mac. S7 remains CI-only. No closeout procedure is included.
+On UNKNOWN/forced cleanup: stop further probes, preserve isolation and partials,
+and escalate to Howard. No separate kill, cleanup, resume, retry or logout action.
+
+R0T — PUBLIC TRANSFER AND FIXED PATHS
+Archive: lightyear-no-key-main-8fe41d76.tar
+Size 32706560 bytes.
+SHA256 f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404.
+The tar is regular-file USTAR with no links/xattr records. The pinned inner runtime
+contains its upstream runtime links; PY names the regular python3.12 executable.
+Windows ordinary file copy to the approved public USB only, exclusive destination.
+Before and after copying, Howard compares Get-FileHash -Algorithm SHA256 and
+(Get-Item -LiteralPath ...).Length against the exact archive hash/size above.
+No browser download/extraction on Mac, AirDrop/email, overwrite, removal or retry.
+The archive and review manifest are GitHub Release assets linked from this PR.
+No local queue path is required to review the PR.
+
+After R0 approval only, open /bin/bash, one block at a time. Unexpected nonzero
+exit or mismatch means STOP; retain partial files. Do not continue to the next block.
+Fixed proposed paths work for either date; none silently changes with the date:
+  ROOT='/private/tmp/lightyear-no-key-8fe41d76-session1'
+  BUNDLE='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle'
+  SESSION='/private/tmp/lightyear-no-key-8fe41d76-session1/session'
+  RET='/private/tmp/lightyear-no-key-8fe41d76-session1/public-return'
+  S2_UNRELATED_CWD='/private/tmp/lightyear-no-key-8fe41d76-session1/unrelated-cwd'
+  PY='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/runtime/bin/python3.12'
+  ARCHIVE='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/archives/python.tar.gz'
+  USB='/Volumes/LIGHTYEAR-PUBLIC/lightyear-no-key-main-8fe41d76.tar'
+No /tmp or /var/folders aliases, cloud-sync path, private helper or production journal.
+Existing names stop the attempt; never delete, reuse or choose a new name yourself.
+
+R1 — PUBLIC ENVIRONMENT RECORD AND EXCLUSIVE PARENTS
+First read hostname, sw_vers, uname -m, id -un, id -u and id -G using the exact
+commands below; compare with the completed R0 profile before creating any file.
+Wrong host/account/version/build, UID0, group80, Intel or Rosetta => STOP.
+sysctl.proc_translated must be0; if unavailable, record UNAVAILABLE and STOP unless
+the completed exact host profile explicitly permits that observation on this arm64
+host. Unavailability is not evidence of no translation. Never change account/settings.
   /bin/hostname
   /usr/bin/sw_vers
   /usr/bin/uname -m
@@ -44,153 +72,167 @@ Read-only commands, one at a time, cwd any:
   /usr/bin/id -u
   /usr/bin/id -G
   /usr/sbin/sysctl -in sysctl.proc_translated
-Compare to <<CODEX-BIND:EXACT_HOST_ACCOUNT_UID_OS_ARCH_PROFILE>>. UID0 or group80,
-wrong account/host, translation1, or ambiguous architecture => STOP. An unavailable
-sysctl key is recorded unavailable; it is not assumed pass. Do not change settings.
-The selected runtime requires uname -m = arm64. Intel/x86_64 => STOP and ask
-Howard; never substitute the x86_64 archive or use Rosetta.
-<<CODEX-BIND:EXCLUSIVE_ENV_METADATA_RECORD_OPERATION>>
-This operation is still missing; never replace it with redirection to an old file.
+After the comparison passes:
+  ( set -e; umask 077
+    test "$(/bin/realpath /private/tmp)" = /private/tmp
+    /bin/mkdir -m 700 "$ROOT"
+    /bin/mkdir -m 700 "$SESSION" "$RET" "$S2_UNRELATED_CWD"
+    test "$(/bin/realpath "$ROOT")" = "$ROOT"
+  )
+  ( set -Ce; umask 077
+    { printf 'hostname\n'; /bin/hostname
+      printf 'os\n'; /usr/bin/sw_vers
+      printf 'architecture\n'; /usr/bin/uname -m
+      printf 'account\n'; /usr/bin/id -un
+      printf 'uid\n'; /usr/bin/id -u
+      printf 'groups\n'; /usr/bin/id -G
+      printf 'translated\n'
+      if value=$(/usr/sbin/sysctl -in sysctl.proc_translated 2>/dev/null); then
+        printf '%s\n' "$value"; test "$value" = 0
+      else printf 'UNAVAILABLE\n'; fi
+    } > "$SESSION/r1-environment.txt"
+  )
+Inspect the complete record against R0 again. No env/serial/key/process listings.
 
-Define only in the final reviewed sheet (these are NOT pasteable draft values):
-BUNDLE=<<CODEX-BIND:ABSOLUTE_BUNDLE_WITH_SPACE_PATH>>
-PY=<<CODEX-BIND:ABSOLUTE_REVIEWED_RUNTIME_PYTHON>>
-SESSION=<<CODEX-BIND:EXCLUSIVE_SESSION_PARENT>>
-RET=<<CODEX-BIND:ABSOLUTE_PUBLIC_RETURN_PARENT>>
-ARCHIVE=<<CODEX-BIND:ABSOLUTE_TRANSFERRED_RUNTIME_ARCHIVE>>
-All named parents must already exist with reviewed ownership, mode and no aliases.
-F5: every final value must already be fully resolved. On macOS, /tmp and
-/var/folders are aliases; use the reviewed /private/... resolved path or a
-reviewed home-folder path instead. Never silently substitute a different path
-after the packet is bound. A resolution mismatch stops the session for review.
-<<CODEX-BIND:EXCLUSIVE_SESSION_PARENT_CREATION_OPERATION>>
-Each S1–S6 invocation creates its own new subdirectory. Never precreate those.
+R0T continued — verify the outer tar BEFORE any extraction
+  ( set -Ce; umask 077
+    test "$(/usr/bin/stat -f '%z' "$USB")" = 32706560
+    got=$(/usr/bin/shasum -a 256 "$USB"); test "${got%% *}" = f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404
+    attrs=$(/usr/bin/xattr "$USB"); case "$attrs" in *com.apple.quarantine*) exit 2;; esac
+    /bin/mkdir -m 700 "$BUNDLE"
+    /usr/bin/tar -xf "$USB" -C "$BUNDLE"
+  )
+Any xattr read error/quarantine/Gatekeeper refusal stops. No xattr deletion,
+Gatekeeper exception, sudo/admin/Rosetta, runtime execution or repair in transfer.
 
-R2 — RUNTIME / PUBLIC HASHES
-Compatibility baseline: Python3.12.16, cryptography46.0.3, yubikey-manager5.9.2.
-No package install, upgrade or pip during the session. Use only the absolute reviewed PY with -I -B.
-Runtime selection: runtime-manifest.json, python-build-standalone release20261026,
-cpython-3.12.16+20261026-aarch64-apple-darwin-install_only.tar.gz,
-25172086 bytes, SHA256 fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e.
-Release URL: https://github.com/astral-sh/python-build-standalone/releases/tag/20261026
-Published checksum list SHA256:
-39af6e3d3c712476893409f714a3b9ab795a861a89ec1628cbc99b45d1271a73.
-Independent native hash/size checks BEFORE extraction or running PY:
-  /usr/bin/shasum -a 256 "$ARCHIVE"
-  /usr/bin/stat -f '%z' "$ARCHIVE"
-Both must exactly match the pinned runtime manifest. The public-IO tool's 8MiB
-limit is unchanged; it must not read this 25172086-byte archive.
-<<CODEX-BIND:EXCLUSIVE_RUNTIME_HASH_RESULT_RECORD_OPERATION>>
-Then, only with the reviewed runtime destination absent:
-  /bin/mkdir -m 700 "$BUNDLE/runtime"
-  /usr/bin/tar -xzf "$ARCHIVE" --strip-components 1 -C "$BUNDLE/runtime"
-The resulting PY is the absolute resolved BUNDLE/runtime/bin/python3.
-Bound quarantine check, in the final reviewed /bin/bash sheet, before executing PY:
-  ( set -Ce; attrs=$(/usr/bin/xattr -r "$BUNDLE"); case "$attrs" in *com.apple.quarantine*) exit 2;; esac; printf '%s\n' '{"method":"windows-file-copy-usb-terminal","quarantine_found":false,"native_proof":false}' > "$SESSION/transfer-check.json" )
-A nonzero status, missing check result, xattr read error or any quarantine attribute
-stops the session. This scans only the reviewed public BUNDLE, never a home tree.
-Metadata reads dist-info only; it does not import SDKs or inspect hardware:
+R2 — PINNED RUNTIME; HASH FIRST, UNPACK SECOND
+python-build-standalone20261026, CPython3.12.16, aarch64-apple-darwin install_only.
+URL: https://github.com/astral-sh/python-build-standalone/releases/download/20261026/cpython-3.12.16%2B20261026-aarch64-apple-darwin-install_only.tar.gz
+Size25172086; SHA256 fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e.
+The runtime-selection manifest from merged source is unchanged. No substitution.
+  ( set -Ce; umask 077
+    bytes=$(/usr/bin/stat -f '%z' "$ARCHIVE")
+    got=$(/usr/bin/shasum -a 256 "$ARCHIVE"); digest="${got%% *}"
+    test "$bytes" = 25172086
+    test "$digest" = fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e
+    printf '{"bytes":%s,"sha256":"%s","native_proof":false}\n' "$bytes" "$digest" > "$SESSION/r2-runtime-hash.json"
+    /bin/mkdir -m 700 "$BUNDLE/runtime"
+    /usr/bin/tar -xzf "$ARCHIVE" --strip-components 1 -C "$BUNDLE/runtime"
+    attrs=$(/usr/bin/xattr -r "$BUNDLE"); case "$attrs" in *com.apple.quarantine*) exit 2;; esac
+    printf '%s\n' '{"method":"windows-file-copy-usb-terminal","quarantine_found":false,"native_proof":false}' > "$SESSION/transfer-check.json"
+    test "$(/bin/realpath "$PY")" = "$PY"
+  )
+SDK baseline46.0.3/5.9.2 is authentic dist-info METADATA ONLY in site/, with the
+unchanged public wheels in archives/. Neither SDK is installed/imported or exercised.
+This is stdlib rehearsal, not hardware/SDK compatibility proof. No pip or upgrades.
+The public-IO8MiB limit is unchanged; it does not check the25MB runtime archive.
   "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" metadata --bundle "$BUNDLE" --site "$BUNDLE/site" --output "$SESSION/runtime-metadata.json"
-Expected: RECORDED, exact versions, executable inside bundle/runtime, architecture
-matches R1. Its stdout acknowledgment is not independent runtime verification.
-Public source/fixture manifest (each listed file <=8MiB; NOT a runtime archive checker):
-  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" manifest --root "$BUNDLE" --manifest "$BUNDLE/public-files.json" --sha256 <<CODEX-BIND:PUBLIC_MANIFEST_SHA256>> --output "$SESSION/public-manifest-check.json"
-Missing runtime manifest verification blocks use. Self-reported hashes are not trust.
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" manifest --root "$BUNDLE" --manifest "$BUNDLE/public-files.json" --sha256 2f65231e77f74e8b6082c812fdadf15b7350f90a99c20e0d81f073802e409eeb --output "$SESSION/public-manifest-check.json"
+Both require exit0/RECORDED. Compare python3.12.16, arm64, exact PY, distribution
+versions and false sdk_imported/hardware_checked/native_proof; no self-report trust.
 
-R3 — NAMED PATHS / SPACE
-  /bin/ls -ld "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$SESSION" "$RET"
-  /usr/bin/stat -f '%N %Su %Sp' "$SESSION" "$RET"
-  /bin/df -h "$SESSION"
-  /bin/realpath "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$PY" "$SESSION" "$RET"
-Expected: reviewed owner/mode, no symlink/reparse aliases, no group/world write,
-session owner-only, resolved paths unchanged, free space >=<<CODEX-BIND:MIN_FREE>>.
-The realpath output must print the exact fully resolved values in the packet,
-including any /private prefix. /tmp/... or /var/folders/... shorthand is refused;
-the operator must not fix a mismatch by editing commands during the session.
-No OneDrive/iCloud, production journal or private-helper directory. No recursive
-home walk, chmod repair, delete or reuse. Windows CI is not Mac permission proof.
-<<CODEX-BIND:EXCLUSIVE_PATH_METADATA_RECORD_OPERATION>>
+R3 — PATH, OWNER, MODE AND SPACE RECORD
+  ( set -Ce; umask 077
+    { /bin/ls -ld "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$SESSION" "$RET" "$S2_UNRELATED_CWD"
+      /usr/bin/stat -f '%N %Su %Sp' "$SESSION" "$RET" "$S2_UNRELATED_CWD"
+      /bin/df -k "$SESSION"
+      /bin/realpath "$BUNDLE" "$BUNDLE/runtime" "$BUNDLE/site" "$PY" "$SESSION" "$RET" "$S2_UNRELATED_CWD"
+    } > "$SESSION/r3-paths.txt"
+  )
+Compare all resolved paths exactly; owner must match R0, SESSION/RET/S2 mode700,
+no group/world-write or alias, available space at least1048576KiB. Check the bundle,
+runtime and site also have no group/world-write permissions. Mismatch => STOP.
+No chmod repair, recursive home scan or cleanup. A partial record is not success.
 
-R4 — PUBLIC COPY / SAME-OPERATION NEGATIVES
-Fixtures are fixed public bytes, never private inputs. Bind names/digests/lengths:
-<<CODEX-BIND:PUBLIC_GOOD_AND_ONE_BYTE_CORRUPT_FIXTURES>>
-Positive, with exact known GOOD_SHA and GOOD_BYTES substituted in the final sheet:
-  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-good.txt" --destination "$RET/r4-p1.bin" --sha256 <<CODEX-BIND:GOOD_SHA>> --bytes <<CODEX-BIND:GOOD_BYTES>> --output "$SESSION/r4-p1.json"
-N1: same command with destination "$RET/r4 n1.bin" and output "$SESSION/r4-n1.json".
-N2: source=public-corrupt.txt, destination="$RET/r4-n2.bin", GOOD_SHA, and
-output="$SESSION/r4-n2-result.json": REFUSED, no destination or result file.
-Retain its fixed REFUSED stdout as "$SESSION/r4-n2.json" using the exclusive
-refusal operation below. Independently compare that source to CORRUPT_SHA and
-CORRUPT_BYTES, output="$SESSION/r4-n2-source-check.json".
-N3: same copy against existing r4-p1.bin, output="$SESSION/r4-n3-result.json":
-REFUSED, no result file. Retain fixed stdout as "$SESSION/r4-n3.json"; independently
-compare retained destination to GOOD_SHA/GOOD_BYTES, output="$SESSION/r4-n3-retained-check.json".
-N4: compare good source with <<CODEX-BIND:WRONG_SHA>>, GOOD_BYTES,
-output="$SESSION/r4-n4-result.json": REFUSED, no result file. Retain fixed stdout
-as "$SESSION/r4-n4.json". No nonexistent *-result.json file belongs in returns.
-Comparison syntax:
-  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" compare --source <<CODEX-BIND:EXACT_PUBLIC_SOURCE>> --sha256 <<CODEX-BIND:EXPECTED_SHA>> --bytes <<CODEX-BIND:EXPECTED_BYTES>> --output <<CODEX-BIND:FRESH_COMPARISON_OUTPUT>>
-Each REFUSED returns exit2 and a fixed public reason, no traceback. The final
-bound /bin/bash refusal operation runs that exact command in a subshell with
-set -C (noclobber), redirects its fixed stdout to the corresponding new
-r4-n2.json/r4-n3.json/r4-n4.json, and requires exit2. Do not use set -e inside
-that operation: exit2 is expected and must be inspected. Bind all three complete
-argv/redirection/exit-status checks in <<CODEX-BIND:EXCLUSIVE_REFUSAL_RECORD_OPERATION>>.
-Existing output, wrong exit status or a non-fixed stdout record => STOP, no retry.
-Unexpected result => STOP. Preserve partial files; no retry, overwrite or deletion.
-These checks are local/public transport, never authenticated Tower append.
+R4 — COMPLETE PUBLIC COPY / REFUSAL OPERATIONS
+  GOOD_SHA='bd91fbaaaf01da97a5443d0df49d6c281965893d7f72521a0154442d7e48bff9'
+  CORRUPT_SHA='6bad8085e32df07380ef9aa3c87c7abd5cbace9cc01693552ca917d24d0a8bfa'
+Both fixtures are45bytes, differ in exactly one byte, and contain no private input.
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-good.txt" --destination "$RET/r4-p1.bin" --sha256 "$GOOD_SHA" --bytes 45 --output "$SESSION/r4-p1.json"
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-good.txt" --destination "$RET/r4 n1.bin" --sha256 "$GOOD_SHA" --bytes 45 --output "$SESSION/r4-n1.json"
+Require exit0/RECORDED for each. Run these expected-refusal blocks individually,
+without set -e: require exit2 from the IO tool, then block exit0 after assertions.
+  ( set -C; umask 077
+    "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-corrupt.txt" --destination "$RET/r4-n2.bin" --sha256 "$GOOD_SHA" --bytes 45 --output "$SESSION/r4-n2-result.json" > "$SESSION/r4-n2.json"
+    code=$?; test "$code" = 2 || exit 3
+    test ! -e "$RET/r4-n2.bin" && test ! -e "$SESSION/r4-n2-result.json"
+  )
+  ( set -C; umask 077
+    "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" copy --source "$BUNDLE/public-good.txt" --destination "$RET/r4-p1.bin" --sha256 "$GOOD_SHA" --bytes 45 --output "$SESSION/r4-n3-result.json" > "$SESSION/r4-n3.json"
+    code=$?; test "$code" = 2 || exit 3
+    test ! -e "$SESSION/r4-n3-result.json"
+  )
+  ( set -C; umask 077
+    "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" compare --source "$BUNDLE/public-good.txt" --sha256 0000000000000000000000000000000000000000000000000000000000000000 --bytes 45 --output "$SESSION/r4-n4-result.json" > "$SESSION/r4-n4.json"
+    code=$?; test "$code" = 2 || exit 3
+    test ! -e "$SESSION/r4-n4-result.json"
+  )
+Read each refusal record and require exactly this fixed public JSON, no extras:
+{"status":"REFUSED","reason":"public-io-invalid-or-unavailable","native_proof":false}
+Wrong status, existing stdout target, unexpected file or malformed record => STOP.
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" compare --source "$BUNDLE/public-corrupt.txt" --sha256 "$CORRUPT_SHA" --bytes 45 --output "$SESSION/r4-n2-source-check.json"
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" compare --source "$RET/r4-p1.bin" --sha256 "$GOOD_SHA" --bytes 45 --output "$SESSION/r4-n3-retained-check.json"
+Both require exit0/RECORDED. Copies remain on Mac; only allowlisted diagnostics return.
 
-R5 — REAL FIXED-WORKER HARNESS INTERFACE
-cwd "$SESSION" except S2 uses the reviewed unrelated cwd; absolute BUNDLE path must
-contain a space. Default proposed execution bound15seconds; final packet binds it.
-<<CODEX-BIND:S2_UNRELATED_CWD>>
+R5/R6 — SIX ATTENDED CASES, EACH FOLLOWED BY JOURNAL READBACK
+One case at a time; read stdout/result and its complete journal before proceeding.
+S1/S2/S3 require exit0/PASS/REAPED. S4/S5/S6 require exit2/FAIL/REAPED with the exact
+original reason below. Expected FAIL stays FAIL. Missing result/UNKNOWN/forced
+termination stops subsequent cases. Never infer live cleanup from journal consistency.
+S6: wait for READY/press-Ctrl-C-once, then press Ctrl-C once, no automatic signal.
+Each case binds execution15seconds; original deadline+5seconds is cleanup only.
+The harness owns at most one cleanup; there is no separate cleanup command.
+
+S1: PASS/REAPED
+  cd "$SESSION"
+  test "$(pwd -P)" = "$SESSION"
   "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S1 --output "$SESSION/S1" --seconds 15 --keys-unplugged
-Repeat exact syntax with case/output S2, S3, S4, S5, S6 only in the final schedule.
-S1 PASS: positive child completion and observed reap.
-S2 PASS: same, actual launcher path with spaces and unrelated cwd.
-S3 PASS: known child/grandchild, parent-reported grandchild reap (not OS attestation).
-S4 FAIL/initialization-failed; cleanup REAPED. Original failure remains failure.
-S5 FAIL/original-deadline-reached; cleanup REAPED, no deadline extension.
-S6 wait for READY/press-Ctrl-C-once; press once. FAIL/operator-cancelled; REAPED.
-All cases fix execution and cleanup bounds BEFORE launch. Cleanup bound is original
-execution deadline+5seconds; it permits cleanup only, never more execution/success.
-Cleanup is internal and at most once. There is NO separate cleanup/resume command.
-Do not invent one or kill by name/PID. Unknown/forced cleanup => stop subsequent
-probes and keep the host isolated pending the separately reviewed closeout action.
-No real detach/escape probe here. Unexpected UNKNOWN cleanup still stops the
-session; do not reinterpret it as the expected result of any attended case.
-
-R6 — JOURNAL READBACK / RETURN
-For each S1–S6, read the complete retained chain through the real IO command:
   "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S1/events.jsonl" --output "$SESSION/S1-status.json"
-It reports journal consistency and REPORTED status only, never checks live PIDs,
-authenticates evidence or establishes no survivors. Missing/truncated result fails.
-Expected-negative FAIL remains FAIL; UNKNOWN remains UNKNOWN. Do not log out on
-unknown cleanup until the bound independent safety procedure resolves it.
-Return only RETURN-CHECKLIST.txt allowlisted files, using new names; no folders,
-raw stdout/stderr dumps, shell history, private data, signatures or credentials.
-All keys still unplugged. Preserve every attempted session, no delete/retry/resume.
 
-HARNESS_RETURN_FILES (literal allowlist, no wildcard/folder upload):
+S2: PASS/REAPED, unrelated cwd and launcher path with a space
+  cd "$S2_UNRELATED_CWD"
+  test "$(pwd -P)" = "$S2_UNRELATED_CWD"
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S2 --output "$SESSION/S2" --seconds 15 --keys-unplugged
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S2/events.jsonl" --output "$SESSION/S2-status.json"
+
+S3: PASS/REAPED, parent-reported grandchild reap, not OS attestation
+  cd "$SESSION"
+  test "$(pwd -P)" = "$SESSION"
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S3 --output "$SESSION/S3" --seconds 15 --keys-unplugged
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S3/events.jsonl" --output "$SESSION/S3-status.json"
+
+S4: FAIL/initialization-failed/REAPED
+  cd "$SESSION"
+  test "$(pwd -P)" = "$SESSION"
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S4 --output "$SESSION/S4" --seconds 15 --keys-unplugged
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S4/events.jsonl" --output "$SESSION/S4-status.json"
+
+S5: FAIL/original-deadline-reached/REAPED
+  cd "$SESSION"
+  test "$(pwd -P)" = "$SESSION"
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S5 --output "$SESSION/S5" --seconds 15 --keys-unplugged
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S5/events.jsonl" --output "$SESSION/S5-status.json"
+
+S6: FAIL/operator-cancelled/REAPED
+  cd "$SESSION"
+  test "$(pwd -P)" = "$SESSION"
+  "$PY" -I -B "$BUNDLE/code/tools/native_owner_rehearsal.py" --case S6 --output "$SESSION/S6" --seconds 15 --keys-unplugged
+  "$PY" -I -B "$BUNDLE/code/tools/native_rehearsal_public_io.py" journal-status --source "$SESSION/S6/events.jsonl" --output "$SESSION/S6-status.json"
+
+Each cd/test must pass before launch; no case output directory is precreated.
+Readback requires exit0/RECORDED and chain_consistent=true; reported_status/cleanup
+must match the case. It does not check live PIDs or authenticate the journal.
+
+HARNESS_RETURN_FILES (literal list; no wildcard/folder upload):
 S1/events.jsonl S1-status.json S2/events.jsonl S2-status.json
 S3/events.jsonl S3-status.json S4/events.jsonl S4-status.json
 S5/events.jsonl S5-status.json S6/events.jsonl S6-status.json
 
-CI-ONLY — OUTSIDE THE OPERATOR STEPS
-S7 retains its unchanged FAIL/UNKNOWN classification and tests on all
-three operating systems. It is outside the attended Mac session. D06/#532 is
-parked as a draft and is not a 12 November rehearsal dependency.
-
-FORBIDDEN: human_signing preflight/sign, sign.sh, check.py, setup.sh, ykman,
-age/decryption, old request/intent folders, private helper, production controller,
-models, live Tower/network, tools/ci/p5_drills.py, setting GITHUB_ACTIONS, sudo,
-killall/pkill, unrelated process lists, env/Keychain/SSH-agent dumps, port8768.
-NO-PIN preflight touches hardware; it is NOT permitted in this NO-KEY session.
-
-LATER PRODUCTION PROOF (NOT THESE COMMANDS)
-The eight P5 families remain kill-mid-build, worker-network, budget-exhausted,
-tower-unreachable, workspace-changed, answer-fragment, wall-and-window and
-duplicate-attempt. They are not the19control IDs or N1 behavior cases. ExactE,
-admissions, original deadlines, genuine ownership/isolation/Tower/retention and
-human custody must be bound separately before17–19Nov. No production argv exists
-in this sheet. No environment result closes native/P5 or any strict gate.
+Return only actual attempted-session files in RETURN-CHECKLIST section A.
+Missing/partial files remain missing/partial; never fabricate a full return set.
+The unchanged checklist section B governs safety/readback. No closeout operation
+is provided by this packet. S7 is CI-only and has no Mac command or return file.
+No production controller, private helper, live Tower/network, model, signing,
+decryption, hardware preflight, sudo, kill-by-name, environment dump or port8768.
+No native/P5 qualification, independent descendant containment or custody proof
+follows from these public diagnostics or CI. Separate exact approvals remain.

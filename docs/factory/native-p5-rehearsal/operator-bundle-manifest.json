@@ -1,0 +1,125 @@
+{
+  "schema": "no-key-operator-bundle/1",
+  "source_commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+  "source_tree": "06d670d3a14561de9c4c0115b6b6f304bbb2716e",
+  "archive": "lightyear-no-key-main-8fe41d76.tar",
+  "bytes": 32706560,
+  "sha256": "f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404",
+  "public_manifest_sha256": "2f65231e77f74e8b6082c812fdadf15b7350f90a99c20e0d81f073802e409eeb",
+  "source": {
+    "tools/native_owner_rehearsal.py": {
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "blob": "62f24933c9e2385f77619c06700b4af415c05e3f",
+      "sha256": "0628d7fb5cac49e59992a9c264a8e4017e28f293653495bebd28f438f36a9883",
+      "bytes": 5285
+    },
+    "src/lightyear_execution/mac_owner_process.py": {
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "blob": "89dabad8c70453fe413b5bf3bd0190715f49ada1",
+      "sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc",
+      "bytes": 18684
+    },
+    "src/lightyear_execution/__init__.py": {
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "blob": "24c8f88159c0ae42154fbd9c8c246ec6f2fdc52f",
+      "sha256": "cd7421bea88ba888b09be37ea13ca721f2c234a5797d4bd836e8ef3388b2f4ba",
+      "bytes": 88
+    },
+    "tools/native_rehearsal_public_io.py": {
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "blob": "32e29b7503ac5b442d0e598e4b987168856b76a9",
+      "sha256": "ea1b03abaec2357113abce20ca351a370743f914140460097c3a95644648bd8f",
+      "bytes": 10997
+    }
+  },
+  "files": [
+    {
+      "path": "archives/cryptography-46.0.3-cp311-abi3-macosx_10_9_universal2.whl",
+      "sha256": "109d4ddfadf17e8e7779c39f9b18111a09efb969a301a31e987416a0191ed93a",
+      "bytes": 7225004
+    },
+    {
+      "path": "archives/python.tar.gz",
+      "sha256": "fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e",
+      "bytes": 25172086
+    },
+    {
+      "path": "archives/yubikey_manager-5.9.2-py3-none-any.whl",
+      "sha256": "19a1173106b104bea37722e61ce748fb2d39c87a02880c1964461837ddaa7fba",
+      "bytes": 235711
+    },
+    {
+      "path": "code/src/lightyear_execution/__init__.py",
+      "sha256": "cd7421bea88ba888b09be37ea13ca721f2c234a5797d4bd836e8ef3388b2f4ba",
+      "bytes": 88
+    },
+    {
+      "path": "code/src/lightyear_execution/mac_owner_process.py",
+      "sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc",
+      "bytes": 18684
+    },
+    {
+      "path": "code/tools/native_owner_rehearsal.py",
+      "sha256": "0628d7fb5cac49e59992a9c264a8e4017e28f293653495bebd28f438f36a9883",
+      "bytes": 5285
+    },
+    {
+      "path": "code/tools/native_rehearsal_public_io.py",
+      "sha256": "ea1b03abaec2357113abce20ca351a370743f914140460097c3a95644648bd8f",
+      "bytes": 10997
+    },
+    {
+      "path": "public-corrupt.txt",
+      "sha256": "6bad8085e32df07380ef9aa3c87c7abd5cbace9cc01693552ca917d24d0a8bfa",
+      "bytes": 45
+    },
+    {
+      "path": "public-files.json",
+      "sha256": "2f65231e77f74e8b6082c812fdadf15b7350f90a99c20e0d81f073802e409eeb",
+      "bytes": 2129
+    },
+    {
+      "path": "public-good.txt",
+      "sha256": "bd91fbaaaf01da97a5443d0df49d6c281965893d7f72521a0154442d7e48bff9",
+      "bytes": 45
+    },
+    {
+      "path": "runtime-manifest.json",
+      "sha256": "3725f1d589e358c27307de7dbb9a5f599c55350ac5f48a9e21e058562fa4aa8b",
+      "bytes": 1322
+    },
+    {
+      "path": "site/cryptography-46.0.3.dist-info/METADATA",
+      "sha256": "6f1d8bc82126395502f051f986c18465ec163e2668208613ab484cf66bbdaf8b",
+      "bytes": 5748
+    },
+    {
+      "path": "site/yubikey_manager-5.9.2.dist-info/METADATA",
+      "sha256": "b04e9e362e20c182c596dd4e6c1561be79169ce14d77ce069b4a3f8bea7c7512",
+      "bytes": 10604
+    },
+    {
+      "path": "source-bindings.json",
+      "sha256": "547dd6ac08c2f11d1dfbcb17ddde6bf933387ee2b3ea0eb720f2e73500cc5ae7",
+      "bytes": 2032
+    }
+  ],
+  "wheels": [
+    {
+      "path": "archives/cryptography-46.0.3-cp311-abi3-macosx_10_9_universal2.whl",
+      "bytes": 7225004,
+      "sha256": "109d4ddfadf17e8e7779c39f9b18111a09efb969a301a31e987416a0191ed93a",
+      "use": "Planned metadata-only inspection of authentic public wheels. Not installed or imported as SDKs."
+    },
+    {
+      "path": "archives/yubikey_manager-5.9.2-py3-none-any.whl",
+      "bytes": 235711,
+      "sha256": "19a1173106b104bea37722e61ce748fb2d39c87a02880c1964461837ddaa7fba",
+      "use": "Planned metadata-only inspection of authentic public wheels. Not installed or imported as SDKs."
+    }
+  ],
+  "sdk_metadata_only": true,
+  "executed": false,
+  "ready": false,
+  "review_scope": "Bundle public bytes and command sheet; no Mac session performed"
+}

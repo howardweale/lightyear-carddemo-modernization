@@ -7,9 +7,9 @@ R0 — SOURCE / BUNDLE / REVIEW
 Harness review candidate: PR530, tools/native_owner_rehearsal.py. Final-head
 CI and Claude delta review precede Howard's exact-head merge approval request.
 The rehearsal binds the merged main commit after both PR530 and PR531 merge;
-no superseded draft head, including ff3119b7 or d83350fd, is a rehearsal binding.
+No superseded draft head is a rehearsal binding.
 Public IO source: tools/native_rehearsal_public_io.py from this separate draft.
-Common base: aa61b96954e771636e579e638c0d16d93bb424a0. Neither draft implies a merge.
+Common base: <<CODEX-BIND:BASE_COMMIT>>. Neither draft implies a merge.
 <<CODEX-BIND:FINAL_SOURCE_HEADS_AND_TREES>>
 <<CODEX-BIND:MERGED_MAIN_COMMIT_AND_TREE>>
 <<CODEX-BIND:REVIEWED_BUNDLE_AND_RUNTIME_MANIFESTS_AND_SHA256>>

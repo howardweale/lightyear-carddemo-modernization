@@ -1,0 +1,22 @@
+{
+  "schema": "native-rehearsal-runtime-selection/1",
+  "purpose": "Planned NO-KEY operator runtime; exact bundle review and admission remain separate",
+  "python": "3.12.16",
+  "release": "20261026",
+  "release_url": "https://github.com/astral-sh/python-build-standalone/releases/tag/20261026",
+  "file_name": "cpython-3.12.16+20261026-aarch64-apple-darwin-install_only.tar.gz",
+  "download_url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261026/cpython-3.12.16%2B20261026-aarch64-apple-darwin-install_only.tar.gz",
+  "size_bytes": 25172086,
+  "sha256": "fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e",
+  "published_checksums_url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261026/SHA256SUMS",
+  "published_checksums_sha256": "39af6e3d3c712476893409f714a3b9ab795a861a89ec1628cbc99b45d1271a73",
+  "architecture": "aarch64-apple-darwin",
+  "uname_machine": "arm64",
+  "extraction": "Strip the archive's python/ prefix into the new BUNDLE/runtime directory",
+  "interpreter_relative_path": "runtime/bin/python3",
+  "cryptography": "46.0.3",
+  "yubikey-manager": "5.9.2",
+  "intel_host_action": "STOP; fresh Howard decision required; no x86_64 substitution",
+  "private_or_hardware_execution_authorized": false,
+  "native_qualified": false
+}

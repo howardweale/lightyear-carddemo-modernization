@@ -174,7 +174,7 @@ def journal_status(source):
                 deadline, cleanup_bound, case = binding
                 require(type(deadline) in (int, float) and type(cleanup_bound) in (int, float)
                         and math.isfinite(deadline) and math.isfinite(cleanup_bound)
-                        and cleanup_bound - deadline == 5 and case in ("S1","S2","S3","S4","S5","S6","S7"), "journal-binding")
+                        and cleanup_bound == deadline + 5 and case in ("S1","S2","S3","S4","S5","S6","S7"), "journal-binding")
             require(binding == (deadline, cleanup_bound, case), "journal-binding-drift")
         require(event.get("kind") != "result" or sequence == len(rows), "journal-after-result")
         previous = hashlib.sha256(line).hexdigest()

@@ -104,9 +104,9 @@ class PublicIOTests(unittest.TestCase):
                     io.runtime_metadata(bundle, site)
         # No claim that this metadata fixture verifies a runnable interpreter.
 
-    def journal(self, status="FAIL", cleanup="UNKNOWN", changed_deadline=False):
+    def journal(self, status="FAIL", cleanup="UNKNOWN", changed_deadline=False, deadline=50):
         metadata = dict(kind="metadata", schema="native-owner-rehearsal/1", native_proof=False)
-        intent = dict(kind="intent", case="S7", original_deadline=50, cleanup_deadline=55)
+        intent = dict(kind="intent", case="S7", original_deadline=deadline, cleanup_deadline=deadline + 5)
         final = dict(intent, kind="result", status=status, cleanup_status=cleanup, native_proof=False)
         if changed_deadline: final["original_deadline"] = 51
         previous, lines = "0" * 64, []
@@ -124,6 +124,9 @@ class PublicIOTests(unittest.TestCase):
         self.assertEqual("UNKNOWN", result["reported_cleanup"])
         self.assertFalse(result["live_processes_checked"])
         self.assertFalse(result["authenticated"])
+        # The contract binds the addition, not an inverse floating subtraction.
+        rounded = io.journal_status(self.journal(deadline=float(2**53)))
+        self.assertEqual("UNKNOWN", rounded["reported_cleanup"])
         with self.assertRaises(ValueError):
             io.journal_status(self.journal(changed_deadline=True))
 

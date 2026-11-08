@@ -1,0 +1,84 @@
+NO-KEY REHEARSAL RETURNS — CP1 CODEX INTEGRATION DRAFT
+NOT RUNNABLE until the final command sheet/bundle/CI/Claude review and all bindings
+are complete. These are public environment diagnostics, not receipts or admission.
+
+A — EXACT GENERATED RETURN FILES
+One row per file, with the producing step and its allowed fields. All JSON files
+are beneath SESSION. No wildcard uploads. Record only actual outputs; a refused
+public-IO command prints fixed stdout and creates no --output result file.
+
+File | Step | Fields
+runtime-metadata.json | R2 metadata | python, executable, machine, sqlite, distributions, sdk_imported, hardware_checked, native_proof
+public-manifest-check.json | R2 manifest | manifest_sha256, files[{path,sha256,bytes,matched,native_proof}], native_proof, scope
+transfer-check.json | R2 exclusive shell check | method, quarantine_found, native_proof
+r4-p1.json | R4 positive copy | sha256, bytes, matched, native_proof, copy_readback, overwrite
+r4-n1.json | R4 space-path copy | sha256, bytes, matched, native_proof, copy_readback, overwrite
+r4-n2.json | R4 corrupt-source refusal, exclusive stdout capture | status, reason, native_proof
+r4-n2-source-check.json | R4 independent corrupt-source comparison | sha256, bytes, matched, native_proof
+r4-n3.json | R4 existing-destination refusal, exclusive stdout capture | status, reason, native_proof
+r4-n3-retained-check.json | R4 retained destination comparison | sha256, bytes, matched, native_proof
+r4-n4.json | R4 wrong-hash refusal, exclusive stdout capture | status, reason, native_proof
+S1/events.jsonl | R5 S1 | sequence, previous_sha256, event (J below)
+S1-status.json | R6 S1 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+S2/events.jsonl | R5 S2 | sequence, previous_sha256, event (J below)
+S2-status.json | R6 S2 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+S3/events.jsonl | R5 S3 | sequence, previous_sha256, event (J below)
+S3-status.json | R6 S3 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+S4/events.jsonl | R5 S4 | sequence, previous_sha256, event (J below)
+S4-status.json | R6 S4 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+S5/events.jsonl | R5 S5 | sequence, previous_sha256, event (J below)
+S5-status.json | R6 S5 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+S6/events.jsonl | R5 S6 | sequence, previous_sha256, event (J below)
+S6-status.json | R6 S6 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
+
+J: metadata event contains kind/schema/python/executable/machine/argv_sha256/
+source_sha256/keys_unplugged_human_ack/hardware_checked/native_proof/admission_authorized.
+Later events contain kind/case/original_deadline/cleanup_deadline/monotonic/wall_time;
+intent adds owner_pid/start_method/native_proof, worker-observation adds the fixed
+observation {kind, role, pid, parent_pid, creation_identity} or {kind} or the
+grandchild-reap {kind,pid,reaped,exitcode}; cleanup-requested adds reason.
+Result adds status/reason/cleanup_fault/cleanup_status/cleanup_requested/
+child_exitcode/child_reap_observed/forced_parent_termination/identities/
+grandchild_reap/scope/native_proof/admission_authorized/restart_authorized.
+No arbitrary exception detail, command line or environment is allowed.
+
+HARNESS_RETURN_FILES = S1/events.jsonl S1-status.json S2/events.jsonl S2-status.json
+S3/events.jsonl S3-status.json S4/events.jsonl S4-status.json
+S5/events.jsonl S5-status.json S6/events.jsonl S6-status.json
+
+The fixed public copies RET/r4-p1.bin and RET/r4 n1.bin stay on the Mac; their
+hash/readback JSON files above are the returns. REFUSED *-result.json files and
+r4-n2.bin do not exist and must not be fabricated. Original source/fixture files
+and the 25MB runtime archive are not generated return files.
+R1 environment, R3 path and R2 archive-hash recording operations still have
+explicit CODEX-BIND markers. They are not allowlisted outputs until their exact
+exclusive commands, names and fields are reviewed in the final dated packet.
+S7 is CI-only, with unchanged FAIL/UNKNOWN classification; no Mac S7 return.
+
+B — SAFETY AND READBACK
+
+No private input/answer/ciphertext, hardware or key data, raw process environment,
+unrelated command lines, raw stderr/tracebacks, shell history or folder uploads.
+Never copy anything beyond the manifest/return allowlist. No overwrite/deletion.
+
+Howard before return:
+[ ] All keys still unplugged.
+[ ] Exact reviewed source/runtime/host/account/path bindings match.
+[ ] Every expected negative retained under its original diagnostic identity.
+[ ] Unknown cleanup is unresolved until the bound independent safety procedure
+    resolves it; journal-status does not inspect live processes.
+[ ] Returned files contain only their allowlisted fields; originals retained.
+[ ] No logout while cleanup safety remains unknown.
+
+Codex readback (public bytes only):
+1 Verify source/runtime manifests and per-file hashes against the reviewed packet.
+2 Verify journal sequence/hash chain and final original-deadline binding; retain
+  FAIL/UNKNOWN/missing/truncated results. Hash consistency is not authentication.
+3 Distinguish child handle reap from parent-reported grandchild reap and OS proof.
+4 Record each probe PASS / FAIL / NOT TESTED / UNKNOWN and expected-refusal status.
+5 Record runtime/paths/copy findings and remaining production ownership limits.
+6 Do not admit a new attempt, resend, sign, launch private work or close a P5 control.
+
+Procedure traceability: R0 source/review; R1 physical/account; R2 runtime/hash;
+R3 named paths; R4 same-operation copy controls; R5 fixed spawn/cleanup;
+R6 public returns and independent safety closeout. Later P5 families remain separate.

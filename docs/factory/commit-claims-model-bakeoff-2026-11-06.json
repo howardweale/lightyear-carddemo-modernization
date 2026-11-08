@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-11-06",
+  "claims": [
+    {
+      "record": "docs/factory/specs/verified-model-bakeoff.md",
+      "reference": "6c496ce3b232443a8ba62be4baaed56e655108e7",
+      "commit": "6c496ce3b232443a8ba62be4baaed56e655108e7",
+      "role": "source",
+      "source_path": "src/lightyear_factory/model_config.py",
+      "source_sha256": "5662ae03b55b0a9c99160ae21d33009ef1f566c4d4440ebad018ea22fcc90766"
+    }
+  ]
+}

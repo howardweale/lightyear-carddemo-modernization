@@ -1,0 +1,13 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/factory/d1-controller-phase-exact-registration-20261107-r2.json",
+      "reference": "061229839ca5f9a68f729c8d3fb930eb8489bfb4",
+      "commit": "061229839ca5f9a68f729c8d3fb930eb8489bfb4",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add"
+    }
+  ]
+}

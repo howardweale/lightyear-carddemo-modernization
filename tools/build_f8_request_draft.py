@@ -5,14 +5,14 @@ from pathlib import Path
 import subprocess
 
 from lightyear_factory.contracts import WorkOrder
-from tools.check_f8_request import RECORD, ROOT, review
+from tools.check_f8_request import ROOT, review, preparation_record
 
 OUTPUT = ROOT / "work/f8-unsigned-request"
 PREREQUISITES = "docs/factory/copau-f2-prerequisites-2026-10-22.md"
 
 
 def main():
-    request = json.loads((ROOT / RECORD).read_bytes())
+    record_path, record_raw, request = preparation_record(ROOT)
     result = review(request)
     order = WorkOrder.from_dict(request["work_order"])
     OUTPUT.mkdir(parents=True, exist_ok=False)
@@ -34,7 +34,7 @@ def main():
     emit("unsigned-bindings.json", {
         "schema": "copau-f2-unsigned-draft-bindings/1",
         "publication_commit": head,
-        "request": {"path": RECORD, "sha256": sha256((ROOT / RECORD).read_bytes()).hexdigest()},
+        "request": {"path": record_path, "sha256": sha256(record_raw).hexdigest()},
         "private_prerequisites": {
             "path": PREREQUISITES,
             "sha256": sha256((ROOT / PREREQUISITES).read_bytes()).hexdigest(),

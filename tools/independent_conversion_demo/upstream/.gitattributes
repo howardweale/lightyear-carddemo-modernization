@@ -1,0 +1,2 @@
+# Preserve the exact upstream license bytes bound by manifest.json.
+LICENSE -text

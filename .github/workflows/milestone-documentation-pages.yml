@@ -63,6 +63,10 @@ on:
       - 'src/lightyear_factory/model_config.py'
       - 'src/lightyear_factory/process_environment.py'
       - 'src/lightyear_factory/provider_secrets.py'
+      - 'src/lightyear_execution/candidate_human_signer.py'
+      - 'src/lightyear_execution/external_signing.py'
+      - 'src/lightyear_execution/signing_designation.py'
+      - 'src/lightyear_execution/signing_handoff.py'
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"
@@ -154,6 +158,10 @@ on:
       - 'src/lightyear_factory/model_config.py'
       - 'src/lightyear_factory/process_environment.py'
       - 'src/lightyear_factory/provider_secrets.py'
+      - 'src/lightyear_execution/candidate_human_signer.py'
+      - 'src/lightyear_execution/external_signing.py'
+      - 'src/lightyear_execution/signing_designation.py'
+      - 'src/lightyear_execution/signing_handoff.py'
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"

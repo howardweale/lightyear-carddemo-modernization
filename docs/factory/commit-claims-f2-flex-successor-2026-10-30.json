@@ -1,0 +1,12 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/factory/p5-flex-count-controller-exact-binding-2026-10-27.json",
+      "reference": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "commit": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+      "role": "ancestor",
+      "descendant": "62170a5e6644bc8a41b05aa708a0a9c8c7f0d3ef"
+    }
+  ]
+}

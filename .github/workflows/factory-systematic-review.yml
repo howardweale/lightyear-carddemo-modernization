@@ -85,21 +85,21 @@ jobs:
             work/factory-review-${{ matrix.job }}/generation-inventory.json
             work/factory-review-${{ matrix.job }}/fault-results.json
             work/factory-review-${{ matrix.job }}/equivalence-followup/*.json
-          retention-days: 14
+          retention-days: 90
       - name: Preserve every refusal and survivor
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: factory-review-${{ matrix.job }}-${{ matrix.shard }}
           path: work/factory-review-${{ matrix.job }}
-          retention-days: 14
+          retention-days: 90
       - name: Publish sealed targeted shard for complete-only aggregation
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: targeted-shard-${{ matrix.job }}-${{ matrix.shard }}
           path: work/factory-review-${{ matrix.job }}/equivalence-followup
-          retention-days: 14
+          retention-days: 90
   aggregate:
     needs: engineering
     runs-on: ubuntu-24.04
@@ -131,7 +131,7 @@ jobs:
         with:
           name: equivalence-aggregate
           path: work/aggregate
-          retention-days: 14
+          retention-days: 90
   cp037:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -153,5 +153,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 90
           name: cp037-twin-reconciliation
           path: work/cp037-twin

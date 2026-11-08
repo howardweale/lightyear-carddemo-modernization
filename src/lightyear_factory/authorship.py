@@ -25,6 +25,17 @@ FACTORY_EMAIL = "factory@lightyear.invalid"
 REF = "refs/heads/candidate"
 
 
+def _is_human_signer(signer):
+    # Keep unsigned and CI histories independent of the optional public verifier.
+    # Names only avoid unnecessary imports; acceptance still requires exact type.
+    cls = type(signer)
+    if (cls.__module__, cls.__name__) != (
+            "lightyear_execution.candidate_human_signer", "CandidateHumanSigner"):
+        return False
+    from lightyear_execution.candidate_human_signer import CandidateHumanSigner
+    return cls is CandidateHumanSigner
+
+
 class CandidateHistory:
     def __init__(self, workspace: IsolatedWorkspace, history: Path, run_id: str,
                  ledger: RunLedger, signer=None) -> None:
@@ -38,7 +49,7 @@ class CandidateHistory:
             raise ContractError("candidate-history-visible-to-agent")
         self.run_id, self.ledger = run_id, ledger
         self.start_commit = None
-        if signer is not None and type(signer) is not CICommitSigner:
+        if signer is not None and type(signer) is not CICommitSigner and not _is_human_signer(signer):
             raise ContractError("candidate-history-real-signer-required")
         self.signer = signer
 
@@ -246,9 +257,11 @@ class CandidateHistory:
         message = (f'Factory candidate attempt {attempt}\n\nFactory-Run: {self.run_id}\n'
                    f'Factory-Attempt: {attempt}\nFactory-Provenance: {proof["content_sha256"]}\n')
         commit = self.signer.sign(self, tree, parent, message.encode())
+        expected_message = (self.signer.expected_message(message.encode()).decode()
+                            if _is_human_signer(self.signer) else message)
         # Signing adapters cannot substitute another tree or parent.
         if (self._git('show', '-s', '--format=%T %P', commit).decode().strip() != tree+' '+parent
-                or self._git('show', '-s', '--format=%B', commit).decode().strip() != message.strip()):
+                or self._git('show', '-s', '--format=%B', commit).decode().strip() != expected_message.strip()):
             raise ContractError('candidate-history-signed-commit-mismatch')
         self._git('update-ref', REF, commit, parent)
         self.ledger.append('BUILDING', 'candidate_committed', dict(
@@ -448,7 +461,15 @@ class CandidateHistory:
                                                   ledger_head=proof['ledger_head_sha256'])
                 if proof != expected:
                     raise ContractError('candidate-history-provenance-mismatch')
-                trailers = self._git('show', '-s', '--format=%B', commit).decode().rstrip().split('\n\n')[-1].splitlines()
+                body = self._git('show', '-s', '--format=%B', commit).decode().rstrip()
+                if _is_human_signer(self.signer):
+                    expected_body = (f'Factory candidate attempt {record["attempt"]}\n\n'
+                                     f'Factory-Run: {self.run_id}\nFactory-Attempt: {record["attempt"]}\n'
+                                     f'Factory-Provenance: {proof["content_sha256"]}\n')
+                    if body != self.signer.expected_message(expected_body.encode()).decode().rstrip():
+                        raise ContractError('candidate-history-human-exact-body')
+                    body = expected_body.rstrip()
+                trailers = body.split('\n\n')[-1].splitlines()
                 if trailers != [f'Factory-Run: {self.run_id}', f'Factory-Attempt: {record["attempt"]}',
                                 f'Factory-Provenance: {proof["content_sha256"]}']:
                     raise ContractError('candidate-history-provenance-trailer')
@@ -468,7 +489,8 @@ class CandidateHistory:
         result = dict(schema='factory-candidate-authorship/1', run_id=self.run_id,
                       start_commit=self.start_commit, candidate_commit=end, commits=records,
                       human_interventions=sum(not r['factory'] for r in records),
-                      cryptographically_verified=qualified, qualifies_for_factory_receipt=qualified,
+                      cryptographically_verified=qualified,
+                      qualifies_for_factory_receipt=qualified and type(self.signer) is CICommitSigner,
                       final_package_tree_sha256=package_hash,
                       qualification='Each intervening commit requires a signature and ledger-bound builder responses.')
         result['content_sha256'] = canonical_hash(result)

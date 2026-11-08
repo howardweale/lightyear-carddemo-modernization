@@ -1,0 +1,4 @@
+# A: lightyear-A
+age1yubikey1qg8fhksrg4ww0ana8dqcd5z7na2r239jywqnwa9y3elqhrkl2rvd24zxdxw
+# B: lightyear-B
+age1yubikey1qfsdprmqgcf70su076n04vf4xjxf0nn8z7mw6fwnjkzn37fy3tvfcazq329

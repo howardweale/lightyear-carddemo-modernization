@@ -117,3 +117,28 @@ class JavaQualityFenceTests(unittest.TestCase):
         self.assertGreaterEqual(report['fenced_paths'], 153)
         self.assertTrue(report['merge_permitted'])
         self.assertIn(fence.F2, report['source_records'])
+
+    def test_trusted_run_selection_unions_old_and_new_fence(self):
+        documents = self.fixture()
+        old = fence.derive(documents.__getitem__, list(documents))
+        selected = 'docs/factory/november-request.json'
+        request = json.loads(documents[fence.F2])
+        request['engineering_source_bindings']['new'] = dict(path='new-controller.py')
+        raw = json.dumps(request).encode()
+        documents[selected] = raw
+        documents[fence.RUN_SELECTION] = json.dumps(dict(
+            schema='copau-run-request-selection/1',
+            request=dict(path=selected, sha256=hashlib.sha256(raw).hexdigest()))).encode()
+        new = fence.derive(documents.__getitem__, list(documents))
+        self.assertTrue(set(old['paths']).issubset(new['paths']))
+        self.assertTrue(set(old['prefixes']).issubset(new['prefixes']))
+        self.assertIn('new-controller.py', new['paths'])
+        self.assertIn(selected, new['paths'])
+        documents[selected] += b' '
+        with self.assertRaisesRegex(ValueError, 'fence-record-hash'):
+            fence.derive(documents.__getitem__, list(documents))
+
+    def test_candidate_cannot_add_selector_to_unfenced_paths(self):
+        documents = self.fixture()
+        derived = fence.derive(documents.__getitem__, list(documents))
+        self.assertEqual([fence.RUN_SELECTION], fence.violations(derived, [fence.RUN_SELECTION]))

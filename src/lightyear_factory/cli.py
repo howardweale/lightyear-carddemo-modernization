@@ -796,7 +796,7 @@ def main(argv: list[str] | None = None) -> int:
     elif args.provider == "configured":
         if not args.model_config:
             raise ContractError("--model-config required")
-        from .model_config import load_router
+        from .routing_config import load_router
         from .provider_secrets import HardenedSecretStore
         from .agents import ModelAgentSet
         agents=ModelAgentSet(load_router(args.model_config,

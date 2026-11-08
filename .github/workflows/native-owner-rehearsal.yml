@@ -40,3 +40,43 @@ jobs:
             export PYTHONPATH='src:.:tests'
           fi
           python -B -m unittest test_mac_owner_process test_native_owner_fault_sequences test_mac_owner_native -v
+  operator-runtime-mac:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Verify and unpack exact Apple-silicon operator runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(/usr/bin/uname -m)" = arm64
+          archive="$RUNNER_TEMP/cpython-operator.tar.gz"
+          curl --fail --location --max-time 180 --output "$archive" 'https://github.com/astral-sh/python-build-standalone/releases/download/20261026/cpython-3.12.16%2B20261026-aarch64-apple-darwin-install_only.tar.gz'
+          test "$(/usr/bin/stat -f '%z' "$archive")" = 25172086
+          echo 'fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e  '"$archive" | /usr/bin/shasum -a 256 -c -
+          /bin/mkdir "$RUNNER_TEMP/operator-runtime"
+          /usr/bin/tar -xzf "$archive" --strip-components 1 -C "$RUNNER_TEMP/operator-runtime"
+          "$RUNNER_TEMP/operator-runtime/bin/python3" -I -B -c 'import sys, platform; print(sys.version); assert platform.python_version() == "3.12.16"; assert platform.machine() == "arm64"'
+      - name: Install exact public verification dependencies
+        shell: bash
+        run: '"$RUNNER_TEMP/operator-runtime/bin/python3" -m pip install cryptography==46.0.3 yubikey-manager==5.9.2'
+      - name: Read exact independent CP1 public-IO source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 9fc08769d204388dea2e69a78c0bcefaf0451d2f
+          path: cp1-public-io
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/native_rehearsal_public_io.py
+            /tests/test_native_rehearsal_public_io.py
+      - name: Rehearsal and exact CP1 fixtures using the operator interpreter
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C cp1-public-io rev-parse HEAD)" = 9fc08769d204388dea2e69a78c0bcefaf0451d2f
+          echo 'CP1 source: 9fc08769d204388dea2e69a78c0bcefaf0451d2f; runtime release: 20261026'
+          cp cp1-public-io/tools/native_rehearsal_public_io.py tools/
+          cp cp1-public-io/tests/test_native_rehearsal_public_io.py tests/
+          export PYTHONPATH='src:.:tests'
+          "$RUNNER_TEMP/operator-runtime/bin/python3" -B -m unittest test_mac_owner_process test_native_owner_fault_sequences test_mac_owner_native test_native_rehearsal_public_io -v

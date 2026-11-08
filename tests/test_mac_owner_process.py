@@ -33,7 +33,7 @@ class ProcessOwnerTests(unittest.TestCase):
         self.assertEqual(1, sum(e["kind"] == "cleanup-requested" for e in events))
         self.assertEqual(1, len({e["original_deadline"] for e in events}))
         self.assertEqual(1, len({e["cleanup_deadline"] for e in events}))
-        self.assertEqual(5, events[0]["cleanup_deadline"] - events[0]["original_deadline"])
+        self.assertEqual(events[0]["original_deadline"] + 5, events[0]["cleanup_deadline"])
         self.assertFalse(result["native_proof"])
         self.assertFalse(result["admission_authorized"])
         self.assertFalse(result["restart_authorized"])
@@ -212,13 +212,18 @@ class ProcessOwnerTests(unittest.TestCase):
         receive = process_support._receive
         for failure in (EOFError(), BrokenPipeError(), OSError(32, "private pipe detail")):
             events = []
+            poll = process_support._poll
+            def no_cleanup_poll(channel, timeout):
+                self.assertFalse(any(e["kind"] == "cleanup-requested" for e in events))
+                return poll(channel, timeout)
             def close_before_completed(channel):
                 message = receive(channel)
                 if message["kind"] == "completed":
                     with patch.object(channel, "recv_bytes", side_effect=failure):
                         return receive(channel)
                 return message
-            with patch.object(process_support, "_receive", side_effect=close_before_completed):
+            with patch.object(process_support, "_receive", side_effect=close_before_completed), \
+                    patch.object(process_support, "_poll", side_effect=no_cleanup_poll):
                 result = RehearsalProcessOwner(case="S1", duration=15, emit=events.append).run_once()
             self.assertEqual("FAIL", result["status"])
             self.assertEqual("worker-exited-before-completion", result["reason"])
@@ -281,7 +286,20 @@ class ProcessOwnerTests(unittest.TestCase):
                     if int(parent) == os.getpid() and int(pid) != process.pid}
         before = children()
         for case in ("S1", "S3", "S4", "S6", "S7"):
-            result, _ = self.run_case(case)
+            events, snapshots = [], []
+            def observe(event):
+                events.append(event)
+                if event["kind"] == "worker-observation" and event["observation"]["kind"] == "ready":
+                    declared = {e["observation"]["pid"] for e in events
+                                if e["kind"] == "worker-observation"
+                                and e["observation"].get("role") == "child"}
+                    snapshots.append((children(), declared))
+            owner = RehearsalProcessOwner(case=case, duration=15, emit=observe,
+                cancel_requested=lambda: case == "S6" and bool(snapshots))
+            result = owner.run_once()
+            if case != "S4":
+                self.assertEqual(1, len(snapshots))
+                self.assertEqual(snapshots[0][0], snapshots[0][1])
             self.assertEqual(0, result["child_exitcode"])
             self.assertEqual(before, children())
 

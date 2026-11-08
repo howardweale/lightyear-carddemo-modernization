@@ -298,7 +298,7 @@ class RehearsalProcessOwner:
         identities, ready, completed, grand_reap = {}, False, False, None
         reason, storage_failed, forced, cleanup_requested = "unknown", False, False, False
         observation_failed = False
-        cleanup_fault = None
+        cleanup_fault, channel_closed = None, False
 
         def event(kind, **fields):
             nonlocal storage_failed
@@ -375,6 +375,7 @@ class RehearsalProcessOwner:
         except WorkerFault as error:
             reason = str(error)
         except EOFError:
+            channel_closed = True
             reason = ("original-deadline-reached" if time.monotonic() >= original_deadline
                       else "worker-exited-before-completion")
         except BaseException:
@@ -386,7 +387,7 @@ class RehearsalProcessOwner:
             child.request_stop()
             try:
                 event("cleanup-requested", reason=reason)
-                while child.pid is not None and time.monotonic() < cleanup_deadline - 0.5:
+                while not channel_closed and child.pid is not None and time.monotonic() < cleanup_deadline - 0.5:
                     try:
                         if _poll(reader, 0.02):
                             consume(_receive(reader))
@@ -434,7 +435,7 @@ if __name__ == "__main__":
         raise SystemExit(2)
     role, case = sys.argv[2:4]
     original, cleanup = map(float, sys.argv[4:6])
-    if case not in CASES or not all(map(math.isfinite, (original, cleanup))) or cleanup - original != 5:
+    if case not in CASES or not all(map(math.isfinite, (original, cleanup))) or cleanup != original + 5:
         raise SystemExit(2)
     stop, output = _StopPipe(), _Output()
     if role == "grandchild":

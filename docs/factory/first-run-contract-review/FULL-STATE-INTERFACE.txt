@@ -34,9 +34,11 @@ Ordering and retained data
 Remaining capability before any private packet
 1. Authenticate ACK and result metadata against exact reviewed custody/context;
    seal every full artifact and bind the earlier unchanged input commitment to E.
-2. Independently load the same complete initial state into the candidate database
-   and verify exact inventory/rows before replay. Complete schema, quarantine,
-   bytea, decimals, timestamps and identity-row parity need real PostgreSQL CI.
+2. Validate the new complete initial-state loader in real PostgreSQL CI, then
+   bind its connection/custody to the candidate route. The loader consumes once,
+   refuses a nonempty database and compares every table after commit against the
+   independently projected committed input. Schema, quarantine, bytea, decimals,
+   timestamps and identity-row parity remain CI-unverified and unqualified.
 3. Drive the normal HTTP InteractionEngine, whose source calls commit, rather
    than ReferenceScenarioTest's rollback-only replay. Retain full actual frames,
    returned COMMAREA and every table's before/after state through independent
@@ -52,3 +54,31 @@ Remaining capability before any private packet
 
 Planned ownership: Codex implementation, Claude exact-head pre-review, Howard
 private custody and exact approvals. This component supplies no new authority.
+
+External PostgreSQL observation component
+The planned loopback relay observes one protocol-3.0 database connection under
+one original deadline. It refuses SSL/GSS negotiation, unsupported messages,
+autocommit writes, incomplete frames, ambiguous transaction endings and limits.
+It never downgrades TLS or logs password, cancel-key, query, parameter or row
+payloads. COMMIT is complete only after the backend command tag and idle
+ReadyForQuery; rollback and SQLSTATE errors remain distinct. The transaction
+record is diagnostic, qualified=false and ownership_verified=false.
+
+Planned CI uses an existing digest-pinned disposable PostgreSQL image and the
+existing pinned psycopg client. It exercises real commit, explicit rollback and
+duplicate-key rollback, checking durable rows through a separate connection.
+This does not exercise the candidate Java or prove same-request attribution.
+The HTTP/request-to-connection binding, bypass prevention, candidate replay and
+authenticated private results remain open. Multiple
+connections, TLS, COPY and suspended portals are unsupported, never presumed
+equivalent. No private networking or execution admission is implied.
+
+Protocol sources:
+https://www.postgresql.org/docs/16/protocol-message-formats.html
+https://www.postgresql.org/docs/16/protocol-flow.html
+
+The same public CI job also stages a disclosed synthetic seed, acknowledges it
+with an explicitly unauthenticated CI double, captures the full frozen session,
+and loads the same input into a new disposable database. It compares all initial
+tables, rejects an extra table in the comparison, and refuses loader reuse. This
+is not private generation, production ACK authentication or a candidate result.

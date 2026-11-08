@@ -1,0 +1,54 @@
+N07-C: whole-session oracle capture component
+
+Planned public CI exercises the complete existing authorization-pages-and-fraud
+session with a disclosed synthetic seed, unchanged frozen Proof.start, inputs,
+step and expected_state, and the original nested session assertions. It uses
+exact Git bytes on both POSIX and Windows. No private input is a test fixture.
+
+Not yet a complete private runner or qualified correctness result. This library
+has no CLI and no signing, candidate launch, database connection or admission.
+It does not change the 153 frozen files, case catalogue, threshold or receipts.
+
+Ordering and retained data
+- Input-only preparation reuses fixture_inputs. No Engine is constructed before
+  the exact input/context/source commitment has an authenticated acknowledgment.
+- A required caller-supplied verifier authenticates ACK bytes and returns the
+  exact commitment. It is called again on persisted bytes before consumption.
+  A boolean or string approval is refused. A test lambda is not authentication;
+  the production verifier and its public-key/context policy remain unbound.
+- Oracle entry first writes an exclusive consumed marker. Errors or interruption
+  leave that marker, without completion. No retry, reseed or automatic resumption.
+- Initial state is projected independently from the committed raw fixture, with
+  all generated parent, child, quarantine and identity tables. The candidate's
+  initial database cannot supply expected unchanged rows. Shared mapping/codec
+  projection remains a disclosed dependency, as in the historical comparator.
+- The unchanged Proof.step retains complete frame, attributes, cursor/message,
+  program/COMMAREA and complete expected after-state for every interaction.
+  Before/after digests form a continuous chain. Original traces and reference
+  events stay private. Seven leakage fragments are not the correctness oracle.
+- Content-addressed state writes use private RAM; immutable bounded chunks pass
+  through the existing store interface. Full private-store/ciphertext integration
+  still needs review. No raw values, paths, differences or tracebacks are returned
+  by capture; only digests/counts and ORACLE_CAPTURE_ONLY, qualified=false.
+
+Remaining capability before any private packet
+1. Authenticate ACK and result metadata against exact reviewed custody/context;
+   seal every full artifact and bind the earlier unchanged input commitment to E.
+2. Independently load the same complete initial state into the candidate database
+   and verify exact inventory/rows before replay. Complete schema, quarantine,
+   bytea, decimals, timestamps and identity-row parity need real PostgreSQL CI.
+3. Drive the normal HTTP InteractionEngine, whose source calls commit, rather
+   than ReferenceScenarioTest's rollback-only replay. Retain full actual frames,
+   returned COMMAREA and every table's before/after state through independent
+   connections; run the unchanged frame and full-state comparisons.
+4. Observe actual per-interaction commit/rollback and operation boundaries on
+   that same connection/input, including failure categories. Mock commit calls,
+   source inspection and final state equality alone are insufficient. Proposed
+   external PostgreSQL protocol observation requires a bounded reviewed adapter;
+   encrypted/unsupported protocol or ambiguous ownership must block, never pass.
+5. Public end-to-end positives/negatives, exact source/condition review and Howard
+   private procedure/admission remain required. Browser/rendered-state coverage
+   and the full existing condition inventory must not be silently reduced.
+
+Planned ownership: Codex implementation, Claude exact-head pre-review, Howard
+private custody and exact approvals. This component supplies no new authority.

@@ -1,0 +1,52 @@
+D06 — S7 SAFE-CLOSEOUT DESIGN AND PUBLIC CI FEASIBILITY
+Planned narrow scope: demonstrate separate safety ownership without changing S7's
+FAIL/UNKNOWN outcome. Not yet: an integrated, reviewed operator bundle or native
+safety proof. This is not a production-owner implementation or launch procedure.
+
+Problem
+The S7 diagnostic deliberately withholds its reap observation. Reinterpreting its
+journal as cleanup proof would defeat that negative. An operator needs a separately
+reviewed safety path before logout or a subsequent probe; neither a process name nor
+an unbound PID is sufficient. No killall/pkill or arbitrary-PID fallback is proposed.
+
+Narrow design
+An outer supervisor owns both the fixed public worker and a separate observation
+probe through retained Popen handles. The observation probe gets no reap evidence
+and remains FAIL/UNKNOWN. The supervisor closes only its own pipe writer and waits
+for the exact children it launched. Its separate safety observation includes every
+owned role/PID/exitcode and the original predeclared deadlines. A missing handle,
+nonzero exit, missing marker, forced termination, late result or observation fault
+cannot produce OBSERVED_EXIT. EOF alone does not prove successful process exit.
+The complete packet must bind source hashes, exact supervisor argv and manifest,
+host/runtime, all children and their no-descendant contract BEFORE launch.
+
+Public feasibility fixture
+rehearsal_safe_closeout.run_public_fixture uses only two immutable in-repository
+public worker roles, isolated Python entrypoints and local pipes. No hardware,
+network, external executable, signing or private inputs. Six CI-only tests exercise
+positive handle reaps, partial launch, altered diagnostic PASS, cancellation, lost
+exit marker and refused duration. The original duration and five-second cleanup
+bound never change. Failure is retained and does not authorize automatic retry.
+This fixture is not the current #530 S7 implementation. It deliberately proves only
+the proposed separation of diagnostic classification from separate handle ownership.
+It must not be described as already closing #530, R6 or the native/P5 requirement.
+
+Operator integration still required
+The final S7 route must place actual worker ownership outside the injected missing-
+observation path, using this design or a separately reviewed equivalent. Merely
+running this fixture after an unrelated #530 S7 does not bind the old worker and is
+NOT a safe-closeout procedure. Do not splice this source into an unreviewed bundle.
+Claude must review the exact final integration/head/diff and all three OS CI; the
+runtime/bundle/argv/paths and public return allowlist must bind that same source.
+No executable operator command is supplied here until these dependencies close.
+
+Limits and fail-closed boundary
+Separate supervisor handles are independent of the missing-observation code path;
+they are not independent hardware custody, a signature, kernel birth identity,
+arbitrary descendant containment, or owner-death qualification. The fixed workers
+spawn no children; their exit bound is a last resort, not proof after owner loss.
+Public output stays diagnostic, with no change to any lifecycle receipt schema.
+Unknown closeout keeps the host isolated for the separately reviewed human action.
+No logout, second attempt, renamed retry, force-kill by supplied PID or upgrade of
+S7 to PASS follows. If exact review/binding is absent by 11 November17Pacific, the
+12 November rehearsal must move under Howard's selected fallback; no silent waiver.

@@ -34,5 +34,5 @@ jobs:
           PUBLIC_PG_PORT: ${{ job.services.postgres.ports[5432] }}
         run: |
           python --version
-          python -B -m unittest test_copau_pg_observer -v
+          python -B -m unittest test_copau_pg_observer test_copau_full_state_capture -v
           python -B -m tools.copau_pg_observer_ci --port "$PUBLIC_PG_PORT"

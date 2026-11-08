@@ -1,4 +1,6 @@
 """Complete original N1 oracle with PUBLIC synthetic input, in CI only."""
+import base64
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
@@ -12,6 +14,7 @@ from unittest.mock import patch
 
 from lightyear_execution import copau_full_state_contract as stage
 from tools import copau_full_state as capture
+from tools import copau_candidate_replay as replay
 from tests import test_copau_full_state_contract as fixtures
 
 
@@ -88,8 +91,81 @@ class FullStateCaptureTests(unittest.TestCase):
         self.assertIn('F', fraud)
         self.assertIn('R', fraud)
         self.assertEqual(artifact['candidate_replay'], 'NOT_RUN')
+        self._exercise_candidate_replay(store, root, producer, artifact, initial, states)
         with self.assertRaises(stage.Refused):
             capture.capture(store, root, acknowledgment_verifier=lambda _: commitment)
+
+    def _exercise_candidate_replay(self, original, root, producer, artifact, initial, states):
+        # Public scripted responses only. This tests the real frozen comparator
+        # against complete captured rows, not an HTTP/browser/candidate proof.
+        for fault in (None, 'values', 'attributes', 'cursor', 'message', 'program',
+                      'ended', 'commarea', 'extra-table', 'missing-row',
+                      'request-mutated', 'private-exception', 'initial'):
+            with self.subTest(candidate_comparison_fault=fault):
+                store = fixtures.MemoryStore()
+                store.files = dict(original.files)
+                commitment_raw, commitment = stage._commitment(store)
+                store.write('n1-load-complete.json', stage.encoded(dict(
+                    status='INITIAL_STATE_ONLY', commitment_sha256=stage.sha(commitment_raw),
+                    input_sha256=commitment['input_sha256'],
+                    full_state_sha256=producer.digest(initial))))
+                state, seen = deepcopy(initial), []
+                if fault == 'initial':
+                    state['unexpected'] = []
+                def exchange(request):
+                    nonlocal state
+                    row = artifact['rows'][len(seen)]
+                    self.assertEqual(set(request), {'token', 'aid', 'fields'})
+                    self.assertEqual(request['aid'], row['aid'])
+                    self.assertEqual(request['fields'], row['fields'])
+                    self.assertNotIn('expected', request)
+                    seen.append(deepcopy(request))
+                    expected = row['expected']
+                    screen = deepcopy(expected['screen'])
+                    screen['program'] = expected['program']
+                    area = bytes.fromhex(expected['commarea'])
+                    if fault == 'commarea':
+                        area += b'X'
+                    envelope = stage.encoded(dict(program=expected['program'],
+                        commarea=base64.b64encode(area).decode()))
+                    token = base64.urlsafe_b64encode(envelope).decode().rstrip('=') + '.PUBLIC'
+                    actual = dict(token=token, screen=screen, ended=expected['ended'])
+                    state = deepcopy(states[row['database_file']['path']])
+                    if fault in ('values', 'attributes'):
+                        screen[fault] = {}
+                    elif fault in ('cursor', 'message', 'program'):
+                        screen[fault] = 'PUBLIC WRONG'
+                    elif fault == 'ended':
+                        actual['ended'] = not actual['ended']
+                    elif fault == 'extra-table':
+                        state['unexpected'] = []
+                    elif fault == 'missing-row':
+                        state['pautdtl1'].pop()
+                    elif fault == 'request-mutated':
+                        request['aid'] = 'PUBLIC WRONG'
+                    elif fault == 'private-exception':
+                        raise RuntimeError('PRIVATE SENTINEL')
+                    return actual
+                kwargs = dict(exchange=exchange, snapshot=lambda: deepcopy(state),
+                              candidate_sha256='b' * 64)
+                if fault:
+                    with self.assertRaisesRegex(stage.Refused, '^candidate-replay-failed-consumed$'):
+                        replay.replay(store, root, **kwargs)
+                    self.assertNotIn('n1-replay-complete.json', store.files)
+                else:
+                    result = replay.replay(store, root, **kwargs)
+                    self.assertEqual(result['interactions'], len(artifact['rows']))
+                    self.assertEqual(len(seen), 15)
+                    self.assertFalse(result['qualified'])
+                    self.assertFalse(result['browser_replayed'])
+                    self.assertFalse(result['transaction_binding_verified'])
+                    retained = stage.decoded(stage.get_blob(store, 'n1-candidate-observations'))
+                    self.assertEqual(len(retained), 15)
+                    self.assertEqual(retained[0]['before'], initial)
+                    self.assertEqual(retained[-1]['after'], state)
+                self.assertIn('n1-replay-consumed.json', store.files)
+                with self.assertRaises(stage.Refused):
+                    replay.replay(store, root, **kwargs)
 
     def test_oracle_fault_remains_consumed_with_no_private_exception(self):
         store = fixtures.MemoryStore()

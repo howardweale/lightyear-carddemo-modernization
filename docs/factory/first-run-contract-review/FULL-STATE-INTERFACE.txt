@@ -82,3 +82,14 @@ with an explicitly unauthenticated CI double, captures the full frozen session,
 and loads the same input into a new disposable database. It compares all initial
 tables, rejects an extra table in the comparison, and refuses loader reuse. This
 is not private generation, production ACK authentication or a candidate result.
+Planned candidate replay component: tools/copau_candidate_replay.py consumes one
+attempt before caller capabilities run, passes only token/aid/fields to exchange,
+and applies the unchanged frozen frame comparator to every sealed interaction.
+It compares the complete independent before/after table inventory and returned
+COMMAREA, retaining full private observations. No selection or fragment fallback.
+Planned public CI uses scripted responses for all 15 original-session steps and
+negative mutations, not a real candidate/browser execution. The caller exchange
+and snapshot capabilities still need authenticated same-candidate routing,
+request-to-transaction ownership, bypass prevention and encrypted private custody.
+The result remains qualified=false, browser_replayed=false and transaction binding
+unverified. This library is not a private execution admission or source hook.

@@ -83,9 +83,18 @@ def read_public(path):
     before = p.stat()
     require(before.st_size <= MAX_BYTES, "public-file-size")
     with p.open("rb") as stream:
-        require(_identity(os.fstat(stream.fileno())) == _identity(before), "source-open-drift")
-        raw = stream.read(MAX_BYTES + 1)
-        require(_identity(os.fstat(stream.fileno())) == _identity(before), "source-read-drift")
+        if os.name == "nt":
+            # Windows path stat and handle fstat do not share all identity fields.
+            opened = os.fstat(stream.fileno())
+            require((opened.st_size, opened.st_mtime_ns) == (before.st_size, before.st_mtime_ns),
+                    "source-open-drift")
+            raw = stream.read(MAX_BYTES + 1)
+            # Compare the full identity on the same handle across the read.
+            require(_identity(os.fstat(stream.fileno())) == _identity(opened), "source-read-drift")
+        else:
+            require(_identity(os.fstat(stream.fileno())) == _identity(before), "source-open-drift")
+            raw = stream.read(MAX_BYTES + 1)
+            require(_identity(os.fstat(stream.fileno())) == _identity(before), "source-read-drift")
     require(_identity(p.stat()) == _identity(before) and len(raw) == before.st_size, "source-path-drift")
     _path(p)
     return raw

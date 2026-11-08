@@ -1,4 +1,5 @@
 """CI-only public bytes and metadata fixtures; no hardware/private operations."""
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -30,6 +31,52 @@ class PublicIOTests(unittest.TestCase):
         self.assertEqual(self.raw, destination.read_bytes())
         self.assertEqual((before.st_ino, before.st_mtime_ns),
                          (destination.stat().st_ino, destination.stat().st_mtime_ns))
+
+    def test_mid_read_file_change_is_refused_on_windows_and_posix(self):
+        # Real file writes while the read handle remains open, including on Windows.
+        original_open = Path.open
+        original_fstat = os.fstat
+        for same_size in (False, True):
+            with self.subTest(same_size=same_size):
+                self.source.write_bytes(self.raw)
+                descriptors = []
+                def observed_fstat(fd):
+                    descriptors.append(fd)
+                    return original_fstat(fd)
+                @contextmanager
+                def changed_open(path, *args, **kwargs):
+                    with original_open(path, *args, **kwargs) as stream:
+                        if path != self.source or args != ("rb",):
+                            yield stream
+                            return
+                        class ChangingReader:
+                            def fileno(self):
+                                return stream.fileno()
+                            def read(self, limit):
+                                raw = stream.read(limit)
+                                before = self_source.stat()
+                                with original_open(self_source, "r+b") as writer:
+                                    if same_size:
+                                        writer.write(b"X" + original_raw[1:])
+                                    else:
+                                        writer.seek(0, os.SEEK_END)
+                                        writer.write(b"changed during read")
+                                    writer.flush()
+                                    os.fsync(writer.fileno())
+                                # Ensure deterministic timestamp movement for same-size writes.
+                                os.utime(self_source, ns=(before.st_atime_ns,
+                                                          before.st_mtime_ns + 2_000_000_000))
+                                return raw
+                        yield ChangingReader()
+                self_source, original_raw = self.source, self.raw
+                destination = self.root / "refused mid-read copy"
+                with patch.object(Path, "open", changed_open), \
+                        patch.object(io.os, "fstat", side_effect=observed_fstat):
+                    with self.assertRaisesRegex(ValueError, "^source-read-drift$"):
+                        io.copy_public(self.source, destination, self.sha, len(self.raw))
+                self.assertEqual(2, len(descriptors))
+                self.assertEqual(descriptors[0], descriptors[1])
+                self.assertFalse(destination.exists())
 
     def test_corruption_wrong_hash_and_wrong_length_create_no_destination(self):
         for raw, digest, size in ((b"X" + self.raw[1:], self.sha, len(self.raw)),

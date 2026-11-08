@@ -1,0 +1,54 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-11-08",
+  "claims": [
+    {
+      "record": "docs/factory/native-p5-rehearsal/COMMAND-SHEET.txt",
+      "reference": "8fe41d76",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "merge",
+      "parents": [
+        "e1d00efe4c7f4bc821a8edf5dda6c5669e4ba9b3",
+        "02f1e32bcf46effc1f0aaad41100576d51767cfc"
+      ],
+      "head_commit": "02f1e32bcf46effc1f0aaad41100576d51767cfc",
+      "pr": 531
+    },
+    {
+      "record": "docs/factory/native-p5-rehearsal/COMMAND-SHEET.txt",
+      "reference": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "merge",
+      "parents": [
+        "e1d00efe4c7f4bc821a8edf5dda6c5669e4ba9b3",
+        "02f1e32bcf46effc1f0aaad41100576d51767cfc"
+      ],
+      "head_commit": "02f1e32bcf46effc1f0aaad41100576d51767cfc",
+      "pr": 531
+    },
+    {
+      "record": "docs/factory/native-p5-rehearsal/operator-bundle-manifest.json",
+      "reference": "8fe41d76",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "merge",
+      "parents": [
+        "e1d00efe4c7f4bc821a8edf5dda6c5669e4ba9b3",
+        "02f1e32bcf46effc1f0aaad41100576d51767cfc"
+      ],
+      "head_commit": "02f1e32bcf46effc1f0aaad41100576d51767cfc",
+      "pr": 531
+    },
+    {
+      "record": "docs/factory/native-p5-rehearsal/operator-bundle-manifest.json",
+      "reference": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "merge",
+      "parents": [
+        "e1d00efe4c7f4bc821a8edf5dda6c5669e4ba9b3",
+        "02f1e32bcf46effc1f0aaad41100576d51767cfc"
+      ],
+      "head_commit": "02f1e32bcf46effc1f0aaad41100576d51767cfc",
+      "pr": 531
+    }
+  ]
+}

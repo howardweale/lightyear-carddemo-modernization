@@ -8,25 +8,21 @@
   "source": {
     "tools/native_owner_rehearsal.py": {
       "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
-      "blob": "62f24933c9e2385f77619c06700b4af415c05e3f",
       "sha256": "0628d7fb5cac49e59992a9c264a8e4017e28f293653495bebd28f438f36a9883",
       "bytes": 5285
     },
     "src/lightyear_execution/mac_owner_process.py": {
       "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
-      "blob": "89dabad8c70453fe413b5bf3bd0190715f49ada1",
       "sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc",
       "bytes": 18684
     },
     "src/lightyear_execution/__init__.py": {
       "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
-      "blob": "24c8f88159c0ae42154fbd9c8c246ec6f2fdc52f",
       "sha256": "cd7421bea88ba888b09be37ea13ca721f2c234a5797d4bd836e8ef3388b2f4ba",
       "bytes": 88
     },
     "tools/native_rehearsal_public_io.py": {
       "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
-      "blob": "32e29b7503ac5b442d0e598e4b987168856b76a9",
       "sha256": "ea1b03abaec2357113abce20ca351a370743f914140460097c3a95644648bd8f",
       "bytes": 10997
     }

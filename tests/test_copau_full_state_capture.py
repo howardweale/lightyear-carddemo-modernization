@@ -100,7 +100,9 @@ class FullStateCaptureTests(unittest.TestCase):
         # against complete captured rows, not an HTTP/browser/candidate proof.
         for fault in (None, 'values', 'attributes', 'cursor', 'message', 'program',
                       'ended', 'commarea', 'extra-table', 'missing-row',
-                      'request-mutated', 'private-exception', 'initial'):
+                      'request-mutated', 'private-exception', 'initial', 'empty-database', 'missing-table',
+                      'timeout', 'interrupted', 'malformed', 'snapshot-fault',
+                      'snapshot-shape', 'artifact-fault', 'write-fault'):
             with self.subTest(candidate_comparison_fault=fault):
                 store = fixtures.MemoryStore()
                 store.files = dict(original.files)
@@ -109,9 +111,15 @@ class FullStateCaptureTests(unittest.TestCase):
                     status='INITIAL_STATE_ONLY', commitment_sha256=stage.sha(commitment_raw),
                     input_sha256=commitment['input_sha256'],
                     full_state_sha256=producer.digest(initial))))
+                if fault == 'artifact-fault':
+                    manifest = stage.decoded(store.files['n1-initial-manifest.json'])
+                    manifest['sha256'] = '0' * 64
+                    store.files['n1-initial-manifest.json'] = stage.encoded(manifest)
                 state, seen = deepcopy(initial), []
                 if fault == 'initial':
                     state['unexpected'] = []
+                elif fault == 'empty-database':
+                    state = {}
                 def exchange(request):
                     nonlocal state
                     row = artifact['rows'][len(seen)]
@@ -139,21 +147,49 @@ class FullStateCaptureTests(unittest.TestCase):
                         actual['ended'] = not actual['ended']
                     elif fault == 'extra-table':
                         state['unexpected'] = []
+                    elif fault == 'missing-table':
+                        state.pop('authfrds')
                     elif fault == 'missing-row':
                         state['pautdtl1'].pop()
                     elif fault == 'request-mutated':
                         request['aid'] = 'PUBLIC WRONG'
                     elif fault == 'private-exception':
                         raise RuntimeError('PRIVATE SENTINEL')
+                    elif fault == 'timeout':
+                        raise TimeoutError('PRIVATE SENTINEL')
+                    elif fault == 'interrupted':
+                        raise KeyboardInterrupt('PRIVATE SENTINEL')
+                    elif fault == 'malformed':
+                        del actual['screen']
                     return actual
-                kwargs = dict(exchange=exchange, snapshot=lambda: deepcopy(state),
+                def snapshot():
+                    if fault == 'snapshot-fault':
+                        raise OSError('PRIVATE SENTINEL')
+                    if fault == 'snapshot-shape':
+                        return {'bad': 'PRIVATE SENTINEL'}
+                    return deepcopy(state)
+                kwargs = dict(exchange=exchange, snapshot=snapshot,
                               candidate_sha256='b' * 64)
-                if fault:
-                    with self.assertRaisesRegex(stage.Refused, '^candidate-replay-failed-consumed$'):
+                if fault == 'write-fault':
+                    write = store.write
+                    def fail_write(name, raw):
+                        if name == 'n1-replay-complete.json':
+                            raise OSError('PRIVATE SENTINEL')
+                        write(name, raw)
+                    store.write = fail_write
+                    with self.assertRaisesRegex(stage.Refused, '^candidate-result-write-failed-consumed$'):
                         replay.replay(store, root, **kwargs)
                     self.assertNotIn('n1-replay-complete.json', store.files)
                 else:
                     result = replay.replay(store, root, **kwargs)
+                    outcome = 'FAULT' if fault in ('request-mutated', 'private-exception',
+                        'timeout', 'interrupted', 'malformed', 'snapshot-fault',
+                        'snapshot-shape', 'artifact-fault') else 'MISMATCH' if fault else 'MATCH'
+                    self.assertEqual(result['outcome'], outcome)
+                    self.assertEqual(stage.decoded(store.read('n1-replay-complete.json')), result)
+                    self.assertNotIn(b'PRIVATE SENTINEL', stage.encoded(result))
+                    self.assertFalse(result['qualified'])
+                if fault is None:
                     self.assertEqual(result['interactions'], len(artifact['rows']))
                     self.assertEqual(len(seen), 15)
                     self.assertFalse(result['qualified'])

@@ -4,6 +4,7 @@ Not candidate proof: this client is psycopg, not InteractionEngine. No private
 input/custody/signing/provider capability, receipt or activation is supplied.
 """
 import argparse
+from decimal import Decimal
 import json
 from pathlib import Path
 import threading
@@ -45,11 +46,62 @@ def exercise_state(port):
     with psycopg.connect(**connect, autocommit=True) as admin:
         admin.execute('CREATE DATABASE n1_input_public')
     with psycopg.connect(**dict(connect, dbname='n1_input_public'), autocommit=True) as independent:
+        assert candidate_state.snapshot(independent, producer) == {}
         result = candidate_state.load_committed(store, root, independent)
         expected = contract.decoded(contract.get_blob(store, 'n1-initial'))
         assert candidate_state.snapshot(independent, producer) == expected
         independent.execute('CREATE TABLE public.n1_unexpected (id integer)')
         assert candidate_state.snapshot(independent, producer) != expected
+        independent.execute('DROP TABLE public.n1_unexpected')
+        independent.execute('CREATE SCHEMA "Other.Schema"')
+        independent.execute('CREATE TABLE "Other.Schema"."Odd.Table" (id integer, value text, precise numeric)')
+        key = '@' + json.dumps(['Other.Schema', 'Odd.Table'])
+        empty = candidate_state.snapshot(independent, producer)
+        assert empty[key] == [] and empty != expected
+        independent.execute('INSERT INTO "Other.Schema"."Odd.Table" VALUES (1,\'PUBLIC\',123456789012345678.123456789)')
+        extra = candidate_state.snapshot(independent, producer)
+        assert extra[key] == [producer.canonical(dict(id=1, value='PUBLIC', precise=Decimal('123456789012345678.123456789')))]
+        assert {k: v for k, v in extra.items() if k != key} == expected
+        # Privilege/RLS failures must not silently remove rows from the snapshot.
+        independent.execute('CREATE ROLE n1_snapshot_reader')
+        independent.execute('GRANT USAGE ON SCHEMA public,"Other.Schema" TO n1_snapshot_reader')
+        independent.execute('GRANT SELECT ON ALL TABLES IN SCHEMA public,"Other.Schema" TO n1_snapshot_reader')
+        independent.execute('ALTER TABLE "Other.Schema"."Odd.Table" ENABLE ROW LEVEL SECURITY')
+        independent.execute('SET ROLE n1_snapshot_reader')
+        try:
+            candidate_state.snapshot(independent, producer)
+        except psycopg.errors.InsufficientPrivilege:
+            pass
+        else:
+            raise AssertionError('RLS-hidden rows must fault')
+        finally:
+            independent.execute('RESET ROLE')
+        independent.execute('ALTER TABLE "Other.Schema"."Odd.Table" DISABLE ROW LEVEL SECURITY')
+        independent.execute('REVOKE SELECT ON "Other.Schema"."Odd.Table" FROM n1_snapshot_reader')
+        independent.execute('SET ROLE n1_snapshot_reader')
+        try:
+            candidate_state.snapshot(independent, producer)
+        except psycopg.errors.InsufficientPrivilege:
+            pass
+        else:
+            raise AssertionError('unreadable table must fault')
+        finally:
+            independent.execute('RESET ROLE')
+        for create, remove in (
+                ('CREATE SEQUENCE public.n1_unsupported', 'DROP SEQUENCE public.n1_unsupported'),
+                ('CREATE VIEW public.n1_unsupported AS SELECT 1 AS id', 'DROP VIEW public.n1_unsupported')):
+            independent.execute(create)
+            try:
+                candidate_state.snapshot(independent, producer)
+            except contract.Refused:
+                pass
+            else:
+                raise AssertionError('unsupported relation must fault')
+            finally:
+                independent.execute(remove)
+        independent.execute('DROP TABLE public.authfrds')
+        missing = candidate_state.snapshot(independent, producer)
+        assert 'authfrds' not in missing and missing != expected
         try:
             candidate_state.load_committed(store, root, independent)
         except contract.Refused:
@@ -58,6 +110,8 @@ def exercise_state(port):
             raise AssertionError('consumed loader must not run again')
         print(json.dumps(dict(status='PUBLIC_COMPLETE_INITIAL_STATE_ONLY',
             table_count=result['table_count'], extra_table_caught=True,
+            all_user_schemas=True, exact_numeric=True, rls_and_privilege_fault=True,
+            unsupported_relation_fault=True, missing_table_caught=True,
             candidate_replay=False, qualified=False), sort_keys=True))
 
 

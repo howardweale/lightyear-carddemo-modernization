@@ -5,30 +5,39 @@ accepts candidate-derived expected state, resets an existing database, launches 
 candidate, authenticates custody or returns a qualified result.
 """
 import json
-import re
+from decimal import Decimal
 
 from lightyear_execution import copau_full_state_contract as contract
 from tools import copau_full_state as capture
 
 
 def tables(connection):
-    rows = connection.execute("SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename").fetchall()
-    names = [r[0] for r in rows]
-    contract.require(all(isinstance(n, str) and re.fullmatch('[a-z][a-z0-9_]*', n) for n in names))
-    return names
+    return connection.execute("""SELECT n.nspname,c.relname,c.relkind
+        FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+        WHERE n.nspname NOT IN ('pg_catalog','information_schema')
+        AND n.nspname !~ '^pg_toast' AND c.relkind IN ('r','p','m','f','v','S')
+        ORDER BY n.nspname,c.relname""").fetchall()
 
 
 def snapshot(connection, producer):
-    """One consistent read-only transaction; every public table and every row."""
+    """All user-schema tables/rows; unsupported relations or hidden rows FAULT.
+
+    A database table-state snapshot, not a schema/DDL or concurrent-writer proof.
+    The caller must isolate candidate execution between observation boundaries.
+    """
+    from psycopg import sql
     contract.require(connection.autocommit, 'independent-autocommit-connection-required')
     with connection.transaction():
         connection.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY')
+        connection.execute('SET LOCAL row_security = off')
         inventory = tables(connection)
-        contract.require(inventory, 'empty-inventory')
         state = {}
-        for table in inventory:
-            raw = connection.execute("SELECT COALESCE(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]'::jsonb)::text FROM \"" + table + '\" t').fetchone()[0]
-            state[table] = json.loads(raw)
+        for schema, table, kind in inventory:
+            contract.require(kind in ('r', 'p', 'm'), 'unsupported-database-relation')
+            raw = connection.execute(sql.SQL("SELECT COALESCE(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]'::jsonb)::text FROM {} t").format(sql.Identifier(schema, table))).fetchone()[0]
+            key = table if schema == 'public' and not table.startswith('@') else '@' + json.dumps([schema, table])
+            contract.require(key not in state)
+            state[key] = json.loads(raw, parse_float=Decimal)
     return capture.canonical_state(producer, state)
 
 

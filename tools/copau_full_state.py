@@ -113,7 +113,7 @@ class _PrivateBlobs:
 def canonical_state(producer, state):
     # Exact frozen timestamp/row-multiset normalization; no row/column exclusions.
     state = deepcopy(state)
-    for row in state['authfrds']:
+    for row in state.get('authfrds', []):
         row['auth_ts'] = datetime.fromisoformat(row['auth_ts']).isoformat(
             timespec='microseconds').rstrip('0').rstrip('.')
     return {table: sorted([producer.canonical(row) for row in rows],

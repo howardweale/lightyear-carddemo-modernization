@@ -12,6 +12,24 @@ from lightyear_execution import copau_full_state_contract as contract
 from tools import copau_full_state as capture
 
 
+class _Mismatch(Exception):
+    """Only an observed comparison inequality, never an operational fault."""
+
+
+def match(equal):
+    if not equal:
+        raise _Mismatch
+
+
+def full_snapshot(reader):
+    state = reader()
+    contract.require(type(state) is dict and all(type(name) is str and
+        type(rows) is list and all(type(row) is dict for row in rows)
+        for name, rows in state.items()), 'malformed-candidate-snapshot')
+    contract.require(len(contract.encoded(state)) <= contract.LIMIT)
+    return state
+
+
 def replay(store, root, *, exchange, snapshot, candidate_sha256):
     """Compare every sealed interaction; no filtering, retries or fallback.
 
@@ -37,6 +55,7 @@ transaction ownership, browser rendering and result authentication remain open.
     binding = dict(commitment_sha256=contract.sha(raw),
         oracle_sha256=contract.sha(oracle_raw), candidate_sha256=candidate_sha256)
     store.write('n1-replay-consumed.json', contract.encoded(binding))
+    observed, outcome = [], 'FAULT'
     try:
         producer, _ = capture.reference.verify_producer(root)
         oracle = contract.decoded(oracle_raw)
@@ -55,12 +74,12 @@ transaction ownership, browser rendering and result authentication remain open.
             contract.require(item['path'] not in states and
                 item['sha256'] == contract.sha(payload))
             states[item['path']] = (item['sha256'], contract.decoded(payload))
-        contract.require(snapshot() == initial, 'replay-initial-state')
+        match(full_snapshot(snapshot) == initial)
         previous, token, session, observed = initial, None, None, []
         for row in rows:
             contract.require(row['case'] == contract.SESSION and
                 row['before_sha256'] == producer.digest(previous))
-            contract.require(snapshot() == previous, 'replay-before-state')
+            match(full_snapshot(snapshot) == previous)
             if row['session'] != session:
                 contract.require(row['aid'] == 'INITIAL')
                 token, session = None, row['session']
@@ -68,34 +87,47 @@ transaction ownership, browser rendering and result authentication remain open.
             sent = contract.encoded(request)
             actual = exchange(request)
             contract.require(contract.encoded(request) == sent, 'request-mutated')
-            contract.require(type(actual) is dict)
+            contract.require(type(actual) is dict and type(actual['screen']) is dict
+                and type(actual['token']) is str and type(actual['ended']) is bool)
             token = actual['token']
             expected = row['expected']
-            producer.compare_frame(actual['screen'], expected)
-            contract.require(actual['ended'] == expected['ended'])
+            try:
+                producer.compare_frame(actual['screen'], expected)
+            except AssertionError:
+                raise _Mismatch from None
+            match(actual['ended'] == expected['ended'])
             if not expected['ended'] and not expected.get('source_fault'):
                 envelope = token.split('.')[0]
                 value = contract.decoded(base64.urlsafe_b64decode(
                     envelope + '=' * (-len(envelope) % 4)))
-                contract.require(value['program'] == expected['program'] and
+                match(value['program'] == expected['program'] and
                     base64.b64decode(value['commarea'], validate=True).hex() ==
-                    expected['commarea'], 'replay-returned-commarea')
+                    expected['commarea'])
             file = row['database_file']
             digest, after = states[file['path']]
             contract.require(digest == file['sha256'] and
                 row['after_sha256'] == producer.digest(after))
-            actual_state = snapshot()
-            contract.require(actual_state == after, 'replay-after-state')
+            actual_state = full_snapshot(snapshot)
+            match(actual_state == after)
             observed.append(dict(request_sha256=contract.sha(sent),
                 response=deepcopy(actual), before=previous, after=deepcopy(actual_state)))
             contract.require(len(contract.encoded(observed)) <= contract.LIMIT)
             previous = after
+        outcome = 'MATCH'
+    except _Mismatch:
+        outcome = 'MISMATCH'
+    except BaseException:
+        # Timeout, interruption, malformed input/response, storage/DB or adapter
+        # errors are FAULT, never evidence of behavioral inequality or equality.
+        outcome = 'FAULT'
+    try:
         digest = contract.put_blob(store, 'n1-candidate-observations', contract.encoded(observed))
-        result = dict(binding, observations_sha256=digest, interactions=len(rows),
+        result = dict(binding, observations_sha256=digest, interactions=len(observed),
+            outcome=outcome,
             status='FULL_SESSION_COMPARISON_ONLY', qualified=False,
             candidate_ownership_verified=False, transaction_binding_verified=False,
             browser_replayed=False, result_authenticated=False)
         store.write('n1-replay-complete.json', contract.encoded(result))
         return result
     except BaseException:
-        raise contract.Refused('candidate-replay-failed-consumed') from None
+        raise contract.Refused('candidate-result-write-failed-consumed') from None

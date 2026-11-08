@@ -299,7 +299,7 @@ class ProcessOwnerTests(unittest.TestCase):
             result = owner.run_once()
             if case != "S4":
                 self.assertEqual(1, len(snapshots))
-                self.assertEqual(snapshots[0][0], snapshots[0][1])
+                self.assertEqual(before | snapshots[0][1], snapshots[0][0])
             self.assertEqual(0, result["child_exitcode"])
             self.assertEqual(before, children())
 

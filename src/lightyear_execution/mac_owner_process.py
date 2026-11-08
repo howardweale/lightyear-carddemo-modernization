@@ -6,14 +6,18 @@ reported by its parent. No arbitrary executable, process discovery or PID kill.
 An unobserved descendant/parent loss is UNKNOWN, never complete containment.
 """
 import hashlib
+import errno
 import json
 import math
-import multiprocessing
 import os
+from pathlib import Path
+from queue import Empty, Queue
 import signal
+import subprocess
+import sys
 import time
 from datetime import datetime, timezone
-from threading import Lock
+from threading import Event, Lock, Thread
 
 
 CASES = ("S1", "S2", "S3", "S4", "S5", "S6", "S7")
@@ -24,16 +28,164 @@ class WorkerFault(Exception):
     """Fixed public reason only; never arbitrary worker exception text."""
 
 
+class _Output:
+    def send_bytes(self, raw):
+        sys.stdout.buffer.write(raw + b"\n")
+        sys.stdout.buffer.flush()
+
+    def close(self):
+        pass
+
+
+class _StopPipe:
+    def __init__(self):
+        self.closed, self.invalid = Event(), False  # Thread event, never SemLock.
+        Thread(target=self._watch, daemon=True).start()
+
+    def _watch(self):
+        try:
+            self.invalid = os.read(sys.stdin.fileno(), 1) != b""
+        except OSError:
+            self.invalid = True
+        self.closed.set()
+
+    def poll(self, timeout):
+        return self.closed.wait(timeout)
+
+    def recv_bytes(self, maximum):
+        if self.invalid:
+            raise ValueError("stop-channel-invalid")
+        raise EOFError
+
+    def close(self):
+        pass
+
+
+class _WorkerChannel:
+    """Bounded public frames; a reader thread avoids platform-specific pipe poll."""
+    def __init__(self, stream):
+        self.stream, self.messages, self.pending = stream, Queue(16), None
+        self.overflow = False
+        self.thread = Thread(target=self._read, daemon=True)
+        self.thread.start()
+
+    def _read(self):
+        try:
+            while True:
+                raw = self.stream.readline(MAX_MESSAGE + 2)
+                item = raw[:-1] if raw.endswith(b"\n") and len(raw) <= MAX_MESSAGE + 1 else (
+                    EOFError() if not raw else ValueError("worker-frame-invalid"))
+                if self.messages.full():
+                    self.overflow = True
+                    return
+                self.messages.put_nowait(item)
+                if isinstance(item, Exception):
+                    return
+        except OSError as error:
+            if not self.messages.full():
+                self.messages.put_nowait(error)
+            else:
+                self.overflow = True
+
+    def poll(self, timeout):
+        if self.overflow:
+            raise ValueError("worker-frame-overflow")
+        if self.pending is None:
+            try:
+                self.pending = self.messages.get(timeout=timeout)
+            except Empty:
+                return False
+        return True
+
+    def recv_bytes(self, maximum):
+        item, self.pending = self.pending, None
+        if isinstance(item, Exception):
+            raise item
+        if not isinstance(item, bytes) or len(item) > maximum:
+            raise ValueError("worker-frame-invalid")
+        return item
+
+    def close(self):
+        self.thread.join(timeout=0.1)
+        self.stream.close()
+
+
+class _OwnedWorker:
+    def __init__(self, role, case, original_deadline, cleanup_deadline):
+        self.argv = [sys.executable, "-I", "-B", str(Path(__file__).resolve()),
+                     "--worker", role, case, str(original_deadline), str(cleanup_deadline)]
+        self.process = self.channel = None
+
+    @property
+    def pid(self):
+        return None if self.process is None else self.process.pid
+
+    @property
+    def exitcode(self):
+        return None if self.process is None else self.process.poll()
+
+    def start(self):
+        self.process = subprocess.Popen(self.argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                        stderr=subprocess.DEVNULL, close_fds=True)
+        self.channel = _WorkerChannel(self.process.stdout)
+
+    def request_stop(self):
+        if self.process is not None:
+            self.process.stdin.close()
+
+    def join(self, timeout):
+        try:
+            self.process.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            pass
+
+    def is_alive(self):
+        return self.exitcode is None
+
+    def terminate(self):
+        self.process.terminate()  # Only this owned Popen handle, never a supplied PID.
+
+    def close(self):
+        self.request_stop()
+        if self.channel is not None:
+            self.channel.close()
+
+
 def _send(channel, kind, **fields):
     channel.send_bytes(json.dumps(dict(kind=kind, **fields), sort_keys=True).encode("ascii"))
 
 
 def _receive(channel):
-    raw = channel.recv_bytes(MAX_MESSAGE)
+    try:
+        raw = channel.recv_bytes(MAX_MESSAGE)
+    except OSError as error:
+        if _closed_channel(error):
+            raise EOFError from error
+        raise
     message = json.loads(raw)
     if type(message) is not dict or type(message.get("kind")) is not str:
         raise ValueError("worker-protocol-invalid")
     return message
+
+
+def _closed_channel(error):
+    return (isinstance(error, BrokenPipeError) or getattr(error, "winerror", None) == 109
+            or error.errno == errno.EPIPE)
+
+
+def _poll(channel, timeout):
+    """Normalize only Windows' closed-writer poll result to stream EOF.
+
+    CPython 3.12 PipeConnection.poll uses PeekNamedPipe, which can raise
+    ERROR_BROKEN_PIPE before recv_bytes gets its chance to report EOFError.
+    EOF is never itself evidence of process exit, scope or successful cleanup.
+    """
+    try:
+        return channel.poll(timeout)
+    except OSError as error:
+        if _closed_channel(error):
+            raise EOFError from error
+        raise
 
 
 def _identity(role):
@@ -43,13 +195,25 @@ def _identity(role):
                 creation_identity=hashlib.sha256(f"{role}:{pid}:{parent}:{created}".encode()).hexdigest())
 
 
+def _stop_requested(channel, timeout):
+    """The owner closes its sole writer; no semaphore/resource-tracker process."""
+    try:
+        if _poll(channel, timeout):
+            channel.recv_bytes(1)
+            raise ValueError("stop-channel-data-refused")
+        return False
+    except EOFError:
+        return True
+
+
 def _grandchild(channel, stop, cleanup_deadline):
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     try:
         _send(channel, "identity", **_identity("grandchild"))
-        while not stop.wait(0.02) and time.monotonic() < cleanup_deadline - 1:
+        while not _stop_requested(stop, 0.02) and time.monotonic() < cleanup_deadline - 1:
             pass
     finally:
+        stop.close()
         channel.close()
 
 
@@ -66,12 +230,10 @@ def _worker(channel, stop, case, original_deadline, cleanup_deadline):
             _send(channel, "initialization-failed")
             return
         if case == "S3":
-            context = multiprocessing.get_context("spawn")
-            grand_channel, sender = context.Pipe(duplex=False)
-            grand = context.Process(target=_grandchild, args=(sender, stop, cleanup_deadline))
+            grand = _OwnedWorker("grandchild", case, original_deadline, cleanup_deadline)
             grand.start()
-            sender.close()
-            if not grand_channel.poll(max(0, original_deadline - time.monotonic())):
+            grand_channel = grand.channel
+            if not _poll(grand_channel, max(0, original_deadline - time.monotonic())):
                 raise ValueError("grandchild-ready-missing")
             observed = _receive(grand_channel)
             if (observed.get("kind") != "identity" or observed.get("role") != "grandchild"
@@ -81,7 +243,7 @@ def _worker(channel, stop, case, original_deadline, cleanup_deadline):
         _send(channel, "ready")
         if case not in ("S5", "S6"):
             _send(channel, "completed")
-        while not stop.wait(0.02) and time.monotonic() < original_deadline:
+        while not _stop_requested(stop, 0.02) and time.monotonic() < cleanup_deadline - 1:
             pass
     except BaseException:
         # No traceback, path, environment or arbitrary exception content returned.
@@ -90,8 +252,8 @@ def _worker(channel, stop, case, original_deadline, cleanup_deadline):
         except (OSError, EOFError):
             pass
     finally:
-        stop.set()
         if grand is not None and grand.pid is not None:
+            grand.request_stop()
             grand.join(max(0, cleanup_deadline - 1 - time.monotonic()))
             if grand.is_alive():
                 grand.terminate()  # Only this positively owned Process handle.
@@ -103,8 +265,7 @@ def _worker(channel, stop, case, original_deadline, cleanup_deadline):
                 pass
             if grand.exitcode is not None:
                 grand.close()
-        if grand_channel is not None:
-            grand_channel.close()
+        stop.close()
         channel.close()
 
 
@@ -132,13 +293,12 @@ class RehearsalProcessOwner:
             self._consumed = True
         started = time.monotonic()
         original_deadline, cleanup_deadline = started + self.duration, started + self.duration + 5
-        context = multiprocessing.get_context("spawn")
-        stop = context.Event()
-        reader, sender = context.Pipe(duplex=False)
-        child = context.Process(target=_worker, args=(sender, stop, self.case, original_deadline, cleanup_deadline))
+        child = _OwnedWorker("child", self.case, original_deadline, cleanup_deadline)
+        reader = None
         identities, ready, completed, grand_reap = {}, False, False, None
         reason, storage_failed, forced, cleanup_requested = "unknown", False, False, False
         observation_failed = False
+        cleanup_fault = None
 
         def event(kind, **fields):
             nonlocal storage_failed
@@ -190,11 +350,11 @@ class RehearsalProcessOwner:
             event("worker-observation", observation=message)
 
         try:
-            event("intent", owner_pid=self._pid, start_method="spawn", native_proof=False)
+            event("intent", owner_pid=self._pid, start_method="fixed-subprocess", native_proof=False)
             if time.monotonic() >= original_deadline:
                 raise WorkerFault("original-deadline-before-launch")
             child.start()
-            sender.close()
+            reader = child.channel
             while True:
                 if time.monotonic() >= original_deadline:
                     reason = "original-deadline-reached"
@@ -202,38 +362,42 @@ class RehearsalProcessOwner:
                 if self.cancel_requested():
                     reason = "operator-cancelled"
                     break
-                if reader.poll(min(0.02, max(0, original_deadline - time.monotonic()))):
+                if _poll(reader, min(0.02, max(0, original_deadline - time.monotonic()))):
+                    if time.monotonic() >= original_deadline:
+                        reason = "original-deadline-reached"
+                        break
                     consume(_receive(reader))
                 if completed:
                     reason = "completed"
-                    break
-                if child.exitcode is not None:
-                    reason = "worker-exited-before-completion"
                     break
         except KeyboardInterrupt:
             reason = "operator-cancelled"
         except WorkerFault as error:
             reason = str(error)
+        except EOFError:
+            reason = ("original-deadline-reached" if time.monotonic() >= original_deadline
+                      else "worker-exited-before-completion")
         except BaseException:
             observation_failed = True
             reason = "journal-failed" if storage_failed else "launch-or-worker-fault"
         finally:
             # One request, no new deadline. Reap remains mandatory on every path.
             cleanup_requested = True
-            stop.set()
+            child.request_stop()
             try:
                 event("cleanup-requested", reason=reason)
                 while child.pid is not None and time.monotonic() < cleanup_deadline - 0.5:
-                    if reader.poll(0.02):
-                        try:
+                    try:
+                        if _poll(reader, 0.02):
                             consume(_receive(reader))
-                        except EOFError:
-                            break
-                    elif child.exitcode is not None:
+                    except EOFError:
                         break
             except BaseException:
                 observation_failed = True
-                reason = "journal-failed" if storage_failed else "cleanup-observation-unknown"
+                cleanup_fault = "journal-failed" if storage_failed else "cleanup-observation-unknown"
+                # Retain the first fault/cancellation; cleanup has its own evidence.
+                if reason in ("unknown", "completed"):
+                    reason = cleanup_fault
             finally:
                 if child.pid is not None:
                     child.join(max(0, cleanup_deadline - 0.5 - time.monotonic()))
@@ -241,8 +405,6 @@ class RehearsalProcessOwner:
                         forced = True
                         child.terminate()
                         child.join(max(0, cleanup_deadline - time.monotonic()))
-                sender.close()
-                reader.close()
         reaped = child.pid is not None and child.exitcode is not None
         exitcode = child.exitcode if child.pid is not None else None
         # S7 removes the observation, not cleanup itself. It must remain UNKNOWN.
@@ -253,6 +415,7 @@ class RehearsalProcessOwner:
         passed = (reason == "completed" and ready and completed and cleanup_known
                   and time.monotonic() < original_deadline and not storage_failed)
         result = dict(status="PASS" if passed else "FAIL", reason=reason,
+                      cleanup_fault=cleanup_fault,
                       cleanup_status="REAPED" if cleanup_known else "UNKNOWN",
                       cleanup_requested=cleanup_requested, child_exitcode=exitcode,
                       child_reap_observed=observed_reap, forced_parent_termination=forced,
@@ -263,3 +426,18 @@ class RehearsalProcessOwner:
             child.close()
         event("result", **result)
         return result
+
+
+if __name__ == "__main__":
+    # Internal fixed worker entrypoint; no arbitrary command/module/path accepted.
+    if len(sys.argv) != 6 or sys.argv[1] != "--worker" or sys.argv[2] not in ("child", "grandchild"):
+        raise SystemExit(2)
+    role, case = sys.argv[2:4]
+    original, cleanup = map(float, sys.argv[4:6])
+    if case not in CASES or not all(map(math.isfinite, (original, cleanup))) or cleanup - original != 5:
+        raise SystemExit(2)
+    stop, output = _StopPipe(), _Output()
+    if role == "grandchild":
+        _grandchild(output, stop, cleanup)
+    else:
+        _worker(output, stop, case, original, cleanup)

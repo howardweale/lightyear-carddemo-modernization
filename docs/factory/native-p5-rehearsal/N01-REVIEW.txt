@@ -9,7 +9,7 @@ or a qualified production NativeProcessOwner implementation.
 
 Scope
 mac_owner_process.RehearsalProcessOwner launches only its fixed importable public
-workers using multiprocessing spawn. It does not implement NativeProcessOwner:
+workers using isolated fixed subprocess entrypoints. It does not implement NativeProcessOwner:
 that interface promises trusted complete production scope, which this diagnostic
 cannot attest. There is no arbitrary executable/module/PID input, signing import,
 hardware discovery, private helper, model call or Tower connection in the harness.
@@ -63,6 +63,13 @@ has an autonomous bound as a last resort. Forced parent loss or missing descenda
 reap is UNKNOWN. No process-name kills, arbitrary PID kills, detach/escape probe,
 resend or resume. OS scheduling/spawn/termination are not hard real-time guarantees.
 Keep the host isolated on UNKNOWN and preserve the journal for diagnosis.
+Stop uses closure of an owner-held pipe writer, without multiprocessing helpers.
+The fixed workers use cleanup-bound autonomous exits; only the owner ends the
+execution window. Channel closure is not itself reap evidence: exit code and
+complete declared identities remain mandatory. Unexpected I/O/protocol failures
+remain failures. The original reason and a separate cleanup_fault retain both
+causes. The CLI turns repeated Ctrl-C into a cancellation flag until journaling
+and cleanup finish, then restores the prior signal handler.
 
 Public returns and limits
 Only events.jsonl is emitted per exclusive session directory. Each event has a
@@ -82,8 +89,11 @@ independent birth identity, escaped descendant tracking and owner-death cleanup
 must close before native/P5 qualification. These are not established by this PR.
 Do not use human_signing preflight during NO-KEY rehearsal: it accesses hardware.
 All keys remain unplugged. No signing, decryption, private inputs or live Tower.
-Frozen Python 3.12.16 / cryptography 46.0.3 / SDK 5.9.2 compatibility remains the
-review basis; this stdlib harness imports neither cryptography nor the SDK.
+The operator runtime remains separately reviewed against its exact manifest;
+the original Python 3.12.16 / cryptography 46.0.3 / SDK 5.9.2 review basis is not
+changed by CI. Planned CI matrix: Linux Python 3.12.16, Windows/Mac 3.12.10,
+cryptography 46.0.3 for adapter fixtures; each job records sys.version. This
+stdlib harness imports neither cryptography nor the SDK.
 
 Review order
 Claude reviews exact base/head/diff in the external pre-reviews/N01 packet.

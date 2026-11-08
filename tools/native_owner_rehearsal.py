@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import signal
 import stat
 import sys
 
@@ -67,6 +68,11 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not args.keys_unplugged:
         parser.error("human NO-KEY acknowledgment required")
+    interrupted = False
+    def request_cancel(signum, frame):
+        nonlocal interrupted
+        interrupted = True  # Repeated Ctrl-C cannot interrupt a journal write or reap.
+    previous_sigint = signal.signal(signal.SIGINT, request_cancel)
     journal = None
     try:
         journal = PublicJournal(args.output)
@@ -84,7 +90,8 @@ def main(argv=None):
             if (args.case == "S6" and event["kind"] == "worker-observation"
                     and event["observation"]["kind"] == "ready"):
                 print('{"status":"READY","action":"press-Ctrl-C-once"}', flush=True)
-        result = RehearsalProcessOwner(case=args.case, duration=args.seconds, emit=emit).run_once()
+        result = RehearsalProcessOwner(case=args.case, duration=args.seconds, emit=emit,
+                                      cancel_requested=lambda: interrupted).run_once()
         print(json.dumps({k: result[k] for k in ("status", "reason", "cleanup_status", "native_proof")}))
         return 0 if result["status"] == "PASS" else 2
     except BaseException:
@@ -92,8 +99,11 @@ def main(argv=None):
         print('{"status":"FAIL","reason":"public-rehearsal-unavailable","native_proof":false}')
         return 2
     finally:
-        if journal is not None:
-            journal.close()
+        try:
+            if journal is not None:
+                journal.close()
+        finally:
+            signal.signal(signal.SIGINT, previous_sigint)
 
 
 if __name__ == "__main__":

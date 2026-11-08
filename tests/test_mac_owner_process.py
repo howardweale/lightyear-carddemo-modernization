@@ -142,8 +142,89 @@ class ProcessOwnerTests(unittest.TestCase):
             parent = Path(temp).resolve()
             with self.assertRaises(ValueError):
                 PublicJournal(parent / ".." / "child")
+            private = parent / "private parent"
+            private.mkdir(mode=0o700)
+            existing = private / "existing"
+            existing.mkdir(mode=0o700)
             with self.assertRaises(FileExistsError):
-                PublicJournal(parent)
+                # The existing output must have an otherwise accepted parent;
+                # /tmp itself is deliberately rejected as a writable parent.
+                PublicJournal(existing)
+            if os.name == "posix":
+                public = parent / "world writable"
+                public.mkdir(mode=0o700)
+                public.chmod(0o777)
+                try:
+                    with self.assertRaisesRegex(ValueError, "output-parent-owner-or-mode-refused"):
+                        PublicJournal(public / "new output")
+                    self.assertFalse((public / "new output").exists())
+                finally:
+                    public.chmod(0o700)
+
+    def test_closed_writer_during_cleanup_requires_real_reap_and_known_scope(self):
+        poll = process_support._poll
+        for case in ("S4", "S6", "S7"):
+            with self.subTest(case=case):
+                events = []
+                def closed_writer(channel, timeout):
+                    if any(e["kind"] == "cleanup-requested" for e in events):
+                        error = OSError("private pipe detail")
+                        error.winerror = 109
+                        with patch.object(channel, "poll", side_effect=error):
+                            return poll(channel, timeout)
+                    return poll(channel, timeout)
+                cancel = lambda: case == "S6" and any(
+                    e["kind"] == "worker-observation" and e["observation"]["kind"] == "ready" for e in events)
+                with patch.object(process_support, "_poll", side_effect=closed_writer):
+                    result = RehearsalProcessOwner(case=case, duration=15, emit=events.append,
+                                                  cancel_requested=cancel).run_once()
+                self.assertEqual("FAIL", result["status"])
+                self.assertEqual({"S4": "initialization-failed", "S6": "operator-cancelled",
+                                  "S7": "completed"}[case], result["reason"])
+                self.assertEqual("UNKNOWN" if case == "S7" else "REAPED", result["cleanup_status"])
+                self.assertEqual(0, result["child_exitcode"])
+                self.assertIsNone(result["cleanup_fault"])
+                self.assertNotIn("private pipe detail", json.dumps(events))
+
+    def test_other_pipe_error_keeps_first_fault_and_unknown_cleanup(self):
+        poll = process_support._poll
+        for code in (5, 6, 232):
+            with self.subTest(winerror=code):
+                events = []
+                def broken_observation(channel, timeout):
+                    if any(e["kind"] == "cleanup-requested" for e in events):
+                        error = OSError("private pipe detail")
+                        error.winerror = code
+                        with patch.object(channel, "poll", side_effect=error):
+                            return poll(channel, timeout)
+                    return poll(channel, timeout)
+                with patch.object(process_support, "_poll", side_effect=broken_observation):
+                    result = RehearsalProcessOwner(case="S4", duration=15, emit=events.append).run_once()
+                self.assertEqual("FAIL", result["status"])
+                self.assertEqual("initialization-failed", result["reason"])
+                self.assertEqual("UNKNOWN", result["cleanup_status"])
+                self.assertEqual("cleanup-observation-unknown", result["cleanup_fault"])
+                self.assertEqual(1, sum(e["kind"] == "cleanup-requested" for e in events))
+                self.assertEqual(1, len({e["original_deadline"] for e in events}))
+                self.assertNotIn("private pipe detail", json.dumps(events))
+
+    def test_channel_closed_before_completion_never_becomes_pass(self):
+        receive = process_support._receive
+        for failure in (EOFError(), BrokenPipeError(), OSError(32, "private pipe detail")):
+            events = []
+            def close_before_completed(channel):
+                message = receive(channel)
+                if message["kind"] == "completed":
+                    with patch.object(channel, "recv_bytes", side_effect=failure):
+                        return receive(channel)
+                return message
+            with patch.object(process_support, "_receive", side_effect=close_before_completed):
+                result = RehearsalProcessOwner(case="S1", duration=15, emit=events.append).run_once()
+            self.assertEqual("FAIL", result["status"])
+            self.assertEqual("worker-exited-before-completion", result["reason"])
+            self.assertEqual(0, result["child_exitcode"])
+            self.assertEqual("REAPED", result["cleanup_status"])
+            self.assertNotIn("private pipe detail", json.dumps(events))
 
     def test_posix_operator_interrupt_targets_owner_then_owned_tree_cleanup(self):
         # Windows uses the callback cancellation probe; no Unix group signal there.
@@ -169,15 +250,40 @@ class ProcessOwnerTests(unittest.TestCase):
                 else:
                     self.fail("public worker did not become ready")
                 os.killpg(process.pid, signal.SIGINT)  # CI-only owned new session, like terminal Ctrl-C.
+                os.killpg(process.pid, signal.SIGINT)  # Repeated cancellation must not abort cleanup.
                 stdout, stderr = process.communicate(timeout=10)
                 self.assertEqual(2, process.returncode, stderr.decode())
                 final = json.loads(stdout.splitlines()[-1])
                 self.assertEqual("operator-cancelled", final["reason"])
                 self.assertEqual("REAPED", final["cleanup_status"])
+                previous = "0" * 64
+                for sequence, raw in enumerate((output / "events.jsonl").read_bytes().splitlines(keepends=True), 1):
+                    row = json.loads(raw)
+                    self.assertEqual(sequence, row["sequence"])
+                    self.assertEqual(previous, row["previous_sha256"])
+                    previous = hashlib.sha256(raw).hexdigest()
             finally:
                 if process.poll() is None:
                     process.terminate()
                 process.communicate(timeout=25)
+
+    def test_no_undeclared_posix_child_or_resource_tracker_after_reap(self):
+        if os.name != "posix":
+            # Windows exercises the same pipe-stop owner, with positive reaps.
+            self.assertEqual("REAPED", self.run_case("S3")[0]["cleanup_status"])
+            return
+        def children():
+            process = subprocess.Popen(["ps", "-axo", "pid=,ppid="], stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate(timeout=5)
+            self.assertEqual(0, process.returncode, stderr.decode())
+            return {int(pid) for line in stdout.splitlines() for pid, parent in [line.split()]
+                    if int(parent) == os.getpid() and int(pid) != process.pid}
+        before = children()
+        for case in ("S1", "S3", "S4", "S6", "S7"):
+            result, _ = self.run_case(case)
+            self.assertEqual(0, result["child_exitcode"])
+            self.assertEqual(before, children())
 
 
 class AdapterFaultEvidenceTests(unittest.TestCase):

@@ -4,7 +4,8 @@ the exact packet, public host/transfer bindings and selected attended slot befor
 any command below is used. This document is not an admission or a safety closeout.
 Planned slots: 12 or 13 November 2026, 60–90 minutes; neither is booked here.
 REHEARSAL_DATE = <<HOWARD: choose 2026-11-12 or 2026-11-13>>
-That is the only operator-fill marker. Do not edit code, paths, hashes or bounds.
+The public identity markers below remain unbound; execution stays blocked.
+Do not replace markers, edit code, paths, hashes or bounds during the session.
 
 R0 — ONE SOURCE AND REVIEW BOUNDARY
 Source commit: 8fe41d76f08c0907a38d8c97a001de09c953a56c
@@ -15,14 +16,35 @@ This PR's exact head/tree/diff/file hashes and CI scope are in its GitHub descri
 The new command sheet and checklist are review documents, not a different runtime.
 No old draft source is an execution binding. No automatic retry or second session.
 
-BLOCKING PUBLIC IDENTITY BINDINGS
+BLOCKING PUBLIC IDENTITY BINDINGS — LATER EXACT-HEAD REVISION
 The host is Howard's accepted DarkFactory Mac, existing dedicated standard account,
-macOS26.3.1, arm64 only. Exact hostname/account short name/UID/OS build and Windows
-USB drive/Mac volume path have been requested together. They are not supplied in
-the retained record. Proposed USB path below is NOT an observed or approved path.
-R0 cannot pass until a later reviewed revision binds those exact public values;
-do not infer them from a host label, discover devices, or substitute paths in-session.
-No command below is runnable while this paragraph remains blocking.
+macOS26.3.1, arm64 only. Howard chose to supply exact public values in a later
+binding revision; no values are supplied by this draft. Retain these markers:
+  MAC_HOSTNAME = <<MAC_HOSTNAME>>
+  MAC_STD_USER = <<MAC_STD_USER>>
+  MAC_UID = <<MAC_UID>>
+  MAC_OS_BUILD = <<MAC_OS_BUILD>>
+  USB_WIN_ROOT = <<USB_WIN_ROOT>>
+  USB_MAC_VOLUME = <<USB_MAC_VOLUME>>
+  USB_VOLUME_LABEL = <<USB_VOLUME_LABEL>>
+The seventh marker is the public volume label, required in addition to both paths.
+Neither an example path nor the label alone identifies an approved transfer target.
+
+Planned binding sequence, before anything runs:
+1 Howard sends all six values plus the USB volume label in ONE message at most
+  24 hours before the selected slot. The packet records that message's timestamp
+  and the exact attended slot start, each with a real UTC offset. The elapsed time
+  from message to slot start must be between zero and 24 hours, inclusive.
+2 Codex prepares the binding revision with safely quoted literal values, the exact
+  slot, new head/tree, complete and delta patches, per-file hashes and CI status.
+  Values are public metadata only; no PIN, PUK, serial or private material is needed.
+3 Claude reviews that exact new head and packet. Howard then approves the exact
+  bound head/packet and slot before any command or transfer in this sheet runs.
+  A prior review/approval does not transfer to a later changed head or packet.
+4 A missing value, remaining marker, stale message, changed slot/value, missing
+  review/approval or failed live comparison means STOP. Obtain a fresh applicable
+  values message and reviewed binding revision; no in-session substitution or retry.
+This draft supplies no execution authority. No command below is runnable yet.
 
 All keys physically unplugged throughout. No enumeration, PIN, touch or signature.
 Signing/key operations are separate Howard-only steps, outside this NO-KEY packet;
@@ -38,6 +60,21 @@ SHA256 f521b3dcffc870d325c9bc090289dd3ac24b171cc9d03a06d72b14bba71ae404.
 The tar is regular-file USTAR with no links/xattr records. The pinned inner runtime
 contains its upstream runtime links; PY names the regular python3.12 executable.
 Windows ordinary file copy to the approved public USB only, exclusive destination.
+Before the copy, and again before any later USB use, run the Windows read-and-compare
+block below only from the later approved binding revision. It addresses the bound
+drive root alone; no drive/device enumeration or relabeling. PowerShell:
+  $USB_WIN_ROOT = '<<USB_WIN_ROOT>>'
+  $USB_VOLUME_LABEL = '<<USB_VOLUME_LABEL>>'
+  if ($USB_WIN_ROOT -cnotmatch '^[A-Z]:\\$') { throw 'STOP: unbound or invalid USB root' }
+  $usbRootItem = Get-Item -LiteralPath $USB_WIN_ROOT -ErrorAction Stop
+  $usbVolume = @(Get-Volume -DriveLetter $USB_WIN_ROOT.Substring(0,1) -ErrorAction Stop)
+  if ($usbVolume.Count -ne 1) { throw 'STOP: expected one bound volume' }
+  $usbRootItem | Select-Object FullName | Format-List
+  $usbVolume | Select-Object DriveLetter,FileSystemLabel | Format-List
+  if ($usbRootItem.FullName -cne $USB_WIN_ROOT -or $usbVolume[0].FileSystemLabel -cne $USB_VOLUME_LABEL) { throw 'STOP: USB path or label mismatch' }
+Howard confirms the printed FullName equals bound USB_WIN_ROOT and printed
+FileSystemLabel equals bound USB_VOLUME_LABEL before proceeding. Confirm each
+separately; absence, ambiguity, read error or either mismatch means STOP.
 Before and after copying, Howard compares Get-FileHash -Algorithm SHA256 and
 (Get-Item -LiteralPath ...).Length against the exact archive hash/size above.
 No browser download/extraction on Mac, AirDrop/email, overwrite, removal or retry.
@@ -54,24 +91,49 @@ Fixed proposed paths work for either date; none silently changes with the date:
   S2_UNRELATED_CWD='/private/tmp/lightyear-no-key-8fe41d76-session1/unrelated-cwd'
   PY='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/runtime/bin/python3.12'
   ARCHIVE='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle/archives/python.tar.gz'
-  USB='/Volumes/LIGHTYEAR-PUBLIC/lightyear-no-key-main-8fe41d76.tar'
+  USB_MAC_VOLUME='<<USB_MAC_VOLUME>>'
+  USB_VOLUME_LABEL='<<USB_VOLUME_LABEL>>'
+  USB="$USB_MAC_VOLUME/lightyear-no-key-main-8fe41d76.tar"
 No /tmp or /var/folders aliases, cloud-sync path, private helper or production journal.
 Existing names stop the attempt; never delete, reuse or choose a new name yourself.
 
 R1 — PUBLIC ENVIRONMENT RECORD AND EXCLUSIVE PARENTS
-First read hostname, sw_vers, uname -m, id -un, id -u and id -G using the exact
-commands below; compare with the completed R0 profile before creating any file.
+First run each identity read below separately from the approved binding revision.
+Each command prints its live value. Howard must confirm that value matches its
+specific bound value before going to the next row; any mismatch/error means STOP.
+No files, extraction or runtime launch precede all these confirmations.
+
+Bound marker | Read command | Required human comparison
+MAC_HOSTNAME | /bin/hostname | Exact hostname equals bound MAC_HOSTNAME
+MAC_STD_USER | /usr/bin/id -un | Exact short name equals bound MAC_STD_USER
+MAC_UID | /usr/bin/id -u | Exact numeric UID equals bound MAC_UID; UID0 stops
+MAC_OS_BUILD | /usr/bin/sw_vers -buildVersion | Exact build equals bound MAC_OS_BUILD
+
+Then read product version, architecture, groups and translation state:
 Wrong host/account/version/build, UID0, group80, Intel or Rosetta => STOP.
 sysctl.proc_translated must be0; if unavailable, record UNAVAILABLE and STOP unless
 the completed exact host profile explicitly permits that observation on this arm64
 host. Unavailability is not evidence of no translation. Never change account/settings.
-  /bin/hostname
-  /usr/bin/sw_vers
+  /usr/bin/sw_vers -productVersion
   /usr/bin/uname -m
-  /usr/bin/id -un
-  /usr/bin/id -u
   /usr/bin/id -G
   /usr/sbin/sysctl -in sysctl.proc_translated
+Require product version26.3.1 and architecturearm64 as well as the conditions above.
+
+USB_MAC_VOLUME and USB_VOLUME_LABEL read-and-compare, before creating any file:
+  /bin/realpath "$USB_MAC_VOLUME"
+Howard confirms the printed path equals bound USB_MAC_VOLUME exactly, no alias.
+Then read only the named volume's label and mount point, with errors preserved:
+  ( set -eo pipefail
+    LC_ALL=C /usr/sbin/diskutil info "$USB_MAC_VOLUME" | /usr/bin/awk '/^[[:space:]]*Volume Name:/ {print; labels++} /^[[:space:]]*Mount Point:/ {print; mounts++} END {if (labels != 1 || mounts != 1) exit 2}'
+  )
+Howard confirms printed Volume Name equals bound USB_VOLUME_LABEL and Mount Point
+equals bound USB_MAC_VOLUME. Both checks must pass independently. Empty/ambiguous
+output, missing fields, wrong label/path or nonzero exit means STOP; no diskutil list,
+renaming, remounting, fallback path or repair. This reads only the named public USB;
+it does not enumerate signing keys. No device identifiers/serials are returned.
+Repeat these named-volume checks before a later USB use if the stick was removed,
+reinserted or its mount changed; changed bindings require a new reviewed revision.
 After the comparison passes:
   ( set -e; umask 077
     test "$(/bin/realpath /private/tmp)" = /private/tmp

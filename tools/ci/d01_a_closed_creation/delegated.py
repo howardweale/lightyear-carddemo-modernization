@@ -15,10 +15,11 @@ import uuid
 SERVICE = b"com.apple.coreservices.launchservicesd"
 BOOTSTRAP_NOT_PRIVILEGED = 1100
 LS_NO_LAUNCH_PERMISSION = -10826
+APP_READ_POLICIES = ("sandbox-app-read", "combined-app-read")
 
 
 def worker(policy, operation, app):
-    """Resolve API entry points before applying the unchanged deny-default policy."""
+    """Resolve APIs before applying the named strict or app-read-only policy."""
     signal.alarm(8)
     if sys.platform != "darwin" or os.getuid() == 0 or os.geteuid() == 0:
         raise RuntimeError("non-root macOS only")
@@ -43,13 +44,25 @@ def worker(policy, operation, app):
         url = cf.CFURLCreateFromFileSystemRepresentation(None, raw, len(raw), 1)
         if not url:
             raise RuntimeError("CFURL preparation unavailable")
+    profile = b"(version 1)(deny default)"
+    app_read_subpath = None
+    if policy in APP_READ_POLICIES:
+        if operation != "ls-open":
+            raise RuntimeError("app-read variant requires actual open request")
+        app_read_subpath = str(Path(app).resolve(strict=True))
+        # Reject profile metacharacters; do not interpolate arbitrary SBPL.
+        if any(ord(ch) < 32 or ch in '\\"' for ch in app_read_subpath):
+            raise RuntimeError("unsafe disposable app subpath")
+        profile += b'(allow file-read* (subpath "' + os.fsencode(app_read_subpath) + b'"))'
     row = {"pid": os.getpid(), "uid": os.getuid(), "euid": os.geteuid(),
            "policy": policy, "operation": operation, "sandbox_rc": None}
-    if policy == "combined":
+    if app_read_subpath is not None:
+        row["file_read_subpath"] = app_read_subpath
+    if policy in ("combined", "combined-app-read"):
         resource.setrlimit(resource.RLIMIT_NPROC, (0, 0))
     if policy != "baseline":
         error = C.c_void_p()
-        row["sandbox_rc"] = box.sandbox_init(b"(version 1)(deny default)", 0, C.byref(error))
+        row["sandbox_rc"] = box.sandbox_init(profile, 0, C.byref(error))
         if row["sandbox_rc"] != 0:
             raise RuntimeError("sandbox unavailable")
     row["nproc"] = list(resource.getrlimit(resource.RLIMIT_NPROC))
@@ -93,8 +106,10 @@ def delegated(deadline):
     # Retain this disposable directory through report completion to catch witnesses.
     root = Path(tempfile.mkdtemp(prefix="d01-delegated-")).resolve()
     watched = []
-    for policy in ("baseline", "sandbox", "combined"):
-        for operation in ("mach-lookup", "ls-open"):
+    # Keep the original six strict rows, then add only two actual-open variants.
+    for policy in ("baseline", "sandbox", "combined") + APP_READ_POLICIES:
+        operations = ("ls-open",) if policy in APP_READ_POLICIES else ("mach-lookup", "ls-open")
+        for operation in operations:
             row = {"policy": policy, "operation": operation,
                    "observation": "UNKNOWN", "qualified": False}
             process = None
@@ -125,7 +140,10 @@ def delegated(deadline):
                     raise RuntimeError("delegated worker identity mismatch")
                 if policy != "baseline" and report["sandbox_rc"] != 0:
                     raise RuntimeError("sandbox not applied")
-                if policy == "combined" and report["nproc"] != [0, 0]:
+                if (policy in APP_READ_POLICIES and
+                        report.get("file_read_subpath") != str(app)):
+                    raise RuntimeError("disposable app read boundary mismatch")
+                if policy in ("combined", "combined-app-read") and report["nproc"] != [0, 0]:
                     raise RuntimeError("zero hard limit lost")
                 if policy == "baseline":
                     if report["status"] != 0:
@@ -177,6 +195,7 @@ def delegated(deadline):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4 or sys.argv[1] not in ("baseline", "sandbox", "combined"):
+    if (len(sys.argv) != 4 or
+            sys.argv[1] not in ("baseline", "sandbox", "combined") + APP_READ_POLICIES):
         raise SystemExit("CI worker arguments required")
     worker(*sys.argv[1:])

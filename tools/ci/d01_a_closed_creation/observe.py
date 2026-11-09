@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import platform
+import runpy
 from pathlib import Path
 import signal
 import subprocess
@@ -114,6 +115,8 @@ def main():
             operations += ("relax-fork",)
         for operation in operations:
             rows.append(experiment(binary, policy, operation, deadline))
+    delegated = runpy.run_path(str(Path(__file__).with_name("delegated.py")))
+    rows.extend(delegated["delegated"](deadline))
     report = {
         "schema": "d01-a-closed-creation-feasibility/1",
         "platform": platform.platform(), "machine": platform.machine(),
@@ -122,7 +125,7 @@ def main():
         "owner_death": "UNKNOWN", "guardian_death": "UNKNOWN",
         "remaining": [
             "Independent prelaunch enforcement/identity binding in the actual workload",
-            "Inherited Mach/IPC capabilities and delegated service process creation",
+            "Other inherited Mach/IPC capabilities, delegated services and delayed launches",
             "Installed operator OS/build, privilege transitions and workload compatibility",
             "Races, multithreaded attempts, original-deadline owner/guardian cleanup",
         ],
@@ -131,7 +134,7 @@ def main():
     for row in rows:
         print(json.dumps(row, sort_keys=True), flush=True)
     # Any unsupported API, missing control, escape or incomplete observation is red.
-    # Even green only validates these direct-kernel experiments, never A feasibility.
+    # Even green validates only these direct/delegated experiments, never A feasibility.
     if any(row["observation"] == "UNKNOWN" for row in rows):
         raise SystemExit(1)
 

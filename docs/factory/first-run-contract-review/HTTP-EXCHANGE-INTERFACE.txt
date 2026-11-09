@@ -1,0 +1,44 @@
+N07-C candidate HTTP exchange — interface proposal
+
+Planned usage: construct lightyear_execution.copau_http_exchange.Exchange with
+the explicitly reviewed 127.0.0.1 port, candidate_sha256 and the original
+monotonic deadline. Pass that same object as exchange to
+tools.copau_candidate_replay.replay, using its candidate_sha256 for the existing
+replay binding. The independent database snapshot capability remains separate.
+Not yet an authenticated endpoint or enforcement boundary: a supplied digest
+does not prove which process listens, prevent replacement/bypass, or bind an
+HTTP request to the PostgreSQL observer.
+
+Planned transport: POST only /api/interaction, only token/aid/fields, explicit
+JSON/identity encoding, no DNS/proxy environment/credentials/cookies/redirect,
+one connection per interaction, no automatic retry. Port8768 is refused.
+The original deadline covers connect, send, headers and body across every call;
+it never restarts per response or per interaction. A transport fault closes
+the instance to further requests. Response size/framing limits fail closed.
+Content-Length or chunked framing is required; ambiguous framing and chunk
+extensions/trailers are operational faults. Bodies remain bounded and compressed
+content is never decoded.
+
+Planned classification: connection/send, truncation, invalid status-line syntax,
+framing, size-limit and deadline errors are FAULT. A COMPLETE correctly framed
+response with non-200 status, non-JSON content type or non-identity content
+encoding closes the exchange and returns a private malformed response record:
+exact ASCII status line and header lines plus body hex. Replay classifies this
+as MISMATCH, failed_check=response-shape. Framing/body validation precedes this
+classification: a truncated HTTP500 or CL+TE remains FAULT. No redirect follow-up.
+A complete JSON response with malformed shape reaches the existing comparator.
+Malformed JSON, duplicate keys, invalid UTF-8 and nonfinite numbers become a
+shape mismatch carrying exact raw body bytes as hex in PRIVATE failure evidence.
+No raw request/response bytes enter logs or the public result. Existing complete
+frame/COMMAREA/table comparison and MATCH/MISMATCH/FAULT rules are unchanged.
+
+Planned public CI exercises real loopback HTTP framing, no-proxy request shape,
+chunked UTF-8, malformed JSON and response shape, redirects/server errors,
+complete rejected metadata/private evidence, HTTP500 replay MISMATCH versus
+truncation/CL+TE FAULT, truncation/trailers, size limits, slow-drip
+deadline expiry and refused requests/endpoints. Execution is CI only.
+Not yet a real candidate/full-session-over-HTTP or browser result. Follow-up
+integration must bind the same candidate, isolated database connection and
+complete existing session before any ownership/transaction/browser claim.
+No launcher, private CLI, signature/ACK verification, custody, model call,
+nonce/admission, qualification, source/frozen-comparator or gate change.

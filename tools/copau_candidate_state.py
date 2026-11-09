@@ -15,7 +15,8 @@ def tables(connection):
     return connection.execute("""SELECT n.nspname,c.relname,c.relkind
         FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
         WHERE n.nspname NOT IN ('pg_catalog','information_schema')
-        AND n.nspname !~ '^pg_toast' AND c.relkind IN ('r','p','m','f','v','S')
+        AND n.nspname !~ '^pg_toast' AND n.nspname !~ '^pg_temp_'
+        AND c.relkind IN ('r','p','m','f','v','S')
         ORDER BY n.nspname,c.relname""").fetchall()
 
 
@@ -30,6 +31,7 @@ def snapshot(connection, producer):
     with connection.transaction():
         connection.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY')
         connection.execute('SET LOCAL row_security = off')
+        require_no_large_objects(connection)
         inventory = tables(connection)
         state = {}
         for schema, table, kind in inventory:
@@ -39,6 +41,12 @@ def snapshot(connection, producer):
             contract.require(key not in state)
             state[key] = json.loads(raw, parse_float=Decimal)
     return capture.canonical_state(producer, state)
+
+
+def require_no_large_objects(connection):
+    contract.require(not connection.execute(
+        'SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_largeobject_metadata)'
+    ).fetchone()[0], 'unsupported-large-objects')
 
 
 def load_committed(store, root, connection):
@@ -63,6 +71,7 @@ def load_committed(store, root, connection):
         bindings = helpers.web_build(root / 'spec/modernization/carddemo-screens')
         parents = {}
         with connection.transaction():
+            require_no_large_objects(connection)
             contract.require(not tables(connection), 'database-not-empty')
             for _, _, mapping in entries:
                 connection.execute(helpers.ddl(mapping))

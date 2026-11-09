@@ -102,7 +102,9 @@ class FullStateCaptureTests(unittest.TestCase):
                       'ended', 'commarea', 'extra-table', 'missing-row',
                       'request-mutated', 'private-exception', 'initial', 'empty-database', 'missing-table',
                       'timeout', 'interrupted', 'malformed', 'snapshot-fault',
-                      'snapshot-shape', 'artifact-fault', 'write-fault'):
+                      'snapshot-shape', 'artifact-fault', 'write-fault', 'before',
+                      'not-dict', 'token-type', 'ended-type', 'token-envelope',
+                      'token-program', 'token-commarea', 'frame-shape', 'later-frame'):
             with self.subTest(candidate_comparison_fault=fault):
                 store = fixtures.MemoryStore()
                 store.files = dict(original.files)
@@ -161,12 +163,33 @@ class FullStateCaptureTests(unittest.TestCase):
                         raise KeyboardInterrupt('PRIVATE SENTINEL')
                     elif fault == 'malformed':
                         del actual['screen']
+                    elif fault == 'not-dict':
+                        actual = ['PRIVATE SENTINEL']
+                    elif fault == 'token-type':
+                        actual['token'] = None
+                    elif fault == 'ended-type':
+                        actual['ended'] = 'false'
+                    elif fault == 'token-envelope':
+                        actual['token'] = '!INVALID!.PUBLIC'
+                    elif fault in ('token-program', 'token-commarea'):
+                        value = dict(program=expected['program'], commarea='')
+                        del value[fault.removeprefix('token-')]
+                        actual['token'] = base64.urlsafe_b64encode(stage.encoded(value)).decode() + '.PUBLIC'
+                    elif fault == 'frame-shape':
+                        actual['screen'] = {}
+                    elif fault == 'later-frame' and len(seen) == 2:
+                        screen['message'] = 'PRIVATE SENTINEL'
                     return actual
+                snapshots = 0
                 def snapshot():
+                    nonlocal snapshots
+                    snapshots += 1
                     if fault == 'snapshot-fault':
                         raise OSError('PRIVATE SENTINEL')
                     if fault == 'snapshot-shape':
                         return {'bad': 'PRIVATE SENTINEL'}
+                    if fault == 'before' and snapshots == 2:
+                        return dict(state, unexpected=[])
                     return deepcopy(state)
                 kwargs = dict(exchange=exchange, snapshot=snapshot,
                               candidate_sha256='b' * 64)
@@ -183,12 +206,42 @@ class FullStateCaptureTests(unittest.TestCase):
                 else:
                     result = replay.replay(store, root, **kwargs)
                     outcome = 'FAULT' if fault in ('request-mutated', 'private-exception',
-                        'timeout', 'interrupted', 'malformed', 'snapshot-fault',
+                        'timeout', 'interrupted', 'snapshot-fault',
                         'snapshot-shape', 'artifact-fault') else 'MISMATCH' if fault else 'MATCH'
                     self.assertEqual(result['outcome'], outcome)
                     self.assertEqual(stage.decoded(store.read('n1-replay-complete.json')), result)
                     self.assertNotIn(b'PRIVATE SENTINEL', stage.encoded(result))
                     self.assertFalse(result['qualified'])
+                    failure = stage.decoded(stage.get_blob(store, 'n1-candidate-failure'))
+                    if outcome == 'MISMATCH':
+                        shape = ('malformed', 'not-dict', 'token-type', 'ended-type',
+                                 'token-envelope', 'token-program', 'token-commarea', 'frame-shape')
+                        check = ('response-shape' if fault in shape else
+                            'initial' if fault in ('initial', 'empty-database') else
+                            'before' if fault == 'before' else
+                            'ended' if fault == 'ended' else
+                            'commarea' if fault == 'commarea' else
+                            'after' if fault in ('extra-table', 'missing-row', 'missing-table') else 'frame')
+                        self.assertEqual(result['failed_check'], check)
+                        self.assertEqual(result['failing_index'], None if check == 'initial' else
+                                         1 if fault == 'later-frame' else 0)
+                        self.assertEqual(stage.sha(stage.encoded(failure)), result['failure_sha256'])
+                        if check == 'initial':
+                            self.assertEqual(failure['initial'], state)
+                        elif check == 'before':
+                            self.assertIn('unexpected', failure['before'])
+                        else:
+                            self.assertIn('response', failure)
+                            self.assertEqual(failure['after'], state)
+                        if fault == 'later-frame':
+                            self.assertEqual(result['interactions'], 1)
+                            self.assertEqual(failure['response']['screen']['message'], 'PRIVATE SENTINEL')
+                        if fault == 'not-dict':
+                            self.assertEqual(failure['response'], ['PRIVATE SENTINEL'])
+                    else:
+                        self.assertIsNone(result['failed_check'])
+                        self.assertIsNone(result['failing_index'])
+                        self.assertIsNone(failure)
                 if fault is None:
                     self.assertEqual(result['interactions'], len(artifact['rows']))
                     self.assertEqual(len(seen), 15)

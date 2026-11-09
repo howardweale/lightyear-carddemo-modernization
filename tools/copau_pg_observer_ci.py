@@ -50,6 +50,20 @@ def exercise_state(port):
         result = candidate_state.load_committed(store, root, independent)
         expected = contract.decoded(contract.get_blob(store, 'n1-initial'))
         assert candidate_state.snapshot(independent, producer) == expected
+        # Session-local temporary state is explicitly outside durable state.
+        independent.execute('CREATE TEMP TABLE n1_temporary (id integer)')
+        independent.execute('INSERT INTO n1_temporary VALUES (1)')
+        assert candidate_state.snapshot(independent, producer) == expected
+        oid = independent.execute('SELECT lo_create(0)').fetchone()[0]
+        try:
+            candidate_state.snapshot(independent, producer)
+        except contract.Refused as error:
+            assert str(error) == 'unsupported-large-objects'
+        else:
+            raise AssertionError('even an empty large object must fault')
+        finally:
+            independent.execute('SELECT lo_unlink(%s)', (oid,))
+        assert candidate_state.snapshot(independent, producer) == expected
         independent.execute('CREATE TABLE public.n1_unexpected (id integer)')
         assert candidate_state.snapshot(independent, producer) != expected
         independent.execute('DROP TABLE public.n1_unexpected')
@@ -111,7 +125,8 @@ def exercise_state(port):
         print(json.dumps(dict(status='PUBLIC_COMPLETE_INITIAL_STATE_ONLY',
             table_count=result['table_count'], extra_table_caught=True,
             all_user_schemas=True, exact_numeric=True, rls_and_privilege_fault=True,
-            unsupported_relation_fault=True, missing_table_caught=True,
+            unsupported_relation_fault=True, large_object_fault=True,
+            temporary_schema_excluded=True, missing_table_caught=True,
             candidate_replay=False, qualified=False), sort_keys=True))
 
 

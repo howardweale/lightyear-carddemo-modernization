@@ -20,10 +20,15 @@ Ordering and custody
 
 Planned M1 outcomes
 MATCH requires all comparisons; MISMATCH is an observed frame/COMMAREA/state
-inequality. After consumption, malformed data, timeout/interruption, adapter,
-database, storage or artifact-binding errors yield FAULT. Invalid prerequisite
+inequality, or an arrived malformed response (failed_check=response-shape).
+An exchange that raises, timeout/interruption, malformed snapshot, database,
+storage or artifact/producer verification error yields FAULT. Invalid prerequisite
 bindings refuse before consumption. A terminal record binds source/oracle/input
-and retains the successfully compared prefix. Persistence failure leaves the
+and retains the successfully compared prefix plus separate private failing
+response/state evidence. failed_check identifies initial, before, frame, ended,
+commarea, after or response-shape; failing_index is zero-based, null for initial.
+Only hashes and classification/index appear in the public result, never private
+response/state bytes. Persistence failure leaves the
 attempt consumed with a fixed refusal, never private exception text.
 All outcomes retain qualified=false and unverified candidate/transaction/browser/
 authentication flags. No score, qualification or execution authority follows.
@@ -33,16 +38,22 @@ One repeatable-read/read-only transaction inventories all ordinary, partitioned
 and materialized tables in all user schemas, including empty tables and all rows/
 columns. Identifiers are schema-qualified; encoded non-public names avoid collision.
 row_security=off and missing SELECT privilege fault instead of hiding rows.
-Views, foreign tables and sequences fault as unsupported; catalogs/TOAST are
-excluded. Empty databases and missing expected tables remain explicit inequalities.
+Views, foreign tables, sequences and nonempty pg_largeobject_metadata fault as
+unsupported. Catalogs/TOAST and schemas matching ^pg_temp_ are excluded; temporary
+session state is outside this durable-state comparison. Empty databases and
+missing expected tables remain explicit inequalities.
 This is supported table state, not DDL equivalence or concurrent-writer isolation.
 Planned PostgreSQL negatives cover extra public/non-public tables, quoted names,
-precise numeric decoding, missing tables, RLS/privilege denial and unsupported kinds.
+precise numeric decoding, missing tables, RLS/privilege denial, unsupported kinds,
+large objects and explicit temporary-schema exclusion.
 
 Planned PostgreSQL relay observes one protocol-3.0 connection/original deadline;
 COMMIT requires its backend tag plus idle ReadyForQuery; rollback/errors differ.
-SSL/GSS, autocommit writes, ambiguous/incomplete messages, multiple connections,
+SSL/GSS, recognized autocommit writes, ambiguous/incomplete messages, multiple connections,
 COPY and suspended portals are refused. No private query/password/row logs.
+The command-tag observer does not detect writes in SELECT-tagged statements,
+including nextval or writing functions. Such effects are not transaction-write
+proof from this observer; complete independent state and isolation remain required.
 Digest-pinned CI checks real commit/rollback/durable rows independently and consumed
 initial loading; scripted full-session replay does not prove candidate/browser work.
 Not yet same-request connection ownership, bypass prevention, authenticated

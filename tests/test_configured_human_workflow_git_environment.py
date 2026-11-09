@@ -43,7 +43,11 @@ with tempfile.TemporaryDirectory() as directory:
         program,argv,cwd,child_environment=args
         excluded=child_environment is not None and all(k.casefold() not in {'openai_api_key','factory_transport_key'} for k in child_environment)
         kept=child_environment is not None and child_environment.get('WORKFLOW_GIT_PUBLIC_MARKER')=='public-utility-marker'
-        observed.append(dict(git=Path(program if program is not None else argv[0]).name.lower() in ('git','git.exe'),excluded=excluded,kept=kept))
+        # Windows audits a command-line string; these callers use literal git.
+        # argv[0] would be only 'g'. Preserve every environment/result assertion.
+        observed.append(dict(git=(Path(program).name.lower() in ('git','git.exe') if program is not None else
+            (argv.startswith(('git ', 'git.exe ')) if type(argv) is str else
+             Path(argv[0]).name.lower() in ('git','git.exe'))),excluded=excluded,kept=kept))
     sys.addaudithook(observe)
     refusal=None;matches=False;execution_authorized=None
     try:

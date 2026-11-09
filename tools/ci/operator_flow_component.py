@@ -184,10 +184,18 @@ def main():
         proof_hash=digest(proof_path)
         published=base/'metadata-publication'
         def publish_local():
-            command(['git','clone','--no-hardlinks',str(repo),str(published)])
+            command(['git','clone','--config','core.autocrlf=false','--no-hardlinks',str(repo),str(published)])
             git(published,'config','user.name','Disposable CI Fixture')
             git(published,'config','user.email','fixture@invalid.example')
             git(published,'config','core.autocrlf','false')
+            # Configure checkout before clone; changing normalization afterward
+            # can make a Windows clone dirty without any source edit.
+            dirty=git(published,'status','--porcelain=v1','--untracked-files=all')
+            if dirty:
+                print(json.dumps({'fixture_only':True,'stage':'local-bare-metadata-publication',
+                    'dirty_status_tail':dirty[-4096:],'truncated':len(dirty)>4096},
+                    ensure_ascii=True),file=sys.stderr,flush=True)
+                raise RuntimeError('fixture-publication-clone-dirty')
             names=('docs/factory/fixture/plan.json','docs/factory/fixture/proof.json','docs/factory/fixture/contract.json')
             for name,path in zip(names,(pack/'plan.json',proof_path,pack/'contract.json')):
                 write(published/name,path.read_bytes())

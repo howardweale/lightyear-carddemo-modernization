@@ -36,7 +36,7 @@ jobs:
           if (git status --porcelain=v1 --untracked-files=all) { throw 'source-not-clean' }
           $component = (Get-FileHash -Algorithm SHA256 tools/ci/operator_flow_component.py).Hash.ToLowerInvariant()
           $wrapper = (Get-FileHash -Algorithm SHA256 tests/fixtures/operator_flow/fixed-wrapper.ps1.txt).Hash.ToLowerInvariant()
-          if ($component -ne 'e0e10b9e469e2e34c71b92622f6c9919eb78e2d3a31e41c1c32b8e19b47005be') { throw 'component-changed' }
+          if ($component -ne 'c32260e4df26322a89269f73f779270097e9a8ea726c041f6496747a0f625ddc') { throw 'component-changed' }
           if ($wrapper -ne '5723d1c40fb48c20045c5d6e881cd6ab69fb471ec93d1ea72a4d24c0dfd7c4c9') { throw 'wrapper-changed' }
       - name: Time disposable sign export verify local publication and plan preflight
         run: python -B tools/ci/operator_flow_component.py

@@ -11,7 +11,7 @@ class PreparedPublicationReader(unittest.TestCase):
         self.assertEqual(os.environ.get('GITHUB_ACTIONS'),'true')
         self.f=fixtures.PublicationReconstruction();self.f.setUp();self.addCleanup(self.f.doCleanups)
         self.e=self.f.fixture.root;self.m=self.e.parent/'prepared-M'
-        subprocess.run(['git','clone','--no-hardlinks',str(self.e),str(self.m)],check=True,capture_output=True,env=self.f.fixture.env)
+        subprocess.run(['git','clone','--config','core.autocrlf=false','--no-hardlinks',str(self.e),str(self.m)],check=True,capture_output=True,env=self.f.fixture.env)
         for oid,(kind,body) in self.f.candidate['objects'].items():
             self.assertEqual(self.f.fixture.git('hash-object','-w','-t',kind,'--stdin',data=body,root=self.m).decode().strip(),oid)
         self.f.fixture.git('checkout','--detach',self.f.candidate['commit'],root=self.m)

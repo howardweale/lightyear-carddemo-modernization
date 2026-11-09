@@ -47,7 +47,7 @@ with tempfile.TemporaryDirectory() as directory:
         # Observation only: never modify arguments, deny a call or emit values.
         excluded=environment is not None and all(k.casefold() not in {'openai_api_key','factory_transport_key'} for k in environment)
         fixed_history=kind!='history' or (environment.get('GIT_CONFIG_NOSYSTEM')=='1' and environment.get('GIT_CONFIG_COUNT')=='0' and environment.get('GIT_TERMINAL_PROMPT')=='0' and environment.get('GIT_CONFIG_GLOBAL')==os.devnull)
-        observed.append(dict(git=Path(executable).name.lower() in ('git','git.exe'),excluded=excluded,history_guards=fixed_history))
+        observed.append(dict(git=Path(executable if executable is not None else argv[0]).name.lower() in ('git','git.exe'),excluded=excluded,history_guards=fixed_history))
     sys.addaudithook(observe)
     refused=False;matches=False
     try:

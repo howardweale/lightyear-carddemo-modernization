@@ -11,7 +11,7 @@ class ReviewMetadataCheckout(unittest.TestCase):
         self.assertEqual(os.environ.get('GITHUB_ACTIONS'),'true')
         self.fixture=fixtures.MetadataObjects();self.fixture.setUp();self.addCleanup(self.fixture.doCleanups)
         self.source=self.fixture.root;self.root=Path(self.fixture.tmp.name)/'review-copy'
-        subprocess.run(['git','clone','--no-hardlinks',str(self.source),str(self.root)],check=True,capture_output=True,env=self.fixture.env)
+        subprocess.run(['git','clone','--config','core.autocrlf=false','--no-hardlinks',str(self.source),str(self.root)],check=True,capture_output=True,env=self.fixture.env)
         self.git('config','core.autocrlf','false');self.git('checkout','--detach',self.fixture.head)
         self.candidate=self.fixture.build()
         self.files={name:self.fixture.raw[PREFIX+name] for name in ('plan.json','contract.json','proof.json')}

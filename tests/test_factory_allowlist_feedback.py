@@ -429,6 +429,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);source=root/'source';source.mkdir()
             agents=Mock(name='agent-object');agents.name='fixture-agent'
+            agents.bounded_provider=None
             order=SimpleNamespace(max_attempts=1,allowed_paths=('candidate',),
                 content_sha256='a'*64,order_id=private,to_dict=Mock(return_value={'title':private}))
             controller=FactoryOrchestrator(source,root/'runs',agents,
@@ -475,7 +476,7 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
         private = 'PRIVATE-FIXTURE-' + ('x' * 60)
         with tempfile.TemporaryDirectory() as d:
             root = Path(d); source = root/'source'; source.mkdir()
-            agents = Mock(); agents.name = 'fixture-agent'
+            agents = Mock(); agents.name = 'fixture-agent'; agents.bounded_provider = None
             order = SimpleNamespace(max_attempts=1, allowed_paths=('candidate',),
                 content_sha256='a'*64, to_dict=Mock())
             controller = FactoryOrchestrator(source, root/'runs', agents,
@@ -608,7 +609,8 @@ class FactoryAllowlistFeedbackTests(unittest.TestCase):
                 agents.intelligence_summary.return_value={'mode':'fixture','calls':0}
                 controller=FactoryOrchestrator(root,root,agents);controller.memory_store=Mock()
                 events=[];controller.memory_store.prepare_run.side_effect=lambda *a: events.append('prepare') or {}
-                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',metadata={})
+                order=SimpleNamespace(order_id='fixture',content_sha256='a'*64,title='fixture',
+                    metadata={},max_elapsed_seconds=120)
                 ledger=RunLedger(root/'events.jsonl')
                 def package_check():events.append('package');return {'fixture':True}
                 def publish(prepared,run_dir,order,receipt,scan_record,**kwargs):

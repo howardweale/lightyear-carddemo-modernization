@@ -60,8 +60,8 @@ class _Reader:
 def _response(reader):
     block = reader.until(b'\r\n\r\n', HEADER_LIMIT)
     lines = block[:-4].split(b'\r\n')
-    contract.require(re.fullmatch(rb'HTTP/1\.[01] 200(?: [\x20-\x7e]*)?', lines[0]),
-                     'http-status-refused')
+    contract.require(re.fullmatch(rb'HTTP/1\.[01] [1-5][0-9]{2}(?: [\x20-\x7e]*)?', lines[0]),
+                     'http-status-line-refused')
     headers = {}
     for line in lines[1:]:
         name, sep, value = line.partition(b':')
@@ -71,18 +71,12 @@ def _response(reader):
         contract.require(name not in headers and
             all(c == 9 or 32 <= c <= 126 for c in value), 'http-header-refused')
         headers[name] = value
-    content_type = headers.get(b'content-type', b'').lower()
-    contract.require(re.fullmatch(
-        rb'application/json(?:;\s*charset=(?:"utf-8"|utf-8))?', content_type),
-        'http-content-type-refused')
-    contract.require(headers.get(b'content-encoding', b'identity').lower() == b'identity',
-                     'http-content-encoding-refused')
     length, transfer = headers.get(b'content-length'), headers.get(b'transfer-encoding')
     contract.require((length is None) != (transfer is None), 'http-framing-refused')
     if length is not None:
         contract.require(re.fullmatch(rb'[0-9]{1,8}', length) and
             0 < int(length) <= RESPONSE_LIMIT, 'http-response-limit')
-        return reader.take(int(length))
+        return lines, headers, reader.take(int(length))
     contract.require(transfer.lower() == b'chunked', 'http-transfer-refused')
     body = bytearray()
     while True:
@@ -93,7 +87,7 @@ def _response(reader):
         contract.require(len(body) + size <= RESPONSE_LIMIT, 'http-response-limit')
         if size == 0:
             contract.require(reader.take(2) == b'\r\n', 'http-trailer-refused')
-            return bytes(body)
+            return lines, headers, bytes(body)
         body.extend(reader.take(size))
         contract.require(reader.take(2) == b'\r\n', 'http-chunk-refused')
 
@@ -149,8 +143,21 @@ class Exchange:
                 sock.connect(self._address)
                 sock.settimeout(remaining(self._deadline))
                 sock.sendall(head + body)
-                raw = _response(_Reader(sock, self._deadline))
+                lines, headers, raw = _response(_Reader(sock, self._deadline))
             remaining(self._deadline)
+            # Classify only after the complete bounded frame has arrived. Framing,
+            # truncation and transport errors must remain FAULT even for HTTP 500.
+            content_type = headers.get(b'content-type', b'').lower()
+            if (lines[0].split(b' ')[1] != b'200' or not re.fullmatch(
+                    rb'application/json(?:;\s*charset=(?:"utf-8"|utf-8))?', content_type)
+                    or headers.get(b'content-encoding', b'identity').lower() != b'identity'):
+                self._closed = True
+                # Preserve status/header bytes losslessly as ASCII and the bounded
+                # body as hex in private evidence; never decode compressed content.
+                return {'malformed_http_response': {
+                    'status_line': lines[0].decode('ascii'),
+                    'headers': [line.decode('ascii') for line in lines[1:]],
+                    'body_hex': raw.hex()}}
             try:
                 # Explicit UTF-8 only; duplicate keys/nonfinite values are malformed.
                 result = contract.decoded(raw.decode('utf-8'))

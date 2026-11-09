@@ -5,11 +5,14 @@ import socket
 import threading
 import time
 import unittest
+from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from lightyear_execution import copau_http_exchange as http
 from lightyear_execution import copau_full_state_contract as contract
 from tools import copau_candidate_replay as replay
+from tests.test_copau_full_state_contract import MemoryStore
 
 
 REQUEST = {'token': None, 'aid': 'INITIAL', 'fields': {'USER': 'public-fixture'}}
@@ -138,23 +141,86 @@ class HttpExchangeTests(unittest.TestCase):
         with self.assertRaises(contract.Refused):
             replay.response_shape(actual, {'ended': True})
 
-    def test_redirect_and_server_error_fault_without_followup(self):
-        for status in (b'302 Found', b'500 Internal Server Error'):
-            exchange, peer = self.transport(framed(b'{}', status=status,
-                headers=b'Location: http://example.invalid/private\r\n'))
-            with self.assertRaisesRegex(contract.Refused, '^http-exchange-fault$'):
-                exchange(REQUEST)
-            with self.assertRaises(contract.Refused):
-                exchange(REQUEST)
-            self.assertEqual(peer.accepted, 1)
+    def test_complete_rejected_metadata_is_private_malformed_without_followup(self):
+        body = b'PRIVATE RESPONSE SENTINEL'
+        wires = [framed(body, status=b'500 Internal Server Error'),
+                 framed(body, status=b'302 Found',
+                        headers=b'Location: http://example.invalid/private\r\n'),
+                 framed(body).replace(b'application/json', b'text/html'),
+                 framed(body, headers=b'Content-Encoding: gzip\r\n'),
+                 b'HTTP/1.1 500 Error\r\nContent-Type: text/html\r\n'
+                 b'Transfer-Encoding: chunked\r\n\r\n19\r\n' + body + b'\r\n0\r\n\r\n']
+        for wire in wires:
+            with self.subTest(header=wire.split(b'\r\n\r\n')[0]):
+                exchange, peer = self.transport(wire)
+                actual = exchange(REQUEST)
+                lines = wire.split(b'\r\n\r\n')[0].decode('ascii').split('\r\n')
+                self.assertEqual(actual, {'malformed_http_response': {
+                    'status_line': lines[0], 'headers': lines[1:], 'body_hex': body.hex()}})
+                with self.assertRaises(contract.Refused):
+                    replay.response_shape(actual, {'ended': True})
+                with self.assertRaisesRegex(contract.Refused, '^http-exchange-fault$'):
+                    exchange(REQUEST)
+                self.assertEqual(peer.accepted, 1)
+
+    def test_replay_complete_500_mismatch_but_truncation_and_cl_te_fault(self):
+        body = b'PRIVATE RESPONSE SENTINEL'
+        complete = framed(body, status=b'500 Internal Server Error')
+        cases = [(complete, 'MISMATCH'), (complete[:-1], 'FAULT'),
+                 (framed(body, status=b'500 Internal Server Error',
+                         headers=b'Transfer-Encoding: chunked\r\n'), 'FAULT')]
+        for wire, outcome in cases:
+            with self.subTest(outcome=outcome, wire=wire):
+                store = MemoryStore()
+                bindings = {'public-synthetic-producer': 'b' * 64}
+                commitment_raw = contract.stage_inputs(store, {},
+                    context_sha256='c' * 64, producer_bindings=bindings)
+                commitment = contract.decoded(commitment_raw)
+                initial = {}
+                digest = lambda value: contract.sha(contract.encoded(value))
+                initial_sha = contract.put_blob(store, 'n1-initial', contract.encoded(initial))
+                oracle = dict(session=contract.SESSION, producer_bindings=bindings,
+                    binding={'commitment_sha256': contract.sha(commitment_raw)},
+                    initial_sha256=initial_sha, states=[], rows=[dict(
+                        case=contract.SESSION, session='public', aid='INITIAL', fields={},
+                        before_sha256=digest(initial), expected={'ended': True})])
+                oracle_sha = contract.put_blob(store, 'n1-oracle', contract.encoded(oracle))
+                store.write('n1-complete.json', contract.encoded(dict(
+                    status='ORACLE_CAPTURE_ONLY', oracle_sha256=oracle_sha,
+                    commitment_sha256=contract.sha(commitment_raw))))
+                store.write('n1-load-complete.json', contract.encoded(dict(
+                    status='INITIAL_STATE_ONLY', full_state_sha256=digest(initial),
+                    input_sha256=commitment['input_sha256'],
+                    commitment_sha256=contract.sha(commitment_raw))))
+                exchange, peer = self.transport(wire)
+                # Only the producer/DB are public doubles. Exercise the real HTTP
+                # peer and replay classification/storage, without oracle execution.
+                with patch.object(replay.capture.reference, 'verify_producer',
+                        return_value=(SimpleNamespace(digest=digest), None)), \
+                     patch.object(replay.capture, 'bindings', return_value=bindings):
+                    result = replay.replay(store, Path.cwd(), exchange=exchange,
+                        snapshot=lambda: {}, candidate_sha256=exchange.candidate_sha256)
+                self.assertEqual(result['outcome'], outcome)
+                self.assertEqual(result['failed_check'], 'response-shape' if outcome == 'MISMATCH' else None)
+                self.assertEqual(result['interactions'], 0)
+                failure = contract.decoded(contract.get_blob(store, 'n1-candidate-failure'))
+                if outcome == 'MISMATCH':
+                    self.assertEqual(result['failing_index'], 0)
+                    self.assertEqual(failure['response']['malformed_http_response']['body_hex'], body.hex())
+                    self.assertNotIn(body.hex().encode(), contract.encoded(result))
+                else:
+                    self.assertIsNone(failure)
+                self.assertNotIn(body, contract.encoded(result))
+                self.assertFalse(result['qualified'])
+                with self.assertRaises(contract.Refused):
+                    exchange(REQUEST)
+                self.assertEqual(peer.accepted, 1)
 
     def test_conflicting_duplicate_and_missing_framing_refused(self):
         responses = [
             framed(b'{}', headers=b'Transfer-Encoding: chunked\r\n'),
             framed(b'{}', headers=b'Content-Length: 2\r\n'),
             b'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{}',
-            framed(b'{}', headers=b'Content-Encoding: gzip\r\n'),
-            b'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 2\r\n\r\n{}',
         ]
         for raw in responses:
             exchange, _ = self.transport(raw)

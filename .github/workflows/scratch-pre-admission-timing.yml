@@ -1,0 +1,56 @@
+name: Scratch partial pre-admission timing (never merge)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/scratch-pre-admission-timing.yml'
+permissions:
+  contents: read
+concurrency:
+  group: scratch-pre-admission-timing-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  partial-timing:
+    if: github.event.pull_request.number == 471 && github.event.pull_request.draft == true && github.head_ref == 'codex/scratch-configured-route-wip' && github.event.pull_request.head.repo.full_name == github.repository && github.run_attempt == 1
+    runs-on: windows-2025
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONPATH: 'src;.'
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.10'
+      - name: Install exact public fixture dependency
+        run: python -m pip install cryptography==46.0.3
+      - name: Verify unchanged fixture and exact clean source
+        shell: pwsh
+        run: |
+          if ((git rev-parse HEAD) -ne $env:EXPECTED_HEAD) { throw 'source-head-changed' }
+          if (git status --porcelain=v1 --untracked-files=all) { throw 'source-not-clean' }
+          $component = (Get-FileHash -Algorithm SHA256 tools/ci/operator_flow_component.py).Hash.ToLowerInvariant()
+          $wrapper = (Get-FileHash -Algorithm SHA256 tests/fixtures/operator_flow/fixed-wrapper.ps1.txt).Hash.ToLowerInvariant()
+          if ($component -ne '51df38f396417cdc0157ec4381c835a1001eedca3b5b6eeeddbe1c9506a3a2cf') { throw 'component-changed' }
+          if ($wrapper -ne '0f087c5a2b05c5a79c66b1f3f044df444e38fda4d61d079010965ea9f5d5a0e2') { throw 'wrapper-changed' }
+      - name: Time disposable sign export verify local publication and plan preflight
+        run: python -B tools/ci/operator_flow_component.py
+      - name: Verify source remains unchanged
+        if: always()
+        shell: pwsh
+        run: |
+          if ((git rev-parse HEAD) -ne $env:EXPECTED_HEAD) { throw 'source-head-changed' }
+          if (git status --porcelain=v1 --untracked-files=all) { throw 'source-not-clean' }
+      - name: Retain public timing report only
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: scratch-partial-pre-admission-timing
+          path: ${{ runner.temp }}/operator-flow-component-timings.json
+          if-no-files-found: error
+          retention-days: 30

@@ -15,9 +15,20 @@ def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')
 def write(path,raw):
     path.parent.mkdir(parents=True,exist_ok=True)
     with path.open('xb') as stream:stream.write(raw)
-def command(args,*,cwd=None):
+def command(args,*,cwd=None,public_preflight=False):
     result=subprocess.run(args,cwd=cwd,capture_output=True,text=True,timeout=300)
-    if result.returncode:raise RuntimeError('fixture-command-refused:'+Path(str(args[0])).name)
+    if result.returncode:
+        # Only the read-only, pre-sign wrapper stage opts in. Never emit argv,
+        # environment, credential files, signing material or later-stage output.
+        if public_preflight:
+            limit=4096
+            print(json.dumps({'fixture_only':True,'stage':'pre-sign-preflight',
+                'returncode':result.returncode,
+                'stdout_tail':result.stdout[-limit:],'stderr_tail':result.stderr[-limit:],
+                'stdout_truncated':len(result.stdout)>limit,
+                'stderr_truncated':len(result.stderr)>limit},ensure_ascii=True),
+                file=sys.stderr,flush=True)
+        raise RuntimeError('fixture-command-refused:'+Path(str(args[0])).name)
     return result.stdout.strip()
 def git(root,*args):return command(['git','-C',str(root),*args])
 
@@ -144,7 +155,8 @@ def main():
         report['rendered_wrapper_sha256']=digest(rendered)
         def stage(name,*extra):
             return command(['pwsh','-NoProfile','-NonInteractive','-File',str(rendered),
-                            '-Stage',name,'-Manifest',str(manifest_path),*map(str,extra)])
+                            '-Stage',name,'-Manifest',str(manifest_path),*map(str,extra)],
+                           public_preflight=name=='Preflight')
         measure('pre-sign-preflight',lambda:stage('Preflight'))
         measure('pre-sign-import',lambda:stage('Prepare'))
         # Wait only inside disposable CI; a late preparation fails, never rebinds.

@@ -65,6 +65,22 @@ static int policy(const char *name) {
     }
     return 0;
 }
+/* Darwin SYS_fork returns a child flag outside syscall()'s scalar result.
+   Determine the branch using uncached kernel PIDs; never use cached getpid()
+   in the raw child. The raw syscall and independent witness remain required. */
+static pid_t raw_fork(void) {
+    long parent = syscall(SYS_getpid);
+    if (parent <= 0) _exit(121);
+    long result = syscall(SYS_fork);
+    int saved_errno = errno;
+    if (result >= 0) {
+        long current = syscall(SYS_getpid);
+        if (current <= 0) _exit(121);
+        if (current != parent) result = 0;
+    }
+    errno = saved_errno;
+    return (pid_t)result;
+}
 static void reap(pid_t pid, int stopped) {
     int status = -1;
     if (stopped && kill(pid,SIGCONT)) {
@@ -112,7 +128,7 @@ int main(int argc, char **argv) {
     }
     if (!strcmp(op,"fork") || !strcmp(op,"raw-fork")) {
         errno=0;
-        pid_t pid=!strcmp(op,"fork")?fork():(pid_t)syscall(SYS_fork);
+        pid_t pid=!strcmp(op,"fork")?fork():raw_fork();
         e=errno;
         if (pid==0) {
             if (write(witness,"X",1)!=1) _exit(122);

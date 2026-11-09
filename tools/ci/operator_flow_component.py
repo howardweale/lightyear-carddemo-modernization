@@ -229,6 +229,24 @@ def main():
                     '-Manifest',str(manifest_path),*map(str,extra)],capture_output=True,text=True,timeout=300)
                 text=result.stdout+'\n'+result.stderr
                 if result.returncode==0 or expected not in text:
+                    # Only named read-only VerifyExport refusals may disclose
+                    # bounded public fixture diagnostics. Export/signing paths
+                    # (including duplicate-export) never enter this branch.
+                    read_only_cases={'bare-event','malformed-json','journal-signature',
+                                     'stale-journal-head','expired-signing-window'}
+                    if (name in read_only_cases and len(extra)==4
+                            and extra[:3]==('-Stage','VerifyExport','-Proof')):
+                        limit=4096
+                        stdout=result.stdout.encode('utf-8')
+                        stderr=result.stderr.encode('utf-8')
+                        print(json.dumps({'fixture_only':True,
+                            'stage':'read-only-refusal-diagnostic','case':name,
+                            'returncode':result.returncode,
+                            'stdout_tail':stdout[-limit:].decode('utf-8',errors='ignore'),
+                            'stderr_tail':stderr[-limit:].decode('utf-8',errors='ignore'),
+                            'stdout_truncated':len(stdout)>limit,
+                            'stderr_truncated':len(stderr)>limit},ensure_ascii=True),
+                            file=sys.stderr,flush=True)
                     raise RuntimeError('expected-wrapper-refusal-not-observed:'+name)
                 # Do not retain arbitrary command output or credential-bearing
                 # exceptions. Only the fixed expected marker and return code.

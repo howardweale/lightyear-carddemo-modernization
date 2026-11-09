@@ -40,9 +40,18 @@ def _source_bytes(path):
         and 0<before.st_size<=LIMIT,'review-source-file')
     with path.open('rb') as stream:
         opened=os.fstat(stream.fileno());raw=stream.read(LIMIT+1);after=os.fstat(stream.fileno())
+    closed=path.stat()
     def identity(s):return (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
-    require(identity(before)==identity(opened)==identity(after)==identity(path.stat())
-        and len(raw)==before.st_size,'review-source-changed')
+    if os.name=='nt':
+        # CPython 3.12 Windows stat ctime is creation time; fstat ctime is
+        # change time. Compare birthtime across APIs and retain both same-API
+        # full identity/change checks. Missing birthtime fails closed.
+        def common(s):return (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_birthtime_ns)
+        unchanged=(identity(before)==identity(closed) and identity(opened)==identity(after)
+            and common(before)==common(opened)==common(after)==common(closed))
+    else:
+        unchanged=identity(before)==identity(opened)==identity(after)==identity(closed)
+    require(unchanged and len(raw)==before.st_size,'review-source-changed')
     return raw
 
 

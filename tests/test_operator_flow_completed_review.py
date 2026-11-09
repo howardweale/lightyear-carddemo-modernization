@@ -1,6 +1,7 @@
 """Untrusted service/log relations only; no fabricated API or native admission."""
 import copy,os,subprocess,unittest
 from pathlib import Path
+from operator_flow_checkout_fixture import clean_checkout_test
 import test_operator_flow_review_observation as fixtures
 from tools.ci.operator_flow_review_workflow import _review_observation
 from tools.ci.operator_flow_review_cli import SCALARS
@@ -71,6 +72,7 @@ class CompletedReview(unittest.TestCase):
     def test_self_consistent_forged_service_identity_refuses(self):
         self.fixture.identity=dict(self.identity,job=9)
         with self.assertRaisesRegex(ValueError,'service-log-join'):self.parse()
+    @clean_checkout_test
     def test_scratch_without_active_workflow_refuses_before_api(self):
         root=Path(__file__).resolve().parents[1]
         self.assertFalse((root/REVIEW_WORKFLOW).exists())

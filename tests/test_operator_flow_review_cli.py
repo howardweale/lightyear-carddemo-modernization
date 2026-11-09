@@ -1,6 +1,7 @@
 """CI-only public argument/source probes; no API or native proof invocation."""
 import hashlib,os,subprocess,tempfile,unittest
 from pathlib import Path
+from operator_flow_checkout_fixture import clean_checkout_test
 from tools.ci.operator_flow_review_cli import _parse_args,_caller_source,main,SCALARS,PATHS
 
 class ReviewCLI(unittest.TestCase):
@@ -36,6 +37,7 @@ class ReviewCLI(unittest.TestCase):
     def test_scratch_job_refuses_before_arguments_or_api(self):
         self.assertNotEqual(os.environ.get('GITHUB_JOB'),'operator-publication-review')
         with self.assertRaisesRegex(ValueError,'review-cli-original-job-only'):main()
+    @clean_checkout_test
     def test_actual_loaded_caller_matches_committed_source(self):
         root=Path(__file__).resolve().parents[1]
         head=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD']).decode().strip()

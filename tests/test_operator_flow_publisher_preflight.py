@@ -1,6 +1,7 @@
 """CI-only untrusted public-byte/source boundaries, never native approval."""
 import copy,hashlib,os,subprocess,tempfile,unittest
 from pathlib import Path
+from operator_flow_checkout_fixture import clean_checkout_test
 import test_operator_flow_metadata as fixtures
 from tools.ci.operator_flow_review_workflow import _trust_bytes
 from tools.ci.operator_flow_review_cli import SCALARS
@@ -56,6 +57,7 @@ class PublisherPreflight(unittest.TestCase):
     def test_public_materials_inside_checkout_refuse(self):
         for name in ('trust.json','public.pem'):(self.e/name).write_bytes((self.trust/name).read_bytes())
         with self.assertRaisesRegex(ValueError,'external-trust'):_public_materials(self.e,self.m,self.e/'trust.json',self.values)
+    @clean_checkout_test
     def test_actual_source_snapshot_and_other_original_root_refusal(self):
         root=Path(__file__).resolve().parents[1]
         head=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD']).decode().strip()

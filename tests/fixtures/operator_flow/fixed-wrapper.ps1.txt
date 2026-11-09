@@ -69,7 +69,10 @@ function IndependentRepository($Config) {
     foreach ($relative in @('commondir','objects/info/alternates','objects/info/http-alternates')) {
         Require (-not (Test-Path -LiteralPath (Join-Path $metadata $relative))) 'Shared Git metadata/objects refused.'
     }
-    $gitProgram = (Get-Command git -CommandType Application -ErrorAction Stop).Source
+    $gitCandidates = @(Get-Command git -CommandType Application -ErrorAction Stop)
+    Require ($gitCandidates.Count -ge 1) 'Git executable not found.'
+    $gitProgram = $gitCandidates[0].Source
+    Write-Host ('Git executable selected (first on PATH): ' + $gitProgram)
     UnredirectedPath $gitProgram
     $actualGit = Native $gitProgram @('-C',$expected,'rev-parse','--absolute-git-dir')
     $actualCommon = Native $gitProgram @('-C',$expected,'rev-parse','--path-format=absolute','--git-common-dir')

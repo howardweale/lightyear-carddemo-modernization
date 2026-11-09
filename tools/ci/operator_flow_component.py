@@ -138,7 +138,7 @@ def main():
         manifest_path=pack/'manifest.json';write(manifest_path,canonical(manifest))
         template_path=source/'tests/fixtures/operator_flow/fixed-wrapper.ps1.txt'
         original=template_path.read_bytes()
-        if hashlib.sha256(original).hexdigest()!='5723d1c40fb48c20045c5d6e881cd6ab69fb471ec93d1ea72a4d24c0dfd7c4c9':
+        if hashlib.sha256(original).hexdigest()!='1c3d94b5a6b8f349dc57aaec9fbbf171506bb0e53e04f578dea5396d908ac04a':
             raise RuntimeError('reviewed-template-changed')
         wrapper=original.decode()
         replacements={

@@ -317,7 +317,8 @@ if ($Stage -ceq 'ExportAndVerify') {
 $verificationStartedAt = [DateTimeOffset]::UtcNow
 $verificationClock = [Diagnostics.Stopwatch]::StartNew()
 $bundleShape = Get-Content -LiteralPath $Proof -Raw | ConvertFrom-Json
-Require ($bundleShape.schema -ceq 'tower-decision-proof/1') 'Bare events are not proof bundles.'
+# StrictMode: test for the property before reading it, so a bare event reaches this refusal.
+Require ($bundleShape -is [pscustomobject] -and $bundleShape.PSObject.Properties.Name -ccontains 'schema' -and $bundleShape.schema -ceq 'tower-decision-proof/1') 'Bare events are not proof bundles.'
 
 $proofHash = Digest $Proof
 # Deliberately obtain trust AFTER export, from the independently verified local journal.

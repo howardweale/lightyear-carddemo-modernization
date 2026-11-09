@@ -166,7 +166,9 @@ class HttpExchangeTests(unittest.TestCase):
     def test_replay_complete_500_mismatch_but_truncation_and_cl_te_fault(self):
         body = b'PRIVATE RESPONSE SENTINEL'
         complete = framed(body, status=b'500 Internal Server Error')
-        cases = [(complete, 'MISMATCH'), (complete[:-1], 'FAULT'),
+        cases = [(complete, 'MISMATCH'),
+                 (framed(b'', status=b'500 Internal Server Error'), 'MISMATCH'),
+                 (framed(b''), 'MISMATCH'), (complete[:-1], 'FAULT'),
                  (framed(body, status=b'500 Internal Server Error',
                          headers=b'Transfer-Encoding: chunked\r\n'), 'FAULT')]
         for wire, outcome in cases:
@@ -206,7 +208,11 @@ class HttpExchangeTests(unittest.TestCase):
                 failure = contract.decoded(contract.get_blob(store, 'n1-candidate-failure'))
                 if outcome == 'MISMATCH':
                     self.assertEqual(result['failing_index'], 0)
-                    self.assertEqual(failure['response']['malformed_http_response']['body_hex'], body.hex())
+                    if wire == framed(b''):
+                        self.assertEqual(failure['response'], {'malformed_http_body_hex': ''})
+                    else:
+                        expected_hex = body.hex() if wire == complete else ''
+                        self.assertEqual(failure['response']['malformed_http_response']['body_hex'], expected_hex)
                     self.assertNotIn(body.hex().encode(), contract.encoded(result))
                 else:
                     self.assertIsNone(failure)

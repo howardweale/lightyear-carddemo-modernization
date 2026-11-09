@@ -75,7 +75,7 @@ def _response(reader):
     contract.require((length is None) != (transfer is None), 'http-framing-refused')
     if length is not None:
         contract.require(re.fullmatch(rb'[0-9]{1,8}', length) and
-            0 < int(length) <= RESPONSE_LIMIT, 'http-response-limit')
+            0 <= int(length) <= RESPONSE_LIMIT, 'http-response-limit')
         return lines, headers, reader.take(int(length))
     contract.require(transfer.lower() == b'chunked', 'http-transfer-refused')
     body = bytearray()

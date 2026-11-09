@@ -21,11 +21,15 @@ def match(equal, check, index, evidence):
         raise _Mismatch(check, index, evidence)
 
 
-def response_shape(actual):
+def response_shape(actual, expected):
     """Validate an arrived response; exchange failures are handled separately."""
     contract.require(type(actual) is dict and type(actual.get('screen')) is dict
-        and type(actual.get('token')) is str and type(actual.get('ended')) is bool)
-    token = actual['token']
+        and type(actual.get('ended')) is bool)
+    token = actual.get('token')
+    # SEND TEXT and raw source faults have no proved RETURN envelope.
+    if expected['ended'] or expected.get('source_fault'):
+        return token, None, None
+    contract.require(type(token) is str)
     envelope = token.split('.')[0]
     value = contract.decoded(base64.b64decode(
         envelope + '=' * (-len(envelope) % 4), altchars=b'-_', validate=True))
@@ -111,11 +115,11 @@ transaction ownership, browser rendering and result authentication remain open.
             evidence.update(request_sha256=contract.sha(sent), response=deepcopy(actual))
             actual_state = full_snapshot(snapshot)
             evidence['after'] = deepcopy(actual_state)
+            expected = row['expected']
             try:
-                token, program, area = response_shape(actual)
+                token, program, area = response_shape(actual, expected)
             except Exception:
                 raise _Mismatch('response-shape', index, evidence) from None
-            expected = row['expected']
             try:
                 producer.compare_frame(actual['screen'], expected)
             except AssertionError:

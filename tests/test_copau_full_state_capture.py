@@ -104,10 +104,27 @@ class FullStateCaptureTests(unittest.TestCase):
                       'timeout', 'interrupted', 'malformed', 'snapshot-fault',
                       'snapshot-shape', 'artifact-fault', 'write-fault', 'before',
                       'not-dict', 'token-type', 'ended-type', 'token-envelope',
-                      'token-program', 'token-commarea', 'frame-shape', 'later-frame'):
+                      'token-program', 'token-commarea', 'frame-shape', 'later-frame',
+                      'ended-no-token', 'source-fault-token'):
             with self.subTest(candidate_comparison_fault=fault):
                 store = fixtures.MemoryStore()
                 store.files = dict(original.files)
+                replay_artifact = deepcopy(artifact)
+                if fault in ('ended-no-token', 'source-fault-token'):
+                    # Synthetic terminal/fault variants; the frozen oracle and
+                    # original captured artifact remain untouched.
+                    last = replay_artifact['rows'][-1]['expected']
+                    if fault == 'ended-no-token':
+                        last['ended'] = True
+                    else:
+                        last['ended'] = False
+                        last['source_fault'] = 'PUBLIC synthetic source fault'
+                    store.files = {name: raw for name, raw in store.files.items()
+                                   if not name.startswith('n1-oracle-')}
+                    digest = stage.put_blob(store, 'n1-oracle', stage.encoded(replay_artifact))
+                    completed = stage.decoded(store.files['n1-complete.json'])
+                    completed['oracle_sha256'] = digest
+                    store.files['n1-complete.json'] = stage.encoded(completed)
                 commitment_raw, commitment = stage._commitment(store)
                 store.write('n1-load-complete.json', stage.encoded(dict(
                     status='INITIAL_STATE_ONLY', commitment_sha256=stage.sha(commitment_raw),
@@ -124,7 +141,7 @@ class FullStateCaptureTests(unittest.TestCase):
                     state = {}
                 def exchange(request):
                     nonlocal state
-                    row = artifact['rows'][len(seen)]
+                    row = replay_artifact['rows'][len(seen)]
                     self.assertEqual(set(request), {'token', 'aid', 'fields'})
                     self.assertEqual(request['aid'], row['aid'])
                     self.assertEqual(request['fields'], row['fields'])
@@ -179,6 +196,11 @@ class FullStateCaptureTests(unittest.TestCase):
                         actual['screen'] = {}
                     elif fault == 'later-frame' and len(seen) == 2:
                         screen['message'] = 'PRIVATE SENTINEL'
+                    if len(seen) == len(replay_artifact['rows']):
+                        if fault == 'ended-no-token':
+                            actual['token'] = None
+                        elif fault == 'source-fault-token':
+                            actual['token'] = '!NOT-A-RETURN-ENVELOPE!'
                     return actual
                 snapshots = 0
                 def snapshot():
@@ -207,7 +229,8 @@ class FullStateCaptureTests(unittest.TestCase):
                     result = replay.replay(store, root, **kwargs)
                     outcome = 'FAULT' if fault in ('request-mutated', 'private-exception',
                         'timeout', 'interrupted', 'snapshot-fault',
-                        'snapshot-shape', 'artifact-fault') else 'MISMATCH' if fault else 'MATCH'
+                        'snapshot-shape', 'artifact-fault') else 'MATCH' if fault in (
+                            None, 'ended-no-token', 'source-fault-token') else 'MISMATCH'
                     self.assertEqual(result['outcome'], outcome)
                     self.assertEqual(stage.decoded(store.read('n1-replay-complete.json')), result)
                     self.assertNotIn(b'PRIVATE SENTINEL', stage.encoded(result))
@@ -242,7 +265,7 @@ class FullStateCaptureTests(unittest.TestCase):
                         self.assertIsNone(result['failed_check'])
                         self.assertIsNone(result['failing_index'])
                         self.assertIsNone(failure)
-                if fault is None:
+                if fault in (None, 'ended-no-token', 'source-fault-token'):
                     self.assertEqual(result['interactions'], len(artifact['rows']))
                     self.assertEqual(len(seen), 15)
                     self.assertFalse(result['qualified'])
@@ -255,6 +278,19 @@ class FullStateCaptureTests(unittest.TestCase):
                 self.assertIn('n1-replay-consumed.json', store.files)
                 with self.assertRaises(stage.Refused):
                     replay.replay(store, root, **kwargs)
+
+
+    def test_terminal_and_source_fault_shapes_never_decode_a_return_token(self):
+        for expected, token in (({'ended': True}, None),
+                                ({'ended': False, 'source_fault': 'PUBLIC'}, '!INVALID!')):
+            with self.subTest(expected=expected), patch.object(replay.base64, 'b64decode') as decode:
+                actual = dict(screen={}, ended=expected['ended'], token=token)
+                self.assertEqual(replay.response_shape(actual, expected), (token, None, None))
+                decode.assert_not_called()
+                for malformed in ([], {'ended': False}, {'screen': {}, 'ended': 'false'}):
+                    with self.assertRaises(stage.Refused):
+                        replay.response_shape(malformed, expected)
+                decode.assert_not_called()
 
     def test_oracle_fault_remains_consumed_with_no_private_exception(self):
         store = fixtures.MemoryStore()

@@ -76,10 +76,17 @@ class OSDiagnosticsTests(unittest.TestCase):
         self.assertEqual(rows, [])
         self.assertTrue(overflow)
         rows, overflow = diagnostic.kernel_records(
-            ("Sandbox: python3(123) deny(1) " + "\u2603" * diagnostic.CAP + "\n").encode(),
+            ("Sandbox: python3(123) deny(1) " + "\u2603" * diagnostic.KERNEL_CAP + "\n").encode(),
             {123})
         self.assertEqual(rows, [])
         self.assertTrue(overflow)
+
+    def test_kernel_inventory_above_old_cap_preserves_all_lines(self):
+        raw = b"Sandbox: python3(123) deny(1) sysctl-read exact.item\n" * 1000
+        self.assertGreater(len(raw), 32768)
+        rows, overflow = diagnostic.kernel_records(raw, {123})
+        self.assertEqual(len(rows), 1000)
+        self.assertFalse(overflow)
 
     def test_json_escapes_log_control_bytes(self):
         rows, _ = diagnostic.kernel_records(
@@ -136,10 +143,11 @@ class OSDiagnosticsTests(unittest.TestCase):
         self.assertTrue(good["eof"])
         self.assertEqual(good["stdout"], b"line\n")
         self.assertEqual(good["returncode"], 0)
-        noisy = run("import os; os.write(2,b'x'*20000); os.write(1,b'x'*20000)")
+        half = diagnostic.KERNEL_CAP // 2 + 1
+        noisy = run(f"import os; os.write(2,b'x'*{half}); os.write(1,b'x'*{half})")
         self.assertTrue(noisy["overflow"])
         self.assertLessEqual(len(noisy["stdout"]) + len(noisy["stderr"]),
-                             diagnostic.CAP + 1)
+                             diagnostic.KERNEL_CAP + 1)
         self.assertIsNotNone(noisy["returncode"])
 
     def test_query_deadline_kills_and_reaps_only_owned_query(self):

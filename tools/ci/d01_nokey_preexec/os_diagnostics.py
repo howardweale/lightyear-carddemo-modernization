@@ -11,6 +11,7 @@ import sys
 import time
 
 CAP = 32768
+KERNEL_CAP = 512 * 1024
 IPS_CAP = 2 * 1024 * 1024
 IPS_TOTAL = 8 * 1024 * 1024
 EXPECTED = {("S1", "none"), ("S2", "none")} | {
@@ -98,13 +99,13 @@ def capture(command, deadline):
                 result["timed_out"] = True
                 break
             for key, _ in streams.select(min(0.1, remaining)):
-                part = os.read(key.fileobj.fileno(), min(4096, CAP + 1 - used))
+                part = os.read(key.fileobj.fileno(), min(4096, KERNEL_CAP + 1 - used))
                 if not part:
                     streams.unregister(key.fileobj)
                     continue
                 used += len(part)
                 result[key.data] += part
-                if used > CAP:
+                if used > KERNEL_CAP:
                     result["overflow"] = True
                     break
             if result["overflow"]:
@@ -141,7 +142,7 @@ def kernel_records(raw, pids):
             continue
         item = dict(pid=int(match[1]), line=line.rstrip("\r\n"))
         size = len(encoded(item).encode("ascii")) + 1
-        if used + size > CAP:
+        if used + size > KERNEL_CAP:
             overflow = True
             break
         records.append(item)
@@ -237,7 +238,7 @@ def collect(observation):
         result["crash"] = crash_records(
             Path.home() / "Library/Logs/DiagnosticReports", pids, now, start + 30)
         result["limits"] = [
-            "One log query; 32 KiB combined raw pipe cap and 32 KiB escaped selected-line cap",
+            "One log query; 512 KiB combined raw pipe cap and 512 KiB escaped selected-line cap",
             "IPS: 512 directory entries, 64 files, 2 MiB/file, 8 MiB input, 32 KiB escaped selected fields",
             "30-second collector budget; log query 10 seconds plus at most 1 second reap",
             "Ten-minute PID/time correlation is diagnostic, not birth-identity proof",

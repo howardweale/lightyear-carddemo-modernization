@@ -1,0 +1,39 @@
+name: NO-KEY operator packet placeholder dry run
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/native-rehearsal-packet-dryrun.yml'
+      - 'docs/factory/native-p5-rehearsal/**'
+      - 'tools/native_rehearsal_bind_review.py'
+      - 'tools/ci/native_rehearsal_packet_dryrun.py'
+      - 'tests/test_native_rehearsal_packet_dryrun.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/native-rehearsal-packet-dryrun.yml'
+      - 'docs/factory/native-p5-rehearsal/**'
+      - 'tools/native_rehearsal_bind_review.py'
+      - 'tools/ci/native_rehearsal_packet_dryrun.py'
+      - 'tests/test_native_rehearsal_packet_dryrun.py'
+permissions:
+  contents: read
+jobs:
+  placeholder-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Validate review binder and simulated stop decisions
+        env:
+          PYTHONPATH: 'src:.:tests'
+        run: python -B -m unittest test_native_rehearsal_packet_dryrun -v
+      - name: Record every simulated stop rule
+        run: python -B -m tools.ci.native_rehearsal_packet_dryrun --output placeholder-dry-run.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: no-key-placeholder-decisions
+          path: placeholder-dry-run.json
+          if-no-files-found: error

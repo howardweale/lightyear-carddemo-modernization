@@ -1,0 +1,48 @@
+12 NOVEMBER NO-KEY REHEARSAL — ONE-PAGE OPERATOR CHECKLIST
+REVIEW TEMPLATE / NOT RUNNABLE / NO EXECUTION AUTHORITY
+Planned start: 12 Nov 2026, 10:00 Pacific (UTC-08:00); allow60–90min.
+The approved COMMAND-SHEET and RETURN-CHECKLIST remain authoritative.
+
+BEFORE THE SESSION (about10–15min; do not rush checks)
+[ ] Have the exact final packet/head and Claude review, followed by Howard's
+    explicit approval of that same packet, public bindings and attended slot.
+[ ] Supply all seven public Mac/USB values in one message after11Nov17PT
+    and before12Nov10PT; message age at start must be <=24h. No in-session edits.
+[ ] Print the final command sheet, this checklist and RETURN-CHECKLIST.
+    Compare printed head, archive size/hash and seven literals to the review.
+[ ] All keys unplugged throughout. Use the dedicated standard account;
+    no sudo/admin, installs, upgrades, hardware enumeration, signing or PINs.
+[ ] Have the approved public USB, exact archive and enough time/space.
+    No cloud path, alternate runtime, renamed destination or existing session.
+
+READ / PRINT / COMPARE BEFORE CREATING FILES (about10–15min)
+[ ] Windows: print named USB root and volume label; compare each literal.
+    Hash/size the archive before and after the exclusive public USB copy.
+[ ] Mac: individually print hostname, short account name, UID and OS build;
+    compare each to its bound value. UID0/group80/wrong version/arch stop.
+[ ] Print exact named USB real path, mount point and label; compare separately.
+    No enumeration/relabeling/remount/fallback. Recheck before later USB use.
+[ ] Complete translation, path/owner/mode and space checks as written.
+    Exclusive ROOT copy: verify hash/size BEFORE extraction; no overwrite.
+[ ] Run only the approved runtime/manifest metadata and R4 copy/refusal steps.
+
+ATTENDED S1–S6 (about25–40min including readback)
+[ ] Follow one block at a time; read every result and full journal immediately.
+[ ] S1/S2/S3: expected PASS/REAPED. S3 grandchild reap is parent-reported only.
+[ ] S4/S5/S6: expected FAIL/REAPED, respectively initialization-failed,
+    original-deadline-reached, operator-cancelled. Expected FAIL stays FAIL.
+[ ] S6: press Ctrl-C ONCE only at READY. S7 staysCI-only; no Mac command.
+[ ] Keep original15s execution and5s cleanup allowance; no extension/retry.
+
+STOP / RETURN (reserve15–20min; stop sooner if time runs out)
+[ ] Missing binding/review, mismatch, unexpected exit, quarantine, existing
+    target, UNKNOWN, forced cleanup or missing/truncated result: STOP that
+    session. No further probe, separate kill, repair, resume or retry.
+[ ] On UNKNOWN: preserve isolation and partials; leave Mac/Terminal as-is;
+    no reboot/logout. Message Codex/Claude; resolution needs separate review.
+[ ] Return ONLY actual allowlisted diagnostics from RETURN-CHECKLIST A:
+    R1–R4 records and attempted S1–S6 journals/status files. No wildcard upload.
+[ ] Keep public copies and tar local. Do not send secrets, raw stderr,
+    traceback, shell history, environment dumps, keys/serials or folders.
+[ ] Report attempted/missing/UNKNOWN/FAIL honestly; no fabricated completion.
+    Journal consistency is not live-process, custody or native/P5 proof.

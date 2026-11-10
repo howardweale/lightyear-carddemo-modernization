@@ -2,8 +2,13 @@ NO-KEY REHEARSAL — OPERATOR REVIEW DRAFT
 NOT RUNNABLE. Claude must approve this PR's exact head and Howard must approve
 the exact packet, public host/transfer bindings and selected attended slot before
 any command below is used. This document is not an admission or a safety closeout.
-Planned slots: 12 or 13 November 2026, 60–90 minutes; neither is booked here.
-REHEARSAL_DATE = <<HOWARD: choose 2026-11-12 or 2026-11-13>>
+Planned rehearsal: 12 November 2026, 10:00 AM Pacific (UTC-08:00).
+REHEARSAL_DATE = 2026-11-12
+REHEARSAL_START = 2026-11-12T10:00:00-08:00
+Planning duration remains 60-90 minutes; no new end-time binding is inferred.
+Howard supplies public Mac/USB values after 11 November 17:00 Pacific,
+within 24 hours before this start. Exact bound-head review and execution approval
+remain required; the date/time selection alone authorizes no commands.
 The public identity markers below remain unbound; execution stays blocked.
 Do not replace markers, edit code, paths, hashes or bounds during the session.
 
@@ -84,7 +89,7 @@ No local queue path is required to review the PR.
 
 After R0 approval only, open /bin/bash, one block at a time. Unexpected nonzero
 exit or mismatch means STOP; retain partial files. Do not continue to the next block.
-Fixed proposed paths work for either date; none silently changes with the date:
+Fixed proposed paths remain unchanged for the selected date:
   ROOT='/private/tmp/lightyear-no-key-8fe41d76-session1'
   BUNDLE='/private/tmp/lightyear-no-key-8fe41d76-session1/Lightyear Public Bundle'
   SESSION='/private/tmp/lightyear-no-key-8fe41d76-session1/session'

@@ -1,0 +1,587 @@
+{
+ "schema": "operator-review-stop-model/1",
+ "scope": "Simulated document decisions only; does not execute command sheet, observe hardware or establish cleanup",
+ "rules": [
+  {
+   "id": "R0-keys",
+   "field": "keys_unplugged",
+   "good": true,
+   "bad": false,
+   "anchor": "All keys physically unplugged",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-values",
+   "field": "all_seven_values",
+   "good": true,
+   "bad": false,
+   "anchor": "A missing value",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-markers",
+   "field": "remaining_markers",
+   "good": 0,
+   "bad": 1,
+   "anchor": "remaining marker",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-fresh",
+   "field": "message_age_hours",
+   "good": 24,
+   "bad": 25,
+   "anchor": "stale message",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-slot",
+   "field": "slot_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "changed slot/value",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-value-drift",
+   "field": "values_match",
+   "good": true,
+   "bad": false,
+   "anchor": "changed slot/value",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-Claude",
+   "field": "claude_exact_review",
+   "good": true,
+   "bad": false,
+   "anchor": "missing",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-Howard",
+   "field": "howard_exact_approval",
+   "good": true,
+   "bad": false,
+   "anchor": "review/approval",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-live",
+   "field": "live_comparisons_match",
+   "good": true,
+   "bad": false,
+   "anchor": "failed live comparison",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-exit",
+   "field": "unexpected_nonzero",
+   "good": false,
+   "bad": true,
+   "anchor": "Unexpected nonzero",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R0-repeat",
+   "field": "prior_session",
+   "good": false,
+   "bad": true,
+   "anchor": "No automatic retry",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "WIN-root",
+   "field": "windows_root_valid",
+   "good": true,
+   "bad": false,
+   "anchor": "unbound or invalid USB root",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "WIN-count",
+   "field": "volume_count",
+   "good": 1,
+   "bad": 2,
+   "anchor": "expected one bound volume",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "WIN-path",
+   "field": "windows_path_match",
+   "good": true,
+   "bad": false,
+   "anchor": "USB path or label mismatch",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "WIN-label",
+   "field": "windows_label_match",
+   "good": true,
+   "bad": false,
+   "anchor": "USB path or label mismatch",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "WIN-read",
+   "field": "volume_read_error",
+   "good": false,
+   "bad": true,
+   "anchor": "read error",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "TRANSFER-size",
+   "field": "outer_size_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "archive hash/size",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "TRANSFER-hash",
+   "field": "outer_hash_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "archive hash/size",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-host",
+   "field": "hostname_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Wrong host/account/version/build",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-account",
+   "field": "account_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Wrong host/account/version/build",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-version",
+   "field": "version_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Wrong host/account/version/build",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-build",
+   "field": "build_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Wrong host/account/version/build",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-root",
+   "field": "uid",
+   "good": 501,
+   "bad": 0,
+   "anchor": "UID0",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-admin",
+   "field": "groups",
+   "good": [
+    20
+   ],
+   "bad": [
+    20,
+    80
+   ],
+   "anchor": "group80",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-arch",
+   "field": "architecture",
+   "good": "arm64",
+   "bad": "x86_64",
+   "anchor": "Intel or Rosetta",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-translated",
+   "field": "translated",
+   "good": 0,
+   "bad": 1,
+   "anchor": "sysctl.proc_translated must be0",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R1-unavailable",
+   "field": "translation_allowed",
+   "good": true,
+   "bad": false,
+   "anchor": "UNAVAILABLE and STOP unless",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-realpath",
+   "field": "usb_realpath_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "no alias",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-label",
+   "field": "mac_label_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "wrong label/path",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-mount",
+   "field": "mount_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "wrong label/path",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-label-count",
+   "field": "label_count",
+   "good": 1,
+   "bad": 0,
+   "anchor": "missing fields",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-mount-count",
+   "field": "mount_count",
+   "good": 1,
+   "bad": 2,
+   "anchor": "Empty/ambiguous",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-read",
+   "field": "diskutil_exit",
+   "good": 0,
+   "bad": 2,
+   "anchor": "nonzero exit means STOP",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "MAC-reinsert",
+   "field": "reinsert_rechecked",
+   "good": true,
+   "bad": false,
+   "anchor": "Repeat these named-volume checks",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-existing",
+   "field": "any_destination_exists",
+   "good": false,
+   "bad": true,
+   "anchor": "Existing names stop the attempt",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-alias",
+   "field": "all_resolved_paths_match",
+   "good": true,
+   "bad": false,
+   "anchor": "Compare all resolved paths exactly",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-owner",
+   "field": "owners_match",
+   "good": true,
+   "bad": false,
+   "anchor": "owner must match R0",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-mode",
+   "field": "private_modes_700",
+   "good": true,
+   "bad": false,
+   "anchor": "mode700",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-write",
+   "field": "group_world_write",
+   "good": false,
+   "bad": true,
+   "anchor": "no group/world-write",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "PATH-space",
+   "field": "available_kib",
+   "good": 1048576,
+   "bad": 1048575,
+   "anchor": "at least1048576KiB",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "TRANSFER-xattr",
+   "field": "xattr_read_error",
+   "good": false,
+   "bad": true,
+   "anchor": "Any xattr read error",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "TRANSFER-quarantine",
+   "field": "quarantine",
+   "good": false,
+   "bad": true,
+   "anchor": "quarantine/Gatekeeper refusal stops",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "TRANSFER-gatekeeper",
+   "field": "gatekeeper_refused",
+   "good": false,
+   "bad": true,
+   "anchor": "quarantine/Gatekeeper refusal stops",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R2-size",
+   "field": "inner_size_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "test \"$bytes\" = 25172086",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R2-hash",
+   "field": "inner_hash_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "test \"$digest\" = fbf4afef",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R2-metadata",
+   "field": "metadata_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Compare python3.12.16",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R2-flags",
+   "field": "proof_flags_false",
+   "good": true,
+   "bad": false,
+   "anchor": "false sdk_imported/hardware_checked/native_proof",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R2-positive",
+   "field": "metadata_recorded",
+   "good": true,
+   "bad": false,
+   "anchor": "Both require exit0/RECORDED",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-positive",
+   "field": "copies_recorded",
+   "good": true,
+   "bad": false,
+   "anchor": "Require exit0/RECORDED for each",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-negative",
+   "field": "negative_exit",
+   "good": 2,
+   "bad": 0,
+   "anchor": "require exit2 from the IO tool",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-record",
+   "field": "negative_record_exact",
+   "good": true,
+   "bad": false,
+   "anchor": "Wrong status",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-stdout",
+   "field": "stdout_target_exists",
+   "good": false,
+   "bad": true,
+   "anchor": "existing stdout target",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-file",
+   "field": "unexpected_file",
+   "good": false,
+   "bad": true,
+   "anchor": "unexpected file",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-malformed",
+   "field": "negative_record_malformed",
+   "good": false,
+   "bad": true,
+   "anchor": "malformed record",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R4-retained",
+   "field": "independent_comparisons_match",
+   "good": true,
+   "bad": false,
+   "anchor": "Both require exit0/RECORDED",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-cwd",
+   "field": "cwd_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "Each cd/test must pass",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-missing",
+   "field": "result_present",
+   "good": true,
+   "bad": false,
+   "anchor": "Missing result/UNKNOWN/forced",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-unknown",
+   "field": "result_unknown",
+   "good": false,
+   "bad": true,
+   "anchor": "Missing result/UNKNOWN/forced",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-forced",
+   "field": "forced_termination",
+   "good": false,
+   "bad": true,
+   "anchor": "forced",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-reason",
+   "field": "case_result_exact",
+   "good": true,
+   "bad": false,
+   "anchor": "with the exact",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-deadline",
+   "field": "deadline_unchanged",
+   "good": true,
+   "bad": false,
+   "anchor": "original deadline+5seconds",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R5-cancel",
+   "field": "cancel_at_ready_once",
+   "good": true,
+   "bad": false,
+   "anchor": "press Ctrl-C once",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R6-readback",
+   "field": "readback_recorded",
+   "good": true,
+   "bad": false,
+   "anchor": "Readback requires exit0/RECORDED",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R6-chain",
+   "field": "chain_consistent",
+   "good": true,
+   "bad": false,
+   "anchor": "chain_consistent=true",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R6-status",
+   "field": "reported_status_matches",
+   "good": true,
+   "bad": false,
+   "anchor": "must match the case",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "R6-truncation",
+   "field": "returns_complete_for_attempts",
+   "good": true,
+   "bad": false,
+   "anchor": "Missing/partial files remain missing/partial",
+   "document": "COMMAND-SHEET.txt"
+  },
+  {
+   "id": "RET-fields",
+   "field": "return_fields_allowlisted",
+   "good": true,
+   "bad": false,
+   "anchor": "Returned files contain only their allowlisted fields",
+   "document": "RETURN-CHECKLIST.txt"
+  },
+  {
+   "id": "RET-safety",
+   "field": "independent_cleanup_resolved",
+   "good": true,
+   "bad": false,
+   "anchor": "No logout while cleanup safety remains unknown",
+   "document": "RETURN-CHECKLIST.txt"
+  },
+  {
+   "id": "RET-files",
+   "field": "return_files_allowlisted",
+   "good": true,
+   "bad": false,
+   "anchor": "Never copy anything beyond the manifest/return allowlist",
+   "document": "RETURN-CHECKLIST.txt"
+  },
+  {
+   "id": "RET-auth",
+   "field": "claims_authentication",
+   "good": false,
+   "bad": true,
+   "anchor": "Hash consistency is not authentication",
+   "document": "RETURN-CHECKLIST.txt"
+  },
+  {
+   "id": "RET-reap",
+   "field": "claims_os_reap_proof",
+   "good": false,
+   "bad": true,
+   "anchor": "Distinguish child handle reap",
+   "document": "RETURN-CHECKLIST.txt"
+  },
+  {
+   "id": "RET-admit",
+   "field": "requests_new_admission",
+   "good": false,
+   "bad": true,
+   "anchor": "Do not admit a new attempt",
+   "document": "RETURN-CHECKLIST.txt"
+  }
+ ]
+}

@@ -180,3 +180,48 @@ class SetExecIdentityControl(unittest.TestCase):
     def test_returning_child_is_not_a_setexec_control(self):
         with self.assertRaisesRegex(ValueError, "same worker image"):
             classify(sample("spawn-setexec", "baseline"), b"X", "baseline", 100, 99, DIGEST)
+
+class NativeFailureDiagnostics(unittest.TestCase):
+    def test_runtime_path_exception_is_bounded_without_private_message(self):
+        import runpy
+        from unittest import mock
+        from observe import ROOT
+        probe = runpy.run_path(str(ROOT / "src/lightyear_execution/mac_owner_preexec_probe.py"))
+        function = probe["native_attempt"]
+        path = mock.Mock()
+        path.return_value.resolve.side_effect = PermissionError(errno.EACCES, "must-not-leak-secret-path")
+        with mock.patch.dict(function.__globals__, {"Path": path}):
+            row = function("raw-fork", 7, DIGEST, 100.0, 105.0)
+        self.assertEqual(row, dict(operation="raw-fork", native_failure_phase="runtime-path",
+            native_failure_type="PermissionError", native_errno=errno.EACCES, native_rc=None))
+        self.assertNotIn("must-not-leak", repr(row))
+
+    def test_diagnostic_failure_cannot_be_accepted_with_other_valid_fields(self):
+        for policy in ("baseline", "combined"):
+            row = sample(policy=policy)
+            row.update(native_failure_phase="library-load", native_failure_type="OSError",
+                       native_errno=errno.EACCES, native_rc=None)
+            with self.subTest(policy=policy), self.assertRaisesRegex(ValueError, "native helper failed"):
+                classify(row, b"X" if policy == "baseline" else b"", policy, 100, 99, DIGEST)
+
+    def test_unequal_baseline_limits_use_existing_soft_limit_setter_control(self):
+        row = sample("raise-fork", "baseline")
+        row.update(nproc_before=[1333, 2000], requested_nproc=[1333, 1333],
+                   nproc_after=[1333, 1333])
+        self.assertEqual(classify(row, b"X", "baseline", 100, 99, DIGEST),
+                         "POSITIVE_CONTROL_OBSERVED")
+        for after in ([1332, 1333], [1333, 2000], [0, 0]):
+            changed = copy.deepcopy(row); changed["nproc_after"] = after
+            with self.subTest(after=after), self.assertRaises(ValueError):
+                classify(changed, b"X", "baseline", 100, 99, DIGEST)
+
+    def test_old_clamped_baseline_and_successful_confined_raise_still_refused(self):
+        row = sample("raise-fork", "baseline")
+        row.update(nproc_before=[1333, 2000], requested_nproc=[2000, 2000],
+                   nproc_after=[1333, 1333])
+        with self.assertRaises(ValueError):
+            classify(row, b"X", "baseline", 100, 99, DIGEST)
+        row = sample("raise-fork")
+        row.update(raise_rc=0, raise_errno=0, nproc_after=[1, 1])
+        with self.assertRaises(ValueError):
+            classify(row, b"", "combined", 100, 99, DIGEST)

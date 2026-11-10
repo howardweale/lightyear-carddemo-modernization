@@ -20,27 +20,50 @@ NATIVE_OPERATIONS = ("raw-fork", "vfork", "spawn-suspended", "spawn-setexec", "r
 OPERATIONS = ORIGINAL_OPERATIONS + NATIVE_OPERATIONS
 
 def native_attempt(operation, fd, digest, original, cleanup):
-    helper = Path(sys.base_prefix).resolve(strict=True) / "lib/d01-regression.dylib"
-    if helper.resolve(strict=True) != helper or helper.is_symlink():
-        raise ValueError("d01-native-path-refused")
-    info = helper.stat()
-    if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or
-            info.st_mode & 0o222 or type(digest) is not str or len(digest) != 64 or
-            hashlib.sha256(helper.read_bytes()).hexdigest() != digest):
-        raise ValueError("d01-native-bytes-refused")
-    lib = C.CDLL(str(helper), use_errno=True)
-    lib.d01_attempt.argtypes = [C.c_char_p, C.c_char_p, C.c_int, C.c_double, C.c_double, C.c_char_p, C.c_size_t]
-    lib.d01_attempt.restype = C.c_int
-    output = C.create_string_buffer(16384)
-    rc = lib.d01_attempt(operation.encode("ascii"), os.fsencode(Path(sys.executable).resolve()),
-                        fd, original, cleanup, output, len(output))
-    if rc or not output.value or len(output.value) >= len(output)-1:
-        raise ValueError("d01-native-call-incomplete")
-    result = json.loads(output.value)
-    if not isinstance(result, dict) or result.get("operation") != operation:
-        raise ValueError("d01-native-operation-mismatch")
-    result["native_sha256"] = digest
-    return result
+    # Public, bounded diagnostics only. No exception message/path is returned.
+    # Failure remains UNKNOWN; it is never a kernel-refusal observation.
+    phase = "runtime-path"
+    rc = None
+    try:
+        helper = Path(sys.base_prefix).resolve(strict=True) / "lib/d01-regression.dylib"
+        phase = "helper-path"
+        if helper.resolve(strict=True) != helper or helper.is_symlink():
+            raise ValueError("d01-native-path-refused")
+        phase = "helper-stat"
+        info = helper.stat()
+        phase = "helper-bytes"
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or
+                info.st_mode & 0o222 or type(digest) is not str or len(digest) != 64 or
+                hashlib.sha256(helper.read_bytes()).hexdigest() != digest):
+            raise ValueError("d01-native-bytes-refused")
+        phase = "library-load"
+        lib = C.CDLL(str(helper), use_errno=True)
+        lib.d01_attempt.argtypes = [C.c_char_p, C.c_char_p, C.c_int, C.c_double, C.c_double, C.c_char_p, C.c_size_t]
+        lib.d01_attempt.restype = C.c_int
+        output = C.create_string_buffer(16384)
+        phase = "interpreter-path"
+        interpreter = os.fsencode(Path(sys.executable).resolve())
+        phase = "native-call"
+        rc = lib.d01_attempt(operation.encode("ascii"), interpreter,
+                            fd, original, cleanup, output, len(output))
+        if rc or not output.value or len(output.value) >= len(output)-1:
+            raise ValueError("d01-native-call-incomplete")
+        phase = "result-decode"
+        result = json.loads(output.value)
+        if not isinstance(result, dict) or result.get("operation") != operation:
+            raise ValueError("d01-native-operation-mismatch")
+        result["native_sha256"] = digest
+        return result
+    except Exception as error:
+        number = getattr(error, "errno", None)
+        number = number if type(number) is int and -4096 <= number <= 4096 else None
+        name = type(error).__name__
+        if name not in ("PermissionError", "FileNotFoundError", "OSError", "ValueError",
+                        "TypeError", "AttributeError", "JSONDecodeError"):
+            name = "Exception"
+        return dict(operation=operation, native_failure_phase=phase,
+                    native_failure_type=name, native_errno=number, native_rc=rc)
+
 
 def entry(fd):
     if sys.platform != "darwin" or not os.getuid() or not os.geteuid():

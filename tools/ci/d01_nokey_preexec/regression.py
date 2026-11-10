@@ -15,6 +15,8 @@ REFUSALS = (errno.EPERM, errno.EACCES, errno.EAGAIN)
 
 
 def classify(attempt, witness, policy, pid, parent_pid, digest):
+    if "native_failure_phase" in attempt:
+        raise ValueError("native helper failed: " + str(attempt.get("native_failure_phase")))
     operation = attempt.get("operation")
     if operation == "spawn-setexec" and policy == "baseline":
         raise ValueError("SETEXEC control must replace the same worker image, not return a child")
@@ -39,7 +41,7 @@ def classify(attempt, witness, policy, pid, parent_pid, digest):
     if operation == "raise-fork":
         request = attempt.get("requested_nproc")
         if policy == "baseline":
-            if (request != [before[1], before[1]] or before[1] == 0 or
+            if (request != [before[0], before[0]] or before[0] == 0 or
                     attempt.get("raise_rc") != 0 or after != request):
                 raise ValueError("baseline limit setter control missing")
         elif (request != [1, 1] or attempt.get("raise_rc") != -1 or
@@ -118,7 +120,7 @@ def main():
         worker_sha256=sha(ROOT / "src/lightyear_execution/mac_owner_process.py"),
         limits=["Separate 240-second CI experiment, fixed 15-second rows plus original 5-second cleanup",
                 "Native concurrent threads created after worker entry: post-policy samples, not installation races",
-                "Raise baseline requests existing hard limit; confined row requests [1,1] from [0,0]",
+                "Baseline setter control requests existing positive soft limit for both limits; confined row raises [0,0] to [1,1]",
                 "A successful sandbox_init call plus failed fork does not prove policy relaxation was refused",
                 "Exact-interpreter or SETEXEC image replacement is UNKNOWN/red under confinement",
                 "All negative LaunchServices statuses remain UNKNOWN; no denial point isolated",

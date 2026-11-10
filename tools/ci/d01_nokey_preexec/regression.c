@@ -217,9 +217,9 @@ int d01_attempt(const char *operation, const char *interpreter, int witness_fd,
     int raise_rc = -99, raise_error = 0, relax_rc = -99, relax_error = 0, internal = 0;
     const char *creation = operation;
     if (!strcmp(operation, "raise-fork")) {
-        /* Baseline restores soft to its existing positive hard limit. Combined
+        /* Baseline sets both limits to its existing positive soft limit. Combined
          * attempts 0 -> 1. The numeric requests differ and are reported exactly. */
-        requested.rlim_cur = requested.rlim_max = before.rlim_max ? before.rlim_max : 1;
+        requested.rlim_cur = requested.rlim_max = before.rlim_cur ? before.rlim_cur : 1;
         errno = 0;
         raise_rc = setrlimit(RLIMIT_NPROC, &requested);
         raise_error = raise_rc ? errno : 0;

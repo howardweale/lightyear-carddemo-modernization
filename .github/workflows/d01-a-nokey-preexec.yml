@@ -56,17 +56,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B -m unittest discover -s tools/ci/d01_nokey_preexec -p test_diagnostics.py -v
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B -m unittest discover -s tools/ci/d01_nokey_preexec -p 'test_*diagnostics.py' -v
       - name: Observe existing NO-KEY worker under prelaunch confinement
         shell: bash
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B tools/ci/d01_nokey_preexec/observe.py \
             "$RUNNER_TEMP/d01-preexec" "$RUNNER_TEMP/d01-bound-worker.json"
+      - name: Collect bounded PID-matched startup OS diagnostics
+        if: always()
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B tools/ci/d01_nokey_preexec/os_diagnostics.py \
+            "$RUNNER_TEMP/d01-bound-worker.json" "$RUNNER_TEMP/d01-os-diagnostics.json"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: d01-bound-worker-${{ matrix.os }}
-          path: ${{ runner.temp }}/d01-bound-worker.json
+          path: |
+            ${{ runner.temp }}/d01-bound-worker.json
+            ${{ runner.temp }}/d01-os-diagnostics.json
           if-no-files-found: error
           retention-days: 90

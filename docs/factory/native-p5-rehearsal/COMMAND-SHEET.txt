@@ -2,13 +2,17 @@ NO-KEY REHEARSAL — OPERATOR REVIEW DRAFT
 NOT RUNNABLE. Claude must approve this PR's exact head and Howard must approve
 the exact packet, public host/transfer bindings and selected attended slot before
 any command below is used. This document is not an admission or a safety closeout.
-Planned rehearsal: 12 November 2026, 10:00 AM Pacific (UTC-08:00).
-REHEARSAL_DATE = 2026-11-12
-REHEARSAL_START = 2026-11-12T10:00:00-08:00
+Readiness-based rehearsal; no slot selected by this template.
+REHEARSAL_DATE = <<REHEARSAL_DATE>>
+REHEARSAL_START = <<REHEARSAL_START>>
 Planning duration remains 60-90 minutes; no new end-time binding is inferred.
-Howard supplies public Mac/USB values after 11 November 17:00 Pacific,
-within 24 hours before this start. Exact bound-head review and execution approval
+Howard supplies public Mac/USB values before the selected start,
+no more than 24 elapsed hours before it. Exact bound-head review and execution approval
 remain required; the date/time selection alone authorizes no commands.
+Once prerequisites are green, offer the first 08:00-18:00 Pacific slot at least
+two hours after the offer; Howard confirms or names another. Review the real
+America/Los_Angeles offset and enough attended time for the whole session.
+Recheck freshness, final review and execution approval after any slot change.
 The public identity markers below remain unbound; execution stays blocked.
 Do not replace markers, edit code, paths, hashes or bounds during the session.
 

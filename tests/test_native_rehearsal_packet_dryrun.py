@@ -14,7 +14,7 @@ class BindingReviewTests(unittest.TestCase):
             MAC_STD_USER="fixture_user", MAC_UID="501", MAC_OS_BUILD="FIXTURE",
             USB_WIN_ROOT="Z:\\", USB_MAC_VOLUME="/Volumes/PUBLIC FIXTURE",
             USB_VOLUME_LABEL="PUBLIC FIXTURE"), received_at="2030-03-09T18:00:00-08:00",
-            not_before="2030-03-09T17:00:00-08:00", slot_start="2030-03-10T10:00:00-07:00")
+            slot_start="2030-03-10T10:00:00-07:00")
 
     def test_offset_aware_window_across_offset_change(self):
         self.assertEqual(binding.validate_values(self.values())["MAC_UID"], "501")
@@ -36,7 +36,7 @@ class BindingReviewTests(unittest.TestCase):
             binding.validate_values(doc)
 
     def test_stale_early_future_and_naive_values_refuse(self):
-        for value in ("2030-03-08T10:00:00-08:00", "2030-03-09T17:00:00-08:00",
+        for value in ("2030-03-08T10:00:00-08:00", "2030-03-08T17:00:00-08:00",
                       "2030-03-10T10:00:00-07:00", "2030-03-09T18:00:00"):
             doc = self.values(); doc["received_at"] = value
             with self.subTest(value=value), self.assertRaises(ValueError):
@@ -53,6 +53,20 @@ class BindingReviewTests(unittest.TestCase):
         doc["slot_start"] = "2030-03-10T11:00:00-07:00"
         with self.assertRaises(ValueError):
             binding.render(sheet, checklist, doc)
+
+    def test_dynamic_slot_review_draft_and_exact_freshness_boundary(self):
+        doc = self.values()
+        doc["received_at"] = "2030-03-09T09:00:00-08:00"
+        binding.validate_values(doc)  # Exactly24 elapsed hours over DST transition.
+        sheet = "NOT RUNNABLE\nREHEARSAL_START = <<REHEARSAL_START>>\nREHEARSAL_DATE = <<REHEARSAL_DATE>>\n"
+        sheet += "\n".join("<<"+key+">>" for key in binding.KEYS)
+        rendered, _ = binding.render(sheet, "NOT RUNNABLE checklist", doc)
+        self.assertIn(doc["slot_start"], rendered)
+        self.assertIn("NOT RUNNABLE", rendered)
+        self.assertNotIn("<<", rendered)
+        doc["received_at"] = "2030-03-09T08:59:59-08:00"
+        with self.assertRaises(ValueError):
+            binding.validate_values(doc)
 
 
 class StopDecisionTests(unittest.TestCase):

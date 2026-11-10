@@ -18,7 +18,7 @@ def timestamp(value):
 
 
 def validate_values(document):
-    if set(document) != {"public_values", "received_at", "not_before", "slot_start"}:
+    if set(document) != {"public_values", "received_at", "slot_start"}:
         raise ValueError("binding-fields")
     values = document["public_values"]
     if set(values) != set(KEYS):
@@ -42,9 +42,8 @@ def validate_values(document):
         raise ValueError("named-mac-volume-required")
     if volume.split("/")[-1] in (".", ".."):
         raise ValueError("volume-traversal")
-    received, earliest, start = map(timestamp, (
-        document["received_at"], document["not_before"], document["slot_start"]))
-    if not earliest < received < start or not 0 <= (start - received).total_seconds() <= 86400:
+    received, start = map(timestamp, (document["received_at"], document["slot_start"]))
+    if not received < start or not 0 <= (start - received).total_seconds() <= 86400:
         raise ValueError("values-window")
     return values
 
@@ -58,6 +57,10 @@ def render(sheet, checklist, document):
         if marker not in sheet:
             raise ValueError("template-marker-missing")
         sheet = sheet.replace(marker, values[name])
+    # Explicit input, never today, a default slot, or execution authority.
+    start = timestamp(document["slot_start"])
+    sheet = sheet.replace("<<REHEARSAL_START>>", document["slot_start"])
+    sheet = sheet.replace("<<REHEARSAL_DATE>>", start.date().isoformat())
     if "<<" in sheet:
         raise ValueError("unresolved-marker")
     # Slot is supplied, never inferred from this computer's clock.
@@ -75,9 +78,10 @@ def main():
     args = parser.parse_args()
     document = json.loads(args.values.read_text(encoding="utf8"))
     template = json.loads((args.template / "BINDING-VALUES.json").read_text(encoding="utf8"))
-    if (document["not_before"] != template["values_not_before"] or
-            document["slot_start"] != template["rehearsal_start"]):
-        raise ValueError("reviewed-window-mismatch")
+    if (template["values_not_before"] is not None or
+            template["rehearsal_start"] is not None or
+            template["slot_policy"]["maximum_values_age_seconds"] != 86400):
+        raise ValueError("readiness-template-mismatch")
     sheet = (args.template / "COMMAND-SHEET.txt").read_text(encoding="utf8")
     checklist = (args.template / "RETURN-CHECKLIST.txt").read_text(encoding="utf8")
     sheet, checklist = render(sheet, checklist, document)

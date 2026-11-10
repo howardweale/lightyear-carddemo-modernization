@@ -1,13 +1,13 @@
-12 NOVEMBER NO-KEY REHEARSAL — ONE-PAGE OPERATOR CHECKLIST
+READINESS-BASED NO-KEY REHEARSAL — ONE-PAGE OPERATOR CHECKLIST
 REVIEW TEMPLATE / NOT RUNNABLE / NO EXECUTION AUTHORITY
-Planned start: 12 Nov 2026, 10:00 Pacific (UTC-08:00); allow60–90min.
+No slot selected. Offer only when ready: daily08:00-18:00 Pacific, >=2h ahead.
+Howard confirms the slot; allow60–90min and review its actual UTC offset.
 The approved COMMAND-SHEET and RETURN-CHECKLIST remain authoritative.
 
 BEFORE THE SESSION (about10–15min; do not rush checks)
 [ ] Have the exact final packet/head and Claude review, followed by Howard's
     explicit approval of that same packet, public bindings and attended slot.
-[ ] Supply all seven public Mac/USB values in one message after11Nov17PT
-    and before12Nov10PT; message age at start must be <=24h. No in-session edits.
+[ ] Supply all seven public Mac/USB values in one message before the confirmed start; message age at start must be <=24h. No in-session edits.
 [ ] Print the final command sheet, this checklist and RETURN-CHECKLIST.
     Compare printed head, archive size/hash and seven literals to the review.
 [ ] All keys unplugged throughout. Use the dedicated standard account;

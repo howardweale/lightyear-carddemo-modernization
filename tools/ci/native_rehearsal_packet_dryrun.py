@@ -59,7 +59,7 @@ def report(packet):
     try:
         render(documents["COMMAND-SHEET.txt"], documents["RETURN-CHECKLIST.txt"], dict(
             public_values=template["public_values"], received_at=template["values_message_received_at"],
-            not_before=template["values_not_before"], slot_start=template["rehearsal_start"]))
+            slot_start=template["rehearsal_start"]))
     except (ValueError, TypeError):
         refused = True
     if not refused:

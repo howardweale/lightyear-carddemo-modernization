@@ -13,8 +13,12 @@ SINGLE-STEP VALUE DROP-IN, ONLY AFTER HOWARD'S LATER PUBLIC VALUES
 Planned input JSON has exactly these keys:
   public_values: all seven named strings from BINDING-VALUES
   received_at: actual message timestamp including its UTC offset
-  not_before: copy values_not_before from the reviewed BINDING-VALUES
-  slot_start: copy rehearsal_start from the reviewed BINDING-VALUES
+  slot_start: explicitly selected start including its actual Pacific UTC offset
+Fixed-date fields remain null in the template. The renderer accepts no not_before
+field and requires received_at strictly before start, at most24 elapsed hours old.
+Before execution, reviewers verify the actual America/Los_Angeles offset, daily
+08:00-18:00 attendance, >=2h offer lead, Howard confirmation and enough session time.
+The renderer cannot establish those human facts. It produces only a review draft.
 Do not supply real values in the placeholder dry run. The future command is:
   python -B tools/native_rehearsal_bind_review.py --template docs/factory/native-p5-rehearsal --values PUBLIC-VALUES.json --output NEW-BOUND-REVIEW
 This only writes a new review directory, with no shell/subprocess/network or

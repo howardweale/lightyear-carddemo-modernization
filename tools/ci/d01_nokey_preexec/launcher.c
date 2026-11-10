@@ -74,6 +74,9 @@ int main(int argc, char **argv) {
     char profile[PATH_MAX * 6 + 1024];
     n = snprintf(profile, sizeof(profile),
         "(version 1)(deny default)"
+        "(allow file-read-data (literal \"/\"))"
+        "(allow sysctl-read (sysctl-name \"security.mac.lockdown_mode_state\"))"
+        "(allow sysctl-read (sysctl-name \"kern.bootargs\"))"
         "(allow file-read* (subpath \"%s\") (subpath \"/usr/lib\")"
         " (subpath \"/System/Library\") (literal \"%s\") (literal \"%s\") (subpath \"%s\"))"
         "(allow process-exec (literal \"%s\"))",

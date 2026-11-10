@@ -6,8 +6,10 @@ from pathlib import Path
 import stat
 import sys
 
-OPERATIONS = ("none", "fork", "spawn", "exec-same", "exec-other", "mach-lookup", "ls-open")
+ORIGINAL_OPERATIONS = ("none", "fork", "spawn", "exec-same", "exec-other", "mach-lookup", "ls-open")
 
+NATIVE_OPERATIONS = ("raw-fork", "vfork", "spawn-suspended", "spawn-setexec", "raise-fork", "relax-fork", "concurrent-fork", "concurrent-spawn")
+OPERATIONS = ORIGINAL_OPERATIONS + NATIVE_OPERATIONS
 
 def _file(path, digest):
     resolved = Path(path).resolve(strict=True)
@@ -38,6 +40,7 @@ class PreExecBinding:
     operation: str = "none"
     policy: str = "combined"
     stderr_fd: int | None = None  # Optional public CI diagnostic pipe only.
+    native_sha256: str | None = None  # Public regression helper, never default rehearsal.
 
     def command(self, argv):
         if (sys.platform != "darwin" or not os.getuid() or not os.geteuid() or
@@ -65,8 +68,17 @@ class PreExecBinding:
                 not app.is_dir() or runtime in map(Path, ("/", "/usr", "/System", "/Library")) or
                 not interpreter.is_relative_to(runtime) or not stat.S_ISFIFO(os.fstat(self.witness_fd).st_mode)):
             raise ValueError("d01-runtime-input-or-witness-refused")
+        extra = []
+        if self.native_sha256 is not None:
+            helper = runtime / "lib/d01-regression.dylib"
+            _file(str(helper), self.native_sha256)
+            if helper.stat().st_mode & 0o222:
+                raise ValueError("d01-native-helper-writable")
+            extra = ["--d01-native-sha256", self.native_sha256]
+        elif self.operation in NATIVE_OPERATIONS:
+            raise ValueError("d01-native-binding-missing")
         for path in (self.launcher, str(worker), str(interpreter), self.runtime, self.app):
             if any(ord(c) < 32 or c in '\\"' for c in path):
                 raise ValueError("d01-profile-metacharacter-refused")
         return [self.launcher, self.policy, self.runtime, self.app, str(interpreter),
-                *argv[1:], "--d01-probe", self.operation, str(self.witness_fd), self.app]
+                *argv[1:], "--d01-probe", self.operation, str(self.witness_fd), self.app, *extra]

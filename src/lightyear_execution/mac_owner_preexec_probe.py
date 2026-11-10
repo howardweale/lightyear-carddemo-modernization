@@ -1,16 +1,46 @@
 """Fixed public attempts inside a pre-exec-launched NO-KEY worker.
 
-This module NEVER applies or relaxes policy. Loading it and all worker imports
-happens after the owner-launched helper execs it; baseline is explicitly unconfined.
+Loading this module and all worker imports happens after the owner-launched
+helper execs it; baseline is explicitly unconfined. Optional regression helper
+attempts raise/relax adversarially; success never establishes containment.
 """
 import ctypes as C
 import errno
+import hashlib
+import json
+from pathlib import Path
+import stat
 import os
 import resource
 import sys
 
-OPERATIONS = ("none", "fork", "spawn", "exec-same", "exec-other", "mach-lookup", "ls-open")
+ORIGINAL_OPERATIONS = ("none", "fork", "spawn", "exec-same", "exec-other", "mach-lookup", "ls-open")
 
+NATIVE_OPERATIONS = ("raw-fork", "vfork", "spawn-suspended", "spawn-setexec", "raise-fork", "relax-fork", "concurrent-fork", "concurrent-spawn")
+OPERATIONS = ORIGINAL_OPERATIONS + NATIVE_OPERATIONS
+
+def native_attempt(operation, fd, digest, original, cleanup):
+    helper = Path(sys.base_prefix).resolve(strict=True) / "lib/d01-regression.dylib"
+    if helper.resolve(strict=True) != helper or helper.is_symlink():
+        raise ValueError("d01-native-path-refused")
+    info = helper.stat()
+    if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or
+            info.st_mode & 0o222 or type(digest) is not str or len(digest) != 64 or
+            hashlib.sha256(helper.read_bytes()).hexdigest() != digest):
+        raise ValueError("d01-native-bytes-refused")
+    lib = C.CDLL(str(helper), use_errno=True)
+    lib.d01_attempt.argtypes = [C.c_char_p, C.c_char_p, C.c_int, C.c_double, C.c_double, C.c_char_p, C.c_size_t]
+    lib.d01_attempt.restype = C.c_int
+    output = C.create_string_buffer(16384)
+    rc = lib.d01_attempt(operation.encode("ascii"), os.fsencode(Path(sys.executable).resolve()),
+                        fd, original, cleanup, output, len(output))
+    if rc or not output.value or len(output.value) >= len(output)-1:
+        raise ValueError("d01-native-call-incomplete")
+    result = json.loads(output.value)
+    if not isinstance(result, dict) or result.get("operation") != operation:
+        raise ValueError("d01-native-operation-mismatch")
+    result["native_sha256"] = digest
+    return result
 
 def entry(fd):
     if sys.platform != "darwin" or not os.getuid() or not os.geteuid():
@@ -21,11 +51,17 @@ def entry(fd):
                 nproc=list(resource.getrlimit(resource.RLIMIT_NPROC)))
 
 
-def attempt(operation, fd, app):
+def attempt(operation, fd, app, *, native_sha256=None, original=None, cleanup=None):
     if operation not in OPERATIONS or operation == "none":
         raise ValueError("d01-attempt-refused")
+    if operation in NATIVE_OPERATIONS:
+        return native_attempt(operation, fd, native_sha256, original, cleanup)
     row = dict(operation=operation, status=None, child=None, reaped=None)
     sentinel = f"import os;os.write({fd},b'X');os._exit(17)"
+    if native_sha256 is not None and operation == "exec-same":
+        sentinel = ("import os,json,resource,sys;print(json.dumps(dict(kind='d01-replacement',"
+                    "operation='exec-same',interpreter=os.path.realpath(sys.executable),pid=os.getpid(),parent_pid=os.getppid(),"
+                    "nproc=list(resource.getrlimit(resource.RLIMIT_NPROC)))),flush=True);" + sentinel)
     if operation in ("fork", "spawn", "exec-same", "exec-other"):
         try:
             if operation == "fork":

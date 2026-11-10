@@ -33,7 +33,11 @@ static double now(void) {
 int main(int argc, char **argv) {
     /* mode runtime app interpreter -I -B worker --worker child S? clocks
        --d01-probe operation witness-fd app; no shell or arbitrary launch flags. */
-    if (argc != 17 || getuid() == 0 || geteuid() == 0) fail();
+    if ((argc != 17 && argc != 19) || getuid() == 0 || geteuid() == 0) fail();
+    if (argc == 19) {
+        if (strcmp(argv[17], "--d01-native-sha256") || strlen(argv[18]) != 64 ||
+            strspn(argv[18], "0123456789abcdef") != 64) fail();
+    }
     int combined = !strcmp(argv[1], "combined");
     if (!combined && strcmp(argv[1], "baseline")) fail();
     if (strcmp(argv[5], "-I") || strcmp(argv[6], "-B") ||
@@ -41,11 +45,17 @@ int main(int argc, char **argv) {
         (strcmp(argv[10], "S1") && strcmp(argv[10], "S2")) ||
         strcmp(argv[13], "--d01-probe") || strcmp(argv[3], argv[16])) fail();
     const char *operations[] = {"none", "fork", "spawn", "exec-same",
-                                "exec-other", "mach-lookup", "ls-open"};
+                                "exec-other", "mach-lookup", "ls-open",
+        "raw-fork", "vfork", "spawn-suspended", "spawn-setexec",
+        "raise-fork", "relax-fork", "concurrent-fork", "concurrent-spawn"};
     int known = 0;
     for (unsigned i = 0; i < sizeof(operations)/sizeof(operations[0]); i++)
         if (!strcmp(argv[14], operations[i])) known = 1;
     if (!known) fail();
+    if (argc != 19) {
+        for (unsigned i = 7; i < sizeof(operations)/sizeof(operations[0]); i++)
+            if (!strcmp(argv[14], operations[i])) fail();
+    }
     char *end = NULL;
     double original = strtod(argv[11], &end);
     if (!end || *end || !isfinite(original)) fail();

@@ -17,7 +17,7 @@ from diagnostics import BoundedStderr
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
 from lightyear_execution.mac_owner_process import _OwnedWorker, _receive
-from lightyear_execution.mac_owner_preexec import PreExecBinding, OPERATIONS
+from lightyear_execution.mac_owner_preexec import PreExecBinding, ORIGINAL_OPERATIONS as OPERATIONS, NATIVE_OPERATIONS
 
 
 def sha(path):
@@ -43,7 +43,15 @@ def application(root):
     return app, witness, token
 
 
-def collect(launcher, root, case, operation, policy, deadline):
+
+def validate_replacement(replacement, pid, parent_pid, operation, nproc, interpreter):
+    if (replacement.get("pid") != pid or replacement.get("parent_pid") != parent_pid or
+            replacement.get("operation") != operation or replacement.get("interpreter") != interpreter or
+            replacement.get("nproc") != nproc):
+        raise ValueError("replacement image identity mismatch")
+
+def collect(launcher, root, case, operation, policy, deadline, *,
+            native_sha256=None, native_classifier=None):
     row = dict(case=case, operation=operation, policy=policy, observation="UNKNOWN",
                qualified=False, owner_death="UNKNOWN", guardian_death="UNKNOWN")
     app, app_witness, token = application(root)
@@ -68,7 +76,7 @@ def collect(launcher, root, case, operation, policy, deadline):
         probe = source.with_name("mac_owner_preexec_probe.py")
         binding = PreExecBinding(str(launcher), sha(launcher), sha(source), sha(probe),
             sha(Path(sys.executable).resolve()), str(Path(sys.base_prefix).resolve()),
-            str(app), write_fd, operation, policy, stderr_fd=diagnostic.write_fd)
+            str(app), write_fd, operation, policy, stderr_fd=diagnostic.write_fd, native_sha256=native_sha256)
         worker = _OwnedWorker("child", case, original, cleanup, preexec=binding)
         worker.start()
         diagnostic.close_writer()
@@ -102,7 +110,7 @@ def collect(launcher, root, case, operation, policy, deadline):
             if not part:
                 break
             witness.extend(part)
-            if len(witness) > 1:
+            if len(witness) > (16 if operation.startswith("concurrent-") else 1):
                 raise ValueError("unexpected witness inventory")
         row["witness_hex"] = witness.hex()
         if operation == "ls-open" and policy == "baseline":
@@ -118,9 +126,11 @@ def collect(launcher, root, case, operation, policy, deadline):
         kinds = [m["kind"] for m in messages]
         expected_tail = (["identity", "ready", "completed"] if operation == "none"
                          else ["identity", "ready", "d01-attempt", "completed"])
-        exec_control = operation.startswith("exec-") and witness == b"X" and worker.exitcode == 17
+        exec_control = (operation.startswith("exec-") or operation == "spawn-setexec") and witness == b"X" and worker.exitcode == 17
         expected = ["d01-preexec", "d01-entry"] + (
             ["identity", "ready"] if exec_control else expected_tail)
+        if exec_control and native_sha256 is not None and operation in ("exec-same", "spawn-setexec"):
+            expected += ["d01-replacement"]
         if kinds != expected or row.get("forced") or worker.exitcode is None:
             raise ValueError("worker protocol, readiness, completion or reap unknown")
         pre, entry, identity = messages[:3]
@@ -135,6 +145,11 @@ def collect(launcher, root, case, operation, policy, deadline):
         if policy == "baseline" and pre["sandbox_rc"] != -99:
             raise ValueError("baseline policy unexpectedly active")
         if exec_control:
+            if native_sha256 is not None and operation in ("exec-same", "spawn-setexec"):
+                replacement = messages[-1]
+                validate_replacement(replacement, worker.pid, os.getpid(), operation, entry["nproc"],
+                                     str(Path(sys.executable).resolve()))
+                row["replacement_identity"] = replacement
             if policy != "baseline":
                 raise ValueError("exact pre-exec permission replayed: image replacement observed")
             row["observation"] = "POSITIVE_CONTROL_OBSERVED"
@@ -150,6 +165,9 @@ def collect(launcher, root, case, operation, policy, deadline):
         row["attempt"] = attempted
         if attempted["operation"] != operation:
             raise ValueError("attempt identity mismatch")
+        if native_classifier is not None and operation in NATIVE_OPERATIONS:
+            row["observation"] = native_classifier(attempted, witness, policy, worker.pid, os.getpid(), native_sha256)
+            return row, app_witness
         status = attempted["status"]
         if policy == "baseline":
             if operation in ("fork", "spawn"):

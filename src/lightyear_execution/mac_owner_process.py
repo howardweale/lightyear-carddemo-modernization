@@ -446,6 +446,12 @@ class RehearsalProcessOwner:
 if __name__ == "__main__":
     # Internal fixed worker entrypoint; no arbitrary command/module/path accepted.
     d01 = None
+    d01_native = None
+    if len(sys.argv) == 12 and sys.argv[10] == "--d01-native-sha256":
+        d01_native = sys.argv[11]
+        if len(d01_native) != 64 or any(c not in "0123456789abcdef" for c in d01_native):
+            raise SystemExit(2)
+        sys.argv = sys.argv[:10]
     if len(sys.argv) == 10 and sys.argv[6] == "--d01-probe":
         d01 = tuple(sys.argv[7:])
         sys.argv = sys.argv[:6]
@@ -458,7 +464,8 @@ if __name__ == "__main__":
     hook = None
     if d01 is not None:
         # Combined mode starts ALREADY confined by the owner-launched C helper.
-        # Only observations/attempts occur here; no sandbox or setrlimit call.
+        # Only opt-in observations/attempts: regression raise/relax calls are
+        # adversarial attempts under the inherited policy, never setup/approval.
         import runpy
         probe = runpy.run_path(str(Path(__file__).with_name("mac_owner_preexec_probe.py")))
         operation, descriptor, app = d01
@@ -468,7 +475,7 @@ if __name__ == "__main__":
         _send(_Output(), "d01-entry", **probe["entry"](fd))
         if operation != "none":
             def hook():
-                _send(_Output(), "d01-attempt", **probe["attempt"](operation, fd, app))
+                _send(_Output(), "d01-attempt", **probe["attempt"](operation, fd, app, native_sha256=d01_native, original=original, cleanup=cleanup))
     stop, output = _StopPipe(), _Output()
     if role == "grandchild":
         _grandchild(output, stop, cleanup)

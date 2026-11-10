@@ -217,12 +217,12 @@ def crash_records(directory, pids, now, deadline):
                 status="UNKNOWN" if errors or pids - seen else "FIELDS_COLLECTED")
 
 
-def collect(observation):
+def collect(observation, *, inventory=confined_pids):
     start, now = time.monotonic(), time.time()
     result = dict(schema="d01-startup-os-diagnostics/1", qualified=False,
                   observation="UNKNOWN", policy_changed=False, pids=[])
     try:
-        selected = confined_pids(read_regular(observation, 256 * 1024))
+        selected = inventory(read_regular(observation, 256 * 1024))
         pids = set(selected.values())
         result["pids"] = [dict(case=k[0], operation=k[1], pid=v)
                           for k, v in sorted(selected.items())]

@@ -45,7 +45,7 @@ Upstream data licensing is retained in
 CI must verify known account values, all three job bindings, before/after field
 changes, filler and sign representation changes, adds/deletes/reorders, duplicate
 keys, truncated records, invalid digits, explicit codec/binding errors and
-truncated detail reporting. No local tests, apps or compilers are authorized.
+truncated detail reporting. Local test, app and compiler execution is prohibited.
 No Maintec data, private input or `work/mainframe/arrivals/` is needed or permitted
 for this work. Real z/OS execution, program equivalence and qualification remain
 outside this draft; `qualified=false` and `production_controller_receipt=false`.

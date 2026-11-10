@@ -632,7 +632,7 @@ class JavaProbeTests(unittest.TestCase):
             port = listener.getsockname()[1]
             nonce = "a" * 32
             def serve():
-                for data in (nonce + "\n", "b" * 32 + "\n", None):
+                for data in (nonce + "\n", nonce + "\n", "b" * 32 + "\n", None):
                     client, _ = listener.accept()
                     with client:
                         if data is None:
@@ -641,12 +641,18 @@ class JavaProbeTests(unittest.TestCase):
                             client.sendall(data.encode())
             thread = Thread(target=serve, daemon=True)
             thread.start()
-            # The first loopback SYN can take more than 200 ms on Windows.
-            # Keep a genuine read timeout by withholding the third response
-            # longer than this connection/read deadline.
-            raw = self.invoke("".join(f"test-{i} 127.0.0.1 {port} 2000 {nonce}\n" for i in range(3)))
+            # Explicit fixture-startup control in the SAME JVM. Hosted Windows
+            # has produced connect-timeout on its first loopback connection even
+            # at 2000 ms. Do not accept that as the read-timeout observation.
+            # This setup row gets 5000 ms; each measured row remains at 2000 ms.
+            # A failed setup control still fails, with no retry or widened outcome.
+            setup = f"fixture-ready 127.0.0.1 {port} 5000 {nonce}\n"
+            probes = "".join(f"test-{i} 127.0.0.1 {port} 2000 {nonce}\n" for i in range(3))
+            raw = self.invoke(setup + probes)
             self.assertEqual(raw.returncode, 0, raw.stderr)
-            self.assertEqual([r["outcome"] for r in map(json.loads, raw.stdout.splitlines())], ["nonce-matched", "nonce-mismatch", "read-timeout"])
+            rows = list(map(json.loads, raw.stdout.splitlines()))
+            self.assertEqual([r["outcome"] for r in rows],
+                             ["nonce-matched", "nonce-matched", "nonce-mismatch", "read-timeout"])
             thread.join(timeout=4)
         raw = self.invoke(f"refused 127.0.0.1 {port} 200 -\n")
         self.assertEqual(json.loads(raw.stdout)["outcome"], "connection-refused")

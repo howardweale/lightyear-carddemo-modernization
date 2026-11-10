@@ -10,6 +10,10 @@ import tempfile
 import time
 import uuid
 
+# -I excludes the script directory; expose the public CI helper directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from diagnostics import BoundedStderr
+
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
 from lightyear_execution.mac_owner_process import _OwnedWorker, _receive
@@ -45,6 +49,7 @@ def collect(launcher, root, case, operation, policy, deadline):
     app, app_witness, token = application(root)
     read_fd, write_fd = os.pipe()
     os.set_blocking(read_fd, False)
+    diagnostic = BoundedStderr()
     worker = None
     frames = []
     stopped = False
@@ -63,12 +68,14 @@ def collect(launcher, root, case, operation, policy, deadline):
         probe = source.with_name("mac_owner_preexec_probe.py")
         binding = PreExecBinding(str(launcher), sha(launcher), sha(source), sha(probe),
             sha(Path(sys.executable).resolve()), str(Path(sys.base_prefix).resolve()),
-            str(app), write_fd, operation, policy)
+            str(app), write_fd, operation, policy, stderr_fd=diagnostic.write_fd)
         worker = _OwnedWorker("child", case, original, cleanup, preexec=binding)
         worker.start()
+        diagnostic.close_writer()
         os.close(write_fd)
         write_fd = -1
         while time.monotonic() < cleanup:
+            diagnostic.check()
             if time.monotonic() >= original:
                 stop()
             try:
@@ -87,6 +94,7 @@ def collect(launcher, root, case, operation, policy, deadline):
             worker.terminate()
             row["forced"] = True
             worker.join(max(0, cleanup-time.monotonic()))
+        diagnostic.check(final=True)
         row.update(pid=worker.pid, exitcode=worker.exitcode, frames=frames)
         witness = bytearray()
         while True:
@@ -186,6 +194,12 @@ def collect(launcher, root, case, operation, policy, deadline):
         if write_fd != -1:
             os.close(write_fd)
         os.close(read_fd)
+        diagnostic.close_writer()
+        diagnostic.drain()
+        row.update(diagnostic.fields())
+        if diagnostic.overflow or diagnostic.read_error or not diagnostic.eof:
+            row.update(observation="UNKNOWN", diagnostic_error="stderr capture incomplete or over limit")
+        diagnostic.close()
     return row, app_witness
 
 

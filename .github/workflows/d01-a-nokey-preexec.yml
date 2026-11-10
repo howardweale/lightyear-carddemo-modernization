@@ -4,6 +4,7 @@ on:
     paths:
       - '.github/workflows/d01-a-nokey-preexec.yml'
       - 'tools/ci/d01_nokey_preexec/**'
+      - 'src/lightyear_execution/__init__.py'
       - 'src/lightyear_execution/mac_owner_process.py'
       - 'src/lightyear_execution/mac_owner_preexec*.py'
   push:
@@ -11,6 +12,7 @@ on:
     paths:
       - '.github/workflows/d01-a-nokey-preexec.yml'
       - 'tools/ci/d01_nokey_preexec/**'
+      - 'src/lightyear_execution/__init__.py'
       - 'src/lightyear_execution/mac_owner_process.py'
       - 'src/lightyear_execution/mac_owner_preexec*.py'
 permissions:
@@ -50,6 +52,11 @@ jobs:
           set -euo pipefail
           /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror \
             tools/ci/d01_nokey_preexec/launcher.c -o "$RUNNER_TEMP/d01-preexec"
+      - name: Check bounded public diagnostic capture in CI only
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B -m unittest discover -s tools/ci/d01_nokey_preexec -p test_diagnostics.py -v
       - name: Observe existing NO-KEY worker under prelaunch confinement
         shell: bash
         run: |

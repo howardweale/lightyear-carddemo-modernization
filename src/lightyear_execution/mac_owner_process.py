@@ -132,7 +132,9 @@ class _OwnedWorker:
                 raise ValueError("d01-preexec-binding-required")
             argv = self._preexec.command(self.argv)
             self.process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL, close_fds=True, pass_fds=(self._preexec.witness_fd,),
+                stderr=(subprocess.DEVNULL if self._preexec.stderr_fd is None
+                        else self._preexec.stderr_fd),
+                close_fds=True, pass_fds=(self._preexec.witness_fd,),
                 env={"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "LC_ALL": "C"})
         else:
             self.process = subprocess.Popen(self.argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,

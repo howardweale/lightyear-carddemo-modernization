@@ -37,12 +37,18 @@ class PreExecBinding:
     witness_fd: int
     operation: str = "none"
     policy: str = "combined"
+    stderr_fd: int | None = None  # Optional public CI diagnostic pipe only.
 
     def command(self, argv):
         if (sys.platform != "darwin" or not os.getuid() or not os.geteuid() or
                 self.policy not in ("baseline", "combined") or self.operation not in OPERATIONS or
                 type(self.witness_fd) is not int or not 3 <= self.witness_fd <= 1024):
             raise ValueError("d01-binding-refused")
+        if self.stderr_fd is not None:
+            if (type(self.stderr_fd) is not int or not 3 <= self.stderr_fd <= 1024 or
+                    self.stderr_fd == self.witness_fd or
+                    not stat.S_ISFIFO(os.fstat(self.stderr_fd).st_mode)):
+                raise ValueError("d01-diagnostic-pipe-required")
         worker = Path(__file__).with_name("mac_owner_process.py").resolve(strict=True)
         interpreter = Path(sys.executable).resolve(strict=True)
         if (len(argv) != 9 or argv[:4] != [sys.executable, "-I", "-B", str(worker)] or

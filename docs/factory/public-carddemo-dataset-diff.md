@@ -3,8 +3,11 @@
 Planned draft utility for POSTTRAN, INTCALC and TRANREPT. It does not run those
 programs or produce an equivalence, admission or P5 receipt.
 
-The source binding is public AWS CardDemo commit
-[59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e](https://github.com/aws-samples/aws-mainframe-modernization-carddemo/tree/59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e).
+The source binding is the public AWS CardDemo revision recorded in the
+[fixture provenance manifest](../../tests/fixtures/carddemo-dataset-diff/public-data.json)
+and enforced by the module UPSTREAM constant. That is an external repository
+revision, not a commit in this factory repository. The manifest retains the full
+upstream revision, original blob IDs, SHA256 hashes and slice boundaries.
 The existing strict decoder and copybook/JCL bindings remain unchanged.
 The new `lightyear_mainframe.public_dataset_diff` module provides:
 

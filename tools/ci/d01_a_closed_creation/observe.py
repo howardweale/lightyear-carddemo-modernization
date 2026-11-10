@@ -101,10 +101,11 @@ def experiment(binary, policy, operation, deadline):
 
 
 def main():
-    if platform.system() != "Darwin" or os.getuid() == 0 or len(sys.argv) != 3:
+    if platform.system() != "Darwin" or os.getuid() == 0 or len(sys.argv) != 4:
         raise SystemExit("macOS non-root CI only; binary and output required")
     binary = Path(sys.argv[1]).resolve(strict=True)
     output = Path(sys.argv[2])
+    thread_binary = Path(sys.argv[3]).resolve(strict=True)
     deadline = time.monotonic() + 240
     rows = []
     for policy in POLICIES:
@@ -117,10 +118,13 @@ def main():
             rows.append(experiment(binary, policy, operation, deadline))
     delegated = runpy.run_path(str(Path(__file__).with_name("delegated.py")))
     rows.extend(delegated["delegated"](deadline))
+    thread_samples = runpy.run_path(str(Path(__file__).with_name("threaded.py")))
+    rows.extend(thread_samples["threaded"](thread_binary, deadline))
     report = {
         "schema": "d01-a-closed-creation-feasibility/1",
         "platform": platform.platform(), "machine": platform.machine(),
         "python": sys.version, "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+        "thread_binary_sha256": hashlib.sha256(thread_binary.read_bytes()).hexdigest(),
         "rows": rows, "qualified": False, "closed_creation_established": False,
         "owner_death": "UNKNOWN", "guardian_death": "UNKNOWN",
         "remaining": [

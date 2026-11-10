@@ -41,12 +41,14 @@ jobs:
           set -euo pipefail
           /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror -Wno-deprecated-declarations \
             tools/ci/d01_a_closed_creation/probe.c -o "$RUNNER_TEMP/d01-a-probe"
+          /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror -pthread \
+            tools/ci/d01_a_closed_creation/threaded.c -o "$RUNNER_TEMP/d01-a-threaded"
       - name: Demand actual kernel refusals with successful controls
         shell: bash
         run: |
           set -euo pipefail
           python3 -I -B tools/ci/d01_a_closed_creation/observe.py \
-            "$RUNNER_TEMP/d01-a-probe" "$RUNNER_TEMP/d01-a-observations.json"
+            "$RUNNER_TEMP/d01-a-probe" "$RUNNER_TEMP/d01-a-observations.json" "$RUNNER_TEMP/d01-a-threaded"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:

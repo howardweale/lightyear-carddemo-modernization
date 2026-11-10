@@ -364,7 +364,7 @@
    "field": "inner_hash_matches",
    "good": true,
    "bad": false,
-   "anchor": "test \"$digest\" = fbf4afef",
+   "anchor": "test \"$digest\" = fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e",
    "document": "COMMAND-SHEET.txt"
   },
   {

@@ -1,0 +1,29 @@
+{
+  "schema": "no-key-binding-review-template/1",
+  "source_pr": 535,
+  "parent": "f5092b17ef7a21c10e137ff94ed84f9f55812d8a",
+  "runtime_source": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+  "rehearsal_start": null,
+  "values_message_received_at": null,
+  "public_values": {
+    "MAC_HOSTNAME": "<<MAC_HOSTNAME>>",
+    "MAC_STD_USER": "<<MAC_STD_USER>>",
+    "MAC_UID": "<<MAC_UID>>",
+    "MAC_OS_BUILD": "<<MAC_OS_BUILD>>",
+    "USB_WIN_ROOT": "<<USB_WIN_ROOT>>",
+    "USB_MAC_VOLUME": "<<USB_MAC_VOLUME>>",
+    "USB_VOLUME_LABEL": "<<USB_VOLUME_LABEL>>"
+  },
+  "ready": false,
+  "execution_approved": false,
+  "finalization": "Supply seven public values and message timestamp plus selected offset-aware slot; generate review draft only. Exact Claude review and Howard execution approval still required.",
+  "values_not_before": null,
+  "slot_policy": {
+    "timezone": "America/Los_Angeles",
+    "daily_attendance": "08:00-18:00",
+    "minimum_offer_lead_seconds": 7200,
+    "maximum_values_age_seconds": 86400,
+    "confirmation": "Howard confirms; changed slot requires fresh applicable review",
+    "execution_authorized": false
+  }
+}

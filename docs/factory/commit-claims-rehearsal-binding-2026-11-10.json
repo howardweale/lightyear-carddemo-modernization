@@ -1,0 +1,22 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-11-10",
+  "claims": [
+    {
+      "record": "docs/factory/native-p5-rehearsal/BINDING-VALUES.json",
+      "reference": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "source",
+      "source_path": "tools/native_owner_rehearsal.py",
+      "source_sha256": "0628d7fb5cac49e59992a9c264a8e4017e28f293653495bebd28f438f36a9883"
+    },
+    {
+      "record": "docs/factory/native-p5-rehearsal/BINDING-VALUES.json",
+      "reference": "f5092b17ef7a21c10e137ff94ed84f9f55812d8a",
+      "commit": "f5092b17ef7a21c10e137ff94ed84f9f55812d8a",
+      "role": "publication",
+      "publication_path": "docs/factory/native-p5-rehearsal/COMMAND-SHEET.txt",
+      "publication_sha256": "2872182e5c78b3305a168a89f05421e94486028a0be7e2cca08162c5ffa00279"
+    }
+  ]
+}

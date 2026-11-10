@@ -1,13 +1,16 @@
-NO-KEY REHEARSAL RETURNS — CP1 CODEX INTEGRATION DRAFT
+NO-KEY REHEARSAL RETURNS — MERGED-SOURCE OPERATOR REVIEW DRAFT
 NOT RUNNABLE until the final command sheet/bundle/CI/Claude review and all bindings
 are complete. These are public environment diagnostics, not receipts or admission.
 
-A — EXACT GENERATED RETURN FILES
+A — EXACT GENERATED DIAGNOSTICS AND PUBLIC COPIES
 One row per file, with the producing step and its allowed fields. All JSON files
 are beneath SESSION. No wildcard uploads. Record only actual outputs; a refused
 public-IO command prints fixed stdout and creates no --output result file.
 
 File | Step | Fields
+r1-environment.txt | R1 exclusive shell record | hostname; OS product/version/build; architecture; account short name; UID; group IDs; translated0 or UNAVAILABLE
+r2-runtime-hash.json | R2 exclusive native hash record | bytes, sha256, native_proof
+r3-paths.txt | R3 exclusive shell record | named path owner/mode metadata; filesystem capacity/available KiB; exact resolved paths
 runtime-metadata.json | R2 metadata | python, executable, machine, sqlite, distributions, sdk_imported, hardware_checked, native_proof
 public-manifest-check.json | R2 manifest | manifest_sha256, files[{path,sha256,bytes,matched,native_proof}], native_proof, scope
 transfer-check.json | R2 exclusive shell check | method, quarantine_found, native_proof
@@ -18,6 +21,8 @@ r4-n2-source-check.json | R4 independent corrupt-source comparison | sha256, byt
 r4-n3.json | R4 existing-destination refusal, exclusive stdout capture | status, reason, native_proof
 r4-n3-retained-check.json | R4 retained destination comparison | sha256, bytes, matched, native_proof
 r4-n4.json | R4 wrong-hash refusal, exclusive stdout capture | status, reason, native_proof
+RET/r4-p1.bin | R4 positive copy; LOCAL ONLY, do not return | fixed45 public fixture bytes; GOOD_SHA in command sheet
+RET/r4 n1.bin | R4 space-path copy; LOCAL ONLY, do not return | fixed45 public fixture bytes; GOOD_SHA in command sheet
 S1/events.jsonl | R5 S1 | sequence, previous_sha256, event (J below)
 S1-status.json | R6 S1 readback | case, reported_status, reported_cleanup, journal_sha256, chain_consistent, live_processes_checked, authenticated, native_proof
 S2/events.jsonl | R5 S2 | sequence, previous_sha256, event (J below)
@@ -50,9 +55,10 @@ The fixed public copies RET/r4-p1.bin and RET/r4 n1.bin stay on the Mac; their
 hash/readback JSON files above are the returns. REFUSED *-result.json files and
 r4-n2.bin do not exist and must not be fabricated. Original source/fixture files
 and the 25MB runtime archive are not generated return files.
-R1 environment, R3 path and R2 archive-hash recording operations still have
-explicit CODEX-BIND markers. They are not allowlisted outputs until their exact
-exclusive commands, names and fields are reviewed in the final dated packet.
+The copied outer tar under ROOT is also LOCAL ONLY; retain any partial copy on STOP,
+but do not return the tar. No new diagnostic return file is added by that copy.
+All three environment/path/archive-hash operations are explicit in the command
+sheet. They produce exactly the three additional rows above.
 S7 is CI-only, with unchanged FAIL/UNKNOWN classification; no Mac S7 return.
 
 B — SAFETY AND READBACK

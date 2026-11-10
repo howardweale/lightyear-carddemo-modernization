@@ -1,0 +1,36 @@
+PLACEHOLDER REVIEW DRY RUN / NOT RUNNABLE
+
+This CI job evaluates simulated review observations against the decisions in
+COMMAND-SHEET and RETURN-CHECKLIST. It does not run their shell blocks, inspect a
+Mac or USB, launch S1-S6, or establish physical state, custody or cleanup.
+DRY-RUN-RULES maps each negative fixture to an exact source phrase. The retained
+JSON names every STOP decision and the unchanged expected S4-S6 FAIL outcomes.
+A matching simulated control grants no execution authority. Missing observations
+stop; missing anchors fail CI. Human comparisons remain human comparisons.
+Existing public-IO CI tests exercise the separate IO implementation.
+
+SINGLE-STEP VALUE DROP-IN, ONLY AFTER HOWARD'S LATER PUBLIC VALUES
+Planned input JSON has exactly these keys:
+  public_values: all seven named strings from BINDING-VALUES
+  received_at: actual message timestamp including its UTC offset
+  slot_start: explicitly selected start including its actual Pacific UTC offset
+Fixed-date fields remain null in the template. The renderer accepts no not_before
+field and requires received_at strictly before start, at most24 elapsed hours old.
+Before execution, reviewers verify the actual America/Los_Angeles offset, daily
+08:00-18:00 attendance, >=2h offer lead, Howard confirmation and enough session time.
+The renderer cannot establish those human facts. It produces only a review draft.
+Do not supply real values in the placeholder dry run. The future command is:
+  python -B tools/native_rehearsal_bind_review.py --template docs/factory/native-p5-rehearsal --values PUBLIC-VALUES.json --output NEW-BOUND-REVIEW
+This only writes a new review directory, with no shell/subprocess/network or
+rehearsal execution. Existing output directories refuse; partials remain.
+All seven values are validated before writing. Shell metacharacters, placeholders,
+missing/extra fields, naive/stale/out-of-window timestamps and slot drift refuse.
+The conservative literal alphabet deliberately rejects unsupported names rather
+than guessing quoting. A rejected real value needs an exact reviewed update.
+
+The generated sheet retains NOT RUNNABLE; checklist bytes/content are preserved.
+ready=false and execution_approved=false remain. No runtime or original command
+logic is changed. Final same-PR value revision still needs exact Claude review,
+then Howard approval; output generation is not approval or execution admission.
+The renderer cannot authenticate a values message or a review/approval record.
+No real values, keys, private input or execution authority are provided here.

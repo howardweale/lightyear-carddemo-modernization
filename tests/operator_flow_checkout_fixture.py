@@ -22,9 +22,10 @@ def checkout():
     temp = tempfile.TemporaryDirectory(prefix='operator-source-', dir=os.environ['RUNNER_TEMP'])
     atexit.register(temp.cleanup)
     root = Path(temp.name).resolve() / 'checkout'
-    # Local object reuse only; no network, hooks, signing, or original-index writes.
+    # Fetch from this local path without local clone shortcuts or shared objects.
+    # No network, hooks, signing, or original-index writes.
     subprocess.run(['git', '-c', 'core.autocrlf=false', '-c', 'core.longpaths=true',
-                    'clone', '--shared', '--no-checkout', str(source), str(root)],
+                    'clone', '--no-local', '--no-checkout', str(source), str(root)],
                    check=True, capture_output=True, timeout=120)
     hooks = Path(temp.name) / 'empty-hooks'
     hooks.mkdir()

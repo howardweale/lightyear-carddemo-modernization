@@ -1,6 +1,6 @@
 {
   "schema": "intcalc-c1-source-proposal/1",
-  "base_main": "957902622515f360abcf118da18ed72a2878f9ad",
+  "base_main": "b9c444712a3cc99bf88bd953f911e40b437d9569",
   "command_template": [
     "/opt/java/openjdk/bin/java",
     "-jar",
@@ -25,7 +25,7 @@
     "src/lightyear_mainframe/public_dataset_diff.py": "6b15b5bc776da3bd6cc8f22178230e8fe3522ae5e6839bc4e809fec46bb41a01",
     "src/lightyear_mainframe/records.py": "69d3719ccb9d25af86fd1d79d1da160416663cd92c192e15738b1755414752ff",
     "src/lightyear_mainframe/zos_bindings.py": "e30d40f7c34475b82b5a86469930219946e5a2fea273502eb7f5c976acc0fb71",
-    "src/lightyear_mainframe/intcalc_candidate_gate.py": "c8438bd0e04f2a6be716beccfc722f0e2b41968cbc0091483623d76dc8721aff",
+    "src/lightyear_mainframe/intcalc_candidate_gate.py": "707386f601a57cc80663575d1ef40fc8475c54a069861039c0e64fb92aeaebac",
     "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
     "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
     "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",

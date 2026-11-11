@@ -1,0 +1,14 @@
+{
+  "schema": "record-commit-claims/1",
+  "prepared_on": "2026-11-10",
+  "claims": [
+    {
+      "record": "docs/factory/intcalc-c1-binding.json",
+      "reference": "b9c444712a3cc99bf88bd953f911e40b437d9569",
+      "commit": "b9c444712a3cc99bf88bd953f911e40b437d9569",
+      "role": "source",
+      "source_path": "src/lightyear_mainframe/public_dataset_diff.py",
+      "source_sha256": "6b15b5bc776da3bd6cc8f22178230e8fe3522ae5e6839bc4e809fec46bb41a01"
+    }
+  ]
+}

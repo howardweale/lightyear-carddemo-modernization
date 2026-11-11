@@ -99,3 +99,29 @@ The CI fixture records source/JAR hashes, commands and tool versions. It proves
 plumbing only, not that any model-written source has been built or converted.
 The unused execute_case java parameter is removed; the exact command and Java
 entrypoint are validated once against COMMAND before any candidate starts.
+
+## Permanent verifier dependency and ERR-case limit
+
+Release `full-intcalc-c1-proposal-r3` is a permanent CI dependency. Do not delete
+or edit that Release or its assets. The workflow retains its exact ZIP SHA256;
+any future replacement requires a separately reviewed dependency change.
+
+ERR cases establish non-zero candidate exit plus a non-empty diagnostic only.
+They do not establish the cause of the failure or prove that the candidate
+detected the same missing input as the oracle. Reserved Docker exec statuses
+125/126/127 and Docker-daemon error diagnostics are infrastructure refusals;
+they never score EXPECTED_REFUSAL. Candidate timeout scores TIMEOUT and later
+cases stay NOT_RUN. If cleanup is also unconfirmed, runtime.json retains that
+fact; TIMEOUT is not a cleanup-success claim.
+
+Planned runtime.json evidence includes elapsed milliseconds for every Docker
+operation and cleanup step, including exceptions. The shared cleanup allowance
+remains five seconds. On container-cleanup-unconfirmed, report those timings;
+do not extend the allowance without exact review.
+
+Planned build tooling uses exact setup-java Temurin version 21.0.9+10.0.LTS;
+build-receipt.json records that requested pin and the actual javac/jar version
+output and binary hashes. Repository-wide discovery skips the frozen-dependent
+test class only when C1_FROZEN is absent or not a directory. Dedicated C1 CI
+requires all eighteen tests, including the original fourteen, with zero skips.
+No oracle, comparator, hidden-case definition or STRICT byte policy is changed.

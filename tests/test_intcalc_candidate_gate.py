@@ -14,6 +14,12 @@ from lightyear_mainframe import intcalc_candidate_gate as gate
 
 
 class CandidateGateTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        frozen = os.environ.get("C1_FROZEN")
+        if not frozen or not Path(frozen).is_dir():
+            raise unittest.SkipTest("C1_FROZEN directory absent; dedicated C1 CI supplies it")
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -142,6 +148,78 @@ class CandidateGateTests(unittest.TestCase):
             with self.subTest(label=label),self.assertRaises(gate.OutputProblem) as caught:
                 gate.compare_case(expected,actual,"cp037",output)
             self.assertEqual(caught.exception.verdict,"OUTPUT_CONTRACT_VIOLATION" if label=="partial" else "UNDECODABLE")
+
+    def test_candidate_exec_transport_fault_never_scores_expected_refusal(self):
+        # Real execute_case control flow, mocked Docker plumbing; no container run.
+        _, cases, governance = self.validate()
+        cases.sort(key=lambda item: item[0]["kind"] != "refusal")
+        for index, (rc, stderr, timeout, cleanup_failure) in enumerate((
+                (125,b"failure",False,False),(126,b"failure",False,False),
+                (127,b"failure",False,False),(1,b"Error response from daemon: unavailable",False,False),
+                (0,b"Cannot connect to the Docker daemon",False,False),
+                (-9,b"",True,False),(-9,b"",True,True))):
+            creates = {}
+            def fake_capture(argv, deadline, cap=gate.MAX_CAPTURE):
+                result = dict(rc=0, stdout=b"", stderr=b"", timeout=False, overflow=False)
+                if argv[1] == "create":
+                    creates[argv[argv.index("--name")+1]] = argv
+                elif argv[1] == "inspect":
+                    args = creates[argv[2]]
+                    mount = args[args.index("--mount")+1]
+                    volume = mount.split("source=",1)[1].split(",",1)[0]
+                    state = dict(HostConfig=dict(NetworkMode="none",ReadonlyRootfs=True),
+                        Config=dict(User="65534:65534",Image=self.binding["runtime_image"]),
+                        Mounts=[dict(Destination="/output",Type="volume",Name=volume,RW=True),
+                                dict(Destination="/input",RW=False),dict(Destination="/candidate.jar",RW=False)])
+                    result["stdout"] = json.dumps([state]).encode()
+                elif argv[1] == "exec":
+                    result.update(rc=rc,stderr=stderr,timeout=timeout)
+                elif argv[1] == "rm" and cleanup_failure:
+                    result.update(rc=1,stderr=b"cleanup denied")
+                return result
+            with patch.object(gate,"capture",side_effect=fake_capture), patch.object(
+                    gate,"validate",return_value=(b"mock",cases,governance)):
+                report=gate.run(self.path,gate.digest(self.path.read_bytes()),self.root/("transport-"+str(index)))
+            first=report["cases"][0]
+            self.assertEqual(first["verdict"],"TIMEOUT" if timeout else "FAULT")
+            self.assertEqual(first["error_type"],"CandidateTimeout" if timeout else "Refused")
+            self.assertIn("original-deadline-expired-during-candidate" if timeout else "docker-exec-infrastructure:candidate",first["error"])
+            self.assertTrue(all(r["verdict"]=="NOT_RUN" for r in report["cases"][1:]))
+            runtime=json.loads((self.root/("transport-"+str(index))/first["id"]/"runtime.json").read_text())
+            self.assertEqual(runtime["cleanup_confirmed"],not cleanup_failure)
+            self.assertEqual(runtime["cleanup_allowance_seconds"],5)
+            self.assertTrue(all(r["elapsed_ms"]>=0 for r in runtime["operations"]+runtime["cleanup"]))
+
+    def test_candidate_timeout_is_timeout_and_stops_later_cases(self):
+        with patch.object(gate,"execute_case",side_effect=gate.CandidateTimeout(
+                "original-deadline-expired-during-candidate")) as execute:
+            report=gate.run(self.path,gate.digest(self.path.read_bytes()),self.root/"timeout")
+        self.assertEqual(execute.call_count,1)
+        self.assertEqual(report["cases"][0]["verdict"],"TIMEOUT")
+        self.assertTrue(all(r["verdict"]=="NOT_RUN" for r in report["cases"][1:]))
+
+
+class TransportMetadataTests(unittest.TestCase):
+    def test_timing_retained_for_result_and_launch_exception(self):
+        rows=[]
+        result=dict(rc=0,stdout=b"",stderr=b"",timeout=False,overflow=False)
+        with patch.object(gate,"capture",return_value=result), patch.object(
+                gate.time,"monotonic_ns",side_effect=[1000000,4500000]):
+            gate.timed_capture(["docker","inspect","fixture"],10,rows)
+        self.assertEqual(rows[0]["elapsed_ms"],3.5)
+        with patch.object(gate,"capture",side_effect=OSError("missing docker")), patch.object(
+                gate.time,"monotonic_ns",side_effect=[1000000,3000000]):
+            with self.assertRaises(OSError):
+                gate.timed_capture(["docker","rm","fixture"],10,rows,kind="container",name="fixture")
+        self.assertEqual(rows[1]["elapsed_ms"],2.0)
+        self.assertEqual(rows[1]["error_type"],"OSError")
+        self.assertEqual(rows[1]["kind"],"container")
+
+    def test_collector_daemon_failure_is_infrastructure(self):
+        result=dict(rc=1,stderr=b"Error response from daemon: missing container")
+        with self.assertRaisesRegex(gate.Refused,"docker-exec-infrastructure:collector"):
+            gate.require_exec_transport(result,"collector")
+
 
 
 if __name__=="__main__":

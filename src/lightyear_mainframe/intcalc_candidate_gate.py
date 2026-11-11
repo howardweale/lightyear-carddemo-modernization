@@ -53,6 +53,10 @@ class Refused(ValueError):
     pass
 
 
+class CandidateTimeout(Refused):
+    """The original deadline expired during a started candidate exec."""
+
+
 class OutputProblem(ValueError):
     def __init__(self, message, verdict="OUTPUT_CONTRACT_VIOLATION"):
         super().__init__(message)
@@ -203,6 +207,36 @@ def public_capture(result):
             **{k+"_base64": base64.b64encode(result[k]).decode() for k in ("stdout", "stderr")}}
 
 
+def timed_capture(argv, deadline, rows, cap=MAX_CAPTURE, **metadata):
+    """Retain elapsed wall milliseconds even when Docker launch/capture raises."""
+    started = time.monotonic_ns()
+    row = dict(argv=argv, **metadata)
+    try:
+        result = capture(argv, deadline, cap)
+        row.update(public_capture(result))
+        return result
+    except Exception as exc:
+        row.update(error_type=type(exc).__name__, error=str(exc)[:300])
+        raise
+    finally:
+        row["elapsed_ms"] = (time.monotonic_ns()-started)/1_000_000
+        rows.append(row)
+
+
+def require_exec_transport(result, role):
+    # Reserved Docker exec statuses and daemon diagnostics never satisfy ERR cases.
+    stderr = result["stderr"].lower()
+    daemon_error = (b"error response from daemon" in stderr
+                    or b"error response from docker daemon" in stderr
+                    or b"cannot connect to the docker daemon" in stderr
+                    or b"is the docker daemon running" in stderr
+                    or b"error during connect:" in stderr
+                    or b"docker: error" in stderr
+                    or (b"daemon" in stderr and b"error" in stderr))
+    if result["rc"] in (125, 126, 127) or daemon_error:
+        raise Refused("docker-exec-infrastructure:"+role)
+
+
 def output_tar(raw):
     outputs = {}
     with tarfile.open(fileobj=io.BytesIO(raw), mode="r:") as archive:
@@ -241,11 +275,15 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
     name, collector, volume = ("intcalc-c1-"+token+s for s in ("", "-collect", "-out"))
     evidence, cleanup_rows, attempted = [], [], []
     volume_attempted = False
-    def call(args, cap=MAX_CAPTURE, output_phase=False):
-        result = capture(["docker", *args], deadline, cap)
-        evidence.append(dict(argv=["docker", *args], **public_capture(result)))
+    pending_error = None
+    def call(args, cap=MAX_CAPTURE, output_phase=False, candidate_exec=False):
+        result = timed_capture(["docker", *args], deadline, evidence, cap)
         if result["timeout"]:
+            if candidate_exec:
+                raise CandidateTimeout("original-deadline-expired-during-candidate")
             raise Refused("original-deadline-expired")
+        if candidate_exec:
+            require_exec_transport(result, "candidate")
         if result["overflow"]:
             if output_phase:
                 raise OutputProblem("bounded-output-capture-overflow")
@@ -286,7 +324,7 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
                     or not mounts["/output"]["RW"] or mounts["/input"]["RW"] or mounts["/candidate.jar"]["RW"]):
                 raise Refused("container-boundary-not-observed")
             run = call(["exec", name, "/usr/bin/env", "-i", "LANG=C", "TZ=UTC", *command],
-                       output_phase=True)
+                       output_phase=True, candidate_exec=True)
             required(["pause", name])
             paused = json.loads(required(["inspect", name])["stdout"])[0]["State"]["Paused"]
             if paused is not True:
@@ -301,17 +339,14 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
             if collect_mount["Name"] != volume or collect_mount["RW"]:
                 raise Refused("collector-mount-boundary")
             # No docker cp: tar reads the shared volume through the trusted collector.
-            copied = capture(["docker", "exec", collector, "/bin/tar", "-C", "/capture", "-cf", "-", "."],
-                             deadline, cap=2*MAX_DATA+65536)
-            evidence.append(dict(argv=["docker","exec",collector,"/bin/tar","-C","/capture","-cf","-","."],
-                                 **public_capture(copied)))
+            copied = timed_capture(["docker", "exec", collector, "/bin/tar", "-C", "/capture", "-cf", "-", "."],
+                                   deadline, evidence, cap=2*MAX_DATA+65536)
             (retained / "output.tar").write_bytes(copied["stdout"])
             if copied["timeout"]:
                 raise Refused("original-deadline-expired")
+            require_exec_transport(copied, "collector")
             if copied["overflow"]:
                 raise OutputProblem("output-archive-overflow")
-            if copied["rc"] in (125,126,127):
-                raise Refused("trusted-collector-unavailable")
             if copied["rc"]:
                 raise OutputProblem("candidate-output-unreadable")
             try:
@@ -322,6 +357,9 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
             outputs = output_tar(copied["stdout"]) if run["rc"] == 0 else None
             return dict(exit_code=run["rc"], command=command, outputs=outputs,
                         captured_output_inventory=inventory, stderr_nonempty=bool(run["stderr"].strip()))
+        except Exception as exc:
+            pending_error = exc
+            raise
         finally:
             cleanup_ok = True
             cleanup_deadline = time.monotonic()+5
@@ -331,19 +369,19 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
                 targets.append(("volume",volume,["docker","volume","rm","--force",volume]))
             for kind,target,argv in targets:
                 try:
-                    result = capture(argv,cleanup_deadline)
+                    result = timed_capture(argv, cleanup_deadline, cleanup_rows, kind=kind, name=target)
                     marker = b"no such container:" if kind=="container" else b"no such volume"
                     absent = result["rc"]==1 and marker in result["stderr"].lower()
                     cleanup_ok = cleanup_ok and not result["timeout"] and not result["overflow"] and (result["rc"]==0 or absent)
-                    cleanup_rows.append(dict(kind=kind,name=target,**public_capture(result)))
                 except Exception as exc:
                     cleanup_ok = False
-                    cleanup_rows.append(dict(kind=kind,name=target,error_type=type(exc).__name__,error=str(exc)[:300]))
             (retained / "runtime.json").write_text(json.dumps(dict(
                 operations=evidence,cleanup=cleanup_rows,cleanup_confirmed=cleanup_ok,
+                cleanup_allowance_seconds=5,
+                candidate_timeout=isinstance(pending_error, CandidateTimeout),
                 capture_method="paused candidate; trusted tar collector on read-only shared tmpfs volume",
                 cleanup_is_not_native_owner_proof=True),indent=2)+"\n")
-            if not cleanup_ok:
+            if not cleanup_ok and not isinstance(pending_error, CandidateTimeout):
                 raise Refused("container-cleanup-unconfirmed")
 
 
@@ -421,6 +459,9 @@ def run(binding_path, binding_sha256, attempt_dir):
                     (destination / (dd+".bin")).write_bytes(output)
                 row["output_inventory"] = {d: dict(bytes=len(b), sha256=digest(b)) for d, b in actual.items()}
                 row.update(compare_case(arrays["expected"], actual, case["codec"], destination))
+        except CandidateTimeout as exc:
+            row.update(verdict="TIMEOUT", error_type=type(exc).__name__, error=str(exc)[:500])
+            stopped = True
         except OutputProblem as exc:
             row.update(verdict=exc.verdict,error_type=type(exc).__name__,error=str(exc)[:500])
         except Exception as exc:

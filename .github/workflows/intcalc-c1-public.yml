@@ -64,12 +64,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          C1_FROZEN="$RUNNER_TEMP/intcalc-frozen" python -B -m unittest test_intcalc_candidate_gate -v
+          export C1_FROZEN="$RUNNER_TEMP/intcalc-frozen"
+          python -B - <<'PY'
+          import json, os, unittest
+          from pathlib import Path
+          import test_intcalc_candidate_gate
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_candidate_gate)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          summary = dict(tests_run=result.testsRun, skipped=len(result.skipped),
+                         failures=len(result.failures), errors=len(result.errors), expected_tests=18)
+          (Path(os.environ['C1_FROZEN'])/'c1-test-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          if not result.wasSuccessful() or result.skipped or result.testsRun != 18:
+              raise SystemExit('C1 dedicated suite requires all 18 tests, zero skips')
+          PY
 
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21.0.9+10'
+          java-version: '21.0.9+10.0.LTS'
       - name: Pull exact JRE before any fixture candidate starts
         shell: bash
         run: |
@@ -99,6 +111,7 @@ jobs:
                          tool_binaries={n:digest(Path(os.environ['JAVA_HOME'])/'bin'/n) for n in ('javac','jar')},
                          javac=['javac','-proc:none','--release','21','-d','CLASSES',str(source)],
                          jar=['jar','--create','--file','candidate.jar','--main-class','Main','-C','CLASSES','.'],
+                         setup_java_requested='21.0.9+10.0.LTS',
                          javac_version=(build/'javac-version.txt').read_text(),
                          jar_version=(build/'jar-version.txt').read_text(), model_calls=0)
           (build/'build-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
@@ -127,7 +140,10 @@ jobs:
           assert all(r['verdict'] in ('MATCH','DIFFERENT','REFUSAL_NOT_OBSERVED') for r in rows.values()), report
           for row in rows.values():
               runtime=json.loads((root/'intcalc-real-fixture'/row['id']/'runtime.json').read_text())
-              assert runtime['cleanup_confirmed'] is True
+              assert runtime['cleanup_confirmed'] is True, runtime
+              assert runtime['cleanup_allowance_seconds'] == 5
+              assert all(isinstance(o['elapsed_ms'], (int,float)) and o['elapsed_ms'] >= 0
+                         for o in runtime['operations']+runtime['cleanup']), runtime
               assert any(o['argv'][1]=='exec' and '/usr/bin/env' in o['argv'] for o in runtime['operations'])
               assert any('/bin/tar' in o['argv'] for o in runtime['operations'])
               assert not any(o['argv'][1]=='cp' for o in runtime['operations'])

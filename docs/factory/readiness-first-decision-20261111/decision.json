@@ -1,0 +1,43 @@
+{
+  "schema": "readiness-first-human-decision/1",
+  "decision_by": "Howard",
+  "initial_instruction_date": "2026-11-10",
+  "confirmation_at": "2026-11-11T17:38:00-08:00",
+  "observation_basis": "Direct human instruction; confirmation timestamp is not execution time",
+  "policy": {
+    "basis": "Readiness first",
+    "daily_attendance": "08:00–18:00 America/Los_Angeles every day, including 23–27 November",
+    "fixed_freeze_or_run_date": null,
+    "P5_date_setting_meeting": false,
+    "Monday_lookahead": "Replaced by one checklist per run",
+    "checklist_fields": [
+      "prerequisite",
+      "status",
+      "evidence link",
+      "TECHNICAL/GATE/HUMAN type"
+    ],
+    "attendance_when_ready": "Only when every prerequisite is green, offer the first daily attendance slot at least two hours out; Howard confirms",
+    "clock_authority": false,
+    "no_lookaheads_capacity_ledgers_or_dated_planning_packets": true
+  },
+  "supersedes": "Supersedes only the schedule portion of the 3 November decision: 20 November freeze target, week beginning 30 November run basis and 23–27 November blackout; Monday look-ahead is replaced by one run checklist. The 3 November decision remains unchanged and its non-schedule controls remain in force.",
+  "scope": "Schedule policy only; control terminology is a separate patch",
+  "not_authorized": [
+    "run",
+    "qualification",
+    "signing",
+    "spend",
+    "model call",
+    "push",
+    "merge",
+    "gate change",
+    "protected source change"
+  ],
+  "adoption": "This is the repository record of Howard’s readiness-first instruction. Repository adoption occurs when this exact record is merged following Howard’s exact merge approval. The instruction supersedes the earlier schedule policy; neither this record nor a clock authorizes execution or any private operation.",
+  "decision_date": "2026-11-11",
+  "prior_decision": {
+    "path": "docs/factory/custody-option-a-20261103/decision.json",
+    "sha256": "9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf",
+    "scope_preserved": "All non-schedule controls and historical bytes"
+  }
+}

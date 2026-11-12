@@ -6,7 +6,8 @@ Keep work small and targeted. Most of this repository is evidence you never need
 
 ## Current priority
 
-- **Track B, the qualified run, is the only priority.** It covers 19 cases under eight strict gates, all unchanged. Planned complete-freeze target: 20 November at 17:00 Pacific; run in the week beginning 30 November, conditional on capacity, P5 closure, all other evidence and freshness. No execution, qualification, continuation or recovery on 23–27 November. See the [3 November decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf); it supersedes the 13 November freeze planning basis.
+- **Track B, the qualified run, is the only priority.** The nineteen are pass/fail control drills: two clean controls plus seventeen variants across eight P5 drill families. They are prerequisites, not scored behaviour cases. The eight strict gates remain unchanged; drill-family names do not define their mapping.
+- **Readiness first:** daily 08:00–18:00 America/Los_Angeles is available, including 23–27 November. No fixed P5 freeze or run date and no date-setting meeting. When all prerequisites are green, offer the first attendance slot at least two hours out for Howard to confirm. No clock authorizes execution, signing, spend, push or merge. The schedule portion of the 3 November decision is superseded by the [11 November readiness-first decision](docs/factory/readiness-first-decision-20261111/decision.json#sha256=ed95aac2927b5cbb13d56037bf4ac76bd203c0b6f5caaa61b58e2a42d2262182).
 - **Critical-path work comes first.** That means the #455 rebind, encryption of held-out answers, the run checkers' date fixes, and anything the run depends on. Backlog work happens only when a lane is idle.
 - **Track A is retired.** Do not schedule it.
 
@@ -29,13 +30,7 @@ Keep work small and targeted. Most of this repository is evidence you never need
 - **Custody design:** PIN once / touch always; unplug after every window, then log out; freshly insert next window. Planned implementation is option A for signing and Mac/Tower: external human-held Ed25519 signers, supervised isolated Mac owner, direct authenticated Tower append and fail-stop immutable outbox. The [scope decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf) does not authorize provisioning, private operations, signatures, admissions, spend or merges. Retain original deadlines, all-process cleanup and no automatic resend/retry. Heartbeat monitors remain read-only.
 - **Any estimate over 2 days comes to Howard as a decision with options,** not as a plan already under way. The same goes for any date slip of more than 2 days.
 - **Batch your questions.** Howard's time is the scarcest resource. Each request to him must be dated, decision-ready, and list what he must physically do.
-- **Every Monday,** post a 14-day look-ahead of everything that depends on Howard:
-  - decisions and approvals;
-  - physical actions (YubiKey touches, private helpers, GitHub environment approvals);
-  - purchases, accounts and installs;
-  - anything with a lead time over 2 days;
-  - calendar windows where he must be present;
-  - anything that has never yet run for real, with its first real test date.
+- **Howard prerequisites:** maintain one run checklist with prerequisite, status, evidence link and TECHNICAL/GATE/HUMAN type. Include decisions and physical actions; batch decision-ready questions. Do not create Monday look-aheads, capacity ledgers or first-run date forecasts.
 
 ## How to work (this keeps runs cheap)
 

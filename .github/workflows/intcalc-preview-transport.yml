@@ -1,0 +1,51 @@
+name: C2 preview transport synthetic checks
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'tests/test_intcalc_preview_transport.py'
+      - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
+      - '.github/workflows/intcalc-preview-transport.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'tests/test_intcalc_preview_transport.py'
+      - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
+      - '.github/workflows/intcalc-preview-transport.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  transport-synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src:.:tests
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic transport and ledger tests; no provider network
+        shell: bash
+        run: |
+          python -B - <<'PY'
+          import platform,socket,unittest
+          from unittest.mock import patch
+          import test_intcalc_preview_transport
+          if platform.system()=='Darwin':
+              assert platform.machine()=='arm64'
+          suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_transport)
+          with patch.object(socket.socket,'connect',side_effect=AssertionError('Provider networking forbidden in CI')):
+              result=unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.wasSuccessful() and not result.skipped and result.testsRun==40
+          PY

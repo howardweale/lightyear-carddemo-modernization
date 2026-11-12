@@ -3,11 +3,15 @@ on:
   pull_request:
     paths:
       - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/__init__.py'
       - 'tests/test_intcalc_preview_admission.py'
       - 'spec/intcalc-preview/**'
       - '.github/workflows/intcalc-preview-admission.yml'
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   admission-macos:
     runs-on: macos-15

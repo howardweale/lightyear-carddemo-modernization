@@ -25,7 +25,7 @@
     "src/lightyear_mainframe/public_dataset_diff.py": "6b15b5bc776da3bd6cc8f22178230e8fe3522ae5e6839bc4e809fec46bb41a01",
     "src/lightyear_mainframe/records.py": "69d3719ccb9d25af86fd1d79d1da160416663cd92c192e15738b1755414752ff",
     "src/lightyear_mainframe/zos_bindings.py": "e30d40f7c34475b82b5a86469930219946e5a2fea273502eb7f5c976acc0fb71",
-    "src/lightyear_mainframe/intcalc_candidate_gate.py": "4c5b0c47c42a28e779e9983810e53e6b66b610ff07d252d490954eccd9cdab46",
+    "src/lightyear_mainframe/intcalc_candidate_gate.py": "b750a63291b4e2450646353132bbdae3a90e300cfb4701795c5b7c973892c951",
     "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
     "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
     "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
@@ -51,5 +51,34 @@
   "frozen_case_manifest_sha256": null,
   "status": "Not yet runnable: CI must produce the complete frozen case manifest and hand-versus-oracle table; no findings permitted; exact runtime/artifact and later execution approval required",
   "qualified": false,
-  "production_controller_receipt": false
+  "production_controller_receipt": false,
+  "runtime_platform": null,
+  "supported_runtime_platforms": {
+    "linux/amd64": {
+      "runner": "ubuntu-24.04",
+      "runtime_image": "eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032",
+      "runtime_config": "sha256:605296a112703cf91247c29e4f709efd91afd3e1b108d6861ba02f130ea732b3",
+      "tool_binaries_expected": {
+        "javac": "98ac8fa7f55cc6ed6395bee67d55a3980d0073961a57db0f26ccf994f6a5e6b8",
+        "jar": "d593032ab3db2b7217c8db41722f8e65163d5ef0bac98157edadb28cc96b567c"
+      },
+      "build_mode": "host-pinned-setup-java",
+      "artifact_name": "intcalc-oracle-crosscheck-and-real-fixture-amd64"
+    },
+    "linux/arm64": {
+      "runner": "ubuntu-24.04-arm",
+      "runtime_image": "eclipse-temurin@sha256:3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07",
+      "runtime_config": "sha256:2eac78aca4748f2a6b922f8af332d3d1a5ac161d252c2f5664806100bcf6d8cf",
+      "tool_binaries_expected": {
+        "javac": "1c6a574beed14cd3c5a48218359fbdb2c6be775ef777cf8338f080213187c0dc",
+        "jar": "1998d56064b12968a9dd4f62bf787a3e30c9fc8a46614437361e18bed45cc444"
+      },
+      "build_mode": "pinned-jdk-container",
+      "artifact_name": "intcalc-oracle-crosscheck-and-real-fixture-arm64",
+      "build_image": "eclipse-temurin@sha256:8def71d61fd7f95b08480f51e8ac35e37ec87a0aaad6950a6f1e35c771de5b2d",
+      "build_config": "sha256:b6b0d394b3d52d8db009047a714e54141e97e7e267c2fddc256c7a23708e0bd7",
+      "container_hash_comparison_observed": false
+    }
+  },
+  "platform_status": "Not yet qualified: CI must supply separate native-platform fixture/build/runtime receipts; exact execution binding must select a supported platform and match the Docker daemon. No emulation or silent default."
 }

@@ -1,0 +1,794 @@
+{
+  "schema": "row07-closeout-audit/2",
+  "scope": "fixed-cooperative-rehearsal-only",
+  "effective_on": "Merge of this exact record into main following Howard exact merge approval",
+  "repository_disposition_on_effect": "CLOSED for row 07 only",
+  "history": [
+    "Session1: NOT TESTED; S1-S6 NOT ATTEMPTED. Section A pre-existing exact file departure. Mac was zsh, with incomplete parenthesis input buffered. Stop at 16:06 PT on 10 November; one Control-C at 16:22 returned primary prompt with no execution output, per operator.",
+    "11 November 10:45 slot: abandoned before any step, no USB session2 write or Mac command, per operator.",
+    "Session2 r5 at 13:00: archive write stalled; PC force-restarted. Original USB session2 folder retained with 67 entries and 245760-byte truncated payload. No removal or reuse.",
+    "Operator-only write-test.tar, 32706560 bytes, outside the packet. Reported readback is a diagnostic observation, not native qualification or a general health guarantee.",
+    "Session2b r6 at 14:30: first Windows paste left continuation prompt, discarded with Control-C while destination absent, unchanged script re-pasted. Preparation complete at 13:55 PT. Steps reached expected exits; S1-S5 supply closure evidence. S6 lacked operator Control-C and reached the original deadline; retained, not repeated within session2b.",
+    "Session3-s6 at 16:15: first Mac entry hash read failed because Windows preparation had not occurred. Operator reported no session path or writes. Preparation followed, then the same bash window entry. Separate attended S6 supplies operator cancellation evidence; no inference of future recovery permission."
+  ],
+  "departures": [
+    {
+      "departure": "Section A: existing hash-matched addendum file on USB",
+      "session": "session1, 10 November",
+      "original_event": "2026-11-10T15:36:00-08:00",
+      "approver": "Howard",
+      "confirmation_at": "2026-11-11T17:38:00-08:00"
+    },
+    {
+      "departure": "Single Control-C to park the incomplete session1 Terminal input",
+      "session": "session1, 10 November",
+      "original_event": "2026-11-10T16:22:00-08:00",
+      "approver": "Howard",
+      "confirmation_at": "2026-11-11T17:38:00-08:00"
+    },
+    {
+      "departure": "Unchanged r6 script re-pasted after incomplete paste discarded before writes",
+      "session": "session2b, 11 November",
+      "original_event": "Windows preparation complete at 13:55 PT; exact first-paste time not recorded",
+      "approver": "Howard",
+      "confirmation_at": "2026-11-11T17:38:00-08:00"
+    },
+    {
+      "departure": "Mac entry attempted before Windows preparation, then repeated in same bash window",
+      "session": "session3-s6, 11 November",
+      "original_event": "Exact entry-attempt time not recorded",
+      "approver": "Howard",
+      "confirmation_at": "2026-11-11T17:38:00-08:00"
+    }
+  ],
+  "departure_reuse_permitted": false,
+  "packet_tags": {
+    "A": "no-key-session2b-1430-proposal-20261111-r6",
+    "B": "no-key-s6-only-1615-proposal-20261111-r1"
+  },
+  "split": {
+    "A": "S1-S5 retained; original S6 superseded",
+    "B": "S6 cancellation repeat"
+  },
+  "limits_verbatim": [
+    "fixed-cooperative-rehearsal-only",
+    "native_proof false",
+    "journals unauthenticated",
+    "hardware_checked false",
+    "live_processes_checked false"
+  ],
+  "comparisons": {
+    "status": "STATIC CROSS-CHECK; proposal only; no source/row/gate/receipt mutation",
+    "at": "2026-11-12T01:26:50.516433+00:00",
+    "reference_hashes": {
+      "ROW07-EVIDENCE-INDEX-DRAFT.json": "ee806081763c8d7770de591bf2dd7bdac436ba14c9a8a43622482b0373daea9e",
+      "ROW07-EVIDENCE-INDEX-DRAFT.md": "972dce9b0618da049eb80ee431785e454e3a3224d31e47f7f7a72b4d73d0f1c8",
+      "P5-REVIEW-PREP-2026-11-11.md": "f330bfb5b9d3df2cd33ce62186b3bf79b4995bdffb8ec584b7acf8dcd7357d93"
+    },
+    "reference_files_read_only_not_copied": true,
+    "files": [
+      {
+        "folder": "A",
+        "path": "S1-status.json",
+        "bytes": 264,
+        "sha256": "97c5121f54c1e7c18f20cbb4eab168cf11791ef67b11f4b8987f544951816cd1",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S1/events.jsonl",
+        "bytes": 3419,
+        "sha256": "f5cf30c49ca084e12da85e580039385e7d1fc0755868b94b549813399ef6140c",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S2-status.json",
+        "bytes": 264,
+        "sha256": "02249f4dd1d914cc155f9b566e68aadd1220e39a8fd93ba0d1c5d91b42df471d",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S2/events.jsonl",
+        "bytes": 3418,
+        "sha256": "50c1a89184dbb9a4d4873ae05989944dfa7815d2de98fa416aed59dae1376e27",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S3-status.json",
+        "bytes": 264,
+        "sha256": "d7c768ef3bfd1c7b43811ed5ee654b71181ad6a4ce0b706358d7fffb81c23e53",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S3/events.jsonl",
+        "bytes": 4463,
+        "sha256": "53e6c41437c7c722d7e94d91f6266a618d21347cc8dc0f047d6346d0ae625579",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S4-status.json",
+        "bytes": 264,
+        "sha256": "0a24a5516d9e72e9787d805bd5a563064a44ec7c711bf9f41179408fbe66bff6",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S4/events.jsonl",
+        "bytes": 3135,
+        "sha256": "974b05a15fe2430db921d7812b372b8939fdf197f9ae537961b29ed966b7acd2",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S5-status.json",
+        "bytes": 264,
+        "sha256": "8a9a334c2ca14ed041027bce3cb0ed86517420e3329584b20597661d708a0c7f",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S5/events.jsonl",
+        "bytes": 3126,
+        "sha256": "1a416cbafead27c2f67dfc88d8219e47138486017c88c26b7610b659e1152f17",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S6-status.json",
+        "bytes": 264,
+        "sha256": "e6342cac64f7b76ee3a00033a99e42b5eb749637d61583c61ca78707ab438b78",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "S6/events.jsonl",
+        "bytes": 3097,
+        "sha256": "37ee6acea1e957c0355dce20ca41c10d81b36717b14d8e3fb845161afac0741e",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "public-manifest-check.json",
+        "bytes": 2423,
+        "sha256": "d8d22a1a44e4089860d54e33b0b16eca218cc7776b1f7f7abcfccaef49019d07",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r1-environment.txt",
+        "bytes": 209,
+        "sha256": "c56f8e1398ec4f47ab8fd906f9676d2ba5df65adc325b389f13f0a464d583f08",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r2-runtime-hash.json",
+        "bytes": 116,
+        "sha256": "20dca425bcb99b658c5ae50042374bde2bf1c52e2c34dd1782f45c70b029c374",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r3-paths.txt",
+        "bytes": 1660,
+        "sha256": "b34a09be50e30873e450d73ea1bc1f6c345afa5cbcd81df39fc8454c442688b6",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n1.json",
+        "bytes": 175,
+        "sha256": "e79cef3eefb8872a8c2c16ce41ec9da14d857904f3121951031a0f09c4b0b2af",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n2-source-check.json",
+        "bytes": 132,
+        "sha256": "8c0b6a07e6d8bf105cfac071b91d5d9c77099f6652760ec48da46f9dea089957",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n2.json",
+        "bytes": 86,
+        "sha256": "9020e06e214cda3ca0b94ff35f76e3b620166c38257a34000437f810724d4c16",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n3-retained-check.json",
+        "bytes": 132,
+        "sha256": "f4d932b80aa0773b3c9e9ae0d9ecc968694f7db042e768cb70e1ab0e6bbb70dd",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n3.json",
+        "bytes": 86,
+        "sha256": "9020e06e214cda3ca0b94ff35f76e3b620166c38257a34000437f810724d4c16",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-n4.json",
+        "bytes": 86,
+        "sha256": "9020e06e214cda3ca0b94ff35f76e3b620166c38257a34000437f810724d4c16",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "r4-p1.json",
+        "bytes": 175,
+        "sha256": "e79cef3eefb8872a8c2c16ce41ec9da14d857904f3121951031a0f09c4b0b2af",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "runtime-metadata.json",
+        "bytes": 320,
+        "sha256": "8c421ce9ce05f00c1e57c87b2893a6fbb55fcdae8b97bee0b9b4039976384fde",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "A",
+        "path": "transfer-check.json",
+        "bytes": 90,
+        "sha256": "c9e974052e73907c2dc5a55e14942fd7811e7f259e881043cfa479c1e9501827",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "S6-status.json",
+        "bytes": 264,
+        "sha256": "3efacfe70b09e399323d9debde4bce3e56e155e4522845d65f9b3a45c1aad65f",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "S6/events.jsonl",
+        "bytes": 3131,
+        "sha256": "fc5c63d3b9a7512432cc35b18418b96da593ffdd273ef121cfe41b6a04b5c8ec",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "public-manifest-check.json",
+        "bytes": 2423,
+        "sha256": "d8d22a1a44e4089860d54e33b0b16eca218cc7776b1f7f7abcfccaef49019d07",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "r1-environment.txt",
+        "bytes": 209,
+        "sha256": "c56f8e1398ec4f47ab8fd906f9676d2ba5df65adc325b389f13f0a464d583f08",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "r2-runtime-hash.json",
+        "bytes": 116,
+        "sha256": "20dca425bcb99b658c5ae50042374bde2bf1c52e2c34dd1782f45c70b029c374",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "r3-paths.txt",
+        "bytes": 1708,
+        "sha256": "d2a921d0585dcc9e8938095a13a28aacbc8f023c32174555973bf7028d96df28",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "runtime-metadata.json",
+        "bytes": 323,
+        "sha256": "9c0e72d1abf49b603ed29b7c3eddec6b37125fb330694b753b28a37ddebed2f3",
+        "index_retained_original_and_published_inventory": "MATCH"
+      },
+      {
+        "folder": "B",
+        "path": "transfer-check.json",
+        "bytes": 90,
+        "sha256": "c9e974052e73907c2dc5a55e14942fd7811e7f259e881043cfa479c1e9501827",
+        "index_retained_original_and_published_inventory": "MATCH"
+      }
+    ],
+    "file_count": 33,
+    "journals": [
+      {
+        "journal_sha256": "f5cf30c49ca084e12da85e580039385e7d1fc0755868b94b549813399ef6140c",
+        "bytes": 3419,
+        "events": 7,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S1",
+          "chain_consistent": true,
+          "journal_sha256": "f5cf30c49ca084e12da85e580039385e7d1fc0755868b94b549813399ef6140c",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "PASS"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S1",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:43:16.888484+00:00",
+        "result_wall_time_utc": "2026-11-11T22:43:16.958497+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 0.0,
+        "seconds_result_before_original_deadline": 14.93,
+        "seconds_result_before_cleanup_deadline": 19.93,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "worker-observation:completed",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "PASS",
+          "reason": "completed"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "PASS",
+        "reason": "completed",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 0.000125415999946199,
+        "exact_result_before_original_deadline_seconds": 14.929956250000032,
+        "exact_result_before_cleanup_deadline_seconds": 19.929956250000032
+      },
+      {
+        "journal_sha256": "50c1a89184dbb9a4d4873ae05989944dfa7815d2de98fa416aed59dae1376e27",
+        "bytes": 3418,
+        "events": 7,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S2",
+          "chain_consistent": true,
+          "journal_sha256": "50c1a89184dbb9a4d4873ae05989944dfa7815d2de98fa416aed59dae1376e27",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "PASS"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S2",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:43:44.527426+00:00",
+        "result_wall_time_utc": "2026-11-11T22:43:44.598142+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 0.0,
+        "seconds_result_before_original_deadline": 14.929,
+        "seconds_result_before_cleanup_deadline": 19.929,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "worker-observation:completed",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "PASS",
+          "reason": "completed"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "PASS",
+        "reason": "completed",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 0.00013279199993121438,
+        "exact_result_before_original_deadline_seconds": 14.92925354199997,
+        "exact_result_before_cleanup_deadline_seconds": 19.92925354199997
+      },
+      {
+        "journal_sha256": "53e6c41437c7c722d7e94d91f6266a618d21347cc8dc0f047d6346d0ae625579",
+        "bytes": 4463,
+        "events": 9,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S3",
+          "chain_consistent": true,
+          "journal_sha256": "53e6c41437c7c722d7e94d91f6266a618d21347cc8dc0f047d6346d0ae625579",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "PASS"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S3",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:44:11.037490+00:00",
+        "result_wall_time_utc": "2026-11-11T22:44:11.179687+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 0.0,
+        "seconds_result_before_original_deadline": 14.858,
+        "seconds_result_before_cleanup_deadline": 19.858,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "worker-observation:completed",
+          "cleanup-requested",
+          "worker-observation:grandchild-reap",
+          "result"
+        ],
+        "required": {
+          "status": "PASS",
+          "reason": "completed"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "PASS",
+        "reason": "completed",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": {
+          "exitcode": 0,
+          "kind": "grandchild-reap",
+          "pid": 1242,
+          "reaped": true
+        },
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 0.00024137499997323175,
+        "exact_result_before_original_deadline_seconds": 14.857771707999973,
+        "exact_result_before_cleanup_deadline_seconds": 19.857771707999973
+      },
+      {
+        "journal_sha256": "974b05a15fe2430db921d7812b372b8939fdf197f9ae537961b29ed966b7acd2",
+        "bytes": 3135,
+        "events": 6,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S4",
+          "chain_consistent": true,
+          "journal_sha256": "974b05a15fe2430db921d7812b372b8939fdf197f9ae537961b29ed966b7acd2",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "FAIL"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S4",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:44:35.124057+00:00",
+        "result_wall_time_utc": "2026-11-11T22:44:35.193698+00:00",
+        "ready_observed": false,
+        "seconds_ready_to_cleanup_request": null,
+        "seconds_result_before_original_deadline": 14.93,
+        "seconds_result_before_cleanup_deadline": 19.93,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:initialization-failed",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "FAIL",
+          "reason": "initialization-failed"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "FAIL",
+        "reason": "initialization-failed",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": null,
+        "exact_result_before_original_deadline_seconds": 14.93032925,
+        "exact_result_before_cleanup_deadline_seconds": 19.93032925
+      },
+      {
+        "journal_sha256": "1a416cbafead27c2f67dfc88d8219e47138486017c88c26b7610b659e1152f17",
+        "bytes": 3126,
+        "events": 6,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S5",
+          "chain_consistent": true,
+          "journal_sha256": "1a416cbafead27c2f67dfc88d8219e47138486017c88c26b7610b659e1152f17",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "FAIL"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S5",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:45:05.435103+00:00",
+        "result_wall_time_utc": "2026-11-11T22:45:20.448979+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 14.936,
+        "seconds_result_before_original_deadline": -0.014,
+        "seconds_result_before_cleanup_deadline": 4.986,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "FAIL",
+          "reason": "original-deadline-reached"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "FAIL",
+        "reason": "original-deadline-reached",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 14.935593499999982,
+        "exact_result_before_original_deadline_seconds": -0.013964459000021634,
+        "exact_result_before_cleanup_deadline_seconds": 4.986035540999978
+      },
+      {
+        "journal_sha256": "37ee6acea1e957c0355dce20ca41c10d81b36717b14d8e3fb845161afac0741e",
+        "bytes": 3097,
+        "events": 6,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S6",
+          "chain_consistent": true,
+          "journal_sha256": "37ee6acea1e957c0355dce20ca41c10d81b36717b14d8e3fb845161afac0741e",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "FAIL"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S6",
+        "folder": "A",
+        "intent_wall_time_utc": "2026-11-11T22:45:56.146068+00:00",
+        "result_wall_time_utc": "2026-11-11T22:46:11.159809+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 14.934,
+        "seconds_result_before_original_deadline": -0.014,
+        "seconds_result_before_cleanup_deadline": 4.986,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "FAIL",
+          "reason": "operator-cancelled"
+        },
+        "meets_required": false,
+        "used_for_row07": false,
+        "status": "FAIL",
+        "reason": "original-deadline-reached",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session2/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 14.933716582999978,
+        "exact_result_before_original_deadline_seconds": -0.013830041000005622,
+        "exact_result_before_cleanup_deadline_seconds": 4.986169958999994
+      },
+      {
+        "journal_sha256": "fc5c63d3b9a7512432cc35b18418b96da593ffdd273ef121cfe41b6a04b5c8ec",
+        "bytes": 3131,
+        "events": 6,
+        "sequence_contiguous": true,
+        "hash_chain_recomputed_ok": true,
+        "chain_rule": "previous_sha256 = sha256(previous line bytes + LF); first = 64 zeros",
+        "status_file": {
+          "authenticated": false,
+          "case": "S6",
+          "chain_consistent": true,
+          "journal_sha256": "fc5c63d3b9a7512432cc35b18418b96da593ffdd273ef121cfe41b6a04b5c8ec",
+          "live_processes_checked": false,
+          "native_proof": false,
+          "reported_cleanup": "REAPED",
+          "reported_status": "FAIL"
+        },
+        "status_file_journal_sha256_matches": true,
+        "case": "S6",
+        "folder": "B",
+        "intent_wall_time_utc": "2026-11-12T00:25:26.368075+00:00",
+        "result_wall_time_utc": "2026-11-12T00:25:29.202897+00:00",
+        "ready_observed": true,
+        "seconds_ready_to_cleanup_request": 2.759,
+        "seconds_result_before_original_deadline": 12.165,
+        "seconds_result_before_cleanup_deadline": 17.165,
+        "event_kinds": [
+          "metadata",
+          "intent",
+          "worker-observation:identity",
+          "worker-observation:ready",
+          "cleanup-requested",
+          "result"
+        ],
+        "required": {
+          "status": "FAIL",
+          "reason": "operator-cancelled"
+        },
+        "meets_required": true,
+        "used_for_row07": true,
+        "status": "FAIL",
+        "reason": "operator-cancelled",
+        "cleanup_status": "REAPED",
+        "forced_parent_termination": false,
+        "cleanup_fault": null,
+        "child_exitcode": 0,
+        "child_reap_observed": true,
+        "grandchild_reap": null,
+        "scope": "fixed-cooperative-rehearsal-only",
+        "native_proof": false,
+        "admission_authorized": false,
+        "keys_unplugged_human_ack": true,
+        "hardware_checked": false,
+        "executable": "/private/tmp/lightyear-no-key-8fe41d76-session3-s6/Lightyear Public Bundle/runtime/bin/python3.12",
+        "all_index_fields_match": true,
+        "exact_ready_to_cleanup_seconds": 2.7588728339997033,
+        "exact_result_before_original_deadline_seconds": 12.165139624999938,
+        "exact_result_before_cleanup_deadline_seconds": 17.165139624999938
+      }
+    ],
+    "journals_count": 7,
+    "chain_rule": "sha256(previous raw line bytes + LF), initial64zeros",
+    "all_index_case_fields_match": true,
+    "identity_match": true,
+    "runtime_manifest_match": true,
+    "public_io_match": true,
+    "four_cross_session_files_identical": true,
+    "six_observations": [
+      {
+        "observation": 1,
+        "text": "Folder A is named 1300pt-session2 but its journals are timed 22:43-22:46 UTC (14:43-14:46 PT) and it was produced by packet r6 (Windows folder no-key-session2b). The closing record must map these names.",
+        "r1_coverage": "EXPLICIT",
+        "action": "Retain folderA1300pt label = actual14:30r6 mapping and journal times"
+      },
+      {
+        "observation": 2,
+        "text": "Folder A executable paths use the Mac directory lightyear-no-key-8fe41d76-session2 (as written in the r6 command sheet).",
+        "r1_coverage": "PRESENT BUT SUMMARY SHOULD BE EXPLICIT",
+        "action": "Add exact Macsession2 path mapping"
+      },
+      {
+        "observation": 3,
+        "text": "Folder A S6 is FAIL / original-deadline-reached: the operator did not press Ctrl-C. It does not meet the required S6 result and is superseded by folder B; it should be retained and declared, not dropped.",
+        "r1_coverage": "EXPLICIT",
+        "action": "Retain superseded folderA S6 and its hash, not used for closure"
+      },
+      {
+        "observation": 4,
+        "text": "S5 and folder A S6: the result event lands about 14 ms after the original deadline and about 4.99 s inside the cleanup deadline, which is the designed behaviour for original-deadline-reached.",
+        "r1_coverage": "NOT NUMERICALLY EXPLICIT",
+        "action": "Add both deadline margins;14ms late original is expected and within5scleanup"
+      },
+      {
+        "observation": 5,
+        "text": "Mac data volume shows 99% capacity (about 3.0-3.2 GB free) in both r3-paths.txt files.",
+        "r1_coverage": "ONLY S6 DISK EXPLICIT",
+        "action": "Add both disk readings"
+      },
+      {
+        "observation": 6,
+        "text": "r4-n2, r4-n3 and r4-n4 are byte-identical (same refusal JSON); r4-p1 and r4-n1 are byte-identical. Expected from the command sheet, noted so identical hashes are not mistaken for a copy error.",
+        "r1_coverage": "NOT EXPLICIT",
+        "action": "Add identical refusal/copy hashes are expected from sheet"
+      }
+    ],
+    "disk": [
+      {
+        "folder": "A",
+        "available_KiB": 3181908,
+        "capacity_percent": 99,
+        "file_sha256": "b34a09be50e30873e450d73ea1bc1f6c345afa5cbcd81df39fc8454c442688b6"
+      },
+      {
+        "folder": "B",
+        "available_KiB": 3040600,
+        "capacity_percent": 99,
+        "file_sha256": "d2a921d0585dcc9e8938095a13a28aacbc8f023c32174555973bf7028d96df28"
+      }
+    ],
+    "wording_precision": [
+      "Index limits prose says every journal and status file contains all five flags. Status files actually contain authenticated/native_proof/live_processes_checked; hardware_checked and admission_authorized are carried by journal metadata/result/runtime records, not each status JSON. Values agree where present; do not invent absent fields."
+    ],
+    "published_r1_preserved": true,
+    "superseding_record_needed": "Add explicit observations2,4,5,6; outcomeunchanged; no new authority."
+  },
+  "other_production_rows_changed": false
+}

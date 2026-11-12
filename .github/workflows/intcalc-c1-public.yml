@@ -72,10 +72,10 @@ jobs:
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_candidate_gate)
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           summary = dict(tests_run=result.testsRun, skipped=len(result.skipped),
-                         failures=len(result.failures), errors=len(result.errors), expected_tests=18)
+                         failures=len(result.failures), errors=len(result.errors), expected_tests=20)
           (Path(os.environ['C1_FROZEN'])/'c1-test-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
-          if not result.wasSuccessful() or result.skipped or result.testsRun != 18:
-              raise SystemExit('C1 dedicated suite requires all 18 tests, zero skips')
+          if not result.wasSuccessful() or result.skipped or result.testsRun != 20:
+              raise SystemExit('C1 dedicated suite requires all 20 tests, zero skips')
           PY
 
       - uses: actions/setup-java@v5

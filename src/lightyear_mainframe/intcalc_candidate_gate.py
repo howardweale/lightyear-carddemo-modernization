@@ -102,6 +102,7 @@ def validate(binding, root):
         raise Refused("binding-schema-or-source")
     if binding.get("qualified") is not False or binding.get("production_controller_receipt") is not False:
         raise Refused("not-p5-required")
+    selected_byte_policy(binding)
     frozen = json.loads(bound_file(root, binding["case_manifest"]))
     case_root = Path(root) / Path(binding["case_manifest"]["path"]).parent
     if (frozen["schema"] != "intcalc-frozen-cases/2" or frozen["spec_sha256"] != SPEC_SHA256
@@ -417,27 +418,118 @@ def _compare_case(expected, actual, codec, retained):
                 dataset_deltas=deltas, governed_oracle_comparison=semantic)
 
 
+
+REPORT_ONLY_POLICY = {"name":"TRANSACT-UNASSIGNED-REPORT-ONLY-v1",
+                      "TRANSACT_56_131":"report-only; every original byte retained",
+                      "TRANSACT_330_349":"report-only; every original byte retained",
+                      "other_bytes":"verdict-bearing; no other exception"}
+
+
+def selected_byte_policy(binding):
+    policy=binding.get("byte_policy")
+    if policy is None:
+        return BYTE_POLICY
+    if set(policy)!={"name","artifact_sha256","case_manifest_sha256","expires_at","attempt_name"}:
+        raise Refused("named-byte-policy-scope-required")
+    if (policy["name"]!=REPORT_ONLY_POLICY["name"]
+            or policy["artifact_sha256"]!=binding["artifact"]["sha256"]
+            or policy["case_manifest_sha256"]!=binding["case_manifest"]["sha256"]
+            or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}",policy["attempt_name"])):
+        raise Refused("named-byte-policy-binding")
+    expiry=datetime.fromisoformat(policy["expires_at"])
+    if expiry.utcoffset() is None or expiry<=datetime.now(timezone.utc):
+        raise Refused("named-byte-policy-expired")
+    return REPORT_ONLY_POLICY
+
+def compare_report_only_case(expected, actual, codec, retained):
+    for dd in OUTPUTS:
+        if len(actual[dd]) % OUTPUTS[dd]:
+            raise OutputProblem("wrong-record-length:"+dd)
+    # Preserve full raw bytes and all differences; only an explicit comparison view
+    # excludes the two named unassigned regions. It never rewrites an artifact.
+    def view(raw):
+        data=bytearray(raw)
+        for start in range(0,len(data),350):
+            data[start+56:start+132]=b"\x40"*76
+            data[start+330:start+350]=b"\x40"*20
+        return bytes(data)
+    observations=[]
+    left,right=expected["TRANSACT"],actual["TRANSACT"]
+    for index in range(max(len(left),len(right))//350):
+        for lo,hi in ((56,132),(330,350)):
+            a=left[index*350+lo:index*350+hi]
+            b=right[index*350+lo:index*350+hi]
+            observations.append(dict(record=index+1,start=lo,end_inclusive=hi-1,
+                                     expected_hex=a.hex(),actual_hex=b.hex(),different=a!=b))
+    raw_report={}
+    for dd in OUTPUTS:
+        try:
+            raw_report[dd]=compare_dataset("INTCALC","STEP15",dd,expected[dd],actual[dd],codec=codec)
+        except (UnicodeError,ValueError) as exc:
+            raw_report[dd]=dict(decoded=False,error=str(exc)[:200],
+                               before_sha256=digest(expected[dd]),after_sha256=digest(actual[dd]))
+    (retained / "byte-policy-observations.json").write_text(json.dumps(dict(
+        policy=REPORT_ONLY_POLICY,raw_dataset_deltas=raw_report,regions=observations),indent=2)+"\n")
+    projected_expected=dict(expected,TRANSACT=view(left))
+    projected_actual=dict(actual,TRANSACT=view(right))
+    try:
+        result=_compare_report_only_view(projected_expected,projected_actual,codec,retained)
+    except (UnicodeError,ValueError) as exc:
+        if isinstance(exc,OutputProblem):
+            raise
+        raise OutputProblem("candidate-bytes-refused-outside-policy:"+str(exc)[:200],"UNDECODABLE") from exc
+    return dict(verdict=result["verdict"],comparison_policy=REPORT_ONLY_POLICY,
+                dataset_deltas=raw_report,unassigned_region_observations=observations,
+                comparison_view=result,raw_artifacts_changed=False)
+
+
+def _compare_report_only_view(expected, actual, codec, retained):
+    deltas = {dd: compare_dataset("INTCALC", "STEP15", dd, expected[dd], actual[dd], codec=codec)
+              for dd in OUTPUTS}
+    for label, values in (("comparison-view-expected", expected), ("comparison-view-actual", actual)):
+        folder = retained / label
+        folder.mkdir()
+        for dd, filename in (("ACCTFILE", "acctdata.txt"), ("TRANSACT", "transactions.txt")):
+            raw, length = values[dd], OUTPUTS[dd]
+            if len(raw) % length:
+                raise OutputProblem("partial-fixed-record")
+            lines = [raw[i:i+length].decode(codec) for i in range(0, len(raw), length)]
+            if any("\n" in line or "\r" in line for line in lines):
+                raise OutputProblem("embedded-record-separator")
+            (folder / filename).write_bytes(("".join(line+"\n" for line in lines)).encode("ascii"))
+    semantic = compare_directories(retained / "comparison-view-expected", retained / "comparison-view-actual")
+    return dict(verdict="MATCH" if semantic["status"] == "passed" and
+                all(d["identical"] for d in deltas.values()) else "DIFFERENT",
+                dataset_deltas=deltas, governed_oracle_comparison=semantic)
+
+
 def run(binding_path, binding_sha256, attempt_dir):
     raw = regular(binding_path)
     if digest(raw) != binding_sha256:
         raise Refused("approved-binding-hash-required")
     binding = json.loads(raw)
     artifact, cases, governance = validate(binding, Path(binding_path).parent)
+    active_policy = selected_byte_policy(binding)
     retained = Path(attempt_dir)
+    if binding.get("byte_policy") and retained.name != binding["byte_policy"]["attempt_name"]:
+        raise Refused("named-byte-policy-attempt")
     retained.mkdir(parents=False, exist_ok=False)
     report = dict(schema="full-intcalc-c1-result/2", binding_sha256=binding_sha256,
                   artifact_sha256=digest(artifact), runtime_image=binding["runtime_image"],
                   started_at=datetime.now(timezone.utc).isoformat(), cases=[],
                   qualified=False, production_controller_receipt=False,
-                  normalization_governance=governance, comparison_policy=BYTE_POLICY, all_cases_match=False)
+                  normalization_governance=governance, comparison_policy=active_policy, all_cases_match=False)
     deadline = time.monotonic()+binding["max_elapsed_seconds"]
+    if binding.get("byte_policy"):
+        expires=datetime.fromisoformat(binding["byte_policy"]["expires_at"])
+        deadline=min(deadline,time.monotonic()+(expires-datetime.now(timezone.utc)).total_seconds())
     (retained / "binding.json").write_bytes(raw)
     stopped = False
     for case, arrays in cases:
         destination = retained / case["id"]
         destination.mkdir()
         row = dict(id=case["id"], kind=case["kind"], verdict="NOT_RUN", inputs=case["inputs"],
-                   expected=case["expected"], comparison_policy=BYTE_POLICY)
+                   expected=case["expected"], comparison_policy=active_policy)
         try:
             if stopped:
                 raise Refused("attempt-stopped-after-fault")
@@ -458,7 +550,8 @@ def run(binding_path, binding_sha256, attempt_dir):
                 for dd, output in actual.items():
                     (destination / (dd+".bin")).write_bytes(output)
                 row["output_inventory"] = {d: dict(bytes=len(b), sha256=digest(b)) for d, b in actual.items()}
-                row.update(compare_case(arrays["expected"], actual, case["codec"], destination))
+                comparator = compare_report_only_case if active_policy is REPORT_ONLY_POLICY else compare_case
+                row.update(comparator(arrays["expected"], actual, case["codec"], destination))
         except CandidateTimeout as exc:
             row.update(verdict="TIMEOUT", error_type=type(exc).__name__, error=str(exc)[:500])
             stopped = True

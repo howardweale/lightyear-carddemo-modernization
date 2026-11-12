@@ -149,6 +149,34 @@ class CandidateGateTests(unittest.TestCase):
                 gate.compare_case(expected,actual,"cp037",output)
             self.assertEqual(caught.exception.verdict,"OUTPUT_CONTRACT_VIOLATION" if label=="partial" else "UNDECODABLE")
 
+    def test_named_report_only_regions_are_fully_reported_without_changing_verdict(self):
+        _,cases,_=self.validate()
+        _,arrays=next(c for c in cases if c[0]["kind"]=="success" and c[1]["expected"]["TRANSACT"])
+        expected=arrays["expected"]
+        actual=dict(expected);raw=bytearray(actual["TRANSACT"])
+        raw[56]=0x51;raw[330]=0;actual["TRANSACT"]=bytes(raw)
+        output=self.root/"report-only";output.mkdir()
+        result=gate.compare_report_only_case(expected,actual,"cp037",output)
+        self.assertEqual(result["verdict"],"MATCH")
+        self.assertTrue(any(r["different"] for r in result["unassigned_region_observations"]))
+        self.assertFalse(result["raw_artifacts_changed"])
+        actual=dict(expected);raw=bytearray(actual["TRANSACT"]);raw[32]=0xC1;actual["TRANSACT"]=bytes(raw)
+        output=self.root/"assigned";output.mkdir()
+        result=gate.compare_report_only_case(expected,actual,"cp037",output)
+        self.assertEqual(result["verdict"],"DIFFERENT")
+
+    def test_report_only_policy_needs_exact_scope_and_expiry(self):
+        self.assertIs(gate.selected_byte_policy(self.binding),gate.BYTE_POLICY)
+        for policy in ({},{"name":gate.REPORT_ONLY_POLICY["name"]}):
+            bound=copy.deepcopy(self.binding);bound["byte_policy"]=policy
+            with self.assertRaises(gate.Refused):gate.selected_byte_policy(bound)
+        bound=copy.deepcopy(self.binding)
+        bound["byte_policy"]=dict(name=gate.REPORT_ONLY_POLICY["name"],
+            artifact_sha256=bound["artifact"]["sha256"],case_manifest_sha256=bound["case_manifest"]["sha256"],
+            expires_at="2000-01-01T00:00:00+00:00",attempt_name="one-attempt")
+        with self.assertRaises(gate.Refused):gate.selected_byte_policy(bound)
+
+
     def test_candidate_exec_transport_fault_never_scores_expected_refusal(self):
         # Real execute_case control flow, mocked Docker plumbing; no container run.
         _, cases, governance = self.validate()

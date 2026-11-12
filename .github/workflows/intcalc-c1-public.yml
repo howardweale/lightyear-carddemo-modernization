@@ -20,16 +20,61 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
   oracle-freeze:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: "amd64"
+            runner: "ubuntu-24.04"
+            platform: "linux/amd64"
+            runner_arch: "X64"
+            jre: "eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032"
+            jre_config: "sha256:605296a112703cf91247c29e4f709efd91afd3e1b108d6861ba02f130ea732b3"
+            javac_sha256: "98ac8fa7f55cc6ed6395bee67d55a3980d0073961a57db0f26ccf994f6a5e6b8"
+            jar_sha256: "d593032ab3db2b7217c8db41722f8e65163d5ef0bac98157edadb28cc96b567c"
+            build_mode: "host-pinned-setup-java"
+          - id: "arm64"
+            runner: "ubuntu-24.04-arm"
+            platform: "linux/arm64"
+            runner_arch: "ARM64"
+            jre: "eclipse-temurin@sha256:3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07"
+            jre_config: "sha256:2eac78aca4748f2a6b922f8af332d3d1a5ac161d252c2f5664806100bcf6d8cf"
+            javac_sha256: "1c6a574beed14cd3c5a48218359fbdb2c6be775ef777cf8338f080213187c0dc"
+            jar_sha256: "1998d56064b12968a9dd4f62bf787a3e30c9fc8a46614437361e18bed45cc444"
+            build_mode: "pinned-jdk-container"
     timeout-minutes: 15
     env:
       PYTHONPATH: src:.:tests
+      C1_PLATFORM: ${{ matrix.platform }}
+      C1_ARCH: ${{ matrix.id }}
+      C1_RUNNER_ARCH: ${{ matrix.runner_arch }}
+      C1_JRE: ${{ matrix.jre }}
+      C1_JRE_CONFIG: ${{ matrix.jre_config }}
+      C1_JAVAC_SHA256: ${{ matrix.javac_sha256 }}
+      C1_JAR_SHA256: ${{ matrix.jar_sha256 }}
+      C1_BUILD_MODE: ${{ matrix.build_mode }}
+      C1_ARM_JDK: eclipse-temurin@sha256:8def71d61fd7f95b08480f51e8ac35e37ec87a0aaad6950a6f1e35c771de5b2d
+      C1_ARM_JDK_CONFIG: sha256:b6b0d394b3d52d8db009047a714e54141e97e7e267c2fddc256c7a23708e0bd7
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
+      - name: Require native matrix host and Linux daemon
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          import json, os, platform, subprocess
+          from lightyear_mainframe.intcalc_candidate_gate import daemon_runtime_platform
+          assert os.environ['RUNNER_ARCH'] == os.environ['C1_RUNNER_ARCH']
+          arches={'amd64':('x86_64','amd64'),'arm64':('aarch64','arm64')}
+          assert platform.system()=='Linux' and platform.machine() in arches[os.environ['C1_ARCH']]
+          raw=subprocess.check_output(['docker','info','--format','{"os":{{json .OSType}},"architecture":{{json .Architecture}}}'])
+          assert daemon_runtime_platform(raw)==os.environ['C1_PLATFORM'], 'Emulation refused'
+          PY
       - name: Fetch exact verifier-only assets outside repository and model workspace
         shell: bash
         run: |
@@ -72,31 +117,83 @@ jobs:
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_candidate_gate)
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           summary = dict(tests_run=result.testsRun, skipped=len(result.skipped),
-                         failures=len(result.failures), errors=len(result.errors), expected_tests=20)
+                         failures=len(result.failures), errors=len(result.errors), expected_tests=28)
           (Path(os.environ['C1_FROZEN'])/'c1-test-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
-          if not result.wasSuccessful() or result.skipped or result.testsRun != 20:
-              raise SystemExit('C1 dedicated suite requires all 20 tests, zero skips')
+          if not result.wasSuccessful() or result.skipped or result.testsRun != 28:
+              raise SystemExit('C1 dedicated suite requires all 28 tests, zero skips')
           PY
 
       - uses: actions/setup-java@v5
+        if: matrix.id == 'amd64'
         with:
           distribution: temurin
           java-version: '21.0.9+10.0.LTS'
-      - name: Pull exact JRE before any fixture candidate starts
+      - name: Pull and verify exact platform JRE before fixture
         shell: bash
         run: |
           set -euo pipefail
-          docker pull --platform=linux/amd64 eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032
-          docker image inspect eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032 > "$RUNNER_TEMP/intcalc-frozen/jre-image.json"
+          docker pull --platform="$C1_PLATFORM" "$C1_JRE"
+          docker image inspect "$C1_JRE" > "$RUNNER_TEMP/intcalc-frozen/jre-image.json"
+          python -B - <<'PY'
+          import json,os
+          from pathlib import Path
+          records=json.loads((Path(os.environ['RUNNER_TEMP'])/'intcalc-frozen/jre-image.json').read_text())
+          assert len(records)==1
+          record=records[0]
+          assert record['Os']=='linux' and record['Architecture']==os.environ['C1_ARCH']
+          assert record['Id']==os.environ['C1_JRE_CONFIG'] and os.environ['C1_JRE'] in record['RepoDigests']
+          PY
+      - name: ARM pinned JDK image and in-container tool hashes
+        if: matrix.id == 'arm64'
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull --platform=linux/arm64 "$C1_ARM_JDK"
+          docker image inspect "$C1_ARM_JDK" > "$RUNNER_TEMP/intcalc-frozen/jdk-image.json"
+          python -B - <<'PY'
+          import json,os
+          from pathlib import Path
+          record=json.loads((Path(os.environ['RUNNER_TEMP'])/'intcalc-frozen/jdk-image.json').read_text())[0]
+          assert record['Os']=='linux' and record['Architecture']=='arm64'
+          assert record['Id']==os.environ['C1_ARM_JDK_CONFIG'] and os.environ['C1_ARM_JDK'] in record['RepoDigests']
+          PY
+          docker run --rm --pull=never --platform=linux/arm64 --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory=512m --cpus=1 --user=65534:65534 --entrypoint=/usr/bin/sha256sum "$C1_ARM_JDK" /opt/java/openjdk/bin/javac /opt/java/openjdk/bin/jar > "$RUNNER_TEMP/intcalc-frozen/jdk-tool-hashes.txt"
+      - name: Verify actual tool hashes before compile
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'intcalc-frozen'
+          expected={n:os.environ['C1_'+n.upper()+'_SHA256'] for n in ('javac','jar')}
+          if os.environ['C1_ARCH']=='arm64':
+              lines=[line.split() for line in (root/'jdk-tool-hashes.txt').read_text().splitlines()]
+              assert len(lines)==2 and {p for _,p in lines}=={'/opt/java/openjdk/bin/javac','/opt/java/openjdk/bin/jar'}
+              actual={Path(p).name:h for h,p in lines}
+          else:
+              actual={n:hashlib.sha256((Path(os.environ['JAVA_HOME'])/'bin'/n).read_bytes()).hexdigest() for n in expected}
+          equality={n:actual[n]==expected[n] for n in expected}
+          receipt=dict(platform=os.environ['C1_PLATFORM'],build_mode=os.environ['C1_BUILD_MODE'],tool_binaries=actual,expected_tool_binaries=expected,equal_to_expected=equality,
+              arm_jdk_image=os.environ['C1_ARM_JDK'] if os.environ['C1_ARCH']=='arm64' else None,
+              arm_jdk_config=os.environ['C1_ARM_JDK_CONFIG'] if os.environ['C1_ARCH']=='arm64' else None,
+              comparison_basis='ARM official archive members; amd64 retained C1 build receipt')
+          (root/'toolchain-verification.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          assert all(equality.values()), 'Tool bytes differ; record finding and refuse compilation'
+          PY
       - name: Trusted compile and package tiny public fixture only
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/intcalc-build/classes"
-          javac -proc:none --release 21 -d "$RUNNER_TEMP/intcalc-build/classes" tests/fixtures/intcalc-c1/Main.java
-          jar --create --file "$RUNNER_TEMP/intcalc-build/candidate.jar" --main-class Main -C "$RUNNER_TEMP/intcalc-build/classes" .
-          javac -version > "$RUNNER_TEMP/intcalc-build/javac-version.txt" 2>&1
-          jar --version > "$RUNNER_TEMP/intcalc-build/jar-version.txt" 2>&1
+          if [ "$C1_ARCH" = arm64 ]; then
+            docker run --rm --pull=never --platform=linux/arm64 --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory=512m --cpus=1 --user="$(id -u):$(id -g)" --tmpfs=/tmp:rw,noexec,nosuid,nodev,size=32m --mount "type=bind,source=$PWD/tests/fixtures/intcalc-c1/Main.java,target=/source/Main.java,readonly" --mount "type=bind,source=$RUNNER_TEMP/intcalc-build,target=/build" --entrypoint=/bin/sh "$C1_ARM_JDK" -ceu '/opt/java/openjdk/bin/javac -proc:none --release 21 -d /build/classes /source/Main.java; /opt/java/openjdk/bin/jar --create --file /build/candidate.jar --main-class Main -C /build/classes .; /opt/java/openjdk/bin/javac -version > /build/javac-version.txt; /opt/java/openjdk/bin/jar --version > /build/jar-version.txt'
+          else
+            javac -proc:none --release 21 -d "$RUNNER_TEMP/intcalc-build/classes" tests/fixtures/intcalc-c1/Main.java
+            jar --create --file "$RUNNER_TEMP/intcalc-build/candidate.jar" --main-class Main -C "$RUNNER_TEMP/intcalc-build/classes" .
+            javac -version > "$RUNNER_TEMP/intcalc-build/javac-version.txt"
+            jar --version > "$RUNNER_TEMP/intcalc-build/jar-version.txt"
+          fi
           python -B - <<'PY'
           import hashlib, json, os
           from pathlib import Path
@@ -108,17 +205,21 @@ jobs:
           receipt = dict(schema='intcalc-public-fixture-build/1', source={str(source):dict(sha256=digest(source),bytes=source.stat().st_size)},
                          artifact_sha256=digest(build/'candidate.jar'), fixture_only=True, conversion=False,
                          classes={p.relative_to(build/'classes').as_posix():digest(p) for p in sorted((build/'classes').rglob('*')) if p.is_file()},
-                         tool_binaries={n:digest(Path(os.environ['JAVA_HOME'])/'bin'/n) for n in ('javac','jar')},
-                         javac=['javac','-proc:none','--release','21','-d','CLASSES',str(source)],
-                         jar=['jar','--create','--file','candidate.jar','--main-class','Main','-C','CLASSES','.'],
-                         setup_java_requested='21.0.9+10.0.LTS',
+                         tool_binaries=json.loads((frozen/'toolchain-verification.json').read_text())['tool_binaries'],
+                         javac=['/opt/java/openjdk/bin/javac','-proc:none','--release','21','-d','/build/classes','/source/Main.java'] if os.environ['C1_ARCH']=='arm64' else ['javac','-proc:none','--release','21','-d',str(build/'classes'),str(source)],
+                         jar=['/opt/java/openjdk/bin/jar','--create','--file','/build/candidate.jar','--main-class','Main','-C','/build/classes','.'] if os.environ['C1_ARCH']=='arm64' else ['jar','--create','--file',str(build/'candidate.jar'),'--main-class','Main','-C',str(build/'classes'),'.'],
+                         builder_container=dict(image=os.environ['C1_ARM_JDK'],config=os.environ['C1_ARM_JDK_CONFIG'],platform='linux/arm64',network='none',read_only=True,cap_drop=['ALL'],no_new_privileges=True,pids_limit=64,memory='512m',cpus=1,verifier_mounts=False) if os.environ['C1_ARCH']=='arm64' else None,
+                         setup_java_requested='21.0.9+10.0.LTS' if os.environ['C1_ARCH']=='amd64' else None,
+                         build_platform=os.environ['C1_PLATFORM'], build_mode=os.environ['C1_BUILD_MODE'],
+                         toolchain_verification=json.loads((frozen/'toolchain-verification.json').read_text()),
+                         runtime_platform=os.environ['C1_PLATFORM'], runtime_image=os.environ['C1_JRE'], runtime_config=os.environ['C1_JRE_CONFIG'],
                          javac_version=(build/'javac-version.txt').read_text(),
                          jar_version=(build/'jar-version.txt').read_text(), model_calls=0)
           (build/'build-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
           binding = dict(schema='full-intcalc-c1/2',upstream=UPSTREAM,
                          case_manifest=dict(path='intcalc-frozen/case-manifest.json',sha256=digest(frozen/'case-manifest.json')),
                          artifact=dict(path='intcalc-build/candidate.jar',sha256=digest(build/'candidate.jar')),
-                         runtime_image='eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032',java=COMMAND[0],command_template=COMMAND,
+                         runtime_image=os.environ['C1_JRE'],runtime_platform=os.environ['C1_PLATFORM'],java=COMMAND[0],command_template=COMMAND,
                          max_elapsed_seconds=600,qualified=False,production_controller_receipt=False)
           (root/'intcalc-fixture-binding.json').write_text(json.dumps(binding,indent=2)+'\n')
           PY
@@ -142,6 +243,11 @@ jobs:
               runtime=json.loads((root/'intcalc-real-fixture'/row['id']/'runtime.json').read_text())
               assert runtime['cleanup_confirmed'] is True, runtime
               assert runtime['cleanup_allowance_seconds'] == 5
+              assert runtime['runtime_platform']==os.environ['C1_PLATFORM']
+              assert runtime['observed_daemon_platform']==os.environ['C1_PLATFORM']
+              creates=[o['argv'] for o in runtime['operations'] if len(o['argv'])>1 and o['argv'][1]=='create']
+              assert len(creates)==2 and all('--platform='+os.environ['C1_PLATFORM'] in a and '--pull=never' in a for a in creates)
+              assert all(os.environ['C1_JRE'] in a for a in creates)
               assert all(isinstance(o['elapsed_ms'], (int,float)) and o['elapsed_ms'] >= 0
                          for o in runtime['operations']+runtime['cleanup']), runtime
               assert any(o['argv'][1]=='exec' and '/usr/bin/env' in o['argv'] for o in runtime['operations'])
@@ -152,7 +258,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: intcalc-oracle-crosscheck-and-real-fixture
+          name: intcalc-oracle-crosscheck-and-real-fixture-${{ matrix.id }}
           path: |
             ${{ runner.temp }}/intcalc-frozen
             ${{ runner.temp }}/intcalc-build

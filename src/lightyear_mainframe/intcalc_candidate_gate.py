@@ -97,7 +97,29 @@ def bound_file(root, row, limit=MAX_DATA):
     return raw
 
 
+def selected_runtime_platform(binding):
+    value = binding.get("runtime_platform")
+    if type(value) is not str or value not in {"linux/amd64", "linux/arm64"}:
+        raise Refused("explicit-supported-runtime-platform-required")
+    return value
+
+
+def daemon_runtime_platform(raw):
+    try:
+        info = json.loads(raw)
+        if type(info) is not dict or info.get("os") != "linux":
+            raise ValueError("not Linux")
+        arch = info.get("architecture")
+        if type(arch) is not str:
+            raise ValueError("unknown architecture")
+        return {"amd64": "linux/amd64", "x86_64": "linux/amd64",
+                "arm64": "linux/arm64", "aarch64": "linux/arm64"}[arch]
+    except (ValueError, KeyError, TypeError) as exc:
+        raise Refused("docker-daemon-platform-unknown") from exc
+
+
 def validate(binding, root):
+    selected_runtime_platform(binding)
     if binding["schema"] != "full-intcalc-c1/2" or binding["upstream"] != UPSTREAM:
         raise Refused("binding-schema-or-source")
     if binding.get("qualified") is not False or binding.get("production_controller_receipt") is not False:
@@ -270,7 +292,9 @@ def tar_inventory(raw):
     return rows
 
 
-def execute_case(image, artifact, inputs, case, deadline, retained):
+def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_platform):
+    runtime_platform = selected_runtime_platform({"runtime_platform": runtime_platform})
+    observed_daemon_platform = None
     # Shared bounded tmpfs volume; trusted collector reads it after candidate pause.
     token = uuid.uuid4().hex
     name, collector, volume = ("intcalc-c1-"+token+s for s in ("", "-collect", "-out"))
@@ -295,6 +319,12 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
         if result["rc"]:
             raise Refused("docker-operation-failed:"+args[0])
         return result
+    def require_native_daemon():
+        nonlocal observed_daemon_platform
+        raw = required(["info", "--format", '{"os":{{json .OSType}},"architecture":{{json .Architecture}}}'])["stdout"]
+        observed_daemon_platform = daemon_runtime_platform(raw)
+        if observed_daemon_platform != runtime_platform:
+            raise Refused("docker-daemon-platform-mismatch-emulation-refused")
     with tempfile.TemporaryDirectory(prefix="intcalc-c1-") as temp:
         temp = Path(temp)
         (temp / "input").mkdir()
@@ -303,10 +333,11 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
         (temp / "candidate.jar").write_bytes(artifact)
         command = [value.format(**case) for value in COMMAND]
         try:
+            require_native_daemon()
             volume_attempted = True
             required(["volume", "create", "--driver=local", "--opt=type=tmpfs",
                       "--opt=device=tmpfs", "--opt=o=size=32m,uid=65534,gid=65534,mode=0700", volume])
-            common = ["--pull=never", "--platform=linux/amd64", "--network=none", "--read-only",
+            common = ["--pull=never", "--platform="+runtime_platform, "--network=none", "--read-only",
                       "--cap-drop=ALL", "--security-opt=no-new-privileges", "--pids-limit=64",
                       "--memory=512m", "--cpus=1", "--user=65534:65534"]
             attempted.append(name)
@@ -330,6 +361,7 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
             paused = json.loads(required(["inspect", name])["stdout"])[0]["State"]["Paused"]
             if paused is not True:
                 raise Refused("candidate-output-not-frozen")
+            require_native_daemon()
             attempted.append(collector)
             required(["create", "--name", collector, *common,
                 "--mount", f"type=volume,source={volume},target=/capture,readonly,volume-nocopy",
@@ -378,6 +410,7 @@ def execute_case(image, artifact, inputs, case, deadline, retained):
                     cleanup_ok = False
             (retained / "runtime.json").write_text(json.dumps(dict(
                 operations=evidence,cleanup=cleanup_rows,cleanup_confirmed=cleanup_ok,
+                runtime_platform=runtime_platform, observed_daemon_platform=observed_daemon_platform,
                 cleanup_allowance_seconds=5,
                 candidate_timeout=isinstance(pending_error, CandidateTimeout),
                 capture_method="paused candidate; trusted tar collector on read-only shared tmpfs volume",
@@ -516,6 +549,7 @@ def run(binding_path, binding_sha256, attempt_dir):
     retained.mkdir(parents=False, exist_ok=False)
     report = dict(schema="full-intcalc-c1-result/2", binding_sha256=binding_sha256,
                   artifact_sha256=digest(artifact), runtime_image=binding["runtime_image"],
+                  runtime_platform=selected_runtime_platform(binding),
                   started_at=datetime.now(timezone.utc).isoformat(), cases=[],
                   qualified=False, production_controller_receipt=False,
                   normalization_governance=governance, comparison_policy=active_policy, all_cases_match=False)
@@ -536,7 +570,8 @@ def run(binding_path, binding_sha256, attempt_dir):
             if time.monotonic() >= deadline:
                 raise Refused("original-deadline-expired")
             execution = execute_case(binding["runtime_image"], artifact,
-                                     arrays["inputs"], case, deadline, destination)
+                                     arrays["inputs"], case, deadline, destination,
+                                     runtime_platform=selected_runtime_platform(binding))
             row.update(exit_code=execution["exit_code"], command=execution["command"],
                        captured_output_inventory=execution.get("captured_output_inventory", []))
             if case["kind"] == "refusal":

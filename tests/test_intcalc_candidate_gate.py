@@ -31,7 +31,7 @@ class CandidateGateTests(unittest.TestCase):
         self.binding = dict(schema="full-intcalc-c1/2",upstream=gate.UPSTREAM,
             case_manifest=dict(path="frozen/case-manifest.json",sha256=gate.digest((self.root/"frozen/case-manifest.json").read_bytes())),
             artifact=dict(path="fixture.jar",sha256=gate.digest(artifact.read_bytes())),
-            runtime_image="sha256:"+"1"*64,java="/opt/java/openjdk/bin/java",
+            runtime_image="sha256:"+"1"*64,runtime_platform="linux/amd64",java="/opt/java/openjdk/bin/java",
             command_template=gate.COMMAND,max_elapsed_seconds=300,qualified=False,
             production_controller_receipt=False)
         self.path=self.root/"binding.json"
@@ -73,7 +73,8 @@ class CandidateGateTests(unittest.TestCase):
 
     def test_original_deadline_and_attempt_separation(self):
         deadlines=[]
-        def execute(image,artifact,inputs,case,deadline,retained):
+        def execute(image,artifact,inputs,case,deadline,retained,*,runtime_platform):
+            self.assertEqual(runtime_platform,"linux/amd64")
             deadlines.append(deadline)
             return dict(exit_code=7,command=[gate.COMMAND[0]],outputs=None,stderr_nonempty=True)
         sha=gate.digest(self.path.read_bytes())
@@ -189,7 +190,9 @@ class CandidateGateTests(unittest.TestCase):
             creates = {}
             def fake_capture(argv, deadline, cap=gate.MAX_CAPTURE):
                 result = dict(rc=0, stdout=b"", stderr=b"", timeout=False, overflow=False)
-                if argv[1] == "create":
+                if argv[1] == "info":
+                    result["stdout"] = b'{"os":"linux","architecture":"x86_64"}'
+                elif argv[1] == "create":
                     creates[argv[argv.index("--name")+1]] = argv
                 elif argv[1] == "inspect":
                     args = creates[argv[2]]
@@ -227,6 +230,19 @@ class CandidateGateTests(unittest.TestCase):
         self.assertTrue(all(r["verdict"]=="NOT_RUN" for r in report["cases"][1:]))
 
 
+    def test_explicit_platform_binding_passed_to_execution(self):
+        for platform in ("linux/amd64", "linux/arm64"):
+            bound = copy.deepcopy(self.binding)
+            bound["runtime_platform"] = platform
+            self.validate(bound)
+            self.path.write_text(json.dumps(bound)+"\n")
+            with patch.object(gate,"execute_case",return_value=dict(exit_code=7,command=[],outputs=None,stderr_nonempty=True)) as execute:
+                report=gate.run(self.path,gate.digest(self.path.read_bytes()),self.root/platform.rsplit("/",1)[1])
+            self.assertEqual(execute.call_count,10)
+            self.assertTrue(all(c.kwargs["runtime_platform"]==platform for c in execute.call_args_list))
+            self.assertEqual(report["runtime_platform"],platform)
+
+
 class TransportMetadataTests(unittest.TestCase):
     def test_timing_retained_for_result_and_launch_exception(self):
         rows=[]
@@ -248,6 +264,84 @@ class TransportMetadataTests(unittest.TestCase):
         with self.assertRaisesRegex(gate.Refused,"docker-exec-infrastructure:collector"):
             gate.require_exec_transport(result,"collector")
 
+
+
+class PlatformBindingTests(unittest.TestCase):
+    def test_allowed_platforms(self):
+        for value in ("linux/amd64","linux/arm64"):
+            self.assertEqual(gate.selected_runtime_platform({"runtime_platform":value}),value)
+
+    def test_absent_or_unknown_platform_refused_before_files(self):
+        for binding in ({},{"runtime_platform":None},{"runtime_platform":"linux/ppc64le"},
+                        {"runtime_platform":""},{"runtime_platform":[]},{"runtime_platform":True}):
+            with self.subTest(binding=binding),patch.object(gate,"bound_file") as read:
+                with self.assertRaisesRegex(gate.Refused,"explicit-supported-runtime-platform-required"):
+                    gate.validate(binding,Path("unused"))
+                read.assert_not_called()
+
+    def _execute(self,platform,daemon,*,info_rc=0):
+        # Public synthetic Docker transport only; no case/answer assets or containers.
+        calls=[];created={};raw=io.BytesIO()
+        with tarfile.open(fileobj=raw,mode="w") as archive:
+            for name in ("ACCTFILE.bin","TRANSACT.bin"):
+                item=tarfile.TarInfo(name);item.size=0;archive.addfile(item,io.BytesIO())
+        image="sha256:"+"1"*64
+        def capture(argv,deadline,cap=gate.MAX_CAPTURE):
+            calls.append(argv)
+            result=dict(rc=0,stdout=b"",stderr=b"",timeout=False,overflow=False)
+            if argv[1]=="info":result.update(rc=info_rc,stdout=daemon)
+            elif argv[1]=="create":created[argv[argv.index("--name")+1]]=argv
+            elif argv[1]=="inspect":
+                args=created[argv[2]];mount=args[args.index("--mount")+1]
+                volume=mount.split("source=",1)[1].split(",",1)[0]
+                collector="target=/capture" in mount
+                mounts=([dict(Destination="/capture",Type="volume",Name=volume,RW=False)] if collector else
+                    [dict(Destination="/output",Type="volume",Name=volume,RW=True),dict(Destination="/input",RW=False),dict(Destination="/candidate.jar",RW=False)])
+                result["stdout"]=json.dumps([dict(HostConfig=dict(NetworkMode="none",ReadonlyRootfs=True),
+                    Config=dict(User="65534:65534",Image=image),Mounts=mounts,State=dict(Paused=True))]).encode()
+            elif argv[1]=="exec" and "/bin/tar" in argv:result["stdout"]=raw.getvalue()
+            return result
+        with tempfile.TemporaryDirectory() as directory:
+            retained=Path(directory)
+            with patch.object(gate,"capture",side_effect=capture):
+                try:
+                    result=gate.execute_case(image,b"public mock jar",{},dict(processing_date="2000-01-01",timestamp="2000-01-01-00.00.00.000000",codec="cp037"),
+                        gate.time.monotonic()+60,retained,runtime_platform=platform)
+                except gate.Refused as exc:
+                    return calls,None,json.loads((retained/"runtime.json").read_text()),str(exc)
+            return calls,result,json.loads((retained/"runtime.json").read_text()),None
+
+    def _assert_native(self,platform,arch):
+        calls,result,runtime,error=self._execute(platform,json.dumps(dict(os="linux",architecture=arch)).encode())
+        self.assertIsNone(error);self.assertEqual(result["exit_code"],0)
+        creates=[a for a in calls if a[1]=="create"]
+        self.assertEqual(len(creates),2)
+        self.assertTrue(all("--platform="+platform in a and "--pull=never" in a for a in creates))
+        self.assertEqual(sum(a[1]=="info" for a in calls),2)
+        self.assertEqual(runtime["runtime_platform"],platform)
+        self.assertEqual(runtime["observed_daemon_platform"],platform)
+        self.assertTrue(runtime["cleanup_confirmed"])
+
+    def test_arm64_candidate_and_collector(self):self._assert_native("linux/arm64","aarch64")
+    def test_amd64_candidate_and_collector(self):self._assert_native("linux/amd64","x86_64")
+
+    def test_daemon_architecture_mismatch_refuses_before_create(self):
+        for platform,arch in (("linux/arm64","x86_64"),("linux/amd64","aarch64")):
+            calls,result,runtime,error=self._execute(platform,json.dumps(dict(os="linux",architecture=arch)).encode())
+            self.assertEqual(error,"docker-daemon-platform-mismatch-emulation-refused")
+            self.assertFalse(any(a[1] in ("create","start","exec","volume") for a in calls))
+            self.assertEqual(runtime["cleanup"],[])
+
+    def test_unknown_daemon_refuses_before_create(self):
+        for raw in (b"not-json",b"{}",b'{"os":"windows","architecture":"amd64"}',b'{"os":"linux","architecture":"unknown"}'):
+            calls,result,runtime,error=self._execute("linux/arm64",raw)
+            self.assertEqual(error,"docker-daemon-platform-unknown")
+            self.assertFalse(any(a[1]=="create" for a in calls))
+
+    def test_daemon_info_failure_refuses_before_create(self):
+        calls,result,runtime,error=self._execute("linux/arm64",b"",info_rc=1)
+        self.assertEqual(error,"docker-operation-failed:info")
+        self.assertFalse(any(a[1]=="create" for a in calls))
 
 
 if __name__=="__main__":

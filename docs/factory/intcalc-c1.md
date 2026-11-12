@@ -123,7 +123,7 @@ Planned build tooling uses exact setup-java Temurin version 21.0.9+10.0.LTS;
 build-receipt.json records that requested pin and the actual javac/jar version
 output and binary hashes. Repository-wide discovery skips the frozen-dependent
 test class only when C1_FROZEN is absent or not a directory. Dedicated C1 CI
-requires all twenty tests, including the original fourteen, with zero skips.
+requires all twenty-eight tests, including the original fourteen, with zero skips.
 No oracle, comparator, hidden-case definition or STRICT byte policy is changed.
 
 ## Optional byte policy proposal, disabled by default
@@ -139,3 +139,30 @@ only those regions with cp037 spaces before the unchanged comparator. Original
 bytes are never rewritten. Other differences and decode errors remain failures.
 This is an explicit verdict policy, not evidence that the bytes match or that
 z/OS initializes them. No P5 qualification or native claim follows.
+
+## Planned dual native-platform qualification
+
+Planned runtime bindings require an explicit runtime_platform of linux/amd64 or
+linux/arm64. Missing or unknown values refuse before verifier files are read.
+The gate checks the Docker daemon OS and architecture before each container
+create and refuses mismatch or unknown metadata; emulation is not an alternative.
+Candidate and collector receive the same explicit platform. Neither an image
+digest nor the host architecture silently selects a default platform.
+
+Planned CI keeps both ubuntu-24.04 and ubuntu-24.04-arm matrix jobs, each with its
+own immutable JRE digest, tool hashes and artifact name. Both freeze all ten cases,
+require twenty-eight tests with zero skips and retain the ten real fixture rows.
+The amd64 job retains its pinned native setup-java build. The arm64 job compiles
+inside the pinned Temurin JDK Linux container, with network none, read-only root,
+cap-drop ALL, no-new-privileges and resource bounds. Only the tiny public source
+and the build output directory are mounted into that builder, never verifier
+assets. The ARM job hashes javac and jar inside that exact JDK image and records
+their equality to the official archive member hashes before compilation. A
+mismatch is a retained finding and stops the build. The build receipt binds the
+actual compiler image/config, tool hashes, commands, source, classes and JAR.
+
+Not yet qualified by this change: native arm64 execution, Mac local-image presence,
+Mac free disk, VM isolation, host watchdog or a C2 run. Actual CI evidence is
+required; static expected compiler hashes are not observed container hashes.
+No hidden case, input or expected answer belongs in model context or these docs.
+STRICT comparison, original deadlines and five-second cleanup remain unchanged.

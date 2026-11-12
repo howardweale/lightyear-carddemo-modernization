@@ -33,10 +33,11 @@
   "no_hidden_case_context": true,
   "qualified": false,
   "production_controller_receipt": false,
-  "test_count": 40,
+  "test_count": 42,
   "truncation": "disabled",
   "input_count_comparison": "Retain counted input_tokens and response usage.input_tokens plus count_matches_usage. Equality is not promised; each must be <= reviewed token_upper_bound and hard cap. Malformed or inconsistent usage still refuses.",
   "non_POSIX": "Ledger construction and persistence refuse posix-required before POSIX-only constants, getuid or fcntl.",
   "interrupts": "Record failed consumed slot and preserve the full hold, then re-raise KeyboardInterrupt/SystemExit unchanged.",
-  "synthetic_spawn": "CI-only real spawn workers send a fixed frame, stall or exit without sending. No socket or https_once call. Production worker/default five-second cleanup unchanged."
+  "synthetic_spawn": "Real-file guarded CI runner; all synthetic workers must leave a startup witness before normal frame, deliberate stall or EOF. A missing witness is a failing test, including a negative control. No socket or https_once call; production worker and cleanup unchanged.",
+  "test_fixture_paths": "Canonicalize trusted temporary test fixtures only. Runtime ancestor-symlink refusal is unchanged and has a negative test. Real synchronization remains enabled; safe file-kind/errno diagnostics on a failure, no downgrade."
 }

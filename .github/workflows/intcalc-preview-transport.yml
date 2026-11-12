@@ -38,14 +38,4 @@ jobs:
       - name: Synthetic transport and ledger tests; no provider network
         shell: bash
         run: |
-          python -B - <<'PY'
-          import platform,socket,unittest
-          from unittest.mock import patch
-          import test_intcalc_preview_transport
-          if platform.system()=='Darwin':
-              assert platform.machine()=='arm64'
-          suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_transport)
-          with patch.object(socket.socket,'connect',side_effect=AssertionError('Provider networking forbidden in CI')):
-              result=unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.wasSuccessful() and not result.skipped and result.testsRun==40
-          PY
+          python -B tests/test_intcalc_preview_transport.py

@@ -1,9 +1,11 @@
 """CI-only C2 transport tests. Synthetic public input; no credential or API call."""
 import copy
+from functools import partial
 import json
 import multiprocessing
 import time
 import os
+import stat
 from pathlib import Path
 import tempfile
 import threading
@@ -249,13 +251,47 @@ class WireAndLedgerTests(unittest.TestCase):
                 t.ExclusiveRunLedger("unused", "1"*64)
             return
         with tempfile.TemporaryDirectory() as directory:
+            # This is a trusted test fixture, not a change to runtime path policy.
+            # macOS may spell its temporary root through a symlink alias.
+            directory = Path(directory).resolve(strict=True)
             os.chmod(directory,0o700)
-            ledger=t.ExclusiveRunLedger(directory,"1"*64)
-            try:
-                ledger.record_once("planner-count-send.json",{"consumed":True})
-                with self.assertRaises(t.TransportRefused):ledger.record_once("planner-count-send.json",{})
-                with self.assertRaises(t.TransportRefused):t.ExclusiveRunLedger(directory,"1"*64)
-            finally:ledger.close()
+            sync_events = []
+            real_persist = t.persist
+            def observe_real_persist(fd):
+                kind = "directory" if stat.S_ISDIR(os.fstat(fd).st_mode) else "file"
+                try:
+                    real_persist(fd)
+                except OSError as error:
+                    sync_events.append({"kind": kind, "errno": error.errno})
+                    raise
+                sync_events.append({"kind": kind, "ok": True})
+            with patch.object(t,"persist",side_effect=observe_real_persist):
+                try:
+                    ledger=t.ExclusiveRunLedger(directory,"1"*64)
+                    try:
+                        ledger.record_once("planner-count-send.json",{"consumed":True})
+                        with self.assertRaises(t.TransportRefused):ledger.record_once("planner-count-send.json",{})
+                        with self.assertRaises(t.TransportRefused):t.ExclusiveRunLedger(directory,"1"*64)
+                    finally:ledger.close()
+                except t.TransportRefused as error:
+                    self.fail("canonical fixture ledger refused; real synchronization events=" + repr(sync_events))
+
+    def test_ledger_symlink_ancestor_refused_without_creation(self):
+        if os.name != "posix":
+            with self.assertRaisesRegex(t.TransportRefused,"posix-required"):
+                t.ExclusiveRunLedger("unused", "2"*64)
+            return
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve(strict=True)
+            real = root / "real"
+            real.mkdir(mode=0o700)
+            parent = real / "parent"
+            parent.mkdir(mode=0o700)
+            alias = root / "alias"
+            alias.symlink_to(real, target_is_directory=True)
+            with self.assertRaises(t.TransportRefused):
+                t.ExclusiveRunLedger(alias / "parent", "2"*64)
+            self.assertFalse((parent / ("2"*64)).exists())
     def test_fullfsync_selected_on_mac_and_errors_not_downgraded(self):
         if os.name != "posix":
             with self.assertRaisesRegex(t.TransportRefused,"posix-required"):
@@ -284,15 +320,24 @@ class WireAndLedgerTests(unittest.TestCase):
 
 
 # Module-level picklable workers: no HTTP helper, socket, credential or model call.
-def synthetic_frame_worker(pipe,path,body,key,timeout):
-    try:pipe.send_bytes((200).to_bytes(2,"big")+b"public synthetic frame")
+def synthetic_frame_worker(marker,pipe,path,body,key,timeout):
+    try:
+        Path(marker).write_bytes(b"worker-started\n")
+        pipe.send_bytes((200).to_bytes(2,"big")+b"public synthetic frame")
     finally:pipe.close()
 
-def synthetic_stalled_worker(pipe,path,body,key,timeout):
-    try:time.sleep(60)
+def synthetic_stalled_worker(marker,pipe,path,body,key,timeout):
+    try:
+        Path(marker).write_bytes(b"worker-started\n")
+        time.sleep(60)
     finally:pipe.close()
 
-def synthetic_empty_worker(pipe,path,body,key,timeout):
+def synthetic_empty_worker(marker,pipe,path,body,key,timeout):
+    try:Path(marker).write_bytes(b"worker-started\n")
+    finally:pipe.close()
+
+def synthetic_missing_start_worker(marker,pipe,path,body,key,timeout):
+    # Negative control: EOF without the startup witness must not pass the helper.
     pipe.close()
 
 class RecordedProcess:
@@ -315,25 +360,27 @@ class RecordedSpawnContext:
 class RealSpawnWireTests(unittest.TestCase):
     def run_worker(self,target,refusal=False):
         context=RecordedSpawnContext()
-        wire=t.DeadlineWire(context=context,worker_target=target)
-        started=time.monotonic()
-        stalled = target is synthetic_stalled_worker
-        # Normal/EOF workers get twenty seconds plus five reserved for reap;
-        # they return immediately on their frame/EOF. The deliberate stall
-        # retains two seconds plus five for reap, with a six-second assertion.
-        end = started + (7 if stalled else 25)
-        if refusal:
-            with self.assertRaises(t.TransportRefused):
-                wire.post_once(t.COUNT_PATH,b"{}","synthetic-not-a-credential",end)
-            result=None
-        else:result=wire.post_once(t.COUNT_PATH,b"{}","synthetic-not-a-credential",end)
-        self.assertLess(time.monotonic()-started,6 if stalled else 15)
-        self.assertEqual(len(context.created),1)
-        closed=context.created[0].closed
-        self.assertIsNotNone(closed)
-        self.assertIsNotNone(closed[1])
-        self.assertFalse(closed[2])
-        return result,closed[1]
+        with tempfile.TemporaryDirectory() as directory:
+            marker = Path(directory).resolve(strict=True) / "worker-started.txt"
+            wire=t.DeadlineWire(context=context,worker_target=partial(target,str(marker)))
+            started=time.monotonic()
+            stalled = target is synthetic_stalled_worker
+            # Keep the exact reviewed TR-8 timing margins.
+            end = started + (7 if stalled else 25)
+            if refusal:
+                with self.assertRaises(t.TransportRefused):
+                    wire.post_once(t.COUNT_PATH,b"{}","synthetic-not-a-credential",end)
+                result=None
+            else:result=wire.post_once(t.COUNT_PATH,b"{}","synthetic-not-a-credential",end)
+            self.assertLess(time.monotonic()-started,6 if stalled else 15)
+            self.assertEqual(len(context.created),1)
+            closed=context.created[0].closed
+            self.assertIsNotNone(closed)
+            self.assertIsNotNone(closed[1])
+            self.assertFalse(closed[2])
+            self.assertTrue(marker.is_file(), "worker-start-not-observed")
+            self.assertEqual(marker.read_bytes(), b"worker-started\n")
+            return result,closed[1]
     def test_spawn_normal_frame(self):
         result,_=self.run_worker(synthetic_frame_worker)
         self.assertEqual(result,(200,b"public synthetic frame"))
@@ -342,5 +389,24 @@ class RealSpawnWireTests(unittest.TestCase):
         self.assertNotEqual(exitcode,0)
     def test_spawn_exit_without_frame_refused_and_reaped(self):
         self.run_worker(synthetic_empty_worker,refusal=True)
+    def test_spawn_missing_start_witness_cannot_pass_as_empty_exit(self):
+        with self.assertRaisesRegex(AssertionError,"worker-start-not-observed"):
+            self.run_worker(synthetic_missing_start_worker,refusal=True)
 
-if __name__=="__main__":unittest.main()
+
+def synthetic_ci_main():
+    # A real file and a main guard let spawn import this module without rerunning
+    # the suite in each child. Children use only the synthetic workers above.
+    import platform
+    import socket
+    import sys
+    if platform.system() == "Darwin":
+        assert platform.machine() == "arm64"
+    suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
+    with patch.object(socket.socket,"connect",side_effect=AssertionError("Provider networking forbidden in CI")):
+        result = unittest.TextTestRunner(verbosity=2).run(suite)
+    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 42 else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(synthetic_ci_main())

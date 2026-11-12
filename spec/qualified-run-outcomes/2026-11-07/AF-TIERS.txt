@@ -1,0 +1,9 @@
+Qualified Run: Success Criteria and Outcome Wording (2 Nov 2026)
+
+Tier	Test (all must be true)	What it proves
+A. Full pass	All 19 held-out cases pass all eight gates; every limit held; receipts published; the open verifier says PASS	The factory wrote working code for a real legacy slice on its own, and outsiders can check it
+B. Strong partial	10–18 cases pass all eight gates; limits held; every failure has a judge receipt naming the difference	The factory does most of it, and the judge catches what it gets wrong
+C. Early partial	1–9 cases pass; limits held; failures recorded	The pipeline works end to end; the agents are the weak link, not the controls
+D. Clean stop	Nothing passes, or the run stops itself on a limit or control, with a receipt saying why	The controls work: it stops instead of shipping bad code
+E. No run	The run never starts (freeze missed, no-go, blocker)	Discipline: we don’t run unprepared
+F. Unexplained	A limit exceeded, answers exposed, a case or gate changed after freeze, missing evidence, or the verifier disagrees	Nothing good. Stop, investigate, publish

@@ -1,0 +1,114 @@
+Qualified-run outcome renderer — 7 November 2026, revision 2
+
+This supersedes REPORT-CONTRACT.txt in the local preparation packet.
+A–F scores separately frozen held-out BEHAVIOUR cases for the factory-written
+authorization code. The 19 control drills are prerequisites, not scored cases.
+The eight P5 drill families are NOT behaviour-case gates. No production scoring
+population, condition list or revised count is selected by this implementation.
+
+The renderer accepts explicit rule and catalog SHA256 values obtained from
+Howard's approved dated version and frozen catalog. There are no implicit
+production defaults. Original AF-TIERS.txt and tiers.json preserve the supplied
+2 November wording, including its now-withdrawn gate-family assumption and
+unverified count. They are historical transcription, not approval of a catalog.
+A corrected count/wording must be adopted as a NEW dated version before use.
+
+CI-only command:
+  python -B tools/report_qualified_run.py bundle.json new-final-report.json \
+    --rules approved-dated-rules.json --rules-sha256 APPROVED_RULES_SHA256 \
+    --catalog-sha256 APPROVED_FROZEN_BEHAVIOUR_CATALOG_SHA256
+
+The output is a new file; existing reports/receipts are never overwritten.
+The command prints the tier mechanically. F returns 1; other tiers return 0
+for report-generation success only. D/E never mean qualified PASS.
+No case, result, gate, checker, source, signature or admission is generated.
+
+Trust and privacy
+Use public/redacted reporting exports of original controller, judge, open-verifier
+and publication/readback receipts. Authenticate those producers independently.
+The renderer verifies byte hashes, identities and joins; hashes alone are NOT
+signature or producer-authenticity proof. It does not run the verifier or visit
+publication URLs. Original private answers never belong in these exports.
+No reference answers, fragments, seed, private paths or raw differences should
+be sent to the factory. A B-tier difference is a judge-authored redacted finding.
+
+Rule format
+schema: qualified-run-tier-rules/1 or /2; version: dated version;
+case_count: approved positive behaviour-case count; bc_cutoff: 10;
+tiers: A–F, each with name, test and what_it_proves text.
+A changed file fails its external approved digest. New policy versions require
+new dated files and explicit approval; the renderer never chooses a new version.
+For N cases, full pass is N; B is 10..N-1; C is 1..min(9,N-1).
+When N=1, B/C are mathematically unavailable, not silently redefined.
+
+Bundle and file references
+schema: qualified-run-report-bundle/1; rules_sha256: approved rules digest;
+run, catalog, verifier, publication: file references;
+cases: N distinct behaviour-case file references;
+controls: the separate 19 control-drill file references.
+Reference shape: {"path":"relative/file.json","sha256":"64 lowercase hex"}.
+Paths remain inside the bundle; links, duplicate JSON keys, digest drift,
+non-finite JSON and oversized inputs fail closed. No private directories read.
+
+All started-run receipts bind run_id and exact_e. Behaviour/verifier/publication
+receipts additionally bind catalog_sha256. The catalog digest must match the
+external --catalog-sha256; an input bundle cannot choose its own catalog.
+
+Run status: qualified-run-status/1
+state: not_started | completed | stopped.
+Explicit booleans: answers_exposed, catalog_changed_after_freeze,
+evidence_missing, verifier_disagrees, limit_exceeded, control_failed_open.
+reason records why no run, a clean stop, or zero passes.
+limits maps every frozen limit ID to true only if its original receipt says held.
+stopped_on is limit or control for an automatic stop.
+
+Frozen catalog: qualified-run-frozen-catalog/1
+run_id, exact_e; cases and gates contain distinct entries:
+{"id":...,"definition":{"file":...,"commit":"40 hex","sha256":"64 hex"}}.
+cases count equals the approved rule count. gates contains the separately frozen
+behaviour conditions, with no invented eight-family mapping. limit_ids lists
+every frozen limit. Conditions include field equivalence, strict mutation >=90%
+with no exclusions, frozen judge and limits; their complete identity/receipt
+binding must be approved separately. This report does not replace any condition.
+
+Control receipt: qualified-run-control/1
+run_id, exact_e, control_id from the existing 19-ID matrix;
+status: PASS | STOPPED | FAIL_OPEN | NOT_RUN; reason for any non-PASS.
+All 19 must PASS for A–C. FAIL_OPEN is always F.
+A control stopping as designed is D with a reason, including before behaviour
+execution starts. Remaining explicitly NOT_RUN controls require such a stop.
+The source matrix hash is
+e3c8906e8733dcb563f0560bee62e0865b9b271d23ac251bb806aa65399ec6f3.
+The ID list here is a reporting prerequisite, not a new implementation or waiver
+of original drill expectations, strict P5 qualification or native proof.
+
+Behaviour receipt: qualified-run-case/1
+run_id, exact_e, catalog_sha256, case_id;
+gates maps EVERY frozen condition ID to PASS | FAIL | NOT_RUN.
+A case passes only if every condition PASSes. Other cases need a redacted reason.
+B failures additionally require origin:"judge" and a nonempty redacted difference.
+NOT_RUN is permitted only on a stopped run with a reason. Missing conditions
+are missing evidence (F), never an inferred fail/pass/clean stop.
+
+Open-verifier export: qualified-run-open-verifier/1
+run_id, exact_e, catalog_sha256; case_gates: full behaviour outcome matrix;
+control_outcomes: complete drill-ID/status map; passed_cases: integer;
+limits: identical full limits map;
+input_receipt_sha256: sorted hashes of run, catalog, controls and case receipts;
+status: PASS (all N), PARTIAL (1..N-1), FAIL (zero), STOPPED (automatic stop).
+The original independently run verifier must produce this export; a caller's
+claim alone is not authentication. No verifier implementation is changed here.
+
+Publication export for A: qualified-run-publication/1
+run_id, exact_e, catalog_sha256;
+receipts: every run/catalog/control/case/verifier hash, each with an HTTPS url
+and readback_verified:true from the independent public readback process.
+This export excludes its own digest to avoid a circular self-binding.
+
+Decision order
+F integrity/control failures take precedence. E is an evidenced non-start;
+D is an evidenced designed control stop or zero passing cases with a reason.
+A/B/C require all control prerequisites and limits held, and consistent verifier
+evidence. A additionally requires published/read-back receipts.
+A limit actually exceeded is F even if a subsequent stop works.
+No report has been run against real data; synthetic CI cases prove only reporting.

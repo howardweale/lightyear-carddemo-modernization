@@ -1,0 +1,194 @@
+Qualified-run outcome report-contract PROPOSAL — 11 November 2026, revision 5
+
+Proposed successor to REPORT-CONTRACT-r3.txt at draft PR521 head ee2d20351d4b214de9e7ec1212e162d77975cc7c.
+Proposed successor to the review-only11Novemberr4 proposal (e6bf3d1574f5e6ff43288f2bdd35b056e6a1bf646afac15f507c6b52464057cc). Claude accepted its direction, not adoption.
+Howard's 11 November control-pass decision is the policy basis. This text is for exact
+review; no source, gate, executable rules, receipt schema or loader is changed.
+Earlier dated contracts remain immutable. Implementation and exact approvals are separate.
+A–F scores separately frozen held-out BEHAVIOUR cases for the factory-written
+authorization code. The 19 control drills are prerequisites, not scored cases.
+The eight P5 drill families are NOT behaviour-case gates. No production scoring
+population, condition list or revised count is selected by this implementation.
+
+The renderer accepts explicit rule and catalog SHA256 values obtained from
+Howard's approved dated version and frozen catalog. There are no implicit
+production defaults. Original AF-TIERS.txt and tiers-2026-11-02-historical.json preserve the supplied
+2 November wording, including its now-withdrawn gate-family assumption and
+unverified count. They are historical transcription, not approval of a catalog.
+The historical JSON uses schema qualified-run-tier-rules-historical/1 and
+load_rules rejects it even when its exact SHA256 is supplied. It cannot be used
+as an executable rule set. A corrected count/wording must be adopted as a NEW
+dated version before use. No held-out catalogue is activated by this PR.
+
+CI-only command:
+  python -B tools/report_qualified_run.py bundle.json new-final-report.json \
+    --rules approved-dated-rules.json --rules-sha256 APPROVED_RULES_SHA256 \
+    --catalog-sha256 APPROVED_FROZEN_BEHAVIOUR_CATALOG_SHA256
+
+The output is a new file; existing reports/receipts are never overwritten.
+The command prints the tier mechanically. F returns 1; other tiers return 0
+for report-generation success only. D/E never mean qualified PASS.
+No case, result, gate, checker, source, signature or admission is generated.
+
+Trust and privacy
+Use public/redacted reporting exports of original controller, judge, open-verifier
+and publication/readback receipts. Authenticate those producers independently.
+The renderer verifies byte hashes, identities and joins; hashes alone are NOT
+signature or producer-authenticity proof. It does not run the verifier or visit
+publication URLs. Original private answers never belong in these exports.
+No reference answers, fragments, seed, private paths or raw differences should
+be sent to the factory. A B-tier difference is a judge-authored redacted finding.
+
+Rule format
+schema: qualified-run-tier-rules/1 or /2; version: dated version;
+case_count: approved positive behaviour-case count; bc_cutoff: 10;
+bc_cutoff=10 is hard-coded in load_rules. Changing it requires BOTH a new dated
+rules version explicitly approved by Howard AND a code change to the loader
+with boundary tests. Editing the JSON alone cannot change the B/C boundary.
+The proposed new catalogue and B cutoff are not approved or activated here;
+tiers: A–F, each with name, test and what_it_proves text.
+A changed file fails its external approved digest. New policy versions require
+new dated files and explicit approval; the renderer never chooses a new version.
+For N cases, full pass is N; B is 10..N-1; C is 1..min(9,N-1).
+First run N=1: only A, D, E or F is possible. B/C are unavailable and must not
+appear in that run packet. N counts behaviour cases; the19 control drills never
+enter the behaviour numerator or denominator.
+At N=1, even an all-pass behaviour run reports F with reason
+missing-publication-readback if required publication/read-back evidence is absent.
+It cannot fall back to B or C; those tiers are unavailable. This includes absent
+or incomplete independently verified read-back coverage, not just a missing URL.
+
+Bundle and file references
+schema: qualified-run-report-bundle/1; rules_sha256: approved rules digest;
+run, catalog, verifier, publication: file references;
+cases: N distinct behaviour-case file references;
+controls: the separate 19 control-drill file references.
+Reference shape: {"path":"relative/file.json","sha256":"64 lowercase hex"}.
+Paths remain inside the bundle; links, duplicate JSON keys, digest drift,
+non-finite JSON and oversized inputs fail closed. No private directories read.
+
+All started-run receipts bind run_id and exact_e. Behaviour/verifier/publication
+receipts additionally bind catalog_sha256. The catalog digest must match the
+external --catalog-sha256; an input bundle cannot choose its own catalog.
+
+Run status: qualified-run-status/1
+state: not_started | completed | stopped.
+Explicit booleans: answers_exposed, catalog_changed_after_freeze,
+evidence_missing, verifier_disagrees, limit_exceeded, control_failed_open.
+reason records why no run, a clean stop, or zero passes.
+limits maps every frozen limit ID to true only if its original receipt says held.
+stopped_on is limit or control for an automatic stop.
+
+Frozen catalog: qualified-run-frozen-catalog/1
+run_id, exact_e; cases and gates contain distinct entries:
+{"id":...,"definition":{"file":...,"commit":"40 hex","sha256":"64 hex"}}.
+cases count equals the approved rule count. gates contains the separately frozen
+behaviour conditions, with no invented eight-family mapping. limit_ids lists
+every frozen limit. Conditions include field equivalence, strict mutation >=90%
+with no exclusions, frozen judge and limits; their complete identity/receipt
+binding must be approved separately. This report does not replace any condition.
+
+Control receipt: qualified-run-control/1
+run_id, exact_e, control_id from the existing 19-ID matrix;
+PROPOSED versioned control-report vocabulary:
+status: PASS | STOPPED | FAIL_OPEN | NOT_RUN | INCONCLUSIVE.
+Drill PASS means the control fired as designed on the injected fault, or a clean
+control ran clean, with the exact expected evidence and no fail-open. A negative
+process result can therefore be a drill PASS. STOPPED means a real, non-injected
+control/limit stop. Do not label a successful injected negative drill STOPPED or
+use it to manufacture a tierD behaviour-run stop.
+INCONCLUSIVE is the proposed new value for an attempted control whose result
+cannot establish PASS, STOPPED or FAIL_OPEN. NOT_RUN means no attempt occurred.
+Neither is PASS. Each non-PASS requires a specific reason and evidence reference;
+absence of a receipt is not a substitute for an explicit status.
+
+All19 distinct control drills must PASS on the exact frozen source AND runtime
+before the first behaviour case may be attempted. The report joins each control
+to those frozen source/runtime digests and original authenticated evidence.
+Mismatch blocks behaviour; it cannot reuse a result from another source/runtime.
+Controls are prerequisites only, never scored cases. FAIL_OPEN is tierF regardless
+of any behaviour outcome. An evidenced real control stopping behaviour is tierD
+with its original stop receipt, including a stop before behaviour starts.
+If a control cannot be run or is inconclusive, behaviour does not start: tierE,
+with the specific reason and evidence. Report all19 IDs; later controls not tried
+are NOT_RUN with a reason referencing the blocker. This does not excuse missing
+or unauthenticated evidence or invent a successful stop.
+The first-run packet binds its19 controls to its exact source/runtime. Whether
+results may be reused per frozen source rather than rerun per run is DEFERRED
+until after the first run; this proposal grants no cross-run reuse.
+The source matrix hash is
+e3c8906e8733dcb563f0560bee62e0865b9b271d23ac251bb806aa65399ec6f3.
+The ID list here is a reporting prerequisite, not a new implementation or waiver
+of original drill expectations, strict P5 qualification or native proof.
+
+Behaviour receipt: qualified-run-case/1
+run_id, exact_e, catalog_sha256, case_id;
+gates maps EVERY frozen condition ID to PASS | FAIL | NOT_RUN.
+A case passes only if every condition PASSes. Other cases need a redacted reason.
+B failures additionally require origin:"judge" and a nonempty redacted difference.
+NOT_RUN is permitted only on a stopped run with a reason. Missing conditions
+are missing evidence (F), never an inferred fail/pass/clean stop.
+
+Open-verifier export: qualified-run-open-verifier/1
+run_id, exact_e, catalog_sha256; case_gates: full behaviour outcome matrix;
+control_outcomes: complete drill-ID/status map; passed_cases: integer;
+limits: identical full limits map;
+input_receipt_sha256: sorted hashes of run, catalog, controls and case receipts;
+status: PASS (all N), PARTIAL (1..N-1), FAIL (zero), STOPPED (automatic stop).
+Proposed versioned extension: an independently evidenced prerequisite block uses
+status NOT_STARTED, zero attempted behaviour cases, the complete control map and
+the blocker reason/evidence. NOT_STARTED is not PASS and never a D stop without
+a real stop receipt. Existing exports are not silently reinterpreted; exact schema
+and renderer changes need a separate implementation proposal.
+IMPLEMENTATION PREREQUISITE: the renderer at ee2d20351d4b214de9e7ec1212e162d77975cc7c
+does not accept INCONCLUSIVE control status or NOT_STARTED verifier status;
+feeding these values to that renderer reports F. The exact versioned schema,
+renderer, validation and decision-order implementation must land and pass CI
+before the first run using this contract. No human postprocessing or silent
+reinterpretation may turn that F into E. This prose proposal alone does not
+implement either vocabulary value or authorize first-run admission.
+The original independently run verifier must produce this export; a caller's
+claim alone is not authentication. No verifier implementation is changed here.
+
+Publication export for A: qualified-run-publication/1
+run_id, exact_e, catalog_sha256;
+receipts: every run/catalog/control/case/verifier hash, each with an HTTPS url
+and readback_verified:true from the independent public readback process.
+This export excludes its own digest to avoid a circular self-binding.
+
+Decision order
+F integrity/control failures take precedence, including every FAIL_OPEN.
+D applies when an actual control/limit stopped behaviour with its original receipt
+(and the prior zero-passing-behaviour rule remains); a real evidenced stop is not
+relabelled E merely because later controls were NOT_RUN.
+E applies to inability/inconclusive prerequisite blocks with no behaviour attempt
+and no actual stop receipt. Record the blocker reason; do not manufacture D.
+The distinction between D and E is the original evidence, not a desired outcome.
+A/B/C require all control prerequisites and limits held, and consistent verifier
+evidence. A additionally requires published/read-back receipts. At N=1, all-pass without
+that required evidence is F (missing-publication-readback), never B/C.
+A limit actually exceeded is F even if a subsequent stop works.
+No report has been run against real data; synthetic CI cases prove only reporting.
+
+Worked examples — illustrative proposals, not generated receipts or native proof:
+D before behaviour: a genuine, non-injected workspace-integrity change occurs
+during control preparation. The real controller issues an original authenticated
+control-stop receipt before any behaviour starts; no limit was exceeded and no
+fail-open or missing-evidence integrity fault occurred. attempted_cases=0;
+behaviour_state=stopped; stopped_on=control; control_status=STOPPED. Later controls
+are NOT_RUN with explicit blocker references; the independent verifier agrees.
+The result is D, supported by the real stop receipt, not because zero cases ran.
+This is different from the intentionally injected workspace-changed drill: that
+drill is PASS if its control fires exactly as designed and its evidence matches.
+
+E: a required control cannot establish its outcome because an observation channel
+is unavailable before that control can complete, while the prerequisite blocker
+itself is explicitly and independently evidenced. No real control-stop receipt,
+no fail-open and no behaviour attempt exists. status=INCONCLUSIVE with a specific
+reason; later controls=NOT_RUN with that blocker; verifier status=NOT_STARTED;
+attempted_cases=0. Under the future reviewed implementation the result is E.
+If the explicit blocker/evidence is missing, malformed or unauthenticated where
+required, F takes precedence. The current ee2d2035 renderer would report F for
+the proposed enum values; the implementation prerequisite above must be met.
+
+No case catalogue or eight-gate mapping is selected. No gate/check is weakened.

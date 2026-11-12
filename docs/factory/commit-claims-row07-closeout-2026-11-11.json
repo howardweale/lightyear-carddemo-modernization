@@ -1,0 +1,28 @@
+{
+  "claims": [
+    {
+      "record": "docs/factory/no-key-row07-closeout-20261111/AUDIT-AND-HISTORY.json",
+      "reference": "8fe41d76",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "source",
+      "source_path": "src/lightyear_execution/mac_owner_process.py",
+      "source_sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc"
+    },
+    {
+      "record": "docs/factory/no-key-row07-closeout-20261111/decision-receipt.json",
+      "reference": "b9c444712a3cc99bf88bd953f911e40b437d9569",
+      "commit": "b9c444712a3cc99bf88bd953f911e40b437d9569",
+      "role": "source",
+      "source_path": "src/lightyear_execution/mac_owner_process.py",
+      "source_sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc"
+    },
+    {
+      "record": "docs/factory/no-key-row07-closeout-20261111/RECORD.md",
+      "reference": "8fe41d76",
+      "commit": "8fe41d76f08c0907a38d8c97a001de09c953a56c",
+      "role": "source",
+      "source_path": "src/lightyear_execution/mac_owner_process.py",
+      "source_sha256": "acc05e03f977edd0cc7c35e7187cae89adc220ea5e868c9f8c18bd083b62a4cc"
+    }
+  ]
+}

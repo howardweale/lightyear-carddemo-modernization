@@ -123,5 +123,19 @@ Planned build tooling uses exact setup-java Temurin version 21.0.9+10.0.LTS;
 build-receipt.json records that requested pin and the actual javac/jar version
 output and binary hashes. Repository-wide discovery skips the frozen-dependent
 test class only when C1_FROZEN is absent or not a directory. Dedicated C1 CI
-requires all eighteen tests, including the original fourteen, with zero skips.
+requires all twenty tests, including the original fourteen, with zero skips.
 No oracle, comparator, hidden-case definition or STRICT byte policy is changed.
+
+## Optional byte policy proposal, disabled by default
+
+Planned TRANSACT-UNASSIGNED-REPORT-ONLY-v1 affects only zero-based inclusive
+regions56-131 and330-349. Default comparison stays strict. A later exact binding
+must name this policy, its exact artifact/case-manifest hashes, one exclusive
+attempt directory name and an offset-aware expiry. Howard decides that scoped
+binding; none is supplied here. The policy cannot extend the original deadline.
+Raw inputs/outputs, hashes, raw #539 deltas or decode errors, and every region
+hex observation remain retained. A separately labelled comparison view replaces
+only those regions with cp037 spaces before the unchanged comparator. Original
+bytes are never rewritten. Other differences and decode errors remain failures.
+This is an explicit verdict policy, not evidence that the bytes match or that
+z/OS initializes them. No P5 qualification or native claim follows.

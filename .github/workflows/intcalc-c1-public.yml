@@ -1,0 +1,161 @@
+name: INTCALC C1 oracle freeze and real public fixture
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/intcalc-c1-public.yml'
+      - 'src/lightyear_mainframe/**'
+      - 'src/carddemo_oracle/**'
+      - 'src/lightyear_common/**'
+      - 'spec/mainframe/**'
+      - 'spec/comparison-normalizations.json'
+      - 'tests/mainframe/fixtures/**'
+      - 'tests/test_intcalc_candidate_gate.py'
+      - 'tests/fixtures/intcalc-c1/**'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  oracle-freeze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src:.:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Fetch exact verifier-only assets outside repository and model workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          import hashlib, io, json, os, stat, urllib.request, zipfile
+          from pathlib import Path
+          url = 'https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/full-intcalc-c1-proposal-r3/VERIFIER-CASES.zip'
+          with urllib.request.urlopen(url, timeout=30) as response:
+              raw = response.read(1024*1024+1)
+          assert len(raw) <= 1024*1024 and hashlib.sha256(raw).hexdigest() == '6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33'
+          root = Path(os.environ['RUNNER_TEMP'])/'intcalc-verifier'
+          root.mkdir()
+          with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+              names = archive.namelist()
+              assert len(names)==3 and set(names)=={'BUNDLE.json','cases.json','freeze.py'}
+              for item in archive.infolist():
+                  assert item.file_size <= 128*1024 and stat.S_ISREG(item.external_attr >> 16)
+                  (root/item.filename).write_bytes(archive.read(item))
+          manifest = json.loads((root/'BUNDLE.json').read_text())
+          assert manifest['model_context_eligible'] is False
+          for name, row in manifest['files'].items():
+              data = (root/name).read_bytes()
+              assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
+          PY
+      - name: Build independent cases and freeze unchanged oracle outputs before any candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B "$RUNNER_TEMP/intcalc-verifier/freeze.py" --root "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/intcalc-frozen"
+      - name: Check frozen binding and refusal plumbing without candidate or model execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          export C1_FROZEN="$RUNNER_TEMP/intcalc-frozen"
+          python -B - <<'PY'
+          import json, os, unittest
+          from pathlib import Path
+          import test_intcalc_candidate_gate
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_candidate_gate)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          summary = dict(tests_run=result.testsRun, skipped=len(result.skipped),
+                         failures=len(result.failures), errors=len(result.errors), expected_tests=18)
+          (Path(os.environ['C1_FROZEN'])/'c1-test-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          if not result.wasSuccessful() or result.skipped or result.testsRun != 18:
+              raise SystemExit('C1 dedicated suite requires all 18 tests, zero skips')
+          PY
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21.0.9+10.0.LTS'
+      - name: Pull exact JRE before any fixture candidate starts
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull --platform=linux/amd64 eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032
+          docker image inspect eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032 > "$RUNNER_TEMP/intcalc-frozen/jre-image.json"
+      - name: Trusted compile and package tiny public fixture only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/intcalc-build/classes"
+          javac -proc:none --release 21 -d "$RUNNER_TEMP/intcalc-build/classes" tests/fixtures/intcalc-c1/Main.java
+          jar --create --file "$RUNNER_TEMP/intcalc-build/candidate.jar" --main-class Main -C "$RUNNER_TEMP/intcalc-build/classes" .
+          javac -version > "$RUNNER_TEMP/intcalc-build/javac-version.txt" 2>&1
+          jar --version > "$RUNNER_TEMP/intcalc-build/jar-version.txt" 2>&1
+          python -B - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from lightyear_mainframe.intcalc_candidate_gate import COMMAND, UPSTREAM
+          root = Path(os.environ['RUNNER_TEMP'])
+          build, frozen = root/'intcalc-build', root/'intcalc-frozen'
+          digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+          source = Path('tests/fixtures/intcalc-c1/Main.java')
+          receipt = dict(schema='intcalc-public-fixture-build/1', source={str(source):dict(sha256=digest(source),bytes=source.stat().st_size)},
+                         artifact_sha256=digest(build/'candidate.jar'), fixture_only=True, conversion=False,
+                         classes={p.relative_to(build/'classes').as_posix():digest(p) for p in sorted((build/'classes').rglob('*')) if p.is_file()},
+                         tool_binaries={n:digest(Path(os.environ['JAVA_HOME'])/'bin'/n) for n in ('javac','jar')},
+                         javac=['javac','-proc:none','--release','21','-d','CLASSES',str(source)],
+                         jar=['jar','--create','--file','candidate.jar','--main-class','Main','-C','CLASSES','.'],
+                         setup_java_requested='21.0.9+10.0.LTS',
+                         javac_version=(build/'javac-version.txt').read_text(),
+                         jar_version=(build/'jar-version.txt').read_text(), model_calls=0)
+          (build/'build-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          binding = dict(schema='full-intcalc-c1/2',upstream=UPSTREAM,
+                         case_manifest=dict(path='intcalc-frozen/case-manifest.json',sha256=digest(frozen/'case-manifest.json')),
+                         artifact=dict(path='intcalc-build/candidate.jar',sha256=digest(build/'candidate.jar')),
+                         runtime_image='eclipse-temurin@sha256:5cbbc80ec3f79faeba17a0551a77b260040da7a9e3b398dac0e681e84a4d8032',java=COMMAND[0],command_template=COMMAND,
+                         max_elapsed_seconds=600,qualified=False,production_controller_receipt=False)
+          (root/'intcalc-fixture-binding.json').write_text(json.dumps(binding,indent=2)+'\n')
+          PY
+      - name: Exercise real runner; plumbing only, not conversion or P5
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from lightyear_mainframe.intcalc_candidate_gate import run
+          root = Path(os.environ['RUNNER_TEMP'])
+          binding = root/'intcalc-fixture-binding.json'
+          report = run(binding,hashlib.sha256(binding.read_bytes()).hexdigest(),root/'intcalc-real-fixture')
+          rows = {r['id']:r for r in report['cases']}
+          assert rows['EMPTY-INPUT']['verdict']=='MATCH', rows['EMPTY-INPUT']
+          assert rows['NZ-POSTTRAN']['verdict']=='DIFFERENT', rows['NZ-POSTTRAN']
+          assert len(rows)==10 and not report['all_cases_match'] and report['qualified'] is False
+          assert all(r['verdict'] in ('MATCH','DIFFERENT','REFUSAL_NOT_OBSERVED') for r in rows.values()), report
+          for row in rows.values():
+              runtime=json.loads((root/'intcalc-real-fixture'/row['id']/'runtime.json').read_text())
+              assert runtime['cleanup_confirmed'] is True, runtime
+              assert runtime['cleanup_allowance_seconds'] == 5
+              assert all(isinstance(o['elapsed_ms'], (int,float)) and o['elapsed_ms'] >= 0
+                         for o in runtime['operations']+runtime['cleanup']), runtime
+              assert any(o['argv'][1]=='exec' and '/usr/bin/env' in o['argv'] for o in runtime['operations'])
+              assert any('/bin/tar' in o['argv'] for o in runtime['operations'])
+              assert not any(o['argv'][1]=='cp' for o in runtime['operations'])
+          print('REAL PUBLIC FIXTURE PLUMBING ONLY; not conversion, not P5; no model call')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: intcalc-oracle-crosscheck-and-real-fixture
+          path: |
+            ${{ runner.temp }}/intcalc-frozen
+            ${{ runner.temp }}/intcalc-build
+            ${{ runner.temp }}/intcalc-real-fixture
+            ${{ runner.temp }}/intcalc-fixture-binding.json
+          if-no-files-found: warn

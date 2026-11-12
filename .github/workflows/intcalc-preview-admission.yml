@@ -1,0 +1,35 @@
+name: INTCALC preview admission macOS
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'tests/test_intcalc_preview_admission.py'
+      - 'spec/intcalc-preview/**'
+      - '.github/workflows/intcalc-preview-admission.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  admission-macos:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic admission tests including native durability
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B - <<'PY'
+          import platform, unittest
+          assert platform.system() == "Darwin" and platform.machine() == "arm64"
+          suite = unittest.defaultTestLoader.loadTestsFromName('test_intcalc_preview_admission')
+          assert suite.countTestCases() == 32
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() and not result.skipped else 1)
+          PY

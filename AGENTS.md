@@ -6,7 +6,7 @@ Keep work small and targeted. Most of this repository is evidence you never need
 
 ## Current priority
 
-- **Track B, the qualified run, is the only priority.** It covers 19 cases under eight strict gates, all unchanged. Planned complete-freeze target: 20 November at 17:00 Pacific; run in the week beginning 30 November, conditional on capacity, P5 closure, all other evidence and freshness. No execution, qualification, continuation or recovery on 23–27 November. See the [3 November decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf); it supersedes the 13 November freeze planning basis.
+- **Track B, the qualified run, is the only priority.** The nineteen are pass/fail control drills: two clean controls plus seventeen variants across eight P5 drill families. They are prerequisites, not scored behaviour cases. The eight strict gates remain unchanged; drill-family names do not define their mapping. Planned complete-freeze target: 20 November at 17:00 Pacific; run in the week beginning 30 November, conditional on capacity, P5 closure, all other evidence and freshness. No execution, qualification, continuation or recovery on 23–27 November. See the [3 November decision](docs/factory/custody-option-a-20261103/decision.json#sha256=9ee96e111ee019003192f2c0988b696985b06bfeb74757660e389949cff43acf); it supersedes the 13 November freeze planning basis.
 - **Critical-path work comes first.** That means the #455 rebind, encryption of held-out answers, the run checkers' date fixes, and anything the run depends on. Backlog work happens only when a lane is idle.
 - **Track A is retired.** Do not schedule it.
 

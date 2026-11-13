@@ -17,12 +17,13 @@ import re
 import sys
 import stat
 import zipfile
+import zlib
 import threading
 import time
 
 SCHEMA = "full-intcalc-preview-result/1"
 SCOPE = "NOT-P5/public-CBACT04C-only"
-ROLES = ("planner", "builder-attempt1", "analysis-attempt1", "builder-repair1", "analysis-attempt2")
+ROLES = ("planner", "builder-attempt1", "analysis-attempt1", "builder-repair1")
 VERDICTS = ("MATCH", "EXPECTED_REFUSAL", "DIFFERENT", "REFUSAL_NOT_OBSERVED",
             "EXECUTION_FAILED", "TIMEOUT", "OUTPUT_CONTRACT_VIOLATION", "NOT_RUN", "FAULT")
 SUCCESS = frozenset(("MATCH", "EXPECTED_REFUSAL"))
@@ -41,11 +42,16 @@ ROLE_INSTRUCTIONS = {
     "planner": "Plan the full public CBACT04C rewrite from the supplied public context; return one plain-text plan in the field \"text\".",
     "builder-attempt1": "Implement the public CBACT04C rewrite using the supplied public context and plan. The field \"source\" must contain the complete text of one Java 21 file, Main.java, with default-package public class Main, using only the JDK; return the full file, not a patch or diff.",
     "analysis-attempt1": "Explain how to improve the first public candidate using only the supplied public context, generated artifacts and verdict-class counts; return plain text in the field \"text\".",
-    "builder-repair1": "Repair the public candidate using the supplied public context, generated artifacts and verdict-class counts. The field \"source\" must contain the complete text of one Java 21 file, Main.java, with default-package public class Main, using only the JDK; return the full file, not a patch or diff.",
-    "analysis-attempt2": "Summarize the remaining limitations of the repaired public candidate using only the supplied public context, generated artifacts and verdict-class counts; return plain text in the field \"text\"."
+    "builder-repair1": "Repair the public candidate using the supplied public context, generated artifacts and verdict-class counts. The field \"source\" must contain the complete text of one Java 21 file, Main.java, with default-package public class Main, using only the JDK; return the full file, not a patch or diff."
 }
-ROLE_INSTRUCTIONS_SHA256 = "07e223b8b91ecf4fa99668e26b7d490425f32cb09bffda936a467e4ecedd785d"
-SLOT_HOLD = 1_892_000
+ROLE_INSTRUCTIONS_SHA256 = "2b0082f7493d931809e0cbf3d779f8d7b278a846c26419f1d83ca1f6ce064ce9"
+BUDGET_POLICY_SHA256 = "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd"
+ROLE_INPUT_CAPS = {"planner": 85876, "builder-attempt1": 100000,
+                   "analysis-attempt1": 188000, "builder-repair1": 198000}
+ROLE_HOLDS = {"planner": 1736636, "builder-attempt1": 1892000,
+              "analysis-attempt1": 2860000, "builder-repair1": 2970000}
+FRAMING_ALLOWANCE = 4096
+NAMED_BUDGET_LIMIT = 'Budget-fixed input caps: an escape-heavy artifact can stop the run early despite satisfying its artifact byte cap.'
 PREREQUISITES = frozenset(("exact_implementations_green", "macos_admission_green",
     "native_arm64_c1_green", "operator_admission_procedure", "spend_authority",
     "count_billing", "local_images", "disk_capacity", "trusted_build_gate_adapter",
@@ -54,7 +60,7 @@ HASH_FIELDS = frozenset(("binding_sha256", "controller_source_manifest_sha256",
     "gate_manifest_sha256", "case_manifest_sha256", "runtime_manifest_sha256",
     "runtime_config_sha256", "toolchain_manifest_sha256", "javac_sha256", "jar_sha256",
     "context_sha256", "allowlist_sha256", "feedback_schema_sha256", "named_limit_sha256",
-    "request_bound_proof_sha256", "public_context_approval_sha256"))
+    "request_bound_proof_sha256", "public_context_approval_sha256", "budget_policy_sha256"))
 
 
 class CompositionRefused(ValueError):
@@ -142,7 +148,7 @@ def context_members(archive, allowlist_raw):
                 decoded[entry.filename] = raw.decode("utf-8", errors="strict")
             return decoded
     except (zipfile.BadZipFile, zipfile.LargeZipFile, UnicodeError, RuntimeError,
-            NotImplementedError, EOFError, OSError):
+            NotImplementedError, EOFError, OSError, zlib.error):
         raise CompositionRefused("invalid-public-context-archive") from None
 
 
@@ -165,6 +171,7 @@ def validate_packet(packet):
             "reviewed-public-context")
     require(packet["feedback_schema_sha256"] == FEEDBACK_HASH
             and packet["named_limit_sha256"] == LIMIT_HASH, "feedback-binding")
+    require(packet["budget_policy_sha256"] == BUDGET_POLICY_SHA256, "budget-policy-mismatch")
     rows = packet["prerequisites"]
     require(type(rows) is dict and set(rows) == PREREQUISITES, "prerequisite-inventory")
     for row in rows.values():
@@ -243,7 +250,7 @@ class Composition:
     only packet (private credentials stay inside the trusted port), consumes the
     admission nonce and returns the real admission object. ports.transport builds
     the real PreviewTransport. prove_request binds the exact projection and proves
-    its conservative token bound; no byte/token heuristic is supplied here.
+    the reviewed E2 byte-plus-allowance bound, independently recomputed here.
     build/gate must enforce PhaseWindow including reap and return typed minimal
     records. No per-case report or build diagnostic crosses these interfaces.
     These ports are not dynamically loadable by this module or its CLI.
@@ -293,13 +300,20 @@ class Composition:
 
     def _artifact(self, role, value):
         field = "source" if role.startswith("builder") else "text"
-        require(type(value) is dict and set(value) == {field} and type(value[field]) is str
-                and 0 < len(value[field].encode("utf-8")) <= 128000, "artifact-contract")
+        require(type(value) is dict and set(value) == {field} and type(value[field]) is str,
+                "artifact-contract")
+        try:
+            raw = value[field].encode("utf-8", errors="strict")
+        except UnicodeError:
+            raise CompositionRefused("artifact-utf8") from None
+        cap = 65536 if field == "source" else 8192
+        require(0 < len(raw) <= cap, "artifact-contract")
+        require(not any(ord(ch) < 32 and ch not in "\t\r\n" for ch in value[field]), "artifact-c0")
         return strict_json(canonical(value))
 
     def _send(self, role, projection_feedback=None):
         self._now()
-        require(self._roles[role] == "NOT_RUN" and self._holds + SLOT_HOLD <= CAP, "role-or-cap")
+        require(self._roles[role] == "NOT_RUN" and self._holds + ROLE_HOLDS[role] <= CAP, "role-or-cap")
         # The sole context constructor: known public bundle + generated artifacts
         # + one exact count projection. No runtime diagnostics or verifier record.
         payload = {"public_context": self._context,
@@ -311,19 +325,21 @@ class Composition:
                       "input": canonical(payload).decode("utf-8"),
                       "text": {"format": {"type": "json_schema", "name": "c2_artifact",
                                            "strict": True, "schema": self._schema(role)}}}
+        token_bound = len(canonical(projection)) + FRAMING_ALLOWANCE
+        require(token_bound <= ROLE_INPUT_CAPS[role], "budget-fixed-input-cap")
         request = self._ports.prove_request(role, strict_json(canonical(projection)))
         require(canonical(request.projection) == canonical(projection)
                 and request.projection_sha256 == digest(canonical(projection))
                 and request.bound_proof_sha256 == self._packet["request_bound_proof_sha256"]
                 and request.public_context_approval_sha256 == self._packet["public_context_approval_sha256"]
-                and type(request.token_upper_bound) is int and 0 < request.token_upper_bound <= 100000,
+                and type(request.token_upper_bound) is int and request.token_upper_bound == token_bound,
                 "reviewed-request-proof")
         self._now()
         # Reserve irreversibly before calling transport. If validation or durable
         # recording fails after here, conservative full hold stays consumed.
         self._roles[role] = "FAILED_CONSUMED"
-        self._holds += SLOT_HOLD
-        self._record(role + "-composition-start.json", {"role": role, "hold_microdollars": SLOT_HOLD,
+        self._holds += ROLE_HOLDS[role]
+        self._record(role + "-composition-start.json", {"role": role, "hold_microdollars": ROLE_HOLDS[role],
             "projection_sha256": request.projection_sha256, "packet_sha256": self._packet_hash})
         value, evidence = self._transport.complete(role, request)
         self._now()
@@ -331,6 +347,8 @@ class Composition:
         require(type(evidence) is dict and evidence.get("role") == role and evidence.get("status") == "COMPLETED"
                 and evidence.get("observed_tier") == "flex" and evidence.get("model") == MODEL
                 and evidence.get("retries") == 0 and evidence.get("attempts") == 1
+                and evidence.get("budget_policy_sha256") == BUDGET_POLICY_SHA256
+                and evidence.get("total_reserved_microdollars") == ROLE_HOLDS[role]
                 and evidence.get("artifact_sha256") == digest(canonical(artifact)), "transport-evidence")
         self._record(role + "-composition-complete.json", {"role": role, "artifact_sha256": digest(canonical(artifact))})
         self._roles[role] = "COMPLETED"
@@ -372,6 +390,7 @@ class Composition:
             "attempts": strict_json(canonical(self._attempts)),
             "reserved_microdollars": self._holds, "billing_final": False, "holds_released": False,
             "feedback_observations": len(self._attempts), "named_feedback_limit_sha256": LIMIT_HASH,
+            "budget_policy_sha256": BUDGET_POLICY_SHA256, "named_budget_limit": NAMED_BUDGET_LIMIT,
             "resume": False, "retry": False, "authentication": "local-unsigned-evidence-only"}
 
     def run(self):
@@ -391,12 +410,14 @@ class Composition:
                 require(receipt.get("schema") == SCHEMA and receipt.get("scope") == SCOPE
                         and receipt.get("qualified") is False and receipt.get("production_controller_receipt") is False
                         and receipt.get("status") == "ADMITTED_ONLY"
-                        and receipt.get("binding_sha256") == self._packet["binding_sha256"], "admission-binding")
+                        and receipt.get("binding_sha256") == self._packet["binding_sha256"]
+                        and receipt.get("budget_policy_sha256") == BUDGET_POLICY_SHA256, "admission-binding")
                 self._last = start
                 self._now()
                 self._record("composition-admitted.json", {"packet_sha256": self._packet_hash,
                     "binding_sha256": self._packet["binding_sha256"], "run_budget_seconds": 8100})
                 self._transport = self._ports.transport(self._admission)
+                require(getattr(self._transport, "budget_policy_sha256", None) == BUDGET_POLICY_SHA256, "transport-budget-policy")
                 self._send("planner")
                 source = self._send("builder-attempt1")["source"]
                 passed, first_feedback = self._attempt(1, source)
@@ -412,7 +433,6 @@ class Composition:
                     if passed:
                         status = "MATCH_AFTER_REPAIR"
                     else:
-                        self._send("analysis-attempt2", second_feedback)
                         status = "CANDIDATE_FAIL"
                 result = self._result(status)
                 self._record("composition-result.json", result)
@@ -434,7 +454,7 @@ def verify_result(value):
     """Offline structural verification; no signature/production qualification."""
     fields = {"schema", "scope", "qualified", "production_controller_receipt", "status", "packet_sha256",
         "roles", "attempts", "reserved_microdollars", "billing_final", "holds_released", "feedback_observations",
-        "named_feedback_limit_sha256", "resume", "retry", "authentication"}
+        "named_feedback_limit_sha256", "budget_policy_sha256", "named_budget_limit", "resume", "retry", "authentication"}
     require(type(value) is dict and set(value) == fields, "result-fields")
     require(value["schema"] == SCHEMA and value["scope"] == SCOPE and value["qualified"] is False
             and value["production_controller_receipt"] is False, "preview-only")
@@ -442,6 +462,8 @@ def verify_result(value):
             "result-binding")
     require(value["authentication"] == "local-unsigned-evidence-only" and
             all(value[k] is False for k in ("billing_final", "holds_released", "resume", "retry")), "result-limits")
+    require(value["budget_policy_sha256"] == BUDGET_POLICY_SHA256
+            and value["named_budget_limit"] == NAMED_BUDGET_LIMIT, "result-budget-policy")
     roles = value["roles"]
     require(type(roles) is dict and set(roles) == set(ROLES)
             and all(v in ("NOT_RUN", "COMPLETED", "FAILED_CONSUMED") for v in roles.values()), "result-roles")
@@ -451,7 +473,7 @@ def verify_result(value):
             and all(v == "NOT_RUN" for v in states[consumed:]), "result-role-prefix")
     failed = [i for i, v in enumerate(states) if v == "FAILED_CONSUMED"]
     require(not failed or failed == [consumed - 1], "result-failed-role-terminal")
-    require(type(value["reserved_microdollars"]) is int and value["reserved_microdollars"] == consumed * SLOT_HOLD
+    require(type(value["reserved_microdollars"]) is int and value["reserved_microdollars"] == sum(ROLE_HOLDS[r] for r in ROLES[:consumed])
             and value["reserved_microdollars"] <= CAP, "result-cost")
     attempts = value["attempts"]
     require(type(attempts) is list and len(attempts) <= 2 and type(value["feedback_observations"]) is int
@@ -464,8 +486,8 @@ def verify_result(value):
     status = value["status"]
     require(status in ("MATCH_FIRST_ATTEMPT", "MATCH_AFTER_REPAIR", "CANDIDATE_FAIL", "STOPPED"), "result-status")
     if status != "STOPPED":
-        expected = {"MATCH_FIRST_ATTEMPT": 2, "MATCH_AFTER_REPAIR": 4, "CANDIDATE_FAIL": 5}[status]
-        require([roles[r] for r in ROLES] == ["COMPLETED"] * expected + ["NOT_RUN"] * (5 - expected), "result-role-order")
+        expected = {"MATCH_FIRST_ATTEMPT": 2, "MATCH_AFTER_REPAIR": 4, "CANDIDATE_FAIL": 4}[status]
+        require([roles[r] for r in ROLES] == ["COMPLETED"] * expected + ["NOT_RUN"] * (len(ROLES) - expected), "result-role-order")
         require(len(attempts) == (1 if expected == 2 else 2), "result-attempt-count")
         successes = [sum(row["feedback"]["verdict_counts"][v] for v in SUCCESS) == 10 for row in attempts]
         require(successes == {"MATCH_FIRST_ATTEMPT": [True], "MATCH_AFTER_REPAIR": [False, True],

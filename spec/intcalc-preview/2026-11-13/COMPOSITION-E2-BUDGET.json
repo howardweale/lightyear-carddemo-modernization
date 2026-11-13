@@ -1,0 +1,41 @@
+{
+  "schema": "full-intcalc-preview-e2-budget/1",
+  "option": "E2",
+  "roles": [
+    "planner",
+    "builder-attempt1",
+    "analysis-attempt1",
+    "builder-repair1"
+  ],
+  "role_input_caps": {
+    "planner": 85876,
+    "builder-attempt1": 100000,
+    "analysis-attempt1": 188000,
+    "builder-repair1": 198000
+  },
+  "role_holds_microdollars": {
+    "planner": 1736636,
+    "builder-attempt1": 1892000,
+    "analysis-attempt1": 2860000,
+    "builder-repair1": 2970000
+  },
+  "text_cap_utf8_bytes": 8192,
+  "source_cap_utf8_bytes": 65536,
+  "output_token_cap": 32000,
+  "framing_allowance": 4096,
+  "count_input_rate_usd_per_million": "5.50",
+  "generation_input_rate_usd_per_million": "5.50",
+  "generation_output_rate_usd_per_million": "24.75",
+  "hold_rounding": "Ceil each input hold independently to a whole microdollar",
+  "total_hold_microdollars": 9458636,
+  "envelope_microdollars": 9460000,
+  "headroom_microdollars": 1364,
+  "pre_count_rule": "len(canonical_projection_utf8_bytes)+4096 <= fixed role input cap; otherwise refuse before role reservation and count send",
+  "C0_rule": "Reject U+0000..U+001F except TAB/LF/CR in every generated artifact; do not sanitize",
+  "named_limit": "Budget-fixed input caps: an escape-heavy artifact can stop the run early despite satisfying its artifact byte cap.",
+  "run_budget_seconds": 8100,
+  "retries": 0,
+  "fallback": false,
+  "scope": "NOT-P5/public-CBACT04C-only",
+  "no_spend_or_activation_authority": true
+}

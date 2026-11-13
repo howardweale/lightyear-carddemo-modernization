@@ -1,0 +1,30 @@
+{
+  "work_item": "Composition (no PR yet, r4)",
+  "base_commit": "c4359f9e51abf9600c36181ffd7cf3d071b10fb5",
+  "status": "REVIEW_ONLY_EXACT_IMPLEMENTATION_PROPOSAL",
+  "budget_policy_sha256": "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd",
+  "budget_policy_file": "spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json",
+  "budget_hash_encoding": "SHA256 of exact policy file bytes, including final LF",
+  "selection": "Howard explicitly selects E2 in the direct 13 November work order; selection authorizes proposal preparation/publication only.",
+  "named_limit": "Budget-fixed input caps: an escape-heavy artifact can stop the run early despite satisfying its artifact byte cap.",
+  "tests_defined": 85,
+  "tests_run_locally": false,
+  "details": {
+    "role_instructions_sha256": "2b0082f7493d931809e0cbf3d779f8d7b278a846c26419f1d83ca1f6ce064ce9",
+    "carry_forward": "Include zlib.error in archive refusal tuple, as requested for the next revision. Four remaining role instructions unchanged."
+  },
+  "independent_patch": "On the same main base; no stacked PR or source commit created. Runtime composition requires all three reviewed budget patches; mixed versions refuse by policy hash.",
+  "unchanged": [
+    "No CLI admit/run wiring",
+    "No credential, spend or model-call authority",
+    "Original deadline 8100 seconds; no extension",
+    "Zero retries and no fallback",
+    "No gate or allowlist changes"
+  ],
+  "live_blocks": [
+    "Exact Claude review and applicable push/merge approvals",
+    "Green CI including Windows discovery and macOS durability",
+    "Live bootstrap and qualified adapters",
+    "Operator disk/image/ledger evidence and exact spend/credential/run approval"
+  ]
+}

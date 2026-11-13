@@ -43,12 +43,13 @@ def packet():
         runtime_platform="linux/arm64", emulation=False, byte_policy_sha256="STRICT",
         run_budget_seconds=8100, cap_microdollars=c.CAP, context_sha256=c.digest(PUBLIC),
         allowlist_sha256=c.digest(ALLOWLIST), feedback_schema_sha256=c.FEEDBACK_HASH,
-        named_limit_sha256=c.LIMIT_HASH,
+        named_limit_sha256=c.LIMIT_HASH, budget_policy_sha256=c.BUDGET_POLICY_SHA256,
         prerequisites={name: {"status": "PRESENT", "evidence_sha256": H} for name in c.PREREQUISITES})
     return value
 
 
 class FakePorts:
+    budget_policy_sha256 = c.BUDGET_POLICY_SHA256
     """Trusted synthetic ports, never import transport or call a provider."""
     def __init__(self, outcomes=None):
         self.events = []
@@ -64,7 +65,7 @@ class FakePorts:
         self.mutate_gate = lambda value: value
         self.mutate_evidence = lambda value: value
         self.proof_hash = H
-        self.proof_tokens = 100000
+        self.proof_tokens = None
         self.drift_projection = False
         self.record_failure = False
     def authenticate(self, value):
@@ -75,7 +76,7 @@ class FakePorts:
         self.events.append("admit")
         return SimpleNamespace(started_monotonic=self.now, deadline_monotonic=self.now + 8100,
             public_receipt=lambda: {"schema": c.SCHEMA, "scope": c.SCOPE, "qualified": False,
-                "production_controller_receipt": False, "status": "ADMITTED_ONLY", "binding_sha256": H})
+                "production_controller_receipt": False, "status": "ADMITTED_ONLY", "binding_sha256": H, "budget_policy_sha256": c.BUDGET_POLICY_SHA256})
     def transport(self, admission):
         self.events.append("transport")
         return self
@@ -91,7 +92,7 @@ class FakePorts:
             projection["input"] = "unapproved"
         return SimpleNamespace(projection=projection, projection_sha256=c.digest(c.canonical(projection)),
             bound_proof_sha256=self.proof_hash, public_context_approval_sha256=H,
-            token_upper_bound=self.proof_tokens)
+            token_upper_bound=(len(c.canonical(projection))+c.FRAMING_ALLOWANCE if self.proof_tokens is None else self.proof_tokens))
     def complete(self, role, request):
         self.events.append(role)
         if self.interrupt:
@@ -100,7 +101,8 @@ class FakePorts:
             raise ValueError("PRIVATE verifier detail must never be returned")
         artifact = {"source": "public class Main {}"} if role.startswith("builder") else {"text": "synthetic public note"}
         evidence = {"role": role, "status": "COMPLETED", "observed_tier": "flex", "model": c.MODEL,
-                    "retries": 0, "attempts": 1, "artifact_sha256": c.digest(c.canonical(artifact))}
+                    "retries": 0, "attempts": 1, "budget_policy_sha256": c.BUDGET_POLICY_SHA256,
+                    "total_reserved_microdollars": c.ROLE_HOLDS[role], "artifact_sha256": c.digest(c.canonical(artifact))}
         return artifact, self.mutate_evidence(evidence)
     def build(self, number, source, window):
         self.events.append("build" + str(number))
@@ -138,22 +140,23 @@ class CompositionTests(unittest.TestCase):
         result = self.session().run()
         self.assertEqual(self.ports.events, ["authenticate", "admit", "transport", "planner", "builder-attempt1", "build1", "gate1"])
         self.assertEqual(result["status"], "MATCH_FIRST_ATTEMPT")
-        self.assertEqual(result["reserved_microdollars"], 2 * c.SLOT_HOLD)
+        self.assertEqual(result["reserved_microdollars"], sum(c.ROLE_HOLDS[r] for r in c.ROLES[:2]))
         self.assertFalse(c.verify_result(result)["qualified"])
     def test_repair_success_preserves_first_failure(self):
         self.ports.outcomes = [("DIFFERENT",) + ("MATCH",) * 9, ("MATCH",) * 10]
         result = self.session().run()
         self.assertEqual(result["status"], "MATCH_AFTER_REPAIR")
         self.assertEqual(result["attempts"][0]["feedback"]["verdict_counts"]["DIFFERENT"], 1)
-        self.assertEqual(result["roles"]["analysis-attempt2"], "NOT_RUN")
+        self.assertNotIn("analysis-attempt2", result["roles"])
         c.verify_result(result)
-    def test_two_failures_exact_five_roles(self):
+    def test_two_failures_exact_four_roles(self):
         self.ports.outcomes = [("DIFFERENT",) * 10, ("REFUSAL_NOT_OBSERVED",) * 10]
         result = self.session().run()
         self.assertEqual(result["status"], "CANDIDATE_FAIL")
-        self.assertEqual(result["reserved_microdollars"], c.CAP)
+        self.assertEqual(result["reserved_microdollars"], 9458636)
         self.assertEqual(result["feedback_observations"], 2)
-        self.assertEqual(self.ports.events[-1], "analysis-attempt2")
+        self.assertEqual(self.ports.events[-1], "gate2")
+        self.assertNotIn("analysis-attempt2", self.ports.events)
         c.verify_result(result)
     def test_feedback_reused_without_case_fields(self):
         self.ports.outcomes = [("DIFFERENT",) * 10, ("MATCH",) * 10]
@@ -219,14 +222,14 @@ class CompositionTests(unittest.TestCase):
     def test_transport_fault_consumes_slot_and_redacts(self):
         self.ports.fail_role = "planner"
         result = self.stopped()
-        self.assertEqual(result["reserved_microdollars"], c.SLOT_HOLD)
+        self.assertEqual(result["reserved_microdollars"], c.ROLE_HOLDS["planner"])
         self.assertEqual(result["roles"]["planner"], "FAILED_CONSUMED")
         self.assertNotIn("PRIVATE", c.canonical(result).decode())
     def test_keyboard_interrupt_preserved_and_recorded(self):
         self.ports.interrupt = KeyboardInterrupt()
         with self.assertRaises(KeyboardInterrupt):
             self.session().run()
-        self.assertEqual(self.ports.records["composition-stopped.json"]["reserved_microdollars"], c.SLOT_HOLD)
+        self.assertEqual(self.ports.records["composition-stopped.json"]["reserved_microdollars"], c.ROLE_HOLDS["planner"])
     def test_system_exit_preserved_and_recorded(self):
         self.ports.interrupt = SystemExit(8)
         with self.assertRaises(SystemExit) as raised:
@@ -329,7 +332,7 @@ class CompositionTests(unittest.TestCase):
     def test_verify_rejects_extra_analysis_after_success(self):
         result = self.session().run()
         result["roles"]["analysis-attempt1"] = "COMPLETED"
-        result["reserved_microdollars"] += c.SLOT_HOLD
+        result["reserved_microdollars"] += c.ROLE_HOLDS["planner"]
         with self.assertRaises(c.CompositionRefused):
             c.verify_result(result)
     def test_verify_rejects_third_observation(self):
@@ -369,6 +372,145 @@ class CompositionTests(unittest.TestCase):
 
 
 
+
+    def test_e2_policy_exact_binding(self):
+        self.binding["budget_policy_sha256"] = "f" * 64
+        with self.assertRaisesRegex(c.CompositionRefused, "budget-policy-mismatch"):
+            self.session()
+    def test_e2_old_transport_refuses_before_send(self):
+        self.ports.budget_policy_sha256 = "f" * 64
+        result = self.stopped()
+        self.assertEqual(result["reserved_microdollars"], 0)
+        self.assertNotIn("planner", self.ports.events)
+    def test_e2_artifact_caps_and_utf8(self):
+        session = self.session()
+        for role,field,cap in (("planner","text",8192),("builder-attempt1","source",65536)):
+            self.assertEqual(session._artifact(role,{field:"a"*cap}),{field:"a"*cap})
+            self.assertEqual(session._artifact(role,{field:"é"*(cap//2)}),{field:"é"*(cap//2)})
+            for text in ("a"*(cap+1),"é"*(cap//2+1),chr(0xd800)):
+                with self.subTest(role=role),self.assertRaises(c.CompositionRefused):
+                    session._artifact(role,{field:text})
+    def test_e2_c0_rejected_allowed_whitespace_retained(self):
+        session = self.session()
+        for number in range(32):
+            value = {"text":"a"+chr(number)+"b"}
+            if number in (9,10,13):self.assertEqual(session._artifact("planner",value),value)
+            else:
+                with self.subTest(number=number),self.assertRaisesRegex(c.CompositionRefused,"artifact-c0"):
+                    session._artifact("planner",value)
+    def test_e2_precount_boundary_and_one_byte_over_no_hold(self):
+        session = self.session()
+        session._admission = self.ports.admit(self.binding)
+        session._transport = self.ports
+        # First measure only the synthetic projection supplied to the proof port.
+        session._send("planner")
+        bound = len(c.canonical(self.ports.projections["planner"])) + 4096
+        for delta in (0,-1):
+            ports = FakePorts()
+            trial = c.Composition(self.binding,PUBLIC,ALLOWLIST,ports,clock=lambda:ports.now)
+            trial._admission=ports.admit(self.binding);trial._transport=ports
+            with patch.dict(c.ROLE_INPUT_CAPS,{"planner":bound+delta}):
+                if delta == 0:trial._send("planner")
+                else:
+                    with self.assertRaisesRegex(c.CompositionRefused,"budget-fixed-input-cap"):
+                        trial._send("planner")
+                    self.assertEqual(trial._holds,0)
+                    self.assertEqual(trial._roles["planner"],"NOT_RUN")
+                    self.assertNotIn("planner",ports.projections)
+                    self.assertNotIn("planner",ports.events)
+    def test_e2_escape_heavy_plan_stops_builder_without_its_hold(self):
+        original=self.ports.complete
+        def complete(role,request):
+            artifact,evidence=original(role,request)
+            if role=="planner":
+                artifact={"text":"\\"*8192}
+                evidence["artifact_sha256"]=c.digest(c.canonical(artifact))
+            return artifact,evidence
+        self.ports.complete=complete
+        # Make the public context large enough to exercise the fixed builder cap.
+        session=self.session(); session._context={"public.txt":"a"*70000}
+        with self.assertRaises(c.CompositionRefused):session.run()
+        result=self.ports.records["composition-stopped.json"]
+        self.assertEqual(result["reserved_microdollars"],1736636)
+        self.assertEqual(result["roles"]["builder-attempt1"],"NOT_RUN")
+        self.assertNotIn("builder-attempt1",self.ports.events)
+        self.assertEqual(result["named_budget_limit"],c.NAMED_BUDGET_LIMIT)
+    def test_e2_understated_proof_refused_without_hold(self):
+        self.ports.proof_tokens=1
+        result=self.stopped()
+        self.assertEqual(result["reserved_microdollars"],0)
+
+
+    def test_e2_policy_file_hash_and_arithmetic(self):
+        import hashlib
+        raw=(Path(__file__).resolve().parents[1] / "spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json").read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(),c.BUDGET_POLICY_SHA256)
+        policy=json.loads(raw)
+        holds={role:2*((cap*11+1)//2)+792000 for role,cap in policy["role_input_caps"].items()}
+        self.assertEqual(holds,policy["role_holds_microdollars"])
+        self.assertEqual(sum(holds.values()),9458636)
+        self.assertEqual(policy["envelope_microdollars"]-sum(holds.values()),1364)
+
+    def test_e2_old_admission_refuses_before_transport_or_send(self):
+        original=self.ports.admit
+        def old_admit(value):
+            result=original(value); receipt=result.public_receipt()
+            receipt.pop("budget_policy_sha256")
+            result.public_receipt=lambda:receipt
+            return result
+        self.ports.admit=old_admit
+        result=self.stopped()
+        self.assertEqual(result["reserved_microdollars"],0)
+        self.assertNotIn("transport",self.ports.events)
+    def test_e2_c0_generated_artifact_never_carried_forward(self):
+        original=self.ports.complete
+        def invalid(role,request):
+            artifact,evidence=original(role,request)
+            artifact={"text":"invalid"+chr(1)}
+            evidence["artifact_sha256"]=c.digest(c.canonical(artifact))
+            return artifact,evidence
+        self.ports.complete=invalid
+        result=self.stopped()
+        self.assertEqual(result["reserved_microdollars"],1736636)
+        self.assertEqual(result["roles"]["planner"],"FAILED_CONSUMED")
+        self.assertEqual(result["roles"]["builder-attempt1"],"NOT_RUN")
+        self.assertNotIn("builder-attempt1",self.ports.projections)
+
+    def test_e2_planner_fixture_actual_cap_boundary_and_one_byte_over(self):
+        # Real synthetic ZIP/allowlist decoding, unchanged serializer and fixed cap.
+        # No cap patch and no replacement of the decoded context or proof path.
+        payload={"public_context":{"pad.txt":""},"generated_artifacts":{},"feedback":None}
+        projection={"model":c.MODEL,"instructions":c.ROLE_INSTRUCTIONS["planner"],
+                    "input":c.canonical(payload).decode("utf-8"),
+                    "text":{"format":{"type":"json_schema","name":"c2_artifact","strict":True,
+                        "schema":{"type":"object","properties":{"text":{"type":"string"}},
+                                  "required":["text"],"additionalProperties":False}}}}
+        padding=c.ROLE_INPUT_CAPS["planner"]-c.FRAMING_ALLOWANCE-len(c.canonical(projection))
+        self.assertGreater(padding,0)
+        self.assertEqual(c.ROLE_INPUT_CAPS["planner"],85876)
+        for extra in (0,1):
+            archive,allowlist=make_bundle([("pad.txt",b"a"*(padding+extra))])
+            with self.subTest(extra=extra),patch.object(c,"CONTEXT_HASH",c.digest(archive)),patch.object(c,"ALLOWLIST_HASH",c.digest(allowlist)):
+                bound=packet()
+                bound.update(context_sha256=c.digest(archive),allowlist_sha256=c.digest(allowlist))
+                ports=FakePorts()
+                session=c.Composition(bound,archive,allowlist,ports,clock=lambda:ports.now)
+                session._admission=ports.admit(bound);session._transport=ports
+                if extra==0:
+                    session._send("planner")
+                    raw=c.canonical(ports.projections["planner"])
+                    self.assertEqual(len(raw),81780)
+                    self.assertEqual(len(raw)+c.FRAMING_ALLOWANCE,c.ROLE_INPUT_CAPS["planner"])
+                    self.assertEqual(session._holds,1736636)
+                else:
+                    with self.assertRaisesRegex(c.CompositionRefused,"budget-fixed-input-cap"):
+                        session._send("planner")
+                    self.assertEqual(session._holds,0)
+                    self.assertEqual(session._roles["planner"],"NOT_RUN")
+                    self.assertNotIn("planner",ports.projections)
+                    self.assertNotIn("planner",ports.events)
+                    self.assertEqual(ports.records,{})
+
 class ArchiveAndRoleTests(unittest.TestCase):
     def construct(self, archive, allowlist):
         # Patch only the synthetic pair's approved hashes, never extraction,
@@ -400,7 +542,7 @@ class ArchiveAndRoleTests(unittest.TestCase):
         for role in ("builder-attempt1", "builder-repair1"):
             for phrase in ('"source"', "complete text", "Java 21", "Main.java", "default-package public class Main", "only the JDK", "not a patch or diff"):
                 self.assertIn(phrase, c.ROLE_INSTRUCTIONS[role])
-        for role in ("planner", "analysis-attempt1", "analysis-attempt2"):
+        for role in ("planner", "analysis-attempt1"):
             self.assertIn('"text"', c.ROLE_INSTRUCTIONS[role])
             self.assertTrue("plain text" in c.ROLE_INSTRUCTIONS[role] or "plain-text" in c.ROLE_INSTRUCTIONS[role])
     def test_role_table_drift_refuses_before_send(self):

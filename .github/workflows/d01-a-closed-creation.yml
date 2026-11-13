@@ -1,0 +1,58 @@
+name: D01-A macOS closed creation experiments
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/d01-a-closed-creation.yml'
+      - 'tools/ci/d01_a_closed_creation/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/d01-a-closed-creation.yml'
+      - 'tools/ci/d01_a_closed_creation/**'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  kernel-denials:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Record preinstalled tools and OS
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/sw_vers
+          /usr/bin/uname -a
+          /usr/bin/xcrun clang --version
+          python3 --version
+          test "$(id -u)" != 0
+      - name: Compile public probe in CI only
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror -Wno-deprecated-declarations \
+            tools/ci/d01_a_closed_creation/probe.c -o "$RUNNER_TEMP/d01-a-probe"
+          /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror -pthread \
+            tools/ci/d01_a_closed_creation/threaded.c -o "$RUNNER_TEMP/d01-a-threaded"
+      - name: Demand actual kernel refusals with successful controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I -B tools/ci/d01_a_closed_creation/observe.py \
+            "$RUNNER_TEMP/d01-a-probe" "$RUNNER_TEMP/d01-a-observations.json" "$RUNNER_TEMP/d01-a-threaded"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: d01-a-creation-${{ matrix.os }}
+          path: ${{ runner.temp }}/d01-a-observations.json
+          if-no-files-found: error
+          retention-days: 90

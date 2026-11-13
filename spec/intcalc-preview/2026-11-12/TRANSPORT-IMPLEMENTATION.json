@@ -1,0 +1,43 @@
+{
+  "schema": "intcalc-preview-transport-implementation/1",
+  "status": "UNWIRED; no admission or spend authority",
+  "model": "gpt-5.4-2026-03-05",
+  "count_endpoint": "POST /v1/responses/input_tokens",
+  "generation_endpoint": "POST /v1/responses",
+  "tier_request_and_response": "flex",
+  "count_timeout_seconds": 120,
+  "generation_timeout_seconds": 900,
+  "run_budget_seconds": 8100,
+  "reserved_run_cleanup_seconds": 15,
+  "phase_worker_cleanup_reserved_seconds": 5,
+  "five_slot_cap_microdollars": 9460000,
+  "slot_hold_microdollars": 1892000,
+  "no_refunds_or_slot_reuse": true,
+  "all_retry_layers": 0,
+  "SDK": "Not used; stdlib HTTPSConnection one request, no redirects or proxy/environment discovery",
+  "ledger": "Fresh controller-owned dirfd, O_EXCL immutable reservations/send latches/results; F_FULLFSYNC on macOS file and directory, fsync elsewhere, errors fail closed; no resume",
+  "platform": "macOS arm64 intended; Linux and macOS synthetic CI required",
+  "trusted_input_seams": [
+    "Validated preview admission public token from separately reviewed admission module",
+    "ReviewedSpend only after exact Howard spend and account-billing evidence verification",
+    "ReviewedRequest only after public context and conservative pre-count bound proof verification",
+    "Bounded deterministic schema validator for exact reviewed artifact schema"
+  ],
+  "seam_limits": [
+    "Transport is not an admission verifier; its hash-shaped receipt references are not cryptographic authority",
+    "No existing CLI/provider/orchestrator wired; no credential discovery or generation supplied",
+    "Composition must enforce exact admission type and receipt/binding authentication, process/boot identity, role order and two-feedback cap before exposing this module",
+    "No current spend authority, count billing evidence, conservative bound proof, runtime image/disk evidence or credential is supplied",
+    "Deadline wire worker makes DNS/TLS/write/read interruptible and reserves reap inside phase; processing checks refuse late success. Native hard-real-time scheduling is not established; CI must exercise stalled worker cleanup before acceptance."
+  ],
+  "no_hidden_case_context": true,
+  "qualified": false,
+  "production_controller_receipt": false,
+  "test_count": 42,
+  "truncation": "disabled",
+  "input_count_comparison": "Retain counted input_tokens and response usage.input_tokens plus count_matches_usage. Equality is not promised; each must be <= reviewed token_upper_bound and hard cap. Malformed or inconsistent usage still refuses.",
+  "non_POSIX": "Ledger construction and persistence refuse posix-required before POSIX-only constants, getuid or fcntl.",
+  "interrupts": "Record failed consumed slot and preserve the full hold, then re-raise KeyboardInterrupt/SystemExit unchanged.",
+  "synthetic_spawn": "Real-file guarded CI runner; all synthetic workers must leave a startup witness before normal frame, deliberate stall or EOF. A missing witness is a failing test, including a negative control. No socket or https_once call; production worker and cleanup unchanged.",
+  "test_fixture_paths": "Canonicalize trusted temporary test fixtures only. Runtime ancestor-symlink refusal is unchanged and has a negative test. Real synchronization remains enabled; safe file-kind/errno diagnostics on a failure, no downgrade."
+}

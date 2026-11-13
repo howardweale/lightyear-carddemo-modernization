@@ -18,6 +18,9 @@ import subprocess
 import tarfile
 import tempfile
 import threading
+import contextvars
+import selectors
+import signal
 import time
 import uuid
 
@@ -191,8 +194,70 @@ def validate(binding, root):
     return artifact, prepared, governance
 
 
+_C2_CONTEXT = contextvars.ContextVar("intcalc_c2_absolute_runtime", default=None)
+
+
+def absolute_capture(argv, deadline, hard_end, cap):
+    """C2-only bounded pipes and child-group reap within the incoming hard end."""
+    if os.name != "posix" or not time.monotonic() < deadline <= hard_end:
+        raise Refused("absolute-command-deadline")
+    proc = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, env={"PATH": "/usr/bin:/bin:/usr/sbin:/sbin"},
+                            close_fds=True, start_new_session=False)
+    poller = selectors.DefaultSelector()
+    streams = (proc.stdout, proc.stderr)
+    chunks = [bytearray(), bytearray()]
+    expired = overflow = False
+    try:
+        for i, stream in enumerate(streams):
+            os.set_blocking(stream.fileno(), False)
+            poller.register(stream, selectors.EVENT_READ, i)
+        while poller.get_map() or proc.poll() is None:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                expired = True
+                break
+            for key, _ in poller.select(min(0.05, remaining)):
+                block = os.read(key.fileobj.fileno(), 65536)
+                if not block:
+                    poller.unregister(key.fileobj)
+                    continue
+                target = chunks[key.data]
+                space = max(0, cap - len(target))
+                target.extend(block[:space])
+                if len(block) > space:
+                    overflow = True
+                    break
+            if overflow:
+                break
+    finally:
+        try:
+            proc.kill()
+        except ProcessLookupError:
+            pass
+        if proc.poll() is None:
+            remaining = hard_end - time.monotonic()
+            if remaining <= 0:
+                raise Refused("absolute-child-reap-deadline")
+            try:
+                proc.wait(timeout=remaining)
+            except subprocess.TimeoutExpired:
+                raise Refused("absolute-child-reap-unconfirmed") from None
+        poller.close()
+        for stream in streams:
+            stream.close()
+    return dict(rc=proc.returncode, timeout=expired, overflow=overflow,
+                stdout=bytes(chunks[0]), stderr=bytes(chunks[1]))
+
+
 def capture(argv, deadline, cap=MAX_CAPTURE):
     """Bound both pipes while reading; overflow is a fault, never a truncated pass."""
+    context = _C2_CONTEXT.get()
+    if context is not None:
+        hard_end, prefix, _, _ = context
+        if not argv or argv[0] != "docker":
+            raise Refused("c2-fixed-docker-only")
+        return absolute_capture([*prefix, *argv[1:]], min(deadline, hard_end - 0.05), hard_end, cap)
     remaining = deadline - time.monotonic()
     if not math.isfinite(remaining) or remaining <= 0:
         raise Refused("original-deadline-expired")
@@ -335,12 +400,16 @@ def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_p
         try:
             require_native_daemon()
             volume_attempted = True
+            if _C2_CONTEXT.get() is not None:
+                _C2_CONTEXT.get()[2]("volume", volume)
             required(["volume", "create", "--driver=local", "--opt=type=tmpfs",
                       "--opt=device=tmpfs", "--opt=o=size=32m,uid=65534,gid=65534,mode=0700", volume])
             common = ["--pull=never", "--platform="+runtime_platform, "--network=none", "--read-only",
                       "--cap-drop=ALL", "--security-opt=no-new-privileges", "--pids-limit=64",
                       "--memory=512m", "--cpus=1", "--user=65534:65534"]
             attempted.append(name)
+            if _C2_CONTEXT.get() is not None:
+                _C2_CONTEXT.get()[2]("container", name)
             required(["create", "--name", name, *common,
                 "--tmpfs=/tmp:rw,noexec,nosuid,nodev,size=32m,mode=1777",
                 "--mount", f"type=volume,source={volume},target=/output,volume-nocopy",
@@ -363,6 +432,8 @@ def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_p
                 raise Refused("candidate-output-not-frozen")
             require_native_daemon()
             attempted.append(collector)
+            if _C2_CONTEXT.get() is not None:
+                _C2_CONTEXT.get()[2]("container", collector)
             required(["create", "--name", collector, *common,
                 "--mount", f"type=volume,source={volume},target=/capture,readonly,volume-nocopy",
                 "--entrypoint=/bin/sh", image, "-c", "while :; do sleep 1; done"])
@@ -396,6 +467,8 @@ def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_p
         finally:
             cleanup_ok = True
             cleanup_deadline = time.monotonic()+5
+            if _C2_CONTEXT.get() is not None:
+                cleanup_deadline = min(time.monotonic() + _C2_CONTEXT.get()[3], _C2_CONTEXT.get()[0])
             targets = [("container", target, ["docker","rm","--force","--volumes",target])
                        for target in reversed(attempted)]
             if volume_attempted:
@@ -406,12 +479,19 @@ def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_p
                     marker = b"no such container:" if kind=="container" else b"no such volume"
                     absent = result["rc"]==1 and marker in result["stderr"].lower()
                     cleanup_ok = cleanup_ok and not result["timeout"] and not result["overflow"] and (result["rc"]==0 or absent)
+                    if _C2_CONTEXT.get() is not None:
+                        probe = timed_capture(["docker", kind, "inspect", target], cleanup_deadline,
+                                              cleanup_rows, kind=kind, name=target)
+                        cleanup_ok = (cleanup_ok and probe["rc"] == 1 and marker in probe["stderr"].lower()
+                                      and not probe["timeout"] and not probe["overflow"])
+                        if cleanup_ok:
+                            _C2_CONTEXT.get()[2]("removed-" + kind, target)
                 except Exception as exc:
                     cleanup_ok = False
             (retained / "runtime.json").write_text(json.dumps(dict(
                 operations=evidence,cleanup=cleanup_rows,cleanup_confirmed=cleanup_ok,
                 runtime_platform=runtime_platform, observed_daemon_platform=observed_daemon_platform,
-                cleanup_allowance_seconds=5,
+                cleanup_allowance_seconds=(_C2_CONTEXT.get()[3] if _C2_CONTEXT.get() is not None else 5),
                 candidate_timeout=isinstance(pending_error, CandidateTimeout),
                 capture_method="paused candidate; trusted tar collector on read-only shared tmpfs volume",
                 cleanup_is_not_native_owner_proof=True),indent=2)+"\n")
@@ -536,7 +616,34 @@ def _compare_report_only_view(expected, actual, codec, retained):
                 dataset_deltas=deltas, governed_oracle_comparison=semantic)
 
 
-def run(binding_path, binding_sha256, attempt_dir):
+def run(binding_path, binding_sha256, attempt_dir, *, absolute_deadline=None,
+        docker_prefix=None, resource_register=None, cleanup_seconds=5):
+    """Legacy C1 behavior stays unchanged; C2 supplies one trusted absolute end."""
+    if absolute_deadline is None:
+        if docker_prefix is not None or resource_register is not None or cleanup_seconds != 5:
+            raise Refused("absolute-runtime-incomplete")
+        return _run(binding_path, binding_sha256, attempt_dir)
+    started = time.monotonic()
+    if (type(absolute_deadline) not in (int, float) or not math.isfinite(absolute_deadline)
+            or type(cleanup_seconds) is not int or cleanup_seconds != 18
+            or absolute_deadline - started <= cleanup_seconds or os.name != "posix"
+            or type(docker_prefix) is not list or len(docker_prefix) != 5
+            or docker_prefix[1] != "--config" or docker_prefix[3] != "--host"
+            or not Path(docker_prefix[0]).is_absolute()
+            or not Path(docker_prefix[2]).is_absolute()
+            or not docker_prefix[4].startswith("unix:///") or not callable(resource_register)):
+        raise Refused("absolute-runtime-binding")
+    token = _C2_CONTEXT.set((absolute_deadline, tuple(docker_prefix), resource_register, cleanup_seconds))
+    try:
+        result = _run(binding_path, binding_sha256, attempt_dir, started=started)
+        if time.monotonic() >= absolute_deadline:
+            raise Refused("absolute-result-late")
+        return result
+    finally:
+        _C2_CONTEXT.reset(token)
+
+
+def _run(binding_path, binding_sha256, attempt_dir, *, started=None):
     raw = regular(binding_path)
     if digest(raw) != binding_sha256:
         raise Refused("approved-binding-hash-required")
@@ -554,6 +661,10 @@ def run(binding_path, binding_sha256, attempt_dir):
                   qualified=False, production_controller_receipt=False,
                   normalization_governance=governance, comparison_policy=active_policy, all_cases_match=False)
     deadline = time.monotonic()+binding["max_elapsed_seconds"]
+    if _C2_CONTEXT.get() is not None:
+        deadline = min(started + binding["max_elapsed_seconds"], _C2_CONTEXT.get()[0] - _C2_CONTEXT.get()[3])
+        if time.monotonic() >= deadline:
+            raise Refused("absolute-validation-deadline")
     if binding.get("byte_policy"):
         expires=datetime.fromisoformat(binding["byte_policy"]["expires_at"])
         deadline=min(deadline,time.monotonic()+(expires-datetime.now(timezone.utc)).total_seconds())

@@ -1,0 +1,109 @@
+name: C2 live-bootstrap qualification
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/intcalc-preview-live-bootstrap.yml'
+      - 'spec/intcalc-preview/2026-11-13/LIVE-BOOTSTRAP-IMPLEMENTATION-R3.json'
+      - 'src/carddemo_oracle/__init__.py'
+      - 'src/carddemo_oracle/compare.py'
+      - 'src/carddemo_oracle/records.py'
+      - 'src/lightyear_common/__init__.py'
+      - 'src/lightyear_common/io.py'
+      - 'src/lightyear_common/trust.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
+      - 'src/lightyear_factory/intcalc_preview_build_gate.py'
+      - 'src/lightyear_factory/intcalc_preview_composition.py'
+      - 'src/lightyear_factory/intcalc_preview_ledger_volume.py'
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'src/lightyear_mainframe/__init__.py'
+      - 'src/lightyear_mainframe/intcalc_candidate_gate.py'
+      - 'src/lightyear_mainframe/public_dataset_diff.py'
+      - 'src/lightyear_mainframe/records.py'
+      - 'src/lightyear_mainframe/source.py'
+      - 'src/lightyear_mainframe/zos_bindings.py'
+      - 'tests/test_intcalc_preview_bootstrap.py'
+      - 'tools/qualify_intcalc_preview_ledger.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/intcalc-preview-live-bootstrap.yml'
+      - 'spec/intcalc-preview/2026-11-13/LIVE-BOOTSTRAP-IMPLEMENTATION-R3.json'
+      - 'src/carddemo_oracle/__init__.py'
+      - 'src/carddemo_oracle/compare.py'
+      - 'src/carddemo_oracle/records.py'
+      - 'src/lightyear_common/__init__.py'
+      - 'src/lightyear_common/io.py'
+      - 'src/lightyear_common/trust.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
+      - 'src/lightyear_factory/intcalc_preview_build_gate.py'
+      - 'src/lightyear_factory/intcalc_preview_composition.py'
+      - 'src/lightyear_factory/intcalc_preview_ledger_volume.py'
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'src/lightyear_mainframe/__init__.py'
+      - 'src/lightyear_mainframe/intcalc_candidate_gate.py'
+      - 'src/lightyear_mainframe/public_dataset_diff.py'
+      - 'src/lightyear_mainframe/records.py'
+      - 'src/lightyear_mainframe/source.py'
+      - 'src/lightyear_mainframe/zos_bindings.py'
+      - 'tests/test_intcalc_preview_bootstrap.py'
+      - 'tools/qualify_intcalc_preview_ledger.py'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic tests; no providers or Docker
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH='src:.:tests'; fi
+          python -B - <<'PY'
+          import socket, subprocess, sys, unittest
+          from unittest.mock import patch
+          import test_intcalc_preview_bootstrap
+          original = subprocess.Popen
+          def synthetic_only(argv, *args, **kwargs):
+              if not isinstance(argv, list) or argv[:3] != [sys.executable, '-I', '-c'] or len(argv) != 4:
+                  raise AssertionError('Only fixed synthetic children allowed')
+              if argv[3] not in ('print("synthetic")', 'import time; time.sleep(20)'):
+                  raise AssertionError('Unknown synthetic child')
+              return original(argv, *args, **kwargs)
+          suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_bootstrap)])
+          with patch.object(socket.socket, 'connect', side_effect=AssertionError('No network')), patch.object(subprocess, 'Popen', side_effect=synthetic_only):
+              result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.wasSuccessful() and not result.skipped and result.testsRun == 29
+          PY
+  actual-ledger-volume:
+    runs-on: macos-15
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: src:.:tests
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Native ARM APFS and full-sync observation; synthetic placement only
+        run: python -B tools/qualify_intcalc_preview_ledger.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c2-ledger-volume-observation
+          path: ledger-volume-ci-result.json
+          if-no-files-found: error

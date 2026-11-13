@@ -1,0 +1,83 @@
+{
+  "work_item": "Live bootstrap (no PR yet, r3)",
+  "review_only": true,
+  "pull_request": null,
+  "supersedes": "Live bootstrap (no PR yet, r2); Build/gate adapter (no PR yet, r3) is the exact prerequisite.",
+  "bs1": {
+    "host": "Controller statfs at every check: APFS local work/use/run parents each >=20 GiB.",
+    "docker": "No reliable read-only Docker CLI guest-free counter. docker system df reports usage/reclaimable, not VM free. Separate controller observe-disk invokes fixed pinned JRE /usr/bin/df -P -k / with empty --config and no mounts/network; removes and confirms absence. Its raw-output hash and parsed >=20 GiB are bound to the approval window, max 1800s from observation, not operator-entered and not refreshed.",
+    "precondition": "Accepted inspection must establish that the container root backing filesystem is the relevant Docker disk, with no per-container quota hiding the relationship. Unknown mapping refuses attended procedure.",
+    "source": "https://docs.docker.com/reference/cli/docker/system/df/"
+  },
+  "bs2": {
+    "schema": "full-intcalc-rehearsal-intent/1",
+    "prior_evidence": [
+      "exact_implementations_green",
+      "operator_rehearsal_procedure",
+      "public_fixture_review",
+      "attended_image_pull",
+      "daemon_inspection",
+      "verifier_freeze_review"
+    ],
+    "excluded": [
+      "spend",
+      "count billing",
+      "live admission",
+      "model context",
+      "request proof",
+      "Mac build/gate and ledger results that rehearsal itself evidences"
+    ],
+    "cap_microdollars": 0,
+    "account_billing_evidence_sha256": null,
+    "live_prerequisites_unchanged": true
+  },
+  "bs3": "Repeatable preflight and shared launch checks are read-only, create no probe files/containers, use no secrets, consume no approval. Fixed public codes only, including run/rehearse before admission. Success is preflight-ready-write-probe-pending: actual O_EXCL/write/F_FULLFSYNC/readback is necessarily deferred until separately authorized launch.",
+  "bs4": "local_images and observation use fixed binary --config <owner-only empty directory> --host <reviewed local endpoint>. configure creates it exclusively beforehand; preflight never creates it.",
+  "bs5": "OPERATOR-PROCEDURE.txt gives exact physical-line commands to generate config, controller disk evidence, intent, qualification and candidate approval; Claude independently hashes canonical approval bytes, Howard approves and types the public hash. Helpers do not grant approval.",
+  "preserved": [
+    "Inline len(canonical(projection))+4096 proof before count send; fixed E2 role caps/holds.",
+    "Hidden in-process key prompt for LIVE only; ephemeral preview key and approval-identity exclusive use store.",
+    "Actual launch-time APFS ledger full-sync probe; runtime/code/manifest/pin joins; real fixed public-source no-spend rehearsal."
+  ],
+  "named_limits": [
+    "Docker headroom is observed then bound to the fixed approval window, not reserved or continuously measured. Material storage change requires a new observation and new approval, never extension.",
+    "Read-only preflight cannot establish write/full-sync success; launch must qualify it before admission.",
+    "Synchronous full-sync may block; the existing attended stuck-step STOP applies. No send follows a blocked probe.",
+    "Hash integrity is not authentication. Generated approval.json is a review candidate only; independent review and Howard exact approval remain mandatory.",
+    "Python reference disposal is not guaranteed memory zeroization or protection against same-user/root inspection.",
+    "Rehearsal/CI is not native P5 qualification, hostile-code containment or power-loss proof."
+  ],
+  "prerequisites": "No operator step, key entry or live action is authorized by this proposal. Exact review, CI and separate attended authorization still required.",
+  "activation": false,
+  "runtime_tests": "CI ONLY; not executed locally",
+  "source_manifest_inventory": [
+    "src/carddemo_oracle/__init__.py",
+    "src/carddemo_oracle/compare.py",
+    "src/carddemo_oracle/records.py",
+    "src/lightyear_common/__init__.py",
+    "src/lightyear_common/io.py",
+    "src/lightyear_common/trust.py",
+    "src/lightyear_factory/__init__.py",
+    "src/lightyear_factory/intcalc_preview_admission.py",
+    "src/lightyear_factory/intcalc_preview_bootstrap.py",
+    "src/lightyear_factory/intcalc_preview_build_gate.py",
+    "src/lightyear_factory/intcalc_preview_build_gate_worker.py",
+    "src/lightyear_factory/intcalc_preview_composition.py",
+    "src/lightyear_factory/intcalc_preview_ledger_volume.py",
+    "src/lightyear_factory/intcalc_preview_transport.py",
+    "src/lightyear_mainframe/__init__.py",
+    "src/lightyear_mainframe/intcalc_candidate_gate.py",
+    "src/lightyear_mainframe/public_dataset_diff.py",
+    "src/lightyear_mainframe/records.py",
+    "src/lightyear_mainframe/source.py",
+    "src/lightyear_mainframe/zos_bindings.py",
+    "tests/fixtures/intcalc-c1/Main.java"
+  ],
+  "dependency": {
+    "work_item": "Build/gate adapter (no PR yet, r3)",
+    "tag": "full-intcalc-c2-build-gate-adapter-implementation-proposal-20261113-r3",
+    "tree": "db8cf32cfa29ddc4620c12413a0bb4f9a0ca85b0",
+    "patch_sha256": "d3e917cd9111e38a7920eeab7ef13e11d030421b27bc688b3277a5d7bbb8c56c"
+  },
+  "tests_expected": 29
+}

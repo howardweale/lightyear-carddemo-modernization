@@ -201,6 +201,9 @@ def main(argv=None):
                                    for p in sorted((root / 'tests').rglob('*.py'))}
         policy = load_policy(policy_path, root)
         sys.path.insert(0, str(root))
+        if root == Path(__file__).resolve().parents[1]:
+            from lightyear_data.ms70_current_evidence import produce_and_verify
+            context['ms70_current_source'] = produce_and_verify(root)
         suite = unittest.TestLoader().discover(str(root / 'tests'))
         data = execute(suite, policy, platform.system())
     except BaseException as exc:

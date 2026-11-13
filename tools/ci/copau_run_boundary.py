@@ -6,6 +6,8 @@ import hashlib
 import io
 import json
 import os
+import re
+from tempfile import TemporaryDirectory
 from pathlib import Path
 import subprocess
 import tarfile
@@ -106,12 +108,44 @@ def template_inventory(repo, main, paths, root):
     return records
 
 
+def collect_from_main(repo, main, output):
+    """Run the trusted main collector with main imports in an isolated CI checkout."""
+    require(os.environ.get('GITHUB_ACTIONS') == 'true' and not output.exists())
+    require(re.fullmatch('[0-9a-f]{40}', main) is not None)
+    original = git(repo, 'rev-parse', 'HEAD').decode().strip()
+    with TemporaryDirectory(prefix='copau-main-corpus-') as temp:
+        parent = Path(temp)
+        checkout = parent/'main'
+        hooks = parent/'no-hooks'
+        hooks.mkdir()
+        subprocess.check_call(['git', '-C', str(repo), '-c', 'core.autocrlf=false',
+            '-c', 'core.hooksPath='+str(hooks), 'worktree', 'add', '--detach', str(checkout), main])
+        try:
+            require(git(checkout, 'rev-parse', 'HEAD').decode().strip() == main)
+            env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1',
+                PYTHONPATH=str(checkout/'src')+os.pathsep+str(checkout),
+                COPAU_BOUNDARY_MAIN_COMMIT=main)
+            subprocess.check_call([os.sys.executable, '-B', 'tools/ci/copau_run_boundary.py',
+                '--out', str(output.resolve())], cwd=checkout, env=env)
+            require(json.loads((output/'boundary.json').read_bytes())['main_commit'] == main)
+        finally:
+            subprocess.check_call(['git', '-C', str(repo), 'worktree', 'remove', str(checkout)])
+            require(git(repo, 'rev-parse', 'HEAD').decode().strip() == original)
+
+
 def collect(repo, output):
     require(os.environ.get('GITHUB_ACTIONS') == 'true' and not output.exists())
     require(github('')['private'] is False)
     main = github('git/ref/heads/main')['object']['sha']
     # Fetch exact public objects only; no checkout or branch changes.
     subprocess.check_call(['git', '-C', str(repo), 'fetch', '--no-tags', 'origin', main])
+    checkout_head = git(repo, 'rev-parse', 'HEAD').decode().strip()
+    pinned_main = os.environ.get('COPAU_BOUNDARY_MAIN_COMMIT')
+    if pinned_main is not None:
+        require(main == pinned_main and checkout_head == pinned_main)
+    if checkout_head != main:
+        collect_from_main(repo, main, output)
+        return
     output.mkdir(parents=True)
     request = json.loads(git(repo, 'show', main + ':' + REQUEST))
     require(request['bindings']['workspace']['sha256'] == WORKER_SHA)

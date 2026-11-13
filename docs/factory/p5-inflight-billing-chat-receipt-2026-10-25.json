@@ -1,0 +1,31 @@
+{
+  "schema": "public-operational-receipt/1",
+  "kind": "decision",
+  "status": "completed",
+  "historical_only": true,
+  "source_commit": "a1b259f7518c45ac80bf8528e5c374e8f7357ab8",
+  "evidence_sha256": "69017fd156efefd360e6a18b9d7ab8774a03d2ecf61da02a6dc0b7e6d4b45cb0",
+  "observed_at": "2026-10-25T22:53:48+00:00",
+  "public_url": "https://github.com/howardweale/lightyear-carddemo-modernization/issues/436#issuecomment-6399834543",
+  "provenance_source": "operator-chat",
+  "operator": "Howard Weale",
+  "decision_time_reported": "25 October 2026, approximately 15:45 America/Los_Angeles; supplied by Howard",
+  "processing_time_not_authenticated_message_time": true,
+  "github_identity_is_human_proof": false,
+  "transcription": {
+    "path": "docs/factory/p5-inflight-billing-chat-transcription-2026-10-25.txt",
+    "sha256": "69017fd156efefd360e6a18b9d7ab8774a03d2ecf61da02a6dc0b7e6d4b45cb0",
+    "format": "UTF-8; verbatim supplied human message with LF line endings and one final newline"
+  },
+  "identity_limitation": "Direct human instruction in this operator chat. The linked GitHub comment is an agent transcription using the shared account, not independent human authentication. No Tower signature is supplied.",
+  "scope": "Conditional acceptance of unknown final billed usage/cost for a call in flight at interruption, first COPAU run only",
+  "authority": {
+    "conditional_gap_acceptance": true,
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false,
+    "production_change": false,
+    "qualifier_change_publication": false
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "schema": "p5-unsigned-recovery-exception-proposal/1",
+  "prepared_on": "2026-10-24",
+  "status": "Not approved: proposal",
+  "later_publication_decision": "Later approval of the revised orchestrator and CLI bytes is recorded separately [operator-chat receipt](../p5-recovery-publication-approval-2026-10-24.json#sha256=c204149d2ff2ac644ced8b5c116c716ad129e929af83c926316795e6667ad7fd)",
+  "base_pr_head": "bc91d3089a2e34dd535d4252064770f2e160cd5d",
+  "main": "3bc468666be34faf69796a6cfece9fe59f9f8939",
+  "production_files": {
+    "src/lightyear_factory/orchestrator.py": {
+      "before_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
+      "after_sha256": "3c3ddf02d57d3fa4ef3c9b870f4f2ac69a094b20594a324202ad8ca6352a73f3"
+    },
+    "src/lightyear_factory/cli.py": {
+      "before_sha256": "834845283db5911613cf3a25af9fe65a06168903538c2e19dc00d25c33367098",
+      "after_sha256": "e495898243fcabe438285d1d900f43acf30f33238aabb566251e1122a2fba4ec"
+    }
+  },
+  "fenced_or_historically_bound_files": [
+    {
+      "path": "src/lightyear_execution/admission.py",
+      "main_before_sha256": "5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0",
+      "prior_pr_sha256": "939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd",
+      "final_source_sha256": "939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd",
+      "net_change_from_main": true,
+      "fenced": false,
+      "justifying_drill": "duplicate-attempt",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 161,
+      "binding_inventory_pointer": "/files/0/binding_records"
+    },
+    {
+      "path": "src/lightyear_factory/budgeted_providers.py",
+      "main_before_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+      "prior_pr_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+      "final_source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
+      "net_change_from_main": true,
+      "fenced": true,
+      "justifying_drill": "wall-and-window",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 12,
+      "binding_inventory_pointer": "/files/1/binding_records"
+    },
+    {
+      "path": "src/lightyear_factory/providers.py",
+      "main_before_sha256": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d",
+      "prior_pr_sha256": "8d3809a6c86e37d804705f91e43b9c877b977a2f98653446eebf5809eb0b6fc7",
+      "final_source_sha256": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d",
+      "net_change_from_main": false,
+      "fenced": false,
+      "justifying_drill": "wall-and-window",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 167,
+      "binding_inventory_pointer": "/files/2/binding_records"
+    },
+    {
+      "path": "src/lightyear_factory/orchestrator.py",
+      "main_before_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
+      "final_source_sha256": "3c3ddf02d57d3fa4ef3c9b870f4f2ac69a094b20594a324202ad8ca6352a73f3",
+      "fenced": true,
+      "justifying_drill": "kill-mid-build and budget-exhausted",
+      "binding_record_count": 170,
+      "approval": "pending exact-hash comment"
+    }
+  ],
+  "purpose": "Abort-only unsigned interrupted ledger record and sanitized failure accounting. Human signing remains in Control Tower.",
+  "record_status": "interrupted; awaiting human attestation",
+  "unsigned": true,
+  "bindings": [
+    "attempt_id",
+    "work_order_sha256",
+    "consumed_nonce_sha256",
+    "sealed_workspace_sha256",
+    "admission_receipt_sha256",
+    "accounting_ledger_head_sha256"
+  ],
+  "refusal": [
+    "live controller lease",
+    "existing terminal record",
+    "missing consumed nonce",
+    "corrupt or truncated ledger",
+    "changed identity binding",
+    "links or nonregular evidence",
+    "resume",
+    "retry",
+    "new admission"
+  ],
+  "historical_inventory": {
+    "path": "docs/factory/p5-unsigned-recovery-proposal-2026-10-24/binding-inventory.json",
+    "sha256": "5cc6bab74dd0e30b183006a8d47c5318e0c3a35b708a94fa29f9dd4e28120ced",
+    "retained_records": 170,
+    "scope": "Every currently retained public record identified by orchestrator path or observed digests; immutable Git history retained, not a claim to enumerate every historical version"
+  },
+  "stale_f2_binding": {
+    "old": "4491b3219361f786d66f175bef798c63ca62984ef768d552fe8203aa0b97e622",
+    "current": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
+    "introduced_by": "790deb46650454bb2e3870221e6aa4f6c3c06155",
+    "reason": "Graph/plain-search integration added ledger policy binding, plan graph and receipt graph even for packed mode; real stale source binding, not byte-equivalent.",
+    "resolution": "This proposal explicitly identifies current main as the baseline plus the exact proposed recovery delta. Old records stay unchanged. Planned: a new dated F2 request must recompute every binding from exact frozen main after approved merge; CI must validate all fields. No silent reseal.",
+    "operational_resolution_complete": false
+  },
+  "ci": {
+    "status": "not run; source publication awaiting exact-hash approval",
+    "tests": [
+      "real controller killed mid-build then CLI abort",
+      "budget refusal durable accounting",
+      "consumed-nonce duplicate after kill",
+      "terminal duplicate reconciliation refusal",
+      "live controller refusal",
+      "normal reference run receipt bytes equal with timing fixed",
+      "existing Tower interruption kind refused"
+    ],
+    "normal_scope": "Existing deterministic reference benchmark plus PASSED finalizer; no live F2 model run",
+    "qualify_unchanged": true
+  },
+  "gaps": [
+    "Existing Tower factory-review registry cannot directly attest this interruption kind; no Tower change proposed. Human attestation remains unverified and unaccepted.",
+    "A killed in-flight transport can leave final billed tokens/cost and response hash unknown. No zero-fill or complete-billing claim.",
+    "Kill before identity/checkpoint initialization is not recovered by this command.",
+    "Hash-chain consistency is not authentication against a complete owner rewrite; human attestation must anchor the reviewed record."
+  ],
+  "invariants": {
+    "judge_freeze_changed_paths": [],
+    "fence_checker_changed": false,
+    "providers_changed": false,
+    "admission_or_nonce_changed": false,
+    "budgeted_providers_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
+    "caps_changed": false,
+    "model_changed": false,
+    "new_key": false,
+    "machine_signing": false,
+    "Tower_changed": false,
+    "historical_records_preserved": true
+  },
+  "authorization": {
+    "preparation": true,
+    "source_publication": false,
+    "exception_effective": false,
+    "merge": false,
+    "signing": false,
+    "spend": false,
+    "factory_run": false
+  },
+  "deadlines": {
+    "proposal": "2026-10-25T12:00:00-07:00",
+    "green_gate": "2026-10-25T20:00:00-07:00",
+    "main_freeze": "2026-10-26T08:00:00-07:00",
+    "at_risk": true
+  },
+  "request_ready": false
+}

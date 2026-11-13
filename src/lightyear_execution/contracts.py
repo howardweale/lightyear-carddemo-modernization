@@ -72,6 +72,21 @@ class ExecutionPolicy:
 
     @classmethod
     def from_dict(cls, payload: dict[str, Any]) -> "ExecutionPolicy":
+        # Existing public-drill and HMAC parsing semantics stay unchanged.
+        return cls._parse_policy(payload, configured_human=False)
+
+    @classmethod
+    def from_configured_human_dict(cls, payload: dict[str, Any]) -> "ExecutionPolicy":
+        """Parse the proposed narrow configured-human policy, never admission.
+
+        No existing loader or dispatch calls this entry. The genuine human
+        context, proof, one-use reservation and broker must be reviewed together
+        before this policy may be used. No HMAC policy is accepted here.
+        """
+        return cls._parse_policy(payload, configured_human=True)
+
+    @classmethod
+    def _parse_policy(cls, payload: dict[str, Any], *, configured_human: bool) -> "ExecutionPolicy":
         if payload.get("schema_version") != EXECUTION_SCHEMA_VERSION:
             raise ExecutionContractError("Unsupported execution policy schema")
         runtime = payload.get("runtime", {})
@@ -112,7 +127,8 @@ class ExecutionPolicy:
             raise ExecutionContractError("Invalid allowed environment variable")
         if admission.get("required") is not True:
             raise ExecutionContractError("Hardened execution requires signed admission")
-        if admission.get("signature_algorithm") != "HMAC-SHA256":
+        signature_algorithm = admission.get("signature_algorithm")
+        if not isinstance(signature_algorithm, str) or signature_algorithm not in {"HMAC-SHA256", "FACTORY-TOWER-PROOF"}:
             raise ExecutionContractError("Unsupported work-order signature algorithm")
         key_ids = tuple(str(item) for item in admission.get("trusted_key_ids", []))
         if not key_ids:
@@ -138,6 +154,29 @@ class ExecutionPolicy:
             raise ExecutionContractError("Invalid secret name in execution policy")
         if secrets.get("persist_values") is not False:
             raise ExecutionContractError("Secret values must never be persisted")
+        if configured_human:
+            # This separate parser is a source proposal, not a flag in an input
+            # or a passed receipt. It preserves the existing schema fields and
+            # requires one exact case, public key, host-only secret and role map.
+            expected_roles = {
+                "planner": ("factory:plan",),
+                "failure_analyst": ("factory:analyze-failure",),
+                "builder": ("factory:build",),
+                "verifier": ("factory:verify",),
+                "provider": ("secret:lease:OPENAI_API_KEY",),
+            }
+            if (payload.get("id") != "lightyear:configured-human:configured-build-control"
+                    or signature_algorithm != "FACTORY-TOWER-PROOF"
+                    or secret_names != ("OPENAI_API_KEY",)
+                    or len(key_ids) != 1 or not _SHA256.fullmatch(key_ids[0])
+                    or role_actions != expected_roles
+                    or "OPENAI_API_KEY" in environment):
+                raise ExecutionContractError("Configured human policy exact scope required")
+        elif signature_algorithm == "FACTORY-TOWER-PROOF":
+            # This names an authorization route, not a replacement signature
+            # algorithm. The genuine FactoryDecisions verifier checks the proof.
+            if secret_names or len(key_ids) != 1 or not _SHA256.fullmatch(key_ids[0]):
+                raise ExecutionContractError("Tower drill policy requires one public PEM hash and no secrets")
         return cls(
             safe_name(payload.get("id"), "execution policy id"),
             str(payload.get("version", "")),
@@ -157,7 +196,7 @@ class ExecutionPolicy:
             commands,
             environment,
             True,
-            "HMAC-SHA256",
+            signature_algorithm,
             key_ids,
             ttl,
             identity_ttl,

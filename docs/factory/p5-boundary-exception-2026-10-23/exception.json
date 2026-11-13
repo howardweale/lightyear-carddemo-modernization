@@ -1,0 +1,142 @@
+{
+  "schema": "p5-boundary-exception-proposal/1",
+  "prepared_on": "2026-10-23",
+  "status": "review-draft",
+  "main": "811c2aff2fe2be37b1aa1d9b5aa7ec3f312e9d5e",
+  "prior_pr_head": "1f463c337e2e6aefe5f9774304fdf81195c301b8",
+  "fixed_source_commit": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+  "harness_commit": "e1c934d7b3041480e555007dfea0106c6210b144",
+  "review_commits": [
+    {
+      "name": "01-reverse-combined-boundary-repair-for-separate-review",
+      "parent": "1f463c337e2e6aefe5f9774304fdf81195c301b8",
+      "head": "91294940925b151e32676bb8d94c905976fa2045",
+      "file_bindings": [
+        {"path":".github/workflows/p5-factory-drills.yml","mode":"100644","sha256":"72b14fc9a37c5695b9590892dcc5d380815dd36f13a80f854806ac6473ce0741"},
+        {"path":"docs/platform/p5-factory-drills.md","mode":"100644","sha256":"2c1465dfbf952532831d8b0fe05c2f85a2d9ce177c37488652c972543c6a3f05"},
+        {"path":"src/lightyear_execution/admission.py","mode":"100644","sha256":"5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0"},
+        {"path":"src/lightyear_factory/providers.py","mode":"100644","sha256":"f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"},
+        {"path":"tests/test_p5_failure_repairs.py","state":"absent","mode":null,"sha256":null},
+        {"path":"tools/ci/p5_drills.py","mode":"100644","sha256":"0a8fb56a6fd8c2637fb4556cd78768e43bd3f66e38ee290fabcb985f937c4a99"}
+      ],
+      "paths": [
+        ".github/workflows/p5-factory-drills.yml",
+        "docs/platform/p5-factory-drills.md",
+        "src/lightyear_execution/admission.py",
+        "src/lightyear_factory/providers.py",
+        "tests/test_p5_failure_repairs.py",
+        "tools/ci/p5_drills.py"
+      ]
+    },
+    {
+      "name": "02-serialize-work-order-nonce-consumption-and-test-contention",
+      "parent": "91294940925b151e32676bb8d94c905976fa2045",
+      "head": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
+      "file_bindings": [
+        {"path":".github/workflows/p5-factory-drills.yml","mode":"100644","sha256":"302c13c53b9ad2f5136920f522c1b0c70c16fa8c563382fd6709aedf99dbd35f"},
+        {"path":"src/lightyear_execution/admission.py","mode":"100644","sha256":"939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd"},
+        {"path":"tests/test_p5_failure_repairs.py","mode":"100644","sha256":"28e6c2cbc68cf72a19bfec44dc0b024ba4fdc45b46b9c1933e698bdbe702b15d"},
+        {"path":"tools/ci/p5_drills.py","mode":"100644","sha256":"340ec84c99b886d8c2640cc11dec8e0813daa7abaddb8aa3e7709bf92b21541a"}
+      ],
+      "paths": [
+        ".github/workflows/p5-factory-drills.yml",
+        "src/lightyear_execution/admission.py",
+        "tests/test_p5_failure_repairs.py",
+        "tools/ci/p5_drills.py"
+      ]
+    },
+    {
+      "name": "03-refuse-accounted-provider-deadline-equality-with-deterministic-regression",
+      "parent": "c17d997c3cd33f6eb2d5a1c89f1d81db19a04e98",
+      "head": "81ddd1c77cfa013a88375e4e87609a5bc1ad321e",
+      "file_bindings": [
+        {"path":"src/lightyear_factory/budgeted_providers.py","mode":"100644","sha256":"12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928"},
+        {"path":"tests/test_p5_failure_repairs.py","mode":"100644","sha256":"1232870dd6acecab0388621dfc80715260229b2140b5fce95406036da933b753"}
+      ],
+      "paths": [
+        "src/lightyear_factory/budgeted_providers.py",
+        "tests/test_p5_failure_repairs.py"
+      ]
+    }
+  ],
+  "scope": "Existing P5 harness, separate nonce and deadline fixes, deterministic regression and this evidence only.",
+  "fenced_or_historically_bound_files": [
+    {
+      "path": "src/lightyear_execution/admission.py",
+      "main_before_sha256": "5c4d96d664699b05cc814a7236feca8fa0927c37139a09c36306ad2f4b9c63f0",
+      "prior_pr_sha256": "939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd",
+      "final_source_sha256": "939a21f5f16fb1b06f2388f57c88d3453c9ca89a7a997231e8e07d9fda9d02bd",
+      "net_change_from_main": true,
+      "fenced": false,
+      "justifying_drill": "duplicate-attempt",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 161,
+      "binding_inventory_pointer": "/files/0/binding_records"
+    },
+    {
+      "path": "src/lightyear_factory/budgeted_providers.py",
+      "main_before_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+      "prior_pr_sha256": "7207e840edf4292026a909b7f4e992dfe682f9add36b0fff4d552b224015fb7b",
+      "final_source_sha256": "12d195d37b6d7ed9e7ca8f290e61f8aead641c5ded2d3351db600def5816d928",
+      "net_change_from_main": true,
+      "fenced": true,
+      "justifying_drill": "wall-and-window",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 12,
+      "binding_inventory_pointer": "/files/1/binding_records"
+    },
+    {
+      "path": "src/lightyear_factory/providers.py",
+      "main_before_sha256": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d",
+      "prior_pr_sha256": "8d3809a6c86e37d804705f91e43b9c877b977a2f98653446eebf5809eb0b6fc7",
+      "final_source_sha256": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d",
+      "net_change_from_main": false,
+      "fenced": false,
+      "justifying_drill": "wall-and-window",
+      "run_url": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+      "binding_record_count": 167,
+      "binding_inventory_pointer": "/files/2/binding_records"
+    }
+  ],
+  "judge_freeze": {
+    "changed_paths": [],
+    "effective_paths_checked": 153
+  },
+  "gap": {
+    "first_run": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40039170100",
+    "wall": "A call was admitted exactly at the wall cap.",
+    "nonce": "Eight concurrent uses of one nonce were admitted.",
+    "windows_run": "https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/40046311187",
+    "windows": "The first deadline correction still failed its Windows regression.",
+    "necessity": "Refuse transport at the deadline and refuse duplicate admission before a second attempt can proceed.",
+    "historical_preservation": "Restore providers.py exactly to main; preserve all historical record bytes."
+  },
+  "f2": {
+    "recomputation": "Deferred until after PR455 merges, from its exact final head and resulting merge.",
+    "request_ready": false,
+    "new_seal_created": false,
+    "preexisting_orchestrator_mismatch": "Retained as a previously observed unresolved finding; not adopted by this exception."
+  },
+  "qualification": {
+    "final_head_results": "pending",
+    "go": false,
+    "remaining_gaps": "Full controller recovery/receipts, dollar/token/fallback cases, operator API outage, assembled worker/context and run-directory attempt identity remain incomplete."
+  },
+  "authorization": {
+    "review_and_ci_preparation": true,
+    "merge": false,
+    "signing": false,
+    "spend": false,
+    "factory_run": false,
+    "exception_effective": false
+  },
+  "deadline": {
+    "go_no_go": "2026-10-28T18:00:00-07:00",
+    "at_risk": true
+  },
+  "fence_checker_changed": false,
+  "binding_inventory": {
+    "path": "docs/factory/p5-boundary-exception-2026-10-23/binding-inventory.json",
+    "sha256": "aa62741bb3b5a68506e5e28539226ca978d134742a29c30bc58b614b0ee9b3b6"
+  }
+}

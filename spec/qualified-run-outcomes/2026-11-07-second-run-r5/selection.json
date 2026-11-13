@@ -1,0 +1,50 @@
+{
+  "schema": "authorization-second-run-selection/1",
+  "version": "2026-11-07-r5",
+  "status": "scope-selected-contract-and-execution-not-frozen",
+  "run": "SECOND qualified run only",
+  "N": 8,
+  "B_min": 5,
+  "A": 8,
+  "B": [
+    5,
+    7
+  ],
+  "C": [
+    1,
+    4
+  ],
+  "case_ids": [
+    "AUTH-L01",
+    "AUTH-L02",
+    "AUTH-L04",
+    "AUTH-L06",
+    "AUTH-L11",
+    "AUTH-L12",
+    "AUTH-L15",
+    "AUTH-D07"
+  ],
+  "definitions": {
+    "path": "spec/qualified-run-outcomes/2026-11-07-proposal-r4/authorization-behaviour-catalogue-proposal.json",
+    "sha256": "5138ed05baabfdfc7b45e71b66839d3d6d9fc81d3586c9b217ed511b76803fd7",
+    "rule": "Use complete unchanged definitions and all mandatory variants for these eight IDs; remaining23are future backlog, not counted."
+  },
+  "first_run": {
+    "scenario": "authorization-pages-and-fraud",
+    "N": 1,
+    "B_C": "unavailable",
+    "cutoff": 10,
+    "contract_review_pending": true,
+    "excluded_from_this_catalogue": true
+  },
+  "priority": "Native/P5 owns primary lane and needed hours. Adapter work only when those hours are not needed.",
+  "deadline": null,
+  "old_13_nov_deadline": "Removed for this catalogue",
+  "freeze": "Exact second-run catalogue, variant counts/input commitments, source/judge/condition/rules and private correctness contract must freeze BEFORE any results. No adaptive case reduction.",
+  "activation": false,
+  "implementation": false,
+  "spend": false,
+  "private_execution": false,
+  "signing": false,
+  "limits": "Selection is not a runtime-loader schema or final admission. N8/B5 needs a separately reviewed executable rules binding; do not change first-run cutoff10. Historicalr4 files remain intact."
+}

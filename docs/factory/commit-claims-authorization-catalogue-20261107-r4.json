@@ -1,0 +1,13 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "spec/qualified-run-outcomes/2026-11-07-proposal-r4/authorization-behaviour-catalogue-proposal.json",
+      "reference": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "role": "source",
+      "source_path": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+      "source_sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254"
+    }
+  ]
+}

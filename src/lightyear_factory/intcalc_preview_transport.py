@@ -19,8 +19,14 @@ import threading
 import time
 
 MODEL = "gpt-5.4-2026-03-05"
-ROLES = ("planner", "builder-attempt1", "analysis-attempt1", "builder-repair1", "analysis-attempt2")
-SLOT_HOLD = 1_892_000  # integer microdollars; count 550000 + generation 1342000
+ROLES = ("planner", "builder-attempt1", "analysis-attempt1", "builder-repair1")
+BUDGET_POLICY_SHA256 = "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd"
+ROLE_INPUT_CAPS = {"planner": 85876, "builder-attempt1": 100000,
+                   "analysis-attempt1": 188000, "builder-repair1": 198000}
+ROLE_HOLDS = {"planner": 1736636, "builder-attempt1": 1892000,
+              "analysis-attempt1": 2860000, "builder-repair1": 2970000}
+FRAMING_ALLOWANCE = 4096
+NAMED_BUDGET_LIMIT = 'Budget-fixed input caps: an escape-heavy artifact can stop the run early despite satisfying its artifact byte cap.'
 RUN_CAP = 9_460_000
 MAX_BODY = 2 * 1024 * 1024
 MAX_RESPONSE = 4 * 1024 * 1024
@@ -238,7 +244,8 @@ class ReviewedRequest:
 
     Hash presence is not approval: composition must authenticate these receipts
     and independently compute the conservative token bound before constructing.
-    No tokenizer guess or byte-length-as-token-count fallback exists here.
+    The selected E2 policy is recomputed from exact canonical UTF-8 bytes plus 4096.
+    This policy bound is not a provider-guaranteed token certificate.
     """
     projection: dict
     projection_sha256: str
@@ -256,7 +263,8 @@ class ReviewedSpend:
     cap_microdollars: int
 
 
-def projection_bytes(request):
+def projection_bytes(request, role):
+    require(type(role) is str and role in ROLE_INPUT_CAPS, "unknown-role")
     require(type(request) is ReviewedRequest, "reviewed-request-required")
     body = request.projection
     require(type(body) is dict and set(body) == {"model", "instructions", "input", "text"}, "projection-fields")
@@ -271,18 +279,20 @@ def projection_bytes(request):
     raw = canonical(body)
     require(len(raw) <= MAX_BODY and hash_value(request.projection_sha256)
             and sha(raw) == request.projection_sha256, "projection-hash-size")
-    integer(request.token_upper_bound, 100000, "pre-count-bound")
+    integer(request.token_upper_bound, ROLE_INPUT_CAPS[role], "pre-count-bound")
+    require(request.token_upper_bound == len(raw) + FRAMING_ALLOWANCE, "e2-projection-bound")
     require(hash_value(request.bound_proof_sha256) and hash_value(request.public_context_approval_sha256), "pre-count-proof-missing")
     return raw
 
 
-def usage_cost(response, token_upper_bound):
+def usage_cost(response, token_upper_bound, role):
+    require(type(role) is str and role in ROLE_INPUT_CAPS, "unknown-role")
     usage = response.get("usage")
     require(type(usage) is dict, "usage-missing")
-    inp = integer(usage.get("input_tokens"), 100000, "input-usage")
+    inp = integer(usage.get("input_tokens"), ROLE_INPUT_CAPS[role], "input-usage")
     out = integer(usage.get("output_tokens"), 32000, "output-usage")
-    total = integer(usage.get("total_tokens"), 132000, "total-usage")
-    integer(token_upper_bound, 100000, "pre-count-bound")
+    total = integer(usage.get("total_tokens"), ROLE_INPUT_CAPS[role]+32000, "total-usage")
+    integer(token_upper_bound, ROLE_INPUT_CAPS[role], "pre-count-bound")
     require(inp <= token_upper_bound, "input-usage-exceeds-bound")
     require(total == inp+out, "usage-total-mismatch")
     details = usage.get("output_tokens_details")
@@ -290,23 +300,26 @@ def usage_cost(response, token_upper_bound):
     integer(details.get("reasoning_tokens"), out, "reasoning-usage")
     # Rates USD5.50/24.75 per million; round upward to whole microdollars.
     microdollars = (inp*550 + out*2475 + 99)//100
-    require(microdollars <= 1_342_000, "generation-hold-exceeded")
+    require(microdollars <= (ROLE_INPUT_CAPS[role]*11+1)//2 + 792000, "generation-hold-exceeded")
     return microdollars, {"input_tokens": inp, "output_tokens": out, "total_tokens": total}
 
 
 class PreviewTransport:
-    """Single controller process, fresh ledger, five irrevocable role slots.
+    """Single controller process, fresh ledger, four irrevocable role slots.
 
     It accepts only a trusted admission seam, not an untrusted envelope. Composition
     must enforce exact admission type/binding/authentication and public-only context.
     It is intentionally unwired from all existing routes and the CLI.
     """
+    budget_policy_sha256 = BUDGET_POLICY_SHA256
+
     def __init__(self, *, admission, spend, ledger, api_key, validate_artifact,
                  wire=None, clock=time.monotonic):
         receipt = admission.public_receipt()
         require(receipt.get("scope") == "NOT-P5/public-CBACT04C-only"
                 and receipt.get("qualified") is False and receipt.get("production_controller_receipt") is False
-                and receipt.get("status") == "ADMITTED_ONLY" and receipt.get("run_budget_seconds") == 8100,
+                and receipt.get("status") == "ADMITTED_ONLY" and receipt.get("run_budget_seconds") == 8100
+                and receipt.get("budget_policy_sha256") == BUDGET_POLICY_SHA256,
                 "preview-admission-required")
         require(type(spend) is ReviewedSpend and spend.count_billing_known is True
                 and hash_value(spend.operator_approval_sha256) and hash_value(spend.account_billing_evidence_sha256),
@@ -349,20 +362,25 @@ class PreviewTransport:
 
     def complete(self, role, request):
         with self._lock:
-            require(not self._stopped and role in ROLES and role not in self._used, "role-consumed-or-stopped")
+            require(not self._stopped and type(role) is str and role in ROLES and role not in self._used, "role-consumed-or-stopped")
             self._now()
-            raw = projection_bytes(request)
+            try:
+                raw = projection_bytes(request, role)
+            except (TransportRefused, UnicodeError, ValueError, TypeError):
+                # A size/proof refusal stops the run without reserving this role.
+                self._stopped = True
+                raise TransportRefused("pre-count-refused-no-reservation") from None
             body = strict_json(raw)  # private immutable copy before network/threads
-            require(self._holds+SLOT_HOLD <= self._spend.cap_microdollars, "cap-shortage")
+            require(self._holds+ROLE_HOLDS[role] <= self._spend.cap_microdollars, "cap-shortage")
             self._used.add(role)
-            self._holds += SLOT_HOLD
+            self._holds += ROLE_HOLDS[role]
             try:
                 self._ledger.record_once(role+"-reservation.json", {"role": role,"binding_sha256": self._binding,
-                    "projection_sha256": sha(raw),"hold_microdollars": SLOT_HOLD,"slot_consumed": True,
+                    "projection_sha256": sha(raw),"hold_microdollars": ROLE_HOLDS[role],"slot_consumed": True,
                     "count_billing_evidence_sha256": self._spend.account_billing_evidence_sha256})
                 counted, count_end = self._call(role,"count",COUNT_PATH,raw,120)
                 require(counted.get("object") == "response.input_tokens", "count-object")
-                count = integer(counted.get("input_tokens"),100000,"count-response")
+                count = integer(counted.get("input_tokens"),ROLE_INPUT_CAPS[role],"count-response")
                 require(count <= request.token_upper_bound, "pre-count-proof-violated")
                 require(self._now() < count_end, "count-phase-deadline")
                 generation = dict(body,service_tier="flex",store=False,max_output_tokens=32000,
@@ -372,7 +390,7 @@ class PreviewTransport:
                 require(response.get("status") == "completed" and response.get("incomplete_details") is None
                         and response.get("error") is None, "incomplete-or-failed-response")
                 require(response.get("model") == MODEL and response.get("service_tier") == "flex", "snapshot-or-flex-mismatch")
-                cost, usage = usage_cost(response,request.token_upper_bound)
+                cost, usage = usage_cost(response,request.token_upper_bound,role)
                 texts=[]
                 require(type(response.get("output")) is list, "output-missing")
                 for item in response["output"]:
@@ -391,8 +409,9 @@ class PreviewTransport:
                 require(self._now() < generation_end, "generation-phase-deadline")
                 evidence = {"role":role,"status":"COMPLETED","count_tokens":count,"usage":usage,
                     "token_upper_bound":request.token_upper_bound,"count_matches_usage":count == usage["input_tokens"],
-                    "generation_conservative_microdollars":cost,"count_hold_microdollars":550000,
-                    "total_reserved_microdollars":SLOT_HOLD,"holds_released":False,"billing_final":False,
+                    "generation_conservative_microdollars":cost,"count_hold_microdollars":(ROLE_INPUT_CAPS[role]*11+1)//2,
+                    "total_reserved_microdollars":ROLE_HOLDS[role],
+                    "budget_policy_sha256":BUDGET_POLICY_SHA256,"holds_released":False,"billing_final":False,
                     "requested_tier":"flex","observed_tier":"flex","model":MODEL,"attempts":1,"retries":0,
                     "artifact_sha256":sha(canonical(artifact)),"qualified":False,"production_controller_receipt":False}
                 self._ledger.record_once(role+"-complete.json",evidence)
@@ -412,4 +431,5 @@ class PreviewTransport:
 
     def public_totals(self):
         return {"consumed_slots":len(self._used),"reserved_microdollars":self._holds,
-                "stopped":self._stopped,"billing_final":False,"holds_released":False,"qualified":False}
+                "stopped":self._stopped,"budget_policy_sha256":BUDGET_POLICY_SHA256,
+                "named_budget_limit":NAMED_BUDGET_LIMIT,"billing_final":False,"holds_released":False,"qualified":False}

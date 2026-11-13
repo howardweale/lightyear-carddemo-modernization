@@ -31,7 +31,7 @@ class Admission:
     deadline_monotonic=8200.0
     def public_receipt(self):
         return dict(scope="NOT-P5/public-CBACT04C-only",qualified=False,production_controller_receipt=False,
-            status="ADMITTED_ONLY",run_budget_seconds=8100,binding_sha256="1"*64)
+            status="ADMITTED_ONLY",run_budget_seconds=8100,binding_sha256="1"*64,budget_policy_sha256=t.BUDGET_POLICY_SHA256)
 
 
 class Ledger:
@@ -57,7 +57,7 @@ class PreviewTransportTests(unittest.TestCase):
         self.now=100.0;self.ledger=Ledger();self.wire=Wire()
         self.spend=t.ReviewedSpend("2"*64,"3"*64,True,t.RUN_CAP)
         self.body=projection()
-        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),100,"4"*64,"5"*64)
+        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),len(t.canonical(self.body))+4096,"4"*64,"5"*64)
         self.client=self.make()
     def make(self,**kwargs):
         values=dict(admission=Admission(),spend=self.spend,ledger=self.ledger,api_key="synthetic-not-a-credential",
@@ -82,7 +82,7 @@ class PreviewTransportTests(unittest.TestCase):
         self.assertTrue(evidence["count_matches_usage"])
         self.assertEqual(self.wire.calls[0][2],220)
         self.assertEqual(self.wire.calls[1][2],1000)
-        self.assertEqual(evidence["total_reserved_microdollars"],1892000)
+        self.assertEqual(evidence["total_reserved_microdollars"],1736636)
         self.assertFalse(evidence["billing_final"] or evidence["holds_released"])
     def test_reservation_and_latches_precede_sends(self):
         original=self.wire.post_once
@@ -96,7 +96,7 @@ class PreviewTransportTests(unittest.TestCase):
     def test_count_408_one_send_and_consumed(self):
         self.wire.answers=[(408,b"error")];self.fail()
         self.assertEqual(len(self.wire.calls),1)
-        self.assertEqual(self.client.public_totals()["reserved_microdollars"],1892000)
+        self.assertEqual(self.client.public_totals()["reserved_microdollars"],1736636)
         self.fail();self.assertEqual(len(self.wire.calls),1)
     def test_generation_failures_do_not_retry(self):
         for status in (408,429,500,503,302,307):
@@ -128,7 +128,7 @@ class PreviewTransportTests(unittest.TestCase):
         payload=response();payload["usage"]["output_tokens_details"]["reasoning_tokens"]=6
         self.wire.answers[1]=(200,t.canonical(payload));self.fail()
     def test_presend_proof_missing_zero_sends(self):
-        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),100,"","5"*64)
+        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),len(t.canonical(self.body))+4096,"","5"*64)
         self.fail();self.assertEqual(self.wire.calls,[])
     def test_presend_projection_changed_zero_sends(self):
         self.body["input"]="changed";self.fail();self.assertEqual(self.wire.calls,[])
@@ -136,21 +136,21 @@ class PreviewTransportTests(unittest.TestCase):
         self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),100001,"4"*64,"5"*64)
         self.fail();self.assertEqual(self.wire.calls,[])
     def test_actual_count_exceeding_proved_bound_refused(self):
-        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),9,"4"*64,"5"*64)
+        self.wire.answers[0]=(200,t.canonical(dict(object="response.input_tokens",input_tokens=self.request.token_upper_bound+1)))
         self.fail();self.assertEqual(len(self.wire.calls),1)
     def test_unknown_billing_or_spend_refuses_construction(self):
         for spend in (t.ReviewedSpend("2"*64,"3"*64,False,t.RUN_CAP),t.ReviewedSpend("","3"*64,True,t.RUN_CAP)):
             with self.assertRaises(t.TransportRefused):self.make(spend=spend)
         self.assertEqual(self.wire.calls,[])
     def test_cap_shortage_zero_sends(self):
-        self.client=self.make(spend=t.ReviewedSpend("2"*64,"3"*64,True,1891999))
+        self.client=self.make(spend=t.ReviewedSpend("2"*64,"3"*64,True,1736635))
         self.fail();self.assertEqual(self.wire.calls,[])
-    def test_five_slots_hold_exact_envelope_never_recycle(self):
-        self.wire.answers*=5
+    def test_four_slots_hold_e2_total_never_recycle(self):
+        self.wire.answers*=4
         for role in t.ROLES:self.client.complete(role,self.request)
-        self.assertEqual(len(self.wire.calls),10)
-        self.assertEqual(self.client.public_totals()["reserved_microdollars"],9460000)
-        self.fail();self.assertEqual(len(self.wire.calls),10)
+        self.assertEqual(len(self.wire.calls),8)
+        self.assertEqual(self.client.public_totals()["reserved_microdollars"],9458636)
+        self.fail();self.assertEqual(len(self.wire.calls),8)
     def test_concurrent_duplicate_has_one_pair_of_sends(self):
         outcomes=[]
         def attempt():
@@ -173,7 +173,7 @@ class PreviewTransportTests(unittest.TestCase):
         self.wire.post_once=late;self.fail();self.assertEqual(len(self.wire.calls),1)
     def test_full_hold_when_artifact_invalid(self):
         self.client=self.make(validate_artifact=lambda a,s:False)
-        self.fail();self.assertEqual(self.client.public_totals()["reserved_microdollars"],1892000)
+        self.fail();self.assertEqual(self.client.public_totals()["reserved_microdollars"],1736636)
     def test_late_artifact_validation_cannot_succeed(self):
         def late(artifact,schema):self.now=1001;return True
         self.client=self.make(validate_artifact=late)
@@ -207,11 +207,11 @@ class PreviewTransportTests(unittest.TestCase):
             _,evidence=self.client.complete("planner",self.request)
             self.assertEqual(evidence["count_tokens"],10)
             self.assertEqual(evidence["usage"]["input_tokens"],actual)
-            self.assertEqual(evidence["token_upper_bound"],100)
+            self.assertEqual(evidence["token_upper_bound"],len(t.canonical(self.body))+4096)
             self.assertFalse(evidence["count_matches_usage"])
     def test_usage_above_proved_bound_refused(self):
-        payload=response();payload["usage"]["input_tokens"]=101
-        payload["usage"]["total_tokens"]=106
+        payload=response();payload["usage"]["input_tokens"]=self.request.token_upper_bound+1
+        payload["usage"]["total_tokens"]=self.request.token_upper_bound+6
         self.wire.answers[1]=(200,t.canonical(payload));self.fail()
         self.assertIn("planner-failed.json",self.ledger.rows)
     def test_interrupt_and_exit_record_failure_then_propagate_unchanged(self):
@@ -221,9 +221,67 @@ class PreviewTransportTests(unittest.TestCase):
                 self.client.complete("planner",self.request)
             self.assertIs(caught.exception,error)
             self.assertEqual(self.ledger.rows["planner-failed.json"]["status"],"FAILED_CONSUMED")
-            self.assertEqual(self.client.public_totals()["reserved_microdollars"],t.SLOT_HOLD)
+            self.assertEqual(self.client.public_totals()["reserved_microdollars"],t.ROLE_HOLDS["planner"])
             self.assertTrue(self.client.public_totals()["stopped"])
 
+
+    def test_e2_fixed_role_caps_holds_and_policy(self):
+        self.assertEqual(tuple(t.ROLE_INPUT_CAPS.values()),(85876,100000,188000,198000))
+        self.assertEqual(sum(t.ROLE_HOLDS.values()),9458636)
+        self.assertEqual(t.RUN_CAP-sum(t.ROLE_HOLDS.values()),1364)
+        self.assertEqual(self.client.budget_policy_sha256,t.BUDGET_POLICY_SHA256)
+    def test_e2_exact_bound_and_one_byte_over_each_role(self):
+        for role,cap in t.ROLE_INPUT_CAPS.items():
+            for excess in (0,1):
+                self.setUp()
+                body=projection()
+                fixed=len(t.canonical(body))
+                body["input"] += "a"*(cap-4096-fixed+excess)
+                raw=t.canonical(body)
+                request=t.ReviewedRequest(body,t.sha(raw),len(raw)+4096,"4"*64,"5"*64)
+                if excess:
+                    with self.assertRaises(t.TransportRefused):self.client.complete(role,request)
+                    self.assertEqual(self.wire.calls,[])
+                    self.assertEqual(self.ledger.rows,{})
+                    self.assertEqual(self.client.public_totals()["reserved_microdollars"],0)
+                    self.assertTrue(self.client.public_totals()["stopped"])
+                else:
+                    _,evidence=self.client.complete(role,request)
+                    self.assertEqual(evidence["total_reserved_microdollars"],t.ROLE_HOLDS[role])
+                    self.assertEqual(evidence["budget_policy_sha256"],t.BUDGET_POLICY_SHA256)
+    def test_e2_old_admission_policy_refused(self):
+        old=Admission(); original=old.public_receipt
+        old.public_receipt=lambda:dict(original(),budget_policy_sha256="f"*64)
+        with self.assertRaises(t.TransportRefused):self.make(admission=old)
+        self.assertEqual(self.wire.calls,[])
+    def test_e2_removed_role_cannot_send(self):
+        with self.assertRaises(t.TransportRefused):self.client.complete("analysis-attempt2",self.request)
+        self.assertEqual(self.wire.calls,[])
+        self.assertEqual(self.client.public_totals()["reserved_microdollars"],0)
+    def test_e2_cap_bypass_understated_proof_refused(self):
+        self.body["input"]="a"*100000
+        self.request=t.ReviewedRequest(self.body,t.sha(t.canonical(self.body)),1,"4"*64,"5"*64)
+        self.fail()
+        self.assertEqual(self.wire.calls,[])
+        self.assertEqual(self.client.public_totals()["reserved_microdollars"],0)
+    def test_e2_usage_exact_cap_and_next_token(self):
+        for role,cap in t.ROLE_INPUT_CAPS.items():
+            payload=response()
+            payload["usage"].update(input_tokens=cap,output_tokens=32000,total_tokens=cap+32000)
+            cost,_=t.usage_cost(payload,cap,role)
+            self.assertEqual(cost,(cap*11+1)//2+792000)
+            payload["usage"].update(input_tokens=cap+1,total_tokens=cap+32001)
+            with self.assertRaises(t.TransportRefused):t.usage_cost(payload,cap,role)
+
+    def test_e2_policy_file_hash_and_arithmetic(self):
+        import hashlib
+        raw=(Path(__file__).resolve().parents[1] / "spec/intcalc-preview/2026-11-13/TRANSPORT-E2-BUDGET.json").read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(),t.BUDGET_POLICY_SHA256)
+        policy=json.loads(raw)
+        holds={role:2*((cap*11+1)//2)+792000 for role,cap in policy["role_input_caps"].items()}
+        self.assertEqual(holds,policy["role_holds_microdollars"])
+        self.assertEqual(sum(holds.values()),9458636)
+        self.assertEqual(policy["envelope_microdollars"]-sum(holds.values()),1364)
 
 class WireAndLedgerTests(unittest.TestCase):
     def test_http_single_request_no_redirect(self):
@@ -405,7 +463,7 @@ def synthetic_ci_main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
     with patch.object(socket.socket,"connect",side_effect=AssertionError("Provider networking forbidden in CI")):
         result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 42 else 1
+    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 49 else 1
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@ on:
       - 'src/lightyear_factory/__init__.py'
       - 'tests/test_intcalc_preview_transport.py'
       - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
+      - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-BUDGET.json'
+      - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-IMPLEMENTATION.json'
       - '.github/workflows/intcalc-preview-transport.yml'
   push:
     branches: [main]
@@ -14,6 +16,8 @@ on:
       - 'src/lightyear_factory/__init__.py'
       - 'tests/test_intcalc_preview_transport.py'
       - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
+      - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-BUDGET.json'
+      - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-IMPLEMENTATION.json'
       - '.github/workflows/intcalc-preview-transport.yml'
 permissions:
   contents: read

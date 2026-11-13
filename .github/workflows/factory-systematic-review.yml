@@ -14,8 +14,8 @@ on:
       - 'docs/factory/retention-projection-2026-10-11.json'
       - 'docs/factory/decision-classification.json'
       - '.github/workflows/factory-systematic-review.yml'
-  push:
-    branches: [main]
+  schedule:
+    - cron: '17 10 * * *'
   workflow_dispatch:
 permissions:
   contents: read

@@ -44,7 +44,13 @@ class ControllerDryRunTests(unittest.TestCase):
         execution=object.__new__(HardenedExecutionContext)
         execution.policy=policy;execution.backend=OCIContainerBackend(policy,'docker',execute=True)
         execution.work_order_sha256=order.content_sha256
-        execution.admission_receipt={'content_sha256':'1'*64}
+        # Inert public fixture bindings, not a real consumed nonce/admission.
+        execution.admission_receipt=dict(status='passed',
+            work_order_sha256=order.content_sha256,nonce_sha256='0'*64)
+        execution.admission_receipt['content_sha256']=canonical_hash(
+            execution.admission_receipt,{'content_sha256'})
+        manifest_path=source/'workspace-manifest.json'
+        manifest_path.write_text(json.dumps(manifest),encoding='utf-8')
         execution.identity_receipts=[];execution.authorization_receipts=[]
         execution.execution_evidence=[];execution.secret_receipts=[]
         admission=object.__new__(FactoryModelAdmission)
@@ -78,6 +84,7 @@ class ControllerDryRunTests(unittest.TestCase):
             input_usd_per_million=1,output_usd_per_million=1,max_output_tokens=256,opener=opener)
         agents=ModelAgentSet(provider)
         controller=FactoryOrchestrator(source,root/'runs',agents,workspace_read_manifest=manifest,
+            factory_input_paths={'workspace':str(manifest_path.resolve())},
             execution_context=execution,model_admission=admission,private_expected_values_path=root/'not-read-private.json',
             candidate_signing_paths=(root/'not-read-key',root/'not-read-trust'),transport_encryption=(b'x'*32,'fixture-key'))
         def authorize(role,action,now):

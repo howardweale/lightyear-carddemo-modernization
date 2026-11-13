@@ -30,7 +30,8 @@ def bindings():
     b = {k: "a" * 64 for k in BINDING_FIELDS}
     b.update(runtime_image_digest="sha256:" + "a" * 64,
              build_toolchain_digest="sha256:" + "b" * 64,
-             preview_policy_sha256=POLICY_SHA256, feedback_schema_sha256=FEEDBACK_SHA256,
+             preview_policy_sha256=POLICY_SHA256, budget_policy_sha256=admission.BUDGET_POLICY_SHA256,
+             feedback_schema_sha256=FEEDBACK_SHA256,
              named_feedback_limit_sha256=FEEDBACK_LIMIT_SHA256, byte_policy_sha256="STRICT",
              issued_at=ISSUED.isoformat(), admission_expires_at=(ISSUED + timedelta(seconds=1800)).isoformat(),
              nonce="c" * 64, run_budget_seconds=8100)
@@ -307,3 +308,30 @@ class PreviewAdmissionTests(unittest.TestCase):
                 with self.assertRaisesRegex(OSError, "full-sync-unavailable"):
                     admission._persist(101)
                 sync.assert_not_called()
+
+    def test_e2_budget_policy_pinned_even_when_operator_bindings_match(self):
+        b=bindings(); b["budget_policy_sha256"]="f"*64
+        with self.assertRaisesRegex(PreviewAdmissionError,"budget-policy-mismatch"):
+            self.admit(envelope(b),approved_bindings=b)
+        self.assertEqual(self.store.calls,0)
+    def test_e2_receipt_carries_exact_budget_join(self):
+        result=self.admit()
+        self.assertEqual(result.public_receipt()["budget_policy_sha256"],admission.BUDGET_POLICY_SHA256)
+        self.assertEqual(result.deadline_monotonic,8200)
+        self.assertEqual(self.store.calls,1)
+    def test_e2_missing_budget_policy_refused_before_consumption(self):
+        b=bindings(); del b["budget_policy_sha256"]
+        with self.assertRaisesRegex(PreviewAdmissionError,"binding-fields"):
+            self.admit(envelope(b),approved_bindings=b)
+        self.assertEqual(self.store.calls,0)
+
+
+    def test_e2_policy_file_hash_and_arithmetic(self):
+        import hashlib
+        raw=(Path(__file__).resolve().parents[1] / "spec/intcalc-preview/2026-11-13/ADMISSION-E2-BUDGET.json").read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(),admission.BUDGET_POLICY_SHA256)
+        policy=json.loads(raw)
+        holds={role:2*((cap*11+1)//2)+792000 for role,cap in policy["role_input_caps"].items()}
+        self.assertEqual(holds,policy["role_holds_microdollars"])
+        self.assertEqual(sum(holds.values()),9458636)
+        self.assertEqual(policy["envelope_microdollars"]-sum(holds.values()),1364)

@@ -19,6 +19,7 @@ except ImportError:  # Windows use-store admission is refused below.
     fcntl = None
 
 POLICY_SHA256 = "9367543ccecbb8ac624959368c7f14b3fd2ca9329ddd6e55cd6ef23b83e9ddf7"
+BUDGET_POLICY_SHA256 = "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd"
 FEEDBACK_SHA256 = "5c1a6f7ae6feba059b05417bfc8fb911e405c542f0ad18a32f595d8e397f3aa6"
 FEEDBACK_LIMIT_SHA256 = "01daf03f89c6b250a1679c266e1daca5e5ae3831b2371db7b0356842d8323ad2"
 SCHEMA = "full-intcalc-preview-admission/1"
@@ -81,6 +82,7 @@ def _bindings(value: object) -> dict:
             _require(isinstance(item, str) and item.startswith("sha256:")
                      and _hash(item[7:]), "invalid-runtime-digest")
     _require(value["preview_policy_sha256"] == POLICY_SHA256, "policy-mismatch")
+    _require(value["budget_policy_sha256"] == BUDGET_POLICY_SHA256, "budget-policy-mismatch")
     _require(value["feedback_schema_sha256"] == FEEDBACK_SHA256, "feedback-mismatch")
     _require(value["named_feedback_limit_sha256"] == FEEDBACK_LIMIT_SHA256,
              "feedback-limit-mismatch")
@@ -175,6 +177,7 @@ class PreviewAdmission:
                 "status": "ADMITTED_ONLY", "envelope_sha256": self.envelope_sha256,
                 "binding_sha256": self.binding_sha256, "nonce_sha256": self.nonce_sha256,
                 "admitted_at": self.admitted_at, "run_budget_seconds": 8100,
+                "budget_policy_sha256": BUDGET_POLICY_SHA256,
                 "no_resume": True, "no_retry": True, "model_calls": 0}
 
 

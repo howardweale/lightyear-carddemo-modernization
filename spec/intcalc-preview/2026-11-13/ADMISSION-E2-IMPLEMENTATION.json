@@ -1,0 +1,30 @@
+{
+  "work_item": "Admission (no PR yet, r5)",
+  "base_commit": "c4359f9e51abf9600c36181ffd7cf3d071b10fb5",
+  "status": "REVIEW_ONLY_EXACT_IMPLEMENTATION_PROPOSAL",
+  "budget_policy_sha256": "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd",
+  "budget_policy_file": "spec/intcalc-preview/2026-11-13/ADMISSION-E2-BUDGET.json",
+  "budget_hash_encoding": "SHA256 of exact policy file bytes, including final LF",
+  "selection": "Howard explicitly selects E2 in the direct 13 November work order; selection authorizes proposal preparation/publication only.",
+  "named_limit": "Budget-fixed input caps: an escape-heavy artifact can stop the run early despite satisfying its artifact byte cap.",
+  "tests_defined": 36,
+  "tests_run_locally": false,
+  "details": {
+    "scope": "Pin the existing budget_policy_sha256 binding and expose it on the preview receipt. Credential format, policy namespace, 1800-second validity, 8100-second deadline, HMAC and durable one-use logic unchanged."
+  },
+  "independent_patch": "On the same main base; no stacked PR or source commit created. Runtime composition requires all three reviewed budget patches; mixed versions refuse by policy hash.",
+  "unchanged": [
+    "No CLI admit/run wiring",
+    "No credential, spend or model-call authority",
+    "Original deadline 8100 seconds; no extension",
+    "Zero retries and no fallback",
+    "No gate or allowlist changes"
+  ],
+  "live_blocks": [
+    "Exact Claude review and applicable push/merge approvals",
+    "Green CI including Windows discovery and macOS durability",
+    "Live bootstrap and qualified adapters",
+    "Operator disk/image/ledger evidence and exact spend/credential/run approval"
+  ],
+  "preview_policy_compatibility": "The retained preview policy permits at most five count/generation calls. E2 narrows both maxima to four through the exact pinned budget_policy_sha256; it does not expand or replace the credential policy. Existing dated policy remains byte-identical."
+}

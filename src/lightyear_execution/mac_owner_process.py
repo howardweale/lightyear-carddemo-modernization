@@ -111,10 +111,11 @@ class _WorkerChannel:
 
 
 class _OwnedWorker:
-    def __init__(self, role, case, original_deadline, cleanup_deadline):
+    def __init__(self, role, case, original_deadline, cleanup_deadline, *, preexec=None):
         self.argv = [sys.executable, "-I", "-B", str(Path(__file__).resolve()),
                      "--worker", role, case, str(original_deadline), str(cleanup_deadline)]
         self.process = self.channel = None
+        self._preexec = preexec  # Explicit CI-only opt-in; default launcher is unchanged.
 
     @property
     def pid(self):
@@ -125,8 +126,19 @@ class _OwnedWorker:
         return None if self.process is None else self.process.poll()
 
     def start(self):
-        self.process = subprocess.Popen(self.argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                        stderr=subprocess.DEVNULL, close_fds=True)
+        if self._preexec is not None:
+            from .mac_owner_preexec import PreExecBinding
+            if type(self._preexec) is not PreExecBinding:
+                raise ValueError("d01-preexec-binding-required")
+            argv = self._preexec.command(self.argv)
+            self.process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=(subprocess.DEVNULL if self._preexec.stderr_fd is None
+                        else self._preexec.stderr_fd),
+                close_fds=True, pass_fds=(self._preexec.witness_fd,),
+                env={"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "LC_ALL": "C"})
+        else:
+            self.process = subprocess.Popen(self.argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            stderr=subprocess.DEVNULL, close_fds=True)
         self.channel = _WorkerChannel(self.process.stdout)
 
     def request_stop(self):
@@ -217,7 +229,7 @@ def _grandchild(channel, stop, cleanup_deadline):
         channel.close()
 
 
-def _worker(channel, stop, case, original_deadline, cleanup_deadline):
+def _worker(channel, stop, case, original_deadline, cleanup_deadline, *, before_complete=None):
     """Fixed cooperative fixture, with autonomous bound if its owner disappears."""
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     grand = grand_channel = None
@@ -241,6 +253,8 @@ def _worker(channel, stop, case, original_deadline, cleanup_deadline):
                 raise ValueError("grandchild-identity-mismatch")
             _send(channel, "identity", **{k: v for k, v in observed.items() if k != "kind"})
         _send(channel, "ready")
+        if before_complete is not None:
+            before_complete()
         if case not in ("S5", "S6"):
             _send(channel, "completed")
         while not _stop_requested(stop, 0.02) and time.monotonic() < cleanup_deadline - 1:
@@ -431,14 +445,42 @@ class RehearsalProcessOwner:
 
 if __name__ == "__main__":
     # Internal fixed worker entrypoint; no arbitrary command/module/path accepted.
+    d01 = None
+    d01_native = None
+    if len(sys.argv) == 12 and sys.argv[10] == "--d01-native-sha256":
+        d01_native = sys.argv[11]
+        if len(d01_native) != 64 or any(c not in "0123456789abcdef" for c in d01_native):
+            raise SystemExit(2)
+        sys.argv = sys.argv[:10]
+    if len(sys.argv) == 10 and sys.argv[6] == "--d01-probe":
+        d01 = tuple(sys.argv[7:])
+        sys.argv = sys.argv[:6]
     if len(sys.argv) != 6 or sys.argv[1] != "--worker" or sys.argv[2] not in ("child", "grandchild"):
         raise SystemExit(2)
     role, case = sys.argv[2:4]
     original, cleanup = map(float, sys.argv[4:6])
     if case not in CASES or not all(map(math.isfinite, (original, cleanup))) or cleanup != original + 5:
         raise SystemExit(2)
+    hook = None
+    if d01 is not None:
+        # Combined mode starts ALREADY confined by the owner-launched C helper.
+        # Only opt-in observations/attempts: regression raise/relax calls are
+        # adversarial attempts under the inherited policy, never setup/approval.
+        import runpy
+        probe = runpy.run_path(str(Path(__file__).with_name("mac_owner_preexec_probe.py")))
+        operation, descriptor, app = d01
+        fd = int(descriptor)
+        if role != "child" or case not in ("S1", "S2") or operation not in probe["OPERATIONS"]:
+            raise SystemExit(2)
+        _send(_Output(), "d01-entry", **probe["entry"](fd))
+        if operation != "none":
+            def hook():
+                _send(_Output(), "d01-attempt", **probe["attempt"](operation, fd, app, native_sha256=d01_native, original=original, cleanup=cleanup))
     stop, output = _StopPipe(), _Output()
     if role == "grandchild":
         _grandchild(output, stop, cleanup)
     else:
-        _worker(output, stop, case, original, cleanup)
+        if hook is None:
+            _worker(output, stop, case, original, cleanup)
+        else:
+            _worker(output, stop, case, original, cleanup, before_complete=hook)

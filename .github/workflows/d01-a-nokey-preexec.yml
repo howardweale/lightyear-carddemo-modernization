@@ -1,0 +1,82 @@
+name: D01-A NO-KEY pre-exec worker prototype
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/d01-a-nokey-preexec.yml'
+      - 'tools/ci/d01_nokey_preexec/**'
+      - 'src/lightyear_execution/__init__.py'
+      - 'src/lightyear_execution/mac_owner_process.py'
+      - 'src/lightyear_execution/mac_owner_preexec*.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/d01-a-nokey-preexec.yml'
+      - 'tools/ci/d01_nokey_preexec/**'
+      - 'src/lightyear_execution/__init__.py'
+      - 'src/lightyear_execution/mac_owner_process.py'
+      - 'src/lightyear_execution/mac_owner_preexec*.py'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  bound-worker:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Record public OS and unpack exact disposable runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/sw_vers
+          test "$(/usr/bin/uname -m)" = arm64
+          test "$(id -u)" != 0
+          archive="$RUNNER_TEMP/d01-python.tar.gz"
+          curl --fail --location --max-time 180 --output "$archive" 'https://github.com/astral-sh/python-build-standalone/releases/download/20261026/cpython-3.12.16%2B20261026-aarch64-apple-darwin-install_only.tar.gz'
+          test "$(/usr/bin/stat -f '%z' "$archive")" = 25172086
+          echo 'fbf4afef53c2a6b72bb741bc06d5671a9dfaf87bd84e5aa73ac9b3d0d589f14e  '"$archive" | /usr/bin/shasum -a 256 -c -
+          /bin/mkdir "$RUNNER_TEMP/d01-runtime"
+          /usr/bin/tar -xzf "$archive" --strip-components 1 -C "$RUNNER_TEMP/d01-runtime"
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B -c 'import sys, platform; print(sys.version); assert platform.python_version() == "3.12.16"; assert platform.machine() == "arm64"'
+      - name: Compile fixed pre-exec step in CI only
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/xcrun clang -std=c11 -Wall -Wextra -Werror \
+            tools/ci/d01_nokey_preexec/launcher.c -o "$RUNNER_TEMP/d01-preexec"
+      - name: Check bounded public diagnostic capture in CI only
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B -m unittest discover -s tools/ci/d01_nokey_preexec -p 'test_*diagnostics.py' -v
+      - name: Observe existing NO-KEY worker under prelaunch confinement
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B tools/ci/d01_nokey_preexec/observe.py \
+            "$RUNNER_TEMP/d01-preexec" "$RUNNER_TEMP/d01-bound-worker.json"
+      - name: Collect bounded PID-matched startup OS diagnostics
+        if: always()
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/d01-runtime/bin/python3" -I -B tools/ci/d01_nokey_preexec/os_diagnostics.py \
+            "$RUNNER_TEMP/d01-bound-worker.json" "$RUNNER_TEMP/d01-os-diagnostics.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: d01-bound-worker-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/d01-bound-worker.json
+            ${{ runner.temp }}/d01-os-diagnostics.json
+          if-no-files-found: error
+          retention-days: 90

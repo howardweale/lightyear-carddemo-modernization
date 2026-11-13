@@ -20,8 +20,8 @@ except ImportError:  # Windows use-store admission is refused below.
 
 POLICY_SHA256 = "9367543ccecbb8ac624959368c7f14b3fd2ca9329ddd6e55cd6ef23b83e9ddf7"
 BUDGET_POLICY_SHA256 = "ff9e778369876d5e36bae724035ae58a80bb95e337091593d2bb23d7c6df0edd"
-FEEDBACK_SHA256 = "5c1a6f7ae6feba059b05417bfc8fb911e405c542f0ad18a32f595d8e397f3aa6"
-FEEDBACK_LIMIT_SHA256 = "01daf03f89c6b250a1679c266e1daca5e5ae3831b2371db7b0356842d8323ad2"
+FEEDBACK_SHA256 = "5f94ac7bd1e0539e6682f4a70a023d20336e7b99f67d184c4f05b753c8a1531d"
+FEEDBACK_LIMIT_SHA256 = "1799e9eb6fb74e2a60cb884f512a5150560298627496b9f15db3d4a24f97ec80"
 SCHEMA = "full-intcalc-preview-admission/1"
 ISSUER = "lightyear-full-intcalc-preview"
 DOMAIN = (ISSUER + "\x00" + SCHEMA + "\x00").encode("ascii")

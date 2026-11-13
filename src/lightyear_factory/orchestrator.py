@@ -141,6 +141,7 @@ class FactoryOrchestrator:
         private_expected_values_path: Path | None = None,
         candidate_signing_paths: tuple[Path, Path] | None = None,
         transport_encryption: tuple[bytes, str] | None = None,
+        phase_capture=None,
     ) -> None:
         self.source_root = source_root.resolve()
         self.runs_root = runs_root.resolve()
@@ -163,10 +164,17 @@ class FactoryOrchestrator:
         self.private_expected_values_path = private_expected_values_path
         self.candidate_signing_paths = candidate_signing_paths
         self.transport_encryption = transport_encryption
+        if phase_capture is not None:
+            from .controller_phase_capture import ControllerPhaseCapture
+            if type(phase_capture) is not ControllerPhaseCapture:
+                raise ContractError("controller-phase-capture-type")
+        self.phase_capture = phase_capture
         self.memory_retrieval: dict[str, Any] | None = None
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         self._validate_attempt_budget(order)
+        if self.phase_capture is not None and order.max_attempts != 1:
+            raise ContractError("controller-phase-capture-one-attempt")
         try:
             return self._run(order, run_id)
         except Exception:
@@ -346,6 +354,8 @@ class FactoryOrchestrator:
                 if time.monotonic() - started_monotonic > order.max_elapsed_seconds:
                     raise ContractError("Factory exceeded max_elapsed_seconds")
                 attempts += 1
+                if self.phase_capture is not None:
+                    self.phase_capture.start(run_id, order.content_sha256, attempts)
                 state = "BUILDING"
                 self._authorize("builder", "factory:build")
                 if history is not None:
@@ -353,7 +363,7 @@ class FactoryOrchestrator:
                     if recorder.pending is not None or recorder.failed:
                         raise ContractError('transport-recorder-unavailable')
                     recorder.attempt = attempts
-                    response_start = len(ledger.events)
+                response_start = len(ledger.events)
                 self._scan_workspace(workspace, 'builder-workspace')
                 proposal = self.agents.build(
                     order, plan, public_failure, workspace.root, attempts
@@ -361,6 +371,9 @@ class FactoryOrchestrator:
                 self._record_agent_evidence(
                     artifacts, ledger, references, "builder", "implementer"
                 )
+                if self.phase_capture is not None:
+                    self.phase_capture.built()
+                    self.phase_capture.transport(ledger.events[response_start:])
                 proposal_ref = artifacts.write(
                     "build-proposal", "builder", "implementer", proposal
                 )
@@ -386,6 +399,8 @@ class FactoryOrchestrator:
                 if history is not None:
                     candidate_end = history.commit_applied_changes(attempts, parent=parent,
                                                                   change_set=change_set, response_events=response_ids)
+                    if self.phase_capture is not None:
+                        self.phase_capture.candidate(candidate_end)
                 change_ref = artifacts.write(
                     "change-set", "controller", "implementer", change_set
                 )
@@ -394,7 +409,11 @@ class FactoryOrchestrator:
 
                 state = "VERIFYING"
                 self._authorize("verifier", "factory:verify")
+                if self.phase_capture is not None:
+                    self.phase_capture.verifying()
                 latest_verification = self._run_gates(workspace, order)
+                if self.phase_capture is not None:
+                    self.phase_capture.verified()
                 verification_ref = artifacts.write(
                     "verification-report",
                     "controller",
@@ -735,6 +754,13 @@ class FactoryOrchestrator:
         candidate_authorship: dict[str, Any] | None = None,
         candidate_package_check: Callable[[], dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
+        if self.phase_capture is not None and attempts == 1:
+            capture = self.phase_capture.project()
+            self._scan_controller_value("controller-phase-capture", capture)
+            write_json(capture, run_dir / "controller-phase-capture.json")
+            ledger.append(state, "controller_phase_capture",
+                          dict(content_sha256=capture["content_sha256"],
+                               production_qualification=False))
         changed_paths = sorted(
             path
             for path in set(initial_snapshot) | set(final_snapshot)

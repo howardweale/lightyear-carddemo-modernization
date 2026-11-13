@@ -1,0 +1,72 @@
+{
+  "schema": "intcalc-c2-composition-implementation-proposal/1",
+  "status": "INACTIVE CORE AND OFFLINE CLI; live integration incomplete",
+  "base": "34ec48dcff74e3024697cb56da6edcc3fcc9af5f",
+  "tests_defined": 74,
+  "local_tests_run": false,
+  "implemented": [
+    "One-use in-process composition state machine and durable record calls",
+    "Exact five-role order and at most two private gate observations",
+    "Early success stop; first failure retained independently",
+    "Candidate-attributable completed gate failure only for repair; infrastructure/timeout/uncertain cleanup stop",
+    "Single public context constructor with reviewed bundle and allowlist hash checks",
+    "Count-only feedback with exactly nine classes summing to ten; immutable first projection reused for analysis/repair",
+    "600-second build/gate phase windows and unchanged 8100-second original deadline with terminal cleanup reserve",
+    "Source/artifact/toolchain/runtime/manifest/byte-policy joins",
+    "Irrevocable conservative per-slot holds; no refunds or retries",
+    "Offline prepare/verify with exact input hashes; no promotion to P5",
+    "Live admit/run and --qualify refuse before opening files or discovering credentials"
+  ],
+  "not_implemented": [
+    "Qualified Mac trusted-build/C1-verifier adapter",
+    "Human-controlled credential/admission/bootstrap procedure",
+    "Reviewed deterministic conservative request-token-bound proof"
+  ],
+  "why_no_live_adapter": "Accepted packet D still labels the credential procedure missing; ARM requalification and transport are under exact review. Neither hash-shaped evidence nor a caller boolean authenticates authority. This patch does not invent those prerequisites. It is not a complete runnable C2 controller.",
+  "ports_are_trusted_code": "No plugin loader, module-name option, environment discovery or dynamic adapter loading. Synthetic FakePorts is test-only. A future exact implementation must bind and authenticate concrete ports; passing tests with fakes does not qualify them.",
+  "admission_binding": "The trusted admission port must use the exact reviewed admission implementation and its real PreviewAdmission. It must match all credential bindings to the packet and exact reviewed evidence; the core additionally checks the binding hash and fixed same-process deadline. This is an explicit integration obligation, not implemented authentication.",
+  "build_contract": "Compile model Main source only, inside the exact native linux/arm64 JDK container using javac --release 21 and trusted jar packaging. No model build plugins/downloads. No implicit pull/emulation. Enforce phase deadline and complete reap; return minimal typed source/JAR/runtime/config/tool hashes. Compiler diagnostics never enter model context.",
+  "gate_contract": "Verifier-only adapter binds exact ARM gate, case manifest and candidate artifact, enforces phase original deadline and cleanup, and returns only ten verdict enums and joins. Hidden data/reports never cross into request construction. Gate errors become stop, never model diagnostics.",
+  "request_proof_contract": "Proof port must construct the reviewed transport ReviewedRequest for the exact projection digest, prove its token bound before any count send, and bind the reviewed proof algorithm and public-context approval. No unproved byte-to-token estimate or count-as-pre-count-proof substitution.",
+  "CLI": {
+    "prepare": "Offline structural check; always admission_ready false, even if all evidence hashes PRESENT",
+    "verify": "Offline structural receipt check only; authentication_verified false",
+    "admit": "REFUSED: qualified-live-bootstrap-not-supplied",
+    "run": "REFUSED: qualified-live-bootstrap-not-supplied",
+    "qualify": "REFUSED"
+  },
+  "feedback_named_limit": "Verdict-class counts disclose the success-type/refusal-type split. At most two distinct attempt projections. No case names, fields, bytes or hidden diagnostics.",
+  "byte_policy": "STRICT unless a separately approved exact policy hash is bound; this proposal activates neither choice",
+  "windows": "RUNNER_OS switch: src;.;tests on Windows; src:.:tests elsewhere. No skip or allowlist change.",
+  "P5_negative": {
+    "commit": "b123faed16ab372f4feb07d2ddb33c002d07a4d8",
+    "path": "tools/ci/p5_drills.py",
+    "sha256": "2e29fa748274d7386a9fe7676088f1c5f9e1107deb8f7992c2372a9017f6d9cd",
+    "entrypoint": "qualify(output)",
+    "requires": "Exact historical full module imported unmodified; direct call must return False, exception is failure",
+    "limit": "Historical schema rejection only; no current production-route qualification and no dependency on merging #455"
+  },
+  "no_activation": true,
+  "no_existing_route_registration": true,
+  "no_push": true,
+  "no_credential": true,
+  "no_model_call": true,
+  "no_spend": true,
+  "role_instructions": {
+    "planner": "Plan the full public CBACT04C rewrite from the supplied public context; return one plain-text plan in the field \"text\".",
+    "builder-attempt1": "Implement the public CBACT04C rewrite using the supplied public context and plan. The field \"source\" must contain the complete text of one Java 21 file, Main.java, with default-package public class Main, using only the JDK; return the full file, not a patch or diff.",
+    "analysis-attempt1": "Explain how to improve the first public candidate using only the supplied public context, generated artifacts and verdict-class counts; return plain text in the field \"text\".",
+    "builder-repair1": "Repair the public candidate using the supplied public context, generated artifacts and verdict-class counts. The field \"source\" must contain the complete text of one Java 21 file, Main.java, with default-package public class Main, using only the JDK; return the full file, not a patch or diff.",
+    "analysis-attempt2": "Summarize the remaining limitations of the repaired public candidate using only the supplied public context, generated artifacts and verdict-class counts; return plain text in the field \"text\"."
+  },
+  "role_instructions_sha256": "07e223b8b91ecf4fa99668e26b7d490425f32cb09bffda936a467e4ecedd785d",
+  "role_hash_encoding": "SHA256 of UTF-8 JSON sorted keys, compact separators, ensure_ascii=False; no trailing newline",
+  "public_context": {
+    "format": "MODEL-CONTEXT.zip, not a UTF-8 document",
+    "payload": "name -> strict UTF-8 text mapping of exactly the allowlist files",
+    "archive_max_bytes": 2097152,
+    "uncompressed_max_bytes": 131072,
+    "max_members": 64,
+    "validation": "Exact names and per-member bytes/hash; no duplicate, directory, nonregular, encrypted, traversal or absolute entry; bounded in-memory reads only. No filesystem extraction."
+  }
+}

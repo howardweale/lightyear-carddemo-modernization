@@ -1,0 +1,99 @@
+name: C2 composition synthetic checks
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_factory/intcalc_preview_composition.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'tests/test_intcalc_preview_composition.py'
+      - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
+      - '.github/workflows/intcalc-preview-composition.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_factory/intcalc_preview_composition.py'
+      - 'src/lightyear_factory/__init__.py'
+      - 'tests/test_intcalc_preview_composition.py'
+      - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
+      - '.github/workflows/intcalc-preview-composition.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  composition-synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic composition tests without provider or runtime access
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export PYTHONPATH='src;.;tests'
+          else
+            export PYTHONPATH='src:.:tests'
+          fi
+          python -B - <<'PY'
+          import socket,subprocess,unittest
+          from unittest.mock import patch
+          import test_intcalc_preview_composition
+          suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_composition)
+          with patch.object(socket.socket,'connect',side_effect=AssertionError('No network')), patch.object(subprocess,'Popen',side_effect=AssertionError('No child runtime')):
+              result=unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.wasSuccessful() and not result.skipped and result.testsRun==74
+          PY
+  historical-namespace-negative:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Write synthetic preview result
+        shell: bash
+        env:
+          PYTHONPATH: src:.:tests
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          from unittest.mock import patch
+          from lightyear_factory import intcalc_preview_composition as c
+          from test_intcalc_preview_composition import FakePorts,packet,PUBLIC,ALLOWLIST
+          with patch.object(c,'CONTEXT_HASH',c.digest(PUBLIC)),patch.object(c,'ALLOWLIST_HASH',c.digest(ALLOWLIST)):
+              ports=FakePorts()
+              result=c.Composition(packet(),PUBLIC,ALLOWLIST,ports,clock=lambda:ports.now).run()
+          c.verify_result(result)
+          output=Path('synthetic-preview-result')
+          output.mkdir(exist_ok=False)
+          (output/'summary.json').write_bytes(c.canonical(result))
+          assert c.main(['verify','--qualify'])==2
+          PY
+      - uses: actions/checkout@v7
+        with:
+          ref: b123faed16ab372f4feb07d2ddb33c002d07a4d8
+          path: historical-qualifier
+      - name: Import exact historical qualifier and require False
+        shell: bash
+        working-directory: historical-qualifier
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -B - <<'PY'
+          import hashlib,socket,subprocess
+          from pathlib import Path
+          from unittest.mock import patch
+          source=Path('tools/ci/p5_drills.py').read_bytes()
+          assert hashlib.sha256(source).hexdigest()=='2e29fa748274d7386a9fe7676088f1c5f9e1107deb8f7992c2372a9017f6d9cd'
+          with patch.object(socket.socket,'connect',side_effect=AssertionError('No network')), patch.object(subprocess,'Popen',side_effect=AssertionError('No runtime')):
+              from tools.ci.p5_drills import qualify
+              assert qualify(Path('../synthetic-preview-result')) is False
+          PY

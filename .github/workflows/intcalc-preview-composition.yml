@@ -6,6 +6,8 @@ on:
       - 'src/lightyear_factory/__init__.py'
       - 'tests/test_intcalc_preview_composition.py'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
+      - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
+      - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-IMPLEMENTATION.json'
       - '.github/workflows/intcalc-preview-composition.yml'
   push:
     branches: [main]
@@ -14,6 +16,8 @@ on:
       - 'src/lightyear_factory/__init__.py'
       - 'tests/test_intcalc_preview_composition.py'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
+      - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
+      - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-IMPLEMENTATION.json'
       - '.github/workflows/intcalc-preview-composition.yml'
 permissions:
   contents: read
@@ -48,7 +52,7 @@ jobs:
           suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_composition)
           with patch.object(socket.socket,'connect',side_effect=AssertionError('No network')), patch.object(subprocess,'Popen',side_effect=AssertionError('No child runtime')):
               result=unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.wasSuccessful() and not result.skipped and result.testsRun==74
+          assert result.wasSuccessful() and not result.skipped and result.testsRun==85
           PY
   historical-namespace-negative:
     runs-on: ubuntu-24.04

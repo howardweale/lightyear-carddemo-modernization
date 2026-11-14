@@ -143,8 +143,13 @@ def artifact_valid(value, schema):
             'artifact-shape')
     key = next(iter(keys))
     text = value[key]
-    require(type(text) is str and 0 < len(text.encode('utf-8')) <= (65536 if key == 'source' else 8192)
-            and not any(ord(ch) < 32 and ch not in '\t\r\n' for ch in text), 'artifact-content')
+    require(type(text) is str, 'artifact-shape')
+    try:
+        raw = text.encode('utf-8', errors='strict')
+    except UnicodeError:
+        raise BootstrapRefused('artifact-utf8') from None
+    require(0 < len(raw) <= (65536 if key == 'source' else 8192), 'artifact-byte-cap')
+    require(not any(ord(ch) < 32 and ch not in '\t\r\n' for ch in text), 'artifact-c0')
     return True
 
 
@@ -385,6 +390,9 @@ def read_only_checks(intent, approval, expected_hash, config, qualification):
     return 'preflight-ready-write-probe-pending'
 
 
+PUBLIC_REFUSAL_CODES = frozenset(PUBLIC_REFUSAL_CODES) | t.PUBLIC_FAILURE_CODES
+
+
 def refusal_code(error):
     if isinstance(error, (BootstrapRefused, c.CompositionRefused, b.AdapterRefused,
                           a.PreviewAdmissionError, v.VolumeRefused, t.TransportRefused)):
@@ -511,12 +519,28 @@ class Ports:
             self.packet['request_bound_proof_sha256'], self.packet['public_context_approval_sha256'])
 
     def build(self, attempt, source, window):
-        self.lease.check()
-        return self.adapter.build(attempt, source, window)
+        try:
+            self.lease.check()
+            return self.adapter.build(attempt, source, window)
+        except BaseException as error:
+            try:
+                self.record_once('build-attempt' + str(attempt) + '-failed.json',
+                    {'failure_schema': t.FAILURE_SCHEMA, 'refusal_code': refusal_code(error)})
+            except BaseException:
+                pass  # A failed diagnostic write must never mask the original error.
+            raise
 
     def gate(self, attempt, built, window):
-        self.lease.check()
-        return self.adapter.gate(attempt, built, window)
+        try:
+            self.lease.check()
+            return self.adapter.gate(attempt, built, window)
+        except BaseException as error:
+            try:
+                self.record_once('gate-attempt' + str(attempt) + '-failed.json',
+                    {'failure_schema': t.FAILURE_SCHEMA, 'refusal_code': refusal_code(error)})
+            except BaseException:
+                pass  # A failed diagnostic write must never mask the original error.
+            raise
 
     def record_once(self, name, value):
         require(self.ledger is not None, 'admission-ledger-required')

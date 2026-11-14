@@ -35,10 +35,13 @@ class Admission:
 
 
 class Ledger:
-    def __init__(self):self.rows={}
+    def __init__(self):self.rows={};self.private={}
     def record_once(self,name,value):
         if name in self.rows:raise t.TransportRefused("consumed")
         self.rows[name]=copy.deepcopy(value)
+    def retain_failed_response(self,role,raw):
+        if role in self.private:raise t.TransportRefused("private-response-retention-failed")
+        self.private[role]=raw
 
 
 class Wire:
@@ -66,6 +69,59 @@ class PreviewTransportTests(unittest.TestCase):
         values.update(kwargs);return t.PreviewTransport(**values)
     def fail(self):
         with self.assertRaises(t.TransportRefused):self.client.complete("planner",self.request)
+    def test_post_response_fixed_code_and_private_bytes_without_public_content(self):
+        raw = t.canonical(dict(response(), status="incomplete", private_sentinel="NEVER-PUBLIC"))
+        self.wire.answers[1] = (200, raw)
+        with self.assertRaisesRegex(t.TransportRefused, "slot-failed-consumed-no-retry") as stopped:
+            self.client.complete("planner", self.request)
+        record = self.ledger.rows["planner-failed.json"]
+        self.assertEqual(record["refusal_code"], "incomplete-or-failed-response")
+        self.assertEqual(t.public_failure_code(stopped.exception), record["refusal_code"])
+        self.assertEqual(record["private_response"], "RETAINED_PRIVATE")
+        self.assertEqual(self.ledger.private["planner"], raw)
+        self.assertNotIn("NEVER-PUBLIC", json.dumps(self.ledger.rows))
+        self.assertIsNone(self.client._generation_raw)
+        self.fail()
+        self.assertEqual(len(self.wire.calls), 2)
+
+    def test_invalid_response_json_retained_before_parse(self):
+        self.wire.answers[1]=(200,b"not-json-private")
+        self.fail()
+        self.assertEqual(self.ledger.rows["planner-failed.json"]["refusal_code"], "invalid-response-json")
+        self.assertEqual(self.ledger.private["planner"],b"not-json-private")
+
+    def test_unknown_exception_text_never_public(self):
+        self.client=self.make(validate_artifact=lambda *_: (_ for _ in ()).throw(ValueError("PRIVATE-CONTENT")))
+        self.fail()
+        self.assertEqual(self.ledger.rows["planner-failed.json"]["refusal_code"],"unexpected-controller-fault")
+        self.assertNotIn("PRIVATE-CONTENT",json.dumps(self.ledger.rows))
+
+    def test_retention_failure_keeps_original_code_and_consumption(self):
+        self.ledger.retain_failed_response=Mock(side_effect=OSError("PRIVATE-PATH"))
+        self.wire.answers[1]=(200,t.canonical(dict(response(),status="incomplete")))
+        self.fail()
+        row=self.ledger.rows["planner-failed.json"]
+        self.assertEqual(row["refusal_code"],"incomplete-or-failed-response")
+        self.assertEqual(row["private_response"],"RETENTION_FAILED")
+        self.assertEqual(self.client.public_totals()["reserved_microdollars"],1736636)
+        self.assertNotIn("PRIVATE-PATH",json.dumps(self.ledger.rows))
+
+    def test_count_failure_and_success_do_not_retain_generation(self):
+        self.client.complete("planner",self.request)
+        self.assertEqual(self.ledger.private,{})
+        self.setUp()
+        self.wire.answers[0]=(500,b"PRIVATE-COUNT")
+        self.fail()
+        self.assertEqual(self.ledger.private,{})
+        self.assertEqual(self.ledger.rows["planner-failed.json"]["private_response"],"NOT_AVAILABLE")
+
+    def test_fixed_code_allowlist_rejects_untrusted_attribute(self):
+        error=t.TransportRefused("PRIVATE")
+        error.public_code="PRIVATE-PATH"
+        self.assertEqual(t.public_failure_code(error),"unexpected-controller-fault")
+        self.assertEqual(t.public_failure_code(KeyboardInterrupt()),"operator-interrupted")
+        self.assertEqual(t.public_failure_code(SystemExit()),"controller-exit")
+
     def test_exact_projection_route_and_success_receipt(self):
         artifact,evidence=self.client.complete("planner",self.request)
         self.assertEqual(artifact,{"value":"public"})
@@ -303,6 +359,26 @@ class WireAndLedgerTests(unittest.TestCase):
     def test_json_rejects_non_utf8_float_duplicate_nonfinite(self):
         for raw in ('{"a":1}'.encode("utf-16"),b'{"a":1e400}',b'{"a":NaN}',b'{"a":1,"a":2}',b'{'):
             with self.subTest(raw=raw),self.assertRaises(t.TransportRefused):t.strict_json(raw)
+    def test_private_response_owner_mode_exact_bytes_and_exclusive_name(self):
+        if os.name != "posix":
+            with self.assertRaisesRegex(t.TransportRefused,"posix-required"):
+                t.ExclusiveRunLedger.__new__(t.ExclusiveRunLedger).retain_failed_response("planner",b"private")
+            return
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp).resolve(strict=True)
+            os.chmod(root,0o700)
+            ledger=t.ExclusiveRunLedger(root,"7"*64)
+            try:
+                raw=b"private raw response\x00\xff"
+                ledger.retain_failed_response("planner",raw)
+                file=root/("7"*64)/"planner-generation-response.private"
+                self.assertEqual(file.read_bytes(),raw)
+                self.assertEqual(stat.S_IMODE(file.stat().st_mode),0o600)
+                with self.assertRaises(t.TransportRefused):ledger.retain_failed_response("planner",b"replace")
+                with self.assertRaises(t.TransportRefused):ledger.retain_failed_response("../escape",raw)
+                self.assertEqual(file.read_bytes(),raw)
+            finally:ledger.close()
+
     def test_exclusive_ledger_no_reopen_or_duplicate(self):
         if os.name != "posix":
             with self.assertRaisesRegex(t.TransportRefused,"posix-required"):
@@ -463,7 +539,7 @@ def synthetic_ci_main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
     with patch.object(socket.socket,"connect",side_effect=AssertionError("Provider networking forbidden in CI")):
         result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 49 else 1
+    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 56 else 1
 
 
 if __name__ == "__main__":

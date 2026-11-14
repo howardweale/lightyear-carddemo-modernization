@@ -4,6 +4,9 @@ on:
     paths:
       - 'src/lightyear_factory/intcalc_preview_composition.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'tools/check_intcalc_public_role_bounds.py'
       - 'tests/test_intcalc_preview_composition.py'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
@@ -14,6 +17,9 @@ on:
     paths:
       - 'src/lightyear_factory/intcalc_preview_composition.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
+      - 'src/lightyear_factory/intcalc_preview_transport.py'
+      - 'tools/check_intcalc_public_role_bounds.py'
       - 'tests/test_intcalc_preview_composition.py'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
@@ -37,6 +43,16 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
+      - name: Hash-pinned public context projection regression; no provider
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          context_dir="$RUNNER_TEMP/c2-public-bounds"
+          mkdir "$context_dir"
+          gh release download full-intcalc-context-r2 --repo howardweale/lightyear-carddemo-modernization --pattern MODEL-CONTEXT.zip --pattern MODEL-ALLOWLIST.json --dir "$context_dir"
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH='src:.:tests'; fi
+          python -B tools/check_intcalc_public_role_bounds.py --archive "$context_dir/MODEL-CONTEXT.zip" --allowlist "$context_dir/MODEL-ALLOWLIST.json"
       - name: Synthetic composition tests without provider or runtime access
         shell: bash
         run: |
@@ -52,7 +68,7 @@ jobs:
           suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_composition)
           with patch.object(socket.socket,'connect',side_effect=AssertionError('No network')), patch.object(subprocess,'Popen',side_effect=AssertionError('No child runtime')):
               result=unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.wasSuccessful() and not result.skipped and result.testsRun==85
+          assert result.wasSuccessful() and not result.skipped and result.testsRun==89
           PY
   historical-namespace-negative:
     runs-on: ubuntu-24.04

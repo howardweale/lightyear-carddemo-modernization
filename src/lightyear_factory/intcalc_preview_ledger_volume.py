@@ -276,5 +276,10 @@ class CheckedRunLedger:
         self.inner.record_once(name, value)
         self.lease.check()
 
+    def retain_failed_response(self, role, raw):
+        self.lease.check()
+        self.inner.retain_failed_response(role, raw)
+        self.lease.check()
+
     def close(self):
         self.inner.close()

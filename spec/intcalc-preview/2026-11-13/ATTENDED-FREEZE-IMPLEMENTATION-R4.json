@@ -1,0 +1,66 @@
+{
+  "schema": "c2-attended-freeze-implementation/4",
+  "work_item": "Verifier attended freeze (no PR yet, r4)",
+  "pull_request": null,
+  "proposal_only": true,
+  "runnable": false,
+  "base_commit": "dabf7d532418e2886295575cd01619173c4ad789",
+  "existing_verifier_bundle_sha256": "6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33",
+  "retained_standalone_freeze_sha256": "dc642acc18e7e07663016c28780b075f3fcaf2415d4f8c6158e2cee8aa4420ee",
+  "archive_member_join": "Closed for review by Howard report at 2026-11-13T16:44:00-08:00; Claude saw 63/64 matching characters, one obscured. Future CI independently asserts all 64.",
+  "public_controller_sha256": "ca0c70e128d9faeff6c8a8b1aeb96c578011bbc0aed9eb251fb02a5db22c2dc3",
+  "verifier_only_entry_sha256": "702b19d2b575dc16eaa6a43dc96aef3d23c823c6a9ce54c381db839d320bfe67",
+  "verifier_only_entry_bytes": 32923,
+  "new_workflow": ".github/workflows/intcalc-attended-freeze.yml",
+  "synthetic_tests": 45,
+  "existing_files_modified": [],
+  "existing_protected_files_touched": [],
+  "existing_pins_unchanged": {
+    ".github/workflows/intcalc-c1-public.yml": "57d049da9f5a5560caab25cd7e463b7e20f1d4bdc5c0b648d9b1a0cbddc92f21",
+    ".github/workflows/intcalc-preview-build-gate-adapter.yml": "d00fea1219f8d8338c0ee5a09748a17c40e56c39423f98c94b416595d27aa3d5",
+    "docs/factory/intcalc-c1-binding.json": "d70865689e0b99f0d428a41e8c660438fad89df8fd4bbf8f2be45174d67f3ecf",
+    "spec/intcalc-preview/2026-11-13/BUILD-GATE-ADAPTER-IMPLEMENTATION-R3.json": "f2f71647d1d73b6abfc79773b7f3131c39c2b8a6675396f8b4e72149ac01f8b2"
+  },
+  "receipt_schema": "c2-attended-freeze-equivalence/2",
+  "expected_case_manifest_sha256": null,
+  "expected_hash_source": "Future push-to-main CI receipt with source_commit equal to the merge commit; independently reviewed then exact JSON published as a Release asset for sheet fetch/hash check.",
+  "failure_codes": "Fixed Refused allowlist only. Child writes final C2_FREEZE_REFUSED token to private log; parent reads at most 256 tail bytes from that child segment and validates exact code before printing. Unknown errors use fixed fallback.",
+  "private_diagnosis": "AF-9: unexpected child faults print traceback to private stderr before the unchanged final refusal token. Unexpected parent faults after exclusive root creation are recorded best-effort in exclusive 0600 parent-private.log. No diagnostic fallback to terminal; logs never uploaded.",
+  "real_source_admission_ci": "macos-15 and ubuntu-24.04 read-only checks at checked-out HEAD; real stripped-environment /usr/bin/git, checked_path and blob comparison. No bundle, oracle or probe files.",
+  "equivalence": {
+    "original": "Unchanged bundle freeze.py under actual GitHub Actions",
+    "attended": "Separate entry, cleared CI environment, same source/cases/serialization",
+    "compare": "Exact relative-file-name to SHA256 inventory equality; mismatch refuses",
+    "publication": "Only fixed-schema hash-only receipt; no file map, cases, answers, reports or private logs"
+  },
+  "terminal": {
+    "process": "Interactive public parent",
+    "check": "stdin and stdout TTY; exact ATTENDED-FREEZE confirmation",
+    "child": "Isolated Python child, private pipe input, stdout/stderr to exclusive private log",
+    "meaning": "Accidental invocation guard, not authentication or proof of operator identity"
+  },
+  "source_admission": {
+    "identity": "Exact commit and tree from pinned receipt; clean checkout and no untracked/ignored import shadows",
+    "bytes": "All tracked src/, spec/, tools/ and public fixture blobs match Git objects before and after",
+    "scope": "Trusted attended source; before/after checks do not establish hostile-writer exclusion"
+  },
+  "fresh_destinations": [
+    "run root",
+    "freeze output",
+    "private entry",
+    "private log",
+    "binding",
+    "provenance",
+    "control receipts"
+  ],
+  "reuse": "Existing verified bundle/setup may be read-only inputs after revalidation. AF-8 requires a fresh source clone in a new directory at the reviewed merged commit; dabf7d53 clone and stopped area stay untouched.",
+  "binding": "Manifest SHA256 must equal the CI receipt before binding is written; null candidate artifact and STRICT retained",
+  "limits": [
+    "No equivalence execution yet; no historical case-manifest hash is presumed.",
+    "Mac Python 3.15.2 versus CI 3.13: byte equivalence is required on the Mac; difference refuses.",
+    "Hash receipt provenance is pinned through Claude review and Howard approval; it is not a signature.",
+    "Private file fsync is not a macOS power-loss durability claim; every subsequent use must revalidate hashes.",
+    "Source Git object checks are not native containment, authenticated journal or production qualification."
+  ],
+  "authority": "Local preparation and review-only publication approved; every push requires Claude exact review and Howard exact approval; no Mac execution."
+}

@@ -1,0 +1,76 @@
+name: intcalc-attended-freeze
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'spec/**'
+      - 'tools/**'
+      - 'tests/test_intcalc_attended_freeze.py'
+      - 'tests/fixtures/intcalc-c1/Main.java'
+      - '.github/workflows/intcalc-attended-freeze.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'spec/**'
+      - 'tools/**'
+      - 'tests/test_intcalc_attended_freeze.py'
+      - 'tests/fixtures/intcalc-c1/Main.java'
+      - '.github/workflows/intcalc-attended-freeze.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  attended-freeze-synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic admission and joins; no oracle or bundle
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_attended_freeze
+      - name: Real read-only source admission at checked-out HEAD
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          export PYTHONPATH=src:.
+          python -B -m tools.qualify_intcalc_attended_freeze --source "$GITHUB_WORKSPACE" --source-admission-only
+  attended-freeze-equivalence:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Private original-versus-attended freeze; hash-only receipt
+        shell: bash
+        run: |
+          umask 077
+          mkdir -m 700 "$RUNNER_TEMP/attended-freeze-public"
+          export PYTHONPATH=src:.
+          python -B -m tools.qualify_intcalc_attended_freeze --source "$GITHUB_WORKSPACE" --scratch "$RUNNER_TEMP/attended-freeze-private" --receipt "$RUNNER_TEMP/attended-freeze-public/equivalence.json" --entry-sha256 702b19d2b575dc16eaa6a43dc96aef3d23c823c6a9ce54c381db839d320bfe67
+      - name: Retain hash-only equivalence receipt
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: attended-freeze-equivalence-${{ github.sha }}
+          path: ${{ runner.temp }}/attended-freeze-public/equivalence.json
+          if-no-files-found: error
+          retention-days: 30

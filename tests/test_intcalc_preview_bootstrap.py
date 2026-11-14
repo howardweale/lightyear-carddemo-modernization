@@ -22,6 +22,106 @@ class BootstrapTests(unittest.TestCase):
                   'public_context_approval_sha256': 'b' * 64}
         return boot.Ports(packet, {}, {}, 'c' * 64, {}, {}, {})
 
+    def test_artifact_diagnostics_distinguish_bytes_controls_and_utf8(self):
+        for field,cap in (("text",8192),("source",65536)):
+            schema={"properties":{field:{"type":"string"}},"required":[field],"additionalProperties":False}
+            self.assertTrue(boot.artifact_valid({field:"x"*cap},schema))
+            self.assertTrue(boot.artifact_valid({field:"\t\n\r"},schema))
+            for text,code in (("x"*(cap+1),"artifact-byte-cap"),
+                              ("\u00e9"*(cap//2+1),"artifact-byte-cap"),("\x00","artifact-c0"),("\ud800","artifact-utf8")):
+                with self.subTest(field=field,code=code),self.assertRaisesRegex(boot.BootstrapRefused,"^"+code+"$"):
+                    boot.artifact_valid({field:text},schema)
+
+    def test_checked_ledger_retention_keeps_volume_checks(self):
+        ledger=v.CheckedRunLedger.__new__(v.CheckedRunLedger)
+        ledger.lease,ledger.inner=Mock(),Mock()
+        ledger.retain_failed_response("planner",b"private")
+        self.assertEqual(ledger.lease.check.call_count,2)
+        ledger.inner.retain_failed_response.assert_called_once_with("planner",b"private")
+
+    def phase_ports(self):
+        ports=self.ports()
+        ports.lease,ports.adapter,ports.ledger=Mock(),Mock(),Mock()
+        return ports
+
+    def test_build_adapter_failure_records_full_allowlist_code(self):
+        ports=self.phase_ports()
+        error=boot.b.AdapterRefused('compiler-exit-marker')
+        self.assertIn(error.args[0],boot.PUBLIC_REFUSAL_CODES)
+        self.assertNotIn(error.args[0],boot.t.PUBLIC_FAILURE_CODES)
+        ports.adapter.build.side_effect=error
+        with self.assertRaises(boot.b.AdapterRefused) as raised:
+            ports.build(1,'synthetic',object())
+        self.assertIs(raised.exception,error)
+        ports.ledger.record_once.assert_called_once_with('build-attempt1-failed.json',
+            {'failure_schema':boot.t.FAILURE_SCHEMA,'refusal_code':'compiler-exit-marker'})
+
+    def test_gate_adapter_failure_records_full_allowlist_code(self):
+        ports=self.phase_ports()
+        error=boot.b.AdapterRefused('container-cleanup-unconfirmed')
+        self.assertIn(error.args[0],boot.PUBLIC_REFUSAL_CODES)
+        self.assertNotIn(error.args[0],boot.t.PUBLIC_FAILURE_CODES)
+        ports.adapter.gate.side_effect=error
+        with self.assertRaises(boot.b.AdapterRefused) as raised:
+            ports.gate(2,object(),object())
+        self.assertIs(raised.exception,error)
+        ports.ledger.record_once.assert_called_once_with('gate-attempt2-failed.json',
+            {'failure_schema':boot.t.FAILURE_SCHEMA,'refusal_code':'container-cleanup-unconfirmed'})
+
+    def test_phase_lease_fault_recorded_before_adapter_call(self):
+        for phase in ('build','gate'):
+            ports=self.phase_ports()
+            error=boot.v.VolumeRefused('volume-changed')
+            ports.lease.check.side_effect=error
+            with self.subTest(phase=phase),self.assertRaises(boot.v.VolumeRefused) as raised:
+                getattr(ports,phase)(1,object(),object())
+            self.assertIs(raised.exception,error)
+            getattr(ports.adapter,phase).assert_not_called()
+            self.assertEqual(ports.ledger.record_once.call_args.args,
+                (phase+'-attempt1-failed.json',{'failure_schema':boot.t.FAILURE_SCHEMA,'refusal_code':'volume-changed'}))
+
+    def test_phase_record_fault_never_masks_original_even_for_base_exception(self):
+        for phase in ('build','gate'):
+            for recording_error in (OSError('PRIVATE-PATH'),KeyboardInterrupt(),SystemExit(7)):
+                ports=self.phase_ports()
+                original=boot.b.AdapterRefused('compiler-exit-marker')
+                getattr(ports.adapter,phase).side_effect=original
+                ports.ledger.record_once.side_effect=recording_error
+                with self.subTest(phase=phase,recording_error=type(recording_error).__name__),self.assertRaises(boot.b.AdapterRefused) as raised:
+                    getattr(ports,phase)(1,object(),object())
+                self.assertIs(raised.exception,original)
+                self.assertEqual(ports.ledger.record_once.call_count,1)
+
+    def test_phase_unknown_exception_message_is_never_recorded(self):
+        for phase in ('build','gate'):
+            ports=self.phase_ports()
+            original=RuntimeError('PRIVATE-CONTENT')
+            getattr(ports.adapter,phase).side_effect=original
+            with self.assertRaises(RuntimeError) as raised:getattr(ports,phase)(1,object(),object())
+            self.assertIs(raised.exception,original)
+            self.assertEqual(ports.ledger.record_once.call_args.args[1],
+                {'failure_schema':boot.t.FAILURE_SCHEMA,'refusal_code':boot.refusal_code(original)})
+            self.assertNotIn('PRIVATE-CONTENT',repr(ports.ledger.record_once.call_args))
+
+    def test_phase_interrupt_and_exit_re_raised_unchanged(self):
+        for phase in ('build','gate'):
+            for original in (KeyboardInterrupt(),SystemExit(5)):
+                ports=self.phase_ports()
+                getattr(ports.adapter,phase).side_effect=original
+                with self.assertRaises(type(original)) as raised:getattr(ports,phase)(1,object(),object())
+                self.assertIs(raised.exception,original)
+                ports.ledger.record_once.assert_called_once()
+
+    def test_phase_success_does_not_write_failure_record(self):
+        for phase in ('build','gate'):
+            ports=self.phase_ports()
+            argument,window,result=object(),object(),object()
+            getattr(ports.adapter,phase).return_value=result
+            self.assertIs(getattr(ports,phase)(2,argument,window),result)
+            ports.lease.check.assert_called_once()
+            getattr(ports.adapter,phase).assert_called_once_with(2,argument,window)
+            ports.ledger.record_once.assert_not_called()
+
     def test_inline_bound_exact_cap_then_one_byte_refusal(self):
         ports = self.ports()
         projection = dict(model=c.MODEL, instructions=c.ROLE_INSTRUCTIONS['planner'], input='x')
@@ -329,7 +429,7 @@ class VolumeTests(unittest.TestCase):
                 v.full_sync(-1, 'directory')
             self.assertEqual(caught.exception.public_record()['errno'], 22)
             self.assertEqual(caught.exception.public_record()['file_kind'], 'directory')
-            self.assertNotIn('private', str(caught.exception.public_record()))
+            self.assertNotIn('synthetic private text', str(caught.exception.public_record()))
 
     def test_probe_exclusive_readback_retained(self):
         if os.name != 'posix':

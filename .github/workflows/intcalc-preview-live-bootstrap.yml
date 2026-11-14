@@ -11,6 +11,7 @@ on:
       - 'src/lightyear_common/io.py'
       - 'src/lightyear_common/trust.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
       - 'src/lightyear_factory/intcalc_preview_admission.py'
       - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
       - 'src/lightyear_factory/intcalc_preview_build_gate.py'
@@ -37,6 +38,7 @@ on:
       - 'src/lightyear_common/io.py'
       - 'src/lightyear_common/trust.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
       - 'src/lightyear_factory/intcalc_preview_admission.py'
       - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
       - 'src/lightyear_factory/intcalc_preview_build_gate.py'
@@ -87,7 +89,7 @@ jobs:
           suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_bootstrap)])
           with patch.object(socket.socket, 'connect', side_effect=AssertionError('No network')), patch.object(subprocess, 'Popen', side_effect=synthetic_only):
               result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.wasSuccessful() and not result.skipped and result.testsRun == 29
+          assert result.wasSuccessful() and not result.skipped and result.testsRun == 38
           PY
   actual-ledger-volume:
     runs-on: macos-15

@@ -34,8 +34,28 @@ COUNT_PATH = "/v1/responses/input_tokens"
 GENERATION_PATH = "/v1/responses"
 
 
+PUBLIC_FAILURE_CODES = frozenset(('admission-binding', 'admission-deadline', 'artifact-byte-cap', 'artifact-c0', 'artifact-content', 'artifact-contract', 'artifact-schema', 'artifact-schema-binding', 'artifact-shape', 'artifact-utf8', 'artifact-validator-required', 'attempt-record', 'authority-not-authenticated', 'budget-fixed-input-cap', 'budget-policy-mismatch', 'build-artifact-join', 'build-or-cleanup-fault', 'build-platform-toolchain-join', 'build-status-type', 'cap-shortage', 'clock-or-process', 'clock-regressed', 'compile-feedback-bytes', 'compile-feedback-fields', 'compile-result-joins', 'compiler-exit-proof', 'complete-verdict-inventory', 'composition-stopped-no-resume', 'context-allowlist-schema', 'context-archive-size', 'context-compression', 'context-duplicate-member', 'context-encrypted-member', 'context-exact-member-set', 'context-member-count', 'context-member-hash', 'context-member-metadata', 'context-member-name', 'context-member-size', 'context-nonregular-member', 'context-total-size', 'controller-exit', 'count-object', 'count-phase-deadline', 'count-response', 'credential-memory-only', 'duplicate-json-key', 'e2-projection-bound', 'endpoint-not-allowed', 'exact-public-input-required', 'explicit-byte-policy', 'feedback-binding', 'feedback-counts', 'feedback-fields', 'fixed-budget', 'fixed-cap', 'fixed-run-deadline', 'float-or-nonfinite-json', 'fullfsync-unavailable', 'gate-artifact-join', 'gate-binding-join', 'gate-or-cleanup-fault', 'gate-result-joins', 'generation-hold-exceeded', 'generation-phase-deadline', 'http-status-failure', 'incomplete-or-failed-response', 'incomplete-reasoning', 'input-size', 'input-usage', 'input-usage-exceeds-bound', 'invalid-json', 'invalid-public-context-archive', 'invalid-response-json', 'json-size', 'ledger-consumed-or-uncertain', 'ledger-exclusive-or-durability-fault', 'ledger-owner-mode', 'ledger-process-changed', 'ledger-record-name', 'ledger-short-write', 'linked-ledger-parent', 'missing-prerequisite', 'native-arm64-required', 'non-artifact-output', 'non-candidate-fault', 'non-integer-number', 'one-complete-artifact-required', 'operator-interrupted', 'original-deadline', 'output-item', 'output-missing', 'output-usage', 'packet-fields', 'packet-hashes', 'packet-schema', 'phase-deadline', 'phase-response-or-deadline', 'posix-required', 'pre-count-bound', 'pre-count-proof-missing', 'pre-count-proof-violated', 'pre-count-refused-no-reservation', 'prerequisite-evidence', 'prerequisite-fields', 'prerequisite-inventory', 'preview-admission-required', 'preview-cannot-qualify', 'preview-only', 'private-response-ledger-required', 'private-response-retention-failed', 'private-response-shape', 'projection-fields', 'projection-hash-size', 'projection-types', 'public-bundle-hash', 'public-input-hash', 'qualified-live-bootstrap-not-supplied', 'reasoning-usage', 'reasoning-usage-missing', 'regular-public-input', 'response-size', 'result-attempt-count', 'result-binding', 'result-budget-policy', 'result-cost', 'result-failed-role-terminal', 'result-fault', 'result-fields', 'result-limits', 'result-observations', 'result-outcome-join', 'result-refusal-code', 'result-role-order', 'result-role-prefix', 'result-roles', 'result-status', 'reviewed-public-context', 'reviewed-request-proof', 'reviewed-request-required', 'role-consumed-or-stopped', 'role-instructions-drift', 'role-or-cap', 'run-deadline-or-process', 'run-id', 'session-consumed', 'slot-failed-consumed-no-retry', 'snapshot-or-flex-mismatch', 'spend-and-billing-authority-required', 'spend-cap', 'successful-build-contract', 'total-usage', 'transport-budget-policy', 'transport-evidence', 'unexpected-controller-fault', 'unexpected-output', 'unknown-role', 'usage-missing', 'usage-total-mismatch', 'wire-absolute-timeout', 'wire-cleanup-unconfirmed', 'wire-response', 'wire-send-uncertain'))
+FAILURE_SCHEMA = "full-intcalc-public-refusal/1"
+
+
 class TransportRefused(ValueError):
     """Fixed diagnostic only; never expose credentials, body or provider error text."""
+
+
+def public_failure_code(error):
+    if isinstance(error, KeyboardInterrupt):
+        return "operator-interrupted"
+    if isinstance(error, SystemExit):
+        return "controller-exit"
+    if isinstance(error, TransportRefused):
+        forwarded = getattr(error, "public_code", None)
+        if type(forwarded) is str and forwarded in PUBLIC_FAILURE_CODES:
+            return forwarded
+    if isinstance(error, ValueError) and len(error.args) == 1:
+        code = error.args[0]
+        if type(code) is str and code in PUBLIC_FAILURE_CODES:
+            return code
+    return "unexpected-controller-fault"
 
 
 def require(ok, code):
@@ -134,6 +154,32 @@ class ExclusiveRunLedger:
             persist(self._fd)
         except (OSError, TransportRefused):
             raise TransportRefused("ledger-consumed-or-uncertain") from None
+        finally:
+            if fd is not None:
+                os.close(fd)
+
+    def retain_failed_response(self, role, raw):
+        require(os.name == "posix", "posix-required")
+        require(self._pid == os.getpid() and self._fd is not None, "ledger-process-changed")
+        require(type(role) is str and role in ROLES and type(raw) is bytes
+                and len(raw) <= MAX_RESPONSE, "private-response-shape")
+        fd = None
+        try:
+            # Fixed controller name, existing pinned owner-only directory; no path from the response.
+            fd = os.open(role + "-generation-response.private", os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                         0o600, dir_fd=self._fd)
+            info = os.fstat(fd)
+            require(stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid()
+                    and stat.S_IMODE(info.st_mode) == 0o600, "private-response-retention-failed")
+            offset = 0
+            while offset < len(raw):
+                written = os.write(fd, raw[offset:])
+                require(written > 0, "private-response-retention-failed")
+                offset += written
+            persist(fd)
+            persist(self._fd)
+        except (OSError, TransportRefused):
+            raise TransportRefused("private-response-retention-failed") from None
         finally:
             if fd is not None:
                 os.close(fd)
@@ -336,6 +382,8 @@ class PreviewTransport:
         self._wire, self._clock = wire or DeadlineWire(clock=clock), clock
         self._validate_artifact = validate_artifact
         self._used, self._holds, self._stopped = set(), 0, False
+        require(callable(getattr(ledger, "retain_failed_response", None)), "private-response-ledger-required")
+        self._generation_raw = None
         self._binding = receipt["binding_sha256"]
         require(hash_value(self._binding), "admission-binding")
 
@@ -352,6 +400,8 @@ class PreviewTransport:
         self._ledger.record_once(role+"-"+phase+"-send.json", {"request_sha256": sha(body), "consumed": True, "retries": 0})
         require(self._now() < end-5, "phase-deadline")
         status, raw = self._wire.post_once(path, body, self._key, end)
+        if phase == "generation" and type(raw) is bytes and len(raw) <= MAX_RESPONSE:
+            self._generation_raw = raw
         self._now()
         self._ledger.record_once(role+"-"+phase+"-response.json", {"response_sha256": sha(raw), "http_status": status})
         require(200 <= status < 300, "http-status-failure")
@@ -416,18 +466,32 @@ class PreviewTransport:
                     "artifact_sha256":sha(canonical(artifact)),"qualified":False,"production_controller_receipt":False}
                 self._ledger.record_once(role+"-complete.json",evidence)
                 require(self._now() < generation_end, "generation-phase-deadline")
+                self._generation_raw = None
                 return artifact,evidence
             except BaseException as error:
                 self._stopped = True
+                code = public_failure_code(error)
+                retention = "NOT_AVAILABLE"
+                if self._generation_raw is not None:
+                    try:
+                        self._ledger.retain_failed_response(role, self._generation_raw)
+                        retention = "RETAINED_PRIVATE"
+                    except Exception:
+                        retention = "RETENTION_FAILED"
+                    finally:
+                        self._generation_raw = None
                 # The full hold and consumed files stay. Failure evidence must not
                 # replace an earlier durable record or disclose provider content.
                 try:
-                    self._ledger.record_once(role+"-failed.json",{"status":"FAILED_CONSUMED","full_hold_retained":True,"resume":False})
+                    self._ledger.record_once(role+"-failed.json",{"status":"FAILED_CONSUMED","full_hold_retained":True,"resume":False,
+                        "failure_schema":FAILURE_SCHEMA,"refusal_code":code,"private_response":retention})
                 except (OSError,TransportRefused):
                     pass
                 if isinstance(error, (KeyboardInterrupt, SystemExit)):
                     raise
-                raise TransportRefused("slot-failed-consumed-no-retry") from None
+                stopped = TransportRefused("slot-failed-consumed-no-retry")
+                stopped.public_code = code
+                raise stopped from None
 
     def public_totals(self):
         return {"consumed_slots":len(self._used),"reserved_microdollars":self._holds,

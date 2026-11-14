@@ -4,6 +4,7 @@ on:
     paths:
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
       - 'tests/test_intcalc_preview_transport.py'
       - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-BUDGET.json'
@@ -14,6 +15,7 @@ on:
     paths:
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'src/lightyear_factory/__init__.py'
+      - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
       - 'tests/test_intcalc_preview_transport.py'
       - 'spec/intcalc-preview/2026-11-12/TRANSPORT-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/TRANSPORT-E2-BUDGET.json'

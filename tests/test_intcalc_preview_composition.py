@@ -136,6 +136,39 @@ class CompositionTests(unittest.TestCase):
             self.assertEqual(result["status"], "STOPPED")
             c.verify_result(result)
         return result
+    def test_transport_fixed_code_reaches_stopped_record_terminal_stays_generic(self):
+        error=c.transport_codes.TransportRefused("slot-failed-consumed-no-retry")
+        error.public_code="artifact-byte-cap"
+        self.ports.interrupt=error
+        result=self.stopped()
+        self.assertEqual(result["refusal_code"],"artifact-byte-cap")
+        self.assertEqual(result["failure_schema"],c.transport_codes.FAILURE_SCHEMA)
+
+    def test_unknown_private_error_is_generic_in_stopped_record(self):
+        self.ports.fail_role="planner"
+        result=self.stopped()
+        self.assertEqual(result["refusal_code"],"unexpected-controller-fault")
+        self.assertNotIn("PRIVATE verifier detail must never be returned",json.dumps(self.ports.records))
+
+    def test_result_rejects_non_allowlisted_code_but_retains_legacy_verification(self):
+        self.ports.fail_role="planner"
+        result=self.stopped()
+        result["refusal_code"]="PRIVATE-CONTENT"
+        with self.assertRaises(c.CompositionRefused):c.verify_result(result)
+        del result["refusal_code"];del result["failure_schema"]
+        c.verify_result(result)
+
+    def test_all_role_output_limits_are_explicit_and_hash_bound(self):
+        self.assertEqual(c.digest(c.canonical(c.ROLE_INSTRUCTIONS)),c.ROLE_INSTRUCTIONS_SHA256)
+        self.assertEqual(c.ROLE_INSTRUCTIONS["planner"],
+            'Plan the full CBACT04C rewrite. "text": plain text, max 8192 UTF-8 bytes; no control chars except tab, LF, CR.')
+        for role in c.ROLES:
+            instruction=c.ROLE_INSTRUCTIONS[role]
+            self.assertIn("plain text",instruction)
+            self.assertIn("65536" if role.startswith("builder") else "8192",instruction)
+            for term in ("UTF-8","tab","LF","CR"):self.assertIn(term,instruction)
+        self.assertNotIn("maxLength",self.session()._schema("planner")["properties"]["text"])
+
     def test_first_success_stops_early(self):
         result = self.session().run()
         self.assertEqual(self.ports.events, ["authenticate", "admit", "transport", "planner", "builder-attempt1", "build1", "gate1"])
@@ -224,7 +257,7 @@ class CompositionTests(unittest.TestCase):
         result = self.stopped()
         self.assertEqual(result["reserved_microdollars"], c.ROLE_HOLDS["planner"])
         self.assertEqual(result["roles"]["planner"], "FAILED_CONSUMED")
-        self.assertNotIn("PRIVATE", c.canonical(result).decode())
+        self.assertNotIn("PRIVATE verifier detail must never be returned", c.canonical(result).decode())
     def test_keyboard_interrupt_preserved_and_recorded(self):
         self.ports.interrupt = KeyboardInterrupt()
         with self.assertRaises(KeyboardInterrupt):

@@ -8,6 +8,7 @@ on:
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'tools/check_intcalc_public_role_bounds.py'
       - 'tests/test_intcalc_preview_composition.py'
+      - 'tests/fixtures/intcalc-preview/provider-envelope.json'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-IMPLEMENTATION.json'
@@ -21,6 +22,7 @@ on:
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'tools/check_intcalc_public_role_bounds.py'
       - 'tests/test_intcalc_preview_composition.py'
+      - 'tests/fixtures/intcalc-preview/provider-envelope.json'
       - 'spec/intcalc-preview/2026-11-12/COMPOSITION-IMPLEMENTATION.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-BUDGET.json'
       - 'spec/intcalc-preview/2026-11-13/COMPOSITION-E2-IMPLEMENTATION.json'
@@ -68,7 +70,7 @@ jobs:
           suite=unittest.defaultTestLoader.loadTestsFromModule(test_intcalc_preview_composition)
           with patch.object(socket.socket,'connect',side_effect=AssertionError('No network')), patch.object(subprocess,'Popen',side_effect=AssertionError('No child runtime')):
               result=unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.wasSuccessful() and not result.skipped and result.testsRun==89
+          assert result.wasSuccessful() and not result.skipped and result.testsRun==92
           PY
   historical-namespace-negative:
     runs-on: ubuntu-24.04

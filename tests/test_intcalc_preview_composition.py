@@ -652,5 +652,108 @@ class ArchiveAndRoleTests(unittest.TestCase):
         self.refused(PUBLIC, c.canonical(value), "context-allowlist-schema")
 
 
+class ProviderCompositionTests(unittest.TestCase):
+    """Real transport plus composition, synthetic wire/build/gate; no sockets."""
+    def exercise(self, bad_raw=None, bad_phase="generation"):
+        t = c.transport_codes
+        envelope_path = Path(__file__).parent / "fixtures" / "intcalc-preview" / "provider-envelope.json"
+        envelope = json.loads(envelope_path.read_bytes())
+        # Large enough for the reported 13,975 input tokens, without real context.
+        public, allowlist = make_bundle([("README.txt", b"public synthetic context " * 1000)])
+
+        class Ports(FakePorts):
+            def __init__(self):
+                super().__init__([("DIFFERENT",)*10,("MATCH",)*10])
+                self.sent=[]
+                self.private={}
+                self.client=None
+            def admit(self, value):
+                admitted=super().admit(value)
+                receipt=admitted.public_receipt()
+                receipt['run_budget_seconds']=8100
+                admitted.public_receipt=lambda:receipt
+                return admitted
+            def prove_request(self, role, projection):
+                proof=super().prove_request(role,projection)
+                return t.ReviewedRequest(**vars(proof))
+            def retain_failed_response(self,role,raw):
+                if role in self.private: raise AssertionError("duplicate private record")
+                self.private[role]=raw
+            def transport(self, admission):
+                self.events.append("transport")
+                self.client=t.PreviewTransport(admission=admission,
+                    spend=t.ReviewedSpend(H,H,True,c.CAP), ledger=self,
+                    api_key="synthetic-not-a-credential",wire=self,clock=lambda:self.now,
+                    validate_artifact=lambda value,schema: type(value) is dict
+                        and set(value)==set(schema['properties'])
+                        and all(type(v) is str for v in value.values()))
+                return self.client
+            def post_once(self,path,body,key,end):
+                phase="count" if path==t.COUNT_PATH else "generation"
+                role=c.ROLES[len(self.sent)//2]
+                self.sent.append((role,phase))
+                t.strict_json(body)  # outgoing requests remain integer-only
+                if bad_raw is not None and phase==bad_phase:
+                    return 200,bad_raw
+                if phase=="count":
+                    return 200,t.canonical(dict(object="response.input_tokens",input_tokens=13975,
+                                               metadata={"synthetic_finite":0.5}))
+                value=copy.deepcopy(envelope)
+                artifact=({"source":"public class Main {}"} if role.startswith("builder")
+                          else {"text":"Synthetic public note."})
+                value['output'][1]['content'][0]['text']=t.canonical(artifact).decode()
+                return 200,t.canonical(value)
+
+        ports=Ports()
+        binding=packet()
+        binding.update(context_sha256=c.digest(public),allowlist_sha256=c.digest(allowlist))
+        # prepare() validates the packet again inside run(); keep both public
+        # fixture pins in scope through execution, not only construction.
+        self.enterContext(patch.object(c,"CONTEXT_HASH",c.digest(public)))
+        self.enterContext(patch.object(c,"ALLOWLIST_HASH",c.digest(allowlist)))
+        session=c.Composition(binding,public,allowlist,ports,clock=lambda:ports.now)
+        return session,ports
+
+    def test_reported_envelope_completes_all_four_roles_through_real_transport(self):
+        session,ports=self.exercise()
+        result=session.run()
+        self.assertEqual(result['status'],'MATCH_AFTER_REPAIR')
+        self.assertEqual(result['reserved_microdollars'],9458636)
+        self.assertEqual(ports.sent,[(role,phase) for role in c.ROLES for phase in ('count','generation')])
+        self.assertEqual(result['roles'],{role:'COMPLETED' for role in c.ROLES})
+        self.assertEqual(ports.private,{})
+        self.assertEqual(c.strict_json(c.canonical(ports.records)),ports.records)
+        for role in c.ROLES:
+            row=ports.records[role+'-complete.json']
+            self.assertEqual(row['usage'],dict(input_tokens=13975,output_tokens=4328,total_tokens=18303))
+        c.verify_result(result)
+
+    def test_provider_invalid_numbers_and_duplicates_reach_both_failure_records(self):
+        for raw,code in ((b'{"x":NaN}',"float-or-nonfinite-json"),
+                         (b'{"x":Infinity}',"float-or-nonfinite-json"),
+                         (b'{"x":-Infinity}',"float-or-nonfinite-json"),
+                         (b'{"x":1e400}',"float-or-nonfinite-json"),
+                         (b'{"nested":{"x":0.0,"x":1.0}}',"duplicate-json-key")):
+            for phase in ('count','generation'):
+                with self.subTest(raw=raw,phase=phase):
+                    session,ports=self.exercise(raw,phase)
+                    with self.assertRaisesRegex(c.CompositionRefused,'composition-stopped-no-resume'):
+                        session.run()
+                    for name in ('planner-failed.json','composition-stopped.json'):
+                        self.assertEqual(ports.records[name]['refusal_code'],code)
+                    self.assertEqual(c.strict_json(c.canonical(ports.records)),ports.records)
+                    self.assertEqual(len(ports.sent),1 if phase=='count' else 2)
+                    self.assertNotIn('build1',ports.events)
+
+    def test_artifact_text_stays_on_strict_parser_in_composed_route(self):
+        path=Path(__file__).parent/'fixtures'/'intcalc-preview'/'provider-envelope.json'
+        envelope=json.loads(path.read_bytes())
+        envelope['output'][1]['content'][0]['text']='{"text":1.0}'
+        session,ports=self.exercise(c.canonical(envelope))
+        with self.assertRaises(c.CompositionRefused): session.run()
+        self.assertEqual(ports.records['composition-stopped.json']['refusal_code'],'float-or-nonfinite-json')
+        self.assertEqual(c.strict_json(c.canonical(ports.records)),ports.records)
+
+
 if __name__ == "__main__":
     unittest.main()

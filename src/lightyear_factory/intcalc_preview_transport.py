@@ -98,6 +98,32 @@ def strict_json(raw):
         raise TransportRefused("invalid-response-json") from None
 
 
+def provider_envelope_json(raw):
+    """Parse provider metadata, not artifacts or records; finite floats are valid.
+
+    Callers select and validate integer accounting fields before recording them.
+    Never serialize this parsed envelope into a public ledger record.
+    """
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            require(key not in result, "duplicate-json-key")
+            result[key] = value
+        return result
+    def reject(_):
+        raise TransportRefused("float-or-nonfinite-json")
+    def finite(text):
+        value = float(text)
+        require(math.isfinite(value), "float-or-nonfinite-json")
+        return value
+    try:
+        require(type(raw) is bytes and len(raw) <= MAX_RESPONSE, "response-size")
+        return json.loads(raw.decode("utf-8", errors="strict"), object_pairs_hook=pairs,
+                          parse_float=finite, parse_constant=reject)
+    except (UnicodeError, json.JSONDecodeError, RecursionError):
+        raise TransportRefused("invalid-response-json") from None
+
+
 def persist(fd):
     require(os.name == "posix", "posix-required")
     if sys.platform == "darwin":
@@ -405,7 +431,7 @@ class PreviewTransport:
         self._now()
         self._ledger.record_once(role+"-"+phase+"-response.json", {"response_sha256": sha(raw), "http_status": status})
         require(200 <= status < 300, "http-status-failure")
-        result = strict_json(raw)
+        result = provider_envelope_json(raw)
         require(type(result) is dict and self._clock() < end, "phase-response-or-deadline")
         require(self._now() < end, "phase-deadline")
         return result, end

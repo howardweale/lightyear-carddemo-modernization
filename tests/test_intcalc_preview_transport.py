@@ -528,6 +528,117 @@ class RealSpawnWireTests(unittest.TestCase):
             self.run_worker(synthetic_missing_start_worker,refusal=True)
 
 
+class ProviderEnvelopeTests(unittest.TestCase):
+    """Provider metadata may contain floats; artifact/accounting records may not."""
+    def fixture(self):
+        path = Path(__file__).parent / "fixtures" / "intcalc-preview" / "provider-envelope.json"
+        return json.loads(path.read_bytes())
+
+    def client(self, count_raw=None, generation_raw=None):
+        body = projection()
+        body["input"] = "synthetic public padding " * 1000
+        request = t.ReviewedRequest(body, t.sha(t.canonical(body)), len(t.canonical(body))+4096, "4"*64, "5"*64)
+        envelope = self.fixture()
+        envelope["output"][1]["content"][0]["text"] = '{"value":"public"}'
+        wire, ledger = Wire(), Ledger()
+        wire.answers = [(200, count_raw if count_raw is not None else t.canonical(
+            dict(object="response.input_tokens", input_tokens=13975, metadata={"finite":0.25}))),
+            (200, generation_raw if generation_raw is not None else t.canonical(envelope))]
+        client = t.PreviewTransport(admission=Admission(),
+            spend=t.ReviewedSpend("2"*64,"3"*64,True,t.RUN_CAP), ledger=ledger,
+            api_key="synthetic-not-a-credential", wire=wire, clock=lambda:100.0,
+            validate_artifact=lambda a,s:type(a) is dict and set(a)=={"value"} and type(a["value"]) is str)
+        return client, request, ledger, wire
+
+    def test_fixture_matches_reported_structure_not_private_content(self):
+        envelope = self.fixture()
+        keys = "access_programs background billing completed_at created_at error frequency_penalty id image incomplete_details input_transformations instructions max_output_tokens max_tool_calls metadata model moderation object output parallel_tool_calls presence_penalty previous_response_id prompt_cache_key prompt_cache_retention reasoning safety_identifier service_tier status store temperature text tool_choice tool_usage tools top_logprobs top_p truncation usage user".split()
+        self.assertEqual(len(keys), 39)
+        self.assertEqual(set(envelope), set(keys))
+        for key,value in {"frequency_penalty":0.0,"presence_penalty":0.0,"temperature":1.0,"top_p":0.98}.items():
+            self.assertIs(type(envelope[key]), float)
+            self.assertEqual(envelope[key], value)
+        reasoning, message = envelope["output"]
+        self.assertNotIn("status", reasoning)
+        self.assertEqual(reasoning["content"], [])
+        self.assertEqual(message["status"], "completed")
+        self.assertEqual(len(message["content"]), 1)
+        self.assertIsInstance(envelope["usage"]["input_tokens_details"]["cache_details"], dict)
+
+    def test_finite_envelopes_complete_and_records_have_no_floats(self):
+        client, request, ledger, wire = self.client()
+        artifact, evidence = client.complete("planner", request)
+        self.assertEqual(artifact, {"value":"public"})
+        self.assertEqual(evidence["usage"], {"input_tokens":13975,"output_tokens":4328,"total_tokens":18303})
+        self.assertEqual(len(wire.calls), 2)
+        self.assertEqual(ledger.private, {})
+        # The unchanged integer-only parser admits every record, recursively.
+        self.assertEqual(t.strict_json(t.canonical(ledger.rows)), ledger.rows)
+        self.assertNotIn('"temperature"', json.dumps(ledger.rows))
+
+    def test_provider_parser_allows_nested_finite_values(self):
+        raw = b'{"metadata":{"values":[0.0,-1.5,2e2]},"top_p":0.98}'
+        self.assertEqual(t.provider_envelope_json(raw)["metadata"]["values"], [0.0,-1.5,200.0])
+        with self.assertRaisesRegex(t.TransportRefused, "float-or-nonfinite-json"):
+            t.strict_json(raw)
+
+    def test_nonfinite_and_overflow_refuse_both_endpoints_with_fixed_code(self):
+        for literal in (b'NaN',b'Infinity',b'-Infinity',b'1e400',b'-1e400'):
+            for phase in ("count", "generation"):
+                with self.subTest(literal=literal, phase=phase):
+                    raw = b'{"metadata":{"nested":['+literal+b']}}'
+                    kwargs = {phase+"_raw":raw}
+                    client, request, ledger, wire = self.client(**kwargs)
+                    with self.assertRaisesRegex(t.TransportRefused, "slot-failed-consumed-no-retry"):
+                        client.complete("planner", request)
+                    self.assertEqual(ledger.rows["planner-failed.json"]["refusal_code"], "float-or-nonfinite-json")
+                    self.assertEqual(len(wire.calls), 1 if phase=="count" else 2)
+                    self.assertEqual(t.strict_json(t.canonical(ledger.rows)), ledger.rows)
+
+    def test_duplicate_keys_refuse_at_root_and_nested_in_both_endpoints(self):
+        for raw in (b'{"x":1,"x":2}', b'{"metadata":{"x":0.0,"x":1.0}}'):
+            for phase in ("count", "generation"):
+                with self.subTest(raw=raw, phase=phase):
+                    client, request, ledger, wire = self.client(**{phase+"_raw":raw})
+                    with self.assertRaises(t.TransportRefused):
+                        client.complete("planner", request)
+                    self.assertEqual(ledger.rows["planner-failed.json"]["refusal_code"], "duplicate-json-key")
+                    self.assertEqual(t.strict_json(t.canonical(ledger.rows)), ledger.rows)
+
+    def test_provider_parser_keeps_utf8_size_and_syntax_refusals(self):
+        for raw,code in ((b'{"x":"\xff"}',"invalid-response-json"),
+                         ('{"x":1}'.encode('utf-16'),"invalid-response-json"),
+                         (b'{',"invalid-response-json"),
+                         (b' '* (t.MAX_RESPONSE+1),"response-size")):
+            with self.subTest(code=code):
+                with self.assertRaises(t.TransportRefused) as caught:
+                    t.provider_envelope_json(raw)
+                self.assertEqual(str(caught.exception),code)
+
+    def test_finite_float_accounting_still_refuses_before_recording_values(self):
+        for key in ("input_tokens","output_tokens","total_tokens"):
+            envelope=self.fixture()
+            envelope["usage"][key]=float(envelope["usage"][key])
+            client,request,ledger,wire=self.client(generation_raw=t.canonical(envelope))
+            with self.subTest(key=key), self.assertRaises(t.TransportRefused):
+                client.complete("planner",request)
+            self.assertNotIn("planner-complete.json",ledger.rows)
+            self.assertEqual(t.strict_json(t.canonical(ledger.rows)),ledger.rows)
+        client,request,ledger,wire=self.client(count_raw=b'{"object":"response.input_tokens","input_tokens":13975.0}')
+        with self.assertRaises(t.TransportRefused): client.complete("planner",request)
+        self.assertEqual(ledger.rows["planner-failed.json"]["refusal_code"],"count-response")
+        self.assertEqual(len(wire.calls),1)
+
+    def test_artifact_float_remains_refused_after_finite_envelope_parses(self):
+        envelope=self.fixture()
+        envelope["output"][1]["content"][0]["text"]='{"value":1.0}'
+        client,request,ledger,wire=self.client(generation_raw=t.canonical(envelope))
+        with self.assertRaises(t.TransportRefused): client.complete("planner",request)
+        self.assertEqual(ledger.rows["planner-failed.json"]["refusal_code"],"float-or-nonfinite-json")
+        self.assertEqual(ledger.rows["planner-failed.json"]["private_response"],"RETAINED_PRIVATE")
+        self.assertEqual(t.strict_json(t.canonical(ledger.rows)),ledger.rows)
+
+
 def synthetic_ci_main():
     # A real file and a main guard let spawn import this module without rerunning
     # the suite in each child. Children use only the synthetic workers above.
@@ -539,7 +650,7 @@ def synthetic_ci_main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
     with patch.object(socket.socket,"connect",side_effect=AssertionError("Provider networking forbidden in CI")):
         result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 56 else 1
+    return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 64 else 1
 
 
 if __name__ == "__main__":

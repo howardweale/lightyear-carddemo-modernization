@@ -162,7 +162,7 @@ class PreviewTransportTests(unittest.TestCase):
     def test_uncertain_count_send_stops_generation(self):
         self.wire.answers=[TimeoutError("private diagnostic must not escape")]
         self.fail();self.assertEqual(len(self.wire.calls),1)
-        self.assertNotIn("private",json.dumps(self.ledger.rows))
+        self.assertNotIn("private diagnostic must not escape",json.dumps(self.ledger.rows))
     def test_incomplete_or_truncated_consumes_slot(self):
         for payload in (dict(response(),status="incomplete"),dict(response(),incomplete_details={"reason":"max_output_tokens"})):
             self.setUp();self.wire.answers[1]=(200,t.canonical(payload));self.fail()

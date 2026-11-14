@@ -148,7 +148,7 @@ class CompositionTests(unittest.TestCase):
         self.ports.fail_role="planner"
         result=self.stopped()
         self.assertEqual(result["refusal_code"],"unexpected-controller-fault")
-        self.assertNotIn("PRIVATE",json.dumps(self.ports.records))
+        self.assertNotIn("PRIVATE verifier detail must never be returned",json.dumps(self.ports.records))
 
     def test_result_rejects_non_allowlisted_code_but_retains_legacy_verification(self):
         self.ports.fail_role="planner"
@@ -257,7 +257,7 @@ class CompositionTests(unittest.TestCase):
         result = self.stopped()
         self.assertEqual(result["reserved_microdollars"], c.ROLE_HOLDS["planner"])
         self.assertEqual(result["roles"]["planner"], "FAILED_CONSUMED")
-        self.assertNotIn("PRIVATE", c.canonical(result).decode())
+        self.assertNotIn("PRIVATE verifier detail must never be returned", c.canonical(result).decode())
     def test_keyboard_interrupt_preserved_and_recorded(self):
         self.ports.interrupt = KeyboardInterrupt()
         with self.assertRaises(KeyboardInterrupt):

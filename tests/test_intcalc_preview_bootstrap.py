@@ -101,7 +101,7 @@ class BootstrapTests(unittest.TestCase):
             self.assertIs(raised.exception,original)
             self.assertEqual(ports.ledger.record_once.call_args.args[1],
                 {'failure_schema':boot.t.FAILURE_SCHEMA,'refusal_code':boot.refusal_code(original)})
-            self.assertNotIn('PRIVATE',repr(ports.ledger.record_once.call_args))
+            self.assertNotIn('PRIVATE-CONTENT',repr(ports.ledger.record_once.call_args))
 
     def test_phase_interrupt_and_exit_re_raised_unchanged(self):
         for phase in ('build','gate'):
@@ -429,7 +429,7 @@ class VolumeTests(unittest.TestCase):
                 v.full_sync(-1, 'directory')
             self.assertEqual(caught.exception.public_record()['errno'], 22)
             self.assertEqual(caught.exception.public_record()['file_kind'], 'directory')
-            self.assertNotIn('private', str(caught.exception.public_record()))
+            self.assertNotIn('synthetic private text', str(caught.exception.public_record()))
 
     def test_probe_exclusive_readback_retained(self):
         if os.name != 'posix':

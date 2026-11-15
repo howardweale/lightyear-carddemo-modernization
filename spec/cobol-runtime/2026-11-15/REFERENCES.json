@@ -1,0 +1,38 @@
+[
+  {
+    "rule": "R01",
+    "section": "REDEFINES clause; record storage",
+    "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+    "scope": "shared-byte foundation only; layouts and group semantics deferred"
+  },
+  {
+    "rule": "R02/R03",
+    "section": "Formats for numeric data; Sign representation of zoned and packed-decimal data; NUMPROC",
+    "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-formats-numeric-data",
+    "scope": "storage digit/sign representation"
+  },
+  {
+    "rule": "R02/R03-class",
+    "section": "Numeric class tests; NUMCLS(PRIM), Table 7",
+    "url": "https://www.ibm.com/docs/en/SS6SG3_6.4.0/pdf/pgmvs.pdf",
+    "scope": "C/D/F signed and F unsigned class policy, distinct from NOPFD arithmetic signs"
+  },
+  {
+    "rule": "R02/R03-sign",
+    "section": "NUMPROC",
+    "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=ecco-numproc",
+    "scope": "NOPFD nonpreferred valid sign conversion"
+  },
+  {
+    "rule": "R02/R03-PIC",
+    "section": "PICTURE clause, P and V symbols; SIGN clause",
+    "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+    "scope": "P no storage, left/right scaling; separate/embedded sign"
+  },
+  {
+    "rule": "R04",
+    "section": "Formats for numeric data; TRUNC",
+    "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=ecco-trunc",
+    "scope": "STD valid-data input assumption and binary widths; no arithmetic receiver claim"
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "schema": "cobol-codec-profile/1",
+  "reference": "IBM Enterprise COBOL for z/OS 6.4",
+  "NUMPROC": "NOPFD",
+  "NUMCLS": "PRIM",
+  "CODEPAGE": "cp037",
+  "ARITH": "COMPAT",
+  "TRUNC": "STD",
+  "DISPSIGN": "COMPAT",
+  "integer_byte_order": "big-endian",
+  "precision_max": 18,
+  "signed_input_embedded_signs": {
+    "positive": [
+      "A",
+      "C",
+      "E",
+      "F"
+    ],
+    "negative": [
+      "B",
+      "D"
+    ]
+  },
+  "signed_numeric_class_signs": [
+    "C",
+    "D",
+    "F"
+  ],
+  "unsigned_sign": "F",
+  "signed_output": {
+    "positive": "C",
+    "negative": "D",
+    "separate_positive": "4e",
+    "separate_negative": "60"
+  },
+  "qualification": "PENDING_INDEPENDENT_VECTORS_AND_CI",
+  "scope": "Slice 1A storage codecs only. Exact writes refuse loss; MOVE and arithmetic policies are later slices.",
+  "invalid_data": "Invalid digits/zones, nonzero packed pad, unsigned sign not F and binary sending storage outside PIC refuse. No INVDATA compatibility claim.",
+  "negative_zero": "Decode preserves signed decimal zero. Exact encode retains decimal negative zero; binary zero has no sign.",
+  "limits": [
+    "Documented semantics, not mainframe-proven.",
+    "Candidate output is runtime-bound Java, not idiomatic Java.",
+    "No candidate binding or gate activation; all logical slices are required before a runtime-enabled run."
+  ],
+  "conservative_refusals": {
+    "unsigned_decimal_non_F_sign": "Unsigned packed signs other than F and unsigned zoned zones other than F are outside this conservative valid-data profile. Decoding refuses; numeric class returns false for these signs/zones. This is not a claim that NUMPROC(NOPFD) mandates this restriction.",
+    "nonzero_even_digit_packed_pad": "Decoding refuses packed-padding. Numeric class refuses packed-padding-class-unsupported instead of returning false: no IBM Enterprise COBOL 6.4 rule for classifying the unused high-order half-byte is claimed."
+  }
+}

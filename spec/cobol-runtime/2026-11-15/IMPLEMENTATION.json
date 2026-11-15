@@ -1,0 +1,35 @@
+{
+  "work_item": "COBOL semantics runtime slice 1A (no PR yet, r2)",
+  "status": "EXACT_REVIEW_ONLY_PROPOSAL_NOT_QUALIFIED",
+  "profile_sha256": "41c05c36281ef6066a959b8263b4b37cf21cf1a97337e340f54500a925b9de56",
+  "author_vectors": 37,
+  "independent_vectors": {
+    "author": "Claude",
+    "count": 41,
+    "sha256": "8c422ad1bce09625fc025bd2d1c8c0c1f4060ff497dc59a22a882d2b9f8c789d",
+    "profile_sha256": "41c05c36281ef6066a959b8263b4b37cf21cf1a97337e340f54500a925b9de56",
+    "separate_ci_step": true,
+    "expected_values_edited": false
+  },
+  "existing_files_changed": [],
+  "existing_gate_changes": [],
+  "candidate_integration": false,
+  "next": [
+    "1B reviewed layout compiler/auditor",
+    "1C arithmetic/integration"
+  ],
+  "outstanding": [
+    "Claude independent vectors and exact-tree review",
+    "CI on all four platforms after separate Howard push approval",
+    "Remaining logical slices and candidate checker before any runtime-enabled run"
+  ],
+  "review_changes": [
+    "A1 leading-zero PIC counts 1..18",
+    "A2 views bind capacity; accesses bind logical length",
+    "A3 setup-java v5",
+    "A4 selected required workflow; all four codec legs must be green",
+    "A5 explicit conservative unsigned-sign profile limit",
+    "A6 unsupported nonzero packed-pad class refusal"
+  ],
+  "independent_reporting": "CI emits codec-vector-mismatch id=<ID> for every mismatch, then fails the suite."
+}

@@ -1,6 +1,6 @@
 # Architecture
 
-As of 2026-10-18, this is the target layering and a map of existing packages.
+As of 2026-11-15, this is the target layering and a map of existing packages.
 The boundaries are not yet fully enforced: the judge still imports higher-layer
 code, trust primitives live in Control Tower, and estates remain mixed into
 shared packages. Cleanup must preserve behavior and historical import paths.
@@ -38,7 +38,7 @@ introduced with compatibility shims rather than changing old commands.
 | Engine, proposed | [extension runtime](extensions/runtime/) | Extension implementation; review in A2. |
 | Estates | [lightyear_mainframe](src/lightyear_mainframe/) | Mainframe source and twin tooling. |
 | Estates | [lightyear_calibration](src/lightyear_calibration/) | Native calibration and iDempiere campaigns. |
-| Estates | [carddemo_oracle](src/carddemo_oracle/) | CardDemo oracle interface. |
+| Estates | [carddemo_oracle](src/carddemo_oracle/) | Retained Python second opinion; not the sole authority for new expected answers. |
 | Mixed; split in A3 | [lightyear_data](src/lightyear_data/) | Generic migration plus CloudBank, T-SQL and estate logic. |
 | Apps | [lightyear_control_tower](src/lightyear_control_tower/) | Operator UI; also holds trust code to extract. |
 | Apps | [lightyear_pilot](src/lightyear_pilot/) | Pilot planning and reporting. |
@@ -52,6 +52,10 @@ Estate source → knowledge graph → agents → candidate → judge against the
 key → receipt → human signature in the Factory Tower. The graph supplies source
 context; agents cannot change the answer key or promote their own verdicts.
 The private verifier gateway must return only approved redacted feedback.
+The public [reference qualification tool](tools/intcalc_reference_execution.py)
+compares original COBOL execution, independent public derivations and the retained
+Python oracle. Reference image and profile qualification remain prerequisites;
+this tool does not admit candidates, freeze answers or handle a private seed.
 
 Trust lives in the hash-chained decision journal, controlled signing keys, input
 hashes and verified receipts. The Tower is the interface to that authority; its

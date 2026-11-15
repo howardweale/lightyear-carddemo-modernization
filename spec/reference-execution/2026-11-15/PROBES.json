@@ -1,0 +1,105 @@
+{
+  "schema": "reference-public-probes/1",
+  "coverage": "Necessary initial subset, not complete profile qualification",
+  "probes": [
+    {
+      "id": "decimal",
+      "source": {
+        "path": "tests/fixtures/reference-execution/decimal.cob",
+        "sha256": "27a711238d81da15f93574c89d36bfe746098504cd9036c98f3a1760be8065b1"
+      },
+      "derivation": "250.75*21/1200=4.388125; truncation=4.38, ROUNDED=4.39; negative truncation=-4.38; PIC 9(3) overflow keeps 234. IBM 6.4 COMPUTE/ROUNDED/size error.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "size-error",
+      "source": {
+        "path": "tests/fixtures/reference-execution/size-error.cob",
+        "sha256": "93c432b8e9de3fd02c3a0c1d3fb814df83c5727b152a524ab2235bbb8bc0ff02"
+      },
+      "derivation": "IBM 6.4 ON SIZE ERROR: branch taken and receiving item preserved on overflow.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "binary-truncation",
+      "source": {
+        "path": "tests/fixtures/reference-execution/binary-truncation.cob",
+        "sha256": "83507c0c055538f3b4f08ce19825097443409eb76323bf71750093bca7875627"
+      },
+      "derivation": "TRUNC(STD) keeps low 4 decimal digits of 12345, not physical binary maximum. IBM 6.4 TRUNC.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "signs",
+      "source": {
+        "path": "tests/fixtures/reference-execution/signs.cob",
+        "sha256": "2dfb7815c9eae2948f2b6015658fdccc873e4f6106eae4ce318029942de3e4e1"
+      },
+      "derivation": "NOPFD arithmetic C/F positive, D negative. Necessary subset only: A/B/E/zoned/negative-zero matrix remains blocking. IBM 6.4 NUMPROC.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "numeric-class",
+      "source": {
+        "path": "tests/fixtures/reference-execution/numeric-class.cob",
+        "sha256": "f831e6da4f3dc86b1f6f78eaabf58eb78f868b0d2ccc117dd652913c6e473f70"
+      },
+      "derivation": "Valid digit nibbles and C/D preferred signs pass; A in digit position fails. Full PRIM/nonpreferred distinction remains independent-vector blocker. IBM 6.4 numeric class test.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "clock",
+      "source": {
+        "path": "tests/fixtures/reference-execution/clock.cob",
+        "sha256": "9c38622ffc8c76b953f1f48df3943a3a2a7b9099ece5a1babd7623add00f7582"
+      },
+      "derivation": "Injected 12:34:56.789123 gives hundredths 78 and source appends 0000. Tests actual runtime override, not just syntax.",
+      "independent_review_sha256": null,
+      "environment": {
+        "COB_CURRENT_DATE": "2026/11/14 12:34:56.789123000"
+      },
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    },
+    {
+      "id": "indexed-order",
+      "source": {
+        "path": "tests/fixtures/reference-execution/indexed-order.cob",
+        "sha256": "b398f9f38b88b4ba778a32ceb12822117feaa65a9c5b49c08c673da0304a92f4"
+      },
+      "derivation": "Public synthetic writes 03,01,02; indexed sequential reads 01,02,03 then EOF status 10. IBM 6.4 READ indexed sequential; no private case basis.",
+      "independent_review_sha256": null,
+      "environment": {},
+      "exit_code": 0,
+      "stdout_hex": "",
+      "stderr_hex": ""
+    }
+  ],
+  "remaining_before_qualification": [
+    "Independent ARITH intermediate-precision vectors",
+    "Full NOPFD/NUMCLS sign matrix",
+    "Indexed alternate/random and actual-case collation proof",
+    "CEE3ABD arguments and Claude PC-10/11/12 conventions"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "intcalc-claude-public-suite-contract/1",
+  "case_ids": [
+    "PC-01",
+    "PC-02",
+    "PC-03",
+    "PC-04",
+    "PC-05",
+    "PC-06",
+    "PC-07",
+    "PC-08",
+    "PC-09",
+    "PC-10",
+    "PC-11",
+    "PC-12",
+    "PC-13",
+    "PC-14",
+    "PC-15",
+    "PC-16"
+  ],
+  "author": "Claude",
+  "visibility": "public",
+  "selection_frozen": true,
+  "case_fields": {
+    "id": "PC-01..PC-16 ordered",
+    "processing_date": "YYYYMMDDHH",
+    "timestamp": "YYYY-MM-DD-HH.MM.SS.ffffff",
+    "inputs": "ACCTFILE/TCATBALF/DISCGRP/XREFFILE -> relative path + SHA256; fixed cp037",
+    "hand_outputs": "stdout/stderr exact bytes; ACCTFILE/TRANSACT additionally when compare_output_files true",
+    "hand_exit": "0 normal; 12 CEE3ABD",
+    "compare_output_files": "false explicitly for PC-10/11/12; true by default for every other case",
+    "python_findings": "Claude pre-registers O1\u2013O4 per case, pair and modelled channel; exact public discrepancy SHA256 prevents a blanket waiver. Absent list means no exception."
+  },
+  "missing_values": "No cases materialised; never fill from retired cases.",
+  "comparison": "Reference means GnuCOBOL execution of unmodified source, never z/OS. Reference must equal hand on every compared channel. Python compares two output files when defined and success/failure class only; exit value/stdout/stderr NOT_MODELLED. A difference blocks unless exact pre-registered finding matches. No actual freeze command.",
+  "stdout": "Program DISPLAY, ASCII bytes, LF line ends",
+  "stderr": "empty",
+  "limit": "open-source reference, not mainframe-proven"
+}

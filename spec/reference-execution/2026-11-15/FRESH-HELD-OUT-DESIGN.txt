@@ -1,0 +1,36 @@
+Reference execution (no PR yet, r2): fresh held-out generation
+
+Future design binding, not generation code. The public qualification tools have
+no seed or freeze command. Howard alone holds the private seed; no agent,
+Claude, public CI runner, workflow secret, log, Release or model context gets it.
+Claude reviews public generator code and public synthetic vectors, never actual
+hidden output. No private seed is requested or handled by this proposal.
+
+Families/parameters trace to original public COBOL/copybooks, not retired case
+contents, counts, failures, frequencies or retrospective diagnostic findings.
+Record provenance before inspecting retired specifics. Bind reviewed generator
+version, population/size, source and profile before Howard samples his seed;
+no rejection-sampling of candidate performance or cherry-picking. The optional
+Java helper is not linked into reference execution.
+
+Propose a deterministic, domain-separated cryptographic stream with canonical
+parameters and unbiased bounded sampling; exact algorithm, entropy floor,
+encoding and counter exhaustion need separate review. Public synthetic seeds
+test code without disclosing Howard's seed. Domain-separated commitments need
+adequate secret entropy; do not publish per-case hashes of low-entropy plaintext.
+
+Actual generation and qualified-reference execution occur in Howard's isolated
+verifier boundary under a separate approved procedure. Expected answers must
+be encrypted on the first persistent write to the approved human recipients.
+No plaintext temporary files, logs, swap/crash artifacts or CI artifacts;
+memory-only work and its limits must be qualified. Encryption failure is
+terminal, never a plaintext fallback. Agents do not handle keys or recipients.
+Hidden inputs get the same isolation. Only reviewed commitments, ciphertext
+inventories and qualification metadata are public; outputs never enter public
+CI, Release assets or model context. The retired set stays separate and public
+only after its exact-record/content-check publication approval.
+
+Qualify public generator vectors and the reference image first. Howard approves
+gate migration, generation/freeze, recipients and admission separately. Final
+hidden gate once on selected candidate, no hidden counts between repair rounds.
+New seed/manifest commitments do not revive any retired case lineage.

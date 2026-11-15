@@ -1,0 +1,671 @@
+{
+ "author": "Claude",
+ "cases": [
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-01/hand/ACCTFILE.bin",
+     "sha256": "a6bb41e9f91afd7b6fbe3416ccf4765d47b91ab984ccd42029af35d443a51bbc"
+    },
+    "TRANSACT": {
+     "path": "PC-01/hand/TRANSACT.bin",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+     "path": "PC-01/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-01/hand/stdout.txt",
+     "sha256": "c9a3ff9ed5a0351af922b594d1668ffe3840b92ee5bdfc2c5e0232fee9133d68"
+    }
+   },
+   "id": "PC-01",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-01/input/ACCTFILE.bin",
+     "sha256": "a6bb41e9f91afd7b6fbe3416ccf4765d47b91ab984ccd42029af35d443a51bbc"
+    },
+    "DISCGRP": {
+     "path": "PC-01/input/DISCGRP.bin",
+     "sha256": "5ae69139d737bc0972f96826e9246dabd9d6d6906bef54b15600d96f4f4bdd33"
+    },
+    "TCATBALF": {
+     "path": "PC-01/input/TCATBALF.bin",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "XREFFILE": {
+     "path": "PC-01/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-02/hand/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "TRANSACT": {
+     "path": "PC-02/hand/TRANSACT.bin",
+     "sha256": "7092969c4185e9380f2646b30a56d4bb1dbc772c3aac23e78d9028283657fd50"
+    },
+    "stderr": {
+     "path": "PC-02/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-02/hand/stdout.txt",
+     "sha256": "c426e653ef68c7bbc907419b9a281e319fcffe9a2847c5882ef257b32faf9e20"
+    }
+   },
+   "id": "PC-02",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-02/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-02/input/DISCGRP.bin",
+     "sha256": "5ae69139d737bc0972f96826e9246dabd9d6d6906bef54b15600d96f4f4bdd33"
+    },
+    "TCATBALF": {
+     "path": "PC-02/input/TCATBALF.bin",
+     "sha256": "6e046c2c860fb422ff544cd33375d818abbaa0ff9dc0a4c76e9ed9565b6697f9"
+    },
+    "XREFFILE": {
+     "path": "PC-02/input/XREFFILE.bin",
+     "sha256": "b2f0f81c6e630b67b0690eae3b57c735e6680169aa2e5f4d0f6f15f146953d2c"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-03/hand/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "TRANSACT": {
+     "path": "PC-03/hand/TRANSACT.bin",
+     "sha256": "10534ad9bb80c119c31de91fb048476764aba246b89af3798f47f8cdf79a6d43"
+    },
+    "stderr": {
+     "path": "PC-03/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-03/hand/stdout.txt",
+     "sha256": "8292c238b41b8103204708fb8b41fc131f04237a175bb5d98efb0d2282d46ddf"
+    }
+   },
+   "id": "PC-03",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-03/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-03/input/DISCGRP.bin",
+     "sha256": "358aa46cf4ee422ee9a12e8afa699a8a74ca72bf66a3ec3e4c688e7ccd7b838e"
+    },
+    "TCATBALF": {
+     "path": "PC-03/input/TCATBALF.bin",
+     "sha256": "ba112ed43ec9414f4d72a8ac5a6ba25264272fad1bb6ca618129d033b4c51b6b"
+    },
+    "XREFFILE": {
+     "path": "PC-03/input/XREFFILE.bin",
+     "sha256": "b2f0f81c6e630b67b0690eae3b57c735e6680169aa2e5f4d0f6f15f146953d2c"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-04/hand/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "TRANSACT": {
+     "path": "PC-04/hand/TRANSACT.bin",
+     "sha256": "44b15eedff0f111da0fb12a37b29b8e9aab53d7674d84f2a87f835eaed652eaf"
+    },
+    "stderr": {
+     "path": "PC-04/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-04/hand/stdout.txt",
+     "sha256": "4c5aaea32ea5fd1a3994ed6593e2bbe0733a4b497b095399f77fa6c6f525c351"
+    }
+   },
+   "id": "PC-04",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-04/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-04/input/DISCGRP.bin",
+     "sha256": "358aa46cf4ee422ee9a12e8afa699a8a74ca72bf66a3ec3e4c688e7ccd7b838e"
+    },
+    "TCATBALF": {
+     "path": "PC-04/input/TCATBALF.bin",
+     "sha256": "409956c1abade9b0bcb34718ba0c1795368292fcf1ce91e5365fb651d000e9a2"
+    },
+    "XREFFILE": {
+     "path": "PC-04/input/XREFFILE.bin",
+     "sha256": "b2f0f81c6e630b67b0690eae3b57c735e6680169aa2e5f4d0f6f15f146953d2c"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-05/hand/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "TRANSACT": {
+     "path": "PC-05/hand/TRANSACT.bin",
+     "sha256": "c92e795abe7e3300487a8a68e3fe126a31c7a16b4c190981b85b78927f8b9ba6"
+    },
+    "stderr": {
+     "path": "PC-05/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-05/hand/stdout.txt",
+     "sha256": "57bc580dd9456f7d8e93f870b67bcfd55ef5252430f3f69b2c56a4f5d5e160b2"
+    }
+   },
+   "id": "PC-05",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-05/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-05/input/DISCGRP.bin",
+     "sha256": "cfc4b6a9aa82458f309bb6321f066b3211ed73b2566347189b1d9f36e1d83026"
+    },
+    "TCATBALF": {
+     "path": "PC-05/input/TCATBALF.bin",
+     "sha256": "b5ba7e13d6e0bc11c21d7ce82c1f8131367e8046049cded3fd6af50e88e2dc54"
+    },
+    "XREFFILE": {
+     "path": "PC-05/input/XREFFILE.bin",
+     "sha256": "b2f0f81c6e630b67b0690eae3b57c735e6680169aa2e5f4d0f6f15f146953d2c"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-06/hand/ACCTFILE.bin",
+     "sha256": "d8bd4b0d3f36906a229abbbd86c11058977dbaa7b2f3bf2f7da32a398ae821e5"
+    },
+    "TRANSACT": {
+     "path": "PC-06/hand/TRANSACT.bin",
+     "sha256": "38068afc2fbbdbd9a81a004ee9c7ffd301cc7b5dd098994d14338abba979f218"
+    },
+    "stderr": {
+     "path": "PC-06/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-06/hand/stdout.txt",
+     "sha256": "aaecf628191f5f404873132e1fa38202f1d04813699d0fbcd8d8d1c32ada570d"
+    }
+   },
+   "id": "PC-06",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-06/input/ACCTFILE.bin",
+     "sha256": "a6bb41e9f91afd7b6fbe3416ccf4765d47b91ab984ccd42029af35d443a51bbc"
+    },
+    "DISCGRP": {
+     "path": "PC-06/input/DISCGRP.bin",
+     "sha256": "28b66c9a28289c2a7484a3d0c390ad353f00ebf1a2ff3f3d0426973b6e626d89"
+    },
+    "TCATBALF": {
+     "path": "PC-06/input/TCATBALF.bin",
+     "sha256": "780f51ab01f5c18be090f7bc5666a380f3680b029e4d328cc1973641f4a6c4b4"
+    },
+    "XREFFILE": {
+     "path": "PC-06/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-07/hand/ACCTFILE.bin",
+     "sha256": "c2d59ab8c6fc02577b493de2f1f7643c2f20993d09063bdcd2c111bf91528f05"
+    },
+    "TRANSACT": {
+     "path": "PC-07/hand/TRANSACT.bin",
+     "sha256": "24feed37cca52386d053f662cd0d1e972135d2cbbb28f21b7b14f1b354920357"
+    },
+    "stderr": {
+     "path": "PC-07/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-07/hand/stdout.txt",
+     "sha256": "18c61d75736a7f70f39ee800dcea192c190ee9d19365693c5b6c88683e443fc4"
+    }
+   },
+   "id": "PC-07",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-07/input/ACCTFILE.bin",
+     "sha256": "bec4f84a89668e329f4292205dbf1816e102a7c940cff912519a8482fffa3fa3"
+    },
+    "DISCGRP": {
+     "path": "PC-07/input/DISCGRP.bin",
+     "sha256": "e5b169deda95037df02f54bf11408a76c75c1d04d54d0d4610b686172fdd3ca7"
+    },
+    "TCATBALF": {
+     "path": "PC-07/input/TCATBALF.bin",
+     "sha256": "d38a977bddd40596de0daadea17b0980188fe13d3cf908826a70073cadb96d23"
+    },
+    "XREFFILE": {
+     "path": "PC-07/input/XREFFILE.bin",
+     "sha256": "c5b6bd657c56474b6de8e49767681fee085621cca1420aaf195e9b702cd5c7bd"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-08/hand/ACCTFILE.bin",
+     "sha256": "a57b76a00723f82672ad9ccc437c65904a594577ac9123ca1f78268db9e6b89f"
+    },
+    "TRANSACT": {
+     "path": "PC-08/hand/TRANSACT.bin",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+     "path": "PC-08/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-08/hand/stdout.txt",
+     "sha256": "46e885683e2995f9b0b12b83efb26d6526e45a3dd5d81d7a48eb24a437731bd1"
+    }
+   },
+   "id": "PC-08",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-08/input/ACCTFILE.bin",
+     "sha256": "bec4f84a89668e329f4292205dbf1816e102a7c940cff912519a8482fffa3fa3"
+    },
+    "DISCGRP": {
+     "path": "PC-08/input/DISCGRP.bin",
+     "sha256": "96ce3d5393e7d7a71c7949fd913eae25cccf1451344906be8bf832c4de5cdd5f"
+    },
+    "TCATBALF": {
+     "path": "PC-08/input/TCATBALF.bin",
+     "sha256": "40c2ef1bf4e1a1e199a192d8b7676e2d03b1fb4c62a209ccd751c52035935b04"
+    },
+    "XREFFILE": {
+     "path": "PC-08/input/XREFFILE.bin",
+     "sha256": "c5b6bd657c56474b6de8e49767681fee085621cca1420aaf195e9b702cd5c7bd"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-09/hand/ACCTFILE.bin",
+     "sha256": "a24d5b6b3fdc91fd2830c1f238bdb563729b7924cd884bc442cd187b0aa19a59"
+    },
+    "TRANSACT": {
+     "path": "PC-09/hand/TRANSACT.bin",
+     "sha256": "52681b930b27c4a08620948c3b5eefaf2d2aceae354a028a89d7c21653396a1b"
+    },
+    "stderr": {
+     "path": "PC-09/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-09/hand/stdout.txt",
+     "sha256": "b89975c2c8af0e2598a18caee49d71e046dd96d19ddeb59994bf56c79e054c13"
+    }
+   },
+   "id": "PC-09",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-09/input/ACCTFILE.bin",
+     "sha256": "716343ee669f466e885196414a982014ebd6a6207c115769e21fc8fb21ba1eee"
+    },
+    "DISCGRP": {
+     "path": "PC-09/input/DISCGRP.bin",
+     "sha256": "b1dd1e16b726e74ff7840640a41c8c2b3217c6b63784f03ef8650c1fee98eff8"
+    },
+    "TCATBALF": {
+     "path": "PC-09/input/TCATBALF.bin",
+     "sha256": "e71a629cd93eb96f7c623240f30b11824dacd649cdd4cf5f31079cf57fefe8ee"
+    },
+    "XREFFILE": {
+     "path": "PC-09/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": false,
+   "hand_exit": 12,
+   "hand_outputs": {
+    "stderr": {
+     "path": "PC-10/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-10/hand/stdout.txt",
+     "sha256": "9e3ed982fd916db5a924c57ec9fc1ca55c934ce3170626d9daa9087e206d5926"
+    }
+   },
+   "id": "PC-10",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-10/input/ACCTFILE.bin",
+     "sha256": "716343ee669f466e885196414a982014ebd6a6207c115769e21fc8fb21ba1eee"
+    },
+    "DISCGRP": {
+     "path": "PC-10/input/DISCGRP.bin",
+     "sha256": "f095f9b9a7feb5cc3351dff7ecde23a4a140836362c6d152e67b5252055d9dba"
+    },
+    "TCATBALF": {
+     "path": "PC-10/input/TCATBALF.bin",
+     "sha256": "e71a629cd93eb96f7c623240f30b11824dacd649cdd4cf5f31079cf57fefe8ee"
+    },
+    "XREFFILE": {
+     "path": "PC-10/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": false,
+   "hand_exit": 12,
+   "hand_outputs": {
+    "stderr": {
+     "path": "PC-11/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-11/hand/stdout.txt",
+     "sha256": "a37964d790119fb0e8f9c4e14cfb168759daec892e155451fe02104d1497ad71"
+    }
+   },
+   "id": "PC-11",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-11/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-11/input/DISCGRP.bin",
+     "sha256": "f095f9b9a7feb5cc3351dff7ecde23a4a140836362c6d152e67b5252055d9dba"
+    },
+    "TCATBALF": {
+     "path": "PC-11/input/TCATBALF.bin",
+     "sha256": "e71a629cd93eb96f7c623240f30b11824dacd649cdd4cf5f31079cf57fefe8ee"
+    },
+    "XREFFILE": {
+     "path": "PC-11/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": false,
+   "hand_exit": 12,
+   "hand_outputs": {
+    "stderr": {
+     "path": "PC-12/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-12/hand/stdout.txt",
+     "sha256": "5ac35db6ec87fadfeb5d057a20973ed079fe15b099fd9ad05597844df7d4bdab"
+    }
+   },
+   "id": "PC-12",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-12/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-12/input/DISCGRP.bin",
+     "sha256": "f095f9b9a7feb5cc3351dff7ecde23a4a140836362c6d152e67b5252055d9dba"
+    },
+    "TCATBALF": {
+     "path": "PC-12/input/TCATBALF.bin",
+     "sha256": "7b8db39bc94e23f25531b3664e41abe605890d422b7b120419a1e4ece025705e"
+    },
+    "XREFFILE": {
+     "path": "PC-12/input/XREFFILE.bin",
+     "sha256": "cb0a6db32b6a80a69d2d8675f4c4f6526423c38f226bb9d1821e5092756b00b6"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-13/hand/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "TRANSACT": {
+     "path": "PC-13/hand/TRANSACT.bin",
+     "sha256": "8fac4e3f44fa3c5a1ff01581cffa44af08a4e5883e29761edb7e80df48382d0d"
+    },
+    "stderr": {
+     "path": "PC-13/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-13/hand/stdout.txt",
+     "sha256": "352c2e1e068ef93d4b66e9bccffc0d463a961e196d845845a5ab41d32cffefd8"
+    }
+   },
+   "id": "PC-13",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-13/input/ACCTFILE.bin",
+     "sha256": "b40a9e8bded2f4f8a2fdde3d2ddf1826c07342041fa8887eaeec62839d07768e"
+    },
+    "DISCGRP": {
+     "path": "PC-13/input/DISCGRP.bin",
+     "sha256": "c9c71eea5db890a3cf97e784b479bba2b83393f68545e396bf0f208b0c8d794d"
+    },
+    "TCATBALF": {
+     "path": "PC-13/input/TCATBALF.bin",
+     "sha256": "fe17488459ff2f5814b90b04d542293a384d610239ab1eb080ec849fb4cdee31"
+    },
+    "XREFFILE": {
+     "path": "PC-13/input/XREFFILE.bin",
+     "sha256": "b2f0f81c6e630b67b0690eae3b57c735e6680169aa2e5f4d0f6f15f146953d2c"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-14/hand/ACCTFILE.bin",
+     "sha256": "f945576b1f4ac9aa4fb52439c0b5d42a2417862091d64d73681fe95cc166f477"
+    },
+    "TRANSACT": {
+     "path": "PC-14/hand/TRANSACT.bin",
+     "sha256": "459e4a27df6cf9923c0ef723aeea4a656a272699cd65ca8fad579db59437c8c9"
+    },
+    "stderr": {
+     "path": "PC-14/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-14/hand/stdout.txt",
+     "sha256": "3c393877feae607c5a46621115136eff9edd3fca224fcd435a69e078bbcfe3de"
+    }
+   },
+   "id": "PC-14",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-14/input/ACCTFILE.bin",
+     "sha256": "85fbc8d18776ad8dd74c8af0d4aaae9fdd1b015fd530e0d94ed41bdd421429c8"
+    },
+    "DISCGRP": {
+     "path": "PC-14/input/DISCGRP.bin",
+     "sha256": "68d5d3ef9a249460611de6186f7ad80d00b253085b68c4e30c48bdbbf61ac1cb"
+    },
+    "TCATBALF": {
+     "path": "PC-14/input/TCATBALF.bin",
+     "sha256": "1f56b7cf78cc53b8ea75f30e74960e01bccb42908b95cbb1a13ac8a5c62fe02a"
+    },
+    "XREFFILE": {
+     "path": "PC-14/input/XREFFILE.bin",
+     "sha256": "15f9681a4a476fcb1edd31fcb2a3264857eb14d3e05f3bd8d328dbaa747e849b"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-23.59.59.987654"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-15/hand/ACCTFILE.bin",
+     "sha256": "dfd4fe2e0e5e99273b99a5ce49a1c0b52307575a7a2cbf93e7117ce2699be31e"
+    },
+    "TRANSACT": {
+     "path": "PC-15/hand/TRANSACT.bin",
+     "sha256": "fa830b3d85bbc36e670099231aabf67dabdeb5b6fe795fb59d24cb091d5e4225"
+    },
+    "stderr": {
+     "path": "PC-15/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-15/hand/stdout.txt",
+     "sha256": "a470bed20f301e796d6b5114b627475cc0db78b5d8f6c67f782ff4c916823db0"
+    }
+   },
+   "id": "PC-15",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-15/input/ACCTFILE.bin",
+     "sha256": "94897218e905f976eb98b87019eea81596e3ffd59412994d56d38d1968c477a2"
+    },
+    "DISCGRP": {
+     "path": "PC-15/input/DISCGRP.bin",
+     "sha256": "dc64665b90435c8418fb71e0e5021aacbd2dc753b13cfd593c1c8878d64add0a"
+    },
+    "TCATBALF": {
+     "path": "PC-15/input/TCATBALF.bin",
+     "sha256": "1657c2da8d40f00a7d23a4116d8b1944f6c938cee73c7fa4dc22384f312c1e31"
+    },
+    "XREFFILE": {
+     "path": "PC-15/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  },
+  {
+   "compare_output_files": true,
+   "hand_exit": 0,
+   "hand_outputs": {
+    "ACCTFILE": {
+     "path": "PC-16/hand/ACCTFILE.bin",
+     "sha256": "a391baf6273860a2a5654f432d20751f1fdbb9a887aeef2ee7f3dc2bc2d53da3"
+    },
+    "TRANSACT": {
+     "path": "PC-16/hand/TRANSACT.bin",
+     "sha256": "3e5c48fe8ec5629f6839034246a0634a79ea8df674fd146e090e1eea29773f5f"
+    },
+    "stderr": {
+     "path": "PC-16/hand/stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+     "path": "PC-16/hand/stdout.txt",
+     "sha256": "065bfd5b1d8434f285adad2477886ff0cdaa9fe0a96bd5b7244bf3da4de8f74f"
+    }
+   },
+   "id": "PC-16",
+   "inputs": {
+    "ACCTFILE": {
+     "path": "PC-16/input/ACCTFILE.bin",
+     "sha256": "a6bb41e9f91afd7b6fbe3416ccf4765d47b91ab984ccd42029af35d443a51bbc"
+    },
+    "DISCGRP": {
+     "path": "PC-16/input/DISCGRP.bin",
+     "sha256": "f6f8d647e6a5b0a00d435506b59430e22c5a56954ae473d6012b39ab4e72119e"
+    },
+    "TCATBALF": {
+     "path": "PC-16/input/TCATBALF.bin",
+     "sha256": "a7baebaee77a0cfc6ca8c3bdd2ea81024c4ba018d76602b61ca9e81300b5db46"
+    },
+    "XREFFILE": {
+     "path": "PC-16/input/XREFFILE.bin",
+     "sha256": "fbfbd089c8d1d03cfb5eb3c6d00d9dd2f080baebe28d66e21725b7c28ce2c641"
+    }
+   },
+   "processing_date": "2026111400",
+   "timestamp": "2026-11-14-08.30.15.120000"
+  }
+ ],
+ "schema": "intcalc-claude-public-suite/1",
+ "visibility": "public"
+}

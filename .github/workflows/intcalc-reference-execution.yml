@@ -1,0 +1,93 @@
+name: INTCALC reference execution proposal
+on:
+  pull_request:
+    paths: ['src/**', 'tools/**', 'spec/**', 'tests/test_intcalc_reference_execution.py', 'tests/fixtures/reference-execution/**', '.github/workflows/intcalc-reference-execution.yml']
+  push:
+    branches: [main]
+    paths: ['src/**', 'tools/**', 'spec/**', 'tests/test_intcalc_reference_execution.py', 'tests/fixtures/reference-execution/**', '.github/workflows/intcalc-reference-execution.yml']
+  workflow_dispatch:
+    inputs:
+      stage:
+        type: choice
+        options: [inventory, public]
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  reference-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Public synthetic tests; no compiler or Docker
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_reference_execution
+  reference-inventory:
+    if: github.event_name == 'workflow_dispatch' && inputs.stage == 'inventory'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Build retained native recipe; no oracle
+        run: docker build --platform linux/amd64 --file tools/legacy_twin/reproducible.Containerfile --tag reference-inventory .
+      - name: Public package inventory; network none
+        shell: bash
+        run: |
+          mkdir -m 700 "$RUNNER_TEMP/reference-public-inventory"
+          docker run --rm --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --cpus=2 --memory=1g --pids-limit=64 --tmpfs /tmp:rw,nosuid,nodev,size=128m --user "$(id -u):$(id -g)" --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/source,readonly" --mount "type=bind,src=$RUNNER_TEMP/reference-public-inventory,dst=/output" --env GITHUB_ACTIONS=true --env PYTHONPATH=/source/src:/source --env PYTHONDONTWRITEBYTECODE=1 --workdir /source reference-inventory python3 -B tools/intcalc_reference_execution.py inventory --output /output/inventory.json
+          docker image inspect reference-inventory > "$RUNNER_TEMP/reference-public-inventory/image-inspect.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reference-public-inventory
+          path: ${{ runner.temp }}/reference-public-inventory/
+          retention-days: 30
+          if-no-files-found: error
+  reference-public:
+    if: github.event_name == 'workflow_dispatch' && inputs.stage == 'public'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Refuse missing bindings before pull
+        env:
+          PYTHONPATH: src:.
+        run: python -B tools/intcalc_reference_execution.py check-binding --binding spec/reference-execution/2026-11-15/BINDING.json
+      - name: Exact reviewed image pull
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-15/BINDING.json --pull-only
+      - name: Native public discrepancies; no freeze
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-15/BINDING.json --suite tests/fixtures/reference-execution/public-cases/SUITE.json --output "${{ runner.temp }}/reference-public"
+      - name: Public report and cleanup only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-public-discrepancy
+          path: |
+            ${{ runner.temp }}/reference-public/report.json
+            ${{ runner.temp }}/reference-public/container-cleanup.json
+          retention-days: 30
+          if-no-files-found: warn

@@ -344,5 +344,23 @@ class PlatformBindingTests(unittest.TestCase):
         self.assertFalse(any(a[1]=="create" for a in calls))
 
 
+
+
+# Historical synthetic semantics remain tested without granting live admission.
+# test_intcalc_retirement exercises every real boundary with this mock absent.
+from unittest.mock import patch as _retirement_unit_patch
+
+
+def setUpModule():
+    global _retirement_unit_scope
+    _retirement_unit_scope = _retirement_unit_patch(
+        "lightyear_mainframe.intcalc_retirement.require_current", return_value=None)
+    _retirement_unit_scope.start()
+
+
+def tearDownModule():
+    _retirement_unit_scope.stop()
+
+
 if __name__=="__main__":
     unittest.main()

@@ -21,6 +21,7 @@ import zlib
 import threading
 import time
 from lightyear_factory import intcalc_preview_transport as transport_codes
+from lightyear_mainframe import intcalc_retirement as retirement
 
 SCHEMA = "full-intcalc-preview-result/1"
 SCOPE = "NOT-P5/public-CBACT04C-only"
@@ -179,6 +180,7 @@ def validate_packet(packet):
 
 
 def prepare(packet):
+    retirement.require_current(CompositionRefused)
     packet_hash = validate_packet(packet)
     return {"schema": "full-intcalc-composition-preflight/1", "packet_sha256": packet_hash,
             "missing": sorted(k for k, v in packet["prerequisites"].items() if v["status"] != "PRESENT"),
@@ -424,6 +426,7 @@ class Composition:
             "resume": False, "retry": False, "authentication": "local-unsigned-evidence-only"}
 
     def run(self):
+        retirement.require_current(CompositionRefused)
         with self._lock:
             require(not self._started, "session-consumed")
             self._started = True

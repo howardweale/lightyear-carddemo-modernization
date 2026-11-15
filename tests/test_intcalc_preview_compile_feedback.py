@@ -119,3 +119,19 @@ class CompilationFeedbackTests(unittest.TestCase):
         with self.assertRaises(c.CompositionRefused):
             self.run_session()
         self.assertNotIn('gate1', self.ports.events)
+
+
+# Historical synthetic semantics remain tested without granting live admission.
+# test_intcalc_retirement exercises every real boundary with this mock absent.
+from unittest.mock import patch as _retirement_unit_patch
+
+
+def setUpModule():
+    global _retirement_unit_scope
+    _retirement_unit_scope = _retirement_unit_patch(
+        "lightyear_mainframe.intcalc_retirement.require_current", return_value=None)
+    _retirement_unit_scope.start()
+
+
+def tearDownModule():
+    _retirement_unit_scope.stop()

@@ -48,6 +48,12 @@ introduced with compatibility shims rather than changing old commands.
 
 ## Data and trust flow
 
+The legacy INTCALC preview, gate and freeze entry points consult the pinned
+retirement registry before any execution, credential prompt or admission. Their
+current lineage is closed; CI retirement-refusal evidence is not qualification.
+Historical receipts remain readable. A future reference-backed gate requires a
+separate reviewed implementation; no registry or environment override admits it.
+
 Estate source → knowledge graph → agents → candidate → judge against the answer
 key → receipt → human signature in the Factory Tower. The graph supplies source
 context; agents cannot change the answer key or promote their own verdicts.

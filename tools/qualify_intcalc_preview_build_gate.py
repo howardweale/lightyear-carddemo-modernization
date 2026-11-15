@@ -1,5 +1,6 @@
 """CI-only real ARM fixture path. Never prints private verifier output."""
 import json
+from lightyear_mainframe import intcalc_retirement as retirement
 import os
 from pathlib import Path
 import platform
@@ -19,6 +20,7 @@ EXPECTED = {'NZ-POSTTRAN': 'DIFFERENT', 'TRUNCATION': 'DIFFERENT',
 
 
 def run():
+    retirement.require_current(ValueError)
     assert os.environ.get('GITHUB_ACTIONS') == 'true'
     assert os.environ.get('RUNNER_ARCH') == 'ARM64'
     assert sys.platform == 'linux' and platform.machine() in ('aarch64', 'arm64')
@@ -111,6 +113,10 @@ def run():
 if __name__ == '__main__':
     try:
         run()
+    except ValueError as error:
+        code = str(error)
+        print(code if code in ('retired-verifier-set', 'retirement-registry-invalid') else 'qualification-refused')
+        raise SystemExit(2) from None
     except BaseException:
         print('C2 ARM QUALIFICATION FAILED; PRIVATE EVIDENCE NOT PRINTED', file=sys.stderr)
         raise SystemExit(2) from None

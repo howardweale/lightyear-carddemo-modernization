@@ -1,7 +1,10 @@
-name: intcalc-attended-freeze
+name: INTCALC attended-freeze retirement boundary
 on:
   pull_request:
     paths:
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/**'
       - 'spec/**'
       - 'tools/**'
@@ -11,6 +14,9 @@ on:
   push:
     branches: [main]
     paths:
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/**'
       - 'spec/**'
       - 'tools/**'
@@ -49,28 +55,21 @@ jobs:
           export PYTHONPATH=src:.
           python -B -m tools.qualify_intcalc_attended_freeze --source "$GITHUB_WORKSPACE" --source-admission-only
   attended-freeze-equivalence:
+    name: Retired verifier refusal proof (NOT QUALIFICATION)
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 25
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-      - name: Private original-versus-attended freeze; hash-only receipt
+      - name: Retirement negatives; no cases, freeze, images or execution
         shell: bash
         run: |
-          umask 077
-          mkdir -m 700 "$RUNNER_TEMP/attended-freeze-public"
-          export PYTHONPATH=src:.
-          python -B -m tools.qualify_intcalc_attended_freeze --source "$GITHUB_WORKSPACE" --scratch "$RUNNER_TEMP/attended-freeze-private" --receipt "$RUNNER_TEMP/attended-freeze-public/equivalence.json" --entry-sha256 702b19d2b575dc16eaa6a43dc96aef3d23c823c6a9ce54c381db839d320bfe67
-      - name: Retain hash-only equivalence receipt
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: attended-freeze-equivalence-${{ github.sha }}
-          path: ${{ runner.temp }}/attended-freeze-public/equivalence.json
-          if-no-files-found: error
-          retention-days: 30
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_retirement
+      - name: Explicit retired state, never new qualification
+        shell: bash
+        run: echo 'RETIRED_NOT_QUALIFIED; no case fetch, freeze, candidate or model executed'

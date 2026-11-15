@@ -1,0 +1,27 @@
+{
+  "schema": "intcalc-hidden-set-retirement/1",
+  "work_item": "Hidden set retirement (no PR yet, r1)",
+  "decision_date": "2026-11-15",
+  "decider": "Howard",
+  "decision_basis": "Direct instruction; exact time not supplied. No signature or independent attestation claimed.",
+  "bundle_sha256": "6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33",
+  "case_manifest_sha256": "d76879fc7e055d14a088ea94f1c2d9d571243d048071897cbf1ccabc87645cdd",
+  "retained_mac_binding_sha256": "dc0a99fbc70917576f5b80283c67db025fbfa422be454595ef9699ef7341b42c",
+  "classification": "RETIRED_PERMANENTLY_FROM_HELD_OUT_USE",
+  "reasons": [
+    "Expected answers came from the Python oracle with public source gaps O1-O4; per-case effects remain to be established.",
+    "Two candidates were scored in C2 run 3 with counts returned to model roles."
+  ],
+  "effect": [
+    "Never again admissible as held-out, including source-rebound descendants.",
+    "C2 preview pipeline must not be rerun against this set.",
+    "Publication or corrected answers cannot restore held-out status.",
+    "Later public-case adoption requires three-way agreement and Claude selection."
+  ],
+  "retention": "Existing bundles, manifests, equivalence receipts, results, ledger references and source history remain byte-identical. No deletion, replacement, silent re-freeze or dated evidence edit.",
+  "implementation_state": "Decision effective for agent/operator authorization; this record does not install machine enforcement. Existing executables do not consult a retirement registry. No rerun authorized while enforcement is pending.",
+  "publication_state": "Held until Howard approves this exact record; content check and case inventory pending.",
+  "diagnosis_state": "CI-only after record approval and publication; fixed candidate/hash bindings and exact CI patch also required.",
+  "blind_impact_script": "CANCELLED; not built",
+  "p5": "PAUSED"
+}

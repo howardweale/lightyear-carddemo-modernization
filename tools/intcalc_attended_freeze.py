@@ -19,6 +19,7 @@ import sys
 import time
 import traceback
 import zipfile
+from lightyear_mainframe import intcalc_retirement as retirement
 
 BUNDLE_HASH = '6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33'
 CORE_HASH = 'dc642acc18e7e07663016c28780b075f3fcaf2415d4f8c6158e2cee8aa4420ee'
@@ -27,7 +28,7 @@ ENTRY_MARKER = '# PUBLIC_COMMAND_ENTRY\n'
 RECEIPT_FIELDS = {'schema', 'source_commit', 'source_tree', 'bundle_sha256',
                   'controller_sha256', 'entry_sha256', 'case_manifest_sha256',
                   'outputs_sha256', 'equal', 'candidate_executed', 'model_calls', 'source_event', 'source_ref'}
-REFUSAL_CODES = frozenset({
+REFUSAL_CODES = frozenset({'retired-verifier-set', 'retirement-registry-invalid',
     'python-version', 'platform', 'standard-account', 'path-form', 'path-symlink',
     'path-kind', 'path-owner-mode', 'private-mode', 'file-size', 'json-duplicate',
     'json-number', 'json-format', 'receipt-schema', 'source-identity', 'receipt-hash',
@@ -232,6 +233,7 @@ def source_admission(value, commit, tree):
 
 
 def bundle_files(value):
+    retirement.require_current(Refused)
     raw = read_file(value, private=True)
     need(sha(raw) == BUNDLE_HASH, 'bundle-hash')
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
@@ -277,6 +279,7 @@ def build_entry(core, controller):
 
 
 def run_core(text, source, archive, output, commit, tree):
+    retirement.require_current(Refused)
     root, fingerprint = source_admission(str(source), commit, tree)
     files = bundle_files(str(archive))
     need(text == core_text(files['freeze.py']), 'entry-core')
@@ -344,6 +347,7 @@ def child(entry, payload, log_fd, timeout=595):
 
 
 def attended(args):
+    retirement.require_current(Refused)
     posix()
     need(sys.platform == 'darwin' and platform.machine() == 'arm64', 'platform')
     need(sys.flags.isolated and sys.dont_write_bytecode, 'isolated-entry')

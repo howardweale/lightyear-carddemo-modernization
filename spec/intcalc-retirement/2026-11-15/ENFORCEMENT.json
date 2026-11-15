@@ -1,0 +1,11 @@
+{
+  "schema": "intcalc-retirement-enforcement/1",
+  "state": "LEGACY_INTCALC_CLOSED",
+  "retired_bundle_sha256": "6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33",
+  "retired_case_manifest_sha256": "d76879fc7e055d14a088ea94f1c2d9d571243d048071897cbf1ccabc87645cdd",
+  "retired_binding_sha256": "dc0a99fbc70917576f5b80283c67db025fbfa422be454595ef9699ef7341b42c",
+  "retirement_record_sha256": "a4e3e799ab3780f7115b1b5cd3aeae73f27480f43eb632a5946dd919a7ae76f0",
+  "replacement_profiles": [],
+  "reason": "Retired lineage is never admissible as held-out; source rebinding or corrected outputs cannot restore it.",
+  "scope": "Current INTCALC gate, preview, and freeze routes closed. Future qualified reference gate requires a separate reviewed implementation, not registry editing or an override."
+}

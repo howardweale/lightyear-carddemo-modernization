@@ -2,6 +2,10 @@ name: C2 preview transport synthetic checks
 on:
   pull_request:
     paths:
+      - 'src/lightyear_mainframe/__init__.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'src/lightyear_factory/__init__.py'
       - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
@@ -14,6 +18,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/lightyear_mainframe/__init__.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/lightyear_factory/intcalc_preview_transport.py'
       - 'src/lightyear_factory/__init__.py'
       - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'

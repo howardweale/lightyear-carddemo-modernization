@@ -335,3 +335,19 @@ class PreviewAdmissionTests(unittest.TestCase):
         self.assertEqual(holds,policy["role_holds_microdollars"])
         self.assertEqual(sum(holds.values()),9458636)
         self.assertEqual(policy["envelope_microdollars"]-sum(holds.values()),1364)
+
+
+# Historical synthetic semantics remain tested without granting live admission.
+# test_intcalc_retirement exercises every real boundary with this mock absent.
+from unittest.mock import patch as _retirement_unit_patch
+
+
+def setUpModule():
+    global _retirement_unit_scope
+    _retirement_unit_scope = _retirement_unit_patch(
+        "lightyear_mainframe.intcalc_retirement.require_current", return_value=None)
+    _retirement_unit_scope.start()
+
+
+def tearDownModule():
+    _retirement_unit_scope.stop()

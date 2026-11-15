@@ -12,6 +12,7 @@ import re
 import stat
 import sys
 from typing import Callable, Protocol
+from lightyear_mainframe import intcalc_retirement as retirement
 
 try:
     import fcntl
@@ -191,6 +192,7 @@ def admit_preview(raw: bytes, *, approved_bindings: dict, credential_id: str,
     anything. Composition must not call it until those prerequisites are qualified.
     No signing helper or credential discovery is provided.
     """
+    retirement.require_current(PreviewAdmissionError)
     _require(type(raw) is bytes and 0 < len(raw) <= 16384, "envelope-size")
     _require(type(verification_key) is bytes and len(verification_key) == 32, "credential-size")
     _require(isinstance(credential_id, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,80}", credential_id)

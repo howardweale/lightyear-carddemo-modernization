@@ -26,6 +26,7 @@ import uuid
 
 from lightyear_factory import intcalc_preview_composition as c
 from lightyear_factory.intcalc_preview_transport import persist
+from lightyear_mainframe import intcalc_retirement as retirement
 
 JRE = '3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07'
 JRE_CONFIG = '2eac78aca4748f2a6b922f8af332d3d1a5ac161d252c2f5664806100bcf6d8cf'
@@ -309,6 +310,7 @@ class BuildGateAdapter:
         return value
 
     def build(self, attempt, source, window):
+        retirement.require_current(AdapterRefused)
         require(type(attempt) is int and attempt == self.next_build <= 2 and self.next_gate == attempt, 'build-order')
         self.next_build += 1  # consumed even if validation/launch fails
         try:
@@ -325,6 +327,7 @@ class BuildGateAdapter:
             raise AdapterRefused('build-failed-no-retry') from None
 
     def gate(self, attempt, built, window):
+        retirement.require_current(AdapterRefused)
         require(type(attempt) is int and attempt == self.next_gate <= 2
                 and self.built.get(attempt) == built and type(built) is c.BuildResult
                 and built.compile_failed is False, 'gate-order')
@@ -343,6 +346,7 @@ class BuildGateAdapter:
 
 
 def worker_build(request, registry):
+    retirement.require_current(AdapterRefused)
     root, prefix = Path(request['root']), request['prefix']
     end, hard = request['work_end'], request['hard_end'] - 12
     private = []
@@ -465,6 +469,7 @@ def boundary(state, image, mounts):
 
 
 def worker_gate(request, registry):
+    retirement.require_current(AdapterRefused)
     from lightyear_mainframe import intcalc_candidate_gate as gate
     require(c.digest(read_file(gate.__file__, 128 * 1024)) == request['gate_source_sha256'], 'gate-source')
     packet = request['packet']
@@ -503,6 +508,7 @@ def worker_gate(request, registry):
 
 def worker_main(argv):
     """Private fixed child entry. Receives no secret or generated command."""
+    retirement.require_current(AdapterRefused)
     global _IN_WORKER
     _IN_WORKER = True
     require(os.name == 'posix' and len(argv) == 2, 'worker-arguments')

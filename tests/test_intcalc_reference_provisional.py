@@ -28,10 +28,11 @@ class ProvisionalTests(unittest.TestCase):
         expanded = original + [{"id": n, "source": {"path": n, "sha256": "a" * 64}} for n in provisional.NEW_PROBES]
         probes = ref.canonical({"probes": expanded})
         suite = ref.canonical({"schema": "intcalc-claude-public-suite/1", "author": "Claude", "visibility": "public", "cases": [{"id": n} for n in ref.IDS]})
-        row = {"flags": ref.FLAGS, "platform": "linux/amd64", "compiler_package": "3.1.2-5.1ubuntu1", "case_ids": ref.IDS, "case_author": "Claude", "freeze_enabled": False, "hidden_generation_enabled": False, "sources": [], "public_suite_sha256": ref.sha(suite), "probes": {"path": "original", "sha256": "a" * 64}}
+        row = {"flags": ref.FLAGS, "platform": "linux/amd64", "compiler_package": "3.1.2-5.1ubuntu1", "case_ids": ref.IDS, "case_author": "Claude", "freeze_enabled": False, "hidden_generation_enabled": False, "sources": [], "public_suite_sha256": ref.sha(suite), "probes": {"path": "original", "sha256": "a" * 64}, "reference_limits": [ref.SIGN_LIMIT], "reference_limit_approval_sha256": ref.SIGN_APPROVAL_SHA256, "reference_findings": []}
         inv_review = {"schema": "reference-provisional-inventory-review/1", "reviewer": "Claude", "accepted_for_provisional": True, "inventory_sha256": ref.sha(inventory), "package_library_sha256": provisional.inventory_digest(sample_inventory())}
         probe_review = {"schema": "reference-nine-probe-review/1", "reviewer": "Claude", "accepted": True, "probes_sha256": ref.sha(probes)}
         files = {"inventory": inventory, "inventory-review": ref.canonical(inv_review), "probe-review": ref.canonical(probe_review), provisional.BASE_BINDING: ref.canonical(row), "suite": suite, "probes": probes, "original": ref.canonical({"probes": original})}
+        files[ref.SIGN_APPROVAL_PATH] = ref.bounded(ref.ROOT / ref.SIGN_APPROVAL_PATH)
         for probe in expanded: files[probe["source"]["path"]] = b"public probe"
         request = {"schema": "reference-provisional-request/1", "provisional": True, "qualified": False, "freeze_enabled": False}
         for key, path in (("expected_inventory", "inventory"), ("inventory_review", "inventory-review"), ("probe_review", "probe-review"), ("source_binding", provisional.BASE_BINDING), ("suite", "suite"), ("probes", "probes")):
@@ -157,7 +158,7 @@ class ProvisionalTests(unittest.TestCase):
         self.assertFalse(report["comparison_criterion_met"])
 
     def test_unreviewed_request_refuses(self):
-        path = ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json"
+        path = ref.ROOT / "spec/reference-provisional/2026-11-16-preferred-signs-r1/REQUEST.json"
         request = ref.strict(ref.bounded(path))
         request["inventory_review"] = None
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), \
@@ -166,13 +167,14 @@ class ProvisionalTests(unittest.TestCase):
                 provisional.check_inputs(path)
 
     def test_delivered_sources_and_followup_review_join(self):
-        path = ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json"
+        path = ref.ROOT / "spec/reference-provisional/2026-11-16-preferred-signs-r1/REQUEST.json"
         request = ref.strict(ref.bounded(path))
         review_raw = ref.joined(ref.ROOT, request["probe_review"])
         self.assertEqual(ref.sha(review_raw), "32f8ad2dc029fe3a811521ef6cab0d4c77ccc1d085fef58fa887bed5130b8bd6")
         self.assertEqual(len(review_raw), 1973)
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}):
-            self.assertEqual(len(provisional.check_inputs(path)[3]), 9)
+            self.assertEqual(provisional.check_inputs(path)[1]["reference_limit_approval_sha256"],
+                             ref.SIGN_APPROVAL_SHA256)
         unbound = copy.deepcopy(request)
         unbound["probe_review"] = None
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), \
@@ -227,6 +229,65 @@ class ProvisionalTests(unittest.TestCase):
         raw = ref.bounded(ref.ROOT / "spec/reference-execution/2026-11-15/BINDING.json")
         with self.assertRaisesRegex(ref.Refused, "unbound-image_manifest"):
             ref.binding(raw)
+
+
+
+class ReferenceFindingTests(unittest.TestCase):
+    def inputs(self):
+        probes = ref.strict(ref.bounded(ref.ROOT /
+            "spec/reference-provisional/2026-11-15-followup-r1/PROBES.json"))["probes"]
+        p = next(p for p in probes if p["id"] == "zoned-signs-2")
+        binding = ref.strict(ref.bounded(ref.ROOT / provisional.BASE_BINDING))
+        return p, binding["reference_findings"]
+
+    def test_exact_registered_bytes_keep_ibm_expected_and_match_false(self):
+        p, findings = self.inputs()
+        result = provisional.probe_result(p, 0, b"12C\n12L\n123\n12D\n00{\n00N\n", b"", findings)
+        self.assertFalse(result["match"])
+        self.assertTrue(result["comparison_criterion_met"])
+        self.assertEqual(result["expected"]["stdout_hex"], p["stdout_hex"])
+        self.assertEqual(result["channels"]["stdout"]["status"], "PREREGISTERED_FINDING")
+        self.assertEqual(result["channels"]["stdout"]["difference_sha256"], findings[0]["difference_sha256"])
+
+    def test_other_stdout_change_cannot_reuse_first_difference_hash(self):
+        p, findings = self.inputs()
+        for out in (b"12C\n12L\n123\n12D\n00{\n00M\n", b"12C\n12L\n123\n12D\n00{\n00N\nx"):
+            with self.subTest(out=out):
+                self.assertFalse(provisional.probe_result(p, 0, out, b"", findings)["comparison_criterion_met"])
+
+    def test_exit_and_stderr_still_compare(self):
+        p, findings = self.inputs()
+        for code, err in ((1, b""), (0, b"warning")):
+            self.assertFalse(provisional.probe_result(p, code,
+                b"12C\n12L\n123\n12D\n00{\n00N\n", err, findings)["comparison_criterion_met"])
+
+    def test_no_registration_keeps_discrepancy(self):
+        p, _ = self.inputs()
+        self.assertFalse(provisional.probe_result(p, 0,
+            b"12C\n12L\n123\n12D\n00{\n00N\n", b"", [])["comparison_criterion_met"])
+
+    def test_wrong_scope_and_duplicate_refuse(self):
+        _, findings = self.inputs()
+        for key, value in (("probe", "decimal"), ("channel", "exit"),
+                           ("finding", "ANY"), ("pair", "reference-hand")):
+            altered = copy.deepcopy(findings)
+            altered[0][key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ref.Refused, "reference-finding-scope"):
+                provisional.validate_reference_findings(altered)
+        with self.assertRaisesRegex(ref.Refused, "reference-findings"):
+            provisional.validate_reference_findings(findings * 2)
+
+    def test_report_preserves_limit_and_false_raw_match(self):
+        p, findings = self.inputs()
+        observation = provisional.probe_result(p, 0,
+            b"12C\n12L\n123\n12D\n00{\n00N\n", b"", findings)
+        report = provisional.make_report("a", "b", "c", "d", [observation],
+            [{"freeze_criterion_met": True, "all_modelled_channels_match": True}])
+        self.assertTrue(report["comparison_criterion_met"])
+        self.assertFalse(report["all_probes_match"])
+        self.assertFalse(report["qualified"])
+        self.assertFalse(report["freeze_performed"])
+        self.assertIn(ref.SIGN_LIMIT, report["limit"])
 
 
 if __name__ == "__main__":

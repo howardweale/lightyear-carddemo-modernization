@@ -1,0 +1,34 @@
+{
+  "schema": "reference-provisional-request/1",
+  "provisional": true,
+  "qualified": false,
+  "freeze_enabled": false,
+  "expected_inventory": {
+    "path": "spec/reference-provisional/2026-11-15/EXPECTED-INVENTORY.json",
+    "sha256": "b0992a5b19dd770bacad96b075043adbb02ee49393cde1130b24a63ad33c3f3f"
+  },
+  "inventory_review": {
+    "path": "spec/reference-provisional/2026-11-15/INVENTORY-REVIEW-CLAUDE.json",
+    "sha256": "517f5eadecae8f3709b33e253dd73ebca5218383f1b91822257b99ed1add1431"
+  },
+  "probe_review": {
+    "path": "spec/reference-provisional/2026-11-15-followup-r1/NINE-PROBE-REVIEW-CLAUDE-FOLLOWUP.json",
+    "sha256": "32f8ad2dc029fe3a811521ef6cab0d4c77ccc1d085fef58fa887bed5130b8bd6"
+  },
+  "source_binding": {
+    "path": "spec/reference-execution/2026-11-16-preferred-signs-r1/BINDING.json",
+    "sha256": "fb8a0fcf32e20e0be71f8a3e478dcccb2f7b7221ee65284e8f6c720d26eb128d"
+  },
+  "suite": {
+    "path": "tests/fixtures/reference-execution/public-cases/SUITE.json",
+    "sha256": "6da875e28f95409290f77363c135ef98af395fe3448c9bf3e3da28b4cad370b2"
+  },
+  "probes": {
+    "path": "spec/reference-provisional/2026-11-15-followup-r1/PROBES.json",
+    "sha256": "65ab81023d9eb5cf538de1fb83165ce83b9bbc36051632929b0869bccb389ae5"
+  },
+  "prior_probe_review": {
+    "path": "spec/reference-provisional/2026-11-15/NINE-PROBE-REVIEW-CLAUDE.json",
+    "sha256": "dd2b295442336135a6d525ce67c5a238320f9940c99846cd3db20cdd026b1c56"
+  }
+}

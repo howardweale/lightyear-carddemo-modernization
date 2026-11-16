@@ -15,7 +15,12 @@ import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-LIMIT = "open-source reference, not mainframe-proven"
+SIGN_LIMIT = "REFERENCE_LIMIT_PREFERRED_SIGNS"
+SIGN_APPROVAL_PATH = "spec/reference-execution/2026-11-16-preferred-signs-r1/HOWARD-DECISION-20261116.md"
+SIGN_APPROVAL_SHA256 = "6f12d921e95d875acee50ccf27f08356a79aa87e05cf8374e962218dbf2c13a2"
+SIGN_SCOPE = ("signed zoned inputs require preferred C/D signs; zone-F signed inputs "
+              "are outside the reference proven domain and need mainframe evidence")
+LIMIT = "open-source reference, not mainframe-proven; " + SIGN_LIMIT + ": " + SIGN_SCOPE
 MAX_BYTES = 8 * 1024 * 1024
 DDS = {"ACCTFILE": (300, 11), "TCATBALF": (50, 17),
        "DISCGRP": (50, 16), "XREFFILE": (50, 16), "TRANSACT": (350, 0)}
@@ -110,6 +115,7 @@ def binding(raw):
             "public-case-inventory")
     require(row.get("hidden_generation_enabled") is False and
             row.get("freeze_enabled") is False, "no-freeze-authority")
+    reference_domain_binding(row)
     return row
 
 
@@ -128,8 +134,42 @@ def clock_env(timestamp, processing_date):
             f"{dt.microsecond:06}000", "TWIN_PROCESSING_DATE": processing_date}
 
 
-def bridge(raw, width, key, *, order_observable=False):
+def reference_domain_binding(row):
+    require(row.get("reference_limits") == [SIGN_LIMIT], "reference-sign-limit-binding")
+    approval = row.get("reference_limit_approval_sha256")
+    require(type(approval) is str and re.fullmatch(r"[0-9a-f]{64}", approval),
+            "reference-limit-decision-pending")
+    require(approval == SIGN_APPROVAL_SHA256, "reference-limit-approval-mismatch")
+    joined(ROOT, {"path": SIGN_APPROVAL_PATH, "sha256": approval})
+
+
+def preferred_signs(raw, layout, width):
+    # The caller supplies the pinned input copybook layout, never an inferred
+    # record value or a suite-authored list of fields to exempt.
+    require(layout.record_length == width and not layout.variable and not layout.overlays,
+            "reference-sign-layout")
     require(len(raw) % width == 0, "partial-record")
+    for field in layout.fields:
+        if not field.signed:
+            continue
+        require(field.usage == "DISPLAY", "reference-sign-layout")
+        require(not field.separate and field.sign in ("LEADING", "TRAILING") and
+                field.length > 0 and field.offset >= 0 and
+                field.offset + field.length <= width, "reference-sign-layout")
+        sign_offset = 0 if field.sign == "LEADING" else field.length - 1
+        for start in range(0, len(raw), width):
+            value = raw[start + field.offset:start + field.offset + field.length]
+            require(all(b & 15 <= 9 for b in value), "reference-zoned-digit")
+            require(value[sign_offset] >> 4 in (12, 13),
+                    "reference-signed-zoned-nonpreferred")
+            require(all(b >> 4 == 15 for i, b in enumerate(value) if i != sign_offset),
+                    "reference-zoned-digit-zone")
+
+
+def bridge(raw, width, key, *, order_observable=False, layout=None):
+    require(len(raw) % width == 0, "partial-record")
+    if layout is not None:
+        preferred_signs(raw, layout, width)
     try:
         converted = raw.decode("cp037").encode("ascii")
     except UnicodeError as exc:
@@ -385,7 +425,9 @@ def compare_results(case, reference, hand, python, layouts):
 def public_case(case, suite_root, work, compiled, deadline, layouts):
     require(set(case["inputs"]) == set(DDS) - {"TRANSACT"}, "input-dds")
     images = {dd: joined(suite_root, row) for dd, row in case["inputs"].items()}
-    converted = {dd: bridge(raw, *DDS[dd],
+    require(all(dd in layouts and layouts[dd] is not None for dd in images),
+            "reference-sign-layout")
+    converted = {dd: bridge(raw, *DDS[dd], layout=layouts[dd],
                             order_observable=dd in ("TCATBALF", "ACCTFILE"))
                  for dd, raw in images.items()}
     compare_files = comparison_policy(case)

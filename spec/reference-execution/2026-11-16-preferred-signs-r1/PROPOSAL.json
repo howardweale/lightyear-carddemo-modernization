@@ -1,0 +1,46 @@
+{
+  "work_item": "Reference preferred-sign limit (no PR yet, r2)",
+  "pull_request": null,
+  "status": "LIMIT_ADOPTED_2026-11-16_IMPLEMENTATION_PROPOSED",
+  "limit": "REFERENCE_LIMIT_PREFERRED_SIGNS",
+  "signed_zoned_input_signs": [
+    "C",
+    "D"
+  ],
+  "outside_domain": "All non-preferred signed zones, including F; mainframe evidence required.",
+  "reference_finding": {
+    "finding": "REFERENCE_LIMIT_PREFERRED_SIGNS",
+    "probe": "zoned-signs-2",
+    "pair": "reference-ibm",
+    "channel": "stdout",
+    "difference_sha256": "772816a31ba5f27d3ccd7a9b99b614a699624c569e6456f55bf456dddd208803"
+  },
+  "difference": {
+    "byte": 10,
+    "record": 11,
+    "offset": 0,
+    "field": "FILLER_OR_BOUNDARY",
+    "left": "33",
+    "right": "43",
+    "left_bytes": 24,
+    "right_bytes": 24,
+    "left_sha256": "0d5f77717718c1f59ecd6a34e94b36b692da422bdb2f60c71040494e148add28",
+    "right_sha256": "7d9a2836e57671b194b49d7892f497b114d16424dc63ae6ddbca2f9bb96ce6ac"
+  },
+  "difference_serialization": "SHA256 of canonical sorted-key compact ASCII JSON; left is observed reference, right is unchanged IBM expected. First-difference fields follow python_findings; full left/right byte hashes additionally bind the complete stdout.",
+  "evidence_run": 43944811159,
+  "evidence_manifest_sha256": "0d26957b2748447ad0fe54c662631fb25c18157ab11aa889cba9e71eab114032",
+  "evidence_release": "full-intcalc-reference-provisional-results-20261116-r2",
+  "adoption_block": "Howard adopted the named limit on 16 November 2026. Admission requires the exact pinned decision hash and file bytes. This is provenance, not cryptographic authentication or dispatch authority.",
+  "unchanged": [
+    "probe source and IBM expectation",
+    "Claude suite and hand outputs",
+    "old dated bindings and receipts",
+    "retired gate and skip exception",
+    "no freeze or dispatch authority"
+  ],
+  "decision_record": {
+    "path": "spec/reference-execution/2026-11-16-preferred-signs-r1/HOWARD-DECISION-20261116.md",
+    "sha256": "6f12d921e95d875acee50ccf27f08356a79aa87e05cf8374e962218dbf2c13a2"
+  }
+}

@@ -19,7 +19,8 @@ def valid_binding():
     row.update(schema="intcalc-reference-binding/1", platform="linux/amd64",
                compiler_package="3.1.2-5.1ubuntu1", flags=ref.FLAGS,
                case_ids=ref.IDS, case_author="Claude",
-               hidden_generation_enabled=False, freeze_enabled=False)
+               hidden_generation_enabled=False, freeze_enabled=False,
+               reference_limits=[ref.SIGN_LIMIT], reference_limit_approval_sha256=ref.SIGN_APPROVAL_SHA256)
     return row
 
 
@@ -348,13 +349,124 @@ class RuntimeDiagnosticsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             with patch.object(ref, "joined", return_value=b""), \
+                    patch.object(ref, "bridge", return_value=b""), \
                     patch.object(ref, "checked"), \
                     patch.object(ref, "run", side_effect=[(12, b"", raw), (2, b"", b"python-oracle-exception\n")]):
-                report = ref.public_case(case, root, root, root, 123, {})
+                report = ref.public_case(case, root, root, root, 123, {dd: object() for dd in ref.DDS})
             self.assertTrue(report["freeze_criterion_met"])
             self.assertEqual((root / "observations/reference/stderr.raw").read_bytes(), raw)
             self.assertEqual((root / "observations/reference/stderr").read_bytes(), b"")
             self.assertEqual((root / "observations/python/stderr").read_bytes(), b"python-oracle-exception\n")
+
+
+
+class PreferredSignTests(unittest.TestCase):
+    @staticmethod
+    def layout(leading=False, separate=False):
+        from lightyear_mainframe.records import compile_copybook
+        sign = " SIGN IS LEADING" if leading else ""
+        if separate:
+            sign = " SIGN IS TRAILING SEPARATE CHARACTER"
+        return compile_copybook("       01 R.\n           05 V PIC S9(3)" + sign + ".\n")
+
+    def test_cd_preferred_signs_including_zero_accept(self):
+        for value in ("12C", "12L", "00{", "00}"):
+            with self.subTest(value=value):
+                self.assertEqual(ref.bridge(value.encode("cp037"), 3, 0,
+                                            layout=self.layout()), value.encode("ascii"))
+
+    def test_nonpreferred_signed_signs_refuse(self):
+        for zone in (10, 11, 14, 15):
+            with self.subTest(zone=zone), self.assertRaisesRegex(ref.Refused,
+                    "reference-signed-zoned-nonpreferred"):
+                ref.bridge(bytes((0xf1, 0xf2, (zone << 4) | 3)), 3, 0,
+                           layout=self.layout())
+
+    def test_later_record_is_checked(self):
+        with self.assertRaisesRegex(ref.Refused, "reference-signed-zoned-nonpreferred"):
+            ref.bridge("12C123".encode("cp037"), 3, 0, layout=self.layout())
+
+    def test_leading_sign_is_checked(self):
+        self.assertEqual(ref.bridge("A23".encode("cp037"), 3, 0,
+                                    layout=self.layout(leading=True)), b"A23")
+        with self.assertRaisesRegex(ref.Refused, "reference-signed-zoned-nonpreferred"):
+            ref.bridge("123".encode("cp037"), 3, 0, layout=self.layout(leading=True))
+
+    def test_unsigned_zone_f_is_not_refused(self):
+        from lightyear_mainframe.records import compile_copybook
+        layout = compile_copybook("       01 R.\n           05 V PIC 9(3).\n")
+        self.assertEqual(ref.bridge("123".encode("cp037"), 3, 0, layout=layout), b"123")
+
+    def test_separate_sign_and_partial_records_refuse(self):
+        with self.assertRaisesRegex(ref.Refused, "reference-sign-layout"):
+            ref.bridge("123+".encode("cp037"), 4, 0, layout=self.layout(separate=True))
+        with self.assertRaisesRegex(ref.Refused, "partial-record"):
+            ref.bridge(b"x", 3, 0, layout=self.layout())
+
+    def test_signed_non_display_layouts_refuse_even_without_records(self):
+        from dataclasses import replace
+        layout = self.layout()
+        for usage in ("COMP", "COMP-3", "UNKNOWN"):
+            for raw in (b"", b"123"):
+                with self.subTest(usage=usage, raw=raw):
+                    bad = replace(layout, fields=tuple(replace(field, usage=usage)
+                                  for field in layout.fields))
+                    with self.assertRaisesRegex(ref.Refused, "reference-sign-layout"):
+                        ref.preferred_signs(raw, bad, 3)
+
+    def test_actual_public_inputs_use_preferred_signs(self):
+        from lightyear_mainframe.records import load_copybook
+        from lightyear_mainframe.zos_bindings import load_bindings, dataset_binding
+        root = ref.ROOT / "tests/fixtures/reference-execution/public-cases"
+        suite = ref.strict(ref.bounded(root / "SUITE.json"))
+        layouts = {dd: load_copybook(ref.ROOT / dataset_binding(load_bindings(),
+                   "INTCALC", "STEP15", dd)["copybook"]) for dd in ref.DDS}
+        for case in suite["cases"]:
+            for dd, record in case["inputs"].items():
+                with self.subTest(case=case["id"], dd=dd):
+                    ref.bridge(ref.joined(root, record), *ref.DDS[dd], layout=layouts[dd],
+                               order_observable=dd in ("ACCTFILE", "TCATBALF"))
+
+    def test_adoption_is_pending_until_hash_bound(self):
+        row = valid_binding()
+        row["reference_limit_approval_sha256"] = None
+        with self.assertRaisesRegex(ref.Refused, "reference-limit-decision-pending"):
+            ref.binding(ref.canonical(row))
+
+    def test_mismatched_approval_refuses(self):
+        row = valid_binding()
+        row["reference_limit_approval_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ref.Refused, "reference-limit-approval-mismatch"):
+            ref.binding(ref.canonical(row))
+
+    def test_exact_decision_record_is_pinned_and_tampering_refuses(self):
+        self.assertEqual(ref.sha(ref.bounded(ref.ROOT / ref.SIGN_APPROVAL_PATH)),
+                         ref.SIGN_APPROVAL_SHA256)
+        ref.reference_domain_binding(valid_binding())
+        with patch.object(ref, "bounded", return_value=b"changed decision"):
+            with self.assertRaisesRegex(ref.Refused, "file-hash"):
+                ref.reference_domain_binding(valid_binding())
+
+    def test_case_refuses_before_any_file_loader_or_program(self):
+        from lightyear_mainframe.records import load_copybook
+        from lightyear_mainframe.zos_bindings import load_bindings, dataset_binding
+        root = ref.ROOT / "tests/fixtures/reference-execution/public-cases"
+        case = ref.strict(ref.bounded(root / "SUITE.json"))["cases"][1]
+        layouts = {dd: load_copybook(ref.ROOT / dataset_binding(load_bindings(),
+                   "INTCALC", "STEP15", dd)["copybook"]) for dd in ref.DDS}
+        target = case["inputs"]["ACCTFILE"]
+        bad = bytearray(ref.joined(root, target))
+        field = next(f for f in layouts["ACCTFILE"].fields if f.signed and f.usage == "DISPLAY")
+        offset = field.offset + (0 if field.sign == "LEADING" else field.length - 1)
+        bad[offset] = 0xf0 | (bad[offset] & 15)
+        original = ref.joined
+        with patch.object(ref, "joined", side_effect=lambda folder, record:
+                          bytes(bad) if record == target else original(folder, record)), \
+                patch.object(ref, "checked") as loader, patch.object(ref, "run") as program:
+            with self.assertRaisesRegex(ref.Refused, "reference-signed-zoned-nonpreferred"):
+                ref.public_case(case, root, Path("unused"), Path("unused"), 123, layouts)
+            loader.assert_not_called()
+            program.assert_not_called()
 
 
 if __name__ == "__main__":

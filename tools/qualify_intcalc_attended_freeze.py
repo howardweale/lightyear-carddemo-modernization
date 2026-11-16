@@ -9,6 +9,7 @@ import subprocess
 import sys
 import urllib.request
 from tools import intcalc_attended_freeze as module
+from lightyear_mainframe import intcalc_retirement as retirement
 
 
 def inventory(root):
@@ -24,6 +25,7 @@ def inventory(root):
 
 
 def main():
+    retirement.require_current(module.Refused)
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         raise module.Refused('ci-only-equivalence')
     p = module.Parser()

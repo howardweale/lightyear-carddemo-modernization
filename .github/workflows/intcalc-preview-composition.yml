@@ -2,6 +2,10 @@ name: C2 composition synthetic checks
 on:
   pull_request:
     paths:
+      - 'src/lightyear_mainframe/__init__.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/lightyear_factory/intcalc_preview_composition.py'
       - 'src/lightyear_factory/__init__.py'
       - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
@@ -16,6 +20,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/lightyear_mainframe/__init__.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - 'src/lightyear_factory/intcalc_preview_composition.py'
       - 'src/lightyear_factory/__init__.py'
       - 'spec/intcalc-preview/2026-11-14/RUN1-REFUSAL-OUTPUT-FIX.json'
@@ -90,7 +98,8 @@ jobs:
           from unittest.mock import patch
           from lightyear_factory import intcalc_preview_composition as c
           from test_intcalc_preview_composition import FakePorts,packet,PUBLIC,ALLOWLIST
-          with patch.object(c,'CONTEXT_HASH',c.digest(PUBLIC)),patch.object(c,'ALLOWLIST_HASH',c.digest(ALLOWLIST)):
+          # Historical synthetic result only; no provider, candidate or admission.
+          with patch.object(c.retirement,'require_current'),patch.object(c,'CONTEXT_HASH',c.digest(PUBLIC)),patch.object(c,'ALLOWLIST_HASH',c.digest(ALLOWLIST)):
               ports=FakePorts()
               result=c.Composition(packet(),PUBLIC,ALLOWLIST,ports,clock=lambda:ports.now).run()
           c.verify_result(result)

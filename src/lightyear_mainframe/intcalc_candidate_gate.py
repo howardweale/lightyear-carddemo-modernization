@@ -26,6 +26,7 @@ import uuid
 
 from carddemo_oracle.compare import compare_directories, validate_normalization_ledger
 from .public_dataset_diff import compare_dataset
+from lightyear_mainframe import intcalc_retirement as retirement
 
 ROOT = Path(__file__).resolve().parents[2]
 UPSTREAM = "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
@@ -358,6 +359,7 @@ def tar_inventory(raw):
 
 
 def execute_case(image, artifact, inputs, case, deadline, retained, *, runtime_platform):
+    retirement.require_current(Refused)
     runtime_platform = selected_runtime_platform({"runtime_platform": runtime_platform})
     observed_daemon_platform = None
     # Shared bounded tmpfs volume; trusted collector reads it after candidate pause.
@@ -619,6 +621,7 @@ def _compare_report_only_view(expected, actual, codec, retained):
 def run(binding_path, binding_sha256, attempt_dir, *, absolute_deadline=None,
         docker_prefix=None, resource_register=None, cleanup_seconds=5):
     """Legacy C1 behavior stays unchanged; C2 supplies one trusted absolute end."""
+    retirement.require_current(Refused)
     if absolute_deadline is None:
         if docker_prefix is not None or resource_register is not None or cleanup_seconds != 5:
             raise Refused("absolute-runtime-incomplete")
@@ -644,6 +647,7 @@ def run(binding_path, binding_sha256, attempt_dir, *, absolute_deadline=None,
 
 
 def _run(binding_path, binding_sha256, attempt_dir, *, started=None):
+    retirement.require_current(Refused)
     raw = regular(binding_path)
     if digest(raw) != binding_sha256:
         raise Refused("approved-binding-hash-required")

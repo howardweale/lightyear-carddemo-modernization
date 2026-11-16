@@ -1,7 +1,15 @@
-name: C2 build-gate-adapter qualification
+name: C2 build-gate synthetic and retirement checks
 on:
   pull_request:
     paths:
+      - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
+      - 'src/lightyear_factory/intcalc_preview_ledger_volume.py'
+      - 'tools/intcalc_attended_freeze.py'
+      - 'tools/qualify_intcalc_attended_freeze.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - '.github/workflows/intcalc-preview-build-gate-adapter.yml'
       - 'spec/intcalc-preview/2026-11-13/BUILD-GATE-ADAPTER-IMPLEMENTATION-R3.json'
       - 'spec/intcalc-preview/2026-11-13/COMPILATION-FEEDBACK-NAMED-LIMIT.json'
@@ -31,6 +39,14 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/lightyear_factory/intcalc_preview_admission.py'
+      - 'src/lightyear_factory/intcalc_preview_bootstrap.py'
+      - 'src/lightyear_factory/intcalc_preview_ledger_volume.py'
+      - 'tools/intcalc_attended_freeze.py'
+      - 'tools/qualify_intcalc_attended_freeze.py'
+      - src/lightyear_mainframe/intcalc_retirement.py
+      - spec/intcalc-retirement/**
+      - tests/test_intcalc_retirement.py
       - '.github/workflows/intcalc-preview-build-gate-adapter.yml'
       - 'spec/intcalc-preview/2026-11-13/BUILD-GATE-ADAPTER-IMPLEMENTATION-R3.json'
       - 'spec/intcalc-preview/2026-11-13/COMPILATION-FEEDBACK-NAMED-LIMIT.json'
@@ -96,53 +112,21 @@ jobs:
           assert result.wasSuccessful() and not result.skipped and result.testsRun == 31
           PY
   real-arm-fixture:
+    name: Retired verifier refusal proof (NOT QUALIFICATION)
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 35
-    env:
-      PYTHONPATH: src:.:tests
-      PYTHONDONTWRITEBYTECODE: '1'
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
-      - name: Fetch exact verifier-only asset inside this job into RUNNER_TEMP
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -B - <<'PY'
-          import hashlib, io, json, os, stat, urllib.request, zipfile
-          from pathlib import Path
-          url = 'https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/full-intcalc-c1-proposal-r3/VERIFIER-CASES.zip'
-          with urllib.request.urlopen(url, timeout=30) as response:
-              raw = response.read(1024*1024+1)
-          assert len(raw) <= 1024*1024 and hashlib.sha256(raw).hexdigest() == '6936f0cfbad8925098ff8068d7b79a18f3a9a8d58ccc6b2d8c93c5c6d3f18e33'
-          root = Path(os.environ['RUNNER_TEMP'])/'intcalc-verifier'
-          root.mkdir()
-          with zipfile.ZipFile(io.BytesIO(raw)) as archive:
-              names = archive.namelist()
-              assert len(names)==3 and set(names)=={'BUNDLE.json','cases.json','freeze.py'}
-              for item in archive.infolist():
-                  assert item.file_size <= 128*1024 and stat.S_ISREG(item.external_attr >> 16)
-                  (root/item.filename).write_bytes(archive.read(item))
-          manifest = json.loads((root/'BUNDLE.json').read_text())
-          assert manifest['model_context_eligible'] is False
-          for name, row in manifest['files'].items():
-              data = (root/name).read_bytes()
-              assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
-          PY
-      - name: Freeze private cases without printing or publishing them
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -B "$RUNNER_TEMP/intcalc-verifier/freeze.py" --root "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/intcalc-frozen" > "$RUNNER_TEMP/c2-freeze-private.log" 2>&1
-      - name: Only two digest-pinned image pulls
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker pull --platform=linux/arm64 eclipse-temurin@sha256:3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07
-          docker pull --platform=linux/arm64 eclipse-temurin@sha256:8def71d61fd7f95b08480f51e8ac35e37ec87a0aaad6950a6f1e35c771de5b2d
-      - name: Real adapter workers and absolute gate deadline; public fixture only
-        run: python3 -B tools/qualify_intcalc_preview_build_gate.py
-      - uses: actions/upload-artifact@v4
         with:
-          name: c2-build-gate-counts-hashes-cleanup
-          path: ${{ runner.temp }}/c2-build-gate-public.json
-          if-no-files-found: error
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Retirement negatives; no cases, freeze, images or execution
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_retirement
+      - name: Explicit retired state, never new qualification
+        shell: bash
+        run: echo 'RETIRED_NOT_QUALIFIED; no case fetch, freeze, candidate or model executed'

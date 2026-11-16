@@ -18,7 +18,7 @@ class CandidateGateTests(unittest.TestCase):
     def setUpClass(cls):
         frozen = os.environ.get("C1_FROZEN")
         if not frozen or not Path(frozen).is_dir():
-            raise unittest.SkipTest("C1_FROZEN directory absent; dedicated C1 CI supplies it")
+            raise unittest.SkipTest("Retired INTCALC bundle 6936f0cf: no frozen set; 19 CandidateGateTests run in no job; coverage returns with the reference-backed gate")
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -342,6 +342,24 @@ class PlatformBindingTests(unittest.TestCase):
         calls,result,runtime,error=self._execute("linux/arm64",b"",info_rc=1)
         self.assertEqual(error,"docker-operation-failed:info")
         self.assertFalse(any(a[1]=="create" for a in calls))
+
+
+
+
+# Historical synthetic semantics remain tested without granting live admission.
+# test_intcalc_retirement exercises every real boundary with this mock absent.
+from unittest.mock import patch as _retirement_unit_patch
+
+
+def setUpModule():
+    global _retirement_unit_scope
+    _retirement_unit_scope = _retirement_unit_patch(
+        "lightyear_mainframe.intcalc_retirement.require_current", return_value=None)
+    _retirement_unit_scope.start()
+
+
+def tearDownModule():
+    _retirement_unit_scope.stop()
 
 
 if __name__=="__main__":

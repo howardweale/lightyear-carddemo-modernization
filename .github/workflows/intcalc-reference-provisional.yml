@@ -1,0 +1,73 @@
+name: INTCALC provisional public comparison
+on:
+  pull_request:
+    paths: ['src/**', 'tools/**', 'spec/**', 'tests/test_intcalc_reference_provisional.py', 'tests/fixtures/reference-execution/**', '.github/workflows/intcalc-reference-provisional.yml']
+  push:
+    branches: [main]
+    paths: ['src/**', 'tools/**', 'spec/**', 'tests/test_intcalc_reference_provisional.py', 'tests/fixtures/reference-execution/**', '.github/workflows/intcalc-reference-provisional.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  provisional-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic tests only
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_reference_provisional
+  provisional-public:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Require reviewed inventory and nine probes before build
+        env:
+          PYTHONPATH: src:.
+        run: python -B -m tools.intcalc_reference_provisional check-inputs --request spec/reference-provisional/2026-11-15/REQUEST.json
+      - name: Build pinned native image in this job only
+        shell: bash
+        run: |
+          test "$(uname -m)" = x86_64
+          case "$(docker info --format '{{.OSType}}/{{.Architecture}}')" in linux/x86_64|linux/amd64) ;; *) exit 2 ;; esac
+          docker build --platform linux/amd64 --file tools/legacy_twin/reproducible.Containerfile --iidfile "$RUNNER_TEMP/provisional-image.id" .
+      - name: Inventory-match then provisional public comparison
+        env:
+          PYTHONPATH: src:.
+        shell: bash
+        run: python -B -m tools.intcalc_reference_provisional_container --request spec/reference-provisional/2026-11-15/REQUEST.json --image-id "$(cat "$RUNNER_TEMP/provisional-image.id")" --output "$RUNNER_TEMP/reference-provisional"
+      - name: Public provisional evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-provisional-discrepancy
+          path: |
+            ${{ runner.temp }}/reference-provisional/report.json
+            ${{ runner.temp }}/reference-provisional/inventory.json
+            ${{ runner.temp }}/reference-provisional/container-cleanup.json
+            ${{ runner.temp }}/reference-provisional/controller.log
+            ${{ runner.temp }}/reference-provisional/public/PC-*/observations/**
+            ${{ runner.temp }}/reference-provisional/public/probe-*/observations/**
+          retention-days: 30
+          if-no-files-found: warn

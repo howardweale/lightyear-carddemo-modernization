@@ -1,0 +1,26 @@
+{
+ "accepted": true,
+ "added": [
+  {
+   "derivation": "PIC S9(3) DISPLAY seen through X(3), EBCDIC sign convention as characters. '12C' is +123 and stays '12C' after ADD 0. '12L' is -123 and stays '12L'. '123' (zone F) is +123 and becomes '12C' after ADD 0, because arithmetic stores the preferred sign. MOVE 0 stores '00{'. MOVE -5 stores '00N'. Exit 0, no output.",
+   "id": "zoned-signs",
+   "source_sha256": "e46c8a0b360b7cfa2c9bc5f08a5f5279d88e0b5e2a4bdfaccf8643e84c05ada5",
+   "verdict": "EXPECTATION_CONFIRMED"
+  },
+  {
+   "derivation": "Through data items S9(09)V99 * S9(04)V99 / 1200 into S9(09)V99: 250.75 and 21.00 give 4.388125, stored 4.38; -250.75 gives -4.38; 999999999.99 and 9999.99 give 8333324999.91666675, stored 333324999.91 (decimals discarded, leading digit lost; no ROUNDED, no ON SIZE ERROR). Exit 0, no output.",
+   "id": "decimal-data-items",
+   "source_sha256": "2431acc4d2a825cebfbbb6dbecba17ddd75c8cd36af775345887b3fbd9807249",
+   "verdict": "EXPECTATION_CONFIRMED"
+  }
+ ],
+ "basis": "IBM Enterprise COBOL for z/OS 6.4 rules and the public CBACT04C source; sources read, not executed",
+ "limit": "Review of expectations, not execution or qualification; open-source reference, not mainframe-proven",
+ "original_seven": {
+  "review_sha256": "e0f92b2d5125a98a2540cf28e6de5edcd63d3ec48f09f97d652aaf3b1002a0d7",
+  "status": "First seven entries are identical to the merged PROBES.json (a1c2d81b...) already reviewed; expectations confirmed there."
+ },
+ "probes_sha256": "f65d6298e13976759b3b966e98da1676821113dbb3cb643e497726c01f34b755",
+ "reviewer": "Claude",
+ "schema": "reference-nine-probe-review/1"
+}

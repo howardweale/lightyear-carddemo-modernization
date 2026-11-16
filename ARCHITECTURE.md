@@ -56,6 +56,10 @@ The public [reference qualification tool](tools/intcalc_reference_execution.py)
 compares original COBOL execution, independent public derivations and the retained
 Python oracle. Reference image and profile qualification remain prerequisites;
 this tool does not admit candidates, freeze answers or handle a private seed.
+A separate provisional comparison builds the same-job image and requires a
+reviewed package/library inventory match before public probes or cases. Its
+reports are explicitly provisional and unqualified; it cannot freeze answers
+or satisfy the published-image qualification path.
 
 Trust lives in the hash-chained decision journal, controlled signing keys, input
 hashes and verified receipts. The Tower is the interface to that authority; its

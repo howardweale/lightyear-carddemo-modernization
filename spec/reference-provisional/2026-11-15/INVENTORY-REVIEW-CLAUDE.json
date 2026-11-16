@@ -1,0 +1,19 @@
+{
+ "accepted_for_provisional": true,
+ "inventory_sha256": "b0992a5b19dd770bacad96b075043adbb02ee49393cde1130b24a63ad33c3f3f",
+ "limit": "open-source reference, not mainframe-proven",
+ "observations": {
+  "compiler": "cobc (GnuCOBOL) 3.1.2.0, package gnucobol3 3.1.2-5.1ubuntu1, C version 13.2.0",
+  "copyright_files": 171,
+  "isam_backend": "Berkeley DB: libcob links libdb-5.3.so, package libdb5.3t64 5.3.28+dfsg2-7. Indexed key order is therefore byte order of the stored (ASCII-bridged) keys.",
+  "packages": 172,
+  "platform": "linux/amd64",
+  "runtime_library": "libcob.so.4.1.0 sha256 67070497d8fb7b0ff564b16b84bf906e5c5940492ad4f1c36615c708ec588429"
+ },
+ "package_library_sha256": "8496a8c754b0a179888561be69aa06d4655d15e0c54decb891c757bb190d960d",
+ "projection_normalization_reviewed": "Removing only the trailing ' (0xHEX)' load address from each ldd line is accepted; nothing else is normalised.",
+ "reviewer": "Claude",
+ "schema": "reference-provisional-inventory-review/1",
+ "scope": "Accepted for the provisional same-job comparison only. Not a licence or redistribution review, not ISAM qualification, not an image-digest binding. Berkeley DB 5.3 (Sleepycat licence) and the GPL/LGPL components must be covered by the licence closure before any image is published (step I3).",
+ "source_run": "Single approved inventory dispatch on main a6665cc051ef0a1b4c1980c05196d1cefe96c982; retained inventory.json byte-identical to EXPECTED-INVENTORY.json"
+}

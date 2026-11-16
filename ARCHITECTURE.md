@@ -57,7 +57,7 @@ compares original COBOL execution, independent public derivations and the retain
 Python oracle. Reference image and profile qualification remain prerequisites;
 this tool does not admit candidates, freeze answers or handle a private seed.
 A separate provisional comparison builds the same-job image and requires a
-reviewed package/library inventory match before public probes or cases. Its
+reviewed package and library inventory match before public probes or cases. Its
 reports are explicitly provisional and unqualified; it cannot freeze answers
 or satisfy the published-image qualification path.
 

@@ -45,7 +45,7 @@ jobs:
       - name: Require reviewed inventory and nine probes before build
         env:
           PYTHONPATH: src:.
-        run: python -B -m tools.intcalc_reference_provisional check-inputs --request spec/reference-provisional/2026-11-15/REQUEST.json
+        run: python -B -m tools.intcalc_reference_provisional check-inputs --request spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json
       - name: Build pinned native image in this job only
         shell: bash
         run: |
@@ -56,7 +56,7 @@ jobs:
         env:
           PYTHONPATH: src:.
         shell: bash
-        run: python -B -m tools.intcalc_reference_provisional_container --request spec/reference-provisional/2026-11-15/REQUEST.json --image-id "$(cat "$RUNNER_TEMP/provisional-image.id")" --output "$RUNNER_TEMP/reference-provisional"
+        run: python -B -m tools.intcalc_reference_provisional_container --request spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json --image-id "$(cat "$RUNNER_TEMP/provisional-image.id")" --output "$RUNNER_TEMP/reference-provisional"
       - name: Public provisional evidence only
         if: always()
         uses: actions/upload-artifact@v4

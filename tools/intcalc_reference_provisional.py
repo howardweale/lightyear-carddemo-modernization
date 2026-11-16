@@ -7,8 +7,8 @@ import re
 import time
 from tools import intcalc_reference_execution as ref
 
-BASE_BINDING = "spec/reference-execution/2026-11-15/BINDING.json"
-NEW_PROBES = ("zoned-signs", "decimal-data-items")
+BASE_BINDING = "spec/reference-execution/2026-11-15-followup-r1/BINDING.json"
+NEW_PROBES = ("zoned-signs-2", "decimal-data-items")
 
 
 def inventory_projection(value):

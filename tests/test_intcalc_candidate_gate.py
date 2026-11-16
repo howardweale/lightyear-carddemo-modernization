@@ -18,7 +18,7 @@ class CandidateGateTests(unittest.TestCase):
     def setUpClass(cls):
         frozen = os.environ.get("C1_FROZEN")
         if not frozen or not Path(frozen).is_dir():
-            raise unittest.SkipTest("C1_FROZEN directory absent; dedicated C1 CI supplies it")
+            raise unittest.SkipTest("Retired INTCALC bundle 6936f0cf: no frozen set; 19 CandidateGateTests run in no job; coverage returns with the reference-backed gate")
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()

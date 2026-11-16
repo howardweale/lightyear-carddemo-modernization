@@ -80,12 +80,47 @@ class ExecutionRunner(unittest.TextTestRunner):
         return self.observed
 
 
+def check_named_exception(entry, root):
+    exception = entry.get('exception')
+    if exception is None:
+        return
+    if not isinstance(exception, dict) or set(exception) != {'name', 'expires_at', 'valid_while_sources'}:
+        raise ValueError('skip-policy-exception-schema')
+    if not isinstance(exception['name'], str) or not re.fullmatch(r'[A-Z][A-Z0-9_-]+', exception['name']):
+        raise ValueError('skip-policy-exception-name')
+    try:
+        expiry = datetime.fromisoformat(exception['expires_at'])
+    except (TypeError, ValueError):
+        raise ValueError('skip-policy-exception-expiry') from None
+    if expiry.tzinfo is None or expiry.utcoffset() is None:
+        raise ValueError('skip-policy-exception-expiry')
+    if datetime.now(timezone.utc) >= expiry:
+        raise ValueError('skip-policy-exception-expired:' + exception['name'])
+    sources = exception['valid_while_sources']
+    if not isinstance(sources, dict) or not sources:
+        raise ValueError('skip-policy-exception-sources')
+    base = Path(root).resolve()
+    for name, expected in sources.items():
+        if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9_./-]+', name):
+            raise ValueError('skip-policy-exception-path')
+        parts = name.split('/')
+        if any(part in ('', '.', '..') for part in parts) or ':' in name:
+            raise ValueError('skip-policy-exception-path')
+        path = base.joinpath(*parts)
+        if (path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(base)
+                or not isinstance(expected, str) or re.fullmatch(r'[0-9a-f]{64}', expected) is None):
+            raise ValueError('skip-policy-exception-source')
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise ValueError('skip-policy-exception-ended:' + exception['name'])
+
+
 def load_policy(path, root):
     policy = json.loads(Path(path).read_text(encoding='utf-8'))
     if policy.get('schema') != 'ci-test-skip-policy/1':
         raise ValueError('skip-policy-schema')
     seen = set()
     for entry in policy['allowances']:
+        check_named_exception(entry, root)
         key = (entry['selector'], entry['reason'], tuple(entry['platforms']))
         if key in seen or entry['scope'] not in ('test', 'class'):
             raise ValueError('skip-policy-duplicate-or-scope')

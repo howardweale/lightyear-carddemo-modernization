@@ -48,12 +48,19 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
           python -B -m unittest test_intcalc_attended_freeze
-      - name: Real read-only source admission at checked-out HEAD
+      - name: Retired source admission refuses before inspection
         if: runner.os != 'Windows'
         shell: bash
         run: |
           export PYTHONPATH=src:.
-          python -B -m tools.qualify_intcalc_attended_freeze --source "$GITHUB_WORKSPACE" --source-admission-only
+          python -B - <<'PY'
+          import os,subprocess,sys
+          result=subprocess.run([sys.executable,'-B','-m','tools.qualify_intcalc_attended_freeze','--source',os.environ['GITHUB_WORKSPACE'],'--source-admission-only'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)
+          assert result.returncode==2, 'retirement-exit'
+          assert result.stdout==b'retired-verifier-set\n', 'retirement-stdout'
+          assert result.stderr==b'', 'retirement-stderr'
+          print('retired-source-admission-refusal-match')
+          PY
   attended-freeze-equivalence:
     name: Retired verifier refusal proof (NOT QUALIFICATION)
     runs-on: ubuntu-24.04-arm

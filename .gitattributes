@@ -271,3 +271,30 @@ docs/modernization/carddemo-mapping-baseline-2026-10-18/** -text -whitespace
 # Preserve the exact dated COPAU freeze amendment bytes across checkouts.
 /docs/factory/copau-factory-judge-freeze-amendment-2026-10-20.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tests/fixtures/reference-execution/public-cases/** -text
+
+# Preserve exact bytes of every reference-execution bound source on all platforms.
+spec/mainframe/carddemo-bindings.json -text
+spec/mainframe/copybooks/COSTM01.cpy -text
+spec/mainframe/copybooks/CUSTREC-INTAKE.cpy -text
+spec/mainframe/copybooks/CUSTREC.cpy -text
+spec/mainframe/copybooks/CVACT01Y.cpy -text
+spec/mainframe/copybooks/CVACT02Y.cpy -text
+spec/mainframe/copybooks/CVACT03Y.cpy -text
+spec/mainframe/copybooks/CVCUS01Y.cpy -text
+spec/mainframe/copybooks/CVTRA01Y.cpy -text
+spec/mainframe/copybooks/CVTRA02Y.cpy -text
+spec/mainframe/copybooks/CVTRA03Y.cpy -text
+spec/mainframe/copybooks/CVTRA04Y.cpy -text
+spec/mainframe/copybooks/CVTRA05Y.cpy -text
+spec/mainframe/copybooks/CVTRA06Y.cpy -text
+spec/mainframe/copybooks/CVTRA07Y.cpy -text
+spec/mainframe/copybooks/POSTREJS.cpy -text
+spec/mainframe/public-source/CBACT04C.cbl -text
+src/carddemo_oracle/oracle.py -text
+src/carddemo_oracle/records.py -text
+src/lightyear_mainframe/legacy_twin.py -text
+src/lightyear_mainframe/records.py -text
+src/lightyear_mainframe/source.py -text
+src/lightyear_mainframe/zos_bindings.py -text
+tools/legacy_twin/install-pinned.sh -text
+tools/legacy_twin/reproducible.Containerfile -text

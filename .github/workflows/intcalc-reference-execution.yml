@@ -72,15 +72,15 @@ jobs:
       - name: Refuse missing bindings before pull
         env:
           PYTHONPATH: src:.
-        run: python -B tools/intcalc_reference_execution.py check-binding --binding spec/reference-execution/2026-11-15-followup-r1/BINDING.json
+        run: python -B tools/intcalc_reference_execution.py check-binding --binding spec/reference-execution/2026-11-16-preferred-signs-r1/BINDING.json
       - name: Exact reviewed image pull
         env:
           PYTHONPATH: src:.
-        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-15-followup-r1/BINDING.json --pull-only
+        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-16-preferred-signs-r1/BINDING.json --pull-only
       - name: Native public discrepancies; no freeze
         env:
           PYTHONPATH: src:.
-        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-15-followup-r1/BINDING.json --suite tests/fixtures/reference-execution/public-cases/SUITE.json --output "${{ runner.temp }}/reference-public"
+        run: python -B -m tools.intcalc_reference_container --binding spec/reference-execution/2026-11-16-preferred-signs-r1/BINDING.json --suite tests/fixtures/reference-execution/public-cases/SUITE.json --output "${{ runner.temp }}/reference-public"
       - name: Public report and cleanup only
         if: always()
         uses: actions/upload-artifact@v4

@@ -89,3 +89,13 @@ A2 enforces layers; A3 separates estates; A4 bounds new large files; A5 consolid
 entry points; A6 applies lint and size controls to changed code.
 
 The provisional reference comparison separates only five exact declared-file implicit CLOSE diagnostics from compared stderr. Raw stderr and the extracted diagnostics remain public evidence; all other stderr bytes remain compared. Revised probe expectations require a fresh independent review before dispatch.
+
+Reference domain restriction adopted by Howard on 16 November 2026
+([decision](spec/reference-execution/2026-11-16-preferred-signs-r1/HOWARD-DECISION-20261116.md#sha256=6f12d921e95d875acee50ccf27f08356a79aa87e05cf8374e962218dbf2c13a2)):
+`REFERENCE_LIMIT_PREFERRED_SIGNS` confines the GnuCOBOL reference to signed zoned
+input fields with preferred C and D signs. Zone-F signed inputs are outside its proven
+domain and need mainframe evidence. The byte bridge checks every signed zoned
+input field before loading indexed files. The zoned-signs-2 IBM expectation stays
+unchanged; a hash-bound reference finding preserves the actual difference in
+reports rather than calling it a match. This is an open-source reference, not
+mainframe-proven. No freeze or dispatch follows from this proposal.

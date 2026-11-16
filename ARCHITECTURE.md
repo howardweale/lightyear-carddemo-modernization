@@ -87,3 +87,5 @@ is consumed. Preserve old imports and commands with deprecation shims until all
 citing dated receipts have been superseded. No shim retirement date is set.
 A2 enforces layers; A3 separates estates; A4 bounds new large files; A5 consolidates
 entry points; A6 applies lint and size controls to changed code.
+
+The provisional reference comparison separates only five exact declared-file implicit CLOSE diagnostics from compared stderr. Raw stderr and the extracted diagnostics remain public evidence; all other stderr bytes remain compared. Revised probe expectations require a fresh independent review before dispatch.

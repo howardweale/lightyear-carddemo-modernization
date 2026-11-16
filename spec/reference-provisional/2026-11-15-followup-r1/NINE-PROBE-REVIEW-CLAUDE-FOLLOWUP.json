@@ -1,0 +1,20 @@
+{
+ "accepted": true,
+ "basis": "IBM Enterprise COBOL for z/OS 6.4 rules; sources read, not executed",
+ "limit": "Review of expectations, not execution or qualification; open-source reference, not mainframe-proven",
+ "probes_sha256": "65ab81023d9eb5cf538de1fb83165ce83b9bbc36051632929b0869bccb389ae5",
+ "replaced": {
+  "derivation": "PIC S9(3) DISPLAY viewed through X(3); addends are data items so the arithmetic cannot be elided. '12C' + 0 = +123 stored 12C. '12L' + 0 = -123 stored 12L. '123' (zone F, read as +123 under NOPFD) + 0 stored with the preferred positive sign: 12C. '123' + 1 = +124 stored 12D. MOVE 0 stores 00{. MOVE -5 stores 00N. Each value is displayed on its own line; no early exit.",
+  "expected_exit": 0,
+  "expected_stdout": "12C\n12L\n12C\n12D\n00{\n00N\n",
+  "id": "zoned-signs-2",
+  "open_point": "If the third line is observed as 123, GnuCOBOL does not rewrite a zone-F sign on arithmetic that leaves the value unchanged. That would be recorded as a named limit of the reference (signed inputs must carry preferred signs) by a separate decision; it is not pre-approved here.",
+  "source_sha256": "67ab8d0780a3e78336991d3aefbc1deaa3e991c26dd1d58cd3b46145cbe1c198",
+  "verdict": "EXPECTATION_CONFIRMED",
+  "why_replaced": "The earlier zoned-signs probe (e46c8a0b...) exited 16 in run 43802256781. Its specification, written by Claude, added the literal 0, which the compiler can drop, and it stopped at the first failed check. That source and result stay on record."
+ },
+ "reviewer": "Claude",
+ "schema": "reference-nine-probe-review/1",
+ "supersedes_for_followup": "NINE-PROBE-REVIEW-CLAUDE.json dd2b295442336135a6d525ce67c5a238320f9940c99846cd3db20cdd026b1c56 (retained unchanged; it reviewed the earlier nine-probe set)",
+ "unchanged_eight": "decimal, size-error, binary-truncation, signs, numeric-class, clock, indexed-order and decimal-data-items entries are identical to the previously reviewed set; all eight matched in run 43802256781."
+}

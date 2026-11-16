@@ -281,5 +281,81 @@ class ReferenceContractTests(unittest.TestCase):
                 oci.inventory(path)
 
 
+class RuntimeDiagnosticsTests(unittest.TestCase):
+    LINES = (
+        b"libcob: warning: implicit CLOSE of TRANSACT-FILE ('TRANSACT')\n",
+        b"libcob: warning: implicit CLOSE of ACCOUNT-FILE ('ACCTFILE')\n",
+        b"libcob: warning: implicit CLOSE of DISCGRP-FILE ('DISCGRP')\n",
+        b"libcob: warning: implicit CLOSE of XREF-FILE ('XREFFILE')\n",
+        b"libcob: warning: implicit CLOSE of TCATBAL-FILE ('TCATBALF')\n",
+    )
+
+    def test_exact_five_lines_separated_without_loss(self):
+        raw = b"".join(self.LINES)
+        compared, diagnostics = ref.split_runtime_diagnostics(raw)
+        self.assertEqual(compared, b"")
+        self.assertEqual(len(diagnostics), 5)
+        self.assertEqual(b"".join(bytes.fromhex(d["line_hex"]) for d in diagnostics), raw)
+        self.assertEqual([d["dd"] for d in diagnostics],
+                         ["TRANSACT", "ACCTFILE", "DISCGRP", "XREFFILE", "TCATBALF"])
+
+    def test_other_stderr_bytes_remain_in_order(self):
+        raw = b"before\n" + self.LINES[0] + b"\xff\x00after\n" + self.LINES[1] + b"tail"
+        compared, diagnostics = ref.split_runtime_diagnostics(raw)
+        self.assertEqual(compared, b"before\n\xff\x00after\ntail")
+        self.assertEqual(len(diagnostics), 2)
+
+    def test_similar_messages_are_not_suppressed(self):
+        line = self.LINES[0]
+        variants = [line.replace(b"TRANSACT-FILE", b"OTHER-FILE"),
+                    line.replace(b"('TRANSACT')", b"('ACCTFILE')"),
+                    line.replace(b"warning", b"error"), b"prefix " + line,
+                    line[:-1] + b" suffix\n", line.replace(b"\n", b"\r\n"),
+                    line[:-1], line.replace(b"CLOSE", b"close"),
+                    b"libcob: warning: another warning\n"]
+        for raw in variants:
+            with self.subTest(raw=raw):
+                self.assertEqual(ref.split_runtime_diagnostics(raw), (raw, []))
+
+    def test_empty_and_duplicate_diagnostics(self):
+        self.assertEqual(ref.split_runtime_diagnostics(b""), (b"", []))
+        compared, diagnostics = ref.split_runtime_diagnostics(self.LINES[0] * 2)
+        self.assertEqual(compared, b"")
+        self.assertEqual(len(diagnostics), 2)
+
+    def test_abend_comparison_keeps_diagnostics_and_unknown_failure(self):
+        for case_id in ("PC-10", "PC-11", "PC-12"):
+            case = {"id": case_id, "compare_output_files": False}
+            hand = dict(stdout=b"program display\n", stderr=b"", exit=12)
+            reference = dict(hand, stderr=b"".join(self.LINES))
+            python = dict(stdout=b"", stderr=b"", exit=2)
+            report = ref.compare_results(case, reference, hand, python, {})
+            self.assertTrue(report["freeze_criterion_met"])
+            self.assertEqual(len(report["runtime_diagnostics"]), 5)
+            self.assertEqual(reference["stderr"], b"".join(self.LINES))
+            reference["stderr"] += b"unexpected\n"
+            report = ref.compare_results(case, reference, hand, python, {})
+            self.assertFalse(report["freeze_criterion_met"])
+            self.assertEqual(report["comparisons"][0]["channels"]["stderr"]["status"], "DIFFERENT")
+
+    def test_public_case_retains_raw_and_compared_stderr(self):
+        raw = b"".join(self.LINES)
+        record = {"path": "unused", "sha256": "0" * 64}
+        case = {"id": "PC-10", "compare_output_files": False,
+                "inputs": {dd: record for dd in ref.DDS if dd != "TRANSACT"},
+                "hand_outputs": {"stdout": record, "stderr": record}, "hand_exit": 12,
+                "timestamp": "2026-11-14-12.34.56.000000", "processing_date": "2026111400"}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with patch.object(ref, "joined", return_value=b""), \
+                    patch.object(ref, "checked"), \
+                    patch.object(ref, "run", side_effect=[(12, b"", raw), (2, b"", b"python-oracle-exception\n")]):
+                report = ref.public_case(case, root, root, root, 123, {})
+            self.assertTrue(report["freeze_criterion_met"])
+            self.assertEqual((root / "observations/reference/stderr.raw").read_bytes(), raw)
+            self.assertEqual((root / "observations/reference/stderr").read_bytes(), b"")
+            self.assertEqual((root / "observations/python/stderr").read_bytes(), b"python-oracle-exception\n")
+
+
 if __name__ == "__main__":
     unittest.main()

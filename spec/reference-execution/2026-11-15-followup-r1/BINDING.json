@@ -1,0 +1,220 @@
+{
+  "schema": "intcalc-reference-binding/1",
+  "platform": "linux/amd64",
+  "image_repository": "ghcr.io/howardweale/lightyear-reference",
+  "image_manifest": null,
+  "image_config": null,
+  "compiler_package": "3.1.2-5.1ubuntu1",
+  "flags": [
+    "-std=ibm",
+    "-fsign=EBCDIC",
+    "-fbinary-size=2-4-8",
+    "-fbinary-byteorder=big-endian",
+    "-fbinary-truncate",
+    "-O2",
+    "-Q",
+    "-Wl,--build-id=none"
+  ],
+  "isam_inventory_sha256": null,
+  "licence_review_sha256": null,
+  "public_suite_sha256": "6da875e28f95409290f77363c135ef98af395fe3448c9bf3e3da28b4cad370b2",
+  "profile_probe_review_sha256": null,
+  "case_ids": [
+    "PC-01",
+    "PC-02",
+    "PC-03",
+    "PC-04",
+    "PC-05",
+    "PC-06",
+    "PC-07",
+    "PC-08",
+    "PC-09",
+    "PC-10",
+    "PC-11",
+    "PC-12",
+    "PC-13",
+    "PC-14",
+    "PC-15",
+    "PC-16"
+  ],
+  "case_author": "Claude",
+  "freeze_enabled": false,
+  "hidden_generation_enabled": false,
+  "sources": [
+    {
+      "path": "spec/mainframe/copybooks/CVACT01Y.cpy",
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVACT02Y.cpy",
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVACT03Y.cpy",
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVCUS01Y.cpy",
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA01Y.cpy",
+      "sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA02Y.cpy",
+      "sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA03Y.cpy",
+      "sha256": "fb15dbc4a6924cbddce0704932f9e61c067ac10004cd00839dff0ed7c7bb0667"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA04Y.cpy",
+      "sha256": "89803bc13a06347e1f3d8a599a5383b87235b203dce9f18a486bc233186479f8"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA05Y.cpy",
+      "sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA06Y.cpy",
+      "sha256": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA07Y.cpy",
+      "sha256": "72ba597b1a40e1e6cf908e15da9e6a818a0ab899ef1d27d15edeb074963102fa"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CUSTREC.cpy",
+      "sha256": "f87a0a041fbd8f38dc9c23a9519b917af9c7008527e9cb924f91c2fb4e0a2ecc"
+    },
+    {
+      "path": "spec/mainframe/copybooks/COSTM01.cpy",
+      "sha256": "108170f314aa951281fdda321c4609c89638caee8d4d7085d08cdca5dc6bec36"
+    },
+    {
+      "path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "path": "spec/mainframe/copybooks/POSTREJS.cpy",
+      "sha256": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CUSTREC-INTAKE.cpy",
+      "sha256": "90a17b56e9338592d71f192c5c48b34fa91c1f21b5f769aee3cb5ec02259b99e"
+    },
+    {
+      "path": "src/lightyear_mainframe/legacy_twin.py",
+      "sha256": "0311ce42e7d2d67f9529edb7c8666ae405ae1463ebf50f32a89a8d2cd2d51eea"
+    },
+    {
+      "path": "src/lightyear_mainframe/records.py",
+      "sha256": "69d3719ccb9d25af86fd1d79d1da160416663cd92c192e15738b1755414752ff"
+    },
+    {
+      "path": "src/lightyear_mainframe/source.py",
+      "sha256": "5cc8826b7b99839eef1f120e0d4b8dac00b48afee7143fe23158907d78cd5ad0"
+    },
+    {
+      "path": "src/lightyear_mainframe/zos_bindings.py",
+      "sha256": "e30d40f7c34475b82b5a86469930219946e5a2fea273502eb7f5c976acc0fb71"
+    },
+    {
+      "path": "src/carddemo_oracle/oracle.py",
+      "sha256": "da9718cb9a8ae84194ac73a7b6de004e0fce033ee43ca9f4e7adeeb14ca376b2"
+    },
+    {
+      "path": "src/carddemo_oracle/records.py",
+      "sha256": "36cadb354b8345456da751619fa63827151e403b800831375a81aa0dc1473d61"
+    },
+    {
+      "path": "spec/mainframe/carddemo-bindings.json",
+      "sha256": "49537996bb9ec230b5bba89729135e5b4f79a4103cbda027c25b02113a6b62c2"
+    },
+    {
+      "path": "tools/legacy_twin/reproducible.Containerfile",
+      "sha256": "a5825203f639f0cb9c847291f115bccfe256efcd9905b921eb4a56ee3a9f8e85"
+    },
+    {
+      "path": "tools/legacy_twin/install-pinned.sh",
+      "sha256": "2467b6de41d65e5e4b232619e266676f4346cd26e2fafeb018b1105b08160a2f"
+    }
+  ],
+  "compile_sources": [
+    {
+      "path": "spec/mainframe/copybooks/CVACT01Y.cpy",
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVACT02Y.cpy",
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVACT03Y.cpy",
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVCUS01Y.cpy",
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA01Y.cpy",
+      "sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA02Y.cpy",
+      "sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA03Y.cpy",
+      "sha256": "fb15dbc4a6924cbddce0704932f9e61c067ac10004cd00839dff0ed7c7bb0667"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA04Y.cpy",
+      "sha256": "89803bc13a06347e1f3d8a599a5383b87235b203dce9f18a486bc233186479f8"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA05Y.cpy",
+      "sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA06Y.cpy",
+      "sha256": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CVTRA07Y.cpy",
+      "sha256": "72ba597b1a40e1e6cf908e15da9e6a818a0ab899ef1d27d15edeb074963102fa"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CUSTREC.cpy",
+      "sha256": "f87a0a041fbd8f38dc9c23a9519b917af9c7008527e9cb924f91c2fb4e0a2ecc"
+    },
+    {
+      "path": "spec/mainframe/copybooks/COSTM01.cpy",
+      "sha256": "108170f314aa951281fdda321c4609c89638caee8d4d7085d08cdca5dc6bec36"
+    },
+    {
+      "path": "spec/mainframe/public-source/CBACT04C.cbl",
+      "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+    },
+    {
+      "path": "spec/mainframe/copybooks/POSTREJS.cpy",
+      "sha256": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd"
+    },
+    {
+      "path": "spec/mainframe/copybooks/CUSTREC-INTAKE.cpy",
+      "sha256": "90a17b56e9338592d71f192c5c48b34fa91c1f21b5f769aee3cb5ec02259b99e"
+    }
+  ],
+  "isam_inventory": null,
+  "licence_review": null,
+  "probe_review": null,
+  "status": "BLOCKED; image, inventory/licences, full independent probe review absent; public cases/derivations bound",
+  "named_limit": "open-source reference, not mainframe-proven",
+  "probes": {
+    "path": "spec/reference-execution/2026-11-15/PROBES.json",
+    "sha256": "a1c2d81bce2c5f9613b9c9cb81ceb15ff6756e7e787df73d143fb83196eef12b"
+  }
+}

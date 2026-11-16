@@ -534,6 +534,32 @@
     }
    },
    "processing_date": "2026111400",
+   "python_findings": [
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "cc5322ab52e15dcbaf7be93192a06478fd5554223fa53d05e07e85335fa278fb",
+     "finding": "O4",
+     "pair": "reference-python"
+    },
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "cc5322ab52e15dcbaf7be93192a06478fd5554223fa53d05e07e85335fa278fb",
+     "finding": "O4",
+     "pair": "hand-python"
+    },
+    {
+     "channel": "success_class",
+     "difference_sha256": "fbeae75fa652c2160ae256048b2fd7d9e3584c043054165cd5c3c41639bcb826",
+     "finding": "O4",
+     "pair": "reference-python"
+    },
+    {
+     "channel": "success_class",
+     "difference_sha256": "fbeae75fa652c2160ae256048b2fd7d9e3584c043054165cd5c3c41639bcb826",
+     "finding": "O4",
+     "pair": "hand-python"
+    }
+   ],
    "timestamp": "2026-11-14-08.30.15.120000"
   },
   {
@@ -577,6 +603,20 @@
     }
    },
    "processing_date": "2026111400",
+   "python_findings": [
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "7c2b8b7e7fab025edc34e626128265a6148e2a4c9ff7033ea121390097a592c2",
+     "finding": "O1",
+     "pair": "reference-python"
+    },
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "7c2b8b7e7fab025edc34e626128265a6148e2a4c9ff7033ea121390097a592c2",
+     "finding": "O1",
+     "pair": "hand-python"
+    }
+   ],
    "timestamp": "2026-11-14-23.59.59.987654"
   },
   {
@@ -663,6 +703,32 @@
     }
    },
    "processing_date": "2026111400",
+   "python_findings": [
+    {
+     "channel": "ACCTFILE",
+     "difference_sha256": "568bf066bd6a90ae8dc78f6b95def9df8a8ae0218bb2aedbcce060f5995c8cda",
+     "finding": "O2",
+     "pair": "reference-python"
+    },
+    {
+     "channel": "ACCTFILE",
+     "difference_sha256": "568bf066bd6a90ae8dc78f6b95def9df8a8ae0218bb2aedbcce060f5995c8cda",
+     "finding": "O2",
+     "pair": "hand-python"
+    },
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "fe101a9520557eca1418dc868eba7c8f20264c844b376f7795a1ee4f1d564ed8",
+     "finding": "O2",
+     "pair": "reference-python"
+    },
+    {
+     "channel": "TRANSACT",
+     "difference_sha256": "fe101a9520557eca1418dc868eba7c8f20264c844b376f7795a1ee4f1d564ed8",
+     "finding": "O2",
+     "pair": "hand-python"
+    }
+   ],
    "timestamp": "2026-11-14-08.30.15.120000"
   }
  ],

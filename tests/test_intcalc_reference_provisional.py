@@ -45,14 +45,14 @@ class ProvisionalTests(unittest.TestCase):
             return provisional.check_inputs(Path("request"))
 
     def test_all_nine_probes_use_reviewed_expectations(self):
-        path = ref.ROOT / "spec/reference-provisional/2026-11-15/PROBES.json"
+        path = ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/PROBES.json"
         rows = ref.strict(ref.bounded(path))["probes"]
         with tempfile.TemporaryDirectory() as folder, patch.object(ref, "checked") as compile_, \
-                patch.object(ref, "run", return_value=(0, b"", b"")) as run:
+                patch.object(ref, "run", side_effect=[(p["exit_code"], bytes.fromhex(p["stdout_hex"]), bytes.fromhex(p["stderr_hex"])) for p in rows]) as run:
             observations = provisional.run_probes(Path(folder), 123, rows)
             for row in rows:
                 observed = Path(folder) / ("probe-" + row["id"]) / "observations"
-                self.assertEqual((observed / "stdout").read_bytes(), b"")
+                self.assertEqual((observed / "stdout").read_bytes(), bytes.fromhex(row["stdout_hex"]))
                 self.assertEqual((observed / "stderr").read_bytes(), b"")
         self.assertEqual(compile_.call_count, 9)
         self.assertEqual(run.call_count, 9)
@@ -157,7 +157,7 @@ class ProvisionalTests(unittest.TestCase):
         self.assertFalse(report["comparison_criterion_met"])
 
     def test_unreviewed_request_refuses(self):
-        path = ref.ROOT / "spec/reference-provisional/2026-11-15/REQUEST.json"
+        path = ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json"
         request = ref.strict(ref.bounded(path))
         request["inventory_review"] = None
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), \
@@ -165,13 +165,31 @@ class ProvisionalTests(unittest.TestCase):
             with self.assertRaisesRegex(ref.Refused, "unbound-inventory_review"):
                 provisional.check_inputs(path)
 
-    def test_delivered_reviews_and_pinned_sources_join(self):
-        path = ref.ROOT / "spec/reference-provisional/2026-11-15/REQUEST.json"
+    def test_delivered_sources_and_followup_review_join(self):
+        path = ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/REQUEST.json"
+        request = ref.strict(ref.bounded(path))
+        review_raw = ref.joined(ref.ROOT, request["probe_review"])
+        self.assertEqual(ref.sha(review_raw), "32f8ad2dc029fe3a811521ef6cab0d4c77ccc1d085fef58fa887bed5130b8bd6")
+        self.assertEqual(len(review_raw), 1973)
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}):
-            request, row, suite, probes, digest = provisional.check_inputs(path)
-        self.assertEqual(len(probes), 9)
-        self.assertEqual(len(suite["cases"]), 16)
-        self.assertEqual(digest, "8496a8c754b0a179888561be69aa06d4655d15e0c54decb891c757bb190d960d")
+            self.assertEqual(len(provisional.check_inputs(path)[3]), 9)
+        unbound = copy.deepcopy(request)
+        unbound["probe_review"] = None
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), \
+                patch.object(ref, "bounded", return_value=ref.canonical(unbound)):
+            with self.assertRaisesRegex(ref.Refused, "unbound-probe_review"):
+                provisional.check_inputs(path)
+        row = ref.strict(ref.joined(ref.ROOT, request["source_binding"]))
+        for source in row["sources"] + row["compile_sources"]:
+            ref.joined(ref.ROOT, source)
+        suite_raw = ref.joined(ref.ROOT, request["suite"])
+        self.assertEqual(ref.sha(suite_raw), row["public_suite_sha256"])
+        self.assertEqual(len(ref.strict(suite_raw)["cases"]), 16)
+        self.assertEqual(ref.sha(suite_raw), "6da875e28f95409290f77363c135ef98af395fe3448c9bf3e3da28b4cad370b2")
+        for p in ref.strict(ref.joined(ref.ROOT, request["probes"]))["probes"]:
+            ref.joined(ref.ROOT, p["source"])
+        inventory = ref.strict(ref.joined(ref.ROOT, request["expected_inventory"]))
+        self.assertEqual(provisional.inventory_digest(inventory), "8496a8c754b0a179888561be69aa06d4655d15e0c54decb891c757bb190d960d")
 
     def test_local_execution_refuses_before_read(self):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}), patch.object(ref, "bounded") as read:
@@ -200,7 +218,7 @@ class ProvisionalTests(unittest.TestCase):
 
     def test_original_probe_rows_unchanged(self):
         original = ref.strict(ref.bounded(ref.ROOT / "spec/reference-execution/2026-11-15/PROBES.json"))["probes"]
-        expanded = ref.strict(ref.bounded(ref.ROOT / "spec/reference-provisional/2026-11-15/PROBES.json"))["probes"]
+        expanded = ref.strict(ref.bounded(ref.ROOT / "spec/reference-provisional/2026-11-15-followup-r1/PROBES.json"))["probes"]
         self.assertEqual(expanded[:7], original)
         self.assertEqual([p["id"] for p in expanded[7:]], list(provisional.NEW_PROBES))
         for p in expanded: ref.joined(ref.ROOT, p["source"])

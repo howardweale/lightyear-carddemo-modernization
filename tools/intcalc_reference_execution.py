@@ -290,7 +290,36 @@ def comparison_policy(case):
     return value
 
 
+IMPLICIT_CLOSE_FILES = {
+    "TRANSACT-FILE": "TRANSACT", "ACCOUNT-FILE": "ACCTFILE",
+    "DISCGRP-FILE": "DISCGRP", "XREF-FILE": "XREFFILE",
+    "TCATBAL-FILE": "TCATBALF",
+}
+
+
+def split_runtime_diagnostics(stderr):
+    """Separate five exact libcob lines; preserve every other byte for comparison."""
+    allowed = {
+        ("libcob: warning: implicit CLOSE of " + name + " ('" + dd + "')\n").encode("ascii"):
+        (name, dd) for name, dd in IMPLICIT_CLOSE_FILES.items()
+    }
+    compared, diagnostics = [], []
+    # Split only LF, retaining termination. CRLF, partial and extended lines
+    # deliberately do not match; no decoding or blanket warning suppression.
+    parts = stderr.split(b"\n")
+    for index, part in enumerate(parts):
+        line = part + (b"\n" if index < len(parts) - 1 else b"")
+        if line in allowed:
+            name, dd = allowed[line]
+            diagnostics.append({"file": name, "dd": dd, "line_hex": line.hex()})
+        else:
+            compared.append(line)
+    return b"".join(compared), diagnostics
+
+
 def compare_results(case, reference, hand, python, layouts):
+    reference = dict(reference)
+    reference["stderr"], runtime_diagnostics = split_runtime_diagnostics(reference["stderr"])
     compare_files = comparison_policy(case)
     require(type(hand["exit"]) is int and hand["exit"] == (0 if compare_files else 12),
             "hand-exit-convention")
@@ -346,7 +375,7 @@ def compare_results(case, reference, hand, python, layouts):
         comparisons.append({"pair": label, "channels": channels})
     statuses = [c["status"] for p in comparisons for c in p["channels"].values()]
     return {"id": case["id"], "compare_output_files": compare_files,
-            "comparisons": comparisons,
+            "comparisons": comparisons, "runtime_diagnostics": runtime_diagnostics,
             "all_modelled_channels_match": not any(s in ("DIFFERENT", "PREREGISTERED_FINDING") for s in statuses),
             "freeze_criterion_met": "DIFFERENT" not in statuses,
             "reference": "GnuCOBOL execution of unmodified public COBOL source; never z/OS",
@@ -405,6 +434,9 @@ def public_case(case, suite_root, work, compiled, deadline, layouts):
     require(set(hand) == expected_hand, "hand-output-set")
     hand["exit"] = case["hand_exit"]
     report = compare_results(case, reference, hand, python, layouts)
+    # Keep both raw reference stderr and the exact bytes used in comparisons.
+    reference["stderr.raw"] = reference["stderr"]
+    reference["stderr"], _ = split_runtime_diagnostics(reference["stderr"])
     for label, values in (("reference", reference), ("python", python), ("hand", hand)):
         for dd, raw in values.items():
             if isinstance(raw, bytes):

@@ -107,3 +107,5 @@ Planned: the graph-disabled public repair controller bounds five repair rounds, 
 Planned per-run reference qualification uses a pinned native build and reviewed package and library inventory, without image publication. Public answer-key freezing requires separate exact operator adoption and approval; hidden answers are outside this tool. GnuCOBOL remains an open-source reference, not mainframe-proven.
 
 Planned public evaluator adapter aggregates public field differences and sanitized compiler diagnostics. Candidate execution timeouts and output caps count as public differences; worker and cleanup faults remain terminal. Qualified frozen public output bindings must replace development hand-output bindings before live use.
+
+Planned fresh held-out input generation uses an operator-only hidden seed prompt, private exclusive writes, preferred zoned signs, and a public commitment only. Source-derived weighted scenarios favor ordinary rates and balances with rare extremes. Qualified answer execution and encryption remain a separate boundary; no generated private data enters public CI evidence.

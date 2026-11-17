@@ -1,6 +1,6 @@
 # Architecture
 
-As of 2026-11-15, this is the target layering and a map of existing packages.
+As of 2026-11-16, this is the target layering and a map of existing packages.
 The boundaries are not yet fully enforced: the judge still imports higher-layer
 code, trust primitives live in Control Tower, and estates remain mixed into
 shared packages. Cleanup must preserve behavior and historical import paths.
@@ -99,3 +99,5 @@ input field before loading indexed files. The zoned-signs-2 IBM expectation stay
 unchanged; a hash-bound reference finding preserves the actual difference in
 reports rather than calling it a match. This is an open-source reference, not
 mainframe-proven. No freeze or dispatch follows from this proposal.
+
+Planned: the opt-in legacy graph boundary rebuilds a reviewed public-source projection before G2 indexing. Planner and Builder receive only four bounded read methods over that exact approved snapshot; modern and test material, verification links and hidden-result provenance are excluded. Existing G2 signatures and Tower approval remain required. The standalone boundary has no model caller or activation path; later controller and accounting patches are separately reviewed.

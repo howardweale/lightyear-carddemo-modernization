@@ -1,0 +1,86 @@
+name: Public reference freeze wrapper
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      expected_wrapper_commit:
+        description: Howard-approved exact main commit of this wrapper
+        required: true
+        type: string
+      approval_sha256:
+        description: Independently reviewed SHA256 of the exact public freeze approval JSON bytes
+        required: true
+        type: string
+      approval_json:
+        description: Exact Howard approval JSON binding BOTH source commits; no private values
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  synthetic-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: wrapper
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: 71a18164612ce574d889a39ceb335c5643721fc6
+          path: qualification-source
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic two-source approval and public byte checks only
+        shell: bash
+        working-directory: wrapper
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_public_freeze_wrapper
+      - name: Read-only historical source import and all binding joins
+        shell: bash
+        run: python -I -B "$GITHUB_WORKSPACE/wrapper/tools/intcalc_public_freeze_wrapper.py" --wrapper "$GITHUB_WORKSPACE/wrapper" --source "$GITHUB_WORKSPACE/qualification-source" --check-sources
+  freeze-public:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: wrapper
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: 71a18164612ce574d889a39ceb335c5643721fc6
+          path: qualification-source
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Explicitly approved public freeze with two source identities
+        env:
+          EXPECTED_WRAPPER_COMMIT: ${{ inputs.expected_wrapper_commit }}
+          PUBLIC_FREEZE_APPROVAL_SHA256: ${{ inputs.approval_sha256 }}
+          PUBLIC_FREEZE_APPROVAL: ${{ inputs.approval_json }}
+        shell: bash
+        run: |
+          python -I -B "$GITHUB_WORKSPACE/wrapper/tools/intcalc_public_freeze_wrapper.py" --wrapper "$GITHUB_WORKSPACE/wrapper" --source "$GITHUB_WORKSPACE/qualification-source" --output "$RUNNER_TEMP/public-reference-freeze"
+      - name: Complete public answer key only
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-reference-answer-key
+          path: ${{ runner.temp }}/public-reference-freeze/public-answer-key/**
+          if-no-files-found: error
+          retention-days: 30

@@ -89,7 +89,7 @@ def text_ok(value, raw_cap, encoded_cap):
 
 FIELDS = {'ACCTFILE': ['', 'ACCT-ACTIVE-STATUS', 'ACCT-ADDR-ZIP', 'ACCT-CASH-CREDIT-LIMIT', 'ACCT-CREDIT-LIMIT', 'ACCT-CURR-BAL', 'ACCT-CURR-CYC-CREDIT', 'ACCT-CURR-CYC-DEBIT', 'ACCT-EXPIRAION-DATE', 'ACCT-GROUP-ID', 'ACCT-ID', 'ACCT-OPEN-DATE', 'ACCT-REISSUE-DATE', 'FILLER'], 'TRANSACT': ['', 'FILLER', 'TRAN-AMT', 'TRAN-CARD-NUM', 'TRAN-CAT-CD', 'TRAN-DESC', 'TRAN-ID', 'TRAN-MERCHANT-CITY', 'TRAN-MERCHANT-ID', 'TRAN-MERCHANT-NAME', 'TRAN-MERCHANT-ZIP', 'TRAN-ORIG-TS', 'TRAN-PROC-TS', 'TRAN-SOURCE', 'TRAN-TYPE-CD'], 'stdout': [''], 'stderr': [''], 'exit': ['']}
 FEEDBACK_POLICY = dict(schema='public-repair-feedback/1', fields=FIELDS,
-    bytes_max=4096, rows_max=24, diagnostics_max=4, message_encoded_max=512)
+    bytes_max=4096, rows_max=32, diagnostics_max=4, message_encoded_max=512)
 FEEDBACK_HASH = digest(FEEDBACK_POLICY)
 
 
@@ -103,7 +103,7 @@ def validate_feedback(row, candidate, suite, kind):
             and hash_ok(candidate) and hash_ok(suite), 'feedback-join')
     require(type(row['divergences']) is list and type(row['diagnostics']) is list,
             'feedback-shape')
-    require(len(row['divergences']) <= 24 and len(row['diagnostics']) <= 4
+    require(len(row['divergences']) <= 32 and len(row['diagnostics']) <= 4
             and len(canonical(row)) <= 4096, 'feedback-cap')
     require(not row['diagnostics'] if kind == 'PUBLIC_DIVERGENCE' else not row['divergences'],
             'feedback-shape')
@@ -191,11 +191,18 @@ class Controller:
     evaluate_hidden(selected, commitment_hash, deadline).
     No evaluator may expose hidden information to count/generate or public records.
     """
+    window = WINDOW
+    ceiling = CEILING
+    maximum_reservation = MAX_RESERVATION
+    graph_mode = 'off'
+    validate = staticmethod(validate_binding)
+    project = staticmethod(projection)
+
     def __init__(self, ports, binding, public_context, clock=time.monotonic):
         # Freeze caller-owned JSON before admission; later mutation cannot rebind.
         self.binding = json.loads(canonical(binding))
         self.context = json.loads(canonical(public_context))
-        validate_binding(self.binding, self.context)
+        self.validate(self.binding, self.context)
         self.ports = ports
         self.clock = clock
         self.used = False
@@ -233,12 +240,12 @@ class Controller:
             require(type(feedback) is dict, 'feedback-shape')
             feedback = validate_feedback(feedback, sha(source.encode('utf-8')),
                 self.binding['public_suite_sha256'], feedback.get('kind'))
-        request = projection(role, self.context, plan, source, analysis, list(self.history), feedback)
+        request = self.project(role, self.context, plan, source, analysis, list(self.history), feedback)
         self.now_before(self.end - 60)
         bound = len(canonical(request)) + 4096
         request_hash = digest(request)
         hold = HOLDS[role]
-        require(self.reserved + hold <= MAX_RESERVATION <= self.binding['cap_microdollars'],
+        require(self.reserved + hold <= self.maximum_reservation <= self.binding['cap_microdollars'],
                 'reservation-cap')
         self.reserved += hold
         self.record(slot+'-reservation', dict(role=role, request_sha256=request_hash,
@@ -351,7 +358,7 @@ class Controller:
         require(not self.used, 'controller-reused')
         self.used = True
         self.start = self.clock()
-        self.end = self.start + WINDOW
+        self.end = self.start + self.window
         admitted = False
         try:
             admission = self.ports.admit(canonical(self.binding), self.start + 300)
@@ -361,7 +368,7 @@ class Controller:
                     and hash_ok(admission['receipt_sha256']), 'binding-hash')
             admitted = True
             self.record('admitted', dict(binding_sha256=self.binding_sha256,
-                graph_mode='off', maximum_repairs=5, window_seconds=WINDOW, cap_microdollars=CEILING,
+                graph_mode=self.graph_mode, maximum_repairs=5, window_seconds=self.window, cap_microdollars=self.ceiling,
                 admission_receipt_sha256=admission['receipt_sha256']))
             plan = self.role('planner', 'planner')
             source = self.role('builder', 'builder-0', plan=plan)
@@ -396,7 +403,7 @@ class Controller:
                         and hidden['cleanup'] is True, 'hidden-response')
                 status = 'CANDIDATE_PASS' if hidden['status']=='PASS' else 'CANDIDATE_FAIL'
             self.now_before(self.end)
-            result = dict(schema='public-repair-result/1', status=status, graph_mode='off',
+            result = dict(schema='public-repair-result/1', status=status, graph_mode=self.graph_mode,
                 binding_sha256=self.binding_sha256, selected=selected, score_history=self.history,
                 hidden=hidden, reserved_microdollars=self.reserved,
                 accounted_microdollars=self.cost, billing_final=False, qualified=False)

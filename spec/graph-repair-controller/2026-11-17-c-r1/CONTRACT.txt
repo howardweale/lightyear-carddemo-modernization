@@ -1,0 +1,70 @@
+Graph-on run implementation Patch C (no PR yet, r2)
+Review-only opt-in controller library; no launch command, authority or live adapter.
+Graph-off controller retains its original holds, 17520-second window and 37670000
+microdollar ceiling. Both modes now bind the 32-row feedback contract; stale
+24-row hashes refuse. Dated historical contracts remain untouched.
+
+Graph-on: 26880 seconds from one monotonic start, cap 51000000 microdollars.
+Artifact holds remain 37664000. Planner query holds total 4866048; initial builder
+1148928; each of five repair phases 1284096. Maximum total 50099456, slack 900544.
+Input caps: planner turns1..8 = 8192*j; initial builder turns1..3 = 8192*j;
+repair-builder turns1..3 = 8192*j+4096. Query output cap8192 includes reasoning.
+Each query has count30/generation300/local30 seconds, with graph tool15 seconds
+inside local. No refund, retry, fallback, unbudgeted wrapper or deadline slide.
+Ceil count at5.5, generation input at5.5 and output at24.75 microdollars per token
+separately. Counting is a reserved billing assumption, not confirmed billing.
+
+Only planner and builder query. Planner<=8; builder phases0..5<=3 each; total26.
+Pagination counts. Each next query sees prior same-phase exchanges. Query text
+prefixes: plan256, source768, analysis768 canonical bytes with truncation flags;
+candidate hash, phase, public score history<=529, tool schema and public source
+anchor. Repair phases1..5 carry the current selected candidate's complete joined
+feedback<=4096; initial phase has none. No prior candidate envelopes accumulate.
+Query base including all field names/wrappers<=4096; each prior exchange<=8192;
+every actual canonical projection+4096 framing fits its fixed cap before reserve
+and count. Context-only measurement is not a substitute for that check.
+
+Result<=7168, exchange<=8192, capsule<=8192. Lower the G2 page cap by exact intent
+and wrapper size before dispatch. Four existing G2 tools only; lexical search;
+snapshot/profile/inventory/approval and query policy hashes are admission inputs.
+New profile/approval attributes expose hashes of already-admitted bytes; no new
+approval mechanism, signer, Tower step or implicit activation is introduced.
+The graph port must invoke the supplied admitted LegacyGraphSession with the
+supplied lower result cap and enforce its absolute deadline. It must not replace
+the session, call an unrestricted endpoint, or silently retry. As with Patch B,
+trusted port implementation and real deadline qualification are prerequisites
+for live wiring; this synthetic proposal does not establish them.
+
+Count/generation ports normalize the provider envelope, preserving usage and
+request/receipt joins. Query generation returns exact keys status, artifact,
+input_tokens, output_tokens, model, service_tier, request_sha256, receipt_sha256.
+COMPLETED carries one {tool,arguments} intent, <=1024 canonical bytes; done has
+empty arguments. OUTPUT_LIMIT must have a known accounted response, null artifact
+and bounded usage. Only this case clears the phase capsule and proceeds without
+graph evidence. Unknown charge, timeout, malformed envelope, graph boundary,
+scanner, expiry, cleanup or ledger fault is terminal. Interrupts re-raise.
+Normal call-budget exhaustion uses the safe collected capsule and proceeds.
+
+Durable exclusive records precede sends; each full bounded query request,
+normalized response and intent, tool call and exact result, selected/dropped
+response hashes, costs and phase disposition are retained. No raw provider
+reasoning or arbitrary provider envelope is copied into public records.
+Latest complete results first, whole results only, up to7168 selected bytes;
+serialize selected results in call order. A degraded phase has an empty capsule.
+Analysis sees the last safe capsule; a new builder phase replaces it. Every final
+artifact request includes full bounded plan/source/analysis as applicable and
+the selected capsule, with a fresh complete-projection bound check.
+
+Model ports close before the one final hidden gate. Public differences mean
+PUBLIC_FAIL and hidden NOT_RUN/public-fail; hidden PASS/FAIL is never fed back.
+The legacy-only view accepts no hidden answers, retired cases, prior run receipts
+or test-derived rule text. Synthetic canaries and the unchanged legacy isolation
+suite check this boundary. No tool result or feedback is written into graph memory.
+
+Named limits: rule statements authored with knowledge of prior test results;
+single program whose full source fits in context, graph effect on large estates
+not measured; operator review, not independent attestation. No routing or
+performance claim; the matched graph-off comparison is a separately approved run.
+Howard's exact snapshot/context approval and human-only activation remain pending.
+No held-out freeze, generator execution, spend or model call is authorized.
+ARCHITECTURE.md is unchanged by Howard's instruction for this patch.

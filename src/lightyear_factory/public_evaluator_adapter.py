@@ -86,7 +86,7 @@ def envelope(candidate,suite,kind,rows,truncated=False):
     key='diagnostics' if kind=='COMPILE_FAILED' else 'divergences'
     out=dict(schema='public-repair-feedback/1',candidate_sha256=candidate,
         public_suite_sha256=suite,kind=kind,divergences=[],diagnostics=[],truncated=truncated)
-    cap=4 if key=='diagnostics' else 24
+    cap=4 if key=='diagnostics' else 32
     for row in rows:
         if len(out[key])==cap:out['truncated']=True;break
         out[key].append(row)

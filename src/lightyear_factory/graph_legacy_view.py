@@ -262,8 +262,10 @@ class LegacyGraphSession:
             'graph_references': self._tools._graph_references}
         self.projection_sha256 = expected_projection_sha256
         self.inventory_sha256 = sha(inventory_raw)
+        self.profile_sha256 = sha(profile_raw)
+        self.approval_sha256 = sha(encoded(decision))
 
-    def call(self, role, phase, tool, arguments):
+    def call(self, role, phase, tool, arguments, *, result_cap=7168):
         require(not self._failed and type(role) is str and type(tool) is str and
                 role in ('planner','builder') and tool in TOOLS,
                 'legacy-tool-forbidden')
@@ -273,6 +275,7 @@ class LegacyGraphSession:
         cap = 8 if role == 'planner' else 3
         require(self._count < 26 and self._phase_counts.get(key,0) < cap, 'legacy-call-budget')
         require(type(arguments) is dict and len(encoded(arguments)) <= 1024, 'legacy-argument-cap')
+        require(type(result_cap) is int and 1024 <= result_cap <= 7168, 'legacy-response-cap')
         common = {'graph_search': {'query','kind','limit','cursor'},
             'graph_node': {'node_id','include_source'},
             'graph_neighbors': {'node_id','relations','direction','depth','limit','cursor'},
@@ -302,15 +305,19 @@ class LegacyGraphSession:
         require(self._tools.active(), 'legacy-approval-expired')
         self._count += 1
         self._phase_counts[key] = self._phase_counts.get(key,0)+1
+        previous_cap = self._tools.cap
         try:
+            self._tools.cap = result_cap
             self._scanner('legacy-arguments', encoded(arguments))
             result = self._dispatch[tool](**arguments)
             self._scanner('legacy-raw-result', encoded(result))
             result = output_fields(tool, result)
-            require(len(encoded(result)) <= 7168, 'legacy-response-cap')
+            require(len(encoded(result)) <= result_cap, 'legacy-response-cap')
             self._scanner('legacy-result', encoded(result))
             require(self._tools.active(), 'legacy-approval-expired')
             return result
         except BaseException:
             self._failed = True
             raise
+        finally:
+            self._tools.cap = previous_cap

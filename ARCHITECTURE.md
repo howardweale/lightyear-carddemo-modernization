@@ -105,3 +105,5 @@ Planned: the opt-in legacy graph boundary rebuilds a reviewed public-source proj
 Planned: the graph-disabled public repair controller bounds five repair rounds, selects the best public candidate with latest-round ties, uses bounded joined public feedback, then closes model access and invokes the held-out gate only for a public-clean selection. Reviewed trusted ports supply admission, transport and evaluators; this standalone library has no live bootstrap and does not reopen retired INTCALC routes.
 
 Planned per-run reference qualification uses a pinned native build and reviewed package and library inventory, without image publication. Public answer-key freezing requires separate exact operator adoption and approval; hidden answers are outside this tool. GnuCOBOL remains an open-source reference, not mainframe-proven.
+
+Planned public evaluator adapter aggregates public field differences and sanitized compiler diagnostics. Candidate execution timeouts and output caps count as public differences; worker and cleanup faults remain terminal. Qualified frozen public output bindings must replace development hand-output bindings before live use.

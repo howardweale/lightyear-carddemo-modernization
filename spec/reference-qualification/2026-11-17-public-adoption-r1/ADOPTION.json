@@ -1,0 +1,48 @@
+{
+  "schema": "reference-public-adoption-record/1",
+  "work_item": "Reference adoption record (no PR yet, r1)",
+  "decision_date": "2026-11-17",
+  "authority": "Howard",
+  "authority_basis": "Exact decision text supplied directly by Howard in this review conversation; no signature or independent attestation claimed.",
+  "decision": {
+    "path": "spec/reference-qualification/2026-11-17-public-adoption-r1/HOWARD-DECISION.txt",
+    "sha256": "e3c9e18ef57409a964b8b5fc40a73dd4ddd1c7066b100481f76948c109e6b136",
+    "bytes": 555,
+    "encoding": "UTF-8",
+    "trailing_newline": false
+  },
+  "adopt_reference": true,
+  "scope": "16 public interest-batch cases PC-01..PC-16 only; no held-out set",
+  "reference": "GnuCOBOL execution of unmodified public COBOL source; never z/OS",
+  "source_commit": "71a18164612ce574d889a39ceb335c5643721fc6",
+  "source_tree": "7316662cb5cc52d5361ad1954c417b37e1e18fe5",
+  "qualification_run_id": 44126198045,
+  "qualification_receipt": {
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/full-intcalc-reference-qualification-results-20261117-r1/qualification.json",
+    "sha256": "934457b92d24dfc330e078420b14cb529fa6478c6799347b53857e74af98784b"
+  },
+  "evidence_manifest": {
+    "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/full-intcalc-reference-qualification-results-20261117-r1/MANIFEST.json",
+    "sha256": "a489a3e66e556946827b20f53395847b290e1f61eafda78bbd0eef4fd225964f"
+  },
+  "public_suite_sha256": "6da875e28f95409290f77363c135ef98af395fe3448c9bf3e3da28b4cad370b2",
+  "reference_binding": {
+    "path": "spec/reference-qualification/2026-11-17-per-run-r1/BINDING.json",
+    "sha256": "bb8b956a122c44ea70047848f56a2688f28071f2901df3b093a2af0e3ff758cb"
+  },
+  "named_limits": [
+    "open-source reference, not mainframe-proven; REFERENCE_LIMIT_PREFERRED_SIGNS: signed zoned inputs require preferred C/D signs; zone-F signed inputs are outside the reference proven domain and need mainframe evidence",
+    "REFERENCE_LIMIT_PREFERRED_SIGNS",
+    "reference built per run from pinned public packages; no published image digest"
+  ],
+  "qualification_receipt_retained_unchanged": true,
+  "retained_receipt_qualified": false,
+  "retained_receipt_adoption_pending": true,
+  "retained_receipt_status": "CRITERION_MET",
+  "record_effect": "Append-only human adoption decision. Retained qualification receipt fields remain unchanged. No checker, workflow, gate or executable behavior changes in this proposal.",
+  "freeze_public_execution_authorized": false,
+  "held_out_freeze_authorized": false,
+  "dispatch_authorized": false,
+  "model_call_authorized": false,
+  "spend_authorized": false
+}

@@ -163,10 +163,10 @@ def generate_inputs(seed,count,layouts):
                 key=('DEFAULT' if mode==1 and a==account_count-1 else group,category)
                 if not (mode==2 and a==account_count-1) and key not in rates:
                     rates[key]=rate(draws,prefix+str(a)+':rate'+str(category),extreme)
-        for (group,category),rate in sorted(rates.items()):
+        for (group,category),value in sorted(rates.items()):
             images['DISCGRP'].append(record(layouts['DISCGRP'],{
                 'DIS-ACCT-GROUP-ID':group,'DIS-TRAN-TYPE-CD':'01',
-                'DIS-TRAN-CAT-CD':category,'DIS-INT-RATE':rate}))
+                'DIS-TRAN-CAT-CD':category,'DIS-INT-RATE':value}))
         # Empty balance input is a public-source EOF branch, sampled independently.
         if mode==0 and draws.below(prefix+'empty-balances',8)==0:images['TCATBALF']=[]
         joined={}

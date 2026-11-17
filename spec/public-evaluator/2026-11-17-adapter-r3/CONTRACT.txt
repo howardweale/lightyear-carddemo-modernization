@@ -1,0 +1,66 @@
+Public evaluator adapter (no PR yet, r3)
+Exact standalone adapter library for build/evaluate_public controller ports.
+No production Docker worker or LIVE bootstrap is supplied. This proposal is
+not executable authority and does not reopen retired routes. A separately
+reviewed worker must implement the contracts below before any real use.
+The adapter hash-loads ONLY Claude's exact public suite6da875e2 and every joined
+public input/hand output; output layouts pinned to CVACT01Y/CVTRA05Y. It never
+accepts a suite merely because it is labelled public, and has no hidden port.
+Existing public suite, source and expected outputs remain byte-identical.
+Worker compile must attest javac phase, exact image/tool identity, no timeout,
+daemon health and complete cleanup; anything absent/false is a terminal fault.
+Exit0 BUILT; only exit1 COMPILE_FAILED;2/3/4/all others terminal. Diagnostic mode
+must be javac-XDrawDiagnostics, source named Main.java or /source/Main.java.
+Those flags belong to a future reviewed worker change, not an implicit change
+to any existing gate. Only recognized candidate-source diagnostics are relayed;
+all other stderr is replaced by compiler-diagnostic-unavailable, never raw text.
+Messages strip paths/URIs, snippets/carets/stack traces, C0 exceptTAB/LF/CR; cap
+512 canonical bytes, max4, sorted line/column/message hash. Unknown/truncated
+messages set truncated. Over-redaction can lose useful diagnostics: named limit.
+No model prompt may contain raw compiler stdout or private exception content.
+evaluate_public supplies worker only input bytes and fixed clock, never hand
+outputs. Worker runs every case against the exact build and returns complete
+channels, identity/cleanup and receipt; infrastructure cannot become DIFFERENT.
+Expected outputs are Claude's hand derivations, usable for LIVE only after the
+separate GnuCOBOL reference qualification/three-way freeze criterion is adopted.
+Files compare by record index and fixed copybook slices, missing/extra records
+count different. Repeated FILLER slices form one field row per record (OR of
+differences), not double counting. Empty-field rows count framing/count faults
+once per case. Counts overlap across fields; never sum them as a case score.
+stdout/stderr split LF only; final unterminated line counts. Exit one per case.
+PC10/11/12 output files are unmodelled after abend and omitted as suite directs;
+their stdout/stderr/exit remain compared. No warning suppression on candidate
+stderr. Partial candidate records yield framing/field differences, not padding.
+Rows ordered ACCTFILE,TRANSACT,stdout,stderr,exit then field lexical, max24,
+whole-row truncation to4096 encoded bytes; keep exact source/suite hashes.
+Public counts/diagnostics only, no values, case ids or record ids. Controller
+performs its own closed schema and field allowlist check (Patch B r2).
+retain callback must durably store exact public evidence and read back its hash.
+This module retains a hash-only observation receipt; complete raw public
+observations must be retained by the trusted worker for independent review.
+Tests use synthetic workers and public suite only, no sockets/compiler/Docker.
+Before push after Patch B, rebase once and review exact tree; one PR in CI.
+No spend, model calls, signing, activation, dispatch, push or execution here.
+
+E1: run_public adds exact boolean timed_out/output_capped fields. It receives
+absolute execution_deadline <= now+15 seconds, cleanup_deadline <= execution+5,
+and output_bytes=8388608 per channel. Phase deadline is <=600 seconds; 16 full
+20-second slots use320, leaving280 for the shared build, comparison and receipts. A shorter original
+deadline is never extended. The trusted worker enforces kill/reap and prefix
+truncation; flags are not inferred from exit code. It returns bounded partial
+channels and a complete cleanup receipt. A candidate limit forces DIFFERENT,
+file framing rows and exit mismatch even if partial bytes match. For abend cases
+the output-file policy remains false; use stdout framing and exit mismatch,
+never claim unspecified persisted files differ. Compare available bytes normally
+as well. No duplicate counting within framing/exit rows. Flags enter the retained
+per-case receipt. Missing/malformed flags, late worker return, oversized transport
+payload or incomplete cleanup are worker/infrastructure faults, never feedback.
+Existing compiler timeouts remain infrastructure faults, not javac failures.
+E2: hand_outputs are provisional development bindings only. Before real controller
+use, replace that binding with the adopted frozen qualified public answer key:
+the same independently agreed bytes, a different manifest/provenance binding.
+No expected-byte edits or automatic migration are authorized here.
+Carry-forward: rows_max24 is the merged Patch B contract. Patch C changes it to32
+and updates the contract hash and adapter together; this revision adds E3 only to the accepted E1/E2 behavior.
+
+E3: the 600-second phase includes build and all public cases. Each case has at most15 seconds of execution plus5 seconds cleanup. The original phase deadline is still authoritative and never extended. A synthetic test charges200 seconds for build and320 for16 timeouts, yielding0 matches and16 differences at520 seconds. Infrastructure faults remain terminal.

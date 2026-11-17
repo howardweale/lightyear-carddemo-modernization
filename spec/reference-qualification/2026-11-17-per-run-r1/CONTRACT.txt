@@ -1,0 +1,45 @@
+Reference qualification (no PR yet, r1)
+Supersedes the eight-stage image-publication I3/I4 procedure. No image is published.
+Reference means GnuCOBOL execution of unmodified public COBOL, never z/OS.
+Named limits: open-source reference, not mainframe-proven; preferred C/D signs only
+for signed zoned inputs; reference built per run from pinned public packages; no published image digest.
+
+Qualification: reviewed native amd64 base manifest and retained recipe; four direct
+COBOL/faketime packages plus CA bootstrap have SHA256 checks. Transitive packages
+come from the dated signed Ubuntu snapshot and must match the reviewed installed
+package/library projection before compilation. This is not a claim that every
+transitive .deb has an individually enumerated archive checksum. Recipe, installer,
+source modules, binding, suite and nine probes are hash-joined. Local image Id is
+recorded, not an approved registry digest. No redistribution or image licence
+closure is claimed. Existing package copyright inventory remains retained.
+
+Criterion: all 16 public cases; reference equals Claude hand derivation on every
+compared channel. PC-10/11/12 omit unspecified persisted output files and compare
+exit/stdout/stderr. Python agrees on modelled channels or differs only at the
+suite's exact registered O1/O2/O4 discrepancy hashes. Nine probe criteria pass;
+zoned-signs-2 keeps IBM 12C expected, observed 123 is PREREGISTERED_FINDING at
+772816a31ba5f27d3ccd7a9b99b614a699624c569e6456f55bf456dddd208803,
+never MATCH. all_probes_match remains false when that finding occurs.
+
+The new primary report schema is intcalc-reference-qualification/1 on success
+and discrepancy. The unchanged lower-level intcalc-reference-discrepancy/1 report
+is retained as raw comparison evidence, not relabelled or edited. A successful
+run says CRITERION_MET, qualified=false, adoption_pending=true. It cannot adopt
+itself. No retry on discrepancy. Every public observation is retained and hashed.
+
+Order of exact approvals: Claude reviews this tree; Howard approves push; green
+head merge needs Howard; Howard separately approves ONE qualification dispatch
+at the merged main; Claude reviews its exact report; Howard separately adopts
+that report and, if wanted, authorizes public freeze. No current dispatch approval.
+
+Freeze tool: freeze-public is CI-only, fresh destination, same exact source commit
+and tree as the reviewed qualification, rechecks full inventory/observations and
+criterion, copies actual reference bytes after equality with hand bytes, and writes
+the complete hashed manifest last. The caller must supply Howard's exact reviewed
+adoption-and-public-freeze JSON and its independently approved SHA256. A self-written
+record or arbitrary hash is not authority; operator review, not signed attestation.
+Adoption alone cannot freeze. There is no automatic freeze workflow or hidden mode.
+This tool supports the 16 PUBLIC cases only. Fresh held-out answer generation and
+encryption at first persistent write remain a separate exact reviewed integration;
+the inputs-only generator is not an answer-freeze tool and agents never run it.
+The retired verifier routes and old answer keys remain inadmissible.

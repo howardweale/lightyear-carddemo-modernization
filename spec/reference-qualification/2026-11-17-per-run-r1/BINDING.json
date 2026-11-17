@@ -1,0 +1,58 @@
+{
+  "schema": "reference-per-run-binding/1",
+  "platform": "linux/amd64",
+  "named_limits": [
+    "open-source reference, not mainframe-proven; REFERENCE_LIMIT_PREFERRED_SIGNS: signed zoned inputs require preferred C/D signs; zone-F signed inputs are outside the reference proven domain and need mainframe evidence",
+    "REFERENCE_LIMIT_PREFERRED_SIGNS",
+    "reference built per run from pinned public packages; no published image digest"
+  ],
+  "image_publication": false,
+  "hidden_freeze": false,
+  "request": {
+    "path": "spec/reference-provisional/2026-11-16-preferred-signs-r1/REQUEST.json",
+    "sha256": "66e0281f8c1dbfacce47b7ac65448ff4645841f632e0c0ae05364cd39a4e323f"
+  },
+  "recipe": {
+    "path": "tools/legacy_twin/reproducible.Containerfile",
+    "sha256": "a5825203f639f0cb9c847291f115bccfe256efcd9905b921eb4a56ee3a9f8e85"
+  },
+  "installer": {
+    "path": "tools/legacy_twin/install-pinned.sh",
+    "sha256": "2467b6de41d65e5e4b232619e266676f4346cd26e2fafeb018b1105b08160a2f"
+  },
+  "sources": [
+    {
+      "path": "tools/intcalc_reference_per_run.py",
+      "sha256": "ea5f776f41c585d9e9b84fdbf04d42a474cbfd9b687a2cb2a861f33e56135125"
+    },
+    {
+      "path": ".github/workflows/intcalc-reference-per-run.yml",
+      "sha256": "63053ac15760506cea5c9d234a112625c69bf1bde6ee36433ccedc7e902c8b37"
+    },
+    {
+      "path": "tools/intcalc_reference_execution.py",
+      "sha256": "680f228b8acb69608f3257c52203c9bdc07e63cffc18e4604de14ddfd7490f08"
+    },
+    {
+      "path": "tools/intcalc_reference_provisional.py",
+      "sha256": "188f5870d47159408f30167eb5940105383f017086f0a3ed5c91d490a9d4b033"
+    },
+    {
+      "path": "tools/intcalc_reference_provisional_container.py",
+      "sha256": "21bb4f79cf09576deb3eb510e3685410a6f24d84ffbf1a3e9b4e1a512b932cd3"
+    },
+    {
+      "path": "tools/legacy_twin/reproducible.Containerfile",
+      "sha256": "a5825203f639f0cb9c847291f115bccfe256efcd9905b921eb4a56ee3a9f8e85"
+    },
+    {
+      "path": "tools/legacy_twin/install-pinned.sh",
+      "sha256": "2467b6de41d65e5e4b232619e266676f4346cd26e2fafeb018b1105b08160a2f"
+    }
+  ],
+  "package_library_sha256": "8496a8c754b0a179888561be69aa06d4655d15e0c54decb891c757bb190d960d",
+  "public_suite_sha256": "6da875e28f95409290f77363c135ef98af395fe3448c9bf3e3da28b4cad370b2",
+  "build_scope": "One same-job native build, local image Id retained as evidence only, no registry digest admission",
+  "adoption": "Separate Howard decision after exact qualification report review",
+  "freeze": "Separate exact Howard approval of public answer-key freeze; no automatic freeze"
+}

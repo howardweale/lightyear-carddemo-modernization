@@ -1,0 +1,104 @@
+Graph-on run implementation Patch B (no PR yet, r2)
+Standalone graph-disabled controller contract; exact implementation proposal.
+
+This module is callable without Patch A or Patch C: Controller(trusted_ports,
+binding, public_context).run(). Its synthetic CI drives the complete state
+machine through count/generation, build, public evaluation, final selection and
+one final hidden evaluation. It never imports graph tools or the retired C2
+composition/transport/admission paths. It is a controller library, not a LIVE
+bootstrap or an authorization bypass. This proposal supplies no production
+provider/admission/evaluator adapters or credentials. Existing retired routes
+remain refused. Graph-on enablement belongs to Patch C, separately reviewed.
+
+Five repair rounds maximum after the initial candidate; early stop at complete
+public match. Select the greatest public match count, ties to latest round.
+Compile failure is eligible for repair but not selection. If no candidate was
+successfully compiled and completely evaluated, hidden status is NOT_RUN.
+A later compile failure cannot discard an earlier best public result.
+Infrastructure, cleanup, missing evidence and deadline faults terminate; they
+cannot become low public scores. Public failure returns PUBLIC_FAIL with hidden NOT_RUN/public-fail; no hidden
+evaluation is invoked for that selection. qualified remains false in this report.
+
+Rolling projections retain context, original plan, best evaluated source (or
+latest failed-compile source if no evaluated candidate), latest joined feedback (<=4096 canonical bytes) and analysis where
+needed, and all produced candidates' bounded score history. Only public match/
+different counts and hash prefixes appear in history. No per-case differences,
+expected values, hidden counts or prior run receipts enter model projections.
+Full hashes and durable artifacts identify the selected candidate; prefixes
+cannot influence selection. Model capability closes before the exclusive
+hidden-invocation record and the single final hidden call. Uncertain sends or
+hidden calls are never retried.
+
+Budget: planner 112000 / builder 128000 / analysis 224000 / repair 240000
+input caps, 32000 output per role; counts billed conservatively at 5.5
+microdollars per token; generation input 5.5, output 24.75. Ceiling USD37.67,
+maximum reservation USD37.664000. No tightening from prior usage. Each request
+charge rounds upward separately to a microdollar. No hold refunds after sends.
+Graph-disabled window 17520 seconds: startup300 + 12*(count120+generation900+
+local60) + 6*600 build/public + hidden600 + final60. Every subdeadline is
+bounded by the original deadline; no resume or extension. Patch C alone adds
+the approved query allowance/window (overall USD51, 26880 seconds). This
+packet creates no spend authority for either mode.
+
+Raw plan/analysis 8192 UTF-8 bytes, source 65536; reject C0 except TAB/LF/CR.
+Encoded context <=98304, plan/analysis <=16384, source <=73728.
+Score history <=1024 including its key, at most six rows; other envelope
+<=7168 including component property names and separators. Actual canonical
+projection bytes+4096 must fit role cap BEFORE reservation/count.
+Every role instruction states raw limits and optional helper use. Their exact
+table hash is required in the approval binding. A measured actual helper/context
+proof remains a pre-run blocker; synthetic tests do not discharge it.
+
+Trusted ports MUST be independently reviewed and qualified before LIVE use:
+- admit verifies Howard's fresh exact approval and one-use binding, expiry,
+  source manifest, public context provenance/hash, qualified public suite and
+  reference/profile, fresh held-out commitment, disk and all runtime preconditions.
+  It returns the exact binding SHA and authenticated admission-receipt hash.
+  A dictionary with matching hashes alone is NOT authority; the trusted adapter
+  must verify real evidence. No permissive production adapter is provided.
+- record creates exclusive, durable, read-back-verified public JSON. Failure
+  before a send stops. retain_artifact preserves each exact output in a fresh
+  owner-only file and returns its readback hash before role completion.
+- count/generate send once with zero retries/fallback, exact model/tier, fixed
+  projection and reviewed API framing. Their finite-float provider-envelope
+  parsing remains separate from strict artifacts and records. Successful
+  generation means completed output, no provider error or truncation, exact
+  artifact schema. They enforce deadlines, record actual request/response hashes,
+  preserve fixed refusal diagnostics, and retain private responses only under
+  separately reviewed policy. No unseen prompt/tool wrapper may evade the
+  measured projection-plus-4096 framing proof.
+- build binds source/build hashes; only javac exit1 is COMPILE_FAILED. All other
+  tool, image, daemon, timeout and cleanup failures throw terminal faults.
+  Compiled candidates remain retrievable by full build/artifact hash.
+- evaluate_public runs the entire same suite against the exact build. Counts
+  sum to the bound case count. Incomplete execution is a fault, not DIFFERENT.
+- close_models irrevocably revokes provider capability. A failed close blocks
+  hidden evaluation. The controller's closed flag also prevents later role calls.
+- evaluate_hidden is verifier-only, accepts only the selected full build/source
+  identity and bound fresh held-out commitment, runs once, and returns a closed
+  status/receipt/cleanup record. It cannot return hidden outputs to any model.
+- every operation enforces its supplied deadline and cleanup; a returned hash
+  without underlying validated evidence is never sufficient in production.
+
+The controller records known public refusal codes only; unexpected adapter
+exceptions become port-fault with the fixed stage. Adapters retain their own
+allowlisted diagnostics before raising. Interrupts propagate unchanged.
+Best-effort failure recording cannot mask the original exception.
+No gate, oracle, retired set, signing policy or provider source is changed.
+Required next reviews: actual production port implementations and full
+request-bound proof, then exact run authorization. P5 remains paused.
+
+B1: build returns feedback null for BUILT, a COMPILE_FAILED envelope for javac
+exit1; evaluate_public returns a PUBLIC_DIVERGENCE envelope. Each has exact keys
+schema,candidate_sha256,public_suite_sha256,kind,divergences,diagnostics,truncated.
+Divergence rows use closed copybook fields/channel, integer counts only, max24.
+Compiler rows have line,column,message, max4; message <=512 canonical bytes.
+No values or case content. Qualified adapter owns provenance, sanitizing and
+whole-row truncation; controller refuses invalid/oversized envelopes, rather
+than silently accepting them. Only the exact best source's envelope is used;
+latest failed-compile source/envelope is used if no evaluated candidate exists.
+Feedback policy hash is required in the approval binding. One envelope per
+analysis/repair request, not accumulated in score history. Ledger retains each.
+B2: no hidden invocation record or hidden port call when public differences >0.
+D1: Patch C adds current feedback to repair-phase query turns1-3 in phases1-5;
+phase0 has none. This graph-disabled patch changes no graph budget or API.

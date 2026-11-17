@@ -101,3 +101,5 @@ reports rather than calling it a match. This is an open-source reference, not
 mainframe-proven. No freeze or dispatch follows from this proposal.
 
 Planned: the opt-in legacy graph boundary rebuilds a reviewed public-source projection before G2 indexing. Planner and Builder receive only four bounded read methods over that exact approved snapshot; modern and test material, verification links and hidden-result provenance are excluded. Existing G2 signatures and Tower approval remain required. The standalone boundary has no model caller or activation path; later controller and accounting patches are separately reviewed.
+
+Planned: the graph-disabled public repair controller bounds five repair rounds, selects the best public candidate with latest-round ties, uses bounded joined public feedback, then closes model access and invokes the held-out gate only for a public-clean selection. Reviewed trusted ports supply admission, transport and evaluators; this standalone library has no live bootstrap and does not reopen retired INTCALC routes.

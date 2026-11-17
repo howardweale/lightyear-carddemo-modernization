@@ -1,0 +1,71 @@
+Durable ports (no PR yet, r1): P3 exact review-only proposal.
+
+New standalone module public_repair_durable implements record(name, public_record)
+and retain_artifact(slot, key, text) for the merged public_repair_controller. It
+imports no guarded legacy INTCALC source. No production admission, model, build,
+hidden evaluator, key handling or graph activation is supplied by this packet.
+It implements the already documented public-repair durable-retention contract
+inside the existing lightyear_factory package; no new package/data-trust route
+or ARCHITECTURE.md change. The future launcher must authenticate placement and
+run_id: a string of matching digest shape does not grant authority.
+
+Call DurablePorts(resolved_parent, authenticated_run_hash, absolute_deadline).
+The parent exists already and must be owned by the user with mode0700. Every
+ancestor is opened by directory descriptor without following links, belongs to
+root or the owner, and is not writable by group/other. Shared sticky /tmp is
+refused even after resolving /var links. System ancestor directories need not
+be0700; the private parent and new run directory do. Known sync namespaces are
+refused; authenticated operator placement outside ALL sync/candidate/backup
+roots remains an admission prerequisite, not something a name denylist proves.
+
+One exclusive public-repair-<run_hash> directory is created, mode0700; duplicate
+run ids refuse. Its parent and directory are synced. A retained public probe
+then exercises exclusive file creation, sync and hash readback before returning
+the ports. The successful probe is not a power-loss or hardware-flush-honesty
+claim, filesystem qualification, approved Mac placement or admission receipt.
+The final Mac still needs actual-volume qualification and a separately approved
+attended rehearsal of the integrated owner/guardian. This component accepts
+POSIX storage; the production launcher must constrain the qualified Mac/APFS
+profile. Windows refuses before touching getuid/O_DIRECTORY/fcntl.
+
+All files are owner-only0600, O_EXCL and O_NOFOLLOW, regular, single-link,
+descriptor-pinned and reopened by name for exact identity/bytes readback. Public
+records are sorted compact strict JSON plus one LF: no floats/nonfinite values,
+nonstring keys, tuple/bytes objects or depth>32. Size<=1048576 bytes including
+LF. retain_artifact writes exact UTF-8 with no added newline; planner/analysis
+<=8192 bytes and builder/repair<=65536; C0 refused except TAB/LF/CR. Slots are
+planner, builder-0, analysis-1..5, repair-1..5, with text/source keys joined.
+The artifact return is SHA256 of exact raw UTF-8, matching the controller.
+Record return is SHA256 including LF. Distinct record-/artifact- namespaces
+and closed ASCII names prevent collisions/traversal. Bounds include the probe:
+at most512 files and67108864 aggregate bytes; limit or uncertainty stops.
+
+macOS files AND directories require F_FULLFSYNC, with no fsync fallback. Other
+POSIX platforms require fsync; that is a different durability observation, not
+evidence that macOS full-sync passed. Failure carries only fixed refusal code,
+file_kind none/file/directory and integer errno|null. All diagnostics are closed
+allowlists; no dynamic provider/file-path text. The public-record port is generic:
+upstream trusted adapters still own the guarantee that data is public and free
+of secrets/provider content. Strict JSON alone cannot establish provenance.
+
+Each operation verifies process identity, state, parent/run path identities and
+mode, monotonic clock and the original absolute deadline before and after IO.
+Kernel calls can block; this library does not claim to preempt hung fsync/open.
+The final launcher must supervise its process and qualify stop/reap before LIVE.
+A late return refuses; no extension. Any operation failure poisons/closes the
+ports, preserves existing and partial files, and never retries or cleans them.
+KeyboardInterrupt/SystemExit propagate unchanged; close errors during failure
+cleanup never replace the original exception. No automatic recovery/resume.
+
+CI: real public synthetic file writes only. Linux exercises fsync and faults;
+macos-15 exercises actual F_FULLFSYNC file/directory paths under a resolved
+owner-home test parent; Windows takes explicit non-POSIX refusal branches,
+without skipped tests. The actual-volume test is named
+test_actual_volume_sync_record_and_artifact_readback. No agent runs tests,
+generator, app, Docker, compiler or model locally. No test asserts hardware
+power-loss durability. No current push, merge or live-operation authority.
+
+Changed paths are this contract, one new source module, its test and one new
+workflow. No existing workflow, shared contract, __init__ or architecture file
+is edited. Exact open-PR disjointness is recorded in the review packet, not
+inferred from item labels. Synthetic CI is still required after exact approval.

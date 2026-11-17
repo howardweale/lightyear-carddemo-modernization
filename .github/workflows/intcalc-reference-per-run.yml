@@ -1,0 +1,82 @@
+name: Reference per-run qualification contract
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      expected_main:
+        description: Howard-approved exact main commit for one qualification run
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic contract and public hash joins only
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_reference_per_run
+  qualify-public:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Exact approved head and pinned inputs before build
+        env:
+          EXPECTED_MAIN: ${{ inputs.expected_main }}
+          PYTHONPATH: src:.
+        shell: bash
+        run: |
+          test "$GITHUB_SHA" = "$EXPECTED_MAIN"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_MAIN"
+          test "$(uname -m)" = x86_64
+          python -B -m tools.intcalc_reference_per_run check
+      - name: Native pinned build without registry publication
+        shell: bash
+        run: |
+          case "$(docker info --format '{{.OSType}}/{{.Architecture}}')" in linux/x86_64|linux/amd64) ;; *) exit 2 ;; esac
+          docker build --platform linux/amd64 --file tools/legacy_twin/reproducible.Containerfile --iidfile "$RUNNER_TEMP/reference-image.id" .
+      - name: Per-run inventory and qualification criterion
+        env:
+          PYTHONPATH: src:.
+        shell: bash
+        run: python -B -m tools.intcalc_reference_per_run qualify --image-id "$(cat "$RUNNER_TEMP/reference-image.id")" --output "$RUNNER_TEMP/reference-qualified"
+      - name: Public qualification evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-per-run-qualification
+          path: |
+            ${{ runner.temp }}/reference-qualified/qualification.json
+            ${{ runner.temp }}/reference-qualified/report.json
+            ${{ runner.temp }}/reference-qualified/inventory.json
+            ${{ runner.temp }}/reference-qualified/container-cleanup.json
+            ${{ runner.temp }}/reference-qualified/controller.log
+            ${{ runner.temp }}/reference-qualified/public/PC-*/observations/**
+            ${{ runner.temp }}/reference-qualified/public/probe-*/observations/**
+          retention-days: 30
+          if-no-files-found: warn

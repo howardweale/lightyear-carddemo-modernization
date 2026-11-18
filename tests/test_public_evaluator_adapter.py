@@ -1,5 +1,7 @@
 """Synthetic workers only; no Docker/compiler/provider execution."""
-import copy
+import json
+import math
+import time
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -39,6 +41,28 @@ class PublicAdapterTests(unittest.TestCase):
         self.assertEqual((result['match'],result['different'],result['total']),(16,0,16))
         self.assertLessEqual(len(a.canonical(result['feedback'])),4096)
         self.assertTrue(all(set(i)=={'ACCTFILE','TCATBALF','DISCGRP','XREFFILE'} for i in w.observed_inputs))
+
+    def test_report_real_adapter_call_delay_on_public_suite(self):
+        adapter, worker = self.adapter()
+        stamps = []
+        def clock():
+            nonlocal sampled
+            sampled = time.monotonic()
+            return sampled
+        def observe(*args):
+            # Entry into the run_public port, before synthetic response construction.
+            stamps.append(math.ceil((time.monotonic() - sampled) * 1e9))
+            return original(*args)
+        sampled = 0.
+        adapter.clock = clock
+        original = worker.run_public
+        worker.run_public = observe
+        end = time.monotonic() + 600
+        built = adapter.build('class Main {}', 0, end)
+        adapter.evaluate_public(built, a.PUBLIC_SUITE, end)
+        self.assertEqual(len(stamps), 16)
+        print(json.dumps(dict(schema='public-adapter-call-delay/1', samples=len(stamps),
+                              max_adapter_call_delay_ns=max(stamps))), flush=True)
 
     def test_changed_or_nonpublic_suite_refuses(self):
         with self.assertRaisesRegex(a.Refused,'public-suite-hash'):a.public_suite(b'{}',SUITE)

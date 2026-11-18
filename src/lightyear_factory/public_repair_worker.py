@@ -48,6 +48,60 @@ def require(ok,code):
     if not ok:raise Refused(code)
 
 
+class LimitsRefused(Refused):
+    """Exact integer time units preserve sub-nanosecond threshold differences."""
+    def __init__(self, failed, limits, deadline, now):
+        super().__init__('worker-limits')
+        def finite(value):
+            return type(value) is int or type(value) is float and math.isfinite(value)
+
+        def delta(left, right):
+            if not (finite(left) and finite(right)):
+                return None
+            value = left - right
+            return value if finite(value) else None
+
+        execution = limits.get('execution_deadline') if isinstance(limits, dict) else None
+        cleanup = limits.get('cleanup_deadline') if isinstance(limits, dict) else None
+        output = limits.get('output_bytes') if isinstance(limits, dict) else None
+        times = dict(execution_remaining_ticks=delta(execution, now),
+                     cleanup_gap_ticks=delta(cleanup, execution),
+                     cleanup_minus_outer_ticks=delta(cleanup, deadline))
+        ratios = {k: v.as_integer_ratio() for k, v in times.items() if v is not None}
+        units = max((d for _, d in ratios.values()), default=1)
+        ticks = {k: None for k in times}
+        for k, (n, d) in ratios.items():
+            ticks[k] = n * (units // d)
+        byte_ratio = output.as_integer_ratio() if finite(output) else (None, None)
+        self.evidence = dict(schema='public-worker-limits-refusal/1', code='worker-limits',
+                             failed=failed, ticks_per_second=units,
+                             output_bytes=byte_ratio[0] if byte_ratio[1] == 1 else None,
+                             output_bytes_numerator=byte_ratio[0], output_bytes_denominator=byte_ratio[1], **ticks)
+
+
+def check_public_limits(limits, deadline):
+    failed = None
+    if set(limits) != {'execution_deadline', 'cleanup_deadline', 'output_bytes'}:
+        failed = 'keys'
+    elif limits['output_bytes'] != DATA:
+        failed = 'output-bytes'
+    elif not limits['cleanup_deadline'] <= deadline:
+        failed = 'cleanup-after-outer'
+    elif not 0 < limits['cleanup_deadline'] - limits['execution_deadline']:
+        failed = 'cleanup-gap-lower'
+    elif not limits['cleanup_deadline'] - limits['execution_deadline'] <= 5:
+        failed = 'cleanup-gap-upper'
+    now = time.monotonic()
+    if failed is None:
+        remaining = limits['execution_deadline'] - now
+        if not 0 < remaining:
+            failed = 'execution-remaining-lower'
+        elif not remaining <= 15:
+            failed = 'execution-remaining-upper'
+    if failed is not None:
+        raise LimitsRefused(failed, limits, deadline, now)
+
+
 def safe(path, *, directory=False):
     require(os.name=='posix','worker-posix')
     path=Path(path)
@@ -437,10 +491,15 @@ class PublicWorker:
             require(not self.failed and built['build_receipt_sha256'] in self.built,'worker-build-join')
             receipt=built['build_receipt_sha256'];identity,artifact,jar_hash=self.built[receipt]
             require(built['artifact_sha256']==identity and built['status']=='BUILT','worker-build-join')
-            require(set(limits)=={'execution_deadline','cleanup_deadline','output_bytes'}
-                and limits['output_bytes']==DATA and limits['cleanup_deadline']<=deadline
-                and 0<limits['cleanup_deadline']-limits['execution_deadline']<=5
-                and 0<limits['execution_deadline']-time.monotonic()<=15,'worker-limits')
+            try:
+                check_public_limits(limits, deadline)
+            except LimitsRefused as error:
+                try:
+                    exclusive(self.root/'worker-limits.json', c.canonical(error.evidence))
+                except Exception:
+                    # Evidence I/O must preserve the original refusal and its operands.
+                    pass
+                raise
             number=self.next_case[receipt];require(number<16,'worker-case-order');self.next_case[receipt]+=1
             root=self.root/('case-'+receipt[:16]+'-'+str(number));root.mkdir(mode=0o700)
             inp=root/'input';inp.mkdir(mode=0o755)

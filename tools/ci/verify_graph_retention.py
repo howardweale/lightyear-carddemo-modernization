@@ -28,6 +28,51 @@ def validate_run(run):
 
 
 
+def framed_log(raw):
+    text = raw.decode('utf-8-sig')
+    lines = []
+    for line in text.splitlines():
+        match = re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z (.*)', line)
+        if not match: raise ValueError('checkout-log-framing')
+        lines.append(match[1])
+    return lines
+
+
+def combined_checkout(lines, job):
+    """Bound checkout by the exact first and following action headers."""
+    following = [s for s in job.get('steps', []) if s.get('number') == 3]
+    if (len(following) != 1 or following[0].get('name') != 'Run actions/setup-java@v5'
+            or following[0].get('status') != 'completed'
+            or following[0].get('conclusion') != 'success'):
+        raise ValueError('checkout-log-boundary')
+    begin = '##[group]Run actions/checkout@v7'
+    finish = '##[group]Run actions/setup-java@v5'
+    starts = [i for i, line in enumerate(lines) if line == begin]
+    ends = [i for i, line in enumerate(lines) if line == finish]
+    if len(starts) != 1 or len(ends) != 1 or starts[0] >= ends[0]:
+        raise ValueError('checkout-log-boundary')
+    start, end = starts[0], ends[0]
+    # No prior or intervening step can contribute an apparent checkout command.
+    if any(line.startswith('##[group]Run ') and i != start
+           for i, line in enumerate(lines[:end])):
+        raise ValueError('checkout-log-ambiguous')
+    depth = 0
+    for i, line in enumerate(lines[:end]):
+        if i == start and depth:
+            raise ValueError('checkout-log-boundary')
+        if line.startswith('##[group]'):
+            if depth or not line.removeprefix('##[group]'):
+                raise ValueError('checkout-log-framing')
+            depth = 1
+        elif line == '##[endgroup]':
+            if depth != 1:
+                raise ValueError('checkout-log-framing')
+            depth = 0
+    if depth:
+        raise ValueError('checkout-log-boundary')
+    return lines[start:end]
+
+
 def checkout_revision(raw, job):
     """Read the original service-produced checkout step, never a report claim."""
     steps = [s for s in job.get('steps', []) if s.get('number') == 2]
@@ -36,20 +81,26 @@ def checkout_revision(raw, job):
             or not 0 < len(raw) <= 8 * MI):
         raise ValueError('checkout-step-identity')
     target = 'isolated-judge/2_Run actions_checkout@v7.txt'
+    combined = '0_isolated-judge.txt'
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
         entries = archive.infolist(); names = [i.filename for i in entries]
-        if len(entries) > 64 or len(set(names)) != len(names) or names.count(target) != 1:
+        if len(entries) > 64 or len(set(names)) != len(names):
             raise ValueError('checkout-log-closure')
-        info = archive.getinfo(target)
-        if (not 0 < info.file_size <= MI or info.flag_bits & 1
-                or stat.S_IFMT(info.external_attr >> 16) not in (0, stat.S_IFREG)):
-            raise ValueError('checkout-log-entry')
-        text = archive.read(info).decode('utf-8-sig')
-    lines = []
-    for line in text.splitlines():
-        match = re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z (.*)', line)
-        if not match: raise ValueError('checkout-log-framing')
-        lines.append(match[1])
+        present = [name for name in (target, combined) if name in names]
+        if not present:
+            raise ValueError('checkout-log-closure')
+        sections = []
+        for name in present:
+            info = archive.getinfo(name)
+            if (not 0 < info.file_size <= MI or info.flag_bits & 1
+                    or stat.S_IFMT(info.external_attr >> 16) not in (0, stat.S_IFREG)):
+                raise ValueError('checkout-log-entry')
+            lines = framed_log(archive.read(info))
+            sections.append(combined_checkout(lines, job) if name == combined else lines)
+    # Some archives include both layouts. Neither may contradict the other.
+    if any(section != sections[0] for section in sections[1:]):
+        raise ValueError('checkout-log-ambiguous')
+    lines = sections[0]
     commands = [i for i, line in enumerate(lines) if line == '[command]/usr/bin/git log -1 --format=%H']
     checks = [line.removeprefix('[command]/usr/bin/git checkout --progress --force ')
               for line in lines if line.startswith('[command]/usr/bin/git checkout --progress --force ')]

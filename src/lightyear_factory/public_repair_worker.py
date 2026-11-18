@@ -205,19 +205,39 @@ class Docker:
                  *flags,'--entrypoint='+entry,image(kind),*args])
         boundary(self.inspect(name),image(kind),mounts)
 
+    def collector(self,kind,volume,destination):
+        # Keep the local-driver tmpfs mounted after the candidate exits. This
+        # container executes no candidate code and has a read-only volume view.
+        name='prw-'+uuid.uuid4().hex
+        self.create(name,kind,{destination:(volume,False,'volume')},'/bin/sleep',['infinity'])
+        self.ok(['start',name])
+        state=self.inspect(name)['State']
+        require(state['Running'] and not state['Error'],'worker-runtime-infrastructure')
+        return name
+
+    def collect_args(self,name,path):
+        require(path in ('/build/javac.exit','/build/javac.stderr','/build/candidate.jar',
+                         '/output/ACCTFILE.bin','/output/TRANSACT.bin'),'worker-copy')
+        directory,leaf=path.rsplit('/',1)
+        # Fixed trusted shell, no candidate-controlled interpolation. Exit 44
+        # means absent (but a dangling symlink must still reach tar and refuse).
+        script=('if [ ! -e "$1" ] && [ ! -L "$1" ]; then exit 44; fi; '
+                'exec /bin/tar -C "$2" -cf - -- "$3"')
+        return ['exec','--env','LC_ALL=C',name,'/bin/sh','-c',script,'sh',path,directory,leaf]
+
     def copy(self,name,path,cap,missing=False):
-        row=self.call(['cp',name+':'+path,'-'],cap+65536)
+        row=self.call(self.collect_args(name,path),cap+65536)
         if row['rc']!=0:
-            require(missing and row['rc']==1 and b'could not find the file' in row['stderr'].lower(),
+            require(missing and row['rc']==44 and row['stdout']==row['stderr']==b'',
                     'worker-copy')
             return b''
         return member(row['stdout'],path.rsplit('/',1)[-1],cap)
 
     def prefix_copy(self,name,path,cap,missing=False):
-        row=self.call(['cp',name+':'+path,'-'],cap+65536,limited=True)
+        row=self.call(self.collect_args(name,path),cap+65536,limited=True)
         require(not row['timed_out'],'worker-deadline')
         if row['rc']!=0 and not row['output_capped']:
-            require(missing and row['rc']==1 and b'could not find the file' in row['stderr'].lower(),
+            require(missing and row['rc']==44 and row['stdout']==row['stderr']==b'',
                     'worker-copy')
             return b'',False
         try:
@@ -264,6 +284,7 @@ def compile_worker(req,docker):
     require(c.sha(read(root/'Main.java',65536))==req['source_sha256'],'worker-source')
     require(c.sha(read(root/'RecordNumbers.java',65536))==req['helper_sha256'],'worker-helper')
     name='prw-'+uuid.uuid4().hex;volume=name+'-out';docker.volume(volume,'64m')
+    collector=docker.collector('jdk',volume,'/build')
     mounts={'/source/Main.java':(str(root/'Main.java'),False,'bind'),
             '/helper/RecordNumbers.java':(str(root/'RecordNumbers.java'),False,'bind'),
             '/build':(volume,True,'volume')}
@@ -274,14 +295,14 @@ def compile_worker(req,docker):
             and started['rc']==0,'worker-build-infrastructure')
     require(started['stdout'].decode('ascii').splitlines()==[
         JAVAC+'  /opt/java/openjdk/bin/javac',JAR+'  /opt/java/openjdk/bin/jar'],'worker-tools')
-    raw=docker.copy(name,'/build/javac.exit',16)
+    raw=docker.copy(collector,'/build/javac.exit',16)
     require(raw in (b'0\n',b'1\n'),'worker-javac-fault')
     exit_code=int(raw)
-    stderr,_=docker.prefix_copy(name,'/build/javac.stderr',65537)
+    stderr,_=docker.prefix_copy(collector,'/build/javac.stderr',65537)
     exclusive(root/'compiler.stderr',stderr)
     jar_hash=None
     if exit_code==0:
-        jar=docker.copy(name,'/build/candidate.jar',JAR_BYTES)
+        jar=docker.copy(collector,'/build/candidate.jar',JAR_BYTES)
         require(bool(jar),'worker-jar');exclusive(root/'candidate.jar',jar,0o444);jar_hash=c.sha(jar)
     return dict(phase='javac',exit_code=exit_code,artifact_sha256=req['source_sha256'],
         jar_sha256=jar_hash,daemon_ok=True,image_match=True,tool_hash_match=True,timed_out=False,
@@ -296,6 +317,7 @@ def public_worker(req,docker):
     require(re.fullmatch(r'\d{10}',req['processing_date']) and
         re.fullmatch(r'\d{4}-\d{2}-\d{2}-\d{2}\.\d{2}\.\d{2}\.\d{6}',req['timestamp']),'worker-clock')
     name='prw-'+uuid.uuid4().hex;volume=name+'-out';docker.volume(volume,'16m')
+    collector=docker.collector('jre',volume,'/output')
     mounts={'/candidate.jar':(str(artifact),False,'bind'),'/input':(str(root/'input'),False,'bind'),
             '/output':(volume,True,'volume')}
     docker.create(name,'jre',mounts,'/opt/java/openjdk/bin/java',[
@@ -313,7 +335,7 @@ def public_worker(req,docker):
             'worker-runtime-infrastructure')
     observations=dict(stdout=started['stdout'],stderr=started['stderr'])
     for dd in OUTPUTS:
-        observations[dd],capped=docker.prefix_copy(name,'/output/'+dd+'.bin',DATA,missing=True)
+        observations[dd],capped=docker.prefix_copy(collector,'/output/'+dd+'.bin',DATA,missing=True)
         started['output_capped'] |= capped
     for channel,raw in observations.items():exclusive(root/('observed-'+channel),raw)
     return dict(exit=state['ExitCode'],timed_out=started['timed_out'],output_capped=started['output_capped'],

@@ -59,6 +59,7 @@ class WorkerTests(unittest.TestCase):
 
     def docker(self):
         obj=w.Docker(['/docker','--config','/config','--host','unix:///socket'],'/resources',10,15)
+        obj.collector=Mock(return_value='collector')
         obj.call=Mock(return_value=dict(rc=0,stdout=b'',stderr=b'',timed_out=False,output_capped=False))
         return obj
 
@@ -76,7 +77,7 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(len(rows),2)
 
     def test_prefix_copy_missing_is_empty_only_for_exact_missing_error(self):
-        docker=self.docker();docker.call.return_value.update(rc=1,stderr=b'Could not find the file /output/ACCTFILE.bin in container')
+        docker=self.docker();docker.call.return_value.update(rc=44,stdout=b'',stderr=b'')
         self.assertEqual(docker.prefix_copy('name','/output/ACCTFILE.bin',10,missing=True),(b'',False))
         docker.call.return_value['stderr']=b'daemon unavailable'
         with self.assertRaisesRegex(w.Refused,'worker-copy'):
@@ -206,6 +207,53 @@ class WorkerTests(unittest.TestCase):
         with patch.object(Path,'glob',return_value=[Path('container-'+name+'.json')]),\
              patch.object(w,'read',return_value=json.dumps(dict(kind='container',name=name)).encode()):
             with self.assertRaisesRegex(w.Refused,'worker-absence'):docker.cleanup()
+
+
+    def test_collector_readonly_and_running_before_candidate(self):
+        docker=self.docker();del docker.collector
+        docker.create=Mock();docker.ok=Mock()
+        docker.inspect=Mock(return_value={'State':{'Running':True,'Error':''}})
+        name=docker.collector('jdk','prw-'+'a'*32+'-out','/build')
+        self.assertEqual(docker.create.call_args.args[2],{'/build':('prw-'+'a'*32+'-out',False,'volume')})
+        self.assertEqual(docker.create.call_args.args[3:],('/bin/sleep',['infinity']))
+        docker.ok.assert_called_once_with(['start',name])
+
+    def test_copy_executes_tar_in_live_collector_not_stopped_candidate(self):
+        docker=self.docker();docker.call.return_value['stdout']=archive('javac.exit',b'0\n')
+        self.assertEqual(docker.copy('collector','/build/javac.exit',16),b'0\n')
+        args=docker.call.call_args.args[0]
+        self.assertEqual(args[:4],['exec','--env','LC_ALL=C','collector'])
+        self.assertEqual(args[-3:],['/build/javac.exit','/build','javac.exit'])
+        self.assertNotIn('cp',args)
+
+    def test_compile_reads_collector_after_candidate_exits(self):
+        docker=self.docker();docker.preflight=Mock();docker.volume=Mock();docker.create=Mock()
+        docker.inspect=Mock(return_value={'State':{'Running':False,'Error':'','ExitCode':0}})
+        docker.call.return_value['stdout']=(w.JAVAC+'  /opt/java/openjdk/bin/javac\n'+w.JAR+'  /opt/java/openjdk/bin/jar\n').encode()
+        events=[]
+        docker.collector.side_effect=lambda *args:events.append('collector-running') or 'collector'
+        docker.create.side_effect=lambda *args:events.append('candidate-create')
+        def copied(name,path,cap):
+            self.assertEqual(name,'collector');events.append('collect')
+            return b'0\n' if path.endswith('.exit') else b'public-jar'
+        docker.copy=Mock(side_effect=copied);docker.prefix_copy=Mock(return_value=(b'',False))
+        req=dict(root='/root',source_sha256=w.c.sha(b'public'),helper_sha256=w.c.sha(b'public'))
+        with patch.object(w,'read',return_value=b'public'),patch.object(w,'exclusive'):
+            row=w.compile_worker(req,docker)
+        self.assertEqual(events,['collector-running','candidate-create','collect','collect'])
+        self.assertEqual(row['jar_sha256'],w.c.sha(b'public-jar'))
+        self.assertEqual(docker.prefix_copy.call_args.args[0],'collector')
+
+    def test_collector_dead_refuses_before_candidate_creation(self):
+        docker=self.docker();del docker.collector
+        docker.create=Mock();docker.ok=Mock();docker.inspect=Mock(return_value={'State':{'Running':False,'Error':''}})
+        with self.assertRaisesRegex(w.Refused,'worker-runtime-infrastructure'):
+            docker.collector('jre','volume','/output')
+
+    def test_missing_sentinel_with_stderr_is_fault(self):
+        docker=self.docker();docker.call.return_value.update(rc=44,stderr=b'not an absence')
+        with self.assertRaisesRegex(w.Refused,'worker-copy'):
+            docker.prefix_copy('collector','/output/ACCTFILE.bin',1024,missing=True)
 
 
 if __name__=='__main__':unittest.main()

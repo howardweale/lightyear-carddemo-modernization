@@ -31,6 +31,15 @@ def main():
         assert row['exit']==0 and row['cleanup'] and not row['timed_out'] and not row['output_capped']
         assert row['ACCTFILE']==input_bytes['ACCTFILE'] and row['TRANSACT']==b''
         assert row['stdout']==row['stderr']==b''
+    # Every phase must remove candidate, collector and tmpfs volume, with daemon
+    # absence readback. Outputs above prove collection survived candidate exit.
+    cleanups=list(worker.root.glob('*/cleanup.json'))
+    assert len(cleanups)==17
+    for path in cleanups:
+        cleanup=json.loads(path.read_bytes())
+        assert cleanup['cleanup'] is True and len(cleanup['removed'])==3
+        assert sorted(r['kind'] for r in cleanup['removed'])==['container','container','volume']
+        assert all(r['absence_confirmed'] for r in cleanup['removed'])
     assert time.monotonic()<deadline
     bad=worker.compile('public class Main { invalid syntax }',1,time.monotonic()+200)
     assert bad['exit_code']==1 and bad['diagnostic_mode']=='javac-XDrawDiagnostics' and bad['stderr']

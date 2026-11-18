@@ -1,5 +1,4 @@
 """Synthetic workers only; no Docker/compiler/provider execution."""
-import copy
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -32,6 +31,34 @@ class PublicAdapterTests(unittest.TestCase):
         raw=(SUITE/'SUITE.json').read_bytes();cases=a.public_suite(raw,SUITE)
         worker=Worker(cases);adapter=a.PublicAdapter(worker,raw,SUITE,ROOT,a.sha,clock=lambda:0)
         return adapter,worker
+
+    def test_fractional_clock_keeps_both_worker_intervals_inside_the_caps(self):
+        cleanup_boundary = 1_006_000_000_027 / 1_000_000_000
+        execution_boundary = 1_010_000_000_027 / 1_000_000_000
+        self.assertGreater((cleanup_boundary + 20) - (cleanup_boundary + 15), 5)
+        self.assertGreater((execution_boundary + 15) - execution_boundary, 15)
+        for now in (cleanup_boundary, execution_boundary):
+            with self.subTest(now=now):
+                adapter, worker = self.adapter()
+                adapter.clock = lambda: now
+                phase_end = now + 600
+                built = adapter.build('class Main {}', 0, phase_end)
+                adapter.evaluate_public(built, a.PUBLIC_SUITE, phase_end)
+                self.assertEqual(len(worker.limits), 16)
+                for limits in worker.limits:
+                    execution = limits['execution_deadline']
+                    cleanup = limits['cleanup_deadline']
+                    self.assertGreater(execution, now)
+                    self.assertLessEqual(execution - now, 15)
+                    self.assertGreater(cleanup, execution)
+                    self.assertLessEqual(cleanup - execution, 5)
+                    self.assertLessEqual(cleanup, phase_end)
+
+    def test_phase_clip_and_exact_boundaries(self):
+        self.assertEqual(a.case_deadlines(10., 100.), (25., 30.))
+        self.assertEqual(a.case_deadlines(10., 21.), (16., 21.))
+        with self.assertRaisesRegex(a.Refused, '^deadline$'):
+            a.case_deadlines(10., 15.)
 
     def test_delivered_public_suite_hash_and_all_matches(self):
         adapter,w=self.adapter();built=adapter.build('class Main {}',0,10)

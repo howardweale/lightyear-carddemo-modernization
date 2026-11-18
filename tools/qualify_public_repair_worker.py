@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import time
+from lightyear_factory.public_evaluator_adapter import case_deadlines
 from lightyear_factory.public_repair_worker import PublicWorker, DATA, c
 
 
@@ -26,8 +27,10 @@ def main():
     input_bytes={name:b'' for name in ('ACCTFILE','TCATBALF','DISCGRP','XREFFILE')}
     input_bytes['ACCTFILE']=b'PUBLIC-FIXTURE-ONLY'
     for _ in range(16):
-        now=time.monotonic();limits=dict(execution_deadline=now+15,cleanup_deadline=now+20,output_bytes=DATA)
-        row=worker.run_public(identity,input_bytes,'2026-11-17-00.00.00.000000','2026111700',now+20,limits)
+        now = time.monotonic()
+        execution_end, case_end = case_deadlines(now, min(deadline, now + 20))
+        limits = dict(execution_deadline=execution_end, cleanup_deadline=case_end, output_bytes=DATA)
+        row=worker.run_public(identity,input_bytes,'2026-11-17-00.00.00.000000','2026111700',case_end,limits)
         assert row['exit']==0 and row['cleanup'] and not row['timed_out'] and not row['output_capped']
         assert row['ACCTFILE']==input_bytes['ACCTFILE'] and row['TRANSACT']==b''
         assert row['stdout']==row['stderr']==b''

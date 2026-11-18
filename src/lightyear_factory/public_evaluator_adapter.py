@@ -5,6 +5,7 @@ model requests. The controller independently validates the resulting envelope.
 """
 import hashlib
 import json
+import math
 import re
 import time
 from tools.intcalc_reference_execution import strict, joined, comparison_policy
@@ -38,6 +39,21 @@ LAYOUTS={'ACCTFILE':('CVACT01Y.cpy','81a08bad15af5664326a6f0af3650f570821c4857ff
 DIAGNOSTIC=re.compile(r'^(?:/source/)?Main\.java:(\d+):(\d+): (.+)$')
 PATHS=re.compile(r'(?<![A-Za-z0-9_<])(?:[A-Za-z]:[\\/]|\\\\|/(?![/\s\'"<>;]))[^\s\'"<>|]*')
 URIS=re.compile(r'\b[A-Za-z][A-Za-z0-9+.-]*://[^\s\'"<>]+')
+
+
+def bounded_end(start, seconds):
+    end = start + seconds
+    if end - start > seconds:
+        end = math.nextafter(end, start)
+    return end
+
+
+def case_deadlines(now, phase_end):
+    execution = min(bounded_end(now, CASE_EXECUTION_SECONDS), phase_end - CASE_CLEANUP_SECONDS)
+    require(execution > now, 'deadline')
+    cleanup = min(bounded_end(execution, CASE_CLEANUP_SECONDS), phase_end)
+    require(cleanup > execution, 'deadline')
+    return execution, cleanup
 
 
 def prefix(text,cap):
@@ -210,9 +226,7 @@ class PublicAdapter:
             require(type(case['expected']['exit']) is int,'public-exit')
             # Only public INPUT bytes/time are given to the execution worker.
             now=self.clock()
-            execution_end=min(now+CASE_EXECUTION_SECONDS,deadline-CASE_CLEANUP_SECONDS)
-            require(execution_end>now,'deadline')
-            case_end=min(deadline,execution_end+CASE_CLEANUP_SECONDS)
+            execution_end, case_end = case_deadlines(now, deadline)
             limits=dict(execution_deadline=execution_end,cleanup_deadline=case_end,output_bytes=OUTPUT_BYTES)
             actual=self.worker.run_public(dict(built),dict(case['inputs']),case['timestamp'],case['processing_date'],case_end,limits)
             self.before(deadline)

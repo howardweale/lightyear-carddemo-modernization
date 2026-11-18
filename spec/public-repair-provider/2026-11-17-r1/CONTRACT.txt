@@ -1,0 +1,81 @@
+P4 Provider ports (no PR yet, r1)
+
+Review-only integration of count, generate and close_models with the merged
+graph-off Controller and P3 DurablePorts. No launcher, authority issuer, graph
+capability, hidden evaluator or retired-route import. No real request is made by
+tests. Howard must separately approve every paid run and enter his key himself.
+
+Process custody
+The future launcher authenticates its exact binding and fresh spend authority
+BEFORE constructing KeyOwner. The spawned process receives only an IPC handle,
+opens its controlling terminal, and uses getpass with echoed fallback disabled.
+The key is never a constructor argument, IPC message to the controller, argv,
+environment, file or log. The child clears its environment before prompting.
+Windows production entry refuses; Howard's Mac is the production provider host.
+CI may spawn a synthetic key-free owner on all three systems. All CI HTTP tests
+mock HTTPSConnection; no test invokes the real key-owner entry.
+The owner alone makes fixed-host HTTPS POSTs, without an SDK, proxy, redirect,
+retry or fallback. It creates no subprocess. close_models kills and reaps it
+before recording provider-closed. Failed closure cannot be retried into success.
+OS process isolation/termination, not Python memory erasure or independent
+attestation. Host administrators and the reviewed controller remain trusted.
+Candidate processes must inherit no provider IPC descriptor; the launcher and
+build worker must use spawn/close_fds and closed environments. Their integration
+and actual Mac qualification remain blocking; this module cannot establish them.
+
+Requests and bounds
+Only the fixed twelve graph-off slots are accepted: planner, builder, then five
+analysis/repair pairs. One count then one joined generation, never retry/resume.
+The controller reserves its original role hold before calling these ports; no
+additional or refunded hold. Cap USD 37.67, maximum holds USD 37.664000, window
+17,520 s and output 32,000 remain unchanged. Counting remains conservatively
+charged in the controller; billing_final stays false. This is not confirmation
+of account billing and not spend authority.
+MODEL, role instructions and fields are fixed by the merged controller. Public
+context members and artifacts become separate input_text parts; score history
+and feedback use canonical JSON text. Count and generation share input, model,
+instructions and JSON schema. Generation adds flex, medium reasoning, store
+false, no tools, no stream, no background, no previous response, truncation
+disabled. These shapes continue the retained reviewed Responses integration.
+The complete count and generation wire encodings must each be <= actual
+controller projection bytes + 4096, itself <= role cap. This checks the actual
+wire shape before either send, not just a fixture estimate. Named limit:
+escape-heavy feedback or too many tiny context members can refuse at this port
+after reservation but before send; the conservative hold remains consumed.
+This byte rule is a reviewed conservative policy, not a provider certificate.
+Measured proof for the final approved context/launcher is a separate V1 blocker.
+JSON-schema maxLength is not used: characters are not UTF-8 bytes. Artifacts
+undergo strict JSON, exact key, byte/encoded cap and C0 checks after generation.
+
+Responses and failure evidence
+Provider envelopes allow finite floats; duplicate keys, NaN, Infinity, overflow
+and malformed UTF-8 refuse. Artifacts remain float-free. Completed exact-model
+flex responses only; usage integer checks include total and reasoning tokens.
+Reasoning counts against the 32,000 output cap. Incomplete or non-text artifacts
+consume their slot and stop. No provider metadata floats enter public records.
+Each wire send/response record holds hashes, sizes/status, and no content. Fixed
+failure codes are recorded by P3 without replacing the original failure.
+On any post-generation response refusal, the raw bounded response is retained
+through ProviderEvidence's P3 exclusive owner-only 0600 write/readback/full-sync
+operation under a fixed controller filename ending .private. It is never
+printed or published. Howard and Claude only. Retention failure is recorded as
+RETENTION_FAILED and does not mask the original fault or permit another call.
+P3's 512-file and 64-MiB total ceilings remain in force. Public records never
+contain raw response text, credential text, or dynamic exception messages.
+
+Deadline and cleanup
+The original absolute count/generation deadline bounds IPC send, HTTP work and
+reply read. A watchdog kills the process five seconds before that deadline;
+the remainder is reserved for reaping, not added to the phase. Cleanup failure
+is terminal. The final close has at most five seconds within the run deadline.
+Blocking kernel IO and actual-volume behavior need attended Mac qualification.
+The controller's no-hidden-before-close and PUBLIC_FAIL hidden refusal remain
+unchanged. This packet does not supply a hidden key or bypass that boundary.
+
+Validation and integration limits
+Synthetic tests cover finite envelope metadata, usage, C0/byte caps, joined
+wire bounds, duplicate sends, uncertain count, private retention, HTTP failures,
+all twelve slots, four-role controller repair/close ordering and key-free spawn.
+CI-only; no local test execution. L1 still must authenticate admission and
+construct the combined ports; V1 still must measure full wire/deadline behavior
+on Howard's Mac before any run. No activation from a successful unit test.

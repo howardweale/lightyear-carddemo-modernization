@@ -1,0 +1,88 @@
+P5 Build and public worker (no PR yet, r1)
+
+New public-only compile/run_public implementation for the merged PublicAdapter.
+The retired INTCALC build, gate and freeze routes remain closed and unimported.
+No oracle, held-out directory, provider, credential or private answer API exists.
+No live use, Docker invocation or qualification is authorized by this proposal.
+
+Trust flow
+The admitted launcher supplies a resolved owner-only run parent, approved run
+hash, resolved Docker executable with authenticated SHA256, authenticated local
+Unix endpoint, and reviewed RecordNumbers.java helper with SHA256. Hash presence
+is not authorization; L1 must authenticate these values and the whole source
+manifest. Candidate source is <=65536 UTF-8 bytes and remains ordinary Java.
+The optional helper is compiled alongside Main.java; annotation processing is
+disabled. No source-derived shell or command text. Classpath is pure JDK plus
+the exact reviewed helper, no downloaded dependency or candidate build script.
+
+Every compile/case uses an exclusive child directory. Parent launches the fixed
+Python worker entry with -I -B, a closed environment and close_fds. Worker Docker
+commands share the worker process group so parent interruption kills descendants.
+The provider key remains in the separate P4 process and no descriptor is passed.
+The parent alone owns artifact paths and build-receipt joins; selection reuses
+the retained jar by hash, not a rebuilt source. Hidden evaluation is separate.
+All worker request, input and observation files are public material. P3 record
+ports retain controller receipts separately; no private answer enters this root.
+
+Runtime
+Native linux/arm64 only, JDK manifest 8def71d61fd7f95b08480f51e8ac35e37ec87a0aaad6950a6f1e35c771de5b2d,
+JRE manifest 3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07.
+Local inspect only, --pull=never in every container. Dedicated CI qualification
+may pull exactly these two public images; no registry login or image publication.
+Daemon and image platform joins precede work; javac and jar binary hashes are
+checked against the retained pins. Containerd manifest IDs are not mistaken for
+config digests. Empty Docker config, fixed local endpoint, no inherited config.
+Every container: network none, readonly root, nonroot 65534, all caps dropped,
+no-new-privileges, 64 PIDs, 512 MiB RAM, one CPU, no logging driver. Mount type,
+source/name, destination and write permission are inspected against exact maps.
+Only reviewed public input/source/helper/jar binds and temporary output volume.
+No host writable bind, Docker socket, credential or answer mount. Temporary build
+volume 64 MiB; per-case output 16 MiB; /tmp 32 MiB. Named resources are durably
+registered before create. Parent removes and independently inspects absence even
+after a worker fault. No global prune or cleanup of unrelated resources.
+
+Compile semantics
+200 seconds maximum inside the controller's existing 600-second public phase;
+30 seconds reserved within that bound (child collection then parent cleanup).
+Fixed javac-XDrawDiagnostics command; trusted shell records javac exit separately
+from Docker/shell/tool errors. Only javac 1 is COMPILE_FAILED, eligible for repair.
+2/3/4/unknown exit, daemon/image/tool mismatch, timeout or cleanup failure is a
+terminal infrastructure/tool fault. Capture first65537 stderr bytes so the merged
+adapter can mark truncation and produce at most four sanitized diagnostics.
+No stdout or source excerpts enter feedback. Slash-literal and path-shaped
+diagnostic sanitization remains in the reviewed public evaluator adapter.
+
+Public case semantics and limits
+Worker receives only four public input files, timestamp and processing date,
+never expected bytes. Same existing Java argument contract, codec cp037.
+Sixteen cases maximum per build, six builds maximum; one execution per case.
+15-second execution allowance includes startup, daemon checks and create/start;
+5-second allowance includes stop/observation collection and parent remove/inspect.
+The latter is split: child must finish before the final 2.5 seconds reserved for
+the parent. Deadlines are absolute and not extended. Late collection or cleanup
+is terminal; no unconfirmed absence can become a successful case.
+Candidate timeout or stdout/stderr/file output cap produces bounded observation
+prefixes plus timed_out/output_capped. The merged adapter scores it DIFFERENT
+with framing and exit mismatch. Daemon failures remain terminal. Output files
+are copied only after the candidate stops; no symlink extraction or host writes
+from a tar archive. Nonregular or malformed output archives refuse as a named
+conservative output-contract limit; they are not silently scored as a match.
+Missing output files are empty byte observations; only exact Docker missing-file
+diagnostics admit that case, other copy errors refuse. Aggregate raw output
+ceiling is four channels at8 MiB each. Working-set retention is bounded by six
+builds and96 public cases, approximately6.2 GiB at simultaneous input/output
+maxima plus metadata. Launcher disk proof must cover retention; no cleanup grant.
+
+Evidence and qualification
+Worker result/cleanup/receipt hashes join the exact source, jar, helper, CLI,
+images and inputs. Complete public output bytes remain in owner-only local
+observation files; only bounded aggregated feedback goes to model roles.
+The CI ARM job compiles the existing public fixture, runs16 public plumbing cases
+within600 seconds, and distinguishes real compile failure. Synthetic CI tests
+exercise cap/timeout observations and cleanup faults without Docker. No hidden
+bundle, model or key. Public receipts are unsigned integrity evidence, not
+independent attestation, mainframe proof or approval to run on Howard's Mac.
+V1 must still measure sixteen worst-path timeouts and cleanup on the exact Mac
+and volume before live use. The5-second case cleanup budget is not claimed to be
+empirically qualified by synthetic tests. Public answer-key migration is P2;
+the admitted frozen key replaces hand expectations without changing these ports.

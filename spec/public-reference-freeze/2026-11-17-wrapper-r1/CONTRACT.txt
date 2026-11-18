@@ -1,0 +1,78 @@
+Public freeze workflow and provenance binding (no PR yet, r1)
+P1 exact review-only proposal. No dispatch or freeze is authorized by this packet.
+
+New files only: one tool, one test module, one workflow, this work-item contract.
+No existing source, workflow, shared contract or ARCHITECTURE.md is changed.
+This implements the separately approved public-freeze route already described in
+the reference-qualification contract; it does not adopt a key or enable LIVE.
+
+Two-source issue explicitly resolved: historical identity() requires GITHUB_SHA
+to equal the historical qualification commit. Therefore the old freeze() entry
+cannot run unmodified under a new main wrapper's genuine GitHub identity. This
+proposal does NOT spoof GITHUB_SHA or other CI variables. It supplies a new
+reviewed entry, reuses the historical load_binding/attest/observation_inventory
+validation functions, and duplicates the small public output assembly procedure.
+It never calls historical identity() or freeze(). Both clean checkout identities
+are verified before and after; imports run with Python -I -B, explicitly selecting
+the historical root and src, so historical ROOT is never the wrapper root.
+
+Historical qualification source is fixed at
+71a18164612ce574d889a39ceb335c5643721fc6, tree
+7316662cb5cc52d5361ad1954c417b37e1e18fe5. Qualification receipt, evidence Release
+manifest/archive, binding and suite hashes are compiled constants. No historical
+receipt or source byte is edited. Exact current wrapper commit/tree are separate
+approval fields; actual GITHUB_SHA must equal the supplied exact wrapper commit.
+The qualification source and wrapper are sibling fresh checkouts, not nested.
+Git identity subprocesses strip GIT_* overrides; dirty/untracked trees refuse.
+
+Approval schema reference-two-source-public-freeze-approval/1 is closed:
+schema, authority='Howard', authorize_public_freeze=true,
+scope='PC-01..PC-16 only; no hidden set', wrapper_commit, wrapper_tree,
+qualification_commit, qualification_tree, qualification_sha256,
+evidence_manifest_sha256, binding_sha256, public_suite_sha256.
+Howard must review the exact approval JSON bytes and SHA256 independently and
+approve one dispatch on the exact merged wrapper head. A supplied name/hash is
+not a signature or independent authority attestation; the authenticated manual
+workflow dispatch is operator-controlled. Reference adoption alone is refused.
+No JSON substitutions from shell interpolation: inputs enter environment values.
+The proposed manual job exists only on workflow_dispatch/main and outputs public
+bytes. No schedule, workflow_run, image build, compiler, model or hidden mode.
+
+Downloads are limited to the two fixed public Release asset names. Both exact
+hashes are verified before extraction. ZIP extraction rejects duplicate names,
+directories, encryption, symlinks/special files, absolute/traversal/backslash paths,
+noncanonical names, oversized members, >512 entries and >32MiB total expanded data.
+The retained archive has213 regular files and no directory members. The final
+output root is fresh, absolute, resolved and outside both source checkouts.
+
+All211 observation identities and the qualification criterion are recomputed
+through historical validation. Actual reference bytes equal hand derivations
+on every compared channel; Python differences remain exactly registered O1/O2/O4.
+The zoned-signs-2 finding retains the IBM expectation, never becomes MATCH.
+PC-10/11/12 retain compare_output_files=false; unmodelled persisted outputs do
+not become expected answer files. No expected bytes or compare policy change.
+
+The NEW final MANIFEST.json schema reference-public-answer-key/2 records BOTH:
+qualification_commit/tree and wrapper_commit/tree; wrapper tool/workflow hashes;
+qualification receipt, evidence manifest/archive, binding, suite and approval
+hashes; actual run id/attempt; all output path/hash/size rows and named limits.
+APPROVAL.json preserves supplied exact bytes and joins by approval_sha256.
+Files are exclusive and read back; the manifest is written last after repeated
+source identity checks. Only successful complete output is uploaded. A partial
+directory is not a frozen key and is never silently retried or cleaned up.
+P2 must explicitly consume this v2 manifest and require both source identities;
+existing hand-output bindings are unchanged in this PR. No legacy manifest is
+rewritten or relabelled. This is public CI evidence persistence, not a claim of
+Mac full-sync or held-out encryption qualification.
+
+CI: synthetic tests on ubuntu-24.04 and windows-2025, no skips; read-only actual
+historical module import/load_binding from the pinned checkout on both platforms.
+That check performs no freeze, reference execution, Docker or network fetch.
+The actual evidence fetch/output assembly needs Howard's separate manual dispatch
+after exact push/merge approval. Public synthetic fixture tests cover assembly,
+abend compare policy, two-source approval, manifest identities and unsafe ZIPs.
+
+Limits: open-source reference, not mainframe-proven; preferred C/D signs only;
+reference built per run from pinned public packages, no published image digest.
+This wrapper consumes retained qualification evidence; it does not rebuild the
+reference, run cases again, freeze held-out answers, generate inputs or spend.

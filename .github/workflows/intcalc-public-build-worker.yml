@@ -1,0 +1,48 @@
+name: Public build and execution worker
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  worker-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic worker boundaries and cleanup faults
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest -v test_public_repair_worker
+  real-public-fixture:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Pull reviewed native images by digest only
+        run: |
+          docker pull --platform linux/arm64 docker.io/library/eclipse-temurin@sha256:8def71d61fd7f95b08480f51e8ac35e37ec87a0aaad6950a6f1e35c771de5b2d
+          docker pull --platform linux/arm64 docker.io/library/eclipse-temurin@sha256:3d25d5cb6ca22137a17d2aeddc7b965027ce1e404d52c5c92a8796cece4d7b07
+      - name: Compile public fixture and observe sixteen public executions
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B tools/qualify_public_repair_worker.py

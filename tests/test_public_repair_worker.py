@@ -187,6 +187,63 @@ class WorkerTests(unittest.TestCase):
                 worker.run_public(built,{},'','',40,dict(execution_deadline=30,cleanup_deadline=35,output_bytes=w.DATA))
         self.assertTrue(worker.failed)
 
+    def test_limit_evidence_names_first_fault_and_exact_operands(self):
+        clean = dict(execution_deadline=25., cleanup_deadline=30., output_bytes=w.DATA)
+        for update, outer, check in (
+            ({'unexpected': 'excluded-marker'}, 30., 'keys'),
+            ({'output_bytes': 9}, 30., 'output-bytes'),
+            ({}, 29., 'cleanup-after-outer'),
+            ({'cleanup_deadline': 30.000000000000004}, 31., 'cleanup-gap-upper'),
+            ({'cleanup_deadline': 25.}, 30., 'cleanup-gap-lower'),
+            ({'execution_deadline': 25.000000000000004}, 30., 'execution-remaining-upper'),
+            ({'execution_deadline': 10., 'cleanup_deadline': 15.}, 30., 'execution-remaining-lower'),
+        ):
+            limits = {**clean, **update}
+            with self.subTest(check=check, update=update):
+                with patch.object(w.time, 'monotonic', return_value=10.) as clock:
+                    with self.assertRaisesRegex(w.LimitsRefused, '^worker-limits$') as ctx:
+                        w.check_public_limits(limits, outer)
+                clock.assert_called_once_with()
+                row = ctx.exception.evidence
+                self.assertEqual(row['failed'], check)
+                self.assertNotIn(b'excluded-marker', w.c.canonical(row))
+                units = row['ticks_per_second']
+                for key, value in (
+                    ('execution_remaining_ticks', limits['execution_deadline'] - 10.),
+                    ('cleanup_gap_ticks', limits['cleanup_deadline'] - limits['execution_deadline']),
+                    ('cleanup_minus_outer_ticks', limits['cleanup_deadline'] - outer),
+                ):
+                    n, d = value.as_integer_ratio()
+                    self.assertEqual(row[key] * d, n * units)
+                self.assertEqual(row['output_bytes'], limits['output_bytes'])
+
+    def test_missing_or_nonfinite_operands_are_never_serialized_as_values(self):
+        with self.assertRaises(w.LimitsRefused) as ctx:
+            w.check_public_limits({'cleanup_deadline': float('nan')}, 30)
+        row = ctx.exception.evidence
+        self.assertEqual(row['failed'], 'keys')
+        self.assertIsNone(row['execution_remaining_ticks'])
+        self.assertIsNone(row['cleanup_gap_ticks'])
+        self.assertIsNone(row['output_bytes'])
+        self.assertNotIn(b'NaN', w.c.canonical(row))
+
+    def test_valid_boundary_and_refusal_evidence_write(self):
+        worker = object.__new__(w.PublicWorker)
+        worker.root = Path('synthetic')
+        worker.built = {'a'*64: ('b'*64, Path('artifact'), 'c'*64)}
+        built = dict(build_receipt_sha256='a'*64, artifact_sha256='b'*64, status='BUILT')
+        limits = dict(output_bytes=w.DATA, execution_deadline=15., cleanup_deadline=20.)
+        with patch.object(w.time, 'monotonic', return_value=0.):
+            w.check_public_limits(limits, 20.)
+            for disk_error in (None, OSError('test write failure')):
+                worker.failed = False
+                with patch.object(w, 'exclusive', side_effect=disk_error) as write:
+                    with self.assertRaises(w.LimitsRefused) as ctx:
+                        worker.run_public(built, {}, '', '', 19., limits)
+                write.assert_called_once_with(worker.root/'worker-limits.json', w.c.canonical(ctx.exception.evidence))
+                self.assertTrue(worker.failed)
+                self.assertEqual(str(ctx.exception), 'worker-limits')
+
     def test_public_never_accepts_unknown_build(self):
         worker=object.__new__(w.PublicWorker);worker.failed=False;worker.built={}
         with self.assertRaisesRegex(w.Refused,'worker-build-join'):

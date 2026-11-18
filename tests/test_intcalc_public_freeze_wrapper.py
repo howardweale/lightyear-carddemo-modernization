@@ -84,8 +84,16 @@ class PublicFreezeWrapperTests(unittest.TestCase):
     def test_archive_paths_refused_before_writes(self):
         for i, name in enumerate(('../escape', '/absolute', 'C:/escape', 'a\\b', 'a//b', 'a/./b', 'folder/')):
             dest = self.root / str(i)
+            encoded_name = name.replace('\\', '/').encode()
+            raw = self.archive([(encoded_name.decode(), b'x')])
+            if '\\' in name:
+                # Replace both ZIP header names after writing: Windows normalizes separators.
+                self.assertEqual(raw.count(encoded_name), 2)
+                raw = raw.replace(encoded_name, name.encode())
+            with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+                self.assertEqual(archive.infolist()[0].orig_filename, name)
             with self.subTest(name=name), self.assertRaises(w.Refused):
-                w.unpack(self.archive([(name, b'x')]), dest)
+                w.unpack(raw, dest)
             self.assertFalse(dest.exists())
 
     def test_duplicate_archive_refused(self):

@@ -166,7 +166,8 @@ def unpack(raw, destination):
             require(0 < len(entries) <= 512, 'freeze-archive')
             names, planned, total = set(), [], 0
             for info in entries:
-                name = info.filename
+                name = info.orig_filename
+                require(name == info.filename, 'freeze-archive')
                 require(name not in names and not info.is_dir() and not info.flag_bits & 1,
                         'freeze-archive')
                 names.add(name)

@@ -422,7 +422,7 @@ class FeedbackTests(unittest.TestCase):
             with self.assertRaisesRegex(c.Refused,'feedback-row'):self.validate(r)
 
     def test_row_and_diagnostic_count_caps(self):
-        r=feedback('source');r['divergences']=[{}]*25
+        r=feedback('source');r['divergences']=[{}]*33
         with self.assertRaisesRegex(c.Refused,'feedback-cap'):self.validate(r)
         r=feedback('source',kind='COMPILE_FAILED');r['diagnostics']=[{}]*5
         with self.assertRaisesRegex(c.Refused,'feedback-cap'):self.validate(r)

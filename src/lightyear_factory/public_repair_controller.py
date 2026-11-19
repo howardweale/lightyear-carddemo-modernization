@@ -354,6 +354,33 @@ class Controller:
         self.record('attempt-'+str(round_no), item)
         return score['different'] == 0
 
+    def finish_selected(self, selected):
+        hidden = dict(status='NOT_RUN', reason='no-evaluated-candidate')
+        status = 'CANDIDATE_FAIL'
+        if selected is not None and selected['different'] > 0:
+            hidden = dict(status='NOT_RUN', reason='public-fail')
+            status = 'PUBLIC_FAIL'
+        elif selected is not None:
+            # Exclusive invocation record consumes the single hidden allowance.
+            self.record('hidden-invocation', dict(selected=selected,
+                heldout_commitment_sha256=self.binding['heldout_commitment_sha256']))
+            deadline = self.phase(600)
+            self.stage = 'hidden-final'
+            hidden = self.ports.evaluate_hidden(selected, self.binding['heldout_commitment_sha256'], deadline)
+            self.now_before(deadline)
+            shape(hidden, 'status receipt_sha256 cleanup', 'hidden-response')
+            require(hidden['status'] in ('PASS','FAIL') and hash_ok(hidden['receipt_sha256'])
+                    and hidden['cleanup'] is True, 'hidden-response')
+            status = 'CANDIDATE_PASS' if hidden['status']=='PASS' else 'CANDIDATE_FAIL'
+        return status, hidden
+
+    def result_record(self, selected, status, hidden):
+        result = dict(schema='public-repair-result/1', status=status, graph_mode=self.graph_mode,
+            binding_sha256=self.binding_sha256, selected=selected, score_history=self.history,
+            hidden=hidden, reserved_microdollars=self.reserved,
+            accounted_microdollars=self.cost, billing_final=False, qualified=False)
+        return result
+
     def run(self):
         require(not self.used, 'controller-reused')
         self.used = True
@@ -385,28 +412,9 @@ class Controller:
             self.record('selection', dict(rule='maximum-public-match-ties-latest',
                 selected=selected, evaluated_candidates=self.candidates))
             self.close_models()  # no model call after hidden boundary
-            hidden = dict(status='NOT_RUN', reason='no-evaluated-candidate')
-            status = 'CANDIDATE_FAIL'
-            if selected is not None and selected['different'] > 0:
-                hidden = dict(status='NOT_RUN', reason='public-fail')
-                status = 'PUBLIC_FAIL'
-            elif selected is not None:
-                # Exclusive invocation record consumes the single hidden allowance.
-                self.record('hidden-invocation', dict(selected=selected,
-                    heldout_commitment_sha256=self.binding['heldout_commitment_sha256']))
-                deadline = self.phase(600)
-                self.stage = 'hidden-final'
-                hidden = self.ports.evaluate_hidden(selected, self.binding['heldout_commitment_sha256'], deadline)
-                self.now_before(deadline)
-                shape(hidden, 'status receipt_sha256 cleanup', 'hidden-response')
-                require(hidden['status'] in ('PASS','FAIL') and hash_ok(hidden['receipt_sha256'])
-                        and hidden['cleanup'] is True, 'hidden-response')
-                status = 'CANDIDATE_PASS' if hidden['status']=='PASS' else 'CANDIDATE_FAIL'
+            status, hidden = self.finish_selected(selected)
             self.now_before(self.end)
-            result = dict(schema='public-repair-result/1', status=status, graph_mode=self.graph_mode,
-                binding_sha256=self.binding_sha256, selected=selected, score_history=self.history,
-                hidden=hidden, reserved_microdollars=self.reserved,
-                accounted_microdollars=self.cost, billing_final=False, qualified=False)
+            result = self.result_record(selected, status, hidden)
             self.record('result', result)
             return result
         except BaseException as exc:

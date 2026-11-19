@@ -1,0 +1,61 @@
+S1 Staged result amendment (no PR yet, r1)
+
+Proposal only. L1 must select StagedController explicitly; the original Controller
+and GraphController keep their existing behavior. STAGED_PUBLIC admits graph-off
+only, 16 public cases, five repairs, USD 37.67 ceiling, maximum holds USD 37.664000,
+and 17,520 seconds. No role wording, model projection, cap or hold changes.
+The former 600-second hidden phase bounds retention instead; no window increase.
+
+Admission binds the entire canonical staged-public-binding/1 including the public
+answer-key manifest, P5 source hash, build CLI/helper/JDK/JRE hashes, runtime profile,
+staging policy, and the pre-run commitment. The public pre-run record joins the opaque H2 commitment hash, its prior
+publication receipt and commitment time. H2 keeps generator, input, encrypted-answer,
+reference, private-runtime and custody details inside its private completion manifest.
+Stage 2 checks that manifest against the public commitment; stage 1 never receives it. No seed, private answer, decryption identity or private path
+is accepted in these records. The commitment time must precede the aware approval
+time; there is no hard-coded date window or UTC offset. L1 must independently
+authenticate Howard's approval and the prior commitment receipt: self-reported
+timestamps and correctly shaped hashes are not proof of prior commitment.
+
+Selection stays maximum public matches, ties latest. After selection, close_models
+must return successfully, then an exclusive models-closed record is written.
+No evaluated candidate yields CANDIDATE_FAIL, hidden NOT_RUN. Any public difference
+yields PUBLIC_FAIL, hidden NOT_RUN/public-fail, without retention for stage 2.
+Only a public-perfect selection proceeds to the retention port.
+
+P5SelectedJarRetainer reads the existing P5 build registry, compile receipt, cleanup
+receipt and candidate.jar. It joins the exact selected source, build receipt,
+public-evaluation receipt, P5 implementation hash and build profile. Jar bytes
+must match the hash already recorded by P5. It cannot compile, choose another
+candidate, call a model or invoke a hidden evaluator. L1 wires the trusted worker
+and StagedDurablePorts after independent admission. StagedDurablePorts uses P3's
+exclusive 0600 file create, full sync and same-byte readback in the owner-only run
+directory. Jar cap 16 MiB is charged to P3's existing 64 MiB total and 512-file cap.
+Production reads require POSIX, resolved owner-controlled paths and stable regular
+files; platform checks precede POSIX-only calls. Synthetic tests are portable.
+
+The retained-selected-jar/1 descriptor distinguishes source_sha256 from jar_sha256,
+binds byte count, readback, selected build/public receipts, runtime profile, P5
+source, admission binding, model closure and pre-run commitment. Only a fixed
+relative retained leaf is public. Any uncertain copy/readback/deadline failure
+stops; no second retention attempt or successful pending result is manufactured.
+
+staged-public-result/1 reports PUBLIC_COMPLETE_HIDDEN_PENDING only after durable
+descriptor recording. It reports qualified=false and hidden_execution_authorized
+false. Stage 1 shows completion against the public set, not a held-out pass, P5
+qualification or mainframe equivalence. No hidden invocation record is written.
+The descriptor is a hash/readback record, not an independent signature.
+closure_record_sha256 hashes the exact P3 canonical record plus its trailing LF;
+heldout_commitment_sha256 hashes the canonical public pre-run record without LF.
+
+H3 is a separate human-owned once-only operation. It must authenticate this result,
+join the exact retained jar and pre-run commitments, verify model closure, consume
+its own exclusive execution allowance, and run that jar without rebuilding,
+repairing or reselecting. H3 custody, USB key removal, amd64 runtime qualification
+and fresh execution approval remain separate. Nothing here authorizes that step.
+
+Existing dated contracts, retained receipts, retired routes and gate guards are
+unchanged. The original controller's finalization is extracted into overridable
+methods without changing its default behavior; both original and graph regression
+suites remain in the new workflow. This proposal changes shared controller code
+and ARCHITECTURE.md and therefore runs in CI alone after exact review and approval.

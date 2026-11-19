@@ -1,0 +1,27 @@
+name: Native amd64 candidate runtime synthetic contract
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic native-runtime contract
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest test_intcalc_native_candidate_runtime

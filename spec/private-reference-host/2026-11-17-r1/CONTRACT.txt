@@ -1,0 +1,87 @@
+H1 Private reference workspace and host qualification (no PR yet, r1)
+
+Exact review-only proposal. This is not installation, account creation, PC
+execution, private generation, freeze, decryption, model or spend authority.
+No agent runs the tool. CI runs synthetic tests only, never the attended entry.
+
+H1 supplies INSPECT and QUALIFY_PUBLIC on the selected dedicated Windows-account
+and private WSL2 Engine profile. H2a owns framed-stream encryption and durable
+ciphertext completion; H2b owns private reference orchestration and the human
+generation-to-commitment sequence. No private-reference mode is in H1. This split
+keeps the public host qualification independently reviewable and under 1500 lines.
+
+Windows custody is Howard's private read-only inspection, not agent discovery.
+Use the accepted H-A separate-account checklist: different standard private
+Windows account; Codex account not administrator (including deny-only membership)
+and outside docker-users; private account's separate WSL2 registration/backing-VHD
+ACL; no broad or Codex-account access; no sync/backup; Codex stopped across all
+sessions and background services throughout the window. Every required receipt
+boolean must be true, unknown fails. Preflight joins operation, exact wrapper
+commit/tree and private-profile commitment. All raw account/SID/path/process
+evidence stays with Howard. Windows administrators, including Howard, are trusted.
+
+Local admission: native Linux x86_64, WSL2 kernel, ext4 private filesystem, owner
+0700 directory, no extra root ACL entries, no symlink or group-writable ancestor,
+at least 20 GiB available. Standard Windows does not imply non-root Linux: Howard
+must have read-only visibility into the private distro's existing service/socket
+process state. Lack of visibility refuses; the tool does not elevate or install.
+The private Engine must be the existing system Docker service. Join MainPID,
+hash-pinned real dockerd executable, process root and mount namespace, and the
+Unix socket's ss listener PID. Docker Desktop/proxies, remote endpoints, emulation,
+Windows mounts and unrelated containers refuse. Use fixed explicit local socket,
+minimal environment and a reviewed empty runtime CLI config, never a current
+context or inherited DOCKER_HOST. Engine data-root must also be native ext4.
+
+Public qualification uses a fresh operation directory. An exclusive, separate
+build CLI config may retain public BuildKit client metadata; it is never used by
+the runtime commands. Build context includes only checksum-joined Containerfile
+and installer, not the repository or private root. Recipe/base/package pins and
+reviewed package projection 8496a8c754b0a179888561be69aa06d4655d15e0c54decb891c757bb190d960d
+are unchanged. Network is used only by that pinned public build. No image push.
+The resulting local image Id is read back as native amd64 and is evidence only,
+not a registry digest admission.
+
+The public container is read-only, network none, cap-drop ALL, no-new-privileges,
+2 CPUs, 2 GiB, 128 pids, logging none, private cgroup namespace, fixed tmpfs limits,
+and exact read-only source/permit plus fresh public-output mounts. Inspect the
+boundary before start. It runs the same nine criteria and 16 cases, source bytes,
+compile flags and Python third opinion. An explicit new public attended worker
+reuses reviewed function bodies. The old CI-only tools/guards are untouched;
+no GITHUB_ACTIONS variable is set on the host or in the container. Copied public
+oracle child gets source and src import roots; modelled RecordError remains exit2.
+No private input may be passed through this persistent public-observation path.
+
+The report keeps the historical comparison schema for compatibility; its status
+is computed from channel criteria, not the schema's discrepancy word. A new
+ha-public-host-qualification/1 receipt records CRITERION_MET or DISCREPANCY.
+Qualification source 71a18164612ce574d889a39ceb335c5643721fc6 and tree
+7316662cb5cc52d5361ad1954c417b37e1e18fe5 remain distinct from the H1 wrapper's
+approved main commit/tree. Receipt 934457b92d24dfc330e078420b14cb529fa6478c6799347b53857e74af98784b
+is the reviewed comparison basis, not proof of this PC's behavior. Actual host
+report/inventory hashes, custody/profile commitments, case/probe counts, cgroup
+memory.peak and elapsed milliseconds, cleanup and both source identities are
+recorded. Cgroup-v2 memory.peak availability is required, not silently estimated.
+The preferred-sign finding remains a finding; 9/9 criterion with 8/9 raw is valid.
+
+No successful receipt precedes cleanup, source/profile readback and human
+postflight. Howard prepares the exact postflight receipt after the run and enters
+its hash; it must confirm Codex remained stopped and fresh postflight visibility.
+The fixed approval window is operator-supplied, offset-aware and at most 2 hours;
+work is additionally bounded to 5400 seconds. Waiting to type approval does not
+extend expiry. Child commands honor both wall and monotonic deadlines. No retry,
+overwrite or old-directory cleanup. A failed or missing postflight leaves only
+public incomplete observations and no usable host qualification receipt.
+
+The profile template is deliberately unbound: actual native binary hashes,
+private paths, wrapper commit/tree and custody observations come from Howard's
+separately authorized read-only checks after merge. No invented local values.
+Exact approval JSON and its SHA256 are human review inputs, not signatures.
+Before private work H2 must bind the reviewed successful host receipt, its exact
+profile and fresh operation-specific custody; H1 never grants private authority.
+
+Named limits: open-source reference, not mainframe-proven; preferred C/D signs
+only; built per run from pinned public packages, no published image digest.
+FIRST_WRITE_ENCRYPTION_APPLICATION_BOUNDARY belongs to the private H2 path:
+plaintext RAM/tmpfs may be captured in trusted Windows/WSL paging, hibernation or
+crash dumps. No-swap/no-hibernation/crash-dump controls are not required, and no
+forensic erasure or independent Windows attestation is claimed. P5 stays paused.

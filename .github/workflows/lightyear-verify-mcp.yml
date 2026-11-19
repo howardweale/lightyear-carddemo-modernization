@@ -44,12 +44,31 @@ jobs:
           id 1000 || sudo useradd -u 1000 -m verify-judge
           sudo python3 -m venv /var/lib/verify-test-venv
           sudo /var/lib/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47' 'PyYAML==6.0.3'
+      - name: Install checksum-pinned Apache Maven 3.9.11
+        shell: bash
+        run: |
+          archive="$RUNNER_TEMP/apache-maven-3.9.11-bin.tar.gz"
+          curl --fail --location --retry 3 --output "$archive" https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
+          python3 - "$archive" bcfe4fe305c962ace56ac7b5fc7a08b87d5abd8b7e89027ab251069faebee516b0ded8961445d6d91ec1985dfe30f8153268843c89aa392733d1a3ec956c9978 <<'PY'
+          import hashlib
+          from pathlib import Path
+          import sys
+
+          if hashlib.sha512(Path(sys.argv[1]).read_bytes()).hexdigest() != sys.argv[2]:
+              raise SystemExit("Maven distribution SHA-512 mismatch")
+          PY
+          tar -xzf "$archive" -C "$RUNNER_TEMP"
+          maven_home="$RUNNER_TEMP/apache-maven-3.9.11"
+          test -f "$maven_home/lib/maven-resolver-transport-http-1.9.24.jar"
+          echo "$maven_home/bin" >> "$GITHUB_PATH"
+          "$maven_home/bin/mvn" --version
+
       - name: Qualify Maven HTTP retries on the installed transport
         id: retry_policy
         run: python3 tools/ci/qualify_maven_http_retries.py
       - run: mvn -B -f candidate-java/pom.xml package
         env:
-          MAVEN_ARGS: ${{ steps.retry_policy.outputs.maven_args }}
+          MAVEN_ARGS: -C ${{ steps.retry_policy.outputs.maven_args }}
       - name: Real graph-off and graph-on MCP, isolation, full inventory scan and replay
         env:
           SOURCE_SHA: ${{ github.sha }}

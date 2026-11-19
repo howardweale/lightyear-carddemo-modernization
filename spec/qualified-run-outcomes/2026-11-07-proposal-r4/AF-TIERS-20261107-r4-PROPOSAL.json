@@ -1,0 +1,38 @@
+{
+  "schema": "qualified-run-tier-rules-proposal/1",
+  "version": "2026-11-07-r4",
+  "status": "PROPOSAL_NOT_APPROVED_NOT_LOADABLE",
+  "case_count": 31,
+  "bc_cutoff": 16,
+  "cutoff_basis": "Strictly more than half: floor(N/2)+1; proposed before results, not chosen from observed performance",
+  "catalogue_sha256": "5138ed05baabfdfc7b45e71b66839d3d6d9fc81d3586c9b217ed511b76803fd7",
+  "tiers": {
+    "A": {
+      "name": "Full pass",
+      "test": "All 31 frozen held-out authorization behaviour cases pass every frozen condition; all 19 control drills pass; all limits held; receipts published; open verifier says PASS."
+    },
+    "B": {
+      "name": "Strong partial",
+      "test": "16–30 cases pass every frozen condition; all 19 control drills pass; limits held; every failure has a judge receipt naming the redacted difference."
+    },
+    "C": {
+      "name": "Early partial",
+      "test": "1–15 cases pass every frozen condition; all 19 control drills pass; limits held; failures recorded."
+    },
+    "D": {
+      "name": "Clean stop",
+      "test": "Nothing passes, or a limit/control stops the run as designed, with a receipt saying why; no failed-open control or integrity violation."
+    },
+    "E": {
+      "name": "No run",
+      "test": "The run never starts because freeze is missed, a no-go or a blocker; no overriding integrity/control failure."
+    },
+    "F": {
+      "name": "Unexplained",
+      "test": "A limit exceeded, answers exposed, a case or condition changed after freeze, missing evidence, failed-open control, or verifier disagreement: stop, investigate and publish."
+    }
+  },
+  "what_it_proves": "Retain the human-supplied 2 November A–F meanings; this version proposes corrected population, condition terminology and B/C boundary only.",
+  "activation": "None. Both this schema and the catalogue proposal are non-production. PR521 currently requires bc_cutoff=10; any approved cutoff change requires separately reviewed code/boundary tests and a new approved dated executable rules version.",
+  "fallback": "N=1 with B/C unavailable remains unapproved and cannot be selected automatically."
+}

@@ -83,9 +83,13 @@ jobs:
           with open(os.environ['GITHUB_PATH'], 'a') as out:
               out.write(str(binaries[0].parent) + '\n')
           PY
+      - name: Qualify Maven HTTP retries on the installed transport
+        id: retry_policy
+        run: python3 tools/ci/qualify_maven_http_retries.py
       - name: Verify native business traffic and fail-closed evidence
         shell: bash
         env:
+          MAVEN_ARGS: ${{ steps.retry_policy.outputs.maven_args }}
           PYTHONPATH: src
         run: |
           bash -n factory/cloudbank/platform-qualification/gke/run-sustained-load.sh
@@ -231,10 +235,17 @@ jobs:
           echo "$RUNNER_TEMP/apache-maven-3.9.11/bin" >> "$GITHUB_PATH"
           "$RUNNER_TEMP/apache-maven-3.9.11/bin/mvn" --version
 
+      - name: Qualify Maven HTTP retries on the installed transport
+        id: retry_policy
+        run: python3 tools/ci/qualify_maven_http_retries.py
       - name: Verify request log privacy and real OpenTelemetry span correlation
+        env:
+          MAVEN_ARGS: ${{ steps.retry_policy.outputs.maven_args }}
         run: python tools/test_cloudbank_request_logging.py
 
       - name: Verify and compile the pinned upstream service set
+        env:
+          MAVEN_ARGS: ${{ steps.retry_policy.outputs.maven_args }}
         run: |
           export LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY="$(openssl rand -hex 32)"
           ./cloudbank-executable-baseline.sh verify-source ../cloudbank-upstream

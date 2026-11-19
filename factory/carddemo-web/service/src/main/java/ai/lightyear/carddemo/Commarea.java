@@ -21,8 +21,13 @@ public final class Commarea {
                 if(initialized.get(off,off+len).isEmpty())write(f,f.path("digits").asInt()>0?"0":"");initialized.set(off,off+len);}
         }
     }
-    private String leaf(JsonNode field){String path=field.path("path").asText();return path.substring(path.lastIndexOf('.')+1);}
-    private JsonNode field(String name){JsonNode found=null;
+    private static String leaf(JsonNode field){String path=field.path("path").asText();return path.substring(path.lastIndexOf('.')+1);}
+    private JsonNode field(String name){return resolveField(layout,name);}
+    /** Validate names without decoding request storage; called during service startup. */
+    public static void requireFields(JsonNode layout,String... names){
+        for(String name:names)resolveField(layout,name);
+    }
+    private static JsonNode resolveField(JsonNode layout,String name){JsonNode found=null;
         for(JsonNode f:layout.path("fields"))if(f.path("path").asText().equals(name)||leaf(f).equals(name)){
             if(found!=null)throw new IllegalArgumentException("ambiguous-commarea-field");found=f;}
         if(found==null)throw new IllegalArgumentException("unknown-commarea-field:"+name);return found;

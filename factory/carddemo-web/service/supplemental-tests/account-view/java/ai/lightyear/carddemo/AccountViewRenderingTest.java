@@ -236,4 +236,65 @@ class AccountViewRenderingTest {
             new AccountViewRendering(bindings).apply(typed,null,null);assertEquals(snapshot,typed.values);
         }
     }
+
+    // COACTVWC 324-350,581,653-679: identical field resolution and MOVE/SET bytes.
+    @Test void typedCommonAreaDelegatesEveryFieldWithoutChangingStorage() {
+        String[] names={"CDEMO-FROM-PROGRAM","CDEMO-FROM-TRANID","CDEMO-TO-PROGRAM","CDEMO-TO-TRANID","CDEMO-USER-TYPE","CDEMO-PGM-CONTEXT","CDEMO-LAST-MAPSET","CDEMO-LAST-MAP","CDEMO-ACCT-ID","CDEMO-CUST-ID","CDEMO-CARD-NUM"};
+        var layout=bindings.root.path("program_commareas").path("COACTVWC");
+        CommonArea.validateLayout(layout);
+        assertEquals(names.length,CommonArea.Field.values().length);
+        for(int i=0;i<names.length;i++)for(String value:List.of("0","1")) {
+            var left=new Commarea(layout,null);var right=new Commarea(layout,left.bytes());var typed=new CommonArea(right);
+            var field=CommonArea.Field.values()[i];left.set(names[i],value);typed.set(field,value);
+            assertArrayEquals(left.bytes(),right.bytes());assertEquals(left.get(names[i]),typed.get(field));
+            left.move(names[i],value);typed.move(field,value);assertArrayEquals(left.bytes(),right.bytes());
+        }
+        var left=new Commarea(layout,null);var right=new Commarea(layout,left.bytes());var typed=new CommonArea(right);
+        left.move("CDEMO-LAST-MAP","ABCDEFGHIJK");typed.move(CommonArea.Field.LAST_MAP,"ABCDEFGHIJK");
+        assertArrayEquals(left.bytes(),right.bytes());
+        assertThrows(IllegalArgumentException.class,()->typed.set(CommonArea.Field.PROGRAM_CONTEXT,"not-a-number"));
+        assertThrows(NullPointerException.class,()->new CommonArea(null));
+    }
+    // Startup-only invalid binding fixtures: refusal precedes every interact call.
+    @Test void unknownAndAmbiguousCommonFieldsRefuseAtServiceConstruction() throws Exception {
+        var json=JsonMapper.builder().build();
+        String source=bindings.root.toString();
+        var layout=bindings.root.path("program_commareas").path("COACTVWC");
+        assertThrows(IllegalArgumentException.class,()->Commarea.requireFields(layout,"CDEMO-DOES-NOT-EXIST"));
+        var broken=(tools.jackson.databind.node.ObjectNode)json.readTree(source);
+        var fields=(tools.jackson.databind.node.ArrayNode)broken.path("program_commareas").path("COACTVWC").path("fields");
+        for(int i=0;i<fields.size();i++)if(fields.get(i).path("path").asText().endsWith(".CDEMO-ACCT-ID")) {
+            ((tools.jackson.databind.node.ObjectNode)fields.get(i)).put("path","UNKNOWN-FIELD");break;
+        }
+        assertThrows(IllegalArgumentException.class,()->CommonArea.validateLayout(broken.path("program_commareas").path("COACTVWC")));
+        var duplicate=(tools.jackson.databind.node.ObjectNode)json.readTree(layout.toString());
+        var copy=(tools.jackson.databind.node.ArrayNode)duplicate.path("fields");
+        for(var field:layout.path("fields"))if(field.path("path").asText().endsWith(".CDEMO-ACCT-ID")){copy.add(field.deepCopy());break;}
+        assertThrows(IllegalArgumentException.class,()->CommonArea.validateLayout(duplicate));
+        java.nio.file.Path temporary=java.nio.file.Files.createTempDirectory("common-area-bindings-");
+        try {
+            var bind=temporary.resolve("bindings.json");var plan=temporary.resolve("plan.json");
+            java.nio.file.Files.writeString(bind,broken.toString());java.nio.file.Files.writeString(plan,bindings.data.toString());
+            var invalid=new Bindings(bind,plan,json,CLOCK);
+            assertThrows(IllegalArgumentException.class,()->new AccountViewService(invalid));
+        } finally {
+            java.nio.file.Files.deleteIfExists(temporary.resolve("bindings.json"));java.nio.file.Files.deleteIfExists(temporary.resolve("plan.json"));java.nio.file.Files.delete(temporary);
+        }
+    }
+    // COACTVWC source constants used by 324-350: load once, reject malformed startup data.
+    @Test void typedConstantsAreValidatedOnceAndKeepExactSourceText() throws Exception {
+        var values=bindings.program("COACTVWC").path("constants");var constants=AccountViewConstants.load(bindings);
+        assertEquals(values.path("LIT-MENUPGM").asText(),constants.menuProgram());
+        assertEquals(values.path("LIT-MENUTRANID").asText(),constants.menuTransaction());
+        assertEquals(values.path("LIT-THISMAPSET").asText(),constants.mapset());
+        assertEquals(values.path("LIT-THISMAP").asText(),constants.map());
+        var mutable=(tools.jackson.databind.node.ObjectNode)values;
+        var saved=mutable.path("LIT-MENUPGM").deepCopy();
+        try {
+            mutable.remove("LIT-MENUPGM");assertThrows(IllegalArgumentException.class,()->new AccountViewService(bindings));
+            mutable.put("LIT-MENUPGM",12);assertThrows(IllegalArgumentException.class,()->new AccountViewService(bindings));
+            mutable.put("LIT-MENUPGM","");assertThrows(IllegalArgumentException.class,()->new AccountViewService(bindings));
+            assertEquals(saved.asText(),constants.menuProgram());
+        } finally {mutable.set("LIT-MENUPGM",saved);}
+    }
 }

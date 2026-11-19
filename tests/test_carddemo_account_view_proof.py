@@ -51,7 +51,10 @@ class AccountViewProofTests(unittest.TestCase):
         paths=[SCOPE,scope['source']['path'],'factory/carddemo-web/service/pom.xml',
                'factory/carddemo-web/service/account-view-proof.pom.xml',
                'factory/carddemo-web/service/supplemental-tests/account-view/java/ai/lightyear/carddemo/AccountViewProjectionOracle.java',
-               JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',JAVA+'ScreenProjection.java']
+               JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CommonArea.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountViewConstants.java',JAVA+'ScreenProjection.java']
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)
             for path in paths:
@@ -99,7 +102,10 @@ class AccountViewProofTests(unittest.TestCase):
         scope=json.loads((ROOT/SCOPE).read_bytes())
         paths=[SCOPE,scope['source']['path'],'factory/carddemo-web/service/pom.xml',
                'factory/carddemo-web/service/account-view-proof.pom.xml',SERVICE_ORACLE,
-               JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',JAVA+'ScreenProjection.java']
+               JAVA+'AccountViewRendering.java',JAVA+'AccountViewService.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CommonArea.java',
+               'factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AccountViewConstants.java',JAVA+'ScreenProjection.java']
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)
             for path in paths:

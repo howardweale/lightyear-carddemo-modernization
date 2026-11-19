@@ -36,10 +36,15 @@ def distribution():
     print(f"Maven {version}, Resolver {resolver}, {jar.name}, namespace {prefix}", flush=True)
     properties = {"count": "3", "interval": "5000", "intervalMax": "30000",
                   "serviceUnavailable": "429,500,502,503,504"}
-    return transporter, " ".join(f"-D{prefix}.retryHandler.{k}={v}" for k, v in properties.items())
+    central_backoff = (version, resolver) == ("3.9.11", "1.9.24")
+    if central_backoff:
+        properties.update({"count.central": "6", "intervalMax.central": "60000"})
+    policy = " ".join(f"-D{prefix}.retryHandler.{k}={v}" for k, v in properties.items())
+    return transporter, central_backoff, policy
 
 
-def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False, retry_after=None):
+def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False,
+            retry_after=None, retry_after_at=None, repository_id="probe", timeout=85):
     folder.mkdir()
     events = []
 
@@ -60,7 +65,8 @@ def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False, ret
             else:
                 status, body = 404, b""
             self.send_response(status)
-            if retry_after and status == 503:
+            if (retry_after and status in (429, 503)
+                    and (retry_after_at is None or len(events) == retry_after_at)):
                 self.send_header("Retry-After", retry_after)
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
@@ -71,7 +77,7 @@ def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False, ret
         thread.start()
         try:
             url = f"http://127.0.0.1:{server.server_port}/"
-            settings = ("<settings><mirrors><mirror><id>probe</id><mirrorOf>*</mirrorOf>"
+            settings = (f"<settings><mirrors><mirror><id>{repository_id}</id><mirrorOf>*</mirrorOf>"
                         f"<url>{url}</url></mirror></mirrors></settings>")
             (folder / "settings.xml").write_text(settings, encoding="utf-8")
             (folder / "global.xml").write_text("<settings/>", encoding="utf-8")
@@ -80,7 +86,7 @@ def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False, ret
                 ["mvn", "-B", "-X", "-C", "-gs", "global.xml", "-s", "settings.xml",
                  f"-Dmaven.repo.local={folder / 'local'}", "validate"],
                 cwd=folder, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True, timeout=85, check=False)
+                text=True, timeout=timeout, check=False)
         finally:
             server.shutdown()
             thread.join()
@@ -98,22 +104,35 @@ def qualify(folder, name, statuses, transporter, env, *, bad_checksum=False, ret
         return
     if codes != statuses or (run.returncode == 0) != (statuses[-1] == 200):
         raise ValueError(f"{name}: wrong HTTP sequence or Maven result")
-    if any(gap < index * 5 - 0.25 for index, gap in enumerate(gaps, 1)):
-        raise ValueError(f"{name}: retry backoff too short")
+    for index, gap in enumerate(gaps, 1):
+        expected = index * 5
+        if retry_after is not None and (retry_after_at is None or retry_after_at == index):
+            expected = int(retry_after)
+        if gap < expected - 0.25:
+            raise ValueError(f"{name}: retry backoff too short on request {index}")
 
 
 def main():
-    transporter, policy = distribution()
+    transporter, central_backoff, policy = distribution()
+    production_repo = {"repository_id": "central"} if central_backoff else {}
     # Maven's bin/mvn consumes MAVEN_ARGS in both the direct and inherited-child paths.
     env = dict(os.environ, MAVEN_ARGS=policy)
     with TemporaryDirectory() as tmp:
-        for name, statuses, extra in (
-            ("transient", [429, 500, 200], {}),
+        cases = [
+            ("transient", [429, 500, 200], production_repo),
             ("persistent", [503] * 4, {}),
-            ("missing", [404], {}),
+            ("missing", [404], production_repo),
             ("over-budget-retry-after", [503], {"retry_after": "31"}),
-            ("altered-bytes", [200], {"bad_checksum": True}),
-        ):
+            ("altered-bytes", [200], {**production_repo, "bad_checksum": True}),
+        ]
+        if central_backoff:
+            cases.extend([
+                ("central-429-recovery", [429] * 5 + [200],
+                 {**production_repo, "retry_after": "60", "retry_after_at": 5, "timeout": 140}),
+                ("central-503-exhaustion", [503] * 7, {**production_repo, "timeout": 135}),
+                ("central-over-budget-429", [429], {**production_repo, "retry_after": "61"}),
+            ])
+        for name, statuses, extra in cases:
             qualify(Path(tmp) / name, name, statuses, transporter, env, **extra)
     with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as output:
         print(f"maven_args={policy}", file=output)

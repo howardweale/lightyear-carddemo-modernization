@@ -1,0 +1,20 @@
+{
+  "schema": "synthetic-fixture-index/1",
+  "snapshot_main": "e7204abacad22cc7b809657f6e702e312ad16684",
+  "index": "docs/security/evidence/synthetic-fixtures-2026-10-31.csv",
+  "index_sha256": "aceab85f4bb283b7e64c4dd314354d0482efb7f6e6654c4a8738be32d4c7a59b",
+  "entries": 97,
+  "qualification": "All indexed assets are synthetic CI fixtures, not Howard approvals and not qualified-run authorization.",
+  "evidence_basis": {
+    "supplied_archive_sha256": "ee6074a6b183f7d09ab8476914d2485cf284418ae22243a0f2abdf01a8076e0b",
+    "supplied_csv_sha256": "0ef592ee89eea9dea772fefdb66c5de0ca9410d7a3fe4fecbec3d72e61867813",
+    "github_asset_metadata_sha256": "f3e477bca3354f29fe00bf19ed354c5ad874211169cb632de47c691637bd6d97",
+    "all97_asset_digests_match_github": true,
+    "proof_payloads_parsed_by": "supplied independent verifier; not re-downloaded here",
+    "unique_fixture_key_ids": 97,
+    "matches_current_or_old_tower_key": false
+  },
+  "retained_assets_unchanged": true,
+  "scope": "97 listed Release assets through30Oct19:32:06Z; not a universal inventory of every future or other synthetic fixture.",
+  "production_requirement": "Externally designated trust and exact current run/manifest must exclude synthetic inputs. Index labels and digest equality do not establish producer authenticity."
+}

@@ -1,0 +1,41 @@
+P2 Public answer-key loader (no PR yet, r3)
+
+The release binding identifies the reviewed archive and its inner run manifest.
+L1 authenticates the binding as an admission input. It passes the staged tag and
+archive bytes to published_key, unpacks those same verified bytes in a fresh
+directory, and passes the returned ReviewedKey to FrozenPublicAdapter. The loader
+reads local files. The CI smoke check obtains the public release without invoking
+the freeze, a reference compiler, a candidate, or a model. Real run admission and
+spend still require separate authority.
+
+All sixteen cases and every output and expected.json are required, no extra files,
+duplicate rows, cross-case output paths, reparse points, symlinks or special files.
+Canonical manifest bytes include the actual trailing newline in their SHA256.
+The loader does not require reserialization equality; it hashes the delivered bytes.
+JSON rejects duplicate keys, floats, NaN and Infinity. Integer fields reject booleans.
+Per file: 8 MiB. Manifest/approval/suite: 64 KiB. Combined loaded inputs and frozen
+files: 256 MiB. Each read is bounded and checked before/open/after for stable identity.
+All bytes are admitted before a worker or model can be called. Owner-only mutable
+launch roots remain an L1 prerequisite; these checks are not an adversarial OS proof.
+
+Public inputs, timestamps and comparison policies come from the hash-pinned suite.
+Expected bytes come ONLY from the frozen root, never from hand output paths. Their
+digests must also match the hand descriptors already adopted by reference==hand.
+PC-10/11/12 compare stdout/stderr/exit only, with no invented persisted file outputs.
+Other cases compare ACCTFILE/TRANSACT/stdout/stderr/exit. Missing frozen data refuses;
+there is no hand fallback, oracle call, freeze, extraction, download or regeneration.
+
+FrozenPublicAdapter reuses the merged aggregation and sanitized feedback contract.
+Workers receive public inputs/time only. The retained inner evaluation receipt and
+outer public-frozen-evaluation-receipt/1 bind the exact answer-key provenance, with
+the outer hash returned to the controller. Both writes require hash readback.
+Feedback remains bounded counts/diagnostics; no expected bytes are added to models.
+No controller schema/cap/window change, no hidden interface and no graph activation.
+
+CI covers the synthetic format and refusals on Linux, Windows, and macOS.
+The Linux job also admits the reviewed Release ZIP and passes its verified bytes
+through P1's bounded unpacker and P2's 16-case loader. A changed tag, archive,
+binding or extracted manifest must refuse before any evaluation.
+
+Named limits: open-source reference, not mainframe-proven; signed zoned preferred
+C/D only; reference built per run from pinned public packages, no published image.

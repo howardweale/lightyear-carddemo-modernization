@@ -1,0 +1,60 @@
+name: Public answer-key loader
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  frozen-key-contract:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic public manifest and loader contracts (not a freeze)
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
+          python -B -m unittest -v test_public_repair_answer_key
+      - name: Verify and load the published 16-case reference key
+        if: runner.os == 'Linux'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=full-intcalc-public-answer-key-20261118-r1
+          gh release download "$tag" --repo howardweale/lightyear-carddemo-modernization --pattern public-reference-answer-key.zip --dir "$RUNNER_TEMP"
+          python -B - "$tag" "$RUNNER_TEMP" <<'PY'
+          from pathlib import Path
+          import sys
+          import tempfile
+          from lightyear_factory.public_repair_answer_key import load, published_key
+          from tools.intcalc_public_freeze_wrapper import unpack
+
+          tag, temp = sys.argv[1], Path(sys.argv[2])
+          archive = temp / 'public-reference-answer-key.zip'
+          with archive.open('rb') as stream:
+              raw = stream.read(21989)
+          binding = Path('spec/public-answer-key-loader/2026-11-18-r1/RELEASE-BINDING.json').read_bytes()
+          reviewed = published_key(binding, tag, raw)
+          with tempfile.TemporaryDirectory(dir=temp) as folder:
+              root = Path(folder) / 'key'
+              unpack(raw, root)
+              cases, provenance = load(root, Path('tests/fixtures/reference-execution/public-cases').resolve(), reviewed)
+          assert len(cases) == 16 and provenance['manifest_sha256'] == reviewed.manifest_sha256
+          print('published-public-key-16-match', reviewed.manifest_sha256)
+          PY

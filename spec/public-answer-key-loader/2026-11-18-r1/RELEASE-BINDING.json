@@ -1,0 +1,17 @@
+{
+  "schema": "public-answer-key-release-binding/1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "release_tag": "full-intcalc-public-answer-key-20261118-r1",
+  "release_id": 450609530,
+  "asset_name": "public-reference-answer-key.zip",
+  "zip_bytes": 21988,
+  "zip_sha256": "e8dd6b85a39afbb5c3901fe400e479d9798adae8b7954918db8dc87fec71f4aa",
+  "reviewed_key": {
+    "manifest_sha256": "fb51317ab1f5bba9677e543133364b34e893babcac279519b6f743d9568f3b37",
+    "wrapper_commit": "49a81f531b1f426e387bf44806914a810d1cead8",
+    "wrapper_tree": "3501ca338e8d22c176fab468a0f07e47419731ae",
+    "approval_sha256": "6fad849d928b1eb834b5a4ca3a74d92bce1bb69696368f3f3833750232c2ef51",
+    "run_id": 44405884762,
+    "run_attempt": 1
+  }
+}

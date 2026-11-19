@@ -1,0 +1,150 @@
+{
+  "schema": "java-fenced-format-scope/1",
+  "base_commit": "f267fc9ee8d1329529debf4b5edd72bb026b63a5",
+  "stage": "patch-preparation-only",
+  "selected": [
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Bindings.java",
+      "sha256": "21076bced2b3fe1bf82bab3388a9e8d1816d580fac338d394da2dcb4264eb5c6"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSource.java",
+      "sha256": "3ebf674735b9e52534c8dfdd879c4d7ef4ad946fe054b2c48e77791347e523b6"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/CobolSources.java",
+      "sha256": "204123fc7aeb29ae9f20d7c705d91666c9aa32f4cf19ab9f09f26ee8f8c43953"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/Commarea.java",
+      "sha256": "ef194ef18188a1b993195f3a722117e432832dcebcf0880637bd606fff640034"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/ScreenFrame.java",
+      "sha256": "93005b025f95fa1027e301323d7c7c36b8628306a02b9ccd2fbc62c9e94d5530"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SessionToken.java",
+      "sha256": "699c3962704338afca7da062b45e00d46229b24782ce5aceb1f39493213eaaa4"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TransactionService.java",
+      "sha256": "7b229753d2951f34d48c44f93342f8a651c9d9fc137d258fcc7495659541c2d8"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecordImage.java",
+      "sha256": "659e5782e428abde119c857d1ac27c4fb19b63b7425b17def1e65875fbf2ffca"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/TypedRecords.java",
+      "sha256": "b363369b4d807d1494dc2080d27d70af249a6ff60ecc05ffd942671c021baac0"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountInputRulesTest.java",
+      "sha256": "dce6c0632cddee60145b596bc58085ce60696534eaa274bd95dc83a9ec7556e2"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountLocationRulesTest.java",
+      "sha256": "d10299cf4ba3e0621d6e4667df6122e8baddbe518c07d0113df13aac1ab798b3"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountSsnFicoRulesTest.java",
+      "sha256": "742ce9f59dc11545fb9f3af600de5f3d25eb6f03220dd5141ac4067da1ba7024"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountTextMoneyRulesTest.java",
+      "sha256": "41b440a2f7eb2a12d948a6044f6041b2215ad0135a1cb56dd8e3cd940e195e67"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountUpdateServiceTest.java",
+      "sha256": "116b1090fd4982a84360bd11ccb609a0e95fd6c9e4552691c43f2771116f44ea"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountUpdateTransactionTest.java",
+      "sha256": "0bb0d90a9755fe8ff39c688367d49d2682521c8c836b057521bc747038910691"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountValidationTest.java",
+      "sha256": "cd65faaff6a1c6d83723ecf877b84dbd6b240304a4417797e7bf68bc65bfb6eb"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AccountViewTest.java",
+      "sha256": "7c060edf550bb115b9a51588633e9e9733efea13129b5be9d276ff691b4b5d74"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/CobolNumberTest.java",
+      "sha256": "6d643b68912dfd670a6c7e0ad7a28afa8f10c923f0ffcd13340c58115c5122a9"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/GeneratedBindingsTest.java",
+      "sha256": "82623aab7f146c4ff6bc302856a1e89bdc635499c142393317547110f40247b0"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/InteractionEngineTest.java",
+      "sha256": "1c440f5cfb815be7104b42515bd6d99cf402096d0612c17541c1e411cf120de0"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/MasterReadFailureTest.java",
+      "sha256": "0d7ace2bb09be49f403d276cb323d8830631e70709b4890fa35725322abbb7c7"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/NumericEncodingTest.java",
+      "sha256": "5df5788fb70b65d331666e542c250f8a0b838b88c11eaf550392ee653a811872"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/ReferenceScenarioTest.java",
+      "sha256": "4f2411ebc9bde581a0a22656781918e4ae5b0e11ca1c0eb53a12dedbded93796"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/RoutingStateTest.java",
+      "sha256": "97fa481b732123f127f0a910c602b6ca8275514c0abba68ade3f2ecca4c751c7"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SessionTokenTest.java",
+      "sha256": "e5b5c6ecf5dc3a99a985b47033175848ab0040a0e55198f68d96fae8f7dfb8ff"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SignonCommareaTest.java",
+      "sha256": "96d3c59a30c1efc436b6b96766350c86128bd8c5d64fcf88ef17795085676ee7"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SignonRulesTest.java",
+      "sha256": "62aa686a98dbb4bcf8dd9fe405e7bdb978bc9710566f26314c89db2c573a0c32"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SourceDateEditsTest.java",
+      "sha256": "e9a95e90945ab6eb85b163c7ee981fcb726fd6cb07f5335ea211b0bf43f6ccc4"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SourceEditsContractTest.java",
+      "sha256": "9b366aa03f8697455941f8a5730b7ba61b3492fd06049f9f989c5f51e5805367"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/SourceEditsTest.java",
+      "sha256": "d78a5bd599ee6fd99656ebd0627221e59f7f164ef7673dd533409b9de56bc47b"
+    }
+  ],
+  "exclusions": [
+    {
+      "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/AuthorizationRecords.java",
+      "reason": "Reserved authorization Java; no formatting authorization inferred"
+    },
+    {
+      "path": "factory/carddemo-web/service/src/test/java/ai/lightyear/carddemo/AuthorizationTest.java",
+      "reason": "Reserved authorization Java; no formatting authorization inferred"
+    }
+  ],
+  "additional_exclusion": {
+    "path": "factory/carddemo-web/service/src/main/java/ai/lightyear/carddemo/SourceEdits.java",
+    "reason": "Independent oracle remains byte-identical"
+  },
+  "merge_hold": "Run verification complete AND after 31 October; rebase post-run main and exact-head approval",
+  "formatter": {
+    "spotless": "2.43.0",
+    "google_java_format": "1.24.0",
+    "style": "GOOGLE",
+    "reorder_imports": false,
+    "reflow_long_strings": false,
+    "format_javadoc": false
+  }
+}

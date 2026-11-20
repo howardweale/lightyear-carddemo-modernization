@@ -64,6 +64,57 @@ class StrandedWorkTests(unittest.TestCase):
             else: client.commits[1].append({'sha': 'e'*40})
             with self.subTest(kind=kind), self.assertRaises(ValueError): audit(client, NOW)
 
+    def test_insert_between_pages_restarts_complete_listing(self):
+        # PR 101 closes after page 1. PR 100 then appears on both pages and
+        # PR 101 is missing entirely until the listing restarts from page 1.
+        first = [pr(n, 'main') for n in range(1, 101)]
+        inserted = pr(101)
+        stable = [inserted, *first]
+        pages = [first, stable[100:], stable[:100], stable[100:]]
+        numbers = []
+        client = GitHub('test/repo')
+        api = Fake()
+        api.prs = stable
+        api.commits[101] = api.commits[1]
+
+        def request(route):
+            if route.startswith('pulls?'):
+                page = int(route.rsplit('=', 1)[1])
+                numbers.append(page)
+                return pages.pop(0)
+            if route.startswith('pulls/101/commits?'):
+                return api.commits[101]
+            return api.request(route)
+
+        with patch.object(client, 'request', side_effect=request):
+            report = audit(client, NOW)
+        self.assertEqual([1, 2, 1, 2], numbers)
+        self.assertEqual([], pages)
+        self.assertEqual([], api.refs)
+        self.assertTrue(report['complete'])
+        self.assertEqual([101], [row['pr'] for row in report['stranded']])
+
+    def test_persistent_duplicate_refuses_after_three_full_restarts(self):
+        client = GitHub('test/repo')
+        first = [pr(n, 'main') for n in range(1, 101)]
+        requested = []
+
+        def request(route):
+            requested.append(route)
+            if route == 'git/ref/heads/main':
+                return {'object': {'sha': MAIN}}
+            if route.endswith('&page=1'):
+                return first
+            if route.endswith('&page=2'):
+                return [first[-1]]
+            self.fail(route)
+
+        with patch.object(client, 'request', side_effect=request):
+            with self.assertRaisesRegex(ValueError, '^stranded-work-duplicate-pr$'):
+                audit(client, NOW)
+        prefix = 'pulls?state=closed&sort=updated&direction=desc&per_page=100&page='
+        self.assertEqual(['git/ref/heads/main'] + [prefix + '1', prefix + '2'] * 4, requested)
+
     def test_api_commit_cap_and_head_drift_are_refused(self):
         for kind in ('truncated', 'bad-count', 'head-drift', 'base-drift'):
             client = Fake(); original = client.request

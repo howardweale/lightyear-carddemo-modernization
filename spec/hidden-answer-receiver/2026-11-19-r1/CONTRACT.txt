@@ -1,0 +1,49 @@
+H3-A hidden answer receiver. Exact review proposal using the merged H2a frame format; source hashes are listed in DEPENDENCIES.json.
+
+A fresh, verifier-only operation consumes the stage-2 approval and one-shot ledger
+claim before reading completion.json, opening the ciphertext or accessing a USB
+identity. The supervisor must authenticate Howard, bind the S1 pending selection
+and the actual jar, verify closure, pre-existing commitments, H1/H2 provenance and
+native runtime qualification, and ensure durable exclusive replay protection.
+The claim key must be stable for the stage-1 result and commitments across changed
+operation IDs, changed candidate or repeated approvals. A hash is not authority.
+
+H3-A's broker is trusted custodian code with no candidate input. claim() must
+return only after the exclusive record, file, parent directory, and readback have
+completed; exceptions consume the local receiver. H3-B supplies this broker under
+future exact review. The receiver has no CLI or Docker port. open_cipher returns
+an owner-only fd to the precommitted ciphertext file. Hash readback and age
+header, bytes, inode and metadata joins precede the custodian's decrypt call.
+Source identity, fixed count, policy and input commitments are independently joined.
+H2b embeds the actual private inputs inside the encrypted stream. Before age,
+only their precommitted hash can be compared. H3-A also reconstructs the complete
+input-manifest digest from authenticated case data before any case is released.
+
+Howard alone uses the dedicated USB identity in the separate private Windows
+account and approved private distro. The receiver never accepts the identity, its
+path or an environment key. The future broker must launch only the approval-pinned
+age executable; it must recheck its binary bytes immediately before launching.
+Only immutable preverified ciphertext goes in; close_fds is required. The receiver
+accepts only a read-only non-inheritable anonymous stdout pipe from the custodian.
+No terminal diagnostics, shell command line or agent-visible output may contain
+private bytes or paths. Session context exit must close handles, kill/reap descendants
+on error and never suppress exceptions. It must time-bound cleanup and receipt checks.
+Proof of no-copy or physical removal is human-reported. Windows administrators
+including Howard remain trusted. No no-swap or independent-erasure claim.
+
+The H2a frame is uint64 big-endian byte length + canonical compact sorted UTF-8
+JSON. Header joins count/binding; each checked_case must exactly equal the merged
+writer's bytes; the trailer must match the digest of all preceding framed bytes
+and the ordered digests of each case. Reject duplicate keys, floats, noncanonical
+or trailing bytes, truncated prefix or payload, wrong order, uncommitted input,
+oversize total/frames and expired deadline. 64 frames maximum plus header and
+trailer, bounded by 8 MiB per case and at most 512 MiB total framed plaintext.
+The receiver holds complete authenticated frames in memory only. Only after full
+EOF, age zero exit and child/handle cleanup does Howard remove the stick, confirm
+the mount absent and verify no copy remains. Only then can H3-B consume the
+in-memory private handoff once. An incomplete/truncated result cannot be compared.
+H3-B controls candidate mounts: only its jar and one case's input. No hidden
+counts, values, remaining fields or per-case hashes may reach any model or graph.
+The public H3-B receipt will contain only aggregate PASS/FAIL or fixed fault,
+approved identities, commitment, cleanup and custody receipt references. No hidden
+generation, answer writing, decryption, candidate launch or PC operation authorized.

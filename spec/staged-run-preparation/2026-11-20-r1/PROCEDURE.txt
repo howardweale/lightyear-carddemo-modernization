@@ -1,0 +1,28 @@
+L1c · Stage-1 graph-off preparation and read-only preflight
+
+Howard runs these steps on the separately approved arm64 Mac; no agent runs them. Before use, review the exact merged source and verify the interpreter and local checkout. The open-source answer key is for the 16 public cases only. The public context digest is the reviewed r2 snapshot with LICENSE excluded and NOTICE retained. Changes to these bytes require a fresh review. V1 must measure the exact requests and timing and qualify the Mac TLS path before a real run.
+
+1. Assemble the input directory in an existing owner-only, non-synced location. Resolve symlinks in parent names first. Give all individual inputs mode 0600 or 0400; use mode 0700 for the directory and output parent. The commands read fixed leaf names only. Use the same OS user and the reviewed checkout throughout. The absolute input and output paths and actual Docker configuration are local.
+
+REQUEST.json has exactly schema staged-preparation-request/1, operation_id (fresh 64 lowercase hex), approved_at, latest_start (offset-bearing times), and publication (repository, release_id, asset_id and tag of the published two-field H2 commitment). These are proposed approval terms. Howard decides whether to issue them. A changed term requires a new draft. The latest commitment publication event must strictly precede the proposed approval time. For the live check, the approval time must have arrived and latest_start must still be ahead.
+
+Use these reviewed bytes: CURRENT-CONTEXT.json from full-intcalc-graph-review-bindings-20261117-r2 (SHA256 4f25b42be20c5e4bb0a82030e3172b5c6751c7dfb5b36aa1f1bb42dee25a5a52), answer-key.zip from full-intcalc-public-answer-key-20261118-r1, and HOST.json (Howard's public H1 qualification receipt). The P2 pinned Release binding verifies the original ZIP before extraction. The checkout supplies its own SUITE.json and source map. Never put held-out cases or answers in this directory.
+
+Stage LOCAL-WORKER.json (schema staged-local-worker/1, docker_binary and docker_endpoint) and the complete reviewed P5 host rehearsal receipt as WORKER-QUALIFICATION.receipt. Use the actual absolute Docker executable and resolved owner-held Unix socket. Read the CLI bytes for their hash; do not invoke Docker. Preview the raw qualification join with:
+python -I -B tools/prepare_staged_public.py worker-join --directory <input>
+
+For main_green, mac_tls_1, ledger_volume, disk_headroom, public_worker, and measured_bounds_and_deadlines, supply <kind>.json with its L1a evidence fields, plus the exact reviewed attachment in <kind>.receipt. For public_worker the attachment is the worker-join JSON. A terminal newline is permitted in that attachment if the proof hashes those exact bytes. Its two digests join the local configuration and P5 qualification. Howard and the reviewer verify the substance and subject of each receipt, the public context and measured bounds, observation times and expiry. Preparation does not manufacture a PASS, perform a disk write probe, or certify the TLS path. Obtaining the observations is separate work.
+
+2. Draft the proposed authority and its bound intent for independent review:
+python -I -B tools/prepare_staged_public.py draft --directory <input> --output <new-review-directory>
+Only BINDING.json, INTENT.json and PROPOSED-APPROVAL.json are written. Every file is exclusive and read back. Review the actual bytes and their hashes including operation ID, approval window, model, accepted count billing assumption, role holds and USD 37.67 ceiling. Return the independently approved bytes via Howard's separate channel. The proposed file itself grants no authority. A prepare command cannot prove who issued a byte-identical file.
+
+3. Under that fresh authority seal a new output directory:
+python -I -B tools/prepare_staged_public.py seal --directory <input> --output <new-bundle> --approval <operator-issued-file> --approval-sha256 <independently-reviewed-digest>
+Seal recomputes the intent, reads live public commitment metadata and checks the exact approval bytes before creating a directory. It copies inputs and exact approved records, unpacks the hash-pinned ZIP once with the P1 archive checks and revalidates the full P2 inventory and inputs. No retained evidence or previous bundle is modified. Preserve an incomplete directory on refusal and never use it for launch. Choosing an empty replacement staging path does not refresh expired evidence or reset a spent operation.
+
+4. Rehearse the repeatable, read-only preflight from the sealed directory:
+python -I -B tools/prepare_staged_public.py preflight --directory <new-bundle> --approval-sha256 <independently-reviewed-digest>
+It reads both joined source identities, current published H2 metadata, exact binding and approval, evidence expiry, public answer inventory, Docker binary and socket identities, and the absence of operation children in the fixed authority, ledger and worker parents. It never opens a writable port, unpacks files, runs Docker, claims a replay slot or prompts for a credential. A later change can invalidate this observation. The launcher rechecks its joins and exclusively claims the operation. Its own run needs Howard's fresh authority.
+
+The fixed terminal refusal is staged-preparation-refused, exit 2. A ready preflight returns PREFLIGHT_READY with three SHA256s; read them back against the draft. Exit 0 from preparation does not attest to model execution, hidden completion, independent machine authentication or host power-loss recovery. Earlier staged files, partial outputs and source receipts remain local. Publish only the reviewed redacted evidence.

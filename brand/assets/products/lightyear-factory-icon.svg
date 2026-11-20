@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" width="90" height="90" role="img" aria-label="Lightyear Factory">
+<defs>
+<linearGradient id="fyGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1D6"/><stop offset="1" stop-color="#E9C48F"/></linearGradient>
+</defs>
+<rect width="90" height="90" rx="18" fill="#15184D"/>
+<g transform="translate(3 0)"><path d="M17 69V43L31 33V43L45 33V43L59 33V26H67V69Z" fill="#2A2D6E" stroke="#D8CCF8" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M33 50L26 56L33 62" fill="none" stroke="url(#fyGlow)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M49 50L56 56L49 62" fill="none" stroke="url(#fyGlow)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M44 48L38 64" fill="none" stroke="url(#fyGlow)" stroke-width="3.2" stroke-linecap="round"/>
+</g><line x1="12" y1="76" x2="78" y2="76" stroke="#5458A8" stroke-width="2" stroke-linecap="round"/>
+<rect x="22" y="72" width="8" height="4" rx="1.2" fill="#8F6EF0"/>
+<rect x="41" y="72" width="8" height="4" rx="1.2" fill="#36B8A6"/>
+<rect x="60" y="72" width="8" height="4" rx="1.2" fill="#E9C46A"/>
+</svg>

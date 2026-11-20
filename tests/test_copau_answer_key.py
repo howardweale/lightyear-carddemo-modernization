@@ -254,6 +254,28 @@ class HeldoutCorpusTests(unittest.TestCase):
         self.assertEqual(report['historical'], self.index['historical'])
         self.assertEqual(report['historical']['status'], helper.HISTORICAL)
 
+    def test_legacy_index_discloses_missing_observation(self):
+        report = helper.scan_corpora(self.index, self.values)
+        observation = report["historical_observation"]
+        self.assertEqual(observation["gaps"], ["main-catalog-observation-unavailable"])
+        self.assertIsNone(observation["capture_start"])
+        self.assertIsNone(observation["age_seconds"])
+        self.assertEqual(report["historical"], self.index["historical"])
+
+    def test_unavailable_main_snapshot_reaches_report_without_changing_scans(self):
+        from tools.ci import copau_history_snapshot as historical
+        def unavailable(_):
+            raise historical.Unavailable
+        history, observation = historical.observe(self.index['corpora']['main']['commit'],
+            fetch=unavailable)
+        self.index['historical'] = history
+        self.index['closure_review']['historical_observation'] = observation
+        report = helper.scan_corpora(self.index, self.values)
+        self.assertTrue(report['scans_clean'])
+        self.assertEqual(report['historical'], history)
+        self.assertEqual(report['historical_observation']['status'], 'unavailable')
+        self.assertIsNone(report['historical_observation']['age_seconds'])
+
     def test_prompts_and_contexts_are_exposure_not_collision_baseline(self):
         for name in ('prompts', 'contexts'):
             index = deepcopy(self.index); c = index['corpora'][name]; raw = self.values[0].encode()

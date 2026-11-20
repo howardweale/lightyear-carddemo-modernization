@@ -65,14 +65,22 @@ class GitHub:
         raise ValueError('stranded-work-pagination')
 
 
+def closed_prs(client):
+    # Updated-order pages can shift while GitHub serves a listing. A duplicate
+    # can hide another PR, so discard the whole listing and restart at page 1.
+    for _ in range(4):  # Initial listing and at most three complete restarts.
+        rows = client.pages('pulls?state=closed&sort=updated&direction=desc')
+        numbers = [row['number'] for row in rows]
+        if len(set(numbers)) == len(numbers):
+            return rows
+    raise ValueError('stranded-work-duplicate-pr')
+
+
 def audit(client, now):
     now = now.astimezone(timezone.utc); cutoff = now - timedelta(days=14)
     main = oid(client.request('git/ref/heads/main')['object']['sha'])
-    candidates = []; seen = set()
-    for pr in client.pages('pulls?state=closed&sort=updated&direction=desc'):
-        number = pr['number']
-        if number in seen: raise ValueError('stranded-work-duplicate-pr')
-        seen.add(number)
+    candidates = []
+    for pr in closed_prs(client):
         if not pr.get('merged_at') or pr['base']['ref'] == 'main': continue
         merged = timestamp(pr['merged_at'])
         if cutoff <= merged <= now: candidates.append(pr)

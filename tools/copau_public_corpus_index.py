@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 import sys
 import zipfile
+from tools.ci.copau_history_snapshot import reuse
 from tools.copau_answer_key import sha, encoded, stable_read, no_links, git_bytes, member_name, WORKER_SHA, HISTORICAL
 from tools.copau_private_prerequisites import ROOT, require, load_json
 
@@ -112,9 +113,10 @@ def build_index(worker, manifest, repository, graph, prompts, contexts, run_boun
     require(listing)
     corpora['main'] = dict(root=str(repository), commit=commit, tree_listing_sha256=sha(listing))
     require(github('git/ref/heads/main')['object']['sha'] == commit)
+    historical, observation = reuse(boundary, commit)
     return dict(schema='copau-run-surface-index/2', captured_at=datetime.now(timezone.utc).isoformat(),
-                closure_review=dict(status='unreviewed', reference=''), unavailable=[],
-                historical=historical_metadata(), corpora=corpora)
+                closure_review=dict(status='unreviewed', reference='', historical_observation=observation), unavailable=[],
+                historical=historical, corpora=corpora)
 
 
 def main():

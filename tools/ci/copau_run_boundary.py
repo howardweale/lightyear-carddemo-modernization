@@ -14,7 +14,8 @@ from urllib.request import urlopen
 from lightyear_factory.contracts import WorkOrder
 from lightyear_factory.context import GraphContextAssembler
 from lightyear_factory.copau_boundary import DISABLED_GRAPH, SETTINGS, encoded, digest, require
-from tools.copau_public_corpus_index import file_rows, github, historical_metadata, inventory_digest
+from tools.ci.copau_history_snapshot import observe
+from tools.copau_public_corpus_index import file_rows, github, inventory_digest
 
 WORKER = 'docs/factory/copau-f8-workspace-manifest-2026-10-21.json'
 WORKER_SHA = 'bb11b3644a6070d7176767d82826d451e0b5055a6ce3e5eda0495c45591b0771'
@@ -140,7 +141,7 @@ def collect(repo, output):
     builder = GraphContextAssembler.builder_context(context, [], [])
     write(contexts/'planner-context.json', encoded(planner))
     write(contexts/'builder-context.json', encoded(builder))
-    historical = historical_metadata()
+    historical, observation = observe(main)
     rows = {name: file_rows(output/name) for name in ('graph', 'prompts', 'contexts')}
     boundary = dict(schema='copau-run-visible-boundary/1', prepared_on='2026-10-24',
         main_commit=main, work_order_sha256=order.content_sha256,
@@ -158,7 +159,7 @@ def collect(repo, output):
             contexts=dict(records=len(context_records)+407, inventory_sha256=inventory_digest(rows['contexts']),
                 templates=context_records, worker_input_files=403, order_records=1, rendered_records=3,
                 deciding_code='FactoryOrchestrator._context -> GraphContextAssembler.assemble/planner_context/builder_context; gates.builder_failure_view; ModelAgentSet payloads')),
-        historical=historical,
+        historical=historical, historical_observation=observation,
         operational_release_inputs=[assets for assets in retained['assets'] if assets['name'] in ('capsule.tar.gz','capsule-files.json')],
         approval=dict(status='unreviewed', invalidated_by=['main','graph','templates','workspace','launch_settings']),
         gaps=['Final concrete signed F2 WorkOrder/plan must bind this boundary and launch-settings hash after the approved P5 merge.',
@@ -182,6 +183,7 @@ def collect(repo, output):
         surfaces={name: dict(files=len(row['files']), records=row['records'], inventory_sha256=row['inventory_sha256'])
                   for name,row in index['corpora'].items() if name != 'main'},
         run_url='https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/'+os.environ['GITHUB_RUN_ID'],
+        historical_observation=index['closure_review']['historical_observation'],
         reviewed=False, gaps=boundary['gaps'], request_ready=False)
     write(output/'receipt.json', encoded(receipt))
     print(json.dumps(receipt))

@@ -1,0 +1,92 @@
+Native amd64 candidate runtime, r1 (review-only)
+
+The public stage builds on the qualified arm64 P5 compiler. On Howard's Intel PC,
+a retained jar runs unchanged under the reviewed Linux amd64 Eclipse Temurin JRE
+21. This library has no command-line entry, candidate build facility, image pull,
+publication, hidden decryptor or model/tool connection. H1 inspects the private
+WSL2 Engine using its exact CLI, its local Unix socket and Howard's host profile.
+The process needs the H1 profile, accessible private dockerd PID metadata and an
+empty private daemon. Windows administrators, including Howard, remain trusted.
+
+Binding and handoff
+- Howard and the independent reviewer must bind the raw native-candidate-binding/1
+  document by SHA256. Its closed schema contains platform linux/amd64, repository
+  docker.io/library/eclipse-temurin and SHA256 fields manifest, config, java,
+  java_version_stderr, docker_cli, licence_inventory and host_profile (each named
+  with suffix _sha256). Manifest means the single Linux platform manifest, not a
+  multiplatform index. Record identical raw bytes for the image config, manifest,
+  human-reviewed licence inventory and java -version stderr. The local Engine
+  must already contain that digest and report the joined config. The runtime
+  checks the Java executable and version in its trusted collector before launch.
+- Before using any private data Howard must separately review the artifacts,
+  qualify H1 with the nine reference probes and 16 public cases, and perform
+  native candidate public qualification. The latter binds the reviewer-pinned
+  arm64-built fixture jars, the P2 Release answer key, 16 exact-key comparisons on the reviewed all-match fixture, all 16
+  scoped observations against the pinned arm64 report on the known imperfect
+  fixture, timeout, output-cap, boundary and cleanup probes. A redacted receipt includes
+  exact fixture, source, host, H1 and binding hashes. No on-host qualification
+  or image, licence or cross-platform compatibility claim comes from CI.
+- H3 durably claims the once-only private operation before H3-A accesses the
+  encrypted answer store or decrypts any private answer. H3-A, separately
+  reviewed and admitted for this consumed operation, joins the merged H2a ciphertext and
+  completion record to S1's pre-run public commitment, validates its byte frame
+  and checks the stage-1 pending result and close-model record. H3-B verifies and continues
+  the same consumed operation, calls retained_runtime against merged S1, confirms
+  the exact jar size and SHA256 against the selected artifact, and supplies the
+  bytes without rebuilding them. It passes only the jar and input records to
+  this library. A decryptor, its descendants, decrypted answers, USB identity,
+  sockets, environment, host home, checkout and comparison results are outside
+  the candidate mounts. Howard has to confirm decryptor exit, USB removal and
+  absence of a key copy before launch. No private action is authorized here.
+- The H3 supervisor owns case/cleanup exclusion and reaping after death, including
+  host failure. Uncertain execution consumes the operation. H3 never replays the
+  case. Only the verifier gets raw observations in memory; accepted hidden output
+  is PASS/FAIL or a fixed fault, never counts. Timeouts and output caps are case
+  mismatches. Runtime, custody, reap, collection and cleanup faults are terminal.
+
+Execution and limits
+- Fixed child argv. Candidate.jar and four individual .bin files mount read-only.
+  The four inputs are staged
+  exclusively in an owner-only directory on the private distro's /dev/shm tmpfs;
+  normal/fault cleanup removes it. Output is a 16 MiB local tmpfs volume. Candidate and collector use the same
+  immutable image, 65534:65534, no network, read-only root, runc, no capabilities,
+  no-new-privileges, private IPC/cgroups, disabled logging, no healthcheck,
+  one CPU, 512 MiB and 64 PIDs. Candidate heap is 256 MiB. The trusted collector
+  mounts the output volume read-only before candidate start and outlives its exit.
+  Stored metadata gives the resource IDs before Docker actions; cleanup checks
+  absence. Private paths, records and outputs stay off the public ledger.
+- One case has at most 15 s execution and 5 s for collection/reaping/cleanup,
+  using P5's inward-rounded deadlines, with 8 MiB per output stream or file.
+  Missing files are distinct from present zero-length files. For abend cases
+  only stdout, stderr and exit are compared. Host admission, artifact import
+  and staging private inputs are charged to the
+  caller's absolute outer deadline. H3 enforces operation consumption on crash
+  and reconciles the private resource markers and ephemeral scratch on recovery.
+  No automatic resume or repeated launch occurs.
+
+Public fixture catalog
+- H3 pins the raw native-public-fixture-catalog/1 (fixture jar hashes, five
+  arm64 build receipt hashes, frozen public key hash and arm64 parity report
+  hash). The reviewer must verify those jars against each original P5 receipt
+  before approving the catalog. Fixture names are matches_all, imperfect,
+  timeout, output_cap and boundary. The reviewed adversarial boundary fixture
+  must check network, read-only jar/inputs, output and UID, forbidden mounts
+  and environment. Its success marker is exactly boundary-probe-passed plus LF.
+- The arm64-public-parity/1 report holds the imperfect jar digest and all
+  PC-01 through PC-16 IDs in cases. Each observation has exit, timed_out,
+  output_capped and SHA256 for every compared channel; a missing file is null.
+  Boolean cap/timeout flags are false for these parity fixtures. For PC-10/11/12
+  file channels are absent. Every comparison must agree with arm64, and at least
+  one must differ from the public reference. Exact raw proof hashes remain
+  blocking until the reviewer verifies the public fixtures/observations.
+- The returned native-candidate-public-check/1 receipt describes qualification
+  on these public fixtures only. Howard and the reviewer must admit its exact
+  bytes plus the H1 qualification and host custody records to stage 2 separately.
+  No private qualification, host access or H3 approval is implied.
+
+Limits: results apply only to the qualified Intel host, pinned JRE and reviewed
+P5 pure-JDK-plus-helper bytecode. The reference is open-source, not mainframe-
+proven; signed zoned inputs require C/D signs; it is built per run from pinned
+public packages with no published image digest. Paging, hibernation and crash
+capture may persist memory. Operator review is not independent attestation.
+Preview, NOT-P5. Independent approvals and Howard's machine remain required.

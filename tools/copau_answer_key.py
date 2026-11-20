@@ -222,6 +222,15 @@ def scan_corpora(index, values):
     report = dict(schema='copau-public-collision-report/2', corpus_index_sha256=sha(encoded(index)),
                   scanner_sha256=SCANNER_SHA, window_count=len(windows(values)), corpora={},
                   historical=index['historical'], unavailable=index['unavailable'], scans_clean=False)
+    if 'historical_observation' in index['closure_review']:
+        from tools.ci.copau_history_snapshot import reuse
+        _, observation = reuse(dict(historical=index['historical'],
+            historical_observation=index['closure_review']['historical_observation']),
+            index['corpora']['main']['commit'])
+        report['historical_observation'] = observation
+    else:
+        from tools.ci.copau_history_snapshot import GAP, unavailable_observation, utc
+        report['historical_observation'] = unavailable_observation(index['corpora']['main']['commit'], GAP, utc())
     for name in sorted(CORPORA):
         corpus = index['corpora'][name]
         row = dict(file_count=0, record_count=0, window_count=len(windows(values)), match_count=0,

@@ -5,6 +5,14 @@ import unittest
 from unittest.mock import patch
 from tools import copau_public_corpus_index as collector
 from tools import copau_private_prerequisites as custody
+from tools.ci import copau_history_snapshot as history
+
+
+def unavailable_history():
+    def unavailable(_):
+        raise history.Unavailable
+    rows, obs = history.observe('a'*40, fetch=unavailable)
+    return dict(historical=rows, historical_observation=obs)
 
 
 class PublicCorpusIndexTests(unittest.TestCase):
@@ -29,12 +37,12 @@ class PublicCorpusIndexTests(unittest.TestCase):
             manifest = base/'manifest.json'
             manifest.write_bytes(collector.encoded({r['path']:r['sha256'] for r in rows['worker']}))
             boundary = base/'boundary.json'
-            value = dict(schema='copau-run-visible-boundary/1', main_commit='a'*40, surfaces=surfaces)
+            value = dict(schema='copau-run-visible-boundary/1', main_commit='a'*40, surfaces=surfaces, **unavailable_history())
             boundary.write_bytes(producer.encoded(value))
             with patch.object(collector,'WORKER_SHA',collector.sha(manifest.read_bytes())), \
                     patch.object(collector,'github',return_value={'object':{'sha':'a'*40}}), \
                     patch.object(collector,'git_bytes',return_value=b'synthetic-tree'), \
-                    patch.object(collector,'historical_metadata',return_value={}):
+                    patch.object(collector,'historical_metadata',side_effect=AssertionError('second catalog traversal')):
                 args = (roots['worker'],manifest,base,roots['graph'],roots['prompts'],roots['contexts'],boundary)
                 index = collector.build_index(*args)
                 self.assertEqual(index['closure_review']['status'],'unreviewed')
@@ -97,15 +105,13 @@ class PublicCorpusIndexTests(unittest.TestCase):
             bindings = {r['path']:r['sha256'] for r in collector.file_rows(roots['worker'])}
             manifest = base / 'manifest.json'; manifest.write_bytes(collector.encoded(bindings))
             boundary = base / 'boundary.json'
-            boundary.write_bytes(collector.encoded(dict(schema='copau-run-visible-boundary/1', main_commit='a'*40, surfaces={
+            boundary.write_bytes(collector.encoded(dict(schema='copau-run-visible-boundary/1', main_commit='a'*40, **unavailable_history(), surfaces={
                 n:dict(inventory_sha256=collector.sha(collector.encoded(collector.file_rows(roots[n]))), records=1)
                 for n in ('graph', 'prompts', 'contexts')})))
-            history = dict(status=collector.HISTORICAL, catalog_sha256='0'*64, observed_count=0,
-                           missing=[], metadata_error_count=0)
             with patch.object(collector, 'WORKER_SHA', collector.sha(manifest.read_bytes())), \
                     patch.object(collector, 'github', return_value={'object':{'sha':'a'*40}}), \
                     patch.object(collector, 'git_bytes', return_value=b'synthetic-tree'), \
-                    patch.object(collector, 'historical_metadata', return_value=history):
+                    patch.object(collector, 'historical_metadata', side_effect=AssertionError('second catalog traversal')):
                 index = collector.build_index(roots['worker'], manifest, base, roots['graph'],
                                               roots['prompts'], roots['contexts'], boundary)
                 self.assertEqual(set(index['corpora']), {'worker','main','graph','prompts','contexts'})

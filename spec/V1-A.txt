@@ -1,0 +1,8 @@
+V1-A | MAC-TLS-1 | review only | ½–1 engineering day
+Howard compares the immutable V1-A-SHA256SUMS fragment with the clean reviewed checkout.
+Before use, independently pin the production Mac interpreter SHA256 and absolute executable in the human-reviewed host supplement. Missing pin or source review stops the rehearsal. The fragment is source evidence; it grants no operator approval.
+Only on a separately approved public rehearsal: from the repository root run
+/usr/bin/env -i "$PRODUCTION_PYTHON" -I -B tools/v1_mac_tls.py --rehearsal-id "$PUBLIC_REHEARSAL_ID" --python-sha256 "$REVIEWED_PYTHON_SHA256"
+Use v1-rehearsal- plus 32 lowercase hex digits for the public rehearsal ID. Supply neither a credential nor a private file. Use a fresh ID for each session. The command has no replay-store or provider-API argument.
+Retain the JSON and its exact SHA256. One spawned child verifies the certificate and hostname with the default Python trust store. A timeout, unavailable first address or certificate error refuses. Zero HTTP requests. The separate public pseudo-terminal probe exercises EOF cancellation and echo restoration; the actual operator terminal remains unqualified by this observation.
+No CI test opens a socket. The actual Mac timing, trust store and certificate chain require operator evidence.

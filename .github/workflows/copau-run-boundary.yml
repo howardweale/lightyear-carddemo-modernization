@@ -18,6 +18,45 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: &quota_sample |
+          python -I -B - <<'PY'
+          import datetime, os, re, subprocess
+          from pathlib import Path
+
+          sample = "status=unavailable"
+          try:
+              p = subprocess.run(["gh", "api", "--include", "rate_limit", "--hostname", "github.com"], capture_output=True,
+                                 check=False, timeout=12)
+              header, boundary, _ = p.stdout.replace(b"\r\n", b"\n").partition(b"\n\n")
+              if p.returncode == 0 and boundary and len(header) <= 16384:
+                  values = {}
+                  for key in ("used", "remaining", "reset", "resource"):
+                      token = rb"[a-z_]+" if key == "resource" else rb"[0-9]{1,20}"
+                      pattern = rb"^x-ratelimit-" + key.encode() + rb":[ \t]*(" + token + rb")[ \t]*$"
+                      matches = re.findall(pattern, header, re.IGNORECASE | re.MULTILINE)
+                      if len(matches) == 1:
+                          values[key] = matches[0].decode("ascii").lower()
+                  if all(k in values for k in ("used", "remaining", "reset")):
+                      sample = ("status=observed used={used} remaining={remaining} reset={reset} "
+                                "resource={resource}").format(**{"resource":"unknown", **values})
+          except (OSError, subprocess.TimeoutExpired):
+              pass
+          now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+          line = ("github-quota " + now + " phase=" + os.environ["QUOTA_PHASE"] +
+                  " job=" + os.environ["GITHUB_JOB"] + " os=" + os.environ["RUNNER_OS"] +
+                  " arch=" + os.environ["RUNNER_ARCH"] + " run=" + os.environ["GITHUB_RUN_ID"] +
+                  " attempt=" + os.environ["GITHUB_RUN_ATTEMPT"] + " " + sample)
+          print(line)
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as f:
+              f.write(line + "\n")
+          PY
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with: {python-version: '3.13'}
@@ -25,11 +64,28 @@ jobs:
       - name: Refuse graph files, tools and memory before admission effects
         env: {PYTHONPATH: '.'}
         run: python -B -m unittest discover -s tests -p "test_copau_run_boundary.py" -v
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample
   public-index:
     needs: launch-refusals
     runs-on: windows-2025
     timeout-minutes: 30
     steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: *quota_sample
       - uses: actions/checkout@v7
         with: {fetch-depth: 0}
       - uses: actions/setup-python@v6
@@ -67,3 +123,12 @@ jobs:
           path: C:/Users/howar/Lightyear/COPAUReview-v1/public
           if-no-files-found: error
           include-hidden-files: true
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample

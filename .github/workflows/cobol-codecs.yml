@@ -8,6 +8,9 @@ on:
       - 'tools/run_cobol_codec_vectors.py'
       - 'tests/test_cobol_codec_vector_schema.py'
       - '.github/workflows/cobol-codecs.yml'
+      - 'tools/ci/github_read_budget.py'
+      - 'tools/ci/workflow_release_inputs.py'
+      - 'tests/test_workflow_release_inputs.py'
   push:
     branches: [main]
     paths:
@@ -17,13 +20,92 @@ on:
       - 'tools/run_cobol_codec_vectors.py'
       - 'tests/test_cobol_codec_vector_schema.py'
       - '.github/workflows/cobol-codecs.yml'
+      - 'tools/ci/github_read_budget.py'
+      - 'tools/ci/workflow_release_inputs.py'
+      - 'tests/test_workflow_release_inputs.py'
 permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'branch' }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
+  release-inputs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    outputs:
+      artifact_id: ${{ steps.retain.outputs.artifact-id }}
+      producer_attempt: ${{ steps.fetch.outputs.producer_attempt }}
+    steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: &quota_sample |
+          python -I -B - <<'PY'
+          import datetime, os, re, subprocess
+          from pathlib import Path
+
+          sample = "status=unavailable"
+          try:
+              p = subprocess.run(["gh", "api", "--include", "rate_limit", "--hostname", "github.com"], capture_output=True,
+                                 check=False, timeout=12)
+              header, boundary, _ = p.stdout.replace(b"\r\n", b"\n").partition(b"\n\n")
+              if p.returncode == 0 and boundary and len(header) <= 16384:
+                  values = {}
+                  for key in ("used", "remaining", "reset", "resource"):
+                      token = rb"[a-z_]+" if key == "resource" else rb"[0-9]{1,20}"
+                      pattern = rb"^x-ratelimit-" + key.encode() + rb":[ \t]*(" + token + rb")[ \t]*$"
+                      matches = re.findall(pattern, header, re.IGNORECASE | re.MULTILINE)
+                      if len(matches) == 1:
+                          values[key] = matches[0].decode("ascii").lower()
+                  if all(k in values for k in ("used", "remaining", "reset")):
+                      sample = ("status=observed used={used} remaining={remaining} reset={reset} "
+                                "resource={resource}").format(**{"resource":"unknown", **values})
+          except (OSError, subprocess.TimeoutExpired):
+              pass
+          now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+          line = ("github-quota " + now + " phase=" + os.environ["QUOTA_PHASE"] +
+                  " job=" + os.environ["GITHUB_JOB"] + " os=" + os.environ["RUNNER_OS"] +
+                  " arch=" + os.environ["RUNNER_ARCH"] + " run=" + os.environ["GITHUB_RUN_ID"] +
+                  " attempt=" + os.environ["GITHUB_RUN_ATTEMPT"] + " " + sample)
+          print(line)
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as f:
+              f.write(line + "\n")
+          PY
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Synthetic pinned-input and read-budget contract
+        run: python -B -m unittest discover -s tests -p test_workflow_release_inputs.py -v
+      - name: Fetch and verify pinned public Release bytes
+        id: fetch
+        timeout-minutes: 3
+        shell: bash
+        run: python -B -m tools.ci.workflow_release_inputs produce codecs "$RUNNER_TEMP/pinned-release"
+      - uses: actions/upload-artifact@v7
+        id: retain
+        with:
+          name: pinned-codecs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pinned-release
+          if-no-files-found: error
+          retention-days: 30
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample
   codecs:
+    needs: release-inputs
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +113,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: *quota_sample
       - uses: actions/checkout@v7
       - uses: actions/setup-java@v5
         with:
@@ -47,15 +137,39 @@ jobs:
       - name: Author derivations and arena invariants; not qualification
         shell: bash
         run: python -B tools/run_cobol_codec_vectors.py --vectors tests/fixtures/cobol-runtime/codecs-author.json --profile spec/cobol-runtime/2026-11-15/PROFILE.json --classes codec-classes
-      - name: Claude independent vectors; exact pinned bytes
+      - name: Check producer identity
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
+          INPUT_ARTIFACT_ID: ${{ needs.release-inputs.outputs.artifact_id }}
+          INPUT_PRODUCER_ATTEMPT: ${{ needs.release-inputs.outputs.producer_attempt }}
+        run: python -B -m tools.ci.workflow_release_inputs precheck codecs "$RUNNER_TEMP/pinned-release"
+      - name: Retrieve exact run-scoped public inputs
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.release-inputs.outputs.artifact_id }}
+          merge-multiple: true
+          path: ${{ runner.temp }}/pinned-release
+      - name: Verify producer receipt and current pinned bytes
+        shell: bash
+        env:
+          INPUT_ARTIFACT_ID: ${{ needs.release-inputs.outputs.artifact_id }}
+          INPUT_PRODUCER_ATTEMPT: ${{ needs.release-inputs.outputs.producer_attempt }}
+        run: python -B -m tools.ci.workflow_release_inputs verify codecs "$RUNNER_TEMP/pinned-release"
+      - name: Claude independent vectors; exact pinned bytes
+        shell: bash
         run: |
-          gh release download full-intcalc-cobol-runtime-slice1a-implementation-proposal-20261115-r2 --repo howardweale/lightyear-carddemo-modernization --pattern codecs-independent-claude.json --dir "$RUNNER_TEMP/claude-codec-vectors"
-          python -B tools/run_cobol_codec_vectors.py --vectors "$RUNNER_TEMP/claude-codec-vectors/codecs-independent-claude.json" --independent-sha256 8c422ad1bce09625fc025bd2d1c8c0c1f4060ff497dc59a22a882d2b9f8c789d --profile spec/cobol-runtime/2026-11-15/PROFILE.json --classes codec-classes
+          python -B tools/run_cobol_codec_vectors.py --vectors "$RUNNER_TEMP/pinned-release/codecs-independent-claude.json" --independent-sha256 8c422ad1bce09625fc025bd2d1c8c0c1f4060ff497dc59a22a882d2b9f8c789d --profile spec/cobol-runtime/2026-11-15/PROFILE.json --classes codec-classes
       - name: Vector admission negatives without Java execution
         shell: bash
         run: |
           if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH='src:.:tests'; fi
           python -B -m unittest test_cobol_codec_vector_schema
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample

@@ -15,6 +15,45 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: &quota_sample |
+          python -I -B - <<'PY'
+          import datetime, os, re, subprocess
+          from pathlib import Path
+
+          sample = "status=unavailable"
+          try:
+              p = subprocess.run(["gh", "api", "--include", "rate_limit", "--hostname", "github.com"], capture_output=True,
+                                 check=False, timeout=12)
+              header, boundary, _ = p.stdout.replace(b"\r\n", b"\n").partition(b"\n\n")
+              if p.returncode == 0 and boundary and len(header) <= 16384:
+                  values = {}
+                  for key in ("used", "remaining", "reset", "resource"):
+                      token = rb"[a-z_]+" if key == "resource" else rb"[0-9]{1,20}"
+                      pattern = rb"^x-ratelimit-" + key.encode() + rb":[ \t]*(" + token + rb")[ \t]*$"
+                      matches = re.findall(pattern, header, re.IGNORECASE | re.MULTILINE)
+                      if len(matches) == 1:
+                          values[key] = matches[0].decode("ascii").lower()
+                  if all(k in values for k in ("used", "remaining", "reset")):
+                      sample = ("status=observed used={used} remaining={remaining} reset={reset} "
+                                "resource={resource}").format(**{"resource":"unknown", **values})
+          except (OSError, subprocess.TimeoutExpired):
+              pass
+          now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+          line = ("github-quota " + now + " phase=" + os.environ["QUOTA_PHASE"] +
+                  " job=" + os.environ["GITHUB_JOB"] + " os=" + os.environ["RUNNER_OS"] +
+                  " arch=" + os.environ["RUNNER_ARCH"] + " run=" + os.environ["GITHUB_RUN_ID"] +
+                  " attempt=" + os.environ["GITHUB_RUN_ATTEMPT"] + " " + sample)
+          print(line)
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as f:
+              f.write(line + "\n")
+          PY
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
@@ -47,12 +86,29 @@ jobs:
           python -B -m unittest test_ci_test_execution -v
           python -B tools/check_tower_manual.py
           python -B -m unittest test_decision_console_manual -v
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample
   required-ci:
     needs: documentation-and-lint
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 225
     steps:
+      - name: Record GitHub quota at job start
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: start
+        run: *quota_sample
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
@@ -70,3 +126,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           LINT_RESULT: ${{ needs.documentation-and-lint.result }}
         run: python -B tools/ci_gate.py gate
+      - name: Record GitHub quota at job end
+        if: always()
+        timeout-minutes: 1
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUOTA_PHASE: end
+        run: *quota_sample

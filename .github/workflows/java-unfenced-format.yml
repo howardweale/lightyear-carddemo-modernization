@@ -32,8 +32,8 @@ jobs:
           set -euo pipefail
           python -B -m unittest test_java_format_unfenced -v
           python -B -m tools.java_format_unfenced capture --base "$BASE" --out work/unfenced-format
-          mvn -B -f java-format-unfenced.pom.xml spotless:apply
-          mvn -B -f java-format-unfenced.pom.xml spotless:check
+          mvn -B -f java-format-unfenced.pom.xml com.diffplug.spotless:spotless-maven-plugin:2.43.0:apply
+          mvn -B -f java-format-unfenced.pom.xml com.diffplug.spotless:spotless-maven-plugin:2.43.0:check
           python -B -m tools.java_format_unfenced report --base "$BASE" --out work/unfenced-format --require-clean
       - uses: actions/upload-artifact@v6
         with:

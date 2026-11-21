@@ -13,6 +13,7 @@ from http.client import IncompleteRead
 from urllib.parse import quote
 from urllib.request import Request, urlopen, build_opener, HTTPRedirectHandler
 from .contracts import ContractError, canonical_hash
+from .transport_journal import observe_transport, reserve_transport
 from .providers import (
     ProviderError,
     ProviderResult,
@@ -103,17 +104,14 @@ class JSONProvider:
                 role, self.provider_id, self.model, raw)
         # Preserve a fully read body even if closing the transport subsequently fails.
         data = None
+        request = Request(url, data=raw,
+                          headers={"Content-Type": "application/json", **headers}, method="POST")
+        reservation = reserve_transport(self, role, request, self.provider_id, 1)
         try:
-            with self.opener(
-                Request(
-                    url,
-                    data=raw,
-                    headers={"Content-Type": "application/json", **headers},
-                    method="POST",
-                ),
-                timeout=120,
-            ) as response:
-                data = self._read_response(response)
+            with observe_transport(reservation) as received:
+                with self.opener(request, timeout=120) as response:
+                    data = self._read_response(response)
+                    received(data)
         except HTTPError as exc:
             if self.transport_recorder is not None:
                 try:

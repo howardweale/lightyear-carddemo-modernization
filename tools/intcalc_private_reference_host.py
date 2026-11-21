@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import selectors
 import signal
 import stat
 import subprocess
@@ -38,7 +39,7 @@ PRE = ('accounts_distinct private_account_standard private_account_dedicated '
     'local_no_sync_backup_attested codex_stopped_preflight process_visibility_complete '
     'no_codex_background_or_autostart operator_attends_full_window').split()
 POST = ['codex_remained_stopped', 'codex_stopped_postflight']
-BINS = ('docker', 'git', 'systemctl', 'ss', 'findmnt', 'getfacl')
+BINS = ('docker', 'git', 'systemctl', 'ss', 'findmnt', 'getfacl', 'sudo', 'readlink', 'sha256sum')
 CODES = frozenset(('host-arguments', 'host-operator', 'host-profile', 'host-custody',
     'host-source', 'host-approval', 'host-clock', 'host-platform', 'host-native-fs',
     'host-path', 'host-permissions', 'host-cli', 'host-endpoint', 'host-workloads',
@@ -217,7 +218,7 @@ class Commands:
         self.wall_deadline = wall_deadline
 
     def run(self, command, *, allowed=(0,), seconds=30, cap=4194304):
-        require(command and type(command[0]) is str and command[0] in self.binaries, 'host-command')
+        require(command and type(command[0]) is str and command[0] != 'sudo' and command[0] in self.binaries, 'host-command')
         entry = self.binaries[command[0]]
         binary = Path(entry['path'])
         require(binary.is_absolute() and binary == binary.resolve(strict=True)
@@ -268,12 +269,99 @@ class Commands:
         return self.run(command, **kwargs)[1]
 
 
+def system_tool(binaries, name):
+    """Only distro executables at these fixed locations may cross the sudo boundary."""
+    locations = {
+        'sudo': ('/usr/bin/sudo',),
+        'readlink': ('/usr/bin/readlink',),
+        'sha256sum': ('/usr/bin/sha256sum',),
+        'ss': ('/usr/bin/ss', '/usr/sbin/ss'),
+    }
+    entry = binaries[name]
+    require(entry['path'] in locations[name], 'host-cli')
+    path = Path(entry['path'])
+    require(path.resolve(strict=True) == path, 'host-cli')
+    for part in (path, *path.parents):
+        info = part.stat()
+        require(info.st_uid == 0 and not info.st_mode & 0o022, 'host-cli')
+    require(sha(read(path, 268435456)) == entry['sha256'], 'host-cli')
+    return str(path)
+
+
+def engine_pid(value):
+    require(type(value) is str and re.fullmatch(r'[1-9][0-9]{0,9}', value)
+            and 1 < int(value) <= 2147483647, 'host-endpoint')
+    return value
+
+
+def attended_engine_facts(commands, pid):
+    engine_pid(pid)
+    sudo, link, digest, ss = (system_tool(commands.binaries, n)
+                              for n in ('sudo', 'readlink', 'sha256sum', 'ss'))
+    prefix = [sudo, '-k', '-u', 'root', '--']
+    proc = '/proc/' + pid
+    fixed_reads = (
+        [link, '--', proc + '/exe'],
+        [digest, '--', proc + '/exe'],
+        [link, '--', proc + '/root'],
+        [link, '--', proc + '/ns/mnt'],
+        [ss, '-Hxlpn', 'src', '=', '/run/docker.sock', 'or', 'src', '=', '/var/run/docker.sock'],
+    )
+    exe, checksum, root, namespace, listener = [
+        attended_read(prefix + args, commands.deadline, commands.wall_deadline) for args in fixed_reads
+    ]
+    match = re.fullmatch(r'([a-f0-9]{64})  ' + re.escape(proc + '/exe') + '\n', checksum)
+    require(match and exe.startswith('/') and exe.endswith('/dockerd\n') and exe.count('\n') == 1
+            and root == '/\n' and re.fullmatch(r'mnt:\[[0-9]+\]\n', namespace), 'host-endpoint')
+    return match[1], root.rstrip('\n'), namespace.rstrip('\n'), listener.splitlines()
+
+
+def attended_read(argv, deadline, wall_deadline):
+    """Keep sudo in the foreground terminal group. Only its stdout enters H1 memory."""
+    require(os.name == 'posix' and os.getuid() != 0 and os.geteuid() != 0
+            and not os.environ.get('GITHUB_ACTIONS') and sys.stdin.isatty()
+            and os.tcgetpgrp(sys.stdin.fileno()) == os.getpgrp(), 'host-operator')
+    end = min(deadline, time.monotonic() + 90)
+    def remaining():
+        seconds = min(end - time.monotonic(), wall_deadline - time.time())
+        require(seconds > 0, 'host-deadline')
+        return seconds
+    remaining()
+    # No -S, askpass, shell, inherited environment, terminal transcript or password pipe.
+    with subprocess.Popen(argv, cwd='/', env={'PATH': '/usr/bin:/bin', 'LC_ALL': 'C'},
+                          stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                          stderr=subprocess.DEVNULL) as child:
+        output = bytearray()
+        try:
+            with selectors.DefaultSelector() as selector:
+                selector.register(child.stdout, selectors.EVENT_READ)
+                while True:
+                    require(selector.select(remaining()), 'host-deadline')
+                    chunk = os.read(child.stdout.fileno(), 8192)
+                    if not chunk:
+                        break
+                    output.extend(chunk)
+                    require(len(output) <= 65536, 'host-output-cap')
+            require(child.wait(timeout=remaining()) == 0, 'host-command')
+        except subprocess.TimeoutExpired:
+            raise Refused('host-deadline') from None
+        finally:
+            if child.poll() is None:
+                child.terminate()
+                try:
+                    child.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    child.kill()
+    return bytes(output).decode('utf-8', 'strict')
+
+
 def engine_join(pid, process_root, process_namespace, self_namespace, socket_path, listeners, info):
     require(type(pid) is str and pid.isdigit() and int(pid) > 1
         and process_root == '/' and process_namespace == self_namespace
         and socket_path == '/run/docker.sock', 'host-endpoint')
     rows = [line for line in listeners if re.search(r'\s(?:/var)?/run/docker\.sock\s', line)]
-    require(len(rows) == 1 and ('pid='+pid+',') in rows[0] and 'dockerd' in rows[0], 'host-endpoint')
+    require(len(rows) == 1 and re.search(
+        r'\("dockerd",pid=' + re.escape(pid) + r',fd=[0-9]+\)', rows[0]), 'host-endpoint')
     require(info.get('OSType') == 'linux' and info.get('Architecture') in ('x86_64', 'amd64')
         and 'desktop' not in json.dumps(info).lower(), 'host-endpoint')
 
@@ -300,6 +388,7 @@ class Host:
     def observe(self):
         require(os.name == 'posix' and platform.system() == 'Linux' and platform.machine() == 'x86_64'
             and 'microsoft-standard-wsl2' in read('/proc/sys/kernel/osrelease').decode().lower(), 'host-platform')
+        require(os.getuid() != 0 and os.geteuid() != 0, 'host-operator')
         root = private_directory(self.p['private_root'])
         config = private_directory(self.p['client_config'])
         require(root != config and not list(config.iterdir()), 'host-endpoint')
@@ -307,17 +396,19 @@ class Host:
         acl = self.commands.out(['getfacl', '-cp', '--', str(root)]).decode().splitlines()
         require(set(line for line in acl if line) == {'user::rwx', 'group::---', 'other::---'}, 'host-permissions')
         require(os.statvfs(root).f_bavail * os.statvfs(root).f_frsize >= 21474836480, 'host-space')
-        pid = self.commands.out(['systemctl', 'show', 'docker', '--property=MainPID', '--value']).decode().strip()
-        require(pid.isdigit() and int(pid) > 1, 'host-endpoint')
-        process = Path('/proc')/pid
-        executable = (process/'exe').resolve(strict=True)
-        require(executable.name == 'dockerd' and sha(read(executable, 268435456)) == self.p['dockerd_sha256'], 'host-endpoint')
+        pid_query = ['systemctl', 'show', 'docker', '--property=MainPID', '--value']
+        pid = engine_pid(self.commands.out(pid_query).decode().strip())
+        process = Path('/proc') / pid
+        instance = process.stat()
+        digest, process_root, namespace, listeners = attended_engine_facts(self.commands, pid)
+        require(digest == self.p['dockerd_sha256'], 'host-endpoint')
         socket = Path('/var/run/docker.sock')
         require(socket.resolve(strict=True) == Path('/run/docker.sock')
             and stat.S_ISSOCK(socket.stat().st_mode), 'host-endpoint')
-        listeners = self.commands.out(['ss', '-xlpn']).decode().splitlines()
         info = strict(self.docker('info', '--format', '{{json .}}'))
-        engine_join(pid, os.readlink(process/'root'), os.readlink(process/'ns/mnt'),
+        require(self.commands.out(pid_query).decode().strip() == pid
+                and os.path.samestat(instance, process.stat()), 'host-endpoint')
+        engine_join(pid, process_root, namespace,
                     os.readlink('/proc/self/ns/mnt'), str(socket.resolve()), listeners, info)
         self.filesystem(info['DockerRootDir'])
         require(not self.docker('ps', '-aq').strip(), 'host-workloads')

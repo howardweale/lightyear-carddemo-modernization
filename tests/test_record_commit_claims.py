@@ -237,6 +237,50 @@ class RecordCommitTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'claim-required'):check(self.root,self.base)
 
 
+    def test_bound_record_path_is_not_a_commit_but_same_line_head_is(self):
+        identifier='abcdef1234567890abcdef1234567890'
+        name='docs/calibration/attempts/journey-'+identifier+'/plan.json'
+        target=self.root/name;target.parent.mkdir(parents=True);target.write_bytes(b'{}\n')
+        self.commit('bound path fixture')
+        digest=sha256(target.read_bytes()).hexdigest()
+        for path_key, hash_key in (('record','record_sha256'),('path','sha256')):
+            row={path_key:name,hash_key:digest}
+            line=json.dumps(row)
+            self.assertEqual(set(),references([line],root=self.root))
+            self.assertEqual({identifier},references([line]))
+            row['head']=identifier
+            self.assertEqual({identifier},references([json.dumps(row)],root=self.root))
+            row['head']=self.base
+            self.assertEqual({self.base},references([json.dumps(row)],root=self.root))
+        record='docs/factory/bound-path.json'
+        (self.root/record).parent.mkdir(parents=True,exist_ok=True)
+        (self.root/record).write_text(json.dumps({'record':name,'record_sha256':digest}))
+        self.commit('authored inventory row')
+        self.assertEqual([],check(self.root,self.base))
+        (self.root/record).write_text(json.dumps({'record':name,'record_sha256':digest,'head':self.base}))
+        self.commit('commit next to valid path')
+        with self.assertRaisesRegex(ValueError,'claim-required'):
+            check(self.root,self.base)
+
+    def test_unverified_path_bindings_never_hide_identifiers(self):
+        identifier='abcdef1234567890abcdef1234567890'
+        name='docs/calibration/journey-'+identifier+'/plan.json'
+        target=self.root/name;target.parent.mkdir(parents=True);target.write_bytes(b'{}\n')
+        digest=sha256(target.read_bytes()).hexdigest()
+        row={'record':name,'record_sha256':digest}
+        self.assertEqual({identifier},references([json.dumps(row)],root=self.root))
+        self.commit('committed fixture')
+        for bad in ('0'*64,'bad',None):
+            self.assertEqual({identifier},references([json.dumps(dict(row,record_sha256=bad))],root=self.root))
+        duplicate=json.dumps(row)[:-1]+', "record": '+json.dumps(name)+'}'
+        self.assertEqual({identifier},references([duplicate],root=self.root))
+        for bad_path in ('../'+name,'/'+name,'./'+name,name.replace('/','//')):
+            self.assertEqual({identifier},references([json.dumps(dict(row,record=bad_path))],root=self.root))
+        self.git('update-index','--chmod=+x',name);self.git('commit','-qm','executable path')
+        self.assertEqual({identifier},references([json.dumps(row)],root=self.root))
+
+
+
 class GeneratedStatusClaimTests(unittest.TestCase):
     """Real Git output guard fixtures; renderer boundary mocked explicitly."""
     setUp = RecordCommitTests.setUp

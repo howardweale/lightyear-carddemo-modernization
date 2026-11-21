@@ -1,0 +1,325 @@
+def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
+    self._validate_attempt_budget(order)
+    try:
+        return self._run(order, run_id)
+    except Exception:
+        # Cover allocation/constructor failures and errors writing a blocked receipt.
+        # No new persistence is attempted when the failure recorder itself failed.
+        if self.workspace_read_manifest is not None:
+            raise ContractError('factory-isolation-run-refused') from None
+        raise
+
+def _run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
+    run_id = _run_id(run_id)
+    run_dir = self.runs_root / run_id
+    if run_dir.exists():
+        raise ContractError(f"Factory run already exists: {run_id}")
+    run_dir.mkdir(parents=True)
+    artifacts = ArtifactStore(run_dir / "artifacts", run_id)
+    ledger = RunLedger(run_dir / "events.jsonl")
+    workspace = IsolatedWorkspace(
+        self.source_root, run_dir / "workspace", order.allowed_paths,
+        read_manifest=self.workspace_read_manifest
+    )
+    state = "ACCEPTED"
+    references: list[dict[str, Any]] = []
+    attempts = 0
+    history = recorder = None
+    candidate_end = None
+    latest_verification: dict[str, Any] = {"status": "not_run", "gates": []}
+    initial_snapshot: dict[str, str] = {}
+    final_snapshot: dict[str, str] = {}
+    context: dict[str, Any] = {}
+    started_at = datetime.now(timezone.utc).isoformat()
+    started_monotonic = time.monotonic()
+
+    try:
+        if isinstance(self.agents, ModelAgentSet) and self.candidate_signing_paths is None:
+            from .providers import ScriptedModelProvider
+            from .routing import TaskRouter
+            if type(self.agents.provider) is not ScriptedModelProvider:
+                self._verify_runtime_admission(order)
+            if self.agents.bounded_provider is not None:
+                raise ContractError('factory-model-agent-reuse')
+            runtime_admission=lambda:self._verify_runtime_admission(order)
+            if type(self.agents.provider) is TaskRouter:
+                self.agents.bounded_provider=self.agents.provider.bind_order(order,
+                    model_admission=self.model_admission,runtime_admission=runtime_admission)
+            else:
+                self.agents.bounded_provider=AccountedModelProvider(self.agents.provider,order,
+                    model_admission=self.model_admission,runtime_admission=runtime_admission)
+            self.agents.order_sha256=order.content_sha256
+        if self.execution_context:
+            security_binding = self.execution_context.bind(order.content_sha256, started_at)
+            ledger.append(state, "hardened_admission_bound", security_binding)
+        workspace.create()
+        if self.prepare_workspace:
+            self.prepare_workspace(workspace, order)
+        if self.workspace_read_manifest is not None:
+            manifest=workspace.verify_read_boundary()
+            ledger.append(state,'workspace_read_manifest',dict(files=manifest,sha256=canonical_hash(manifest)))
+            if isinstance(self.agents, ModelAgentSet):
+                self._bind_isolation_scan(workspace, ledger, order)
+            self._scan_workspace(workspace, 'initial-workspace')
+        self._scan_controller_value('approved-work-order', order.to_dict())
+        write_json(order.to_dict(), run_dir / "work-order.json")
+        ledger.append(
+            state,
+            "work_order_accepted",
+            {
+                "work_order_id": order.order_id,
+                "work_order_sha256": order.content_sha256,
+                "agent_set": self.agents.name,
+            },
+        )
+        if self.candidate_signing_paths is not None:
+            history, recorder = self._bind_candidate_run(order, workspace, run_dir, artifacts, ledger)
+        initial_snapshot = workspace.snapshot()
+        ledger.append(
+            state,
+            "workspace_isolated",
+            {
+                "allowed_paths": list(order.allowed_paths),
+                "initial_snapshot_sha256": canonical_hash(initial_snapshot),
+                "mode": "copy-on-run-plus-oci-gates" if self.execution_context else "copy-on-run",
+            },
+        )
+
+        from .graph_tools import graph_policy, FactoryGraphSession
+        policy = graph_policy(order)
+        if policy["mode"] in ("on-demand", "plain-search") and (
+                type(self.agents) is not ModelAgentSet or self.workspace_read_manifest is None):
+            raise ContractError("factory-graph-controller-boundary-required")
+        if policy["mode"] == "plain-search":
+            from .plain_search import plain_context, FactoryPlainSession
+            if self.memory_store is not None:
+                raise ContractError("factory-plain-memory-forbidden")
+            context = plain_context(order)
+            self._scan_controller_value("controller-context", context)
+        else:
+            context = self._context(order, workspace.root)
+        if policy["mode"] in ("on-demand", "plain-search"):
+            if self.agents.graph_session is not None:
+                raise ContractError("factory-graph-agent-reuse")
+            if policy["mode"] == "plain-search":
+                self.agents.graph_session = FactoryPlainSession(order, run_id, ledger, context,
+                    self.workspace_read_manifest, self._isolation_scanner(), workspace.root)
+            else:
+                self.agents.graph_session = FactoryGraphSession(order, run_id, ledger, context,
+                    self.approved_projection, self.workspace_read_manifest,
+                    self._isolation_scanner(), workspace.root)
+        else:
+            ledger.append("PLANNED", "graph_policy_bound",
+                dict(policy, run_id=run_id, work_order_sha256=order.content_sha256))
+        context_ref = artifacts.write(
+            "implementer-context", "controller", "implementer", context
+        )
+        references.append(context_ref)
+        state = "PLANNED"
+        self._authorize("planner", "factory:plan")
+        plan = self.agents.plan(order, context)
+        self._record_agent_evidence(
+            artifacts, ledger, references, "planner", "implementer"
+        )
+        self._validate_plan(order, plan, context)
+        plan["graph"] = dict(policy)
+        # Query expansion is controller-validated and retained for Builder citations.
+        if policy["mode"] in ("on-demand", "plain-search"):
+            references.append(artifacts.write(
+                "queried-implementer-context", "controller", "implementer", context))
+        plan_ref = artifacts.write("plan", "planner", "implementer", plan)
+        references.append(plan_ref)
+        ledger.append(state, "plan_created", plan_ref)
+
+        public_failure: dict[str, Any] = {"status": "not_run", "gates": []}
+        if order.baseline_first:
+            state = "VERIFYING"
+            self._authorize("verifier", "factory:verify")
+            latest_verification = self._run_gates(workspace, order)
+            verification_ref = artifacts.write(
+                "verification-report",
+                "controller",
+                "verifier_private",
+                latest_verification,
+            )
+            references.append(verification_ref)
+            ledger.append(
+                state,
+                "baseline_verified",
+                {
+                    **verification_ref,
+                    "status": latest_verification["status"],
+                },
+            )
+            if latest_verification["status"] == "passed":
+                if history is not None:
+                    raise ContractError("signed-candidate-build-required")
+                state = "PASSED"
+                ledger.append(state, "acceptance_gates_passed", {"attempt": 0})
+                return self._finish(
+                    run_dir, run_id, order, state, attempts, started_at,
+                    ledger, references, initial_snapshot, workspace.snapshot(), latest_verification,
+                    "The approved state already satisfied every deterministic gate.", context,
+                )
+            public_failure = builder_failure_view(latest_verification,self.feedback_vocabulary)
+            if self.feedback_vocabulary is not None:ledger.append(state,'verifier_gateway_feedback',public_failure)
+            self._authorize("failure_analyst", "factory:analyze-failure")
+            diagnosis = self.agents.analyze_failure(order, public_failure, 0)
+            self._record_agent_evidence(
+                artifacts, ledger, references, "failure_analyst", "verifier_private"
+            )
+            diagnosis_ref = artifacts.write(
+                "failure-diagnosis", "failure_analyst", "verifier_private", diagnosis
+            )
+            references.append(diagnosis_ref)
+            ledger.append(state, "failure_diagnosed", diagnosis_ref)
+            public_failure = self._failure_envelope(public_failure, diagnosis, include_diagnosis=self.feedback_vocabulary is None)
+
+        while attempts < order.max_attempts:
+            if time.monotonic() - started_monotonic > order.max_elapsed_seconds:
+                raise ContractError("Factory exceeded max_elapsed_seconds")
+            attempts += 1
+            state = "BUILDING"
+            self._authorize("builder", "factory:build")
+            if history is not None:
+                parent = history.verify_before_build()
+                if recorder.pending is not None or recorder.failed:
+                    raise ContractError('transport-recorder-unavailable')
+                recorder.attempt = attempts
+                response_start = len(ledger.events)
+            self._scan_workspace(workspace, 'builder-workspace')
+            proposal = self.agents.build(
+                order, plan, public_failure, workspace.root, attempts
+            )
+            self._record_agent_evidence(
+                artifacts, ledger, references, "builder", "implementer"
+            )
+            proposal_ref = artifacts.write(
+                "build-proposal", "builder", "implementer", proposal
+            )
+            references.append(proposal_ref)
+            ledger.append(state, "build_proposed", proposal_ref)
+            edits = proposal.get("edits", [])
+            if not edits:
+                state = "BLOCKED"
+                ledger.append(
+                    state,
+                    "builder_blocked",
+                    {"attempt": attempts, "reason": proposal.get("blocked_reason")},
+                )
+                break
+            if history is not None:
+                response_ids = self._candidate_response_ids(ledger, response_start, run_id, attempts)
+                if history.verify_before_build() != parent:
+                    raise ContractError('candidate-history-parent-changed')
+            self._scan_controller_value('patch-tool-input', edits)
+            change_set = self._apply_edits(order, workspace, edits)
+            self._scan_controller_value('patch-tool-result', change_set)
+            self._scan_workspace(workspace, 'patched-workspace')
+            if history is not None:
+                candidate_end = history.commit_applied_changes(attempts, parent=parent,
+                                                              change_set=change_set, response_events=response_ids)
+            change_ref = artifacts.write(
+                "change-set", "controller", "implementer", change_set
+            )
+            references.append(change_ref)
+            ledger.append(state, "changes_applied", change_ref)
+
+            state = "VERIFYING"
+            self._authorize("verifier", "factory:verify")
+            latest_verification = self._run_gates(workspace, order)
+            verification_ref = artifacts.write(
+                "verification-report",
+                "controller",
+                "verifier_private",
+                latest_verification,
+            )
+            references.append(verification_ref)
+            ledger.append(
+                state,
+                "attempt_verified",
+                {
+                    **verification_ref,
+                    "attempt": attempts,
+                    "status": latest_verification["status"],
+                },
+            )
+            if latest_verification["status"] == "passed":
+                state = "PASSED"
+                ledger.append(state, "acceptance_gates_passed", {"attempt": attempts})
+                break
+            self._authorize("failure_analyst", "factory:analyze-failure")
+            public_failure = builder_failure_view(latest_verification,self.feedback_vocabulary)
+            if self.feedback_vocabulary is not None:ledger.append(state,'verifier_gateway_feedback',public_failure)
+            diagnosis = self.agents.analyze_failure(order, public_failure, attempts)
+            self._record_agent_evidence(
+                artifacts, ledger, references, "failure_analyst", "verifier_private"
+            )
+            diagnosis_ref = artifacts.write(
+                "failure-diagnosis", "failure_analyst", "verifier_private", diagnosis
+            )
+            references.append(diagnosis_ref)
+            ledger.append(state, "failure_diagnosed", diagnosis_ref)
+            public_failure = self._failure_envelope(public_failure, diagnosis, include_diagnosis=self.feedback_vocabulary is None)
+        else:
+            state = "BLOCKED"
+            ledger.append(
+                state,
+                "attempt_budget_exhausted",
+                {"max_attempts": order.max_attempts},
+            )
+
+        self._scan_workspace(workspace, 'final-candidate-package')
+        candidate_authorship = None
+        package_check = None
+        if history is not None and candidate_end is not None:
+            candidate_authorship = history.audit(candidate_end, artifacts)
+            if not candidate_authorship['qualifies_for_factory_receipt']:
+                state = 'BLOCKED'
+            references.append(artifacts.write('candidate-authorship', 'controller',
+                                               'verifier_private', candidate_authorship))
+            if candidate_authorship['qualifies_for_factory_receipt']:
+                package = history.export_verified_package(candidate_end,
+                    run_dir/'candidate-package', candidate_authorship, self._isolation_scanner())
+                self._scan_controller_value('candidate-package-manifest', package)
+                references.append(artifacts.write('candidate-package-manifest', 'controller',
+                                                   'verifier_private', package))
+                package_check = lambda: history.revalidate_exported_package(
+                    candidate_end, run_dir/'candidate-package', package,
+                    self._isolation_scanner(), artifacts)
+        if state not in TERMINAL_STATES:
+            state = "BLOCKED"
+        final_snapshot = workspace.snapshot()
+        limitation = (
+            str(
+                order.metadata.get(
+                    "success_limitation",
+                    "All deterministic gates passed. Runtime mainframe parity remains unproven.",
+                )
+            )[:1_000]
+            if state == "PASSED"
+            else "The factory stopped without satisfying all deterministic gates."
+        )
+        return self._finish(
+            run_dir, run_id, order, state, attempts, started_at,
+            ledger, references, initial_snapshot, final_snapshot, latest_verification, limitation,
+            context, candidate_authorship=candidate_authorship, candidate_package_check=package_check,
+        )
+    except Exception as exc:
+        state = "BLOCKED"
+        if self.workspace_read_manifest is not None:
+            self._record_isolation_failure(run_dir, order, attempts, ledger)
+            raise ContractError('factory-isolation-run-refused') from None
+        self._record_agent_evidence(artifacts, ledger, references, "controller", "verifier_private")
+        ledger.append(
+            state,
+            "controller_error",
+            {"error_type": type(exc).__name__, "message": str(exc)[:1000]},
+        )
+        final_snapshot = workspace.snapshot() if workspace.root.is_dir() else {}
+        self._finish(
+            run_dir, run_id, order, state, attempts, started_at,
+            ledger, references, initial_snapshot, final_snapshot, latest_verification,
+            f"Controller stopped safely: {type(exc).__name__}", context,
+        )
+        raise

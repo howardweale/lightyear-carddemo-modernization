@@ -105,16 +105,50 @@ jobs:
       - name: Qualify Maven HTTP retries on the installed transport
         id: retry_policy
         run: python3 tools/ci/qualify_maven_http_retries.py
+      - name: Key CloudBank dependencies by exact POM bytes
+        id: cloudbank_key
+        env:
+          CLOUDBANK_RUNNER_LABEL: ${{ matrix.os }}
+        run: >-
+          python -B tools/ci/cloudbank_maven_cache.py key
+          tests/fixtures/transfer-framing
+      - &cloudbank_restore
+        name: Restore exact CloudBank Maven dependency seed
+        id: cloudbank_restore
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        continue-on-error: true
+        with:
+          key: ${{ steps.cloudbank_key.outputs.key }}
+          path: ${{ runner.temp }}/cloudbank-m2/seed
+      - &cloudbank_prepare
+        name: Open isolated Maven repository
+        env:
+          EXACT_HIT: ${{ steps.cloudbank_restore.outcome == 'success' && steps.cloudbank_restore.outputs.cache-hit == 'true' }}
+        run: python -B tools/ci/cloudbank_maven_cache.py prepare --cache-hit "$EXACT_HIT"
       - name: Verify native business traffic and fail-closed evidence
         shell: bash
         env:
-          MAVEN_ARGS: -C ${{ steps.retry_policy.outputs.maven_args }}
+          MAVEN_ARGS: -C -Dmaven.repo.local=${{ runner.temp }}/cloudbank-m2/work ${{ steps.retry_policy.outputs.maven_args }}
           PYTHONPATH: src
         run: |
           bash -n factory/cloudbank/platform-qualification/gke/run-sustained-load.sh
           python -m unittest discover -s tests -p test_cloudbank_sustained_load.py -v
           python tools/test_cloudbank_sustained_load.py
           python tools/test_cloudbank_transfer_framing.py
+      - &cloudbank_stage
+        name: Stage verified Central dependencies
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'howardweale/lightyear-carddemo-modernization' && steps.cloudbank_restore.outputs.cache-hit != 'true'
+        id: cloudbank_stage
+        continue-on-error: true
+        run: python -B tools/ci/cloudbank_maven_cache.py stage
+      - &cloudbank_save
+        name: Save trusted main Maven dependency seed
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'howardweale/lightyear-carddemo-modernization' && steps.cloudbank_restore.outputs.cache-hit != 'true' && steps.cloudbank_stage.outcome == 'success' && steps.cloudbank_stage.outputs.count != '0'
+        continue-on-error: true
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          key: ${{ steps.cloudbank_key.outputs.key }}
+          path: ${{ runner.temp }}/cloudbank-m2/seed
 
   windows-gcloud-recovery:
     needs: changed-paths
@@ -257,14 +291,39 @@ jobs:
       - name: Qualify Maven HTTP retries on the installed transport
         id: retry_policy
         run: python3 tools/ci/qualify_maven_http_retries.py
+      - name: Materialize wave POMs before computing the cache key
+        run: |
+          ./cloudbank-native-wave.sh materialize ../cloudbank-upstream work/cloudbank-native-wave-ci
+          ./cloudbank-oracle-equivalence.sh materialize ../cloudbank-upstream work/cloudbank-ms61-ci
+          ./cloudbank-production-oauth.sh materialize ../cloudbank-upstream work/cloudbank-ms62-ci
+          ./cloudbank-checks-messaging.sh materialize ../cloudbank-upstream work/cloudbank-ms63-ci
+          ./cloudbank-edge-ai.sh materialize ../cloudbank-upstream work/cloudbank-ms64-ci
+          ./cloudbank-production-readiness.sh materialize ../cloudbank-upstream work/cloudbank-ms65-ci
+      - name: Key CloudBank dependencies by exact POM bytes
+        id: cloudbank_key
+        env:
+          CLOUDBANK_RUNNER_LABEL: ubuntu-24.04
+        run: >-
+          python -B tools/ci/cloudbank_maven_cache.py key
+          tests/fixtures/request-logging
+          ../cloudbank-upstream/cloudbank-v5
+          work/cloudbank-native-wave-ci
+          work/cloudbank-ms61-ci/oracle
+          work/cloudbank-ms61-ci/postgresql
+          work/cloudbank-ms62-ci
+          work/cloudbank-ms63-ci
+          work/cloudbank-ms64-ci
+          work/cloudbank-ms65-ci
+      - *cloudbank_restore
+      - *cloudbank_prepare
       - name: Verify request log privacy and real OpenTelemetry span correlation
         env:
-          MAVEN_ARGS: -C ${{ steps.retry_policy.outputs.maven_args }}
+          MAVEN_ARGS: -C -Dmaven.repo.local=${{ runner.temp }}/cloudbank-m2/work ${{ steps.retry_policy.outputs.maven_args }}
         run: python tools/test_cloudbank_request_logging.py
 
       - name: Verify and compile the pinned upstream service set
         env:
-          MAVEN_ARGS: -C ${{ steps.retry_policy.outputs.maven_args }}
+          MAVEN_ARGS: -C -Dmaven.repo.local=${{ runner.temp }}/cloudbank-m2/work ${{ steps.retry_policy.outputs.maven_args }}
         run: |
           export LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY="$(openssl rand -hex 32)"
           ./cloudbank-executable-baseline.sh verify-source ../cloudbank-upstream
@@ -282,7 +341,6 @@ jobs:
           ./cloudbank-transaction-core.sh verify-source ../cloudbank-upstream
           ./cloudbank-native-wave.sh verify
           ./cloudbank-native-wave.sh verify-source ../cloudbank-upstream
-          ./cloudbank-native-wave.sh materialize ../cloudbank-upstream work/cloudbank-native-wave-ci
           (
             cd work/cloudbank-native-wave-ci
             mvn -pl account,transfer -am -DskipTests package
@@ -330,7 +388,6 @@ jobs:
           )
           ./cloudbank-oracle-equivalence.sh verify
           ./cloudbank-oracle-equivalence.sh verify-source ../cloudbank-upstream
-          ./cloudbank-oracle-equivalence.sh materialize ../cloudbank-upstream work/cloudbank-ms61-ci
           (
             cd work/cloudbank-ms61-ci/oracle
             mvn -pl account,transfer -am \
@@ -345,7 +402,6 @@ jobs:
           )
           ./cloudbank-production-oauth.sh verify
           ./cloudbank-production-oauth.sh verify-source ../cloudbank-upstream
-          ./cloudbank-production-oauth.sh materialize ../cloudbank-upstream work/cloudbank-ms62-ci
           (
             cd work/cloudbank-ms62-ci
             mvn -pl azn-server,account,transfer -am \
@@ -354,7 +410,6 @@ jobs:
           )
           ./cloudbank-checks-messaging.sh verify
           ./cloudbank-checks-messaging.sh verify-source ../cloudbank-upstream
-          ./cloudbank-checks-messaging.sh materialize ../cloudbank-upstream work/cloudbank-ms63-ci
           (
             cd work/cloudbank-ms63-ci
             mvn -pl azn-server,account,transfer,checks,testrunner -am \
@@ -362,7 +417,6 @@ jobs:
           )
           ./cloudbank-edge-ai.sh verify
           ./cloudbank-edge-ai.sh verify-source ../cloudbank-upstream
-          ./cloudbank-edge-ai.sh materialize ../cloudbank-upstream work/cloudbank-ms64-ci
           (
             cd work/cloudbank-ms64-ci
             workcell_tests="AccountKubernetesProbeSecurityTest,TransferKubernetesProbeSecurityTest,"
@@ -378,7 +432,6 @@ jobs:
           ./cloudbank-production-readiness.sh verify
           python tools/check_ms67_customer_startup.py --jar work/cloudbank-ms64-ci/customer/target/customer-0.0.1-SNAPSHOT.jar
           ./cloudbank-production-readiness.sh verify-source ../cloudbank-upstream
-          ./cloudbank-production-readiness.sh materialize ../cloudbank-upstream work/cloudbank-ms65-ci
           cp factory/cloudbank/production-readiness/tests/ChecksDeploymentContextTests.java \
             work/cloudbank-ms65-ci/checks/src/test/java/com/example/checks/
           (
@@ -405,6 +458,8 @@ jobs:
           name: cloudbank-source-build-${{ github.sha }}
           path: work/cloudbank-source-build.receipt.json
           if-no-files-found: error
+      - *cloudbank_stage
+      - *cloudbank_save
 
   pli-build-attestation:
     runs-on: ubuntu-24.04

@@ -1,6 +1,8 @@
 """Public synthetic fixtures only. The dedicated workflow runs on Linux amd64."""
 import json
+import os
 from pathlib import Path
+import stat
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -78,6 +80,27 @@ class MemoryRouteTests(unittest.TestCase):
             self.assertEqual(len(argfile.read_bytes().splitlines()),13)
             with self.assertRaises((FileExistsError, native.p5.Refused)):
                 self.capture(mounts, DATE, STAMP)
+
+    def test_private_clock_file_sets_read_only_mode_under_private_umask(self):
+        area = Path("/dev/shm")
+        if not area.is_dir():
+            with tempfile.TemporaryDirectory() as tmp:
+                self.assert_denied_clock_dir(Path(tmp))
+            return
+
+        previous_umask = os.umask(0o077)
+        self.addCleanup(os.umask, previous_umask)
+        with tempfile.TemporaryDirectory(dir=area) as tmp:
+            folder = Path(tmp)
+            route.private_clock_file(self.mounts(folder), route.template(DATE, STAMP))
+            leaf = folder / "case-clock.args"
+            expected = (
+                b"-Xmx256m\n-jar\n/candidate.jar\n--input-dir\n/input\n--output-dir\n/output\n"
+                b"--processing-date\n2026112000\n--timestamp\n2026-11-20-12.34.56.120000\n"
+                b"--codec\ncp037\n"
+            )
+            self.assertEqual(stat.S_IMODE(leaf.stat().st_mode), 0o444)
+            self.assertEqual(leaf.read_bytes(), expected)
 
     def assert_denied_clock_dir(self, folder):
         mounts = self.mounts(folder)

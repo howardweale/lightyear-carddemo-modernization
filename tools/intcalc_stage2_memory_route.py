@@ -1,4 +1,5 @@
 """H3-R. One native amd64 execution route for public qualification and later approved private use."""
+import os
 from pathlib import Path
 import re
 import stat
@@ -55,6 +56,12 @@ def private_clock_file(mounts,args):
     leaf=folder/"case-clock.args"
     raw=("\n".join(args)+"\n").encode("ascii")
     native.p5.exclusive(leaf,raw,0o444)
+    fd = os.open(leaf, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        check(stat.S_ISREG(os.fstat(fd).st_mode))
+        os.fchmod(fd, 0o444)
+    finally:
+        os.close(fd)
     check(stat.S_IMODE(leaf.stat().st_mode) == 0o444 and native.p5.read(leaf,1024) == raw)
     return dict(mounts,**{ARGFILE:(str(leaf),False,"bind")})
 

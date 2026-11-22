@@ -5,6 +5,7 @@ import copy
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -166,6 +167,8 @@ class CloseoutTests(unittest.TestCase):
                     review.read_local(root / "link.receipt.json")
 
     def test_default_cli_is_read_only_and_keeps_keys_and_original_evidence_out_of_report(self):
+        previous = os.umask(0o077)
+        self.addCleanup(os.umask, previous)
         receipt, context = fixtures()
         remote_uri = review.BUCKET + "/test/receipt.json"
         def fake_cloud(*args):

@@ -4,7 +4,7 @@ import copy
 from datetime import datetime, timezone
 from pathlib import Path
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from tools import intcalc_attended_reference_public as worker
 from tools import intcalc_private_reference_host as h
@@ -134,6 +134,71 @@ class HostContractTests(unittest.TestCase):
             with self.subTest(info=info), self.assertRaises(h.Refused):
                 h.engine_join('42', '/', 'a', 'a', '/run/docker.sock',
                              ['x /run/docker.sock users:(("dockerd",pid=42,fd=3))'], info)
+
+
+    def test_socket_activation_joins_dockerd_pid_in_same_tuple(self):
+        args = ('42', '/', 'mnt:[12]', 'mnt:[12]', '/run/docker.sock')
+        info = dict(OSType='linux', Architecture='amd64')
+        start = 'u_str LISTEN 0 4096 /run/docker.sock 123 * 0 users:'
+        h.engine_join(*args, [start + '(("systemd",pid=1,fd=7),("dockerd",pid=42,fd=3))'], info)
+        for owners in ('(("dockerd",pid=41,fd=3),("proxy",pid=42,fd=4))',
+                       '(("systemd",pid=1,fd=7))'):
+            with self.subTest(owners=owners), self.assertRaisesRegex(h.Refused, 'host-endpoint'):
+                h.engine_join(*args, [start + owners], info)
+
+    def test_non_numeric_pid_never_reaches_privileged_reader(self):
+        for pid in ('0', '1', '042', '../2', '42/exe', '-3', '４２', '2147483648'):
+            with self.subTest(pid=pid), patch.object(h, 'attended_read') as read:
+                with self.assertRaisesRegex(h.Refused, 'host-endpoint'):
+                    h.attended_engine_facts(None, pid)
+                read.assert_not_called()
+
+    def test_fixed_argv_and_engine_only_results(self):
+        commands = Mock()
+        pid = '42'
+        exe = '/proc/42/exe'
+        responses = ['/usr/bin/dockerd\n', H+'  '+exe+'\n', '/\n', 'mnt:[12]\n', 'listener\n']
+        with patch.object(h, 'system_tool', side_effect=lambda _, n: '/usr/bin/'+n), \
+             patch.object(h, 'attended_read', side_effect=responses) as reader:
+            self.assertEqual(h.attended_engine_facts(commands, pid), (H, '/', 'mnt:[12]', ['listener']))
+        prefix = ['/usr/bin/sudo', '-k', '-u', 'root', '--']
+        expected = [
+            ['/usr/bin/readlink', '--', exe], ['/usr/bin/sha256sum', '--', exe],
+            ['/usr/bin/readlink', '--', '/proc/42/root'],
+            ['/usr/bin/readlink', '--', '/proc/42/ns/mnt'],
+            ['/usr/bin/ss', '-Hxlpn', 'src', '=', '/run/docker.sock', 'or', 'src', '=', '/var/run/docker.sock'],
+        ]
+        self.assertEqual([c.args for c in reader.call_args_list],
+                         [(prefix+args, commands.deadline, commands.wall_deadline) for args in expected])
+
+    def test_engine_reader_failure_or_malformed_facts_refuse(self):
+        expected = ['/usr/bin/dockerd\n', H+'  /proc/42/exe\n', '/\n', 'mnt:[12]\n', 'listener\n']
+        for index, bad in ((0, '/tmp/proxy\n'), (1, H+'  /tmp/file\n'), (2, '/other\n'),
+                           (3, ''), (4, h.Refused('host-command'))):
+            values = expected.copy()
+            values[index] = bad
+            with self.subTest(index=index), patch.object(h, 'system_tool', return_value='fixed'), \
+                 patch.object(h, 'attended_read', side_effect=values), self.assertRaises(h.Refused):
+                h.attended_engine_facts(Mock(), '42')
+
+    def test_profile_rejects_missing_privileged_tool_pin(self):
+        row = profile()
+        del row['binaries']['sudo']
+        with self.assertRaisesRegex(h.Refused, 'host-profile'):
+            h.profile(row)
+        with self.assertRaisesRegex(h.Refused, 'host-cli'):
+            h.system_tool({'sudo': {'path': '/tmp/sudo', 'sha256': H}}, 'sudo')
+
+    def test_no_generic_sudo_command(self):
+        with self.assertRaisesRegex(h.Refused, 'host-command'):
+            h.Commands(profile()['binaries'], 0, 0).run(['sudo', '--version'])
+
+    def test_c06_false_refuses_both_custody_returns(self):
+        for post in (False, True):
+            row = custody()
+            row['checks']['no_codex_background_or_autostart'] = False
+            with self.subTest(post=post), self.assertRaisesRegex(h.Refused, 'host-custody'):
+                self.validate(row, post)
 
     def test_native_filesystem_excludes_windows_network_and_unknown(self):
         h.native_filesystem(dict(filesystems=[dict(fstype='ext4', source='/dev/sdb', target='/')]))

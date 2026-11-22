@@ -1,0 +1,54 @@
+H3-R | Native amd64 verifier clock transport | Review proposal
+
+Purpose and size
+B2 alone refuses stage2-private-clock-route-unqualified before any custody operation.
+This separate change proposes one native execution path and one public host qualification.
+Estimate 1.5–2 engineering days including one synthetic CI turn. Hardware time and
+Howard's independent review are additional. Every changed path is new.
+
+Runtime profile
+PROFILE.diff gives the old and proposed serialized fields. Its baseline is the actual
+#585 Java create call and ISOLATION tuple from c065ae6e. The packet also contains the
+complete source patch against the queue composition. The #585 module, B1 contract and
+B2 are reused byte for byte. Collector, Java binary and image identity checks,
+timeouts, kill and collection, mount inspection, no network and cleanup come from #585.
+The proposed candidate entry is /opt/java/openjdk/bin/java with one Docker Cmd element
+@/case-clock.args. Java itself reads 13 fixed-position ASCII tokens. Only the processing
+date and timestamp vary. The broker writes the argument file exclusively beside the
+four input files in #585's owner-only, verified /dev/shm tmpfs. Docker mounts the one
+file read-only. The candidate cannot traverse its host directory. No mode chooses a
+different command. Clock data never forms part of Docker's stored Cmd or environment.
+The custody host retains its approved swap, crash-dump and trusted-administrator limits.
+
+Evidence and acceptance
+1. In synthetic CI, capture actual native Docker create argv bytes for two different
+public input fixtures and clocks at identical resource names and paths. Compare every
+byte including mount order. Verify the argument files differ only on lines 9 and 11.
+Actual resource names and host allocation paths vary per run independently of input.
+2. The CI Java 21 parser probe verifies two public argv vectors. It uses a relative
+fixture jar. It cannot qualify Docker, the image or the operator's host.
+3. After this route merges, Howard alone qualifies the exact route on his admitted
+Intel account. Verify the reviewed remote main commit/tree and the clean local
+main checkout. Supply the reviewed native image binding, prior #585 public receipt,
+public fixture catalog, jar bytes, arm64 parity and adopted public answer key.
+Call public_qualification under public-only authorization. The same MemoryRuntime
+runs 16 matching cases, 16 imperfect-candidate parity cases, and the timeout,
+output-cap and boundary fixtures. Any missing case, wrong byte or failed boundary
+probe prevents a qualification receipt. Inspect the new clock mount as part of the
+same native pre-start inspection. Upgrading a public fixture requires separate review.
+4. Retain the exact canonical route_spec and public qualification receipt. Independently
+pin them as runtime_policy and route_qualification in B1's separate once-only
+authorization. Both bind the route bytes or their digest. The receipt binds merged
+source, host, platform/image, catalog, baseline and parity. A successful public
+check grants no private authority. Missing, stale or altered evidence refuses before
+B1 consumes its claim or opens the USB channel.
+5. On separately approved private use, B1 closes decryption and checks USB removal
+before evaluation. Compare rechecks the retained jar and uses the same constructor,
+run_case, Docker serializer and pre-start inspection. Only input file contents and
+selected public/retained jar bytes can reflect the workload. Commands carry allocation
+identities and a digest-pinned image. No fallback to #585 argv. Run once, in memory,
+compare every admitted case, emit only B1's aggregate PASS/FAIL on normal completion.
+Faults preserve the spent claim and produce no verdict. No identity paths in receipts.
+
+The synthetic CI workflow, exact-route public qualification and private operation are
+separate. This review packet contains authored checks, not a qualification receipt.

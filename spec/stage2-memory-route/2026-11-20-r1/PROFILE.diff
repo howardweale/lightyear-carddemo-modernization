@@ -1,0 +1,29 @@
+--- #585/native-runtime-profile
++++ H3-R/memory-runtime-profile
+@@ -1,7 +1,11 @@
+ {
+-  "additional_bind": null,
+-  "argfile_content": null,
+-  "command": [
++  "additional_bind": {
++    "destination": "/case-clock.args",
++    "readonly": true,
++    "source": "same verified tmpfs folder as input/*.bin",
++    "type": "bind"
++  },
++  "argfile_content": [
+     "-Xmx256m",
+     "-jar",
+     "/candidate.jar",
+@@ -16,7 +20,10 @@
+     "--codec",
+     "cp037"
+   ],
+-  "file_encoding": null,
++  "command": [
++    "@/case-clock.args"
++  ],
++  "file_encoding": "ASCII; one token per LF-terminated line; mode 0444",
+   "isolation": [
+     "--pull=never",
+     "--platform=linux/amd64",

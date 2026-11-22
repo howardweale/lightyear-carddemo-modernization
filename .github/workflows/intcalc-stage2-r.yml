@@ -1,0 +1,36 @@
+name: Hidden verifier R synthetic contract
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  synthetic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Check only public synthetic fixtures
+        shell: bash
+        run: |
+          python -B -c "import sys, unittest; sys.path[:0]=['src','.','tests']; suite=unittest.defaultTestLoader.loadTestsFromNames(['test_stage2_memory_route']); assert suite.countTestCases()==10; sys.exit(0 if unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful() else 1)"
+      - name: Check Java 21 argument-file parsing with public fixtures
+        shell: bash
+        run: PYTHONPATH=src:. python -B tests/probe_stage2_java_argfile.py

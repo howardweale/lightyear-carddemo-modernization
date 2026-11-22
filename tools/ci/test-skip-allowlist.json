@@ -35,6 +35,7 @@
   "tests/test_factory.py": "889fadc75740c84d5cdc294f4203b903387d4f3c8df1d14905d0c8c0aaafb955",
   "tests/test_factory_plain_search.py": "118925a0afd97dd8b38d15394e4039157662427fae343bf654e0d2db6f8c8ccb",
   "tests/test_graph_memory_components.py": "adc7c3eea989e2c22313f6f5fb5abf2544b5269809b56d7e0a830c3c4cc4e803",
+  "tests/test_h3_custody_channel.py": "66469cc1e299554af2837c06a706da958bf992d876f37b21aaa13caaf893ddec",
   "tests/test_intcalc_candidate_gate.py": "0301de8599eaa99f12ccff9ca719c59839199475c73a13c1d351fc3cc721db66",
   "tests/test_journey_builder_tools.py": "d32f082082a956d5dcb0ec6653951cbb884c87c2a226934e491f05ce60c36e0e",
   "tests/test_mainframe_public.py": "87ff3482abab87f3910384ef248d0f8705739230e1acf30bc64e182330695d36",
@@ -91,6 +92,8 @@
     {"selector": "test_factory.FactoryTests.test_python_runtime_admission_selects_supported_interpreter_and_rejects_old_one", "scope": "test", "reason": "Bash launcher is verified on POSIX hosts", "platforms": ["Windows"], "rationale": "POSIX-specific assertion; must execute on Linux."},
     {"selector": "test_factory_plain_search.PlainSearchTests.test_full_inventory_scan_and_link_refusal", "scope": "test", "reason": "Host cannot create symbolic links; Linux boundary CI covers this", "platforms": ["Windows"], "rationale": "Windows may lack symbolic-link privilege; Linux must execute the assertion."},
     {"selector": "test_graph_memory_components.ComponentTests.test_local_onnx_assets_before_load_and_masked_pooling", "scope": "test", "reason": "optional graph-embeddings NumPy dependency", "platforms": ["Linux", "Windows"], "rationale": "Optional agent/embedding SDK is outside the extras installed by full discovery; separate SDK jobs retain their checks."},
+    {"selector": "test_h3_custody_channel.DescriptorTests.test_age_exit_required_after_anonymous_pipe_eof", "scope": "test", "reason": "private-host descriptor protocol requires Linux", "platforms": ["Windows"], "rationale": "Linux full discovery executes this private-host descriptor test."},
+    {"selector": "test_h3_custody_channel.DescriptorTests.test_real_descriptor_handshake_uses_only_public_marker", "scope": "test", "reason": "private-host descriptor protocol requires Linux", "platforms": ["Windows"], "rationale": "Linux full discovery executes this private-host descriptor test."},
     {
       "selector": "test_intcalc_candidate_gate.CandidateGateTests",
       "scope": "class",

@@ -261,6 +261,8 @@ class HumanSigningTests(unittest.TestCase):
                 command.require_slot(changed, role)
 
     def test_non_mac_cli_refuses_before_packet_or_hardware_access(self):
+        previous = os.umask(0o077)
+        self.addCleanup(os.umask, previous)
         with patch.object(command.sys, "platform", "linux"), patch.object(command, "read_public") as read:
             result = command.main([
                 "sign", "--source-commit", "a" * 40, "--work-order-sha256", "b" * 64,

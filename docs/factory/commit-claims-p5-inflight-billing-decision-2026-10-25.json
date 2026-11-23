@@ -1,0 +1,13 @@
+{
+  "schema": "record-commit-claims/1",
+  "claims": [
+    {
+      "record": "docs/factory/p5-inflight-billing-chat-receipt-2026-10-25.json",
+      "reference": "a1b259f7518c45ac80bf8528e5c374e8f7357ab8",
+      "commit": "a1b259f7518c45ac80bf8528e5c374e8f7357ab8",
+      "role": "source",
+      "source_path": "src/lightyear_factory/orchestrator.py",
+      "source_sha256": "e727445fb0de0e845abf5b9a0c451ac1269aa9a0b706e9fc3b2dc8da071af8d8"
+    }
+  ]
+}

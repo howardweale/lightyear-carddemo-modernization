@@ -725,6 +725,29 @@ def run_model_triage(
     })
 
 
+def _current_stage3_artifacts(project_root: Path) -> dict[str, dict[str, Any]]:
+    """Read separately produced CI evidence; never regenerate during validation."""
+    from .ms70_current_evidence import verify_current
+    bundle, _ = verify_current(project_root, read=_read)
+    return bundle["artifacts"]
+
+
+def _retained_stage3_projection(
+    project_root: Path,
+    actual: Mapping[str, Mapping[str, Any]],
+    expected: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Mapping[str, Any]]:
+    """Compatibility accessor for verified new evidence, not a binding projection."""
+    from .ms70_current_evidence import verify_current
+    bundle, originals = verify_current(project_root, read=_read)
+    if canonical_bytes(bundle["artifacts"]) != canonical_bytes(expected):
+        raise ValueError("MS70 current-source artifact drift")
+    # Caller-supplied tampering remains visible to the unchanged drift comparison.
+    # No old artifact is resealed, rebound, mutated, or used as the new producer.
+    return {name: bundle["artifacts"][name] if dict(value) == originals[name] else value
+            for name, value in actual.items()}
+
+
 def validate_stage3_artifacts(
     project_root: Path,
     *,
@@ -737,7 +760,7 @@ def validate_stage3_artifacts(
         DIVERGENCE_PATH.name, INDETERMINATE_PATH.name, PROVENANCE_PATH.name, RECEIPT_PATH.name,
     )
     try:
-        actual = dict(artifacts or {name: _read(project_root / ROOT_PATH / name) for name in names})
+        actual = dict(artifacts or _current_stage3_artifacts(project_root))
         expected = build_stage3_artifacts(project_root)
         for name in names:
             if actual[name].get("content_sha256") != content_hash(dict(actual[name])):

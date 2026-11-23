@@ -1,0 +1,9 @@
+{
+  "case_id": "human-clean-control",
+  "execution_authorized": false,
+  "expected_changed_paths": [],
+  "immutable_workspace": {
+    "tests/fixtures/p5_public/human-clean-control/worker.py": "bba870e70e8ba924688e931a8a3467c0698d14e057e20c2ed1c15e97959e5d43"
+  },
+  "schema": "factory-public-drill-freeze/1"
+}

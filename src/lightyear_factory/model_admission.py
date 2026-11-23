@@ -10,6 +10,7 @@ import subprocess
 from lightyear_control_tower.factory_policy import FactoryDecisions
 from .contracts import ContractError, canonical_hash
 from .model_versions import require_snapshot
+from .process_environment import _without_provider_credentials
 
 
 def _bounded_regular_bytes(path, limit, error):
@@ -87,15 +88,15 @@ class FactoryModelAdmission:
             cursor = cursor.parent
         raw = _bounded_regular_bytes(path, 8*1024*1024, 'factory-model-evidence-size')
         command = ['git', '--no-optional-locks', '-C', str(self.root)]
-        oid = subprocess.check_output(command+['rev-parse', '--verify', 'HEAD:'+relative]).decode().strip()
+        oid = subprocess.check_output(command+['rev-parse', '--verify', 'HEAD:'+relative], env=_without_provider_credentials()).decode().strip()
         if not re.fullmatch(r'[0-9a-f]{40}|[0-9a-f]{64}', oid):
             raise ContractError('factory-model-evidence-object')
-        size = int(subprocess.check_output(command+['cat-file', '-s', oid]))
+        size = int(subprocess.check_output(command+['cat-file', '-s', oid], env=_without_provider_credentials()))
         if not 0 <= size <= 8*1024*1024:
             raise ContractError('factory-model-evidence-size')
         if size != len(raw):
             raise ContractError('factory-model-evidence-not-committed')
-        committed = subprocess.check_output(command+['cat-file', 'blob', oid])
+        committed = subprocess.check_output(command+['cat-file', 'blob', oid], env=_without_provider_credentials())
         if len(committed) != size or raw != committed:
             raise ContractError('factory-model-evidence-not-committed')
         try:
@@ -218,7 +219,7 @@ class FactoryModelAdmission:
 
     def _verify(self, order, provider, role, *, now=None):
         if subprocess.check_output(['git','--no-optional-locks','-C',str(self.root),
-                                     'status','--porcelain=v1','--untracked-files=all']):
+                                     'status','--porcelain=v1','--untracked-files=all'], env=_without_provider_credentials()):
             raise ContractError('factory-model-dirty-executable')
         plan, proof, contract = [self._committed_json(path) for path in self.paths]
         digest = canonical_hash(plan, {'content_sha256'})
@@ -229,15 +230,15 @@ class FactoryModelAdmission:
             raise ContractError('factory-model-plan-binding')
         details = contract['details']
         head = subprocess.check_output(['git','--no-optional-locks','-C',str(self.root),
-                                        'rev-parse','HEAD']).decode().strip()
+                                        'rev-parse','HEAD'], env=_without_provider_credentials()).decode().strip()
         executable=details.get('executable_commit')
         if (not isinstance(executable,str) or not re.fullmatch('[0-9a-f]{40}',executable)
                 or plan.get('executable_commit')!=executable):
             raise ContractError('factory-model-executable-binding')
         subprocess.check_output(['git','--no-optional-locks','-C',str(self.root),
-                                 'merge-base','--is-ancestor',executable,head])
+                                 'merge-base','--is-ancestor',executable,head], env=_without_provider_credentials())
         changed=subprocess.check_output(['git','--no-optional-locks','-C',str(self.root),
-                                         'diff','--name-only','-z',executable,head]).decode().split('\0')
+                                         'diff','--name-only','-z',executable,head], env=_without_provider_credentials()).decode().split('\0')
         if set(filter(None,changed))-set(self.paths):
             raise ContractError('factory-model-executable-changed')
         # Committing approval metadata may advance HEAD; executable bytes cannot.

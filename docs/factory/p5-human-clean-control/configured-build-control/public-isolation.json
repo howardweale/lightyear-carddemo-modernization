@@ -1,0 +1,11 @@
+{
+  "case_id": "configured-build-control",
+  "content_sha256": "170748cb20c164b07206dd7850dd6857661368a12bef17cebb73867ecdbeb31c",
+  "schema": "factory-public-drill-isolation/1",
+  "values": [
+    "PUBLIC synthetic isolation canary alpha for the configured build control only.",
+    "PUBLIC synthetic isolation canary beta for the configured build control only.",
+    "PUBLIC synthetic isolation canary gamma for the configured build control only."
+  ],
+  "work_order_sha256": "5eb4125bd1945fd051b0db440623468587c22cd07c28cbb975a1aa7f8630402e"
+}

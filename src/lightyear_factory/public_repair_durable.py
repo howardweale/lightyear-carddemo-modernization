@@ -167,6 +167,11 @@ class DurablePorts:
                 raise Refused('durable-io', 'directory', error.errno) from None
             raise
 
+    @property
+    def written_usage(self) -> tuple[int, int]:
+        """Return the number of files and bytes successfully written and read back."""
+        return self._files, self._bytes
+
     def _cleanup(self):
         close_quiet(self._run_fd)
         close_quiet(self._parent_fd)

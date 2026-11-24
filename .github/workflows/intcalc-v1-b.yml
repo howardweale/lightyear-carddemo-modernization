@@ -27,3 +27,8 @@ jobs:
         shell: bash
         run: |
           python -B -c "import sys, unittest; sys.path[:0]=['src','.','tests']; suite=unittest.defaultTestLoader.loadTestsFromName('test_v1_b'); assert suite.countTestCases()==12; sys.exit(0 if unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful() else 1)"
+      - name: Check the full durable ledger on Linux
+        if: runner.os == 'Linux'
+        env:
+          PYTHONPATH: src:.:tests
+        run: python -B -m unittest -v v1_b_linux_ledger.LedgerProbeTests.test_fills_both_caps_with_storage_probe

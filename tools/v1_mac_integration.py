@@ -22,7 +22,7 @@ SCENARIOS=("early-perfect","five-repairs","public-fail","uncertain-send","cleanu
 INJECTED={"uncertain-send","cleanup-refusal","closure-refusal"}
 KEY="fb51317ab1f5bba9677e543133364b34e893babcac279519b6f743d9568f3b37"
 COPY="tests/fixtures/intcalc-c1/Main.java"
-MODULES="1cad077628d999197d94a519264b1952efb376ecd4b5fa31489d9e47e074ec94"
+MODULES="68a395d84a8605110c178bcae9a3224bfc479aba9b576745e8d227ca5035afad"
 
 
 def expect(ok,why):

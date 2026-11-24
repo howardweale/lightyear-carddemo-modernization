@@ -176,8 +176,9 @@ def ledger_probe(run,operation,end):
         timed(ledger.retain_artifact,"builder-0","source","a"*65536)
         timed(ledger.retain_jar,b"j"*staged.JAR_BYTES)
         # Exercise both the file count and total byte caps at the same time.
-        remaining_count=durable.FILE_COUNT-3
-        remaining_bytes=durable.TOTAL_BYTES-(len(b'{"public":true}\n')+65536+staged.JAR_BYTES)
+        files_written, bytes_written = ledger.written_usage
+        remaining_count = durable.FILE_COUNT - files_written
+        remaining_bytes = durable.TOTAL_BYTES - bytes_written
         overhead=len(durable.canonical({"p":""}))+1
         for i in range(remaining_count):
             size=min(durable.RECORD_BYTES,remaining_bytes-overhead*(remaining_count-i-1))

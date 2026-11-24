@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import platform
 import plistlib
+import re
 import shutil
 import stat
 import subprocess
@@ -104,7 +105,12 @@ class Station:
         self.root,self.config=run,config
         self.docker=[config["docker_binary"],"--config",str(run/"client"),"--host",config["docker_endpoint"]]
         require(run.stat().st_dev==config["ledger_device"],"ledger-device")
-        disk=plistlib.loads(shell(["/usr/sbin/diskutil","info","-plist",str(run)]))
+        rows = shell(["/bin/df", "-P", str(run)]).splitlines()
+        fields = rows[1].split() if len(rows) == 2 else []
+        require(fields and re.fullmatch(rb"/dev/disk[0-9]+(?:s[0-9]+)*", fields[0]),
+                "ledger-disk-device")
+        device = fields[0].decode("ascii")
+        disk = plistlib.loads(shell(["/usr/sbin/diskutil", "info", "-plist", device]))
         require(str(disk.get("FilesystemType","")).lower()=="apfs","ledger-apfs")
         self.fs=disk["FilesystemType"]
         require(shell(self.docker+["info","--format","{{.OSType}}/{{.Architecture}}"]).strip()
@@ -311,6 +317,11 @@ def isolated_action(pipe,action,identifier,pin):
         pipe.send_bytes(json.dumps(value,sort_keys=True).encode())
     except durable.Refused as error:
         pipe.send_bytes(json.dumps({"refusal":error.public_record()}).encode())
+    except ValueError as error:
+        code = str(error)
+        if not re.fullmatch(r"v1-[a-z0-9-]+", code):
+            code = "v1-operation-refused"
+        pipe.send_bytes(json.dumps({"refusal": code}, separators=(",", ":")).encode())
     except (Exception,KeyboardInterrupt):
         pipe.send_bytes(b'{"refusal":"v1-operation-refused"}')
     finally:

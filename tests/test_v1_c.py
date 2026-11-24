@@ -94,3 +94,13 @@ class IntegrationTests(unittest.TestCase):
             if field=="source":
                 self.assertEqual("unlisted public input" in accepted["artifact"][field],i==11)
         pipe.close.assert_called_once()
+
+    def test_integration_child_reports_module_map_refusal(self):
+        pipe = Mock()
+        with patch.dict(v.os.environ), patch.object(v.b, "session", return_value=(None, None)), \
+                patch.object(v.b, "host_settings", return_value={}), \
+                patch.object(v.b.admission, "checkout", return_value={"modules": {}}):
+            v.b.isolated_action(pipe, v.run_c, "fixture", "pin")
+        pipe.send_bytes.assert_called_once()
+        self.assertEqual(json.loads(pipe.send_bytes.call_args.args[0]), {"refusal": "v1-module-map"})
+        pipe.close.assert_called_once()

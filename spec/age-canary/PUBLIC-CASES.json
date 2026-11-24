@@ -1,0 +1,40 @@
+[
+  {
+    "sequence": 0,
+    "inputs": {
+      "ACCTFILE": "00ff00",
+      "TCATBALF": "00ff01",
+      "DISCGRP": "00ff02",
+      "XREFFILE": "00ff03"
+    },
+    "processing_date": "0000000001",
+    "timestamp": "2001-02-03-04.05.06.000007",
+    "outputs": {
+      "ACCTFILE": "00fe",
+      "TRANSACT": "ff00",
+      "stdout": "7075626c69630a",
+      "stderr": ""
+    },
+    "exit": 0,
+    "compare_output_files": true
+  },
+  {
+    "sequence": 1,
+    "inputs": {
+      "ACCTFILE": "f000",
+      "TCATBALF": "f001",
+      "DISCGRP": "f002",
+      "XREFFILE": "f003"
+    },
+    "processing_date": "0000000001",
+    "timestamp": "2001-02-03-04.05.06.000007",
+    "outputs": {
+      "ACCTFILE": "",
+      "TRANSACT": "",
+      "stdout": "7075626c69630a",
+      "stderr": "210a"
+    },
+    "exit": 12,
+    "compare_output_files": false
+  }
+]

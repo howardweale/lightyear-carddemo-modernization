@@ -28,3 +28,40 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
           python -B -m unittest test_intcalc_private_answer_session
+  public-vault-roundtrip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: proposal
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: 00c8bb5b316bd1fd6a5fad0b1b96530395c6a3dc
+          path: frozen
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install pinned public age fixture
+        run: python -B proposal/tools/ci/install_synthetic_age.py
+      - name: Reproduce the frozen refusal and check the repaired transaction
+        shell: bash
+        run: |
+          set -euo pipefail
+          export H2_SYNTHETIC_PARENT
+          H2_SYNTHETIC_PARENT=$(sudo mktemp -d /var/lib/h2-public-ci.XXXXXXXX)
+          sudo chown "$(id -u):$(id -g)" "$H2_SYNTHETIC_PARENT"
+          suite="$GITHUB_WORKSPACE/proposal/tests/ci_h2_vault_roundtrip.py"
+          export PYTHONPATH="$GITHUB_WORKSPACE/frozen/src:$GITHUB_WORKSPACE/frozen"
+          log="$RUNNER_TEMP/h2-public-baseline.txt"
+          if python -B "$suite" >"$log" 2>&1; then
+            echo "Frozen baseline unexpectedly passed"
+            exit 1
+          fi
+          cat "$log"
+          grep -Fqx 'FAILED (errors=2)' "$log"
+          test "$(grep -Fxc 'tools.intcalc_heldout_encrypted_stream.Refused: stream-private-path' "$log")" = 2
+          export PYTHONPATH="$GITHUB_WORKSPACE/proposal/src:$GITHUB_WORKSPACE/proposal"
+          python -B "$suite" -v

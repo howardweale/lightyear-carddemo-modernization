@@ -106,6 +106,8 @@ class AdmissionTests(unittest.TestCase):
             return store
         class Receiver:
             def receive(self,projection,manifest,port,end):
+                assert port.root == Path("/private") / ("answers-" + row["h2_operation_id"])
+                assert port.vault == "encrypted"
                 claim=port.claim(projection,end)
                 event.append("private-read")
                 port.phase="consumed"
@@ -138,7 +140,7 @@ class AdmissionTests(unittest.TestCase):
 class CustodyTests(unittest.TestCase):
     def setUp(self):
         self.proj={"operation_id":"f"*64}
-        self.port=broker.CustodyBroker(Path("/private"),"answers-test",None,5,"8:17",
+        self.port=broker.CustodyBroker(Path("/private")/("answers-"+"c"*64),"encrypted",None,5,"8:17",
                     self.proj,"e"*64,lambda:"a"*64,Mock(),Mock(return_value=True))
 
     def test_claim_is_consumed_even_when_storage_fails(self):

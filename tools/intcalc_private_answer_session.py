@@ -212,7 +212,7 @@ def operation(host,p,pol,authority,approval_hash,deadline,wall,seed_prompt,postf
             reader.end(pol['count']);cleanup()
             hostlib.source_identity(host.commands,p);host.observe()
             return True
-        store=stream.PrivateStore(root,'encrypted-'+authority['operation_id'])
+        store=stream.PrivateStore(run,'encrypted')
         make=lambda fd,end:stream.AgeSink(pol['age']['path'],pol['age']['sha256'],pol['recipient'],pol['recipient_sha256'],fd,end)
         return stream.write_answers(rows(),pol['count'],binding,store,make,done,postflight,deadline)
     finally:

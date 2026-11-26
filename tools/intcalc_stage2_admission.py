@@ -189,7 +189,7 @@ def _run(raw, expected, evidence, host, age_binary, announce, confirm, evaluator
         digest=store.record("claim",info)
         check(digest==ctl.sha(ctl.canonical(info)+b"\n"))
         return digest
-    broker=custody.CustodyBroker(root,"answers-"+row["h2_operation_id"],age_binary,
+    broker=custody.CustodyBroker(root/("answers-"+row["h2_operation_id"]),"encrypted",age_binary,
                                   row["usb_mount_id"],row["usb_device"],projection,row["pins"]["host_qualification"],claim,announce,confirm)
     try:
         handoff=rx.Receiver().receive(projection,rx.strict(evidence["source_manifest"],4194304),broker,end)

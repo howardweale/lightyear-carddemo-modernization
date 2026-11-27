@@ -1,0 +1,89 @@
+{
+  "schema": "d1-exact-source-registration/1",
+  "repository": "howardweale/lightyear-carddemo-modernization",
+  "status": "approved-exact-hashes",
+  "source_anchor": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+  "pr": 522,
+  "candidate_commit": "ad9acb7ae93ec18eeaa0eaed62f8da1fd2365e3c",
+  "entries": [
+    {
+      "path": ".github/workflows/b06-host-review.yml",
+      "mode": "100644",
+      "before_sha256": "b7806c53e21ed0878ab762d69a27ab7dbba6151a10f915d28bd18747c54834a0",
+      "after_sha256": "04b9bb07c00875ecc76e272b8bfea698b72e3001a661f4e1c80d5a5fa50a471b"
+    },
+    {
+      "path": ".github/workflows/b06-provenance-offline.yml",
+      "mode": "100644",
+      "before_sha256": "79b0e23145704e5b6775bbfde0ba61c03642437c83659c0344e16f77758619f2",
+      "after_sha256": "09b4b9843fa0d4e81dbff4917ee0956dba2d456dc9f6351e8dcb0ff9cc74ed15"
+    },
+    {
+      "path": ".github/workflows/judge-qualification.yml",
+      "mode": "100644",
+      "before_sha256": "5d838bf0c243a1042384f4fb07f5b75018a4828670b9d7f77a3b4e3d367b8365",
+      "after_sha256": "c1bba95ab9d6c60cec7728571e1e5ca0cf9b434844554f20eb8581d59b44aca9"
+    },
+    {
+      "path": ".github/workflows/milestone-documentation-pages.yml",
+      "mode": "100644",
+      "before_sha256": "ae0fb967ee69c67954659725c8f5c403faf1a2433311c546d18a127a6263642b",
+      "after_sha256": "df1e760b5d2fb0187899fa8a1a2750b072083d29a5b5723cd944a383b209ce54"
+    },
+    {
+      "path": ".github/workflows/ms71-alloydb.yml",
+      "mode": "100644",
+      "before_sha256": "f87951f2984e0078817b96aea2947e31a5554fe3f4029d280999021af01a5f6b",
+      "after_sha256": "8eecc6a5f5546ec51a76b45531da418cbcf6e26298cfd19f8d6d9b87a90ab756"
+    },
+    {
+      "path": ".github/workflows/service-packs.yml",
+      "mode": "100644",
+      "before_sha256": "1303ae8cf098ab869b6d459f4e1d08c552016b523fdcc2df7fd60893da268662",
+      "after_sha256": "ee39a6d675207d0cab459d744dddf429040ebdb29555ddd0b2c996797e8e11cd"
+    },
+    {
+      "path": "src/lightyear_factory/controller_phase_capture.py",
+      "mode": "100644",
+      "before_sha256": null,
+      "after_sha256": "dd963493c2492495f608717b282ed3f683afd480bcf6b3fd94676eea2155f4dc"
+    },
+    {
+      "path": "src/lightyear_factory/orchestrator.py",
+      "mode": "100644",
+      "before_sha256": "beee29177a35c5a45f283fe888f5c417bebe7b62d9dd51fd1a9bd961bfd66add",
+      "after_sha256": "f71635e613ef5aeef14923a1a16b4d4fdaf95e4b10ff8a6f713c39862996d7fd"
+    },
+    {
+      "path": "tests/test_controller_phase_capture.py",
+      "mode": "100644",
+      "before_sha256": null,
+      "after_sha256": "0957592bd180d1f63728ee1ee568705b5936bb818f75058049b24582163f09db"
+    }
+  ],
+  "approval": {
+    "source": "operator-chat",
+    "approved_by": "Howard Weale",
+    "recorded_at_utc": "2026-11-07T19:08:00Z",
+    "expires_at_utc": "2026-11-09T01:00:00Z",
+    "exact_sha256": {
+      ".github/workflows/b06-host-review.yml": "04b9bb07c00875ecc76e272b8bfea698b72e3001a661f4e1c80d5a5fa50a471b",
+      ".github/workflows/b06-provenance-offline.yml": "09b4b9843fa0d4e81dbff4917ee0956dba2d456dc9f6351e8dcb0ff9cc74ed15",
+      ".github/workflows/judge-qualification.yml": "c1bba95ab9d6c60cec7728571e1e5ca0cf9b434844554f20eb8581d59b44aca9",
+      ".github/workflows/milestone-documentation-pages.yml": "df1e760b5d2fb0187899fa8a1a2750b072083d29a5b5723cd944a383b209ce54",
+      ".github/workflows/ms71-alloydb.yml": "8eecc6a5f5546ec51a76b45531da418cbcf6e26298cfd19f8d6d9b87a90ab756",
+      ".github/workflows/service-packs.yml": "ee39a6d675207d0cab459d744dddf429040ebdb29555ddd0b2c996797e8e11cd",
+      "src/lightyear_factory/controller_phase_capture.py": "dd963493c2492495f608717b282ed3f683afd480bcf6b3fd94676eea2155f4dc",
+      "src/lightyear_factory/orchestrator.py": "f71635e613ef5aeef14923a1a16b4d4fdaf95e4b10ff8a6f713c39862996d7fd",
+      "tests/test_controller_phase_capture.py": "0957592bd180d1f63728ee1ee568705b5936bb818f75058049b24582163f09db"
+    },
+    "github_identity_is_human_proof": false
+  },
+  "authority": {
+    "merge": false,
+    "run": false,
+    "signing": false,
+    "spend": false,
+    "gap_acceptance": false
+  }
+}

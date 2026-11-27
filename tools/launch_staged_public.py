@@ -24,7 +24,7 @@ from lightyear_factory import public_repair_worker as worker
 from lightyear_factory import staged_run_admission as admission
 
 TAG = "full-intcalc-public-answer-key-20261118-r1"
-CONTEXT = "4f25b42be20c5e4bb0a82030e3172b5c6751c7dfb5b36aa1f1bb42dee25a5a52"
+CONTEXT = "766e64f8a76cf543b38f776e71b43e8a31a97043f2ca1763892ff5a2f02dd19b"
 
 
 def require(condition, code):
@@ -74,7 +74,7 @@ def read_bundle(folder, expected):
     raw_context = read("CURRENT-CONTEXT.json", 98304)
     require(ctl.sha(raw_context) == CONTEXT, "context")
     context = staged.strict(raw_context)
-    staged.validate_binding(binding, context)
+    staged.validate_value_binding(binding, context)
     proofs = {kind: (read(kind + ".json"), read(kind + ".receipt", 2097152))
               for kind in admission.PROOFS}
     config = read("LOCAL-WORKER.json")
@@ -186,13 +186,13 @@ def launch(folder, expected):
             engine = worker.PublicWorker(area / "worker", row["operation"], config["docker_binary"],
                                         profile["cli_sha256"], config["docker_endpoint"],
                                         ROOT / admission.HELPER, profile["helper_sha256"])
-            adapter = key.FrozenPublicAdapter(engine, folder / "answers", (ROOT / admission.SUITE).parent,
+            adapter = key.ValuePublicAdapter(engine, folder / "answers", (ROOT / admission.SUITE).parent,
                                               ROOT, row["reviewed"], storage.retain_evaluation, clock=clock)
             return storage, adapter, staged.P5SelectedJarRetainer(engine, storage, clock=clock)
 
         ports = Ports(gate, assemble, deadline)
         try:
-            controller = staged.StagedController(ports, binding, row["context"], clock=clock)
+            controller = staged.ValueStagedController(ports, binding, row["context"], clock=clock)
             result = controller.run()
             clock()
             return dict(schema="staged-launch-readback/1", operation_id=row["operation"],

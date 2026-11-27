@@ -5,6 +5,7 @@ module. Timestamp ordering alone is not evidence of prior publication. The
 admission port must check the exact pre-run commitment receipt independently.
 """
 from datetime import datetime
+from functools import partial
 import inspect
 import json
 import os
@@ -14,6 +15,7 @@ import time
 
 from lightyear_factory import public_repair_controller as c
 from lightyear_factory import public_repair_durable as durable
+from lightyear_factory import public_value_feedback as values
 
 JAR_BYTES = 16777216
 LEAF = 'selected-candidate.jar'
@@ -66,7 +68,12 @@ def validate_binding(row, context):
               and row['mode'] == 'STAGED_PUBLIC'
               and row['staged_policy_sha256'] == POLICY_HASH, 'staged-binding')
     base['schema'] = 'public-repair-binding/1'
-    c.validate_binding(base, context)
+    if base.get('feedback_contract_sha256') == values.HASH:
+        c.require(base.get('public_suite_sha256') == values.SUITE
+                  and row['public_answer_key_sha256'] == values.KEY, 'feedback-join')
+        c.validate_binding(base, context, feedback_hash=values.HASH)
+    else:
+        c.validate_binding(base, context)
     c.require(base['public_case_count'] == 16, 'staged-binding')
     for key in ('public_answer_key_sha256', 'worker_source_sha256'):
         c.require(c.hash_ok(row[key]), 'staged-binding')
@@ -147,6 +154,17 @@ class StagedController(c.Controller):
                 pass
         else:
             super().failure(name, error)
+
+
+def validate_value_binding(row, context):
+    validate_binding(row, context)
+    c.require(row['feedback_contract_sha256'] == values.HASH, 'binding-hash')
+
+
+class ValueStagedController(StagedController):
+    validate = staticmethod(validate_value_binding)
+    check_feedback = staticmethod(values.validate)
+    project = staticmethod(partial(c.projection, feedback_validator=values.validate))
 
 
 class StagedDurablePorts(durable.DurablePorts):

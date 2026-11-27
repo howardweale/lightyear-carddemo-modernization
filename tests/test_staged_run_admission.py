@@ -46,7 +46,7 @@ class AdmissionTests(unittest.TestCase):
                             role_instructions_sha256=a.ctl.ROLE_HASH, feedback_contract_sha256=a.ctl.FEEDBACK_HASH,
                             staged_policy_sha256=a.staged.POLICY_HASH, worker_source_sha256=self.modules[a.WORKER],
                             pre_run_commitment=self.commitment, approval_timestamp=self.issued,
-                            public_answer_key_sha256=h("key-manifest"), build_profile=profile,
+                            public_answer_key_sha256=a.staged.values.KEY, build_profile=profile,
                             runtime_profile_sha256=a.ctl.digest(profile))
         self.host = dict(schema="ha-public-host-qualification/1", status="CRITERION_MET", operation_id=h("Q"),
                          source_commit="e"*40, source_tree="f"*40, profile_sha256=h("profile"),

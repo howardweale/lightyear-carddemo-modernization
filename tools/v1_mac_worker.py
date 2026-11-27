@@ -235,10 +235,10 @@ def engine(run,op,cfg):
                        helper,sha(helper.read_bytes()))
 
 
-def public_adapter(top,runtime,retain):
+def public_adapter(top,runtime,retain,adapter_type=key.FrozenPublicAdapter):
     archive=checked_bytes(top/"answer-key.zip","e8dd6b85a39afbb5c3901fe400e479d9798adae8b7954918db8dc87fec71f4aa",65536)
     review=key.published_key((ROOT/admission.RELEASE_BINDING).read_bytes(),launcher.TAG,archive)
-    return key.FrozenPublicAdapter(runtime,top/"answers",(ROOT/admission.SUITE).parent,ROOT,review,retain,clock=runtime.clock)
+    return adapter_type(runtime,top/"answers",(ROOT/admission.SUITE).parent,ROOT,review,retain,clock=runtime.clock)
 
 
 def clean_receipt(row):

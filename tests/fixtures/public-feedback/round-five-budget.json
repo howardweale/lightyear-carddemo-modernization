@@ -1,0 +1,161 @@
+{
+  "4096": {
+    "bytes": 3648,
+    "sha256": "710ea7a726be7dd8a12539c870fde2e5908c5823c8c0ee4982d6cb85b1e0ce83",
+    "outcomes": "MMMMMDMMDMDDMMMM",
+    "exit_values": {
+      "PC-06": [
+        0,
+        0
+      ],
+      "PC-09": [
+        0,
+        0
+      ],
+      "PC-11": [
+        12,
+        1
+      ],
+      "PC-12": [
+        12,
+        12
+      ]
+    },
+    "kept": [
+      [
+        "PC-06",
+        "stdout",
+        1
+      ],
+      [
+        "PC-09",
+        "stdout",
+        1
+      ],
+      [
+        "PC-11",
+        "stdout",
+        1
+      ],
+      [
+        "PC-12",
+        "stdout",
+        1
+      ],
+      [
+        "PC-06",
+        "stderr",
+        1
+      ],
+      [
+        "PC-09",
+        "stderr",
+        1
+      ]
+    ],
+    "omitted": {
+      "stdout": 8,
+      "stderr": 11,
+      "ACCTFILE": 1,
+      "TRANSACT": 1
+    },
+    "truncated": true
+  },
+  "8192": {
+    "bytes": 8098,
+    "sha256": "d32551d0308faf0559910a1121b85728b015e5c5dffc208c9b9a722f15de00d5",
+    "outcomes": "MMMMMDMMDMDDMMMM",
+    "exit_values": {
+      "PC-06": [
+        0,
+        0
+      ],
+      "PC-09": [
+        0,
+        0
+      ],
+      "PC-11": [
+        12,
+        1
+      ],
+      "PC-12": [
+        12,
+        12
+      ]
+    },
+    "kept": [
+      [
+        "PC-06",
+        "stdout",
+        1
+      ],
+      [
+        "PC-09",
+        "stdout",
+        1
+      ],
+      [
+        "PC-11",
+        "stdout",
+        1
+      ],
+      [
+        "PC-12",
+        "stdout",
+        1
+      ],
+      [
+        "PC-06",
+        "stderr",
+        1
+      ],
+      [
+        "PC-09",
+        "stderr",
+        1
+      ],
+      [
+        "PC-11",
+        "stderr",
+        1
+      ],
+      [
+        "PC-12",
+        "stderr",
+        1
+      ],
+      [
+        "PC-06",
+        "ACCTFILE",
+        2
+      ],
+      [
+        "PC-09",
+        "TRANSACT",
+        2
+      ],
+      [
+        "PC-06",
+        "stdout",
+        2
+      ],
+      [
+        "PC-06",
+        "stderr",
+        2
+      ],
+      [
+        "PC-09",
+        "stderr",
+        2
+      ]
+    ],
+    "omitted": {
+      "stdout": 7,
+      "stderr": 7,
+      "ACCTFILE": 0,
+      "TRANSACT": 0
+    },
+    "truncated": true
+  }
+}

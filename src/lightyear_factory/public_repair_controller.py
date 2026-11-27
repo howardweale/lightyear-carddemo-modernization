@@ -135,7 +135,7 @@ def validate_feedback(row, candidate, suite, kind):
     return json.loads(canonical(row))
 
 
-def validate_binding(row, context):
+def validate_binding(row, context, *, feedback_hash=FEEDBACK_HASH):
     shape(row, 'schema graph_mode max_repairs window_seconds cap_microdollars model service_tier output_cap retries authority_sha256 implementation_sha256 public_context_sha256 public_suite_sha256 heldout_commitment_sha256 runtime_profile_sha256 role_instructions_sha256 public_case_count feedback_contract_sha256', 'binding-fields')
     require(row['schema'] == 'public-repair-binding/1' and row['graph_mode'] == 'off'
             and type(row['max_repairs']) is int and row['max_repairs'] == 5
@@ -147,14 +147,14 @@ def validate_binding(row, context):
             and type(row['public_case_count']) is int and 1 <= row['public_case_count'] <= 9999999999,
             'binding-value')
     require(all(hash_ok(v) for k, v in row.items() if k.endswith('_sha256')), 'binding-hash')
-    require(row['role_instructions_sha256'] == ROLE_HASH and row['feedback_contract_sha256'] == FEEDBACK_HASH, 'binding-hash')
+    require(row['role_instructions_sha256'] == ROLE_HASH and row['feedback_contract_sha256'] == feedback_hash, 'binding-hash')
     require(type(context) is dict and bool(context) and
             all(type(k) is str and type(v) is str for k, v in context.items()), 'public-context')
     require(len(canonical(context)) <= 98304, 'context-cap')
     require(digest(context) == row['public_context_sha256'], 'binding-hash')
 
 
-def projection(role, context, plan, source, analysis, history, feedback=None):
+def projection(role, context, plan, source, analysis, history, feedback=None, *, feedback_validator=validate_feedback):
     require(role in CAPS, 'projection-cap')
     row = dict(schema='public-repair-request/1', role=role, model=MODEL,
                service_tier='flex', max_output_tokens=32000, truncation='disabled',
@@ -165,7 +165,7 @@ def projection(role, context, plan, source, analysis, history, feedback=None):
         row['source'] = text_ok(source, 65536, 73728)
         row['score_history'] = history
         require(type(feedback) is dict, 'feedback-shape')
-        row['feedback'] = validate_feedback(feedback, sha(source.encode('utf-8')),
+        row['feedback'] = feedback_validator(feedback, sha(source.encode('utf-8')),
             feedback.get('public_suite_sha256'), feedback.get('kind'))
     if role == 'repair':
         row['analysis'] = text_ok(analysis, 8192, 16384)
@@ -197,6 +197,7 @@ class Controller:
     graph_mode = 'off'
     validate = staticmethod(validate_binding)
     project = staticmethod(projection)
+    check_feedback = staticmethod(validate_feedback)
 
     def __init__(self, ports, binding, public_context, clock=time.monotonic):
         # Freeze caller-owned JSON before admission; later mutation cannot rebind.
@@ -238,7 +239,7 @@ class Controller:
         self.stage = slot
         if role in ('analysis', 'repair'):
             require(type(feedback) is dict, 'feedback-shape')
-            feedback = validate_feedback(feedback, sha(source.encode('utf-8')),
+            feedback = self.check_feedback(feedback, sha(source.encode('utf-8')),
                 self.binding['public_suite_sha256'], feedback.get('kind'))
         request = self.project(role, self.context, plan, source, analysis, list(self.history), feedback)
         self.now_before(self.end - 60)
@@ -335,7 +336,7 @@ class Controller:
                         for k in ('match','different','total'))
                     and result['match']+result['different']==result['total']==self.binding['public_case_count'],
                     'public-response')
-            feedback = validate_feedback(result['feedback'], identity,
+            feedback = self.check_feedback(result['feedback'], identity,
                 self.binding['public_suite_sha256'], 'PUBLIC_DIVERGENCE')
             score.update(match=result['match'], different=result['different'])
             item.update(match=result['match'], different=result['different'],
@@ -344,7 +345,7 @@ class Controller:
             if self.best is None or item['match'] >= self.best['match']:
                 self.best = dict(item, source=source, feedback=feedback)
         else:
-            feedback = validate_feedback(built['feedback'], identity,
+            feedback = self.check_feedback(built['feedback'], identity,
                 self.binding['public_suite_sha256'], 'COMPILE_FAILED')
         self.last_feedback = feedback
         item['feedback_sha256'] = digest(feedback)

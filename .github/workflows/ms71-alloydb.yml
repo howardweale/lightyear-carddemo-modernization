@@ -2,6 +2,11 @@ name: MS71 managed target contracts
 on:
   pull_request:
     paths:
+      - 'src/lightyear_factory/controller_phase_capture.py'
+      - 'src/lightyear_factory/human_metrics.py'
+      - 'src/lightyear_factory/journal_metrics.py'
+      - 'src/lightyear_factory/metrics_execution_joins.py'
+      - 'src/lightyear_factory/phase_metrics.py'
       - 'src/lightyear_execution/candidate_human_signer.py'
       - 'src/lightyear_execution/external_signing.py'
       - 'src/lightyear_execution/signing_designation.py'
@@ -19,6 +24,11 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/lightyear_factory/controller_phase_capture.py'
+      - 'src/lightyear_factory/human_metrics.py'
+      - 'src/lightyear_factory/journal_metrics.py'
+      - 'src/lightyear_factory/metrics_execution_joins.py'
+      - 'src/lightyear_factory/phase_metrics.py'
       - 'src/lightyear_execution/candidate_human_signer.py'
       - 'src/lightyear_execution/external_signing.py'
       - 'src/lightyear_execution/signing_designation.py'

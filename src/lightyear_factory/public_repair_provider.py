@@ -5,6 +5,7 @@ Only that process prompts for and holds the key. Tests use a synthetic owner.
 """
 import getpass
 import http.client
+import io
 import json
 import math
 import multiprocessing
@@ -179,7 +180,9 @@ def key_owner(pipe):
     try:
         require(os.name == 'posix', 'provider-owner')
         os.environ.clear()
-        with open('/dev/tty', 'r+', encoding='utf-8') as terminal:
+        fd = os.open('/dev/tty', os.O_RDWR | os.O_NOCTTY)
+        with io.FileIO(fd, 'r+') as raw_tty, io.TextIOWrapper(
+                raw_tty, encoding='utf-8', write_through=True) as terminal:
             require(terminal.isatty(), 'provider-owner')
             # getpass must not fall back to echoed input if a terminal is unavailable.
             import warnings

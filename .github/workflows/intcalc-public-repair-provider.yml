@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -28,3 +29,12 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
           python -B -m unittest -v test_public_repair_provider
+      - name: Public-marker key-owner regression on a real PTY
+        if: runner.os != 'Windows'
+        run: python -I -B tools/ci/qualify_provider_tty.py
+      - name: Demonstrate frozen provider refuses on the same PTY
+        if: runner.os != 'Windows' && github.event.pull_request.base.sha == '5124b139fe6acbaa295a8e0f1fff187f02539cef'
+        shell: bash
+        run: |
+          git show 5124b139fe6acbaa295a8e0f1fff187f02539cef:src/lightyear_factory/public_repair_provider.py > "$RUNNER_TEMP/frozen_provider.py"
+          python -I -B tools/ci/qualify_provider_tty.py --baseline "$RUNNER_TEMP/frozen_provider.py"

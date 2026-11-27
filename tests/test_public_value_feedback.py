@@ -98,10 +98,10 @@ class PublicValuesTests(unittest.TestCase):
         self.assertEqual({r['channel']: (r['records_different'], r['records_compared']) for r in tallies
                           if not r['field']}, {'ACCTFILE': (1, 13), 'TRANSACT': (1, 13),
                                               'stdout': (12, 85), 'stderr': (13, 13), 'exit': (1, 16)})
-        rows = [(4096, self.feedback())]
-        # Counterfactual measurement only. The shipped validator refuses the larger envelope.
-        with patch.object(v, 'CAP', 8192):
-            rows.append((8192, self.feedback()))
+        # The historical r1 budget is measured on the identical synthetic observations.
+        with patch.object(v, 'CAP', 4096):
+            previous = self.feedback()
+        rows = [(4096, previous), (8192, self.feedback())]
         expected = json.loads((ROOT/'tests/fixtures/public-feedback/round-five-budget.json').read_bytes())
         for budget, row in rows:
             observed = report(row)
@@ -112,8 +112,9 @@ class PublicValuesTests(unittest.TestCase):
                     if side is not None:
                         self.assertFalse(side.get('clipped') or side.get('redacted'))
             print('public-feedback-budget', budget, json.dumps(observed, sort_keys=True))
-        with self.assertRaises(ctl.Refused):
-            v.validate(rows[1][1], CANDIDATE, v.SUITE, 'PUBLIC_DIVERGENCE')
+        self.assertEqual(v.CAP, 8192)
+        self.assertEqual((v.ROWS, v.LINE_BYTES, ctl.FEEDBACK_POLICY['bytes_max']), (32, 256, 4096))
+        self.assertEqual(rows[1][1]['omitted'], dict(stdout=7, stderr=7, ACCTFILE=0, TRANSACT=0))
 
     def test_projection_and_real_wire_encoder(self):
         row = self.feedback()

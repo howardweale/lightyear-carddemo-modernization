@@ -13,7 +13,7 @@ WIDTH = {'ACCTFILE': 300, 'TRANSACT': 350}
 ABENDS = {'PC-10', 'PC-11', 'PC-12'}
 CHANNELS = ('stdout', 'stderr', *WIDTH)
 SCHEMA = 'public-case-feedback/2'
-CAP = 4096
+CAP = 8192
 ROWS = 32
 LINE_BYTES = 256
 POLICY = dict(schema=SCHEMA, public_suite=SUITE, answer_manifest=KEY, bytes_max=CAP,

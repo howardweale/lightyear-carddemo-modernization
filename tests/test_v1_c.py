@@ -9,13 +9,39 @@ from tools import v1_mac_integration as v
 
 class IntegrationTests(unittest.TestCase):
     def test_wire_measurement_all_roles_and_maximum_components(self):
-        result=v.bounds({"NOTICE":"public synthetic text"},"a"*64)
-        self.assertEqual(len(result["slots"]),12)
-        self.assertEqual(result["holds"],37664000)
-        self.assertEqual(result["ceiling"],37670000)
+        public_suite = v.b.adapter.PUBLIC_SUITE
+        context = {"NOTICE": ""}
+        context["NOTICE"] = "x" * (98304 - len(v.c.canonical(context)))
+        result = v.bounds(context, public_suite)
+        self.assertEqual(len(result["slots"]), 12)
+        self.assertEqual((result["holds"], result["ceiling"]), (37664000, 37670000))
         for row in result["slots"]:
-            self.assertGreaterEqual(row["bound"],max(row["generation_bytes"],row["count_bytes"]))
+            self.assertGreaterEqual(row["bound"], max(row["generation_bytes"], row["count_bytes"]))
+            if row["role"] in ("analysis", "repair"):
+                self.assertEqual(row["parts"]["feedback"], 8192)
+
+        for role, ceiling in (("analysis", 208896), ("repair", 225280)):
+            row = result["maximum_history_by_role"][role]
+            self.assertEqual((row["parts"]["public_context"], row["parts"]["source"],
+                              row["parts"]["plan"], row["parts"]["feedback"]),
+                             (98304, 73728, 16384, 8192))
+            if role == "repair":
+                self.assertEqual(row["parts"]["analysis"], 16384)
+            self.assertLessEqual(max(row["generation_bytes"], row["count_bytes"]), row["bound"])
+            self.assertLessEqual(row["bound"], ceiling)
+            self.assertLessEqual(ceiling, v.c.CAPS[role])
+            print("full-value-feedback-wire", role, json.dumps(row, sort_keys=True))
         self.assertTrue(result["synthetic_oversize_refused_before_count"])
+
+        feedback = v.full_value_feedback("fixture", public_suite)
+        oversized = feedback["samples"][-1]["actual"]
+        oversized["text"] += "x"
+        oversized["bytes"] += 1
+        self.assertEqual(len(v.c.canonical(feedback)), 8193)
+        with self.assertRaisesRegex(v.c.Refused, "^feedback-cap$"):
+            v.s.values.validate(feedback, v.c.sha(b"fixture"), public_suite, "PUBLIC_DIVERGENCE")
+        with self.assertRaisesRegex(v.c.Refused, "^feedback-join$"):
+            v.full_value_feedback("fixture", "a" * 64)
 
     def test_both_unicode_limits_are_exact(self):
         for a,b in [(8192,16384),(65536,73728)]:
@@ -25,8 +51,11 @@ class IntegrationTests(unittest.TestCase):
     def test_synthetic_binding_cannot_be_a_real_preparation(self):
         cfg={"cli_sha256":"a"*64}
         context={"NOTICE":"public"}
-        row=v.bind("public fixture",context,cfg,"b"*64)
-        v.s.validate_binding(row,context)
+        row=v.bind("public fixture",context,cfg,v.b.adapter.PUBLIC_SUITE)
+        v.s.validate_value_binding(row,context)
+        for field in ("public_suite_sha256", "public_answer_key_sha256"):
+            with self.subTest(field=field), self.assertRaisesRegex(v.c.Refused, "^feedback-join$"):
+                v.s.validate_value_binding(dict(row, **{field: "b"*64}), context)
         self.assertEqual(row["authority_sha256"],v.c.sha(b"V1 PUBLIC REHEARSAL public fixture no authority"))
         self.assertEqual(row["heldout_commitment_sha256"],v.c.digest(row["pre_run_commitment"]))
 

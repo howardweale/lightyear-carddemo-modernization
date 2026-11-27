@@ -22,7 +22,7 @@ SCENARIOS=("early-perfect","five-repairs","public-fail","uncertain-send","cleanu
 INJECTED={"uncertain-send","cleanup-refusal","closure-refusal"}
 KEY="fb51317ab1f5bba9677e543133364b34e893babcac279519b6f743d9568f3b37"
 COPY="tests/fixtures/intcalc-c1/Main.java"
-MODULES="53afc6bcafe6f5c961f7b391ae73e7d66e0c56c04c99b0494c5151a2a8f022e8"
+MODULES="eb24a0699f9bb1c3b658aec812bfc9a86f050d2bdda0d59c4472a6fa30226ea0"
 
 
 def expect(ok,why):
@@ -63,25 +63,53 @@ def maximal_text(raw_cap,encoded_cap):
     return text
 
 
+def full_value_feedback(source, suite):
+    """Measure the real wire encoders with all 32 rows and exactly 8,192 canonical bytes."""
+    failed = ("PC-06", "PC-09", "PC-11", "PC-12")
+    feedback = dict(schema=s.values.SCHEMA, kind="PUBLIC_DIVERGENCE",
+                    candidate_sha256=c.sha(source.encode()), public_suite_sha256=suite,
+                    answer_manifest_sha256=s.values.KEY,
+                    outcomes="".join("D" if case in failed else "M" for case in s.values.IDS),
+                    exits={case: [12 if case in s.values.ABENDS else 0, 1] for case in failed},
+                    samples=[], omitted=dict.fromkeys(s.values.CHANNELS, 0), truncated=True)
+    feedback["omitted"]["stderr"] = 1
+    # Unexpected public stderr. Quotes exercise JSON re-encoding in the provider bodies.
+    prefix = b'"' * 32 + b"x" * 68
+    for line in range(1, 8):
+        for case in failed:
+            feedback["samples"].append(dict(case=case, channel="stderr", index=line, expected=None,
+                                            actual=s.values.value(prefix, True, True)))
+    # Distribute the remaining printable bytes over the existing samples. Their lengths
+    # stay three-digit numbers and fit the real 256-byte prefix, without a padding field.
+    rows = feedback["samples"]
+    extra, remainder = divmod(s.values.CAP - len(c.canonical(feedback)), len(rows))
+    expect(extra >= 0 and len(prefix) + extra + bool(remainder) <= s.values.LINE_BYTES, "feedback-size")
+    for index, row in enumerate(rows):
+        data = prefix + b"x" * (extra + (index < remainder))
+        row["actual"] = s.values.value(data, True, True)
+    expect(len(rows) + len(failed) == s.values.ROWS and len(c.canonical(feedback)) == s.values.CAP,
+           "feedback-size")
+    return s.values.validate(feedback, c.sha(source.encode()), suite, "PUBLIC_DIVERGENCE")
+
+
 def bounds(context,suite):
     plan=maximal_text(8192,16384)
     source=maximal_text(65536,73728)
-    feedback = dict(schema=s.values.SCHEMA, kind="PUBLIC_DIVERGENCE", candidate_sha256=c.sha(source.encode()),
-                    public_suite_sha256=suite, answer_manifest_sha256=s.values.KEY, outcomes="D"*16,
-                    exits={case: [12 if case in s.values.ABENDS else 0, 1] for case in s.values.IDS},
-                    samples=[], omitted=dict.fromkeys(s.values.CHANNELS, 1), truncated=True)
+    feedback = full_value_feedback(source, suite)
     hist=[dict(round=i,candidate="f"*16,match=0,different=16) for i in range(6)]
     rows=[]
     for index,role in enumerate(p4.SEQUENCE):
         rows.append(envelope_bytes(role,context,plan,source,plan,hist[:index//2],feedback))
     # Separately test the full retained history and account for all unused feedback/history capacity.
-    worst=envelope_bytes("repair",context,plan,source,plan,hist,feedback)
-    padded=worst["slack"]-(4096-len(c.canonical(feedback)))-(1024-len(c.canonical({"score_history":hist})))
+    maxima = {role: envelope_bytes(role, context, plan, source, plan, hist, feedback)
+              for role in ("analysis", "repair")}
+    worst = maxima["repair"]
+    padded = min(row["slack"] for row in maxima.values()) - (1024 - len(c.canonical({"score_history": hist})))
     expect(padded>=0 and len(rows)==12 and sum(c.HOLDS[r] for r in p4.SEQUENCE)==37664000,"worst-bound")
     try:c.projection("builder",context,plan+"x",source,plan,[],feedback)
     except c.Refused:pass
     else:raise ValueError("v1-oversize-accepted")
-    return dict(slots=rows,maximum_history=worst,slack_after_full_envelopes=padded,
+    return dict(slots=rows,maximum_history=worst,maximum_history_by_role=maxima,slack_after_full_envelopes=padded,
                 synthetic_oversize_refused_before_count=True,holds=c.MAX_RESERVATION,ceiling=c.CEILING)
 
 

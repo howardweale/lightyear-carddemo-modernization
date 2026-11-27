@@ -1,0 +1,17 @@
+SECOND-RUN CATALOGUE â€” 7 NOVEMBER 2026
+
+This PR now belongs to the SECOND qualified run only.
+Initial scope: L01,L02,L04,L06,L11,L12,L15,D07; N=8; A=8, B=5â€“7, C=1â€“4.
+The exact definitions and all mandatory variants remain those of the digest-bound r4 catalogue.
+The other23cases remain future backlog; do not count partial mandatory-variant support.
+No13Novemberdeadline. Native/P5 has primary-lane priority and first call on hours.
+Adapter implementation starts only when native/P5 does not need those hours.
+This change prepares scope metadata only; no adapter, judge, gate or reporting code changes.
+Before any second-run oracle or candidate results: review/freeze the exact case set,
+private input/sample commitments, full correctness contract, source/twin/judge/condition hashes,
+executable scoring record and separate human execution/signing/admission packet.
+No adding/removing/reweighting cases or variants after results. No automatic fallback.
+The previous31-case proposal and its old dates remain historical, not current instructions.
+First run is separate: existing authorization-pages-and-fraud, N=1, B/Cunavailable,
+cutoff10unchanged, conditional on private-input/judge contract review.
+The r5 selection JSON is deliberately not an executable report-loader schema.

@@ -1,0 +1,1004 @@
+{
+  "schema": "authorization-behaviour-catalogue-proposal/1",
+  "version": "2026-11-07-r4",
+  "status": "PROPOSAL_NOT_APPROVED_NOT_FROZEN_NOT_SIGNED",
+  "case_count": 31,
+  "source_snapshot": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+  "sources": {
+    "S0": {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "994add3283d1e583b898156fc80e6d0624f03732",
+      "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254"
+    },
+    "S1": {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "054ecf98b0aa680d68fcba3fd9c9d08567469b93",
+      "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e"
+    },
+    "S2": {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "e2e87cff63d36443c8b7902bba89494161629152",
+      "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e"
+    }
+  },
+  "scoring_unit": "One named behaviour family; all mandatory variants and all frozen conditions must pass for one case pass. Variants/fixture records do not add points.",
+  "private_boundary": "Definitions and source locations only. No concrete private inputs, seeds, reference answers, expected screens, expected database rows or oracle outputs. Agents never generate or view private expected answers.",
+  "result_boundary": "Human reports no qualified result has been seen. No candidate or qualified results were read. Lock catalogue/variant identities before any oracle output; no case additions, removals or denominator changes after any result.",
+  "cases": [
+    {
+      "id": "AUTH-L01",
+      "title": "List entry contexts",
+      "definition": "Enter the authorization list with no COMMAREA and with first-entry COMMAREA carrying numeric or nonnumeric account context.",
+      "mandatory_variants": [
+        "empty context",
+        "first-entry numeric context",
+        "first-entry nonnumeric context"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 178
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L02",
+      "title": "Account input validation",
+      "definition": "Submit the list form with account-input representations at the legacy validation boundaries.",
+      "mandatory_variants": [
+        "spaces",
+        "low-values",
+        "nonnumeric",
+        "numeric with leading zeroes"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-ENTER-KEY",
+              "line": 261
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L03",
+      "title": "Account and summary field projection",
+      "definition": "Load a valid account/customer chain and present the account panel and present authorization-summary fields across declared field widths and numeric domains.",
+      "mandatory_variants": [
+        "name/address delimiters and middle initial",
+        "fixed-width phone/identifiers",
+        "zero/nonzero counts and amounts",
+        "copybook-representable numeric boundaries"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "GATHER-ACCOUNT-DETAILS",
+              "line": 750
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L04",
+      "title": "Missing account-chain records",
+      "definition": "Submit a valid-format account while each lookup stage independently returns the legacy not-found response.",
+      "mandatory_variants": [
+        "XREF missing",
+        "ACCT missing",
+        "CUST missing"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "GETCARDXREF-BYACCT",
+              "line": 812
+            },
+            {
+              "name": "GETACCTDATA-BYACCT",
+              "line": 865
+            },
+            {
+              "name": "GETCUSTDATA-BYCUST",
+              "line": 915
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L05",
+      "title": "Account-chain service errors",
+      "definition": "Submit a valid-format account while each lookup stage independently returns a non-normal, non-not-found response with associated reason information.",
+      "mandatory_variants": [
+        "XREF error",
+        "ACCT error",
+        "CUST error"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "GETCARDXREF-BYACCT",
+              "line": 812
+            },
+            {
+              "name": "GETACCTDATA-BYACCT",
+              "line": 865
+            },
+            {
+              "name": "GETCUSTDATA-BYCUST",
+              "line": 915
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L06",
+      "title": "Absent authorization summary",
+      "definition": "Load a valid account chain whose IMS authorization-summary segment is absent, including after viewing another populated account.",
+      "mandatory_variants": [
+        "initial absent summary",
+        "absent summary after populated account"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "GATHER-DETAILS",
+              "line": 342
+            },
+            {
+              "name": "GATHER-ACCOUNT-DETAILS",
+              "line": 750
+            },
+            {
+              "name": "GET-AUTH-SUMMARY",
+              "line": 966
+            },
+            {
+              "name": "INITIALIZE-AUTH-DATA",
+              "line": 608
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L07",
+      "title": "Authorization-summary service error",
+      "definition": "Load a valid account chain while summary lookup returns an IMS status outside success and segment-not-found.",
+      "mandatory_variants": [
+        "representative non-normal status with reason fields"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "GET-AUTH-SUMMARY",
+              "line": 966
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L08",
+      "title": "Initial list cardinality and row clearing",
+      "definition": "Load authorization collections straddling the five-row page and look-ahead boundaries, including a shorter list after a longer one.",
+      "mandatory_variants": [
+        "0, 1, 4, 5, 6 and 11 child records",
+        "shorter re-query after full page",
+        "child next-read segment-not-found/end statuses",
+        "non-normal child next-read during page fill and during look-ahead"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-PAGE-FORWARD",
+              "line": 415
+            },
+            {
+              "name": "GET-AUTHORIZATIONS",
+              "line": 458
+            },
+            {
+              "name": "INITIALIZE-AUTH-DATA",
+              "line": 608
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L09",
+      "title": "Forward list paging",
+      "definition": "Issue forward-page actions through a collection with more than one page and at its final page, retaining the complete navigation context between actions.",
+      "mandatory_variants": [
+        "partial final page",
+        "exactly full final page",
+        "forward at bottom",
+        "blank or low-value last-key context",
+        "saved-key reposition segment-not-found/end statuses",
+        "non-normal saved-key reposition status"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-PF8-KEY",
+              "line": 388
+            },
+            {
+              "name": "PROCESS-PAGE-FORWARD",
+              "line": 415
+            },
+            {
+              "name": "REPOSITION-AUTHORIZATIONS",
+              "line": 488
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L10",
+      "title": "Backward list paging",
+      "definition": "Issue backward-page actions after forward navigation and at the first page, retaining saved-page keys and page context.",
+      "mandatory_variants": [
+        "page two to page one",
+        "later page to prior page",
+        "backward at top",
+        "saved-key reposition segment-not-found/end statuses",
+        "non-normal saved-key reposition status"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-PF7-KEY",
+              "line": 362
+            },
+            {
+              "name": "PROCESS-PAGE-FORWARD",
+              "line": 415
+            },
+            {
+              "name": "REPOSITION-AUTHORIZATIONS",
+              "line": 488
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L11",
+      "title": "Valid row selection",
+      "definition": "Select a populated authorization row from each of the five displayed positions using each accepted selection-letter form.",
+      "mandatory_variants": [
+        "positions1–5",
+        "uppercase/lowercase selection letter",
+        "selection after paging"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-ENTER-KEY",
+              "line": 261
+            },
+            {
+              "name": "POPULATE-AUTH-LIST",
+              "line": 522
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L12",
+      "title": "Selection validation and precedence",
+      "definition": "Submit selection combinations that exercise invalid letters, absent selected keys and multiple populated selector fields.",
+      "mandatory_variants": [
+        "unsupported nonblank selector",
+        "selector with blank/low-value key",
+        "no selector",
+        "multiple selectors including competing positions"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-ENTER-KEY",
+              "line": 261
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L13",
+      "title": "Account re-query after navigation",
+      "definition": "Change the account and resubmit after paging or selecting in another account, with different authorization counts and keys.",
+      "mandatory_variants": [
+        "populated to populated",
+        "populated to empty",
+        "account input changed while row selectors retain values"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "PROCESS-ENTER-KEY",
+              "line": 261
+            },
+            {
+              "name": "GATHER-DETAILS",
+              "line": 342
+            },
+            {
+              "name": "INITIALIZE-AUTH-DATA",
+              "line": 608
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L14",
+      "title": "List authorization field projection",
+      "definition": "Present authorization rows varying the legacy response-code branch and all mapped date/time/type/match/identifier/amount fields.",
+      "mandatory_variants": [
+        "success-code and other response-code branches",
+        "all five row positions",
+        "copybook-representable date/time and signed amount boundaries"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "POPULATE-AUTH-LIST",
+              "line": 522
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-L15",
+      "title": "List key dispatch and return context",
+      "definition": "Exercise list return navigation and unsupported attention keys while retaining complete COMMAREA and screen attributes.",
+      "mandatory_variants": [
+        "PF3",
+        "unsupported AID on a populated list",
+        "unsupported AID without populated context"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 178
+            },
+            {
+              "name": "RETURN-TO-PREV-SCREEN",
+              "line": 665
+            },
+            {
+              "name": "SEND-PAULST-SCREEN",
+              "line": 681
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D01",
+      "title": "Detail entry and identity guard",
+      "definition": "Enter or refresh the detail transaction with absent context and with account/selected-key combinations at the source guards.",
+      "mandatory_variants": [
+        "no COMMAREA",
+        "valid selected key and numeric account",
+        "nonnumeric account",
+        "blank/low-value selected key",
+        "re-enter with ENTER"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 157
+            },
+            {
+              "name": "PROCESS-ENTER-KEY",
+              "line": 208
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D02",
+      "title": "Missing selected authorization",
+      "definition": "Request a selected authorization while its root summary or keyed child lookup independently reaches each legacy end/not-found status.",
+      "mandatory_variants": [
+        "root absent/end",
+        "child absent/end"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "READ-AUTH-RECORD",
+              "line": 431
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D03",
+      "title": "Selected-authorization read errors",
+      "definition": "Request a selected authorization while root or keyed child read independently returns an IMS error outside normal/end/not-found.",
+      "mandatory_variants": [
+        "root read error",
+        "keyed child read error"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "READ-AUTH-RECORD",
+              "line": 431
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D04",
+      "title": "Next-detail traversal and end",
+      "definition": "Use the next-detail action on adjacent records and on the last record, including each legacy end/not-found status.",
+      "mandatory_variants": [
+        "next record exists",
+        "segment-not-found",
+        "end-of-database"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "PROCESS-PF8-KEY",
+              "line": 268
+            },
+            {
+              "name": "READ-NEXT-AUTH-RECORD",
+              "line": 493
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D05",
+      "title": "Next-detail read error",
+      "definition": "Use the next-detail action with a successful selected-record lookup followed by a non-normal IMS next-read error.",
+      "mandatory_variants": [
+        "next-read error with retained current selection/context"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "PROCESS-PF8-KEY",
+              "line": 268
+            },
+            {
+              "name": "READ-NEXT-AUTH-RECORD",
+              "line": 493
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D06",
+      "title": "Detail business-field projection",
+      "definition": "Present all mapped detail fields using copybook-representable values spanning response, decline-reason lookup and fraud-display branches.",
+      "mandatory_variants": [
+        "success/other response code",
+        "known/unknown decline reason",
+        "confirmed/removed/other fraud state",
+        "date/time/expiry/amount/merchant and identifier width boundaries"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "POPULATE-AUTH-DETAILS",
+              "line": 291
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D07",
+      "title": "Detail key dispatch and return context",
+      "definition": "Exercise detail return and unsupported-key handling from a populated detail view, including the refresh performed during key dispatch.",
+      "mandatory_variants": [
+        "PF3",
+        "unsupported AID",
+        "repeated ENTER"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 157
+            },
+            {
+              "name": "RETURN-TO-PREV-SCREEN",
+              "line": 360
+            },
+            {
+              "name": "SEND-AUTHVIEW-SCREEN",
+              "line": 373
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-D08",
+      "title": "IMS session scheduling lifecycle",
+      "definition": "Exercise scheduling through both list and detail entry points under normal, already-scheduled and other-error statuses.",
+      "mandatory_variants": [
+        "normal schedule",
+        "already-scheduled then successful reschedule",
+        "failed reschedule",
+        "other schedule error",
+        "both entry points"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S0",
+          "paragraphs": [
+            {
+              "name": "SCHEDULE-PSB",
+              "line": 1001
+            },
+            {
+              "name": "SEND-PAULST-SCREEN",
+              "line": 681
+            }
+          ]
+        },
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "SCHEDULE-PSB",
+              "line": 574
+            },
+            {
+              "name": "TAKE-SYNCPOINT",
+              "line": 557
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F01",
+      "title": "Fraud state action sequence",
+      "definition": "Invoke PF5 on privately prepared unmarked, confirmed and removed authorization states, then repeat actions in one retained session under successful storage responses.",
+      "mandatory_variants": [
+        "each initial fraud state",
+        "repeated action sequence",
+        "same-session detail refresh"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "UPDATE-AUTH-DETAILS",
+              "line": 520
+            }
+          ]
+        },
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            },
+            {
+              "name": "FRAUD-UPDATE",
+              "line": 221
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F02",
+      "title": "New fraud-record field and timestamp binding",
+      "definition": "Invoke the fraud program for a new database key with varied legacy input fields, private clock and authorization timestamp components.",
+      "mandatory_variants": [
+        "all transferred columns",
+        "zero/nonzero signed amounts",
+        "string widths",
+        "reversed-time key components",
+        "day/month/year boundaries"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            }
+          ]
+        },
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F03",
+      "title": "Existing fraud-record key targeting",
+      "definition": "Invoke fraud actions when the database reports the legacy duplicate-key condition, with neighbouring rows differing by card or authorization timestamp.",
+      "mandatory_variants": [
+        "duplicate key for each action",
+        "adjacent card key",
+        "adjacent timestamp key",
+        "all pre-existing row fields retained for private comparison"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            },
+            {
+              "name": "FRAUD-UPDATE",
+              "line": 221
+            }
+          ]
+        },
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F04",
+      "title": "Fraud insert database error",
+      "definition": "Invoke fraud insertion with a database error other than the duplicate-key condition and capture the complete caller/callee transaction state.",
+      "mandatory_variants": [
+        "nonduplicate insert error with SQL code/state",
+        "both action forms"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            }
+          ]
+        },
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "ROLL-BACK",
+              "line": 565
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F05",
+      "title": "Fraud update database error",
+      "definition": "Invoke fraud insertion with the duplicate-key condition followed by a database update error, retaining full pre-state and returned status information.",
+      "mandatory_variants": [
+        "duplicate then failed update",
+        "both action forms"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            },
+            {
+              "name": "FRAUD-UPDATE",
+              "line": 221
+            }
+          ]
+        },
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "ROLL-BACK",
+              "line": 565
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F06",
+      "title": "Fraud-program link failure",
+      "definition": "Invoke PF5 while the CICS link to the fraud program returns a non-normal response.",
+      "mandatory_variants": [
+        "link failure for each initial fraud-state branch"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "ROLL-BACK",
+              "line": 565
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F07",
+      "title": "IMS replacement failure after database action",
+      "definition": "Invoke PF5 with a successful fraud-program response followed by a non-normal IMS replacement response.",
+      "mandatory_variants": [
+        "report/remove branch",
+        "replacement failure after new insert and after duplicate-key update"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "UPDATE-AUTH-DETAILS",
+              "line": 520
+            },
+            {
+              "name": "ROLL-BACK",
+              "line": 565
+            }
+          ]
+        },
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            },
+            {
+              "name": "FRAUD-UPDATE",
+              "line": 221
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AUTH-F08",
+      "title": "Fraud action after failed authorization lookup",
+      "definition": "Invoke PF5 where the preceding authorization root or child read is absent or fails, preserving the entire transaction path the legacy actually executes.",
+      "mandatory_variants": [
+        "root missing/error",
+        "child missing/error",
+        "previously populated and fresh session contexts"
+      ],
+      "legacy_definitions": [
+        {
+          "source": "S1",
+          "paragraphs": [
+            {
+              "name": "MARK-AUTH-FRAUD",
+              "line": 230
+            },
+            {
+              "name": "READ-AUTH-RECORD",
+              "line": 431
+            }
+          ]
+        },
+        {
+          "source": "S2",
+          "paragraphs": [
+            {
+              "name": "MAIN-PARA",
+              "line": 89
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sampling_rule": "The later privately generated sample matrix must be committed before any oracle output. Cover each listed mandatory variant at least once; one private fixture may cover several clauses. Do not infer a full Cartesian product. Freeze concrete private sample counts and assignments before outputs. Every committed sample and every frozen condition must pass; no exclusions, replacement samples or denominator changes after results.",
+  "capability_boundary": "Legacy response classes are proposed from source, not proof that the current twin can inject or faithfully reproduce them. Unsupported required variants block freeze/readiness; do not omit or substitute them after results.",
+  "supporting_interfaces": [
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU00.bms",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "111ac4aa04fa4db867b6e11f4c1c6591d120f347",
+      "sha256": "402516c3203e3940df363ae7d84964f7b792bb107331223c9e6c7b0ddaf278bc"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/bms/COPAU01.bms",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "ce6ce7ea44153edb634f5bfda6a5a66c6d1dc02e",
+      "sha256": "35b86cd8d764c831fa4d696802eef58c0f6c2654c54904569494123e2c93fd94"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU00.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "7cdd3cb09f55911fa4a79bcbe9adb0db64fff83b",
+      "sha256": "7bd332d0966e4b0a289521716d5ef5f00c8f55e50f5992dce10e15dbbf04da7d"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy-bms/COPAU01.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "a13528f0f3e0e9f45fa693c6a9b3e1b8d5c1ded8",
+      "sha256": "bee60b3bfeb37d5df0d0ff3182f564bd1aa8cb1f36100c4f7ed4fc42108a7937"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUDTY.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "998b8c9217961a01714e5eeab2325da0a83c27ae",
+      "sha256": "5d67c37c828dc2278339cdd1902a14305799a773d999a329e30c0801e9c80077"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/cpy/CIPAUSMY.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "14e87d0a4398fe0dda84b917101aef6eabd8beb0",
+      "sha256": "bb6eea3270e29ba465147652faea25923588ff3be57a4fc800fbc4b7a26fff29"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "9b502ed3e849a420e2e04177124e3ee71480ad4e",
+      "sha256": "737c2bb757ef256976ac7658e071d1833fc2ea24d7010dbeff137e6c98fb66a6"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "1d80b531696a946df29b8df20a142ddb840c9c41",
+      "sha256": "1634f898360955f32872bd9c35533513e2879135018681b92caa51c787abaeaf"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/app-authorization-ims-db2-mq/ddl/XAUTHFRD.ddl",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "ae712327def1cae27abf81de0c92d4112a407c70",
+      "sha256": "880bb53afed368bdcb858cd7e4ddb6252a47ac16d819df4ca58ca6bab90921b4"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/COCOM01Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "62d5261c746e1f9c9fb70c0e2d31d0e9b254d0d5",
+      "sha256": "77097557ee4c365f62138328d3e280ce7aba5f81d418c6f16434f0fbb2aafa6c"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CSDAT01Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "2277864fcc72121ba52c1791d1a7e0773a51e52c",
+      "sha256": "61dd7b01d974c13cd47f71774c613dd67996418a22fae730d09b246c0b710ad7"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CSMSG02Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "15b983971d1bb4e7ba4096602f1fcacf43f09479",
+      "sha256": "0238a3a75e723272e0c287b46a52d365de8549dada1a73d15df75660ad7bd2ea"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT01Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "598a526f674f977c676acae17122f3401cb89490",
+      "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT02Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "2498714c8455b5b231b3b3d25c79f7179f6982d2",
+      "sha256": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CVACT03Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "fc8e697956749b94268085751815df69362ef8c9",
+      "sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370"
+    },
+    {
+      "file": "spec/modernization/carddemo-screens/upstream/app/cpy/CVCUS01Y.cpy",
+      "commit": "c6110727c927b9aaf0bf4a2e7654948779d72482",
+      "blob": "33b5c73882aec9d2a7f5d8b8ef937e7fa81daea4",
+      "sha256": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8"
+    }
+  ]
+}

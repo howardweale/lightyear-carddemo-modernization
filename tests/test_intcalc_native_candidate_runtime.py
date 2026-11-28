@@ -260,13 +260,13 @@ class NativeProfileTests(unittest.TestCase):
         first, second = Mock(), Mock()
         first.observe_case.side_effect = n.Refused('runtime-java')
         runtime._docker = Mock(side_effect=[first, second])
-        with patch.object(n.p5, 'read', return_value=b'fake'), patch.object(n.p5, 'exclusive'), \
+        with patch.object(n.p5, 'read', return_value=b'fake'), patch.object(n, 'mounted_leaf'), \
                 patch.object(n, 'case_deadlines', return_value=(100, 105)), self.assertRaisesRegex(n.Refused, 'runtime-java'):
             runtime._case(inputs, Path('unused'), Path('ram'), 'stamp', 'date', 500)
         second.cleanup.assert_called_once()
         first.observe_case.side_effect = None
         runtime._docker.side_effect = [first, second]
         second.cleanup.side_effect = n.Refused('runtime-cleanup')
-        with patch.object(n.p5, 'read', return_value=b'fake'), patch.object(n.p5, 'exclusive'), \
+        with patch.object(n.p5, 'read', return_value=b'fake'), patch.object(n, 'mounted_leaf'), \
                 patch.object(n, 'case_deadlines', return_value=(100, 105)), self.assertRaisesRegex(n.Refused, 'runtime-cleanup'):
             runtime._case(inputs, Path('unused'), Path('ram'), 'stamp', 'date', 500)

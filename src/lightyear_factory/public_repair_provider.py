@@ -70,11 +70,7 @@ def integer(value, cap):
 
 
 def requests(request):
-    """No JSON-in-JSON payload: context/plan/source are separate text messages.
-
-    Actual count and generation encodings must each fit the controller's existing
-    canonical projection + 4096 bound. maxLength cannot enforce a UTF-8 byte cap.
-    """
+    """Build both bodies before sending. The returned bound is for token accounting."""
     require(type(request) is dict and request.get('role') in c.CAPS, 'provider-request')
     role = request['role']
     keys = {'schema', 'role', 'model', 'service_tier', 'max_output_tokens',
@@ -96,6 +92,7 @@ def requests(request):
     context = request['public_context']
     require(type(context) is dict and bool(context)
             and all(type(k) is str and type(v) is str for k, v in context.items()), 'provider-request')
+    feedback_escape_bytes = 0
     parts = []
     for name, text in sorted(context.items()):
         parts.extend(({'type': 'input_text', 'text': 'Public context member: ' + name},
@@ -108,6 +105,12 @@ def requests(request):
                           73728 if name == 'source' else 16384)
             else:
                 value = c.canonical(value).decode('ascii')
+                if (name == 'feedback' and type(request[name]) is dict
+                        and request[name].get('schema') == 'public-case-feedback/2'
+                        and request[name].get('kind') == 'PUBLIC_DIVERGENCE'):
+                    # The staged projection has already validated this feedback. Charge
+                    # exactly the extra escape bytes when it becomes an input_text string.
+                    feedback_escape_bytes = len(c.canonical(value)) - 2 - len(value)
             parts.extend(({'type': 'input_text', 'text': name},
                           {'type': 'input_text', 'text': value}))
     key = 'source' if role in ('builder', 'repair') else 'text'
@@ -120,7 +123,8 @@ def requests(request):
         reasoning={'effort': 'medium'}, tools=[], background=False, stream=False,
         previous_response_id=None, truncation='disabled')
     counted, generated = c.canonical(common), c.canonical(generation)
-    require(max(len(counted), len(generated)) <= bound, 'provider-wire-bound')
+    wire_limit = min(c.CAPS[role], bound + feedback_escape_bytes)
+    require(max(len(counted), len(generated)) <= wire_limit, 'provider-wire-bound')
     return counted, generated, bound, key
 
 

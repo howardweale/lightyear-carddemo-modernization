@@ -13,6 +13,7 @@ import stat
 import time
 
 from lightyear_factory import public_evaluator_adapter as adapter
+from lightyear_factory import public_value_feedback as values
 
 
 class Refused(ValueError):
@@ -310,3 +311,10 @@ class FrozenPublicAdapter(adapter.PublicAdapter):
         require(digest(self._last_bound_receipt), 'answer-receipt-readback')
         result['receipt_sha256'] = self._last_bound_receipt
         return result
+
+
+class ValuePublicAdapter(FrozenPublicAdapter):
+    """Only the authenticated published key can supply values to stage-1 repair."""
+    def public_feedback(self, identity, rows, observations, receipts):
+        return values.envelope(identity, self.cases, observations, receipts, self.suite,
+                               self.answer_key['manifest_sha256'])

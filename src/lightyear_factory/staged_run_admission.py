@@ -22,6 +22,7 @@ WORKER = "src/lightyear_factory/public_repair_worker.py"
 SOURCES = tuple(sorted((
     "src/lightyear_factory/staged_run_admission.py",
     "src/lightyear_factory/public_repair_controller.py",
+    "src/lightyear_factory/public_value_feedback.py",
     "src/lightyear_factory/public_repair_staged.py",
     "src/lightyear_factory/public_repair_durable.py",
     "src/lightyear_factory/public_repair_provider.py",

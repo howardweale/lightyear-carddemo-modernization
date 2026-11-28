@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" = Windows ]; then export PYTHONPATH='src;.;tests'; else export PYTHONPATH=src:.:tests; fi
-          python -B -m unittest -v test_public_repair_answer_key
+          python -B -m unittest -v test_public_repair_answer_key test_public_value_feedback
       - name: Verify and load the published 16-case reference key
         if: runner.os == 'Linux'
         env:
@@ -55,6 +55,10 @@ jobs:
               root = Path(folder) / 'key'
               unpack(raw, root)
               cases, provenance = load(root, Path('tests/fixtures/reference-execution/public-cases').resolve(), reviewed)
+              import sys
+              sys.path.insert(0, 'tests')
+              from test_public_value_feedback import verify_published_route
+              verify_published_route(root, reviewed)
           assert len(cases) == 16 and provenance['manifest_sha256'] == reviewed.manifest_sha256
           print('published-public-key-16-match', reviewed.manifest_sha256)
           PY

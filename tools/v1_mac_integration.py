@@ -22,7 +22,7 @@ SCENARIOS=("early-perfect","five-repairs","public-fail","uncertain-send","cleanu
 INJECTED={"uncertain-send","cleanup-refusal","closure-refusal"}
 KEY="fb51317ab1f5bba9677e543133364b34e893babcac279519b6f743d9568f3b37"
 COPY="tests/fixtures/intcalc-c1/Main.java"
-MODULES="f3112b96e8a70e0538204fbb41d44cd532310bd91d67d03ded233c88ab106340"
+MODULES="eb24a0699f9bb1c3b658aec812bfc9a86f050d2bdda0d59c4472a6fa30226ea0"
 
 
 def expect(ok,why):
@@ -45,7 +45,7 @@ def sheet(top):
 
 
 def envelope_bytes(role,context,plan,source,analysis,history,feedback):
-    row=c.projection(role,context,plan,source,analysis,history,feedback)
+    row=s.ValueStagedController.project(role,context,plan,source,analysis,history,feedback)
     counted,generated,bound,_=p4.requests(row)
     components={k:len(c.canonical(row[k])) for k in ("public_context","plan","source","analysis","score_history","feedback") if k in row}
     raw=c.canonical(row)
@@ -63,27 +63,53 @@ def maximal_text(raw_cap,encoded_cap):
     return text
 
 
+def full_value_feedback(source, suite):
+    """Measure the real wire encoders with all 32 rows and exactly 8,192 canonical bytes."""
+    failed = ("PC-06", "PC-09", "PC-11", "PC-12")
+    feedback = dict(schema=s.values.SCHEMA, kind="PUBLIC_DIVERGENCE",
+                    candidate_sha256=c.sha(source.encode()), public_suite_sha256=suite,
+                    answer_manifest_sha256=s.values.KEY,
+                    outcomes="".join("D" if case in failed else "M" for case in s.values.IDS),
+                    exits={case: [12 if case in s.values.ABENDS else 0, 1] for case in failed},
+                    samples=[], omitted=dict.fromkeys(s.values.CHANNELS, 0), truncated=True)
+    feedback["omitted"]["stderr"] = 1
+    # Unexpected public stderr. Quotes exercise JSON re-encoding in the provider bodies.
+    prefix = b'"' * 32 + b"x" * 68
+    for line in range(1, 8):
+        for case in failed:
+            feedback["samples"].append(dict(case=case, channel="stderr", index=line, expected=None,
+                                            actual=s.values.value(prefix, True, True)))
+    # Distribute the remaining printable bytes over the existing samples. Their lengths
+    # stay three-digit numbers and fit the real 256-byte prefix, without a padding field.
+    rows = feedback["samples"]
+    extra, remainder = divmod(s.values.CAP - len(c.canonical(feedback)), len(rows))
+    expect(extra >= 0 and len(prefix) + extra + bool(remainder) <= s.values.LINE_BYTES, "feedback-size")
+    for index, row in enumerate(rows):
+        data = prefix + b"x" * (extra + (index < remainder))
+        row["actual"] = s.values.value(data, True, True)
+    expect(len(rows) + len(failed) == s.values.ROWS and len(c.canonical(feedback)) == s.values.CAP,
+           "feedback-size")
+    return s.values.validate(feedback, c.sha(source.encode()), suite, "PUBLIC_DIVERGENCE")
+
+
 def bounds(context,suite):
     plan=maximal_text(8192,16384)
     source=maximal_text(65536,73728)
-    fields=[dict(channel=dd,field=name,records_different=9999999999,records_compared=9999999999)
-            for dd,names in c.FIELDS.items() for name in sorted(names)]
-    feedback=dict(schema="public-repair-feedback/1",candidate_sha256=c.sha(source.encode()),
-                  public_suite_sha256=suite,kind="PUBLIC_DIVERGENCE",divergences=fields,
-                  diagnostics=[],truncated=False)
-    expect(len(fields)==32 and len(c.canonical(feedback))<=4096,"feedback")
+    feedback = full_value_feedback(source, suite)
     hist=[dict(round=i,candidate="f"*16,match=0,different=16) for i in range(6)]
     rows=[]
     for index,role in enumerate(p4.SEQUENCE):
         rows.append(envelope_bytes(role,context,plan,source,plan,hist[:index//2],feedback))
     # Separately test the full retained history and account for all unused feedback/history capacity.
-    worst=envelope_bytes("repair",context,plan,source,plan,hist,feedback)
-    padded=worst["slack"]-(4096-len(c.canonical(feedback)))-(1024-len(c.canonical({"score_history":hist})))
+    maxima = {role: envelope_bytes(role, context, plan, source, plan, hist, feedback)
+              for role in ("analysis", "repair")}
+    worst = maxima["repair"]
+    padded = min(row["slack"] for row in maxima.values()) - (1024 - len(c.canonical({"score_history": hist})))
     expect(padded>=0 and len(rows)==12 and sum(c.HOLDS[r] for r in p4.SEQUENCE)==37664000,"worst-bound")
     try:c.projection("builder",context,plan+"x",source,plan,[],feedback)
     except c.Refused:pass
     else:raise ValueError("v1-oversize-accepted")
-    return dict(slots=rows,maximum_history=worst,slack_after_full_envelopes=padded,
+    return dict(slots=rows,maximum_history=worst,maximum_history_by_role=maxima,slack_after_full_envelopes=padded,
                 synthetic_oversize_refused_before_count=True,holds=c.MAX_RESERVATION,ceiling=c.CEILING)
 
 
@@ -130,7 +156,7 @@ def bind(identifier,context,cfg,suite):
                 window_seconds=c.WINDOW,cap_microdollars=c.CEILING,model=c.MODEL,service_tier="flex",output_cap=32000,
                 retries=0,authority_sha256=public_id("no authority"),implementation_sha256=MODULES,
                 public_context_sha256=c.digest(context),public_suite_sha256=suite,heldout_commitment_sha256=c.digest(commit),
-                runtime_profile_sha256=public_id("public profile"),feedback_contract_sha256=c.FEEDBACK_HASH,
+                runtime_profile_sha256=public_id("public profile"),feedback_contract_sha256=s.values.HASH,
                 role_instructions_sha256=c.ROLE_HASH,public_case_count=16,pre_run_commitment=commit,
                 approval_timestamp=now.isoformat(),public_answer_key_sha256=KEY,staged_policy_sha256=s.POLICY_HASH,
                 worker_source_sha256=b.sha(Path(p5.__file__).read_bytes()),build_profile=dict(cli_sha256=cfg["cli_sha256"],
@@ -242,11 +268,11 @@ def run_scenario(name,identifier,top,root,cfg,context,suite,end,station):
                            ROOT/b.admission.HELPER,binding["build_profile"]["helper_sha256"])
     traced=CaseTiming(engine,meter)
     def assemble():
-        adapter=b.public_adapter(top,traced,storage.retain_evaluation)
+        adapter=b.public_adapter(top,traced,storage.retain_evaluation,b.key.ValuePublicAdapter)
         return storage,adapter,s.P5SelectedJarRetainer(engine,storage)
     ports=PublicPorts(gate,assemble,end,name,meter)
     # Preserve the original global deadline for every production port and the outer watchdog.
-    controller=s.StagedController(ports,binding,context)
+    controller=s.ValueStagedController(ports,binding,context)
     started=b.T()
     try:
         try:
@@ -357,7 +383,7 @@ def run_c(identifier,pin):
     reviewed_sheet=sheet(top)
     context_raw=b.checked_bytes(top/"CURRENT-CONTEXT.json",launcher.CONTEXT,98304)
     context=s.strict(context_raw)
-    expect(len(context_raw)==69808 and "NOTICE" in context and "LICENSE" not in context,"context")
+    expect(len(context_raw)==70765 and "NOTICE" in context and "LICENSE" not in context,"context")
     bdir=root.parent/"storage-worker"
     config=(bdir/"LOCAL-WORKER.json").read_bytes()
     qual=(bdir/"WORKER-QUALIFICATION.receipt").read_bytes()

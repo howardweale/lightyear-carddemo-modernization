@@ -22,7 +22,7 @@ from lightyear_factory import public_repair_worker as worker
 from lightyear_factory import staged_run_admission as admission
 from tools import intcalc_public_freeze_wrapper as archive
 
-CONTEXT = "4f25b42be20c5e4bb0a82030e3172b5c6751c7dfb5b36aa1f1bb42dee25a5a52"
+CONTEXT = "766e64f8a76cf543b38f776e71b43e8a31a97043f2ca1763892ff5a2f02dd19b"
 TAG = "full-intcalc-public-answer-key-20261118-r1"
 CAPS = {"REQUEST.json": 65536, "LOCAL-WORKER.json": 65536, "HOST.json": 65536,
         "CURRENT-CONTEXT.json": 98304, "answer-key.zip": 65536, "WORKER-QUALIFICATION.receipt": 2097152}
@@ -98,7 +98,7 @@ def documents(data, source, reviewed, build, committed, now):
                    service_tier="flex", output_cap=32000, retries=0, public_case_count=16,
                    implementation_sha256=ctl.digest(modules), public_context_sha256=ctl.digest(context),
                    public_suite_sha256=modules[admission.SUITE], role_instructions_sha256=ctl.ROLE_HASH,
-                   feedback_contract_sha256=ctl.FEEDBACK_HASH, staged_policy_sha256=staged.POLICY_HASH,
+                   feedback_contract_sha256=staged.values.HASH, staged_policy_sha256=staged.POLICY_HASH,
                    pre_run_commitment=committed, heldout_commitment_sha256=ctl.digest(committed),
                    build_profile=build, runtime_profile_sha256=ctl.digest(build),
                    public_answer_key_sha256=reviewed.manifest_sha256, worker_source_sha256=modules[admission.WORKER],
@@ -116,7 +116,7 @@ def documents(data, source, reviewed, build, committed, now):
                     mode="STAGED_PUBLIC", model=ctl.MODEL, graph_mode="off", cap_microdollars=ctl.CEILING,
                     window_seconds=ctl.WINDOW, count_billing_assumption_accepted=True)
     binding["authority_sha256"] = ctl.digest(proposal)
-    staged.validate_binding(binding, context)
+    staged.validate_value_binding(binding, context)
     admission.check_evidence(intent, binding, source, reviewed, data["HOST.json"], proofs, now)
     return {"BINDING.json":ctl.canonical(binding), "INTENT.json":ctl.canonical(intent),
             "PROPOSED-APPROVAL.json":ctl.canonical(proposal)}

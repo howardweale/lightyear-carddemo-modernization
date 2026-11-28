@@ -213,6 +213,9 @@ class PublicAdapter:
         return dict(status='BUILT' if result['exit_code']==0 else 'COMPILE_FAILED',
             artifact_sha256=identity,build_receipt_sha256=result['receipt_sha256'],cleanup=True,feedback=diagnostic)
 
+    def public_feedback(self, identity, rows, observations, receipts):
+        return envelope(identity, self.suite, 'PUBLIC_DIVERGENCE', rows)
+
     def evaluate_public(self,built,suite_sha256,deadline):
         self.before(deadline)
         require(suite_sha256==self.suite and built['status']=='BUILT','public-join')
@@ -255,4 +258,4 @@ class PublicAdapter:
         return dict(suite_sha256=self.suite,artifact_sha256=built['artifact_sha256'],
             build_receipt_sha256=built['build_receipt_sha256'],match=matches,different=len(self.cases)-matches,
             total=len(self.cases),complete=True,cleanup=True,receipt_sha256=receipt,
-            feedback=envelope(built['artifact_sha256'],self.suite,'PUBLIC_DIVERGENCE',rows))
+            feedback=self.public_feedback(built['artifact_sha256'], rows, observations, receipt_rows))

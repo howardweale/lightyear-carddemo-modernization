@@ -271,6 +271,18 @@ def scratch(host):
     require(not root.exists(), 'runtime-tmpfs-cleanup')
 
 
+def mounted_leaf(path, raw):
+    p5.exclusive(path, raw, 0o444)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        require(stat.S_ISREG(os.fstat(fd).st_mode), 'runtime-mount-mode')
+        os.fchmod(fd, 0o444)
+        require(stat.S_IMODE(os.fstat(fd).st_mode) == 0o444, 'runtime-mount-mode')
+    finally:
+        os.close(fd)
+    require(p5.read(path, len(raw)) == raw, 'runtime-mount-readback')
+
+
 class _Runtime:
     """One unchanged jar. H3 supplies admitted custody, stage-1 and consumed-once authority.
 
@@ -287,7 +299,7 @@ class _Runtime:
         self.root = h1.private_directory(host.p['private_root']) / ('native-' + uuid.uuid4().hex)
         self.root.mkdir(mode=0o700)
         self.jar = self.root / s1.LEAF
-        p5.exclusive(self.jar, jar, 0o444)
+        mounted_leaf(self.jar, jar)
         self.jar_sha = c.sha(jar)
         self.prefix = [host.p['binaries']['docker']['path'], '--config', host.p['client_config'],
                        '--host', 'unix:///var/run/docker.sock']
@@ -316,7 +328,7 @@ class _Runtime:
 
     def _case(self, inputs, root, folder, stamp, date, phase_end):
         for dd in p5.INPUTS:
-            p5.exclusive(folder / (dd + '.bin'), inputs[dd], 0o444)
+            mounted_leaf(folder / (dd + '.bin'), inputs[dd])
         require(c.sha(p5.read(self.jar, s1.JAR_BYTES)) == self.jar_sha, 'runtime-selected-jar')
         end, hard = case_deadlines(time.monotonic(), phase_end)
         # Split the five-second reserve between collection and independent removal.

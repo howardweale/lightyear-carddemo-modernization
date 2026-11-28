@@ -22,7 +22,7 @@ SCENARIOS=("early-perfect","five-repairs","public-fail","uncertain-send","cleanu
 INJECTED={"uncertain-send","cleanup-refusal","closure-refusal"}
 KEY="fb51317ab1f5bba9677e543133364b34e893babcac279519b6f743d9568f3b37"
 COPY="tests/fixtures/intcalc-c1/Main.java"
-MODULES="eb24a0699f9bb1c3b658aec812bfc9a86f050d2bdda0d59c4472a6fa30226ea0"
+MODULES="34bb2ab91ace364bb0580d37a91a0c415282c4af943d82afbaa124383219be0d"
 
 
 def expect(ok,why):
@@ -46,12 +46,26 @@ def sheet(top):
 
 def envelope_bytes(role,context,plan,source,analysis,history,feedback):
     row=s.ValueStagedController.project(role,context,plan,source,analysis,history,feedback)
-    counted,generated,bound,_=p4.requests(row)
+    counted,generated,token_bound,_=p4.requests(row)
     components={k:len(c.canonical(row[k])) for k in ("public_context","plan","source","analysis","score_history","feedback") if k in row}
     raw=c.canonical(row)
+    # Both bodies contain exactly one string for each nested JSON component. Keep
+    # all real context-member framing, replacing only those two encoded strings.
+    largest_body = max(len(counted), len(generated))
+    wire_ceiling = largest_body
+    nested_feedback_bytes = 0
+    if "feedback" in row:
+        nested_feedback_bytes = len(c.canonical(c.canonical(row["feedback"]).decode("ascii")))
+        nested_history_bytes = len(c.canonical(c.canonical(row["score_history"]).decode("ascii")))
+        # Canonical JSON is printable ASCII. At most two wire bytes per byte,
+        # plus the two delimiters, even for all quotes and backslashes.
+        wire_ceiling += 2 * s.values.CAP + 2 - nested_feedback_bytes
+        wire_ceiling += 2 * 1024 + 2 - nested_history_bytes
+    expect(wire_ceiling <= c.CAPS[role], "worst-bound")
     return dict(role=role,parts=components,framing=len(raw)-sum(components.values()),projection_sha256=c.sha(raw),
                 count_bytes=len(counted),count_sha256=c.sha(counted),generation_bytes=len(generated),
-                generation_sha256=c.sha(generated),reserve=4096,bound=bound,slack=c.CAPS[role]-bound)
+                generation_sha256=c.sha(generated),reserve=4096,token_upper_bound=token_bound,
+                feedback_string_bytes=nested_feedback_bytes,bound=wire_ceiling,slack=c.CAPS[role]-wire_ceiling)
 
 
 def maximal_text(raw_cap,encoded_cap):
@@ -104,7 +118,7 @@ def bounds(context,suite):
     maxima = {role: envelope_bytes(role, context, plan, source, plan, hist, feedback)
               for role in ("analysis", "repair")}
     worst = maxima["repair"]
-    padded = min(row["slack"] for row in maxima.values()) - (1024 - len(c.canonical({"score_history": hist})))
+    padded = min(row["slack"] for row in [*rows, *maxima.values()])
     expect(padded>=0 and len(rows)==12 and sum(c.HOLDS[r] for r in p4.SEQUENCE)==37664000,"worst-bound")
     try:c.projection("builder",context,plan+"x",source,plan,[],feedback)
     except c.Refused:pass
@@ -376,6 +390,13 @@ class SerialStation(b.Station):
 
 
 def run_c(identifier,pin):
+    try:
+        return rehearse(identifier,pin)
+    except p4.Refused as error:
+        return {"refusal": p4.code(error)}
+
+
+def rehearse(identifier,pin):
     top,root=b.session(identifier,"integration")
     cfg=b.host_settings(top,pin)
     source=b.admission.checkout(ROOT)

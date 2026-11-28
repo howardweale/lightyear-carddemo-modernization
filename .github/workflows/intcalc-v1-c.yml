@@ -26,4 +26,4 @@ jobs:
       - name: Check offline public rehearsal contract
         shell: bash
         run: |
-          python -B -c "import sys, unittest; sys.path[:0]=['src','.','tests']; suite=unittest.defaultTestLoader.loadTestsFromName('test_v1_c'); assert suite.countTestCases()==11; sys.exit(0 if unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful() else 1)"
+          python -B -c "import sys, unittest; sys.path[:0]=['src','.','tests']; suite=unittest.defaultTestLoader.loadTestsFromName('test_v1_c'); assert suite.countTestCases()==14; sys.exit(0 if unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful() else 1)"
